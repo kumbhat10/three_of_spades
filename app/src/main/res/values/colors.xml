@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="teal200">#03DAC5</color>
+    <color name="Black">#000000</color>
+    <color name="Grey">#333333</color>
+    //orangish
+    <color name="font_yellow">#FFB300</color>
+    <color name="progressBarPlayer2">#FF0000</color>
+<color name = "cardsBackgroundDark">#C6040E17</color>
+    <color name = "cardsBackgroundLight">#DDFFFFFF</color>
+    <color name = "layoutBackground">#00000000</color>
+
+    <color name="progressBarPlayer3">#0099FF</color>
+    <color name="progressBarPlayer4">#00FF0A</color>
+    <color name="progressBarPlayer5">#F700FF</color>
+    <color name="progressBarPlayer6">#00FFFF</color>
+    <color name="progressBarPlayer7">#FF5100</color>
+    <color name="frameLayoutBackground">#C80E2043</color>
+    <color name="scoreTableText">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+</resources>

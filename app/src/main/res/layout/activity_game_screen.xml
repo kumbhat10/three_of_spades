@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:elevation="20dp"
+    tools:context=".GameScreen">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/black_squares" />
+
+    <ImageView
+        android:id="@+id/gifViewGameScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:contentDescription="@string/app_name"
+        android:onClick="closeChatWindow"
+        android:scaleX="1.04"
+        android:scaleY="1"
+        android:src="@drawable/table_stretch_full"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textViewShuffling"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:background="#002B0E3A"
+        android:gravity="center"
+        android:text="@string/shuffling_cards"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:visibility="invisible" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/playerView1"
+        android:layout_width="@dimen/imageWidth"
+        android:layout_height="@dimen/imageHeight"
+        android:layout_below="@id/playerView2"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/imageGapEnd"
+        android:layout_marginTop="-20dp"
+        android:paddingStart="-25dp"
+        android:paddingEnd="-25dp"
+       android:contentDescription="@string/app_name"
+         android:src="@drawable/lady1" />
+    <ImageView
+        android:id="@+id/partnerIcon1"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/uihere__8_"
+        android:layout_above="@+id/textView1"
+        android:layout_toEndOf="@id/textView1"
+        android:layout_marginStart="-15dp"
+        android:contentDescription="@string/app_name" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/playerView1"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/imageGapEnd"
+        android:layout_marginTop="0dp"
+        android:gravity="center|top"
+        android:text="@string/playerView1"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/playerView2"
+        android:layout_width="75dp"
+        android:layout_height="85dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/imageGapBetween1"
+        android:layout_marginTop="@dimen/imageGapBetween"
+        android:layout_toEndOf="@+id/textView1"
+        android:contentDescription="@string/app_name"
+        android:paddingStart="-25dp"
+        android:paddingEnd="-25dp"
+        android:src="@drawable/man1" />
+    <ImageView
+        android:id="@+id/partnerIcon2"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/uihere__8_"
+        android:layout_above="@+id/textView2"
+        android:layout_toEndOf="@id/textView2"
+        android:layout_marginStart="-15dp"
+        android:contentDescription="@string/app_name" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/playerView2"
+        android:layout_marginStart="@dimen/imageGapBetween1"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/playerView1"
+        android:gravity="center|top"
+        android:text="@string/playerView2"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/playerView3"
+        android:layout_width="@dimen/imageWidth"
+        android:layout_height="@dimen/imageHeight"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/imageGapBetweenHorizontal"
+        android:layout_marginTop="@dimen/imageGapEnd"
+        android:layout_toEndOf="@+id/playerView2"
+        android:contentDescription="@string/app_name"
+        android:paddingStart="-25dp"
+        android:paddingEnd="-25dp"
+        android:src="@drawable/lady1" />
+    <ImageView
+        android:id="@+id/partnerIcon3"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/uihere__8_"
+        android:layout_below="@+id/playerView3"
+        android:layout_toEndOf="@id/textView3"
+        android:layout_marginStart="-20dp"
+        android:layout_marginTop="-10dp"
+        android:contentDescription="@string/app_name" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/playerView3"
+        android:layout_marginStart="@dimen/imageGapBetweenHorizontal"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@+id/playerView2"
+        android:gravity="center|top"
+        android:text="@string/playerView3"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/playerView4"
+        android:layout_width="@dimen/imageWidth"
+        android:layout_height="@dimen/imageHeight"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/imageGapEnd"
+        android:layout_marginEnd="@dimen/imageGapBetweenHorizontal"
+        android:layout_toStartOf="@+id/playerView5"
+        android:contentDescription="@string/app_name"
+        android:paddingStart="-25dp"
+        android:paddingEnd="-25dp"
+        android:src="@drawable/man1" />
+    <ImageView
+        android:id="@+id/partnerIcon4"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/uihere__8_"
+        android:layout_below="@+id/playerView4"
+        android:layout_toStartOf ="@id/textView4"
+        android:layout_marginEnd= "-15dp"
+        android:layout_marginTop="-10dp"
+        android:contentDescription="@string/app_name" />
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/playerView4"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="@dimen/imageGapBetweenHorizontal"
+        android:layout_marginBottom="0dp"
+        android:layout_toStartOf="@+id/playerView5"
+        android:gravity="center|top"
+        android:text="@string/playerView4"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/playerView5"
+        android:layout_width="@dimen/imageWidth"
+        android:layout_height="@dimen/imageHeight"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/imageGapBetween"
+        android:layout_marginEnd="@dimen/imageGapBetween1"
+        android:layout_marginBottom="0dp"
+        android:layout_toStartOf="@+id/textView6"
+        android:contentDescription="@string/app_name"
+        android:paddingStart="0dp"
+        android:paddingEnd="-5dp"
+        android:src="@drawable/lady1" />
+    <ImageView
+        android:id="@+id/partnerIcon5"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/uihere__8_"
+        android:layout_above="@+id/textView5"
+        android:layout_toStartOf ="@id/textView5"
+        android:layout_marginEnd= "-20dp"
+        android:layout_marginTop="0dp"
+        android:contentDescription="@string/app_name" />
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/playerView5"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="@dimen/imageGapBetween1"
+        android:layout_toStartOf="@+id/textView6"
+        android:gravity="center|top"
+        android:text="@string/playerView5"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/playerView6"
+        android:layout_width="@dimen/imageWidth"
+        android:layout_height="@dimen/imageHeight"
+        android:layout_below="@+id/playerView5"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-20dp"
+        android:layout_marginEnd="@dimen/imageGapEnd"
+        android:contentDescription="@string/app_name"
+        android:paddingStart="0dp"
+        android:paddingEnd="-5dp"
+        android:src="@drawable/man1" />
+    <ImageView
+        android:id="@+id/partnerIcon6"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/uihere__8_"
+        android:layout_above="@+id/textView6"
+        android:layout_toStartOf ="@id/textView6"
+        android:layout_marginEnd= "-20dp"
+        android:layout_marginTop="0dp"
+        android:contentDescription="@string/app_name" />
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/playerView6"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="@dimen/imageGapEnd"
+        android:gravity="center|top"
+        android:text="@string/playerView6"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/playerView7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="@dimen/imageGapEnd"
+        android:contentDescription="@string/app_name"
+        android:visibility="gone" />
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/playerView1"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="705dp"
+        android:layout_marginTop="55dp"
+        android:gravity="center|top"
+        android:text="@string/playerView1"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone" />
+    <ImageView
+        android:id="@+id/imageViewP2"
+        android:layout_width="50dp"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/imageGapEnd"
+        android:layout_marginEnd="30dp"
+        android:layout_toStartOf="@+id/playerView4"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_back_side_blue" />
+    <TextView
+        android:id="@+id/textViewP2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewP2"
+        android:layout_alignStart="@+id/imageViewP2"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="-2dp"
+        android:layout_marginEnd="@dimen/imageGapBetweencards"
+        android:layout_toStartOf="@+id/playerView4"
+        android:gravity="center_horizontal|top"
+        android:text="@string/partner2"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+    <ImageView
+        android:id="@+id/imageViewP1"
+        android:layout_width="50dp"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/imageGapEnd"
+        android:layout_marginEnd="@dimen/imageGapBetweencards"
+        android:layout_toStartOf="@+id/imageViewP2"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_back_side_red" />
+    <TextView
+        android:id="@+id/textViewP1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewP1"
+        android:layout_alignStart="@+id/imageViewP1"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="-2dp"
+        android:layout_marginEnd="@dimen/imageGapBetweencards"
+        android:layout_toStartOf="@+id/imageViewP2"
+        android:gravity="center_horizontal|top"
+        android:text="@string/partner1"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/imageViewTrump"
+        android:layout_width="58dp"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/imageGapEnd"
+        android:layout_marginEnd="@dimen/imageGapBetweencards"
+        android:layout_toStartOf="@id/imageViewP1"
+        android:background="#FFFFFF"
+        android:paddingBottom="-5dp"
+        android:src="@drawable/trump1" />
+    <TextView
+        android:id="@+id/textViewTrump"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewTrump"
+        android:layout_alignStart="@+id/imageViewTrump"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="@dimen/imageGapBetweencards"
+        android:layout_toStartOf="@+id/imageViewP1"
+        android:gravity="center_horizontal|top"
+        android:text="@string/Trump"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+    <ProgressBar
+
+        android:id="@+id/progressbarTimer"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:progressDrawable="@drawable/progress_timer"
+        android:secondaryProgress="100"/>
+    <TextView
+        android:id="@+id/textViewTimer"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="false"
+        android:layout_centerVertical="false"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:gravity="center"
+        android:text="@string/timerStart"
+        android:textColor="@color/font_yellow"
+        android:textSize="30sp"/>
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:animateLayoutChanges="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollIndicators="top"
+        android:scrollbarSize="10dp"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="horizontal">
+
+        <LinearLayout
+            android:id="@+id/imageGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:animateLayoutChanges="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/imageViewChat"
+        android:onClick="openCloseChatWindow"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="5dp"
+        android:src="@drawable/chat2" />
+    <TextView
+        android:id="@+id/textViewChatNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageViewChat"
+        android:layout_marginStart="-25dp"
+        android:layout_marginBottom="-30dp"
+        android:layout_toEndOf="@+id/imageViewChat"
+        android:text="@string/noOfChat"
+        android:textColor="#FF3C00"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:visibility="invisible"/>
+    <TextView
+        android:id="@+id/textViewBid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="@dimen/imageGapEnd"
+        android:maxWidth="100dp"
+        android:text="@string/bidValue"
+        android:textColor="@color/font_yellow"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textViewBider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="@dimen/imageGapEnd"
+        android:layout_marginEnd="30dp"
+        android:layout_toStartOf="@+id/imageViewTrump"
+        android:layout_toEndOf="@+id/textViewBid"
+        android:text="@string/Bider"
+        android:textColor="@color/progressBarPlayer4"
+        android:textSize="25sp" />
+    <TextView
+        android:id="@+id/textViewBidValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewBid"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="-5dp"
+        android:text="@string/bidValue1"
+        android:textColor="@color/progressBarPlayer4"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+
+    <FrameLayout
+        android:id="@+id/frameAskBid"
+        android:layout_width="wrap_content"
+        android:layout_height="222dp"
+        android:layout_above="@+id/horizontalScrollView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="125dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/frameLayoutBackground"
+        android:fadingEdge="horizontal|vertical"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:alpha="1"
+            android:gravity="center|center_horizontal"
+            android:text="@string/raise_bid_or_pass"
+            android:textColor="@color/font_yellow"
+            android:textSize="40sp" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
+            android:layout_gravity="center|center_horizontal|center_vertical"
+            android:animateLayoutChanges="true"
+            app:chipSpacingHorizontal="10dp"
+            app:singleSelection="true">
+
+            <Button
+                android:id="@+id/bid05button"
+                android:tag="5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/font_yellow"
+                android:backgroundTint="@color/font_yellow"
+                android:text="@string/bid05button"
+                android:textColor="@color/Black"
+                android:textSize="30sp"
+                app:cornerRadius="20dp"
+                app:strokeColor="@color/Black"
+                app:strokeWidth="3dp"
+                android:onClick="askToBid"/>
+
+            <Button
+                android:id="@+id/bid10button"
+                android:tag="10"
+                android:onClick="askToBid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/font_yellow"
+                android:backgroundTint="@color/font_yellow"
+                android:shadowDy="4"
+                android:text="@string/bid10button"
+                android:textColor="@color/Black"
+                android:textSize="30sp"
+                app:cornerRadius="20dp"
+                app:strokeColor="@color/Black"
+                app:strokeWidth="3dp" />
+
+            <Button
+                android:id="@+id/bid20button"
+                android:tag="20"
+                android:onClick="askToBid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/font_yellow"
+                android:backgroundTint="@color/font_yellow"
+                android:shadowDy="4"
+                android:text="@string/bid20button"
+                android:textColor="@color/Black"
+                android:textSize="30sp"
+                app:cornerRadius="20dp"
+                app:strokeColor="@color/Black"
+                app:strokeWidth="3dp" />
+
+            <Button
+                android:id="@+id/bid50button"
+                android:tag="50"
+                android:onClick="askToBid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/font_yellow"
+                android:backgroundTint="@color/font_yellow"
+                android:shadowDy="4"
+                android:text="@string/bid50button"
+                android:textColor="@color/Black"
+                android:textSize="30sp"
+                app:cornerRadius="20dp"
+                app:strokeColor="@color/Black"
+                app:strokeWidth="3dp" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <Button
+            android:id="@+id/bidpassbutton"
+            android:tag="pass"
+            android:onClick="askToBid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:background="#FF0000"
+            android:backgroundTint="#FF0000"
+            android:shadowDy="4"
+            android:text="@string/passText"
+            android:textColor="#FFFFFF"
+            android:textSize="35sp"
+            app:cornerRadius="20dp"
+            app:strokeColor="#FFFFFF"
+            app:strokeWidth="3dp" />
+
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/frameTrumpSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="222dp"
+        android:layout_above="@+id/horizontalScrollView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="125dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/frameLayoutBackground"
+        android:visibility="invisible">
+        <TextView
+            android:id="@+id/textViewTrumpSelection"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:alpha="1"
+            android:gravity="center|center_horizontal"
+            android:text="@string/chooseTrump"
+            android:textColor="@color/font_yellow"
+            android:textSize="40sp" />
+
+        <LinearLayout
+            android:id="@+id/trumpSelectionHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal"
+            app:singleLine="true">
+
+
+            <ImageView
+                android:id="@+id/imageViewTrumpHearts"
+                android:tag="h"
+                android:layout_width="@dimen/trumpSelectionImageWidth"
+                android:layout_height="@dimen/trumpSelectionImageHeight"
+                android:contentDescription="@string/app_name"
+                android:background="#C6040E17"
+                app:srcCompat="@drawable/ic_hearts"
+                android:onClick="onTrumpSelectionClick"/>
+
+            <ImageView
+                android:id="@+id/imageViewTrumpSpades"
+                android:tag="s"
+                android:layout_width="@dimen/trumpSelectionImageWidth"
+                android:layout_height="@dimen/trumpSelectionImageHeight"
+                android:background="#DDFFFFFF"
+                android:contentDescription="@string/app_name"
+                android:onClick="onTrumpSelectionClick"
+                app:srcCompat="@drawable/ic_spades" />
+
+            <ImageView
+                android:id="@+id/imageViewTrumpDiamonds"
+                android:tag="d"
+                android:layout_width="@dimen/trumpSelectionImageWidth"
+                android:layout_height="@dimen/trumpSelectionImageHeight"
+                android:contentDescription="@string/app_name"
+                android:background="#C6040E17"
+                android:onClick="onTrumpSelectionClick"
+                app:srcCompat="@drawable/ic_diamonds" />
+
+            <ImageView
+                android:id="@+id/imageViewTrumpClubs"
+                android:tag="c"
+                android:layout_width="@dimen/trumpSelectionImageWidth"
+                android:layout_height="@dimen/trumpSelectionImageHeight"
+                android:contentDescription="@string/app_name"
+                android:background="#DDFFFFFF"
+                android:onClick="onTrumpSelectionClick"
+                app:srcCompat="@drawable/ic_clubs" />
+        </LinearLayout>
+    </FrameLayout>
+    <LinearLayout
+        android:id="@+id/chatLinearLayout"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/horizontalScrollView"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        android:elevation="100dp"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="#D80B1C2E"
+            android:elevation="100dp"
+
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarSize="9dp"
+            android:scrollbars="vertical">
+
+            <TextView
+                android:id="@+id/textViewChatDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:layout_gravity="bottom"
+                android:elevation="100dp"
+                android:gravity="bottom|start"
+                android:hint="@string/chatWindowDisplay"
+                android:paddingStart="3dp"
+                android:paddingEnd="3dp"
+                android:paddingBottom="6dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#666666"
+                android:textSize="15sp" />
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:elevation="100dp"
+            android:gravity="fill"
+            android:orientation="horizontal"
+            app:singleLine="true">
+
+            <EditText
+                android:id="@+id/editTextChatInput"
+                android:layout_width="270dp"
+                android:layout_height="match_parent"
+                android:background="#E49A9999"
+                android:elevation="100dp"
+                android:hint="@string/chatInputHint"
+                android:inputType="textPersonName"
+                android:paddingStart="3dp"
+                android:paddingEnd="3dp"
+                android:textSize="14sp"
+                android:importantForAutofill="no"
+                android:imeOptions="actionSend" />
+
+            <Button
+                android:id="@+id/chatSendButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="#13CA1A"
+                android:backgroundTint="#42DA17"
+                android:backgroundTintMode="add"
+                android:elevation="100dp"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:onClick="sendChat"
+                android:shadowRadius="8"
+                android:text="@string/sendChatButton"
+                android:textColor="#09144A"
+                android:textSize="16sp"
+                app:cornerRadius="15dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutPartnerSelection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/horizontalScrollView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/frameLayoutBackground"
+        android:elevation="200dp"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+
+        <TextView
+            android:id="@+id/textViewPartnerSelect"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:gravity="center|center_horizontal"
+            android:text="@string/partnerSelection1"
+            android:textColor="@color/font_yellow"
+            android:textSize="40sp" />
+
+        <HorizontalScrollView
+            android:id="@+id/horScrollPartnerSelect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:animateLayoutChanges="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollIndicators="top"
+            android:scrollbarSize="10dp"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="horizontal">
+
+            <LinearLayout
+                android:id="@+id/partnerSelectionGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
+                android:scrollIndicators="bottom"
+                android:scrollbarDefaultDelayBeforeFade="700"
+                android:scrollbarSize="10dp"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbars="horizontal" />
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutTableCards"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/horizontalScrollView"
+        android:layout_marginBottom="0dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/imageViewTable1"
+            android:layout_width="@dimen/tableCardImageWidth"
+            android:layout_height="@dimen/tableCardImageHeight"
+            android:layout_above="@+id/imageViewSelf"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="-45dp"
+            android:layout_toStartOf="@+id/imageViewSelf"
+            android:contentDescription="@string/app_name"
+            android:rotation="55"
+            app:srcCompat="@drawable/c10"
+            android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/imageViewTable2"
+            android:layout_width="@dimen/tableCardImageWidth"
+            android:layout_height="@dimen/tableCardImageHeight"
+            android:layout_above="@+id/imageViewTable1"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="-20dp"
+            android:layout_toStartOf="@+id/imageViewSelf"
+            android:contentDescription="@string/app_name"
+            android:rotation="-80"
+            app:srcCompat="@drawable/c10"
+            android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/imageViewTable3"
+            android:layout_width="@dimen/tableCardImageWidth"
+            android:layout_height="@dimen/tableCardImageHeight"
+            android:layout_above="@+id/imageViewTable2"
+            android:layout_marginEnd="-20dp"
+            android:layout_marginBottom="-30dp"
+            android:layout_toStartOf="@+id/imageViewSelf"
+            android:contentDescription="@string/app_name"
+            android:rotation="-20"
+            app:srcCompat="@drawable/c10"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/imageViewTable4"
+            android:layout_width="@dimen/tableCardImageWidth"
+            android:layout_height="@dimen/tableCardImageHeight"
+            android:layout_above="@+id/imageViewTable5"
+            android:layout_marginStart="-20dp"
+            android:layout_toEndOf="@id/imageViewSelf"
+            android:layout_marginEnd="-45dp"
+            android:layout_marginBottom="-30dp"
+            android:contentDescription="@string/app_name"
+            android:rotation="20"
+            app:srcCompat="@drawable/c10"
+            android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/imageViewTable5"
+            android:layout_width="@dimen/tableCardImageWidth"
+            android:layout_height="@dimen/tableCardImageHeight"
+            android:layout_above="@+id/imageViewTable6"
+            android:layout_marginEnd="-10dp"
+            android:layout_marginBottom="-20dp"
+            android:layout_toEndOf="@+id/imageViewSelf"
+            android:contentDescription="@string/app_name"
+            android:rotation="80"
+            app:srcCompat="@drawable/c10"
+            android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/imageViewTable6"
+            android:layout_width="@dimen/tableCardImageWidth"
+            android:layout_height="@dimen/tableCardImageHeight"
+            android:layout_above="@+id/imageViewSelf"
+            android:layout_marginEnd="-10dp"
+            android:layout_marginBottom="-45dp"
+            android:layout_toEndOf="@+id/imageViewSelf"
+            android:contentDescription="@string/app_name"
+            android:rotation="-55"
+            app:srcCompat="@drawable/c10"
+            android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/imageViewSelf"
+            android:layout_width="@dimen/tableCardImageWidth"
+            android:layout_height="@dimen/tableCardImageHeight"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/c10"
+            android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/imageViewWinnerCenter"
+            android:layout_width="@dimen/tableCardImageWidth"
+            android:layout_height="@dimen/tableCardImageHeight"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/imageViewSelf"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/ic_back_side_blue"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scrollViewScore"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="95dp"
+        android:animateLayoutChanges="true"
+        android:background="#D8100823"
+        android:scrollbarSize="14dp"
+        android:scrollbarStyle="insideOverlay"
+        android:visibility="visible">
+
+        <TableLayout
+            android:id="@+id/imageGalleryScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:animateLayoutChanges="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,11 @@
+<resources>
+    <!-- Application theme for dark theme. -->
+    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+
+        <item name="colorPrimary">@color/Grey</item>
+        <item name="colorPrimaryDark">@color/Black</item>
+        <item name="colorAccent">@color/teal200</item>
+    </style>
+
+</resources>

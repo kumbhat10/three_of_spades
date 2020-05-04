@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Kaali ki Tiggi</string>
+    <string name="submit_button">Submit</string>
+    <string name="welcome_msg">Welcome</string>
+    <string name="user_name_request">"    Enter Name"</string>
+    <string name="developer">Dushyant Kumbhat</string>
+    <string name="developer_contact">kumbhat10@gmail.com</string>
+    <string name="createRoom">Create Room</string>
+    <string name="joinRoom">Join Room</string>
+    <string name="invite">Invite</string>
+
+    <string name="roomID">Room ID 12345</string>
+    <string name="roomID_host">Host : XXXXX</string>
+    <string name="hinRoomID">Room ID</string>
+    <string name="developerCredits">Developer Credits</string>
+    <string name="waitingToJoin">Waiting for players to join</string>
+    <string name="player2">Player2 :</string>
+    <string name="player6">Player6 :</string>
+    <string name="player7">Player7 :</string>
+    <string name="player5">Player5 :</string>
+    <string name="player4">Player4 :</string>
+    <string name="player3">Player3 :</string>
+    <string name="playerJoinedConfirmation">Ready to Start</string>
+    <string name="startGameButtonText">Start</string>
+    <string name="hostToStart">Host to Start</string>
+    <string name="spadesVectorGraphic">spades Vector</string>
+    <string name="hint_entername">Enter Name</string>
+    <string name="shuffling_cards">Shuffling Cards</string>
+    <string name="playerView6">Player</string>
+    <string name="playerView5">Player</string>
+    <string name="playerView4">Player</string>
+    <string name="playerView3">Player</string>
+    <string name="playerView2">Player</string>
+    <string name="playerView1">Player</string>
+    <string name="Trump">Trump</string>
+    <string name="partner1">Buddy 1</string>
+    <string name="partner2">Buddy 2</string>
+    <string name="bidValue"> Bid : </string>
+    <string name="bidValue1">Nill</string>
+    <string name="bid05button">+5</string>
+    <string name="bid10button">+10</string>
+    <string name="bid20button">+20</string>
+    <string name="bid50button">+50</string>
+    <string name="raise_bid_or_pass">Raise Bid or Pass</string>
+    <string name="chooseTrump">Select Trump</string>
+
+    <string name="passText">Pass</string>
+    <string name="chatWindowDisplay">No Messages yet. Send your First message</string>
+    <string name="sendChatButton">Send</string>
+    <string name="chatInputHint">Type your message here......</string>
+    <string name="noOfChat">0</string>
+    <string name="Bider">Player</string>
+    <string name="timerStart">10s</string>
+    <string name="partnerSelection1">Choose your 1st Buddy</string>
+    <string name="partnerSelection2">Choose your 2nd Buddy</string>
+
+</resources>

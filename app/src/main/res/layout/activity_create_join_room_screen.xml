@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Black"
+    android:visibility="visible"
+    tools:context=".CreatenJoinRoomScreen">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifViewJoiningRoom1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/smoke_swirl"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifViewJoiningRoom2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/firecracker_success"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_roomID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#00FFFFFF"
+        android:enabled="true"
+        android:fadingEdge="horizontal|vertical"
+        android:fontFamily="sans-serif-smallcaps"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:shadowColor="@color/font_yellow"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="3"
+        android:text="@string/roomID"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/font_yellow"
+        android:textSize="30sp"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:strokeColor="@color/font_yellow"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/button_roomID_host"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_roomID"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+
+        android:backgroundTint="#00000000"
+        android:enabled="true"
+        android:fontFamily="sans-serif-smallcaps"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:shadowColor="@color/font_yellow"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="3"
+        android:text="@string/roomID_host"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/font_yellow"
+        android:textSize="30sp"
+        app:cornerRadius="20dp"
+        app:iconTint="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:strokeColor="@color/font_yellow"
+        app:strokeWidth="2dp" />
+
+    <Button
+        android:id="@+id/waitingToJoinText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_roomID_host"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#00FFFFFF"
+        android:enabled="false"
+        android:fadingEdge="horizontal|vertical"
+        android:fontFamily="sans-serif-smallcaps"
+        android:insetTop="10dp"
+        android:insetBottom="0dp"
+        android:text="@string/waitingToJoin"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/font_yellow"
+        android:textSize="20sp"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:strokeColor="@color/font_yellow"
+        app:strokeWidth="0dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBarMain"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/waitingToJoinText"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="25dp"
+        android:indeterminate="true"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateTint="#0099FF"
+        android:mirrorForRtl="true"
+        android:nestedScrollingEnabled="true"
+        android:progress="100"
+        android:progressDrawable="@android:drawable/button_onoff_indicator_on"
+        android:progressTint="@color/progressBarPlayer4" />
+
+    <Button
+        android:id="@+id/startGameButton"
+        android:onClick="updateGameStateToPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="#00231111"
+        android:enabled="true"
+        android:fadingEdge="horizontal|vertical"
+        android:fontFamily="sans-serif-smallcaps"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/startGameButtonText"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/progressBarPlayer4"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:strokeColor="@color/progressBarPlayer4"
+        app:strokeWidth="2dp" />
+
+    <ScrollView
+        android:id="@+id/scrollPlayerList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/startGameButton"
+        android:layout_below="@+id/progressBarMain"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp">
+
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="87dp">
+
+                <TextView
+                    android:id="@+id/player2Text"
+                    android:layout_width="235dp"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:gravity="center_vertical"
+                    android:text="@string/player2"
+                    android:textColor="@color/progressBarPlayer2"
+                    android:textSize="34sp" />
+
+                <ProgressBar
+                    android:id="@+id/player2ProgressBar"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="@dimen/tableRowHeight"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:indeterminate="true"
+                    android:indeterminateOnly="false"
+                    android:indeterminateTint="@color/progressBarPlayer2"
+                    android:progressTintMode="src_in"
+                    android:rotation="360" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/player3Text"
+                    android:layout_width="235dp"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:gravity="center_vertical"
+                    android:text="@string/player3"
+
+                    android:textColor="@color/progressBarPlayer3"
+                    android:textSize="34sp" />
+
+                <ProgressBar
+                    android:id="@+id/player3ProgressBar"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="@dimen/tableRowHeight"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:indeterminate="true"
+                    android:indeterminateOnly="false"
+                    android:indeterminateTint="@color/progressBarPlayer3"
+                    android:progressTintMode="src_in"
+                    android:rotation="360" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/player4Text"
+                    android:layout_width="235dp"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:gravity="center_vertical"
+                    android:text="@string/player4"
+
+                    android:textColor="@color/progressBarPlayer4"
+                    android:textSize="34sp" />
+
+                <ProgressBar
+                    android:id="@+id/player4ProgressBar"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="@dimen/tableRowHeight"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:indeterminate="true"
+                    android:indeterminateOnly="false"
+                    android:indeterminateTint="@color/progressBarPlayer4"
+                    android:progressTintMode="src_in"
+                    android:rotation="360" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="115dp">
+
+                <TextView
+                    android:id="@+id/player5Text"
+                    android:layout_width="235dp"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:gravity="center_vertical"
+                    android:text="@string/player5"
+
+                    android:textColor="@color/progressBarPlayer5"
+                    android:textSize="34sp" />
+
+                <ProgressBar
+                    android:id="@+id/player5ProgressBar"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="@dimen/tableRowHeight"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:indeterminate="true"
+                    android:indeterminateOnly="false"
+                    android:indeterminateTint="@color/progressBarPlayer5"
+                    android:progressTintMode="src_in"
+                    android:rotation="360" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/player6Text"
+                    android:layout_width="235dp"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:gravity="center_vertical"
+                    android:text="@string/player6"
+                    android:textColor="@color/progressBarPlayer6"
+                    android:textSize="34sp" />
+
+                <ProgressBar
+                    android:id="@+id/player6ProgressBar"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="@dimen/tableRowHeight"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:indeterminate="true"
+                    android:indeterminateOnly="false"
+                    android:indeterminateTint="@color/progressBarPlayer6"
+                    android:progressTintMode="src_in"
+                    android:rotation="360" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/player7Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:gravity="center_vertical"
+                    android:text="@string/player7"
+                    android:textColor="@color/progressBarPlayer7"
+                    android:textSize="34sp" />
+
+                <ProgressBar
+                    android:id="@+id/player7ProgressBar"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="@dimen/tableRowHeight"
+                    android:layout_height="@dimen/tableRowHeight"
+                    android:indeterminate="true"
+                    android:indeterminateOnly="false"
+                    android:indeterminateTint="@color/progressBarPlayer7"
+                    android:progressTintMode="src_in"
+                    android:rotation="360" />
+
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/imageViewShareButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/scrollPlayerList"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:contentDescription="@string/app_name"
+        android:onClick="shareRoomInfo"
+        app:srcCompat="@drawable/share_green1" />
+
+</RelativeLayout>

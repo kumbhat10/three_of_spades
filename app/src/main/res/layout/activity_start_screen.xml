@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Black"
+    android:onClick="developerCredits"
+    android:paddingStart="0dp"
+    android:paddingEnd="0dp"
+    tools:context=".StartScreen">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifStartScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:src="@drawable/smoke_swirl"
+        android:stateListAnimator="@anim/blink_and_scale"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textInputEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:background="@color/Black"
+        android:backgroundTint="@color/Black"
+        android:fadingEdge="horizontal|vertical"
+        android:fontFamily="sans-serif-smallcaps"
+        android:hapticFeedbackEnabled="true"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:onClick="submitButton"
+        android:text="@string/submit_button"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="#FFB300"
+
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:cornerRadius="15dp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:strokeColor="#E1BE25"
+        app:strokeWidth="3dp" />
+
+    <EditText
+        android:id="@+id/textInputEditText"
+        style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="97dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="350dp"
+        android:layout_marginEnd="15dp"
+        android:alpha="1"
+        android:cursorVisible="true"
+        android:hint="@string/hint_entername"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences"
+        android:shadowColor="#353535"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:shadowRadius="5"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="#ACA8A8"
+        android:textDirection="firstStrongRtl"
+        android:textSize="55sp" />
+
+</RelativeLayout>

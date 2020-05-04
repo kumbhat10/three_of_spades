@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TableLayout
+        android:id="@+id/scoreTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp">
+
+        <TableRow
+            android:id="@+id/tableRowScore"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/gameNumber"
+                android:layout_width="@dimen/scoreTableWidth"
+                android:layout_height="@dimen/scoreTableHeight"
+                android:gravity="center"
+                android:text="@string/playerView1"
+                android:textColor="@color/scoreTableText"
+                android:textSize="@dimen/scoreTableTextSize" />
+
+            <TextView
+                android:id="@+id/player1"
+                android:layout_width="@dimen/scoreTableWidth"
+                android:layout_height="@dimen/scoreTableHeight"
+                android:gravity="center"
+                android:text="@string/playerView1"
+                android:textColor="@color/scoreTableText"
+                android:textSize="@dimen/scoreTableTextSize" />
+
+            <TextView
+                android:id="@+id/player2"
+                android:layout_width="@dimen/scoreTableWidth"
+                android:gravity="center"
+                android:layout_height="@dimen/scoreTableHeight"
+                android:text="@string/playerView1"
+                android:textColor="@color/scoreTableText"
+                android:textSize="@dimen/scoreTableTextSize" />
+
+            <TextView
+                android:id="@+id/player3"
+                android:layout_width="@dimen/scoreTableWidth"
+                android:gravity="center"
+                android:layout_height="@dimen/scoreTableHeight"
+                android:text="@string/playerView1"
+                android:textColor="@color/scoreTableText"
+                android:textSize="@dimen/scoreTableTextSize" />
+
+            <TextView
+                android:id="@+id/player4"
+                android:layout_width="@dimen/scoreTableWidth"
+                android:layout_height="@dimen/scoreTableHeight"
+                android:gravity="center"
+                android:text="@string/playerView1"
+                android:textColor="@color/scoreTableText"
+                android:textSize="@dimen/scoreTableTextSize" />
+
+            <TextView
+                android:id="@+id/player5"
+                android:layout_width="@dimen/scoreTableWidth"
+                android:layout_height="@dimen/scoreTableHeight"
+                android:gravity="center"
+                android:text="@string/playerView1"
+                android:textColor="@color/scoreTableText"
+                android:textSize="@dimen/scoreTableTextSize" />
+
+            <TextView
+                android:id="@+id/player6"
+                android:layout_width="@dimen/scoreTableWidth"
+                android:layout_height="@dimen/scoreTableHeight"
+                android:gravity="center"
+                android:text="@string/playerView1"
+                android:textColor="@color/scoreTableText"
+                android:textSize="@dimen/scoreTableTextSize" />
+
+            <TextView
+                android:id="@+id/player7"
+                android:layout_width="@dimen/scoreTableWidth"
+                android:layout_height="@dimen/scoreTableHeight"
+                android:gravity="center"
+                android:text="@string/playerView1"
+                android:textColor="@color/scoreTableText"
+                android:textSize="@dimen/scoreTableTextSize" />
+        </TableRow>
+
+
+    </TableLayout>
+</RelativeLayout>
