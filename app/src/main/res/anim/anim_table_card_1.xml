@@ -8,14 +8,7 @@
         android:fromXDelta="-35%p"
         android:toXDelta="0%p"
 
-        android:duration="600"
+        android:duration="300"
         android:interpolator="@android:anim/accelerate_interpolator"/>
 
-<!--    <translate android:fromYDelta="0%p"-->
-<!--        android:toYDelta="0%p"-->
-<!--        android:fromXDelta="5%p"-->
-<!--        android:toXDelta="0%p"-->
-<!--        android:duration="300"-->
-<!--        android:startOffset="800"-->
-<!--        android:interpolator="@android:anim/accelerate_interpolator"/>-->
 </set>

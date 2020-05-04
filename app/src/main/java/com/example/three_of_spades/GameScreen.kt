@@ -1,11 +1,7 @@
 package com.example.three_of_spades
 
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
-import android.database.DataSetObserver
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +10,6 @@ import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -25,13 +20,11 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_game_screen.*
 import pl.droidsonroids.gif.GifImageView
 import kotlin.math.round
-import kotlin.random.Random
 
 class GameScreen : AppCompatActivity() {
-//    region Initialization
+    //    region Initialization
     private lateinit var soundUpdate: MediaPlayer
     private lateinit var soundError: MediaPlayer
     private lateinit var soundSuccess: MediaPlayer
@@ -138,7 +131,7 @@ class GameScreen : AppCompatActivity() {
     private var onlineP5 = 1
     private var onlineP6 = 1
     private var onlineP7 = 1
-   private var timeCountdown = 10000L
+   private var timeCountdown = 5000L
     private var lastChat = ""
     private lateinit var toast: Toast
     private var roundWinner = 0
@@ -149,9 +142,9 @@ class GameScreen : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE // keep screen in landscape mode always
-        roomID   = intent.getStringExtra("roomID")    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
-        from     = intent.getStringExtra("from")    //check if user has joined room or created one and display Toast
-        selfName = intent.getStringExtra("selfName")
+        roomID   = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
+        from     = intent.getStringExtra("from")!!.toString()    //check if user has joined room or created one and display Toast
+        selfName = intent.getStringExtra("selfName")!!.toString()
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from)
         refIDMappedImageView = PlayersReference().refIDMappedImageView(from)
         refIDMappedTableImageView =  PlayersReference().refIDMappedTableImageView(from)
@@ -409,7 +402,7 @@ class GameScreen : AppCompatActivity() {
                 if (gameState == 4) {
                 getCardsAndDisplay()
                 soundSuccess.start()
-                getTrumpnStartPartnerSelection()
+                getTrumpStartPartnerSelection()
             }
                 if (gameState == 5) {
                 getCardsAndDisplay()
@@ -879,7 +872,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
 
     })
 }
-    private fun getTrumpnStartPartnerSelection() {
+    private fun getTrumpStartPartnerSelection() {
         refGameData.child("Tr").  //get the trump
         addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(errorDataLoad: DatabaseError) {}
@@ -890,7 +883,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                     findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.VISIBLE // make selection frame visible
                     findViewById<TextView>(R.id.textViewPartnerSelect).text = getString(R.string.partnerSelection1)//choose 1st buddy text
                     findViewById<TextView>(R.id.textViewPartnerSelect).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-                    dissplayAllCardsForPartnerSelection()  // display all the cards to choose from
+                    displayAllCardsForPartnerSelection()  // display all the cards to choose from
                 }else{
                     centralText("Waitng for ${bider?.let { playerName(it) }} \n to choose 2 buddies",0)
                 }
@@ -955,7 +948,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
 
     }
-    private fun dissplayAllCardsForPartnerSelection(view: View = View(applicationContext)){
+    private fun displayAllCardsForPartnerSelection(view: View = View(applicationContext)){
         findViewById<LinearLayout>(R.id.partnerSelectionGallery).removeAllViews()
         val gallery = findViewById<LinearLayout>(R.id.partnerSelectionGallery)
         val inflater = LayoutInflater.from(applicationContext)

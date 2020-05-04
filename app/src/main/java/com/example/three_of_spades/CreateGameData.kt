@@ -46,7 +46,7 @@ class CreateGameData(hostName: String) {
             "BT" to playerTurn,"BB" to 1,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1,"p5" to 1,"p6" to 1,"p7" to 1)),
         "Tr" to "") // 1 - spades,2-heart 3-diamonds or 4- clubs
     val roomData = mutableMapOf("Players" to mutableMapOf<String ,String>("p1" to hostName,"p2" to "Chandler","p3" to "Monica","p4" to "Ross","p5" to "Rachael","p6" to "Joe","p7" to "Phoebe") ,
-        "PlayersJoined" to 7,
+        "PlayersJoined" to 5,
         "Sex" to mutableMapOf("p1" to 0 ,"p2" to 0,"p3" to 1,"p4" to 0,"p5" to 1,"p6" to 0,"p7" to 1)) // 0 male 1 female
 
 // endregion

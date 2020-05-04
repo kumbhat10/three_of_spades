@@ -5,7 +5,7 @@
     <dimen name="imageWidth">75dp</dimen>
     <dimen name="imageHeight">85dp</dimen>
     <dimen name="textHeight">25dp</dimen>
-    <dimen name="imageGapBetween">60dp</dimen>
+    <dimen name="imageGapBetween">65dp</dimen>
     <dimen name="imageGapBetweenHorizontal">15dp</dimen>
 
     <dimen name="imageGapBetween1">10dp</dimen>
