@@ -2,13 +2,85 @@
 <resources>
     <color name="teal200">#03DAC5</color>
     <color name="Black">#000000</color>
+    <color name="BlackTrans">#D2000000</color>
+    <color name="BlackTransUserStats">#FD000000</color>
+    <color name="BlackTransUserStats1">#F0202020</color>
+    <color name="BlackTransUserStats2">#EE000000</color>
+
     <color name="Grey">#333333</color>
-    //orangish
+    //orange ish
     <color name="font_yellow">#FFB300</color>
+    <color name="font_yellow_trans">#D8FFB300</color>
+    <color name="font_grey_settings">#676767</color>
+
     <color name="progressBarPlayer2">#FF0000</color>
-<color name = "cardsBackgroundDark">#C6040E17</color>
+    <color name="darkRed">#CA5800</color>
+    <color name = "backgroundDark">#C306102C</color>
+    <color name = "backgroundDarkOpaque">#F30A1B4A</color>
+
+    <color name = "cardsBackgroundDark">#C6040E17</color>
     <color name = "cardsBackgroundLight">#DDFFFFFF</color>
     <color name = "layoutBackground">#00000000</color>
+    <color name = "layoutBackgroundLittle">#7A04061E</color>
+
+    <color name = "inActiveCard">#CE434343</color>
+    <color name="coinIcon0">#0B0B0B</color>
+    <color name="coinIcon1">#202020</color>
+    <color name="coinIcon2">#5A5A5A</color>
+    <color name="ripple">#B3FF00</color>
+
+    <color name="trackSwitchON">#0F56F100</color>
+    <color name="trackSwitchOFF">#2AA3A3A3</color>
+    <color name="thumbSwitchON">#B3FF00</color>
+    <color name="thumbSwitchOFF">#757575</color>
+
+
+    <color name="borderblue">#0B70C8</color>
+
+    <color name = "borderblueDark0b">#00A6FF</color>
+    <color name = "borderblueDark1b">#008DD8</color>
+    <color name = "borderblueDark2b">#006FAA</color>
+
+    <color name = "shine0black">#FFFFFF</color>
+    <color name = "shine1black">#2C2C2C</color>
+    <color name = "shine2black">#000000</color>
+
+    <color name = "shine0blackbar">#FFFFFF</color>
+    <color name = "shine1blackbar">#878787</color>
+    <color name = "shine2blackbar">#000000</color>
+
+    <color name = "shine0bk">#8E8E8E</color>
+    <color name = "shine1bk">#3E3E3E</color>
+    <color name = "shine2bk">#000000</color>
+
+    <color name = "borderblueDark0g">#A5FF47</color>
+    <color name = "borderblueDark1g">#63C300</color>
+    <color name = "borderblueDark2g">#4C9700</color>
+
+    <color name = "borderblueDark0r">#FF2828</color>
+    <color name = "borderblueDark1r">#BA0101</color>
+    <color name = "borderblueDark2r">#9F0000</color>
+
+    <color name = "borderblueDark0o">#FF7D36</color>
+    <color name = "borderblueDark1o">#CD4700</color>
+    <color name = "borderblueDark2o">#B13E00</color>
+
+    <color name = "borderblueDark0y">#FFFF00</color>
+    <color name = "borderblueDark1y">#D5D500</color>
+    <color name = "borderblueDark2y">#B5B500</color>
+
+    <color name = "borderblueDark0pi">#FF47D1</color>
+    <color name = "borderblueDark1pi">#D826AD</color>
+    <color name = "borderblueDark2pi">#B50088</color>
+
+    <color name = "borderblueDark0pu">#B34BFF</color>
+    <color name = "borderblueDark1pu">#7B33AF</color>
+    <color name = "borderblueDark2pu">#57247C</color>
+
+    <color name = "borderblueDark0dpu">#2CFFEA</color>
+    <color name = "borderblueDark1dpu">#15CFBD</color>
+    <color name = "borderblueDark2dpu">#0A9F90</color>
+
 
     <color name="progressBarPlayer3">#0099FF</color>
     <color name="progressBarPlayer4">#00FF0A</color>

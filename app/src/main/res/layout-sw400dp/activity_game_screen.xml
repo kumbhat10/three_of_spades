@@ -59,6 +59,18 @@
         android:textSize="19sp"
         android:visibility="gone" />
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/addView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="211dp"
+        app:adSize="BANNER"
+        app:adUnitId="@string/bannerTest" />
+
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/playerView1"
         android:layout_width="@dimen/imageWidth"
@@ -439,14 +451,14 @@
         android:visibility="gone"/>
 
     <ImageView
-        android:id="@+id/scoreSheetButton"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="25dp"
-        android:onClick="openCloseScoreSheet"
-        android:src="@drawable/info"/>
+    android:id="@+id/scoreSheetButton"
+    android:layout_width="45dp"
+    android:layout_height="45dp"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="25dp"
+    android:onClick="openCloseScoreSheet"
+    android:src="@drawable/info"/>
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
@@ -797,7 +809,6 @@
                 android:layout_width="270dp"
                 android:layout_height="match_parent"
                 android:background="#E49A9999"
-                android:digits="20"
                 android:elevation="100dp"
                 android:hint="@string/chatInputHint"
                 android:imeOptions="actionSend"
@@ -1030,5 +1041,6 @@
         android:onClick="startNextGame"
         android:src="@drawable/start_next_button"
         android:visibility="gone"/>
+
 
 </RelativeLayout>

@@ -8,12 +8,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:3216414081:android:8005a28163a339f2484480",
+        "mobilesdk_app_id": "1:3216414081:android:d063821f3a0ae747484480",
         "android_client_info": {
-          "package_name": "com.example.three_of_spades"
+          "package_name": "com.kaalikiteeggi.three_of_spades"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "3216414081-lg3fgsgirmclngtppqs4iak93vsu3js9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kaalikiteeggi.three_of_spades",
+            "certificate_hash": "085b0010deb2bda22ab43544b74f3a5f5a2cbaf3"
+          }
+        },
+        {
+          "client_id": "3216414081-0jbgheb27ihj9hgrhb5nmmtjnaefeee1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kaalikiteeggi.three_of_spades",
+            "certificate_hash": "38f3a6669434062d1a3cbc65b097bdb989327ea1"
+          }
+        },
         {
           "client_id": "3216414081-rd7i43b5tlea8kkgjfcmbburrf1o823f.apps.googleusercontent.com",
           "client_type": 3

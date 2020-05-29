@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:anim/accelerate_interpolator">
-        <translate android:fromYDelta="0%p" android:toYDelta="-10%p" android:duration="200"
-            android:interpolator="@android:anim/accelerate_interpolator"/>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!--        <translate android:fromYDelta="-20%p" android:toYDelta="100%p" android:duration="800"/>-->
-    <translate android:fromYDelta="-10%p" android:toYDelta="100%p" android:duration="600"   android:startOffset="200"
+    <translate android:duration="200"
+        android:fromYDelta="0%p"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:toYDelta="-15%p"/>
+
+    <translate android:duration="700"
+        android:fromYDelta="-10%p"
+        android:startOffset="200"
+        android:toYDelta="100%p"
         android:interpolator="@android:anim/accelerate_interpolator"/>
 
 </set>

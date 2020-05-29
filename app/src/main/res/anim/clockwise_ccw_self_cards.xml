@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+<!--        <translate android:fromYDelta="50%p" android:toYDelta="0" android:duration="800"/>-->
+
+
+    <rotate
+        android:duration="450"
+        android:fromDegrees="360"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toDegrees="0" >
+    </rotate>
+    <rotate
+        android:duration="550"
+        android:fromDegrees="0"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:startOffset="450"
+        android:toDegrees="270" >
+    </rotate>
+    <rotate
+        android:duration="1300"
+        android:fromDegrees="270"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:startOffset="1000"
+        android:toDegrees="90" > <!-- duration of shuffling is 4900 so 1500 + 4000 offset -->
+    </rotate>
+
+</set>

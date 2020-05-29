@@ -11,69 +11,62 @@
     tools:context=".StartScreen">
 
     <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/gifStartScreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
-        android:src="@drawable/smoke_swirl"
-        android:stateListAnimator="@anim/blink_and_scale"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textInputEditText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:background="@color/Black"
-        android:backgroundTint="@color/Black"
-        android:fadingEdge="horizontal|vertical"
-        android:fontFamily="sans-serif-smallcaps"
-        android:hapticFeedbackEnabled="true"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:onClick="submitButton"
-        android:text="@string/submit_button"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="#FFB300"
-
-        android:textSize="40sp"
-        android:textStyle="bold"
-        app:cornerRadius="15dp"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:strokeColor="#E1BE25"
-        app:strokeWidth="3dp" />
-
-    <EditText
-        android:id="@+id/textInputEditText"
-        style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
         android:layout_width="match_parent"
-        android:layout_height="97dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/black_squares" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleX= "0.9"
+        android:scaleY="0.9"
+        android:src= "@drawable/_s_icon_spadeedit" />
+
+
+    <ImageView
+        android:id="@+id/icon_3startscreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="350dp"
-        android:layout_marginEnd="15dp"
-        android:alpha="1"
-        android:cursorVisible="true"
-        android:hint="@string/hint_entername"
-        android:importantForAutofill="no"
-        android:inputType="textCapSentences"
-        android:shadowColor="#353535"
-        android:shadowDx="10"
-        android:shadowDy="10"
-        android:shadowRadius="5"
-        android:singleLine="true"
-        android:textAlignment="center"
-        android:textColor="#ACA8A8"
-        android:textDirection="firstStrongRtl"
-        android:textSize="55sp" />
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:src="@drawable/_s_icon_3shadow" />
+
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/googleSignInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/facebookLoginButton"
+        android:layout_alignStart="@+id/facebookLoginButton"
+        android:layout_alignEnd="@+id/facebookLoginButton"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="6dp"
+        android:visibility="visible" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebookLoginButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/twitterLoginButton"
+        android:layout_alignStart="@+id/twitterLoginButton"
+        android:layout_alignEnd="@+id/twitterLoginButton"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp" />
+
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        android:id="@+id/twitterLoginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="#0D5BAF" />
+
 
 </RelativeLayout>

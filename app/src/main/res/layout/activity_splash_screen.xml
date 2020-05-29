@@ -1,13 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".SplashScreen">
+    tools:context="com.kaalikiteeggi.three_of_spades.SplashScreen">
 
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_spades_colourful" />
+        android:src="@drawable/black_squares" />
+
+    <ImageView
+        android:id="@+id/spadeIcon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleX="0.9"
+        android:scaleY="0.9"
+        android:src="@drawable/_s_icon_spadeedit" />
+
+    <ImageView
+        android:id="@+id/icon_3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:src="@drawable/_s_icon_3shadow" />
+
+    <ImageButton
+        android:id="@+id/profilePic2"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/border"
+        android:backgroundTintMode="add"
+        android:elevation="100dp"
+        android:foreground="@drawable/_s_icon_3shadow"
+        android:soundEffectsEnabled="true"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/welcomeUserNameview2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profilePic2"
+        android:layout_alignBottom="@+id/profilePic2"
+        android:layout_marginStart="-28dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_toEndOf="@+id/profilePic2"
+        android:background="@color/Black"
+        android:backgroundTint="@color/Black"
+        android:backgroundTintMode="add"
+        android:elevation="90dp"
+        android:fontFamily="@font/nosifer"
+        android:hapticFeedbackEnabled="true"
+        android:paddingStart="35dp"
+        android:text="@string/playeName"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/font_yellow"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:translationZ="50dp"
+        android:visibility="gone"
+        app:cornerRadius="20dp"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/progressBarPlayer4"
+        app:strokeWidth="1dp" />
+
+    <TextView
+        android:id="@+id/welcome2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/welcomeUserNameview2"
+        android:layout_alignStart="@+id/welcomeUserNameview2"
+        android:layout_alignEnd="@+id/welcomeUserNameview2"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="-20dp"
+        android:layout_toEndOf="@+id/profilePic"
+        android:gravity="bottom"
+        android:text="Welcome"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:visibility="gone" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBarLoading"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
+        android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
+        android:indeterminateOnly="false"
+        android:indeterminateTint="#FFE500"
+        android:progressTintMode="src_in"
+        android:rotation="360" />
+
 </RelativeLayout>

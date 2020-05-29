@@ -176,13 +176,13 @@
                 <TableRow
                     android:layout_marginTop="20dp">
                     <com.romainpiel.shimmer.ShimmerTextView
-                        android:id="@+id/gamesPlayedStats"
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="left|center"
-                        android:text="Rounds played : "
-                        android:textColor="@color/font_grey_settings"
-                        android:textSize="20sp"/>
+                android:id="@+id/gamesPlayedStats"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:gravity="left|center"
+                android:text="Rounds played : "
+                android:textColor="@color/font_grey_settings"
+                android:textSize="20sp"/>
                     <com.romainpiel.shimmer.ShimmerTextView
                         android:id="@+id/ngamesPlayedStats"
                         android:layout_width="wrap_content"
@@ -233,8 +233,8 @@
 
             </TableLayout>
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
                 <com.romainpiel.shimmer.ShimmerButton
                     android:id="@+id/signoutbutton"
@@ -265,8 +265,8 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_below="@+id/removeAds"
-        android:layout_marginTop="15dp"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="0dp"
         android:elevation="30dp"
         android:onClick="rateUs"
@@ -286,27 +286,27 @@
 
 
     <com.romainpiel.shimmer.ShimmerButton
-        android:id="@+id/createRoomButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/createRoomIcon"
-        android:layout_alignBottom="@+id/createRoomIcon"
-        android:layout_marginStart="-35dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_toEndOf="@+id/createRoomIcon"
-        android:background="@drawable/shine_button_black"
-        android:fadingEdge="horizontal|vertical"
-        android:fontFamily="sans-serif-smallcaps"
-        android:onClick="createRoomButtonClicked"
-        android:paddingStart="40dp"
-        android:paddingEnd="12dp"
-        android:text="@string/createRoom"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/font_yellow"
-        android:textSize="22sp"
-        />
+            android:id="@+id/createRoomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/createRoomIcon"
+            android:layout_alignBottom="@+id/createRoomIcon"
+            android:layout_marginStart="-35dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_toEndOf="@+id/createRoomIcon"
+            android:background="@drawable/shine_button_black"
+            android:fadingEdge="horizontal|vertical"
+            android:fontFamily="sans-serif-smallcaps"
+            android:onClick="createRoomButtonClicked"
+            android:paddingStart="40dp"
+            android:paddingEnd="12dp"
+            android:text="@string/createRoom"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/font_yellow"
+            android:textSize="22sp"
+       />
     <ImageButton
         android:id="@+id/createRoomIcon"
         android:layout_width="80dp"
@@ -430,64 +430,64 @@
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
         android:textSize="22sp" />
-    <LinearLayout
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="0dp"
+    android:orientation="vertical">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageButton
+        android:id="@+id/developerIcon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_above="@+id/addViewMHS"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="17dp"
+        android:layout_marginBottom="-15dp"
+        android:background="@drawable/border_yellow_only"
+        android:backgroundTintMode="add"
+        android:elevation="90dp"
+        android:foreground="@drawable/_s_icon_3shadow"
+        android:onClick="developerCredits"
+        android:soundEffectsEnabled="true" />
+
+    <com.romainpiel.shimmer.ShimmerButton
+        android:id="@+id/developerCreditsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/developerIcon"
+        android:layout_alignBottom="@+id/developerIcon"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/shine_button_black"
+        android:fadingEdge="horizontal|vertical"
+        android:fontFamily="sans-serif-smallcaps"
+        android:onClick="developerCredits"
+        android:text="@string/developerCredits"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/font_yellow"
+        android:textSize="14sp"
+        android:translationZ="50dp"
+        app:cornerRadius="3dp"
+        app:strokeColor="@color/font_yellow"
+        app:strokeWidth="1dp" />
+</RelativeLayout>
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/addViewMHS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="0dp"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageButton
-                android:id="@+id/developerIcon"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_above="@+id/addViewMHS"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="17dp"
-                android:layout_marginBottom="-15dp"
-                android:background="@drawable/border_yellow_only"
-                android:backgroundTintMode="add"
-                android:elevation="90dp"
-                android:foreground="@drawable/_s_icon_3shadow"
-                android:onClick="developerCredits"
-                android:soundEffectsEnabled="true" />
-
-            <com.romainpiel.shimmer.ShimmerButton
-                android:id="@+id/developerCreditsButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/developerIcon"
-                android:layout_alignBottom="@+id/developerIcon"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/shine_button_black"
-                android:fadingEdge="horizontal|vertical"
-                android:fontFamily="sans-serif-smallcaps"
-                android:onClick="developerCredits"
-                android:text="@string/developerCredits"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/font_yellow"
-                android:textSize="14sp"
-                android:translationZ="50dp"
-                app:cornerRadius="3dp"
-                app:strokeColor="@color/font_yellow"
-                app:strokeWidth="1dp" />
-        </RelativeLayout>
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/addViewMHS"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="0dp"
-            app:adSize="BANNER"
-            app:adUnitId="@string/bannerTest" />
-    </LinearLayout>
+        app:adSize="BANNER"
+        app:adUnitId="@string/bannerTest" />
+</LinearLayout>
     <RelativeLayout
         android:id="@+id/joinRoomFrame"
         android:layout_width="match_parent"
@@ -568,10 +568,10 @@
                 app:shimmer_highlight_color="#FFFFFF"
                 app:shimmer_repeat_mode="restart"
                 app:shimmer_shape="linear">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:src="@drawable/shine_button_black_bar" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:src="@drawable/shine_button_black_bar" />
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <Button
@@ -900,12 +900,12 @@
                             app:shimmer_repeat_mode="reverse"
                             app:shimmer_shape="radial"
                             app:shimmer_tilt="0">
-                            <ImageView
-                                android:layout_width="75dp"
-                                android:layout_height="100dp"
-                                android:onClick="changeBackgroundRequest"
-                                android:src="@drawable/shine_blue"
-                                android:tag="shine_blue" />
+                        <ImageView
+                            android:layout_width="75dp"
+                            android:layout_height="100dp"
+                            android:onClick="changeBackgroundRequest"
+                            android:src="@drawable/shine_blue"
+                            android:tag="shine_blue" />
                         </com.facebook.shimmer.ShimmerFrameLayout>
                         <com.facebook.shimmer.ShimmerFrameLayout
                             android:id="@+id/frameShimmer2"
@@ -1093,21 +1093,21 @@
 
     <Button
         android:id="@+id/welcomeUserNameview"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignTop="@+id/profilePic"
         android:layout_alignBottom="@+id/profilePic"
         android:layout_marginStart="-28dp"
-        android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:layout_toEndOf="@+id/profilePic"
-        android:elevation="90dp"
         android:background="@color/Black"
         android:backgroundTint="@color/Black"
         android:backgroundTintMode="add"
+        android:elevation="90dp"
         android:fontFamily="@font/nosifer"
-        android:onClick="openClosePlayerStats"
         android:hapticFeedbackEnabled="true"
+        android:onClick="openClosePlayerStats"
         android:paddingStart="35dp"
         android:text="@string/playeName"
         android:textAlignment="center"

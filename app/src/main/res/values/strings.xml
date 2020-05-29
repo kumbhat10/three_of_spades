@@ -1,4 +1,20 @@
 <resources>
+    <string name="facebook_app_id">231024018145704</string>
+    <string name="fb_login_protocol_scheme">fb231024018145704</string>
+    <string name="twitter_consumer_key" translatable="false">3lO8Inhu76bB6LiBHegyenODQ</string>
+    <string name="twitter_consumer_secret" translatable="false">gXjsRXLBFXCWT2p8RiqbAXEZ9LggL9yzt4xJ5fI9rhkHCkemd6</string>
+
+    <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
+    <string name="testDeviceId">3872102D27DCB017E465C646FA620D3C</string>
+    <string name="bannerReal">ca-app-pub-2714670043901113/7483435555</string>
+    <string name="bannerTest">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="interstitialReal">ca-app-pub-2714670043901113/9924950426</string>
+    <string name="interstitialTestVideo">ca-app-pub-3940256099942544/8691691433</string>
+    <string name="interstitialTest">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="rewardedReal">ca-app-pub-2714670043901113/2295715721</string>
+    <string name="rewardedTest">ca-app-pub-3940256099942544/5224354917</string>
+
+
     <string name="app_name">Kaali ki Tiggi</string>
     <string name="submit_button">Submit</string>
     <string name="welcome_msg">Welcome</string>
@@ -7,7 +23,11 @@
     <string name="developer_contact">kumbhat10@gmail.com</string>
     <string name="createRoom">Create Room</string>
     <string name="joinRoom">Join Room</string>
-    <string name="invite">Invite</string>
+    <string name="join">Join</string>
+
+    <string name="invite">Invite Friends</string>
+    <string name="settings">Settings</string>
+    <string name="signout">Sign Out</string>
 
     <string name="roomID">Room ID 12345</string>
     <string name="roomID_host">Host : XXXXX</string>
@@ -36,7 +56,7 @@
     <string name="partner1">Buddy 1</string>
     <string name="partner2">Buddy 2</string>
     <string name="bidValue"> Bid : </string>
-    <string name="bidValue1">Nill</string>
+    <string name="bidValue1">Nil</string>
     <string name="bid05button">+5</string>
     <string name="bid10button">+10</string>
     <string name="bid20button">+20</string>
@@ -53,5 +73,14 @@
     <string name="timerStart">10s</string>
     <string name="partnerSelection1">Choose your 1st Buddy</string>
     <string name="partnerSelection2">Choose your 2nd Buddy</string>
+    <string name="shufflingcards">Shuffling Cards</string>
+    <string name="bothPartner">Both</string>
+    <string name="onlyPartner">Only</string>
+    <string name="anyPartner">Any</string>
+    <string name="_10_pts">10 pts</string>
+    <string name="_360">360</string>
+    <string name="_400">400</string>
+    <string name="_0">0</string>
+    <string name="playeName">Player</string>
 
 </resources>

@@ -18,7 +18,7 @@
         android:background="#FF9800"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="10 pts"
+        android:text="@string/_10_pts"
         android:textColor="@color/Black"
         android:textSize="12sp"
         android:textStyle="bold" />
@@ -35,6 +35,8 @@
         android:elevation="50dp"
         android:fadingEdge="horizontal"
         android:paddingEnd="-10dp"
+        android:paddingStart="0dp"
+
         app:srcCompat="@drawable/ic_hearts" />
 
 </RelativeLayout>

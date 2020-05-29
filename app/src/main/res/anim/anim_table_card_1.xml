@@ -8,7 +8,22 @@
         android:fromXDelta="-35%p"
         android:toXDelta="0%p"
 
-        android:duration="300"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        android:duration="200"
+        android:interpolator="@android:anim/accelerate_interpolator">
+    </translate>
+<!--    <rotate-->
+<!--        android:fromDegrees="125"-->
+<!--        android:toDegrees="0"-->
+<!--        android:pivotX="50%"-->
+<!--        android:pivotY="50%"-->
+<!--        android:duration="200">-->
+
+<!--    </rotate>-->
+
+
+
+    <!--  -55 degree actual angle so 180 - 55 = 125     -->
+
+
 
 </set>

@@ -7,13 +7,13 @@
 
     <TextView
         android:id="@+id/textViewPartner"
-        android:layout_width="54dp"
+        android:layout_width="44dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/imageViewPartner"
         android:layout_alignEnd="@+id/imageViewPartner"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="3dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
         android:layout_marginBottom="-1dp"
         android:background="#FF9800"
         android:fontFamily="sans-serif"
@@ -25,8 +25,8 @@
 
     <ImageView
         android:id="@+id/imageViewPartner"
-        android:layout_width="55dp"
-        android:layout_height="75dp"
+        android:layout_width="45dp"
+        android:layout_height="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"

@@ -8,27 +8,35 @@
     android:visibility="visible"
     tools:context=".CreatenJoinRoomScreen">
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/gifViewJoiningRoom1"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/frameShimmerJoiningRoom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/smoke_swirl"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:shimmer_base_alpha="0.9"
+        app:shimmer_clip_to_children="true"
+        app:shimmer_colored="false"
+        app:shimmer_direction="bottom_to_top"
+        app:shimmer_duration="1800"
+        app:shimmer_repeat_delay="0"
+        app:shimmer_repeat_mode="reverse"
+        app:shimmer_shape="radial"
+        app:shimmer_tilt="0">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/backgroundJoiningRoom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/shine_bk" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/gifViewJoiningRoom2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/firecracker_success"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/button_roomID"
@@ -139,34 +147,17 @@
         android:progressDrawable="@android:drawable/button_onoff_indicator_on"
         android:progressTint="@color/progressBarPlayer4" />
 
-    <Button
+    <ImageView
         android:id="@+id/startGameButton"
         android:onClick="updateGameStateToPlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
-        android:backgroundTint="#00231111"
+        android:layout_marginBottom="20dp"
         android:enabled="true"
-        android:fadingEdge="horizontal|vertical"
-        android:fontFamily="sans-serif-smallcaps"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:text="@string/startGameButtonText"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/progressBarPlayer4"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:cornerRadius="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="2dp" />
+        android:src="@drawable/power1"
+        android:visibility="invisible"/>
 
     <ScrollView
         android:id="@+id/scrollPlayerList"
@@ -349,10 +340,9 @@
 
     <ImageView
         android:id="@+id/imageViewShareButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/scrollPlayerList"
-
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
         android:contentDescription="@string/app_name"

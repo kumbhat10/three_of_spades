@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    package="com.example.three_of_spades">
+    package="com.kaalikiteeggi.three_of_spades">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
+
+    <supports-screens
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"/>
 
     <application
         android:allowBackup="true"
@@ -10,36 +19,65 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
-        <activity android:name=".SlideView" />
+    <provider
+        android:name="androidx.core.content.FileProvider"
+        android:authorities="${applicationId}.provider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/provider_paths"/>
+    </provider>
 
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-2714670043901113~4920035759" />
 
-        <activity android:name=".SplashScreen">
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
+
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".SlideView" />
+
+        <activity android:name="com.kaalikiteeggi.three_of_spades.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreatenJoinRoomScreen" />
+        <activity android:name=".DeveloperCredits" />
+        <activity android:name=".CreatenJoinRoomScreen"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"/>
         <activity
             android:name=".GameScreen"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".DeveloperCredits" />
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"/>
         <activity
             android:name=".MainHomeScreen"
-            android:parentActivityName=".StartScreen" />
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
-            android:name=".StartScreen"
-            android:parentActivityName=".SplashScreen">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
+            android:name=".StartScreen">
+        </activity>2rer-+
 
         <meta-data
             android:name="preloaded_fonts"

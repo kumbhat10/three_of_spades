@@ -3,18 +3,20 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
-        applicationId "com.example.three_of_spades"
-        minSdkVersion 24
+        ext.alwaysUpdateBuildId = false
+        applicationId "com.kaalikiteeggi.three_of_spades"
+        minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-        ndkVersion "21.1.6352462"
+        versionCode 2
+        versionName "2.0"
+        ndkVersion "21.1.6363665"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
     }
@@ -37,17 +39,29 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-invites:17.0.0'
+
+    implementation 'ch.halcyon:squareprogressbar:1.6.4'
+    implementation 'com.romainpiel.shimmer:library:1.4.0@aar'
+    implementation 'com.pkmmte.view:circularimageview:1.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.twitter.sdk.android:twitter:3.3.0'
+    implementation 'com.facebook.android:facebook-login:[5,6)'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.google.android.gms:play-services-ads:19.1.0'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
-//    implementation 'com.google.firebase:firebase-auth:19.3.0'
-//    implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
-    // Required only if Facebook login support is required
-    // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
-//    implementation 'com.facebook.android:facebook-android-sdk:4.x'
-    implementation 'com.google.firebase:firebase-database:19.3.0'
+    implementation 'com.google.android.gms:play-services-games:19.0.0'
+
+    implementation 'com.android.billingclient:billing-ktx:2.2.1'
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-invites:17.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
     implementation 'com.google.firebase:firebase-database-ktx:19.3.0'
-    implementation 'com.google.firebase:firebase-analytics:17.4.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.4.2'
+
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'

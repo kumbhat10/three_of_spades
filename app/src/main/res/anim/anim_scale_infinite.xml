@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-    <scale xmlns:android="http://schemas.android.com/apk/res/android"
-        android:fromXScale="0.96"
-        android:toXScale="1.08"
-        android:fromYScale="0.96"
-        android:toYScale="1.08"
-        android:duration="500"
-        android:pivotX="50%"
-        android:pivotY="50%"
-        android:interpolator="@android:anim/accelerate_interpolator"
-        android:repeatCount = "infinite"
-        android:repeatMode = "reverse">
-    </scale>
+<scale
+    android:duration="500"
+    android:fromXScale="0.96"
+    android:fromYScale="0.96"
+    android:interpolator="@android:anim/accelerate_interpolator"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:repeatCount = "infinite"
+    android:repeatMode = "reverse"
+    android:toXScale="1.08"
+    android:toYScale="1.08">
+</scale>
 </set>

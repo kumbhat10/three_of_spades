@@ -4,14 +4,14 @@
 
     <translate
         android:fromYDelta="-100%p"
-        android:toYDelta="10%p"
-        android:duration="500"
+        android:duration="400"
+        android:toYDelta="0%p"
         android:interpolator="@android:anim/accelerate_interpolator"/>
 
-    <translate android:fromYDelta="10%p"
-        android:toYDelta="-10%p"
-        android:duration="500"
-        android:startOffset="500"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+<!--    <translate android:fromYDelta="5%p"-->
+<!--        android:toYDelta="0%p"-->
+<!--        android:duration="200"-->
+<!--        android:startOffset="500"-->
+<!--        android:interpolator="@android:anim/accelerate_interpolator"/>-->
 
 </set>

@@ -7,8 +7,17 @@
         android:toYDelta="0%p"
         android:fromXDelta="-18%p"
         android:toXDelta="0%p"
-        android:duration="250"
+        android:duration="200"
         android:interpolator="@android:anim/accelerate_interpolator"/>
 
+    <!--  -20 degree actual angle so -80    -->
+
+<!--    <rotate-->
+<!--        android:fromDegrees="20"-->
+<!--        android:toDegrees="0"-->
+<!--        android:pivotX="50%"-->
+<!--        android:pivotY="50%"-->
+<!--        android:duration="200">-->
+<!--    </rotate>-->
 
 </set>
