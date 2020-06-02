@@ -39,13 +39,14 @@ android {
 }
 
 dependencies {
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha03"
 
     implementation 'ch.halcyon:squareprogressbar:1.6.4'
     implementation 'com.romainpiel.shimmer:library:1.4.0@aar'
     implementation 'com.pkmmte.view:circularimageview:1.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.twitter.sdk.android:twitter:3.3.0'
-    implementation 'com.facebook.android:facebook-login:[5,6)'
+    implementation 'com.facebook.android:facebook-login:5.15.3'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
@@ -61,9 +62,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
     implementation 'com.google.firebase:firebase-analytics:17.4.2'
 
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

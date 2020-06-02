@@ -33,7 +33,7 @@
     <string name="roomID_host">Host : XXXXX</string>
     <string name="hinRoomID">Room ID</string>
     <string name="developerCredits">Developer Credits</string>
-    <string name="waitingToJoin">Waiting for players to join</string>
+    <string name="waitingToJoin">Waiting for players</string>
     <string name="player2">Player2 :</string>
     <string name="player6">Player6 :</string>
     <string name="player7">Player7 :</string>
@@ -81,6 +81,17 @@
     <string name="_360">360</string>
     <string name="_400">400</string>
     <string name="_0">0</string>
-    <string name="playeName">Player</string>
+    <string name="playeName">Player ?</string>
+    <string name="room_id">Room ID</string>
+    <string name="share">SHARE</string>
+    <string name="host">Host</string>
+    <string name="welcome">Welcome</string>
+    <string name="todo">TODO</string>
+    <string name="player_stats">Player Stats</string>
+    <string name="rounds_played">Rounds played :</string>
+    <string name="nill">Nill</string>
+    <string name="rounds_won">Rounds won :</string>
+    <string name="rounds_bided">Rounds bided :</string>
+    <string name="sound">Sound</string>
 
 </resources>

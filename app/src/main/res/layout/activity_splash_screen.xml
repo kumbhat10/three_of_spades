@@ -28,7 +28,7 @@
         android:scaleY="0.8"
         android:src="@drawable/_s_icon_3shadow" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/profilePic2"
         android:layout_width="90dp"
         android:layout_height="90dp"
@@ -38,7 +38,7 @@
         android:background="@drawable/border"
         android:backgroundTintMode="add"
         android:elevation="100dp"
-        android:foreground="@drawable/_s_icon_3shadow"
+        android:src="@drawable/_s_icon_3shadow"
         android:soundEffectsEnabled="true"
         android:visibility="gone" />
 
@@ -82,10 +82,9 @@
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="-20dp"
-        android:layout_toEndOf="@+id/profilePic"
+        android:layout_toEndOf="@+id/profilePic2"
         android:gravity="bottom"
         android:text="Welcome"
-        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:visibility="gone" />
