@@ -44,11 +44,11 @@
         android:clickable="true"
         android:contentDescription="@string/todo"
         android:focusable="true"
-        android:onClick="leaveJoiningRoom"
+        android:onClick="closeJoiningRoom"
         app:srcCompat="@drawable/stop_sign"/>
 
     <ImageView
-        android:id="@+id/profilePic3"
+        android:id="@+id/hostPhoto"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentStart="true"
@@ -63,15 +63,15 @@
         android:visibility="visible"/>
 
     <Button
-        android:id="@+id/welcomeUserNameview3"
+        android:id="@+id/hostName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profilePic3"
-        android:layout_alignBottom="@+id/profilePic3"
+        android:layout_alignTop="@+id/hostPhoto"
+        android:layout_alignBottom="@+id/hostPhoto"
         android:layout_marginStart="-28dp"
         android:layout_marginTop="18dp"
         android:layout_marginBottom="18dp"
-        android:layout_toEndOf="@+id/profilePic3"
+        android:layout_toEndOf="@+id/hostPhoto"
         android:background="@color/Black"
         android:backgroundTint="@color/Black"
         android:backgroundTintMode="add"
@@ -96,13 +96,13 @@
         android:id="@+id/welcome3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/welcomeUserNameview3"
-        android:layout_alignStart="@+id/welcomeUserNameview3"
-        android:layout_alignEnd="@+id/welcomeUserNameview3"
+        android:layout_above="@+id/hostName"
+        android:layout_alignStart="@+id/hostName"
+        android:layout_alignEnd="@+id/hostName"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="-25dp"
-        android:layout_toEndOf="@+id/profilePic3"
+        android:layout_toEndOf="@+id/hostPhoto"
         android:text="@string/host"
         android:textAlignment = "center"
         android:textColor="#FFFFFF"
@@ -112,7 +112,7 @@
     <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/welcomeUserNameview3"
+        android:layout_below="@+id/hostName"
         android:layout_marginStart="50dp"
         android:layout_marginTop="-24dp"
         android:layout_marginEnd="40dp"
@@ -134,9 +134,10 @@
 
     <ImageView
         android:id="@+id/roomIDIcon"
+        android:layout_below="@+id/hostName"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_below="@+id/welcomeUserNameview3"
+        android:onClick="shareRoomInfo"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="-35dp"
         android:layout_marginEnd="10dp"
@@ -147,6 +148,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_roomID"
+        android:onClick="shareRoomInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/roomIDIcon"
@@ -186,7 +188,6 @@
 
     <ProgressBar
         android:id="@+id/progressBarMain"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/waitingToJoinText"
@@ -195,10 +196,9 @@
         android:layout_toStartOf="@+id/waitingToJoinText"
         android:indeterminate="true"
         android:indeterminateBehavior="repeat"
-        android:indeterminateTint="#0099FF"
+        android:indeterminateTint="#E8E8E8"
         android:progress="100"
         android:progressTint="@color/progressBarPlayer4" />
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/player2Text"
@@ -628,7 +628,7 @@
         android:layout_centerInParent="true"
         android:contentDescription="@string/todo"
         android:enabled="true"
-        android:onClick="updateGameStateToPlay"
+        android:onClick="startGame"
         android:src="@drawable/power1"
         android:visibility="gone" />
 </RelativeLayout>
@@ -640,5 +640,5 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         app:adSize="BANNER"
-        app:adUnitId="@string/bannerTest" />
+        app:adUnitId="@string/banner" />
 </RelativeLayout>

@@ -3,7 +3,7 @@
     <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
 
-        <item name="colorPrimary">@color/Grey</item>
+        <item name="colorPrimary">@color/font_yellow</item>
         <item name="colorPrimaryDark">@color/Black</item>
         <item name="colorAccent">@color/teal200</item>
     </style>

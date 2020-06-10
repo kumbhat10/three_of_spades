@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +8,6 @@
     android:paddingStart="0dp"
     android:paddingEnd="0dp"
     tools:context=".StartScreen">
-
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +18,8 @@
         android:layout_height="match_parent"
         android:scaleX= "0.9"
         android:scaleY="0.9"
-        android:src= "@drawable/_s_icon_spadeedit" />
+        android:contentDescription="@null"
+        android:src= "@drawable/_s_icon_spadeedit"/>
 
 
     <ImageView
@@ -31,7 +30,8 @@
         android:layout_alignParentTop="true"
         android:scaleX="0.8"
         android:scaleY="0.8"
-        android:src="@drawable/_s_icon_3shadow" />
+        android:contentDescription="@null"
+        android:src="@drawable/_s_icon_3shadow"/>
 
 
     <com.google.android.gms.common.SignInButton
@@ -65,8 +65,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:backgroundTint="#0D5BAF" />
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="#0D5098"
+        android:textColor="#FFFFFF" />
 
 
 </RelativeLayout>

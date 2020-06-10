@@ -6,21 +6,23 @@
 
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
     <string name="testDeviceId">3872102D27DCB017E465C646FA620D3C</string>
+
     <string name="bannerReal">ca-app-pub-2714670043901113/7483435555</string>
     <string name="bannerTest">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner">@string/bannerTest</string>
+
     <string name="interstitialReal">ca-app-pub-2714670043901113/9924950426</string>
     <string name="interstitialTestVideo">ca-app-pub-3940256099942544/8691691433</string>
     <string name="interstitialTest">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="interstitial">@string/interstitialTest</string>
+
     <string name="rewardedReal">ca-app-pub-2714670043901113/2295715721</string>
     <string name="rewardedTest">ca-app-pub-3940256099942544/5224354917</string>
-
+    <string name="rewarded">@string/rewardedTest</string>
 
     <string name="app_name">Kaali ki Tiggi</string>
-    <string name="submit_button">Submit</string>
-    <string name="welcome_msg">Welcome</string>
-    <string name="user_name_request">"    Enter Name"</string>
     <string name="developer">Dushyant Kumbhat</string>
-    <string name="developer_contact">kumbhat10@gmail.com</string>
+    <string name="developer_contact">kaaliteerifun@gmail.com</string>
     <string name="createRoom">Create Room</string>
     <string name="joinRoom">Join Room</string>
     <string name="join">Join</string>
@@ -29,22 +31,10 @@
     <string name="settings">Settings</string>
     <string name="signout">Sign Out</string>
 
-    <string name="roomID">Room ID 12345</string>
-    <string name="roomID_host">Host : XXXXX</string>
     <string name="hinRoomID">Room ID</string>
-    <string name="developerCredits">Developer Credits</string>
+    <string name="developerCredits">Contact Developer</string>
     <string name="waitingToJoin">Waiting for players</string>
-    <string name="player2">Player2 :</string>
-    <string name="player6">Player6 :</string>
-    <string name="player7">Player7 :</string>
-    <string name="player5">Player5 :</string>
-    <string name="player4">Player4 :</string>
-    <string name="player3">Player3 :</string>
     <string name="playerJoinedConfirmation">Ready to Start</string>
-    <string name="startGameButtonText">Start</string>
-    <string name="hostToStart">Host to Start</string>
-    <string name="spadesVectorGraphic">spades Vector</string>
-    <string name="hint_entername">Enter Name</string>
     <string name="shuffling_cards">Shuffling Cards</string>
     <string name="playerView6">Player</string>
     <string name="playerView5">Player</string>
@@ -56,7 +46,7 @@
     <string name="partner1">Buddy 1</string>
     <string name="partner2">Buddy 2</string>
     <string name="bidValue"> Bid : </string>
-    <string name="bidValue1">Nil</string>
+    <string name="bidValue1">NIL</string>
     <string name="bid05button">+5</string>
     <string name="bid10button">+10</string>
     <string name="bid20button">+20</string>
@@ -86,6 +76,8 @@
     <string name="share">SHARE</string>
     <string name="host">Host</string>
     <string name="welcome">Welcome</string>
+    <string name="welcomeBack">Welcome back</string>
+
     <string name="todo">TODO</string>
     <string name="player_stats">Player Stats</string>
     <string name="rounds_played">Rounds played :</string>
@@ -93,5 +85,6 @@
     <string name="rounds_won">Rounds won :</string>
     <string name="rounds_bided">Rounds bided :</string>
     <string name="sound">Sound</string>
+    <string name="vibrate">Vibrate</string>
 
 </resources>

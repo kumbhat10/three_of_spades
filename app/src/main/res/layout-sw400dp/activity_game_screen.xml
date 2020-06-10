@@ -43,7 +43,7 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="normal"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textViewShuffling"
@@ -59,18 +59,6 @@
         android:textSize="19sp"
         android:visibility="gone" />
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/addView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="211dp"
-        app:adSize="BANNER"
-        app:adUnitId="@string/bannerTest" />
-
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/playerView1"
         android:layout_width="@dimen/imageWidth"
@@ -82,7 +70,7 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/lady1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon1"
@@ -119,7 +107,7 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/man1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon2"
@@ -156,7 +144,7 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/lady1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon3"
@@ -194,7 +182,7 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/man1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon4"
@@ -234,7 +222,7 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/lady1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon5"
@@ -272,7 +260,7 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/man1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon6"
@@ -403,8 +391,21 @@
         android:textColor="@color/white"
         android:textSize="12sp" />
 
-    <ProgressBar
+    <ImageView
+        android:id="@+id/closeGameRoomIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:onClick="closeGameRoom"
+        app:srcCompat="@drawable/stop_sign" />
 
+    <ProgressBar
         android:id="@+id/progressbarTimer"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="80dp"
@@ -415,9 +416,11 @@
         android:layout_marginEnd="5dp"
         android:indeterminate="false"
         android:max="100"
+        android:clickable="true"
         android:progress="100"
         android:progressDrawable="@drawable/progress_timer"
         android:secondaryProgress="100"
+        android:focusable="true"
         android:visibility="gone" />
 
     <TextView
@@ -431,6 +434,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
         android:text="@string/timerStart"
         android:textColor="@color/font_yellow"
         android:textSize="30sp"
@@ -451,14 +456,16 @@
         android:visibility="gone"/>
 
     <ImageView
-    android:id="@+id/scoreSheetButton"
-    android:layout_width="45dp"
-    android:layout_height="45dp"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentBottom="true"
-    android:layout_marginBottom="25dp"
-    android:onClick="openCloseScoreSheet"
-    android:src="@drawable/info"/>
+        android:id="@+id/scoreSheetButton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:elevation="50dp"
+        android:onClick="openCloseScoreSheet"
+        android:src="@drawable/info"
+        tools:ignore="ContentDescription" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
@@ -555,7 +562,6 @@
         android:textColor="@color/progressBarPlayer4"
         android:textSize="30sp"
         android:textStyle="bold" />
-
 
     <FrameLayout
         android:id="@+id/frameAskBid"
@@ -657,7 +663,6 @@
                 app:cornerRadius="20dp"
                 app:strokeColor="@color/Black"
                 app:strokeWidth="3dp" />
-
         </com.google.android.material.chip.ChipGroup>
 
         <Button
@@ -676,7 +681,6 @@
             app:cornerRadius="20dp"
             app:strokeColor="#FFFFFF"
             app:strokeWidth="3dp" />
-
     </FrameLayout>
 
     <FrameLayout
@@ -712,7 +716,6 @@
             android:layout_marginBottom="30dp"
             android:orientation="horizontal"
             app:singleLine="true">
-
 
             <ImageView
                 android:id="@+id/imageViewTrumpHearts"
@@ -773,7 +776,6 @@
             android:layout_height="180dp"
             android:background="#D80B1C2E"
             android:elevation="100dp"
-
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarSize="9dp"
             android:scrollbars="vertical">
@@ -792,7 +794,6 @@
                 android:textColor="#FFFFFF"
                 android:textColorHint="#666666"
                 android:textSize="15sp" />
-
         </ScrollView>
 
         <LinearLayout
@@ -837,7 +838,6 @@
                 android:textSize="16sp"
                 app:cornerRadius="15dp" />
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
@@ -856,7 +856,6 @@
         android:elevation="200dp"
         android:orientation="vertical"
         android:visibility="gone">
-
 
         <TextView
             android:id="@+id/textViewPartnerSelect"
@@ -1004,23 +1003,43 @@
             android:contentDescription="@string/app_name"
             android:visibility="invisible"
             app:srcCompat="@drawable/ic_back_side_blue" />
-
     </RelativeLayout>
+
+<RelativeLayout
+    android:id="@+id/scoreViewLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="15dp"
+    android:animateLayoutChanges="true"
+    android:background="#D8100823"
+    android:visibility="gone">
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/addViewGameScreenBanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="0dp"
+        app:adSize="BANNER"
+        app:adUnitId="@string/banner" />
 
     <ScrollView
         android:id="@+id/scrollViewScore"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_above="@id/addViewGameScreenBanner"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="95dp"
+        android:layout_marginBottom="0dp"
         android:animateLayoutChanges="true"
-        android:background="#D8100823"
         android:scrollbarSize="14dp"
         android:scrollbarStyle="insideOverlay"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/imageGalleryScore"
@@ -1029,18 +1048,29 @@
             android:layout_gravity="center_horizontal"
             android:orientation="vertical" />
     </ScrollView>
+</RelativeLayout>
 
     <ImageView
         android:id="@+id/startNextRoundButton"
         android:layout_width="230dp"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="0dp"
         android:clickable="true"
         android:onClick="startNextGame"
         android:src="@drawable/start_next_button"
-        android:visibility="gone"/>
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:visibility="gone" />
 
-
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="4"
+        android:textAlignment="viewEnd"
+        android:textColor="#FFFFFF" />
 </RelativeLayout>

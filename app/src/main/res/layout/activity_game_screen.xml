@@ -5,7 +5,7 @@
     android:id="@+id/mainView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Black"
+    android:background="#000000"
     android:elevation="20dp"
     tools:context=".GameScreen">
 
@@ -19,7 +19,7 @@
         android:onClick="closeChatWindow"
         android:scaleX="1.04"
         android:scaleY="1"
-        android:src="@drawable/table_stretch_full"
+        android:src="@drawable/table_stretch_side"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,16 +34,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/tableCardImageHeight"
         android:gravity="center"
-        android:paddingBottom="5dp"
+        android:paddingBottom="3dp"
         android:shadowColor="#454444"
         android:shadowDx="6"
         android:shadowDy="6"
         android:shadowRadius="5"
-        android:text="@string/_400"
+        android:text="@string/_360"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="normal"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textViewShuffling"
@@ -51,12 +51,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="@string/shuffling_cards"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="19sp"
+        android:textSize="22sp"
         android:visibility="gone" />
 
     <pl.droidsonroids.gif.GifImageView
@@ -66,18 +66,18 @@
         android:layout_below="@id/playerView2"
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/imageGapEnd"
-        android:layout_marginTop="-20dp"
+        android:layout_marginTop="-10dp"
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/lady1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon1"
         android:layout_width="@dimen/imageWidthCoin"
         android:layout_height="@dimen/imageWidthCoin"
         android:layout_above="@+id/textView1"
-        android:layout_marginStart="-15dp"
+        android:layout_marginStart="-5dp"
         android:layout_toEndOf="@id/playerView1"
         android:contentDescription="@string/app_name"
         android:src="@drawable/partnericon"
@@ -85,7 +85,7 @@
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="75dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView1"
         android:layout_alignParentStart="true"
@@ -94,7 +94,7 @@
         android:gravity="center|top"
         android:text="@string/playerView1"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/playerView2"
@@ -107,14 +107,14 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/man1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon2"
         android:layout_width="@dimen/imageWidthCoin"
         android:layout_height="@dimen/imageWidthCoin"
         android:layout_above="@+id/textView2"
-        android:layout_marginStart="-15dp"
+        android:layout_marginStart="-5dp"
         android:layout_toEndOf="@id/playerView2"
         android:contentDescription="@string/app_name"
         android:src="@drawable/partnericon"
@@ -122,7 +122,7 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="75dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView2"
         android:layout_marginStart="@dimen/imageGapBetween1"
@@ -131,7 +131,7 @@
         android:gravity="center|top"
         android:text="@string/playerView2"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/playerView3"
@@ -144,14 +144,14 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/lady1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon3"
         android:layout_width="@dimen/imageWidthCoin"
         android:layout_height="@dimen/imageWidthCoin"
         android:layout_below="@+id/playerView3"
-        android:layout_marginStart="-20dp"
+        android:layout_marginStart="-5dp"
         android:layout_marginTop="-15dp"
         android:layout_toEndOf="@id/playerView3"
         android:contentDescription="@string/app_name"
@@ -160,7 +160,7 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="75dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView3"
         android:layout_marginStart="@dimen/imageGapBetweenHorizontal"
@@ -169,7 +169,7 @@
         android:gravity="center|top"
         android:text="@string/playerView3"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/playerView4"
@@ -182,23 +182,23 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/man1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon4"
         android:layout_width="@dimen/imageWidthCoin"
         android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/textView4"
-        android:layout_marginEnd="-15dp"
-        android:layout_marginBottom="-10dp"
-        android:layout_toStartOf="@id/playerView4"
+        android:layout_below="@+id/playerView4"
+        android:layout_marginTop="-15dp"
+        android:layout_marginEnd= "-5dp"
+        android:layout_toStartOf ="@id/playerView4"
         android:contentDescription="@string/app_name"
         android:src="@drawable/partnericon"
         android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="75dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView4"
         android:layout_marginTop="0dp"
@@ -208,7 +208,7 @@
         android:gravity="center|top"
         android:text="@string/playerView4"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/playerView5"
@@ -222,7 +222,7 @@
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/lady1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon5"
@@ -230,15 +230,15 @@
         android:layout_height="@dimen/imageWidthCoin"
         android:layout_above="@+id/textView5"
         android:layout_marginTop="0dp"
-        android:layout_marginEnd="-20dp"
-        android:layout_toStartOf="@id/playerView5"
+        android:layout_marginEnd= "-10dp"
+        android:layout_toStartOf ="@id/playerView5"
         android:contentDescription="@string/app_name"
         android:src="@drawable/partnericon"
         android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="75dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView5"
         android:layout_marginTop="0dp"
@@ -247,7 +247,7 @@
         android:gravity="center|top"
         android:text="@string/playerView5"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/playerView6"
@@ -255,12 +255,12 @@
         android:layout_height="@dimen/imageHeight"
         android:layout_below="@+id/playerView5"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-20dp"
+        android:layout_marginTop="-10dp"
         android:layout_marginEnd="@dimen/imageGapEnd"
         android:contentDescription="@string/app_name"
         android:paddingStart="-25dp"
         android:paddingEnd="-25dp"
-        android:src="@drawable/man1" />
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/partnerIcon6"
@@ -268,15 +268,15 @@
         android:layout_height="@dimen/imageWidthCoin"
         android:layout_above="@+id/textView6"
         android:layout_marginTop="0dp"
-        android:layout_marginEnd="-20dp"
-        android:layout_toStartOf="@id/playerView6"
+        android:layout_marginEnd= "-10dp"
+        android:layout_toStartOf ="@id/playerView6"
         android:contentDescription="@string/app_name"
         android:src="@drawable/partnericon"
         android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="75dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView6"
         android:layout_alignParentEnd="true"
@@ -285,7 +285,7 @@
         android:gravity="center|top"
         android:text="@string/playerView6"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/playerView7"
@@ -300,25 +300,25 @@
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="75dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/horizontalScrollView"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="-10dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="-1dp"
         android:gravity="center|top"
         android:text="@string/playerView1"
         android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:visibility="visible" />
 
     <ImageView
         android:id="@+id/imageViewP2"
-        android:layout_width="50dp"
-        android:layout_height="70dp"
+        android:layout_width="44dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/imageGapEnd"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="35dp"
         android:layout_toStartOf="@+id/playerView4"
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/ic_back_side_blue" />
@@ -331,17 +331,17 @@
         android:layout_alignStart="@+id/imageViewP2"
         android:layout_marginStart="0dp"
         android:layout_marginTop="-2dp"
-        android:layout_marginEnd="@dimen/imageGapBetweenCards"
+        android:layout_marginEnd="30dp"
         android:layout_toStartOf="@+id/playerView4"
-        android:gravity="center_horizontal|top"
+        android:gravity="center|center_horizontal|top"
         android:text="@string/partner2"
         android:textColor="@color/white"
         android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/imageViewP1"
-        android:layout_width="50dp"
-        android:layout_height="70dp"
+        android:layout_width="44dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/imageGapEnd"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
@@ -351,7 +351,7 @@
 
     <TextView
         android:id="@+id/textViewP1"
-        android:layout_width="wrap_content"
+        android:layout_width="49dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewP1"
         android:layout_alignStart="@+id/imageViewP1"
@@ -366,8 +366,8 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/imageViewTrump"
-        android:layout_width="58dp"
-        android:layout_height="70dp"
+        android:layout_width="45dp"
+        android:layout_height="54dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/imageGapEnd"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
@@ -391,12 +391,25 @@
         android:textColor="@color/white"
         android:textSize="12sp" />
 
-    <ProgressBar
+    <ImageView
+        android:id="@+id/closeGameRoomIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:onClick="closeGameRoom"
+        app:srcCompat="@drawable/stop_sign" />
 
+    <ProgressBar
         android:id="@+id/progressbarTimer"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
@@ -406,12 +419,14 @@
         android:progress="100"
         android:progressDrawable="@drawable/progress_timer"
         android:secondaryProgress="100"
-        android:visibility="gone" />
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textViewTimer"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="false"
@@ -421,8 +436,10 @@
         android:gravity="center"
         android:text="@string/timerStart"
         android:textColor="@color/font_yellow"
-        android:textSize="30sp"
-        android:visibility="gone" />
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="22sp"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/partnerIcon7"
@@ -446,23 +463,25 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="25dp"
         android:onClick="openCloseScoreSheet"
-        android:src="@drawable/info"/>
+        android:elevation="50dp"
+        android:src="@drawable/info"
+        tools:ignore="ContentDescription" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="55dp"
         android:layout_marginEnd="45dp"
         android:layout_marginBottom="0dp"
         android:animateLayoutChanges="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:scrollIndicators="top"
-        android:scrollbarSize="10dp"
+        android:scrollbarSize="6dp"
         android:scrollbarStyle="insideOverlay"
         android:scrollbars="horizontal">
 
@@ -480,12 +499,12 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/imageViewChat"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="5dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="20dp"
         android:onClick="openCloseChatWindow"
         android:src="@drawable/chat2" />
 
@@ -494,14 +513,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/imageViewChat"
-        android:layout_marginStart="-25dp"
-        android:layout_marginBottom="-30dp"
+        android:layout_marginStart="-20dp"
+        android:layout_marginBottom="-20dp"
         android:layout_toEndOf="@+id/imageViewChat"
         android:text="@string/noOfChat"
         android:textColor="#FF3C00"
-        android:textSize="35sp"
+        android:textSize="25sp"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textViewBid"
@@ -509,12 +528,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="@dimen/imageGapEnd"
-        android:maxWidth="100dp"
+        android:maxWidth="80dp"
         android:text="@string/bidValue"
         android:textColor="@color/font_yellow"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
@@ -524,12 +543,12 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="2dp"
         android:layout_marginTop="@dimen/imageGapEnd"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/imageViewTrump"
         android:layout_toEndOf="@+id/textViewBid"
         android:text="@string/Bider"
         android:textColor="@color/progressBarPlayer4"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textViewBidValue"
@@ -537,29 +556,28 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewBid"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="-5dp"
         android:text="@string/bidValue1"
         android:textColor="@color/progressBarPlayer4"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:textStyle="bold" />
-
 
     <FrameLayout
         android:id="@+id/frameAskBid"
-        android:layout_width="wrap_content"
+        android:layout_width="500dp"
         android:layout_height="222dp"
         android:layout_above="@+id/horizontalScrollView"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="125dp"
+        android:layout_centerInParent="true"
         android:layout_marginTop="50dp"
-        android:layout_marginEnd="125dp"
         android:layout_marginBottom="0dp"
         android:background="@color/frameLayoutBackground"
         android:fadingEdge="horizontal|vertical"
         android:visibility="gone">
+
+
+
 
         <TextView
             android:id="@+id/textView"
@@ -569,7 +587,7 @@
             android:gravity="center|center_horizontal"
             android:text="@string/raise_bid_or_pass"
             android:textColor="@color/font_yellow"
-            android:textSize="40sp" />
+            android:textSize="35sp" />
 
         <com.google.android.material.chip.ChipGroup
             android:layout_width="wrap_content"
@@ -593,7 +611,7 @@
                 android:textSize="30sp"
                 app:cornerRadius="20dp"
                 app:strokeColor="@color/Black"
-                app:strokeWidth="3dp" />
+                app:strokeWidth="3dp"/>
 
             <Button
                 android:id="@+id/bid10button"
@@ -645,7 +663,6 @@
                 app:cornerRadius="20dp"
                 app:strokeColor="@color/Black"
                 app:strokeWidth="3dp" />
-
         </com.google.android.material.chip.ChipGroup>
 
         <Button
@@ -664,7 +681,6 @@
             app:cornerRadius="20dp"
             app:strokeColor="#FFFFFF"
             app:strokeWidth="3dp" />
-
     </FrameLayout>
 
     <FrameLayout
@@ -701,7 +717,6 @@
             android:orientation="horizontal"
             app:singleLine="true">
 
-
             <ImageView
                 android:id="@+id/imageViewTrumpHearts"
                 android:layout_width="@dimen/trumpSelectionImageWidth"
@@ -710,7 +725,7 @@
                 android:contentDescription="@string/app_name"
                 android:onClick="onTrumpSelectionClick"
                 android:tag="h"
-                app:srcCompat="@drawable/ic_hearts" />
+                app:srcCompat="@drawable/ic_hearts"/>
 
             <ImageView
                 android:id="@+id/imageViewTrumpSpades"
@@ -761,7 +776,6 @@
             android:layout_height="180dp"
             android:background="#D80B1C2E"
             android:elevation="100dp"
-
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarSize="9dp"
             android:scrollbars="vertical">
@@ -769,7 +783,7 @@
             <TextView
                 android:id="@+id/textViewChatDisplay"
                 android:layout_width="match_parent"
-                android:layout_height="230dp"
+                android:layout_height="190dp"
                 android:layout_gravity="bottom"
                 android:elevation="100dp"
                 android:gravity="bottom|start"
@@ -780,12 +794,11 @@
                 android:textColor="#FFFFFF"
                 android:textColorHint="#666666"
                 android:textSize="15sp" />
-
         </ScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:layout_gravity="bottom"
             android:elevation="100dp"
             android:gravity="fill"
@@ -794,10 +807,9 @@
 
             <EditText
                 android:id="@+id/editTextChatInput"
-                android:layout_width="270dp"
+                android:layout_width="240dp"
                 android:layout_height="match_parent"
                 android:background="#E49A9999"
-                android:digits="20"
                 android:elevation="100dp"
                 android:hint="@string/chatInputHint"
                 android:imeOptions="actionSend"
@@ -823,10 +835,9 @@
                 android:shadowRadius="8"
                 android:text="@string/sendChatButton"
                 android:textColor="#09144A"
-                android:textSize="16sp"
-                app:cornerRadius="15dp" />
+                android:textSize="14sp"
+                app:cornerRadius="12dp" />
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
@@ -845,7 +856,6 @@
         android:elevation="200dp"
         android:orientation="vertical"
         android:visibility="gone">
-
 
         <TextView
             android:id="@+id/textViewPartnerSelect"
@@ -879,10 +889,10 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal"
-                android:scrollIndicators="bottom"
-                android:scrollbarDefaultDelayBeforeFade="700"
+                android:scrollIndicators="top"
+                android:scrollbarDefaultDelayBeforeFade="1000"
                 android:scrollbarSize="10dp"
-                android:scrollbarStyle="insideOverlay"
+                android:scrollbarStyle="outsideInset"
                 android:scrollbars="horizontal" />
         </HorizontalScrollView>
     </LinearLayout>
@@ -906,7 +916,7 @@
             android:contentDescription="@string/app_name"
             android:rotation="55"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/c10"/>
 
         <ImageView
             android:id="@+id/imageViewTable2"
@@ -919,7 +929,7 @@
             android:contentDescription="@string/app_name"
             android:rotation="-80"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/c10"/>
 
         <ImageView
             android:id="@+id/imageViewTable3"
@@ -932,7 +942,7 @@
             android:contentDescription="@string/app_name"
             android:rotation="-20"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/c10"/>
 
         <ImageView
             android:id="@+id/imageViewTable4"
@@ -946,7 +956,7 @@
             android:contentDescription="@string/app_name"
             android:rotation="20"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/c10"/>
 
         <ImageView
             android:id="@+id/imageViewTable5"
@@ -959,7 +969,7 @@
             android:contentDescription="@string/app_name"
             android:rotation="80"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/c10"/>
 
         <ImageView
             android:id="@+id/imageViewTable6"
@@ -972,7 +982,7 @@
             android:contentDescription="@string/app_name"
             android:rotation="-55"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/c10"/>
 
         <ImageView
             android:id="@+id/imageViewSelf"
@@ -982,7 +992,7 @@
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/app_name"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/c10"/>
 
         <ImageView
             android:id="@+id/imageViewWinnerCenter"
@@ -991,44 +1001,76 @@
             android:layout_above="@+id/imageViewSelf"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/app_name"
-            android:visibility="invisible"
-            app:srcCompat="@drawable/ic_back_side_blue" />
-
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_back_side_blue"/>
     </RelativeLayout>
 
-    <ScrollView
-        android:id="@+id/scrollViewScore"
+    <RelativeLayout
+        android:id="@+id/scoreViewLayout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="95dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
         android:animateLayoutChanges="true"
         android:background="#D8100823"
-        android:scrollbarSize="14dp"
-        android:scrollbarStyle="insideOverlay"
-        android:visibility="visible">
+        android:visibility="gone">
 
-        <LinearLayout
-            android:id="@+id/imageGalleryScore"
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/addViewGameScreenBanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dp"
+            app:adSize="BANNER"
+            app:adUnitId="@string/banner" />
+
+        <ScrollView
+            android:id="@+id/scrollViewScore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@id/addViewGameScreenBanner"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dp"
+            android:animateLayoutChanges="true"
+            android:scrollbarSize="14dp"
+            android:scrollbarStyle="insideOverlay"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/imageGalleryScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical" />
+        </ScrollView>
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/startNextRoundButton"
         android:layout_width="230dp"
-        android:layout_height="80dp"
+        android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="0dp"
         android:clickable="true"
         android:onClick="startNextGame"
         android:src="@drawable/start_next_button"
-        android:visibility="gone"/>
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="L"
+        android:textAlignment="viewEnd"
+        android:textColor="#FFFFFF" />
 </RelativeLayout>

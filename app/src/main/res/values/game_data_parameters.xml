@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="transitionToGameScreen">1</integer> // from joining screen to game screen activity
+    // from joining screen to game screen activity
 </resources>

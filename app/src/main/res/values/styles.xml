@@ -3,7 +3,7 @@
     <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#FFD000</item>
-        <item name="colorPrimaryDark">@color/progressBarPlayer4</item>
+        <item name="colorPrimaryDark">@color/Grey</item>
         <item name="colorAccent">@color/teal200</item>
         <item name="android:colorControlHighlight">#FFD000</item>
         <item name="android:colorControlNormal">#FFD000</item>
