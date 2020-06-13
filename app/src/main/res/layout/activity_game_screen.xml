@@ -436,9 +436,9 @@
         android:gravity="center"
         android:text="@string/timerStart"
         android:textColor="@color/font_yellow"
+        android:textSize="22sp"
         android:clickable="true"
         android:focusable="true"
-        android:textSize="22sp"
         android:visibility="gone"/>
 
     <ImageView
@@ -467,35 +467,44 @@
         android:src="@drawable/info"
         tools:ignore="ContentDescription" />
 
-    <HorizontalScrollView
+    <RelativeLayout
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="55dp"
+        android:layout_marginStart="80dp"
         android:layout_marginEnd="45dp"
-        android:layout_marginBottom="0dp"
-        android:animateLayoutChanges="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:scrollIndicators="top"
-        android:scrollbarSize="6dp"
-        android:scrollbarStyle="insideOverlay"
-        android:scrollbars="horizontal">
+        android:layout_marginBottom="0dp">
 
-        <LinearLayout
-            android:id="@+id/imageGallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:animateLayoutChanges="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:orientation="horizontal"
-            android:scrollbars="horizontal" />
-    </HorizontalScrollView>
+            android:scrollIndicators="top"
+            android:scrollbarSize="6dp"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="horizontal">
+
+            <LinearLayout
+                android:id="@+id/imageGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
+                android:scrollbars="horizontal" />
+        </HorizontalScrollView>
+    </RelativeLayout>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/imageViewChat"
@@ -1013,7 +1022,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="60dp"
         android:animateLayoutChanges="true"
         android:background="#D8100823"
         android:visibility="gone">
@@ -1053,7 +1062,7 @@
     <ImageView
         android:id="@+id/startNextRoundButton"
         android:layout_width="230dp"
-        android:layout_height="65dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="0dp"
@@ -1070,7 +1079,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:text="L"
+        android:text="3"
+        android:textSize="12sp"
         android:textAlignment="viewEnd"
         android:textColor="#FFFFFF" />
 </RelativeLayout>

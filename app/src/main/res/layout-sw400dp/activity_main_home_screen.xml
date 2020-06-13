@@ -21,7 +21,7 @@
         app:shimmer_shape="radial"
         app:shimmer_tilt="0">
 
-        <pl.droidsonroids.gif.GifImageView
+        <ImageView
             android:id="@+id/backgroundHomeScreen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -413,7 +413,7 @@
         android:textColor="@color/font_yellow"
         android:textSize="22sp" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/settingsIcon"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -462,7 +462,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/developerIcon"
         android:layout_width="80dp"
         android:layout_height="80dp"

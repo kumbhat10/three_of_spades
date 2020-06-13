@@ -21,7 +21,7 @@
         app:shimmer_shape="radial"
         app:shimmer_tilt="0">
 
-        <pl.droidsonroids.gif.GifImageView
+        <ImageView
             android:id="@+id/backgroundHomeScreen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -372,9 +372,9 @@
         android:background="@drawable/border"
         android:backgroundTintMode="add"
         android:elevation="20dp"
-        android:soundEffectsEnabled="true"
         android:onClick="joinRoomWindowOpen"
         android:src="@drawable/joinroomicon"
+        android:soundEffectsEnabled="true"
         tools:ignore="ContentDescription" />
 
     <pl.droidsonroids.gif.GifImageView
@@ -413,7 +413,7 @@
         android:textColor="@color/font_yellow"
         android:textSize="22sp" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/settingsIcon"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -462,7 +462,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/developerIcon"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
@@ -1187,10 +1187,10 @@
         android:layout_alignBottom="@+id/coinIcon"
         android:layout_marginBottom="17dp"
         android:layout_marginEnd="-25dp"
-        android:background="@drawable/shine_button_black"
-        android:fontFamily="@font/codystar"
         android:layout_toStartOf="@+id/coinIcon"
+        android:background="@drawable/shine_button_black"
         android:onClick="openClosePlayerStats"
+        android:fontFamily="@font/codystar"
         android:elevation="100dp"
         android:gravity="start|center_vertical"
         android:paddingEnd="29dp"
@@ -1240,7 +1240,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:text="L"
+        android:text="4"
         android:textAlignment="viewEnd"
         android:textColor="#FFFFFF" />
 </RelativeLayout>

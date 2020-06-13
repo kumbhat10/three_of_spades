@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tableRowHeight">65dp</dimen>
     <dimen name="imageGapEnd">0dp</dimen>
     <dimen name="imageWidth">40dp</dimen>
     <dimen name="imageHeight">52dp</dimen>
 
     <dimen name="imageWidthCoin">25dp</dimen>
-    <dimen name="imageHeightCoin">25dp</dimen>
 
-    <dimen name="textHeight">25dp</dimen>
     <dimen name="imageGapBetween">65dp</dimen>
     <dimen name="imageGapBetweenHorizontal">15dp</dimen>
 

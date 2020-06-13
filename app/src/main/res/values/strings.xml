@@ -1,24 +1,20 @@
 <resources>
+
     <string name="facebook_app_id">231024018145704</string>
     <string name="fb_login_protocol_scheme">fb231024018145704</string>
     <string name="twitter_consumer_key" translatable="false">3lO8Inhu76bB6LiBHegyenODQ</string>
     <string name="twitter_consumer_secret" translatable="false">gXjsRXLBFXCWT2p8RiqbAXEZ9LggL9yzt4xJ5fI9rhkHCkemd6</string>
 
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
-    <string name="testDeviceId">3872102D27DCB017E465C646FA620D3C</string>
 
-    <string name="bannerReal">ca-app-pub-2714670043901113/7483435555</string>
-    <string name="bannerTest">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="banner">@string/bannerTest</string>
+    <string name="bannerReal">ca-app-pub-2714670043901113/2653923895</string>
+    <string name="banner">@string/bannerReal</string>
 
-    <string name="interstitialReal">ca-app-pub-2714670043901113/9924950426</string>
-    <string name="interstitialTestVideo">ca-app-pub-3940256099942544/8691691433</string>
-    <string name="interstitialTest">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="interstitial">@string/interstitialTest</string>
+    <string name="interstitialReal">ca-app-pub-2714670043901113/6210025529</string>
+    <string name="interstitial">@string/interstitialReal</string>
 
-    <string name="rewardedReal">ca-app-pub-2714670043901113/2295715721</string>
-    <string name="rewardedTest">ca-app-pub-3940256099942544/5224354917</string>
-    <string name="rewarded">@string/rewardedTest</string>
+    <string name="rewardedReal">ca-app-pub-2714670043901113/5307668082</string>
+    <string name="rewarded">@string/rewardedReal</string>
 
     <string name="app_name">Kaali ki Tiggi</string>
     <string name="developer">Dushyant Kumbhat</string>
@@ -26,6 +22,7 @@
     <string name="createRoom">Create Room</string>
     <string name="joinRoom">Join Room</string>
     <string name="join">Join</string>
+    <string name="signinsuccess">Well Done !</string>
 
     <string name="invite">Invite Friends</string>
     <string name="settings">Settings</string>
@@ -70,7 +67,6 @@
     <string name="_10_pts">10 pts</string>
     <string name="_360">360</string>
     <string name="_400">400</string>
-    <string name="_0">0</string>
     <string name="playeName">Player ?</string>
     <string name="room_id">Room ID</string>
     <string name="share">SHARE</string>

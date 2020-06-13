@@ -467,19 +467,28 @@
         android:src="@drawable/info"
         tools:ignore="ContentDescription" />
 
+    <RelativeLayout
+    android:id="@+id/horizontalScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="80dp"
+    android:layout_marginEnd="45dp"
+    android:layout_marginBottom="0dp">
+
     <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:id="@+id/horizontalScrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="0dp"
-        android:animateLayoutChanges="true"
+        android:layout_centerHorizontal="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:animateLayoutChanges="true"
         android:scrollIndicators="top"
         android:scrollbarSize="10dp"
         android:scrollbarStyle="insideOverlay"
@@ -489,13 +498,13 @@
             android:id="@+id/imageGallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:animateLayoutChanges="true"
             android:focusable="true"
+            android:layout_gravity="center"
             android:focusableInTouchMode="true"
-            android:orientation="horizontal"
-            android:scrollbars="horizontal" />
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal" />
     </HorizontalScrollView>
+    </RelativeLayout>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/imageViewChat"
@@ -1013,7 +1022,7 @@
     android:layout_alignParentBottom="true"
     android:layout_centerHorizontal="true"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="15dp"
+    android:layout_marginBottom="70dp"
     android:animateLayoutChanges="true"
     android:background="#D8100823"
     android:visibility="gone">
@@ -1072,5 +1081,6 @@
         android:layout_alignParentEnd="true"
         android:text="4"
         android:textAlignment="viewEnd"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
 </RelativeLayout>

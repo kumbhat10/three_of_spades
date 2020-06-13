@@ -8,16 +8,17 @@
     android:paddingStart="0dp"
     android:paddingEnd="0dp"
     tools:context=".StartScreen">
+
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/googleSignInButton"
         android:src="@drawable/black_squares" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleX= "0.9"
-        android:scaleY="0.9"
+        android:layout_above="@+id/googleSignInButton"
         android:contentDescription="@null"
         android:src= "@drawable/_s_icon_spadeedit"/>
 
@@ -28,8 +29,9 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
+        android:layout_above="@+id/googleSignInButton"
+        android:scaleX="0.9"
+        android:scaleY="0.9"
         android:contentDescription="@null"
         android:src="@drawable/_s_icon_3shadow"/>
 
@@ -69,5 +71,50 @@
         android:backgroundTint="#0D5098"
         android:textColor="#FFFFFF" />
 
+<RelativeLayout
+    android:id="@+id/maskButtons"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignTop="@+id/googleSignInButton"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginTop="-2dp"
+    android:background="@color/BlackTrans"
+    android:clickable="true"
+    android:elevation="90dp"
+    android:focusable="true"
+    android:visibility="gone">
+
+    <ProgressBar
+        android:id="@+id/progressBarLoading2"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
+        android:indeterminateOnly="false"
+        android:indeterminateTint="#FFE500"
+        android:progressTintMode="src_in"
+        android:rotation="360" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signInSuccess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shine_button_black"
+        android:fadingEdge="horizontal|vertical"
+        android:fontFamily="sans-serif-condensed"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:text="@string/signinsuccess"
+        android:textAlignment="center"
+        android:textColor="@color/progressBarPlayer4"
+        android:textSize="22sp"
+        android:visibility="gone" />
+
+</RelativeLayout>
 
 </RelativeLayout>

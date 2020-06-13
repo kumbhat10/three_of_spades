@@ -16,19 +16,19 @@
         android:id="@+id/spadeIcon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@null"
         android:scaleX="0.9"
         android:scaleY="0.9"
-        android:contentDescription="@null"
-        android:src="@drawable/_s_icon_spadeedit"/>
+        android:src="@drawable/_s_icon_spadeedit" />
 
     <ImageView
         android:id="@+id/icon_3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@null"
         android:scaleX="0.8"
         android:scaleY="0.8"
-        android:contentDescription="@null"
-        android:src="@drawable/_s_icon_3shadow"/>
+        android:src="@drawable/_s_icon_3shadow" />
 
     <ImageView
         android:id="@+id/profilePic2"
@@ -39,11 +39,11 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/border"
         android:backgroundTintMode="add"
-        android:elevation="100dp"
-        android:src="@drawable/_s_icon_3shadow"
-        android:soundEffectsEnabled="true"
         android:contentDescription="@null"
-        android:visibility="gone"/>
+        android:elevation="100dp"
+        android:soundEffectsEnabled="true"
+        android:src="@drawable/_s_icon_3shadow"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/welcomeUserNameview2"
@@ -70,10 +70,6 @@
         android:textStyle="bold"
         android:translationZ="50dp"
         android:visibility="gone"
-        app:cornerRadius="20dp"
-        app:rippleColor="@color/white"
-        app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="1dp"
         tools:ignore="RtlSymmetry" />
 
     <TextView
@@ -97,8 +93,8 @@
     <ProgressBar
         android:id="@+id/progressBarLoading"
         style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
