@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="50dp">
+
+
+    <ImageView
+        android:id="@+id/coinRewardIcon"
+        android:layout_width="85dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/coin_trans_1"/>
+
+    <TextView
+        android:id="@+id/coinRewardText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/coinRewardIcon"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_square"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="5dp"
+        android:text="Day 1 \n1000 coins"
+        android:textColor="#676767"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Google Play game services IDs.
+Save this file as res/values/games-ids.xml in your project.
+-->
+<resources>
+    <!-- app_id -->
+    <string name="app_id" translatable="false">3216414081</string>
+    <!-- package_name -->
+    <!-- achievement achievement_collect_10000_coins -->
+    <!-- achievement achievement_collect_15000_coins -->
+    <!-- achievement achievement_collect_20000_coins -->
+    <!-- leaderboard Top Score -->
+    <!-- leaderboard Maximum Games Played -->
+    <!-- leaderboard Maximum Number of Biding -->
+    <!-- leaderboard Winning rate after Biding -->
+</resources>
+
