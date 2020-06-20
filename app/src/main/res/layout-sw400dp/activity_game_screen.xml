@@ -13,18 +13,17 @@
         android:id="@+id/gifViewGameScreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/playerView3"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="-30dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="50dp"
         android:contentDescription="@string/app_name"
-        android:onClick="closeChatWindow"
-        android:scaleX="1.04"
-        android:scaleY="1"
-        android:src="@drawable/table_stretch_full"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:onClick="closeChatScoreWindow"
+        android:rotationX="8dp"
+        android:src="@drawable/game_screen_table_blue"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/textViewCenterPoints"
@@ -59,18 +58,19 @@
         android:textSize="19sp"
         android:visibility="gone" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/playerView1"
         android:layout_width="@dimen/imageWidth"
         android:layout_height="@dimen/imageHeight"
+        android:background="@color/Black"
         android:layout_below="@id/playerView2"
         android:layout_alignParentStart="true"
+        android:rotationX="@dimen/rotationValueDP"
         android:layout_marginStart="@dimen/imageGapEnd"
         android:layout_marginTop="-20dp"
         android:contentDescription="@string/app_name"
-        android:paddingStart="-25dp"
-        android:paddingEnd="-25dp"
-        android:src="@drawable/_s_icon_3shadow" />
+        android:src="@drawable/s3"
+        android:visibility="visible"/>
 
     <ImageView
         android:id="@+id/partnerIcon1"
@@ -81,33 +81,48 @@
         android:layout_toEndOf="@id/playerView1"
         android:contentDescription="@string/app_name"
         android:src="@drawable/partnericon"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/p1Online"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@id/textView1"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online" />
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="75dp"
+        android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView1"
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/imageGapEnd"
         android:layout_marginTop="0dp"
+        android:background="@drawable/button_square_userinfo"
         android:gravity="center|top"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
+        android:rotationX="@dimen/rotationValue"
         android:text="@string/playerView1"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/playerView2"
         android:layout_width="@dimen/imageWidth"
         android:layout_height="@dimen/imageHeight"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/imageGapBetween1"
+        android:background="@color/Black"
         android:layout_marginTop="@dimen/imageGapBetween"
         android:layout_toEndOf="@+id/playerView1"
+        android:rotationX="@dimen/rotationValueDP"
         android:contentDescription="@string/app_name"
-        android:paddingStart="-25dp"
-        android:paddingEnd="-25dp"
-        android:src="@drawable/_s_icon_3shadow" />
+        android:src="@drawable/s3" />
 
     <ImageView
         android:id="@+id/partnerIcon2"
@@ -120,31 +135,46 @@
         android:src="@drawable/partnericon"
         android:visibility="gone"/>
 
+    <ImageView
+        android:id="@+id/p2Online"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@id/textView2"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online" />
+
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="75dp"
+        android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_square_userinfo"
         android:layout_below="@+id/playerView2"
         android:layout_marginStart="@dimen/imageGapBetween1"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/playerView1"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
         android:gravity="center|top"
+        android:rotationX="@dimen/rotationValue"
         android:text="@string/playerView2"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/playerView3"
         android:layout_width="@dimen/imageWidth"
         android:layout_height="@dimen/imageHeight"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/imageGapBetweenHorizontal"
+        android:background="@color/Black"
+        android:rotationX="@dimen/rotationValueDP"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/playerView2"
         android:contentDescription="@string/app_name"
-        android:paddingStart="-25dp"
-        android:paddingEnd="-25dp"
-        android:src="@drawable/_s_icon_3shadow" />
+        android:src="@drawable/s3" />
 
     <ImageView
         android:id="@+id/partnerIcon3"
@@ -158,31 +188,46 @@
         android:src="@drawable/partnericon"
         android:visibility="gone"/>
 
+    <ImageView
+        android:id="@+id/p3Online"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignTop="@+id/textView3"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@id/textView3"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online"/>
+
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="75dp"
+        android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_square_userinfo"
         android:layout_below="@+id/playerView3"
         android:layout_marginStart="@dimen/imageGapBetweenHorizontal"
         android:layout_marginTop="1dp"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
         android:layout_toEndOf="@+id/playerView2"
         android:gravity="center|top"
+        android:rotationX="@dimen/rotationValue"
         android:text="@string/playerView3"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/playerView4"
         android:layout_width="@dimen/imageWidth"
         android:layout_height="@dimen/imageHeight"
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
+        android:background="@color/Black"
+        android:rotationX="@dimen/rotationValueDP"
         android:layout_marginEnd="@dimen/imageGapBetweenHorizontal"
         android:layout_toStartOf="@+id/playerView5"
         android:contentDescription="@string/app_name"
-        android:paddingStart="-25dp"
-        android:paddingEnd="-25dp"
-        android:src="@drawable/_s_icon_3shadow" />
+        android:src="@drawable/s3" />
 
     <ImageView
         android:id="@+id/partnerIcon4"
@@ -196,33 +241,48 @@
         android:src="@drawable/partnericon"
         android:visibility="gone"/>
 
+    <ImageView
+        android:id="@+id/p4Online"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignTop="@+id/textView4"
+        android:layout_marginTop="3dp"
+        android:layout_toStartOf="@id/textView4"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online" />
+
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="75dp"
+        android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_square_userinfo"
         android:layout_below="@+id/playerView4"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="@dimen/imageGapBetweenHorizontal"
         android:layout_marginBottom="0dp"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
+        android:rotationX="@dimen/rotationValue"
         android:layout_toStartOf="@+id/playerView5"
         android:gravity="center|top"
         android:text="@string/playerView4"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/playerView5"
         android:layout_width="@dimen/imageWidth"
         android:layout_height="@dimen/imageHeight"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/imageGapBetween"
         android:layout_marginEnd="@dimen/imageGapBetween1"
+        android:background="@color/Black"
         android:layout_marginBottom="0dp"
         android:layout_toStartOf="@+id/playerView6"
+        android:rotationX="@dimen/rotationValueDP"
         android:contentDescription="@string/app_name"
-        android:paddingStart="-25dp"
-        android:paddingEnd="-25dp"
-        android:src="@drawable/_s_icon_3shadow" />
+        android:rotationY="0"
+        android:src="@drawable/s3" />
 
     <ImageView
         android:id="@+id/partnerIcon5"
@@ -236,31 +296,44 @@
         android:src="@drawable/partnericon"
         android:visibility="gone"/>
 
+    <ImageView
+        android:id="@+id/p5Online"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignTop="@+id/textView5"
+        android:layout_marginTop="3dp"
+        android:layout_toStartOf="@id/textView5"
+        android:contentDescription="@string/todo"        android:src="@drawable/status_online" />
+
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="75dp"
+        android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_square_userinfo"
         android:layout_below="@+id/playerView5"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="@dimen/imageGapBetween1"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
+        android:rotationX="@dimen/rotationValue"
         android:layout_toStartOf="@+id/playerView6"
         android:gravity="center|top"
         android:text="@string/playerView5"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/playerView6"
         android:layout_width="@dimen/imageWidth"
         android:layout_height="@dimen/imageHeight"
         android:layout_below="@+id/playerView5"
         android:layout_alignParentEnd="true"
+        android:background="@color/Black"
         android:layout_marginTop="-20dp"
         android:layout_marginEnd="@dimen/imageGapEnd"
+        android:rotationX="@dimen/rotationValueDP"
         android:contentDescription="@string/app_name"
-        android:paddingStart="-25dp"
-        android:paddingEnd="-25dp"
-        android:src="@drawable/_s_icon_3shadow" />
+        android:src="@drawable/s3" />
 
     <ImageView
         android:id="@+id/partnerIcon6"
@@ -274,20 +347,33 @@
         android:src="@drawable/partnericon"
         android:visibility="gone"/>
 
+    <ImageView
+        android:id="@+id/p6Online"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignTop="@+id/textView6"
+        android:layout_marginTop="3dp"
+        android:layout_toStartOf="@id/textView6"
+        android:contentDescription="@string/todo"        android:src="@drawable/status_online" />
+
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="75dp"
+        android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_square_userinfo"
         android:layout_below="@+id/playerView6"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="@dimen/imageGapEnd"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
+        android:rotationX="@dimen/rotationValue"
         android:gravity="center|top"
         android:text="@string/playerView6"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/playerView7"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -298,6 +384,17 @@
         android:contentDescription="@string/app_name"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/p7Online"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignStart="@id/textView7"
+        android:layout_alignBottom="@+id/textView7"
+        android:layout_marginStart="-10dp"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/textView7"
         android:layout_width="75dp"
@@ -305,12 +402,27 @@
         android:layout_above="@+id/horizontalScrollView"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="80dp"
-        android:layout_marginBottom="-10dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/button_square_userinfo"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
         android:gravity="center|top"
         android:text="@string/playerView1"
         android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/partnerIcon7"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/horizontalScrollView"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toStartOf="@+id/textView7"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/partnericon"
+        android:visibility="visible"/>
 
     <ImageView
         android:id="@+id/imageViewP2"
@@ -328,8 +440,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewP2"
+        android:background="@drawable/button_square_userinfo"
         android:layout_alignStart="@+id/imageViewP2"
         android:layout_marginStart="0dp"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
         android:layout_marginTop="-2dp"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
         android:layout_toStartOf="@+id/playerView4"
@@ -355,7 +470,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewP1"
         android:layout_alignStart="@+id/imageViewP1"
+        android:background="@drawable/button_square_userinfo"
         android:layout_marginStart="0dp"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
         android:layout_marginTop="-2dp"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
         android:layout_toStartOf="@+id/imageViewP2"
@@ -381,7 +499,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewTrump"
+        android:background="@drawable/button_square_userinfo"
         android:layout_alignStart="@+id/imageViewTrump"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
@@ -441,42 +562,32 @@
         android:textSize="30sp"
         android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/partnerIcon7"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_alignStart="@+id/horizontalScrollView"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="5dp"
-        android:contentDescription="@string/app_name"
-        android:elevation="40dp"
-        android:src="@drawable/partnericon"
-        android:visibility="gone"/>
+
 
     <ImageView
         android:id="@+id/scoreSheetButton"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="10dp"
         android:elevation="50dp"
         android:onClick="openCloseScoreSheet"
-        android:src="@drawable/info"
+        android:src="@drawable/score_table_icon"
         tools:ignore="ContentDescription" />
 
     <RelativeLayout
     android:id="@+id/horizontalScrollView"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="90dp"
     android:layout_alignParentStart="true"
     android:layout_alignParentEnd="true"
     android:layout_alignParentBottom="true"
-    android:layout_marginStart="80dp"
-    android:layout_marginEnd="45dp"
+    android:layout_marginStart="70dp"
+    android:layout_marginEnd="55dp"
     android:layout_marginBottom="0dp">
+
+
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
@@ -513,7 +624,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="5dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="20dp"
         android:onClick="openCloseChatWindow"
         android:src="@drawable/chat2" />
 
@@ -575,7 +686,7 @@
     <FrameLayout
         android:id="@+id/frameAskBid"
         android:layout_width="wrap_content"
-        android:layout_height="222dp"
+        android:layout_height="240dp"
         android:layout_above="@+id/horizontalScrollView"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -584,7 +695,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="125dp"
         android:layout_marginBottom="0dp"
-        android:background="@color/frameLayoutBackground"
+        android:background="@drawable/shine_scoretable_background"
         android:fadingEdge="horizontal|vertical"
         android:visibility="gone">
 
@@ -596,100 +707,85 @@
             android:gravity="center|center_horizontal"
             android:text="@string/raise_bid_or_pass"
             android:textColor="@color/font_yellow"
-            android:textSize="40sp" />
+            android:textSize="35sp" />
 
         <com.google.android.material.chip.ChipGroup
             android:layout_width="wrap_content"
-            android:layout_height="63dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal|center_vertical"
             android:animateLayoutChanges="true"
             app:chipSpacingHorizontal="10dp"
             app:singleSelection="true">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/bid05button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:background="@color/font_yellow"
-                android:backgroundTint="@color/font_yellow"
+                android:background="@drawable/button_square"
                 android:onClick="askToBid"
                 android:tag="5"
                 android:text="@string/bid05button"
                 android:textColor="@color/Black"
-                android:textSize="30sp"
-                app:cornerRadius="20dp"
-                app:strokeColor="@color/Black"
-                app:strokeWidth="3dp" />
+                android:textSize="30sp" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/bid10button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:background="@color/font_yellow"
-                android:backgroundTint="@color/font_yellow"
+                android:background="@drawable/button_square"
                 android:onClick="askToBid"
                 android:shadowDy="4"
                 android:tag="10"
                 android:text="@string/bid10button"
                 android:textColor="@color/Black"
-                android:textSize="30sp"
-                app:cornerRadius="20dp"
-                app:strokeColor="@color/Black"
-                app:strokeWidth="3dp" />
+                android:textSize="30sp" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/bid20button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:background="@color/font_yellow"
-                android:backgroundTint="@color/font_yellow"
+                android:background="@drawable/button_square"
                 android:onClick="askToBid"
                 android:shadowDy="4"
                 android:tag="20"
                 android:text="@string/bid20button"
                 android:textColor="@color/Black"
-                android:textSize="30sp"
-                app:cornerRadius="20dp"
-                app:strokeColor="@color/Black"
-                app:strokeWidth="3dp" />
+                android:textSize="30sp"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/bid50button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:background="@color/font_yellow"
-                android:backgroundTint="@color/font_yellow"
+                android:background="@drawable/button_square"
                 android:onClick="askToBid"
                 android:shadowDy="4"
                 android:tag="50"
                 android:text="@string/bid50button"
                 android:textColor="@color/Black"
-                android:textSize="30sp"
-                app:cornerRadius="20dp"
-                app:strokeColor="@color/Black"
-                app:strokeWidth="3dp" />
+                android:textSize="30sp" />
         </com.google.android.material.chip.ChipGroup>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bidpassbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
-            android:background="#FF0000"
-            android:backgroundTint="#FF0000"
+            android:layout_marginBottom="10dp"
             android:onClick="askToBid"
             android:shadowDy="4"
             android:tag="pass"
             android:text="@string/passText"
-            android:textColor="#FFFFFF"
-            android:textSize="35sp"
-            app:cornerRadius="20dp"
-            app:strokeColor="#FFFFFF"
-            app:strokeWidth="3dp" />
+            android:background="@drawable/button_square_red"
+            android:paddingStart="15dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="3dp"
+            android:textColor="#D3D3D3"
+            android:textSize="35sp" />
     </FrameLayout>
 
     <FrameLayout
@@ -704,7 +800,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="125dp"
         android:layout_marginBottom="0dp"
-        android:background="@color/frameLayoutBackground"
+        android:background="@drawable/shine_scoretable_background"
         android:visibility="gone">
 
         <TextView
@@ -768,22 +864,37 @@
         </LinearLayout>
     </FrameLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/chatLinearLayout"
         android:layout_width="350dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/horizontalScrollView"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
         android:elevation="100dp"
+        android:background="@drawable/shine_chat_background"
         android:orientation="vertical"
         android:visibility="gone">
 
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/addViewChatGameScreenBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            app:adSize="BANNER"
+            app:adUnitId="@string/banner" />
+
         <ScrollView
+            android:id="@+id/textViewChatDisplayScroll"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="#D80B1C2E"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/chatInput"
+            android:layout_below="@+id/addViewChatGameScreenBanner"
             android:elevation="100dp"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarSize="9dp"
@@ -792,23 +903,26 @@
             <TextView
                 android:id="@+id/textViewChatDisplay"
                 android:layout_width="match_parent"
-                android:layout_height="230dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:elevation="100dp"
                 android:gravity="bottom|start"
                 android:hint="@string/chatWindowDisplay"
-                android:paddingStart="3dp"
+                android:paddingStart="4dp"
                 android:paddingEnd="3dp"
                 android:paddingBottom="6dp"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#666666"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
         </ScrollView>
 
         <LinearLayout
+            android:id="@+id/chatInput"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="1dp"
             android:elevation="100dp"
             android:gravity="fill"
             android:orientation="horizontal"
@@ -818,36 +932,32 @@
                 android:id="@+id/editTextChatInput"
                 android:layout_width="270dp"
                 android:layout_height="match_parent"
-                android:background="#E49A9999"
+                android:background="@drawable/shine_chat_background"
                 android:elevation="100dp"
                 android:hint="@string/chatInputHint"
                 android:imeOptions="actionSend"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                android:paddingStart="3dp"
+                android:paddingStart="8dp"
                 android:paddingEnd="3dp"
+                android:textColor="@color/white"
+                android:textColorHint="#A6A6A6"
                 android:textSize="14sp" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/chatSendButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="#13CA1A"
-                android:backgroundTint="#42DA17"
-                android:backgroundTintMode="add"
+                android:background="@drawable/button_square"
                 android:elevation="100dp"
                 android:gravity="center"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 android:onClick="sendChat"
-                android:shadowRadius="8"
                 android:text="@string/sendChatButton"
-                android:textColor="#09144A"
-                android:textSize="16sp"
-                app:cornerRadius="15dp" />
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearLayoutPartnerSelection"
@@ -861,7 +971,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="0dp"
-        android:background="@color/frameLayoutBackground"
+        android:background="@drawable/shine_chat_background"
         android:elevation="200dp"
         android:orientation="vertical"
         android:visibility="gone">
@@ -1024,8 +1134,22 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="70dp"
     android:animateLayoutChanges="true"
-    android:background="#D8100823"
+    android:background="@drawable/shine_scoretable_background"
     android:visibility="gone">
+
+<TextView
+    android:id="@+id/scoreTitle"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:gravity="center"
+    android:text="@string/score_board"
+    android:textColor="@color/white"
+    android:textSize="17sp"
+    android:textStyle="bold"/>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/addViewGameScreenBanner"
@@ -1042,7 +1166,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_above="@id/addViewGameScreenBanner"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/scoreTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="0dp"
         android:animateLayoutChanges="true"

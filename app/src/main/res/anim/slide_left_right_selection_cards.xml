@@ -5,15 +5,15 @@
     <translate
         android:fromXDelta="100%p"
         android:toXDelta="-100%p"
-        android:duration="1500"
+        android:duration="700"
         android:startOffset="0"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
     <translate
         android:fromXDelta="-100%p"
         android:toXDelta="100%p"
-        android:duration="1000"
-        android:startOffset="1500"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        android:duration="500"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:startOffset="700"/>
 <!--    <translate-->
 <!--        android:fromXDelta="20%p"-->
 <!--        android:toXDelta="0%p"-->

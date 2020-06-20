@@ -372,8 +372,8 @@
         android:background="@drawable/border"
         android:backgroundTintMode="add"
         android:elevation="20dp"
-        android:onClick="joinRoomWindowOpen"
         android:src="@drawable/joinroomicon"
+        android:onClick="joinRoomWindowOpen"
         android:soundEffectsEnabled="true"
         tools:ignore="ContentDescription" />
 
@@ -647,7 +647,7 @@
                 android:hapticFeedbackEnabled="true"
                 android:insetTop="5dp"
                 android:insetBottom="5dp"
-                android:onClick="joinRoomCreated"
+                android:onClick="joinRoomButtonClicked"
                 android:paddingStart="40dp"
                 android:text="@string/join"
                 android:textAlignment="center"
@@ -1185,11 +1185,11 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/coinIcon"
         android:layout_alignBottom="@+id/coinIcon"
-        android:layout_marginBottom="17dp"
         android:layout_marginEnd="-25dp"
-        android:layout_toStartOf="@+id/coinIcon"
         android:background="@drawable/shine_button_black"
+        android:layout_marginBottom="17dp"
         android:onClick="openClosePlayerStats"
+        android:layout_toStartOf="@+id/coinIcon"
         android:fontFamily="@font/codystar"
         android:elevation="100dp"
         android:gravity="start|center_vertical"
@@ -1234,13 +1234,99 @@
         android:src="@drawable/_s_icon_3shadow"
         android:onClick="openClosePlayerStats"
         android:soundEffectsEnabled="true" />
+
+    <LinearLayout
+        android:id="@+id/dailyRewardGridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/shine_player_stats"
+        android:clickable="true"
+        android:elevation="200dp"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.romainpiel.shimmer.ShimmerTextView
+            android:id="@+id/dailyRewardsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/daily_rewards"
+            android:textColor="@color/font_grey_settings"
+            android:textSize="26sp" />
+        <GridView
+            android:id="@+id/dailyRewardGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="15dp"
+            android:columnWidth="85dp"
+            android:elevation="200dp"
+            android:gravity="center|top"
+            android:horizontalSpacing="3dp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="10dp"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:id="@+id/claimReward"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:background="@drawable/button_square"
+                android:gravity="center_vertical"
+                android:onClick="claimDailyReward"
+                android:paddingStart="20dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="5dp"
+                android:text="Claim Reward "
+                android:textColor="#D3D3D3"
+                android:textSize="18sp"
+                android:tint="?attr/colorControlNormal"
+                app:drawableRightCompat="@drawable/watch_video" />
+            <TextView
+                android:id="@+id/claimRewardCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/claimReward"
+                android:background="@drawable/button_square_red"
+                android:gravity="center_vertical"
+                android:onClick="closedailyRewardWindowDisplay"
+                android:paddingStart="20dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="5dp"
+                android:text="Cancel "
+                android:textColor="#D3D3D3"
+                android:textSize="18sp"
+                app:drawableRightCompat="@drawable/watch_video_cancel" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:text="4"
+        android:text="3"
         android:textAlignment="viewEnd"
         android:textColor="#FFFFFF" />
 </RelativeLayout>

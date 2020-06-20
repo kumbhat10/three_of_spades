@@ -200,11 +200,17 @@
         android:progress="100"
         android:progressTint="@color/progressBarPlayer4" />
 
+    <RelativeLayout
+        android:id="@+id/playersInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/waitingToJoinText"
+        android:paddingBottom="20dp">
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/player2Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/waitingToJoinText"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="-28dp"
         android:layout_marginTop="35dp"
         android:layout_toEndOf="@+id/player2Photo"
@@ -387,6 +393,7 @@
         app:shimmer_highlight_color="#FFFFFF"
         app:shimmer_repeat_delay="0"
         app:shimmer_repeat_mode="restart"
+        android:visibility="invisible"
         app:shimmer_shape="linear">
 
         <ImageView
@@ -415,11 +422,11 @@
         android:textColor="@color/font_yellow"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:visibility="visible"
         app:cornerRadius="20dp"
         app:rippleColor="@color/white"
         app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="1dp" />
+        android:visibility="invisible"
+        app:strokeWidth="1dp"/>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/player5Photo"
@@ -435,7 +442,7 @@
         android:elevation="30dp"
         android:soundEffectsEnabled="true"
         android:src="@drawable/player_join_slow"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/player6Shimmer"
@@ -453,6 +460,7 @@
         app:shimmer_highlight_color="#FFFFFF"
         app:shimmer_repeat_delay="0"
         app:shimmer_repeat_mode="restart"
+        android:visibility="invisible"
         app:shimmer_shape="linear">
 
         <ImageView
@@ -481,11 +489,11 @@
         android:textColor="@color/font_yellow"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:visibility="visible"
         app:cornerRadius="20dp"
         app:rippleColor="@color/white"
         app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="1dp" />
+        android:visibility="invisible"
+        app:strokeWidth="1dp"/>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/player6Photo"
@@ -501,7 +509,7 @@
         android:elevation="30dp"
         android:soundEffectsEnabled="true"
         android:src="@drawable/player_join_slow"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
 
 
     <com.facebook.shimmer.ShimmerFrameLayout
@@ -519,6 +527,7 @@
         app:shimmer_highlight_color="#FFFFFF"
         app:shimmer_repeat_delay="0"
         app:shimmer_repeat_mode="restart"
+        android:visibility="invisible"
         app:shimmer_shape="linear">
 
         <ImageView
@@ -535,6 +544,7 @@
         android:layout_below="@+id/player6Text"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="-28dp"
+        android:layout_marginBottom="30dp"
         android:layout_toStartOf="@+id/player7Photo"
         android:background="@drawable/shine_button_black"
         android:fontFamily="@font/codystar"
@@ -547,11 +557,11 @@
         android:textColor="@color/font_yellow"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:visibility="visible"
         app:cornerRadius="20dp"
         app:rippleColor="@color/white"
         app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="1dp" />
+        android:visibility="invisible"
+        app:strokeWidth="1dp"/>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/player7Photo"
@@ -567,13 +577,24 @@
         android:elevation="30dp"
         android:soundEffectsEnabled="true"
         android:src="@drawable/player_join_slow"
-        android:visibility="visible" />
+        android:visibility="invisible" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@+id/player4Photo"
+            android:layout_marginTop="15dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@+id/player7Photo"
+            android:layout_marginTop="15dp"/>
+    </RelativeLayout>
 
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_above="@+id/addViewCreateJoinRoom"
-    android:layout_below="@+id/player7Photo"
+    android:layout_below="@+id/playersInfo"
     android:layout_alignParentStart="true"
     android:layout_alignParentEnd="true"
     android:layout_marginBottom="0dp"

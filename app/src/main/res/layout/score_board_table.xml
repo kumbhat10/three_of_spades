@@ -21,7 +21,9 @@
             <TextView
                 android:id="@+id/gameNumber"
                 android:layout_width="@dimen/scoreTableWidth"
-                android:layout_height="@dimen/scoreTableHeight"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
                 android:gravity="center"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
@@ -30,7 +32,9 @@
             <TextView
                 android:id="@+id/player1"
                 android:layout_width="@dimen/scoreTableWidth"
-                android:layout_height="@dimen/scoreTableHeight"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
                 android:gravity="center"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
@@ -40,8 +44,9 @@
                 android:id="@+id/player2"
                 android:layout_width="@dimen/scoreTableWidth"
                 android:gravity="center"
-                android:layout_height="@dimen/scoreTableHeight"
-                android:text="@string/playerView1"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"                android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
 
@@ -49,16 +54,18 @@
                 android:id="@+id/player3"
                 android:layout_width="@dimen/scoreTableWidth"
                 android:gravity="center"
-                android:layout_height="@dimen/scoreTableHeight"
-                android:text="@string/playerView1"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"                android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
 
             <TextView
                 android:id="@+id/player4"
                 android:layout_width="@dimen/scoreTableWidth"
-                android:layout_height="@dimen/scoreTableHeight"
+                android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingTop="2dp"                android:paddingBottom="2dp"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
@@ -66,8 +73,9 @@
             <TextView
                 android:id="@+id/player5"
                 android:layout_width="@dimen/scoreTableWidth"
-                android:layout_height="@dimen/scoreTableHeight"
+                android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingTop="2dp"                android:paddingBottom="2dp"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
@@ -75,8 +83,9 @@
             <TextView
                 android:id="@+id/player6"
                 android:layout_width="@dimen/scoreTableWidth"
-                android:layout_height="@dimen/scoreTableHeight"
+                android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingTop="2dp"                android:paddingBottom="2dp"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
@@ -84,8 +93,9 @@
             <TextView
                 android:id="@+id/player7"
                 android:layout_width="@dimen/scoreTableWidth"
-                android:layout_height="@dimen/scoreTableHeight"
+                android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingTop="2dp"                android:paddingBottom="2dp"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />

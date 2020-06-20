@@ -70,6 +70,9 @@
         android:textStyle="bold"
         android:translationZ="50dp"
         android:visibility="gone"
+        app:cornerRadius="25dp"
+        app:strokeColor="#00FF40"
+        app:strokeWidth="2dp"
         tools:ignore="RtlSymmetry" />
 
     <TextView

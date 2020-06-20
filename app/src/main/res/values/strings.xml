@@ -1,9 +1,29 @@
 <resources>
+    <string name="test">y</string>
+    <string name="testGameData">y</string>
+
+    <string name="noti_DR_title">Have you collected your Daily Rewards ?</string>
+    <string name="noti_DR_info">Click here to collect your Daily Reward</string>
+    <string name="default_notification_channel_id">ch_kkt</string>
+
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">Oopsieee !! Bugs Attack on server  \nOr server is high on spirit \n\n(Sending Error report to developer)</string>
+    <string name="customactivityoncrash_error_activity_restart_app">Home</string>
+    <string name="customactivityoncrash_error_activity_close_app">Close app</string>
+    <string name="customactivityoncrash_error_activity_error_details">Error details</string>
+    <string name="customactivityoncrash_error_activity_error_details_title">Error details</string>
+    <string name="customactivityoncrash_error_activity_error_details_close">Close</string>
+    <string name="customactivityoncrash_error_activity_error_details_copy">Copy to clipboard</string>
+    <string name="customactivityoncrash_error_activity_error_details_copied">Copied to clipboard</string>
+    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Error information</string>
+
 
     <string name="facebook_app_id">231024018145704</string>
     <string name="fb_login_protocol_scheme">fb231024018145704</string>
     <string name="twitter_consumer_key" translatable="false">3lO8Inhu76bB6LiBHegyenODQ</string>
     <string name="twitter_consumer_secret" translatable="false">gXjsRXLBFXCWT2p8RiqbAXEZ9LggL9yzt4xJ5fI9rhkHCkemd6</string>
+    <string name="sinch_api_key" translatable="false">0041a220-fc43-4bc0-814d-4051b24c18bc</string>
+    <string name="sinch_secret" translatable="false">CgpnthJTfUaYqo0VoKqC1w==</string>
+    <string name="unity_game_id" translatable="false">3652147</string>
 
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
 
@@ -44,7 +64,7 @@
     <string name="partner2">Buddy 2</string>
     <string name="bidValue"> Bid : </string>
     <string name="bidValue1">NIL</string>
-    <string name="bid05button">+5</string>
+    <string name="bid05button"> +5</string>
     <string name="bid10button">+10</string>
     <string name="bid20button">+20</string>
     <string name="bid50button">+50</string>
@@ -52,7 +72,7 @@
     <string name="chooseTrump">Select Trump</string>
 
     <string name="passText">Pass</string>
-    <string name="chatWindowDisplay">No Messages yet. Send your First message</string>
+    <string name="chatWindowDisplay">No Messages yet. Send first message</string>
     <string name="sendChatButton">Send</string>
     <string name="chatInputHint">Type your message here......</string>
     <string name="noOfChat">0</string>
@@ -76,11 +96,14 @@
 
     <string name="todo">TODO</string>
     <string name="player_stats">Player Stats</string>
+    <string name="daily_rewards">Collect your Daily Rewards</string>
     <string name="rounds_played">Rounds played :</string>
     <string name="nill">Nill</string>
     <string name="rounds_won">Rounds won :</string>
     <string name="rounds_bided">Rounds bided :</string>
     <string name="sound">Sound</string>
     <string name="vibrate">Vibrate</string>
+    <string name="claim_reward">Claim \n Reward</string>
+    <string name="score_board">Score Board</string>
 
 </resources>

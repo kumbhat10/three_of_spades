@@ -4,8 +4,14 @@
     <color name="BlackTrans">#D2000000</color>
     <color name="BlackTransUserStats">#FD000000</color>
     <color name="BlackTransUserStats2">#EE000000</color>
+    <color name="BlackTransUserStats3">#C5C5C5</color>
+    <color name="BlackTransUserStats4">#D8222222</color>
+    <color name="BlackTransUserStats5">#B5000000</color>
+    <color name="transparent">#00000000</color>
 
     //orange ish
+    <color name="icon_yellow">#FFE600</color>
+
     <color name="font_yellow">#FFB300</color>
     <color name="font_yellow_trans">#D8FFB300</color>
     <color name="font_grey_settings">#676767</color>
@@ -32,6 +38,10 @@
     <color name = "borderblueDark1b">#008DD8</color>
     <color name = "borderblueDark2b">#006FAA</color>
 
+    <color name = "borderNblueDark0b">#0D8DC8</color>
+    <color name = "borderNblueDark1b">#1475A1</color>
+    <color name = "borderNblueDark2b">#135471</color>
+
     <color name = "shine0black">#FFFFFF</color>
     <color name = "shine1black">#2C2C2C</color>
     <color name = "shine2black">#000000</color>
@@ -46,6 +56,12 @@
     <color name = "borderblueDark0g">#A5FF47</color>
     <color name = "borderblueDark1g">#63C300</color>
     <color name = "borderblueDark2g">#4C9700</color>
+    <color name = "borderblueDark3g">#407806</color>
+
+    <color name = "borderRed0">#B60000</color>
+    <color name = "borderRed1">#A30E0E</color>
+    <color name = "borderRed2">#870F0F</color>
+
 
     <color name = "borderblueDark0o">#FF7D36</color>
     <color name = "borderblueDark1o">#D55C1C</color>
@@ -63,6 +79,8 @@
     <color name = "borderblueDark1pu">#7B33AF</color>
     <color name = "borderblueDark2pu">#57247C</color>
 
+
+
     <color name = "borderblueDark0dpu">#2CFFEA</color>
     <color name = "borderblueDark1dpu">#15CFBD</color>
     <color name = "borderblueDark2dpu">#0A9F90</color>
@@ -71,5 +89,5 @@
     <color name="progressBarPlayer4">#00FF0A</color>
     <color name="frameLayoutBackground">#C80E2043</color>
     <color name="scoreTableText">#FFFFFF</color>
-    <color name="white">#FFFFFF</color>
+    <color name="white">#C8C8C8</color>
 </resources>

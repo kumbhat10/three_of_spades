@@ -6,7 +6,7 @@ import java.util.*
 
 class CreateRoomData(username: String, userPhotoUrl: String) {
     @SuppressLint("SimpleDateFormat")
-    val dummyData = hashMapOf(
+    val dummyData7 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
         "p1" to username,
         "p1h" to userPhotoUrl,
@@ -22,8 +22,21 @@ class CreateRoomData(username: String, userPhotoUrl: String) {
         "p6h" to "https://www.ecopetit.cat/wpic/mpic/231-2317649_jacqueline-fernandez-jacqueline-fernandez-photos-hd.jpg",
         "p7" to "Hrithik",
         "p7h" to "https://imagevars.gulfnews.com/2020/01/22/Hrithik-Roshan--3--1579703264814_16fcda6e62f_large.jpg",
-        "PJ" to 7 )
-    val data = hashMapOf(
+        "PJ" to 7,
+        "n" to 7)
+    val dummyData4 = hashMapOf(
+        "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "p1" to username,
+        "p1h" to userPhotoUrl,
+        "p2" to "Kriti",
+        "p2h" to "https://i.pinimg.com/564x/a0/31/cf/a031cfdf6498a40a345fce8320a563dc.jpg",
+        "p3" to "Kabir",
+        "p3h" to "https://i.pinimg.com/564x/8f/03/b8/8f03b858c3bfcfa8a5027d52d5a23f78.jpg",
+         "p4" to "Tiger",
+        "p4h" to "https://static.toiimg.com/photo/70973522.cms",
+        "PJ" to 4,
+        "n" to 4)
+    val data7 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
         "p1" to username,
         "p1h" to userPhotoUrl,
@@ -39,6 +52,19 @@ class CreateRoomData(username: String, userPhotoUrl: String) {
         "p6h" to "",
         "p7" to "",
         "p7h" to "",
-        "PJ" to 1 )
+        "PJ" to 1,
+    "n" to 7)
+    val data4 = hashMapOf(
+        "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "p1" to username,
+        "p1h" to userPhotoUrl,
+        "p2" to "",
+        "p2h" to "",
+        "p3" to "",
+        "p3h" to "",
+        "p4" to "",
+        "p4h" to "",
+        "PJ" to 1,
+        "n" to 4)
 
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="imageGapEnd">0dp</dimen>
-    <dimen name="imageWidth">75dp</dimen>
-    <dimen name="imageHeight">85dp</dimen>
+    <dimen name="imageWidth">80dp</dimen>
+    <dimen name="imageHeight">80dp</dimen>
     <dimen name="imageWidthCoin">35dp</dimen>
 
     <dimen name="imageGapBetween">65dp</dimen>
@@ -17,7 +17,10 @@
     <dimen name="tableCardImageHeight">60dp</dimen>
     <dimen name="scoreTableHeight">36dp</dimen>
     <dimen name="scoreTableWidth">90dp</dimen>
-    <dimen name="scoreTableTextSize">16sp</dimen>
+    <dimen name="scoreTableTextSize">12sp</dimen>
     <dimen name="widthDisplayCardLast">55dp</dimen>
+    <dimen name="status_online">16dp</dimen>
+    <dimen name="padding_playername">4dp</dimen>
+    <dimen name="width_playername">80dp</dimen>
 
 </resources>

@@ -16,15 +16,11 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
-        android:onClick="closeChatWindow"
+        android:onClick="closeChatScoreWindow"
         android:scaleX="1.04"
         android:scaleY="1"
         android:src="@drawable/table_stretch_side"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/textViewCenterPoints"

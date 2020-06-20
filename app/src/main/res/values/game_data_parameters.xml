@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     // from joining screen to game screen activity
+    <dimen name="rotationValue">35dp</dimen>
+    <dimen name="rotationValueDP">-20dp</dimen>
+
 </resources>

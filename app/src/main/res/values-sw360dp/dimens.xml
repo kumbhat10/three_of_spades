@@ -18,7 +18,9 @@
     <dimen name="tableCardImageHeight">60dp</dimen>
     <dimen name="scoreTableHeight">36dp</dimen>
     <dimen name="scoreTableWidth">90dp</dimen>
-    <dimen name="scoreTableTextSize">16sp</dimen>
+    <dimen name="scoreTableTextSize">12sp</dimen>
     <dimen name="widthDisplayCardLast">48dp</dimen>
+    <dimen name="padding_playername">4dp</dimen>
+    <dimen name="width_playername">80dp</dimen>
 
 </resources>
