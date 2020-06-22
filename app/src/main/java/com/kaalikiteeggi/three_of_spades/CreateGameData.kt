@@ -17,7 +17,7 @@ class CreateGameData() {
     "CT" to mutableMapOf("p1" to 99,"p2" to 99,"p3" to 99,"p4" to 99,"p5" to 99,"p6" to 99,"p7" to 99),
     "GS" to 1, // 0 means joining state
     "M" to "",
-    "OL" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1,"p5" to 1,"p6" to 1,"p7" to 1),
+    "OL" to mutableMapOf("p1" to 0,"p2" to 0,"p3" to 0,"p4" to 0,"p5" to 0,"p6" to 0,"p7" to 0),
     "R" to 1,
     "RO" to mutableMapOf("T" to 1,"P" to 0,"R" to ""), // t game turn, p player turn, R is rung
     "SC" to mutableMapOf("p1" to 0,"p2" to 0,"p3" to 0,"p4" to 0,"p5" to 0,"p6" to 0,"p7" to 0),
@@ -34,7 +34,7 @@ class CreateGameData() {
         "CT" to mutableMapOf("p1" to 83,"p2" to 73,"p3" to 31,"p4" to 45,"p5" to 67,"p6" to 78,"p7" to 89),
         "GS" to 1, // 0 means joining state
         "M" to "",
-        "OL" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1,"p5" to 1,"p6" to 1,"p7" to 1),
+        "OL" to mutableMapOf("p1" to 0,"p2" to 0,"p3" to 0,"p4" to 0,"p5" to 0,"p6" to 0,"p7" to 0),
         "R" to 1,
         "RO" to mutableMapOf("T" to 1,"P" to 0,"R" to ""), // t game turn, p player turn, R is rung
         "SC" to mutableMapOf("p1" to 0,"p2" to 0,"p3" to 0,"p4" to 0,"p5" to 0,"p6" to 0,"p7" to 0),

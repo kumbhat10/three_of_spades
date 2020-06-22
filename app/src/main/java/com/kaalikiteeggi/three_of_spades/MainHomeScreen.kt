@@ -540,7 +540,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private fun initializeAds(){
         mInterstitialAd = InterstitialAd(this)
         if(getString(R.string.test).contains('n')) mInterstitialAd.adUnitId = getString(R.string.interstitial)
-        findViewById<AdView>(R.id.addViewMHS).loadAd(AdRequest.Builder().build()) // banner add load
+        if(getString(R.string.test).contains('n')) findViewById<AdView>(R.id.addViewMHS).loadAd(AdRequest.Builder().build()) // banner add load
         if(getString(R.string.test).contains('n'))  mInterstitialAd.loadAd(AdRequest.Builder().build()) // interstitial add load
         mInterstitialAd.adListener = object : AdListener() {
             override fun onAdClosed() {
@@ -706,12 +706,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if (createRoomStatus) {
             val allowedChars = ('A'..'H')+ ('J'..'N') + ('P'..'Z')+('2'..'9')  // 1, I , O and 0 skipped
             val roomID = (1..4).map { allowedChars.random() }.joinToString ("")
-            val nPlayers = 7
+            val nPlayers = getString(R.string.nPlayers).toInt()
             if(nPlayers==7) {
-                refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).dummyData7)
+                if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).data7)
+                else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).dummyData7)
             }
            else if(nPlayers==4){
-                 refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).dummyData4)
+                if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).data4)
+                else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).dummyData4)
             }
 
             soundSuccess.start()

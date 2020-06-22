@@ -13,7 +13,7 @@
 <!--        android:repeatMode = "reverse">-->
 <!--    </scale>-->
     <alpha android:duration="500"
-        android:fromAlpha="0.6"
+        android:fromAlpha="0.8"
         android:repeatCount="infinite"
         android:repeatMode="reverse"
         android:toAlpha="1.0"/>

@@ -1,6 +1,8 @@
 <resources>
-    <string name="test">y</string>
-    <string name="testGameData">y</string>
+    <string name="test">n</string>
+    <string name="testGameData">n</string>
+    <string name="useTestDevice">n</string>
+    <string name="nPlayers">7</string>
 
     <string name="noti_DR_title">Have you collected your Daily Rewards ?</string>
     <string name="noti_DR_info">Click here to collect your Daily Reward</string>
@@ -16,7 +18,6 @@
     <string name="customactivityoncrash_error_activity_error_details_copied">Copied to clipboard</string>
     <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Error information</string>
 
-
     <string name="facebook_app_id">231024018145704</string>
     <string name="fb_login_protocol_scheme">fb231024018145704</string>
     <string name="twitter_consumer_key" translatable="false">3lO8Inhu76bB6LiBHegyenODQ</string>
@@ -26,13 +27,18 @@
     <string name="unity_game_id" translatable="false">3652147</string>
 
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
+    <string name="testDeviceId">3872102D27DCB017E465C646FA620D3C</string>
 
+    <string name="bannerTest">ca-app-pub-3940256099942544/6300978111</string>
     <string name="bannerReal">ca-app-pub-2714670043901113/2653923895</string>
     <string name="banner">@string/bannerReal</string>
 
+    <string name="interstitialTest">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="interstitialTestVideo">ca-app-pub-3940256099942544/8691691433</string>
     <string name="interstitialReal">ca-app-pub-2714670043901113/6210025529</string>
     <string name="interstitial">@string/interstitialReal</string>
 
+    <string name="rewardedTest">ca-app-pub-2714670043901113/5307668082</string>
     <string name="rewardedReal">ca-app-pub-2714670043901113/5307668082</string>
     <string name="rewarded">@string/rewardedReal</string>
 
@@ -105,5 +111,6 @@
     <string name="vibrate">Vibrate</string>
     <string name="claim_reward">Claim \n Reward</string>
     <string name="score_board">Score Board</string>
+    <string name="start_next_game">Start next game</string>
 
 </resources>

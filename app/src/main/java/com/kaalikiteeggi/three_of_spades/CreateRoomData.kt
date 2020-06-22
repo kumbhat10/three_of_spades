@@ -22,7 +22,7 @@ class CreateRoomData(username: String, userPhotoUrl: String) {
         "p6h" to "https://www.ecopetit.cat/wpic/mpic/231-2317649_jacqueline-fernandez-jacqueline-fernandez-photos-hd.jpg",
         "p7" to "Hrithik",
         "p7h" to "https://imagevars.gulfnews.com/2020/01/22/Hrithik-Roshan--3--1579703264814_16fcda6e62f_large.jpg",
-        "PJ" to 7,
+        "PJ" to 6,
         "n" to 7)
     val dummyData4 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),

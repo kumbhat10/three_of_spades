@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.adcolony.sdk.AdColony
 import com.adcolony.sdk.AdColonyAppOptions
+import com.facebook.ads.AdSettings
 import com.facebook.ads.AudienceNetworkAds
 import com.facebook.login.LoginManager
 import com.google.ads.mediation.adcolony.AdColonyMediationAdapter
@@ -40,6 +41,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import pl.droidsonroids.gif.GifImageView
+import java.util.*
 
 class SplashScreen: AppCompatActivity() {
     private lateinit var soundUpdate: MediaPlayer
@@ -76,6 +78,14 @@ class SplashScreen: AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         MobileAds.initialize(this)
         AudienceNetworkAds.initialize(this)
+
+        if(getString(R.string.useTestDevice).contains('y')) {
+            val testDeviceIds = Arrays.asList(getString(R.string.testDeviceId))
+            val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
+            MobileAds.setRequestConfiguration(configuration)
+            AdSettings.addTestDevice("abb71e62-26ea-4afc-88f7-c370a1da45f1")
+        }
+
         AdColony.configure(this,"app17c8dd48fb9945b9b4","vz3791ce293adf41e69e","vzfb9b1050f8c74cc5ad","vz6cded1664bb44e1cb9")
         val appOptions = AdColonyMediationAdapter.getAppOptions()
         appOptions.gdprConsentString = "1"
