@@ -22,8 +22,8 @@
                 android:id="@+id/gameNumber"
                 android:layout_width="@dimen/scoreTableWidth"
                 android:layout_height="wrap_content"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
+                android:paddingTop="@dimen/_2sdp"
+                android:paddingBottom="@dimen/_2sdp"
                 android:gravity="center"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
@@ -33,8 +33,8 @@
                 android:id="@+id/player1"
                 android:layout_width="@dimen/scoreTableWidth"
                 android:layout_height="wrap_content"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
+                android:paddingTop="@dimen/_2sdp"
+                android:paddingBottom="@dimen/_2sdp"
                 android:gravity="center"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
@@ -45,8 +45,8 @@
                 android:layout_width="@dimen/scoreTableWidth"
                 android:gravity="center"
                 android:layout_height="wrap_content"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"                android:text="@string/playerView1"
+                android:paddingTop="@dimen/_2sdp"
+                android:paddingBottom="@dimen/_2sdp"                android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
 
@@ -55,8 +55,8 @@
                 android:layout_width="@dimen/scoreTableWidth"
                 android:gravity="center"
                 android:layout_height="wrap_content"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"                android:text="@string/playerView1"
+                android:paddingTop="@dimen/_2sdp"
+                android:paddingBottom="@dimen/_2sdp"                android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
 
@@ -65,7 +65,7 @@
                 android:layout_width="@dimen/scoreTableWidth"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="2dp"                android:paddingBottom="2dp"
+                android:paddingTop="@dimen/_2sdp"                android:paddingBottom="@dimen/_2sdp"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
@@ -75,7 +75,7 @@
                 android:layout_width="@dimen/scoreTableWidth"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="2dp"                android:paddingBottom="2dp"
+                android:paddingTop="@dimen/_2sdp"                android:paddingBottom="@dimen/_2sdp"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
@@ -85,7 +85,7 @@
                 android:layout_width="@dimen/scoreTableWidth"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="2dp"                android:paddingBottom="2dp"
+                android:paddingTop="@dimen/_2sdp"                android:paddingBottom="@dimen/_2sdp"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />
@@ -95,7 +95,7 @@
                 android:layout_width="@dimen/scoreTableWidth"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="2dp"                android:paddingBottom="2dp"
+                android:paddingTop="@dimen/_2sdp"                android:paddingBottom="@dimen/_2sdp"
                 android:text="@string/playerView1"
                 android:textColor="@color/scoreTableText"
                 android:textSize="@dimen/scoreTableTextSize" />

@@ -7,13 +7,13 @@
 
     <ImageView
         android:id="@+id/imageViewDisplayCard1"
-        android:layout_width="65dp"
-        android:layout_height="95dp"
+        android:layout_width="@dimen/_47sdp"
+        android:layout_height="@dimen/_68sdp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
         android:contextClickable="true"
-        android:elevation="50dp"
+        android:elevation="@dimen/_36sdp"
         android:fadingEdge="horizontal"
         app:srcCompat="@drawable/ic_hearts" />
 

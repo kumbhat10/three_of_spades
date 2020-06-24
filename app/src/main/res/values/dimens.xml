@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="loginWidth">@dimen/_190sdp</dimen>
+    <dimen name="loginHeight">@dimen/_32sdp</dimen>
+    <dimen name="loginHeightGoogle">@dimen/_34sdp</dimen>
+    <dimen name="loginWidthGoogle">@dimen/_198sdp</dimen>
+
+
     <dimen name="imageGapEnd">0dp</dimen>
-    <dimen name="imageWidth">80dp</dimen>
-    <dimen name="imageHeight">80dp</dimen>
+    <dimen name="imageWidth">@dimen/_57sdp</dimen>
+    <dimen name="width_playername">@dimen/_57sdp</dimen>
+    <dimen name="imageHeight">@dimen/_57sdp</dimen>
+    <dimen name="trumpSelectionImageWidth">@dimen/_72sdp</dimen>
+    <dimen name="trumpSelectionImageHeight">@dimen/_72sdp</dimen>
+    
+    <dimen name="imageWidthCoin">@dimen/_25sdp</dimen>
 
-    <dimen name="imageWidthCoin">40dp</dimen>
+    <dimen name="imageGapBetween">@dimen/_47sdp</dimen>
+    <dimen name="imageGapBetweenHorizontal">@dimen/_11sdp</dimen>
 
-    <dimen name="imageGapBetween">65dp</dimen>
-    <dimen name="imageGapBetweenHorizontal">15dp</dimen>
+    <dimen name="imageGapBetween1">@dimen/_7sdp</dimen>
+    <dimen name="imageGapBetweenCards">@dimen/_4sdp</dimen>
 
-    <dimen name="imageGapBetween1">10dp</dimen>
-    <dimen name="imageGapBetweenCards">5dp</dimen>
-    <dimen name="trumpSelectionImageWidth">100dp</dimen>
-    <dimen name="trumpSelectionImageHeight">100dp</dimen>
-
-    <dimen name="tableCardImageWidth">45dp</dimen>
-    <dimen name="tableCardImageHeight">60dp</dimen>
-    <dimen name="scoreTableHeight">36dp</dimen>
-    <dimen name="scoreTableWidth">90dp</dimen>
-    <dimen name="scoreTableTextSize">12sp</dimen>
-    <dimen name="widthDisplayCardLast">55dp</dimen>
-    <dimen name="status_online">15dp</dimen>
-    <dimen name="padding_playername">4dp</dimen>
-    <dimen name="width_playername">80dp</dimen>
+    <dimen name="tableCardImageWidth">@dimen/_32sdp</dimen>
+    <dimen name="tableCardImageHeight">@dimen/_43sdp</dimen>
+    <dimen name="scoreTableHeight">@dimen/_26sdp</dimen>
+    <dimen name="scoreTableWidth">@dimen/_64sdp</dimen>
+    <dimen name="widthDisplayCardLast">@dimen/_39sdp</dimen>
+    <dimen name="status_online">@dimen/_12sdp</dimen>
+    <dimen name="padding_playername">@dimen/_3sdp</dimen>
+    <dimen name="usernameTextSize">@dimen/_8ssp</dimen>
+    <dimen name="scoreTableTextSize">@dimen/_9ssp</dimen>
 
 </resources>

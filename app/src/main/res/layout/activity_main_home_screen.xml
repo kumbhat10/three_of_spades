@@ -34,13 +34,13 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/removeAds"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="@dimen/_47sdp"
+        android:layout_height="@dimen/_47sdp"
         android:layout_below="@+id/watchVideo"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
-        android:elevation="30dp"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:elevation="@dimen/_22sdp"
         android:onClick="removeAdsorPremium"
         android:src="@drawable/no_ads" />
 
@@ -52,7 +52,7 @@
         android:layout_alignEnd="@+id/welcomeUserNameview"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="-20dp"
+        android:layout_marginBottom="@dimen/_minus14sdp"
         android:layout_toEndOf="@+id/profilePic"
         android:gravity="start|bottom"
         android:text="@string/welcome"
@@ -62,9 +62,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/welcomeUserNameview"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="-20dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="@dimen/_29sdp"
+        android:layout_marginTop="@dimen/_minus14sdp"
+        android:layout_marginEnd="@dimen/_11sdp"
         app:shimmer_auto_start="true"
         app:shimmer_colored="true"
         app:shimmer_duration="1800"
@@ -76,38 +76,38 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="@dimen/_2sdp"
             android:contentDescription="@string/todo"
             android:src="@drawable/shine_button_black_bar" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/watchVideo"
-        android:layout_width="90dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/_64sdp"
+        android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/coinIcon"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginEnd="0dp"
-        android:elevation="30dp"
+        android:elevation="@dimen/_22sdp"
         android:onClick="showRewardedVideoAd"
         android:src="@drawable/watch_ad_100"
         android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/watchVideoCoin"
-        android:layout_width="76dp"
-        android:layout_height="76dp"
+        android:layout_width="@dimen/_54sdp"
+        android:layout_height="@dimen/_54sdp"
         android:layout_below="@+id/welcomeUserNameview"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-36dp"
-        android:layout_marginEnd="7dp"
+        android:layout_marginTop="@dimen/_minus26sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
         android:background="@drawable/coin_blank"
-        android:elevation="100dp"
+        android:elevation="@dimen/_72sdp"
         android:gravity="center"
         android:onClick="showRewardedVideoAd"
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="@dimen/_16ssp"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -119,11 +119,11 @@
         android:layout_below="@+id/userScore"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-20dp"
-        android:layout_marginBottom="-18dp"
+        android:layout_marginTop="@dimen/_minus14sdp"
+        android:layout_marginBottom="@dimen/_minus13sdp"
         android:background="@drawable/shine_player_stats"
         android:clickable="true"
-        android:elevation="40dp"
+        android:elevation="@dimen/_29sdp"
         android:onClick="openClosePlayerStats"
         android:focusable="true"
         android:visibility="gone">
@@ -131,7 +131,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="15dp"
+            android:layout_margin="@dimen/_11sdp"
             android:orientation="vertical">
 
             <com.romainpiel.shimmer.ShimmerTextView
@@ -139,18 +139,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
                 android:text="@string/player_stats"
                 android:textColor="@color/font_grey_settings"
-                android:textSize="26sp" />
+                android:textSize="@dimen/_19ssp" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
                 app:shimmer_auto_start="true"
                 app:shimmer_duration="1800"
                 app:shimmer_highlight_alpha="1"
@@ -160,28 +160,28 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:layout_marginEnd="@dimen/_14sdp"
                     android:src="@drawable/shine_button_black_bar" />
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_7sdp">
 
-                <TableRow android:layout_marginTop="20dp">
+                <TableRow android:layout_marginTop="@dimen/_14sdp">
 
                     <com.romainpiel.shimmer.ShimmerTextView
                         android:id="@+id/gamesPlayedStats"
-                        android:layout_width="230dp"
+                        android:layout_width="@dimen/_165sdp"
                         android:layout_height="wrap_content"
                         android:gravity="start|center"
                         android:text="@string/rounds_played"
                         android:textColor="@color/font_grey_settings"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/_14ssp" />
 
                     <com.romainpiel.shimmer.ShimmerTextView
                         android:id="@+id/ngamesPlayedStats"
@@ -190,19 +190,19 @@
                         android:gravity="start|center"
                         android:text="@string/nill"
                         android:textColor="@color/font_yellow"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/_14ssp" />
                 </TableRow>
 
-                <TableRow android:layout_marginTop="25dp">
+                <TableRow android:layout_marginTop="@dimen/_18sdp">
 
                     <com.romainpiel.shimmer.ShimmerTextView
                         android:id="@+id/gamesWonStats"
-                        android:layout_width="230dp"
+                        android:layout_width="@dimen/_165sdp"
                         android:layout_height="wrap_content"
                         android:gravity="start|center"
                         android:text="@string/rounds_won"
                         android:textColor="@color/font_grey_settings"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/_14ssp" />
 
                     <com.romainpiel.shimmer.ShimmerTextView
                         android:id="@+id/ngamesWonStats"
@@ -211,19 +211,19 @@
                         android:gravity="start|center"
                         android:text="@string/nill"
                         android:textColor="@color/font_yellow"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/_14ssp" />
                 </TableRow>
 
-                <TableRow android:layout_marginTop="25dp">
+                <TableRow android:layout_marginTop="@dimen/_18sdp">
 
                     <com.romainpiel.shimmer.ShimmerTextView
                         android:id="@+id/gamesBidedStats"
-                        android:layout_width="230dp"
+                        android:layout_width="@dimen/_165sdp"
                         android:layout_height="wrap_content"
                         android:gravity="start|center"
                         android:text="@string/rounds_bided"
                         android:textColor="@color/font_grey_settings"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/_14ssp" />
 
                     <com.romainpiel.shimmer.ShimmerTextView
                         android:id="@+id/ngamesBidedStats"
@@ -232,7 +232,7 @@
                         android:gravity="start|center"
                         android:text="@string/nill"
                         android:textColor="@color/font_yellow"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/_14ssp" />
                 </TableRow>
 
             </TableLayout>
@@ -243,13 +243,13 @@
 
                 <ImageView
                     android:id="@+id/signoutbuttonImage"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="@dimen/_72sdp"
+                    android:layout_height="@dimen/_72sdp"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="-35dp"
+                    android:layout_marginEnd="@dimen/_minus25sdp"
                     android:layout_toStartOf="@+id/signoutbutton"
                     android:contentDescription="@string/todo"
-                    android:elevation="20dp"
+                    android:elevation="@dimen/_14sdp"
                     android:enabled="true"
                     android:onClick="signOut"
                     android:src="@drawable/power1"/>
@@ -263,14 +263,14 @@
                     android:clickable="true"
                     android:onClick="signOut"
                     android:focusable="true"
-                    android:paddingEnd="20dp"
+                    android:paddingStart="@dimen/_22sdp"
                     android:soundEffectsEnabled="true"
                     android:text="@string/signout"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/font_yellow"
-                    android:paddingStart="30dp"
-                    android:textSize="22sp"
+                    android:paddingEnd="@dimen/_14sdp"
+                    android:textSize="@dimen/_16ssp"
                     tools:ignore="RelativeOverlap" />
 
             </RelativeLayout>
@@ -280,25 +280,25 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/howToPlay"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/removeAds"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginEnd="0dp"
-        android:elevation="30dp"
+        android:elevation="@dimen/_22sdp"
         android:onClick="howToPlay"
         android:src="@drawable/howtoplay1" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/rateUs"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/howToPlay"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/_4sdp"
         android:layout_marginEnd="0dp"
-        android:elevation="30dp"
+        android:elevation="@dimen/_22sdp"
         android:onClick="rateUs"
         android:src="@drawable/rateus" />
 
@@ -309,31 +309,31 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/createRoomIcon"
         android:layout_alignBottom="@+id/createRoomIcon"
-        android:layout_marginStart="-35dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginStart="@dimen/_minus25sdp"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/createRoomIcon"
         android:background="@drawable/shine_button_black"
         android:fadingEdge="horizontal|vertical"
         android:fontFamily="sans-serif-smallcaps"
         android:onClick="createRoomButtonClicked"
-        android:paddingStart="40dp"
-        android:paddingEnd="12dp"
+        android:paddingStart="@dimen/_29sdp"
+        android:paddingEnd="@dimen/_9sdp"
         android:text="@string/createRoom"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="22sp"
+        android:textSize="@dimen/_16ssp"
         />
     <ImageView
         android:id="@+id/createRoomIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/userScore"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:elevation="20dp"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:elevation="@dimen/_14sdp"
         android:src="@drawable/chip_coin_trans"
         android:onClick="createRoomButtonClicked"
         android:soundEffectsEnabled="true" />
@@ -341,37 +341,37 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/joinRoomButton"
         android:layout_width="wrap_content"
-        android:layout_height="65dp"
+        android:layout_height="@dimen/_47sdp"
         android:layout_alignTop="@+id/joinRoomIcon"
         android:layout_alignBottom="@+id/joinRoomIcon"
-        android:layout_marginStart="-35dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginStart="@dimen/_minus25sdp"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/joinRoomIcon"
         android:background="@drawable/shine_button_black"
         android:fadingEdge="horizontal|vertical"
         android:fontFamily="sans-serif-smallcaps"
         android:hapticFeedbackEnabled="true"
         android:onClick="joinRoomWindowOpen"
-        android:paddingStart="40dp"
-        android:paddingEnd="12dp"
+        android:paddingStart="@dimen/_29sdp"
+        android:paddingEnd="@dimen/_9sdp"
         android:text="@string/joinRoom"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="22sp" />
+        android:textSize="@dimen/_16ssp" />
 
     <ImageView
         android:id="@+id/joinRoomIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/createRoomIcon"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="@dimen/_4sdp"
         android:layout_marginTop="0dp"
         android:background="@drawable/border"
         android:backgroundTintMode="add"
-        android:elevation="20dp"
+        android:elevation="@dimen/_14sdp"
         android:src="@drawable/joinroomicon"
         android:onClick="joinRoomWindowOpen"
         android:soundEffectsEnabled="true"
@@ -379,15 +379,15 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/inviteIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/joinRoomIcon"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="@dimen/_4sdp"
         android:layout_marginTop="0dp"
         android:background="@drawable/border_blue"
         android:backgroundTintMode="add"
-        android:elevation="20dp"
+        android:elevation="@dimen/_14sdp"
         android:onClick="inviteFriends"
         android:soundEffectsEnabled="true"
         android:src="@drawable/inviteshare_1800"/>
@@ -395,31 +395,31 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonInvite"
         android:layout_width="wrap_content"
-        android:layout_height="65dp"
+        android:layout_height="@dimen/_47sdp"
         android:layout_alignTop="@+id/inviteIcon"
         android:layout_alignBottom="@+id/inviteIcon"
-        android:layout_marginStart="-35dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginStart="@dimen/_minus25sdp"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/inviteIcon"
         android:background="@drawable/shine_button_black"
         android:fontFamily="sans-serif-smallcaps"
         android:onClick="inviteFriends"
-        android:paddingStart="40dp"
-        android:paddingEnd="12dp"
+        android:paddingStart="@dimen/_29sdp"
+        android:paddingEnd="@dimen/_9sdp"
         android:text="@string/invite"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="22sp" />
+        android:textSize="@dimen/_16ssp" />
 
     <ImageView
         android:id="@+id/settingsIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/inviteIcon"
         android:layout_marginTop="0dp"
-        android:elevation="30dp"
+        android:elevation="@dimen/_22sdp"
         android:onClick="openSettingsWindow"
         android:src="@drawable/gear" />
 
@@ -429,23 +429,23 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/settingsIcon"
         android:layout_alignBottom="@+id/settingsIcon"
-        android:layout_marginStart="-35dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginStart="@dimen/_minus25sdp"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/settingsIcon"
         android:background="@drawable/shine_button_black"
         android:clickable="true"
         android:fontFamily="sans-serif-smallcaps"
         android:onClick="openSettingsWindow"
-        android:paddingStart="40dp"
-        android:paddingEnd="12dp"
+        android:paddingStart="@dimen/_29sdp"
+        android:paddingEnd="@dimen/_9sdp"
         android:soundEffectsEnabled="true"
         android:text="@string/settings"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
         android:focusable="true"
-        android:textSize="22sp" />
+        android:textSize="@dimen/_16ssp" />
     <LinearLayout
         android:id="@+id/developerandAds"
         android:layout_width="match_parent"
@@ -454,8 +454,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="0dp"
-        android:layout_marginTop="1dp"
-        android:elevation="100dp"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:elevation="@dimen/_72sdp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -464,14 +464,14 @@
 
             <ImageView
                 android:id="@+id/developerIcon"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/_57sdp"
+                android:layout_height="@dimen/_57sdp"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="17dp"
+                android:layout_marginStart="@dimen/_12sdp"
                 android:layout_marginBottom="0dp"
                 android:background="@drawable/border_yellow_only"
                 android:backgroundTintMode="add"
-                android:elevation="90dp"
+                android:elevation="@dimen/_64sdp"
                 android:foreground="@drawable/_s_icon_3shadow"
                 android:onClick="developerCredits"
                 android:soundEffectsEnabled="true"
@@ -484,8 +484,8 @@
                 android:layout_alignTop="@+id/developerIcon"
                 android:layout_alignBottom="@+id/developerIcon"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="18dp"
+                android:layout_marginTop="@dimen/_13sdp"
+                android:layout_marginBottom="@dimen/_13sdp"
                 android:background="@drawable/shine_button_black"
                 android:fadingEdge="horizontal|vertical"
                 android:fontFamily="sans-serif-smallcaps"
@@ -494,17 +494,17 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/font_yellow"
-                android:textSize="14sp"
-                android:translationZ="50dp"
-                app:cornerRadius="3dp"
+                android:textSize="@dimen/_10ssp"
+                android:translationZ="@dimen/_36sdp"
+                app:cornerRadius="@dimen/_2sdp"
                 app:strokeColor="@color/font_yellow"
-                app:strokeWidth="1dp" />
+                app:strokeWidth="@dimen/_1sdp" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/developerCreditsButton"
-                android:layout_marginBottom="-10dp"
+                android:layout_marginBottom="@dimen/_minus7sdp"
                 app:shimmer_auto_start="true"
                 app:shimmer_duration="1800"
                 app:shimmer_highlight_alpha="1"
@@ -514,7 +514,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="@dimen/_2sdp"
                     android:src="@drawable/shine_button_black_bar" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </RelativeLayout>
@@ -532,19 +532,19 @@
         android:layout_height="match_parent"
         android:background="@color/layoutBackgroundLittle"
         android:clickable="true"
-        android:elevation="200dp"
+        android:elevation="@dimen/_143sdp"
         android:onClick="joinRoomWindowExit"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/closeJoinRoom"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
             android:layout_below="@+id/joinRoomFrameTemp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-25dp"
+            android:layout_marginTop="@dimen/_minus18sdp"
             android:clickable="true"
-            android:elevation="100dp"
+            android:elevation="@dimen/_72sdp"
             android:onClick="joinRoomWindowExit"
             app:srcCompat="@drawable/stop_sign" />
 
@@ -554,7 +554,7 @@
             android:layout_below="@+id/joinRoomFrameTemp"
             android:layout_alignStart="@+id/joinRoomFrameTemp"
             android:layout_alignEnd="@+id/joinRoomFrameTemp"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="@dimen/_11sdp"
             android:layout_marginTop="0dp"
             app:shimmer_auto_start="true"
             app:shimmer_duration="1800"
@@ -565,21 +565,21 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="3dp"
+                android:layout_height="@dimen/_2sdp"
                 android:src="@drawable/shine_button_black_bar" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <RelativeLayout
             android:id="@+id/joinRoomFrameTemp"
             android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_height="@dimen/_214sdp"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginStart="@dimen/_22sdp"
+            android:layout_marginEnd="@dimen/_22sdp"
             android:background="@color/BlackTrans"
-            android:elevation="50dp"
+            android:elevation="@dimen/_36sdp"
             android:foregroundTintMode="multiply"
             android:hapticFeedbackEnabled="true"
             android:onClick="joinRoomWindowExit"
@@ -588,13 +588,13 @@
             <EditText
                 android:id="@+id/roomIDInput"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="@dimen/_72sdp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:layout_marginTop="@dimen/_22sdp"
+                android:layout_marginEnd="@dimen/_14sdp"
                 android:background="@color/font_yellow_trans"
                 android:cursorVisible="true"
                 android:gravity="center_horizontal|center_vertical"
@@ -607,16 +607,16 @@
                 android:shadowRadius="5"
                 android:textAlignment="center"
                 android:textColor="@color/Black"
-                android:textSize="50sp"
+                android:textSize="@dimen/_36ssp"
                 android:textStyle="bold" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/roomIDInput"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginTop="0dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="@dimen/_11sdp"
                 app:shimmer_auto_start="true"
                 app:shimmer_duration="1800"
                 app:shimmer_highlight_alpha="1"
@@ -625,19 +625,19 @@
                 app:shimmer_shape="linear">
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
+                    android:layout_height="@dimen/_2sdp"
                     android:src="@drawable/shine_button_black_bar" />
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <Button
                 android:id="@+id/joinRoomButtonMain"
                 android:layout_width="wrap_content"
-                android:layout_height="65dp"
+                android:layout_height="@dimen/_47sdp"
                 android:layout_below="@+id/roomIDInput"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="-25dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="9dp"
+                android:layout_marginStart="@dimen/_minus18sdp"
+                android:layout_marginTop="@dimen/_29sdp"
+                android:layout_marginBottom="@dimen/_7sdp"
                 android:background="@color/Black"
                 android:backgroundTint="@color/Black"
                 android:backgroundTintMode="add"
@@ -645,35 +645,35 @@
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
                 android:hapticFeedbackEnabled="true"
-                android:insetTop="5dp"
-                android:insetBottom="5dp"
+                android:insetTop="@dimen/_4sdp"
+                android:insetBottom="@dimen/_4sdp"
                 android:onClick="joinRoomButtonClicked"
-                android:paddingStart="40dp"
+                android:paddingStart="@dimen/_29sdp"
                 android:text="@string/join"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/font_yellow"
-                android:textSize="35sp"
+                android:textSize="@dimen/_25ssp"
                 android:textStyle="bold"
 
-                app:cornerRadius="20dp"
+                app:cornerRadius="@dimen/_14sdp"
                 app:rippleColor="@color/white"
                 app:strokeColor="@color/font_yellow"
-                app:strokeWidth="1dp" />
+                app:strokeWidth="@dimen/_1sdp" />
 
             <ImageButton
                 android:id="@+id/joinRoomFrameIcon"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/_57sdp"
+                android:layout_height="@dimen/_57sdp"
                 android:layout_alignBottom="@+id/joinRoomButtonMain"
-                android:layout_marginTop="-10dp"
-                android:layout_marginEnd="-10dp"
-                android:layout_marginBottom="-9dp"
+                android:layout_marginTop="@dimen/_minus7sdp"
+                android:layout_marginEnd="@dimen/_minus7sdp"
+                android:layout_marginBottom="@dimen/_minus7sdp"
                 android:layout_toStartOf="@+id/joinRoomButtonMain"
                 android:background="@drawable/border"
                 android:backgroundTintMode="add"
                 android:baselineAlignBottom="true"
-                android:elevation="20dp"
+                android:elevation="@dimen/_14sdp"
                 android:foreground="@drawable/joinroomicon"
                 android:onClick="joinRoomWindowOpen"
                 android:soundEffectsEnabled="true" />
@@ -687,41 +687,41 @@
         android:layout_height="match_parent"
         android:background="@color/layoutBackgroundLittle"
         android:clickable="true"
-        android:elevation="200dp"
+        android:elevation="@dimen/_143sdp"
         android:onClick="closeSettingsWindow"
         android:visibility="gone">
 
         <LinearLayout
             android:id="@id/settingsLayouttemp"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="@dimen/_286sdp"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginEnd="@dimen/_14sdp"
             android:background="@color/BlackTrans"
             android:clickable="true"
-            android:elevation="100dp"
+            android:elevation="@dimen/_72sdp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/musicSett"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="@dimen/_54sdp"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/settMusicIcon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="@dimen/_43sdp"
+                    android:layout_height="@dimen/_43sdp"
                     android:layout_alignParentStart="true"
                     android:layout_gravity="center"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="@dimen/_11sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_marginBottom="@dimen/_7sdp"
                     android:background="@drawable/border_blue"
-                    android:elevation="20dp"
+                    android:elevation="@dimen/_14sdp"
                     android:onClick="music"
                     android:soundEffectsEnabled="true"
                     android:src="@drawable/music" />
@@ -732,11 +732,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center|start"
-                    android:paddingStart="15dp"
+                    android:paddingStart="@dimen/_11sdp"
                     android:paddingEnd="0dp"
                     android:text="Music"
                     android:textColor="@color/font_grey_settings"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/_17ssp"
                     android:textStyle="bold" />
 
                 <RelativeLayout
@@ -749,7 +749,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="@dimen/_11sdp"
                         android:checked="true"
                         android:onClick="music"
                         android:thumb="@drawable/thumb_music"
@@ -760,8 +760,8 @@
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
                 app:shimmer_auto_start="true"
                 app:shimmer_duration="1800"
                 app:shimmer_highlight_alpha="1"
@@ -771,25 +771,25 @@
                 app:shimmer_shape="linear" >
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="@dimen/_1sdp"
                     android:src="@drawable/shine_button_black_bar"/>
             </com.facebook.shimmer.ShimmerFrameLayout>
             <LinearLayout
                 android:id="@+id/soundSett"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="@dimen/_54sdp"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/settSoundIcon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="@dimen/_43sdp"
+                    android:layout_height="@dimen/_43sdp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="@dimen/_11sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_marginBottom="@dimen/_7sdp"
                     android:background="@drawable/border_blue"
-                    android:elevation="20dp"
+                    android:elevation="@dimen/_14sdp"
                     android:onClick="sound"
                     android:soundEffectsEnabled="true"
                     android:src="@drawable/sound_on_png" />
@@ -800,11 +800,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center|start"
-                    android:paddingStart="15dp"
+                    android:paddingStart="@dimen/_11sdp"
                     android:paddingEnd="0dp"
                     android:text="@string/sound"
                     android:textColor="@color/font_grey_settings"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/_17ssp"
                     android:textStyle="bold" />
 
                 <RelativeLayout
@@ -817,7 +817,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="@dimen/_11sdp"
                         android:checked="true"
                         android:onClick="sound"
                         android:thumb="@drawable/thumb_sound"
@@ -828,8 +828,8 @@
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
                 app:shimmer_auto_start="true"
                 app:shimmer_duration="1800"
                 app:shimmer_highlight_alpha="1"
@@ -839,26 +839,26 @@
                 app:shimmer_shape="linear" >
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="@dimen/_1sdp"
                     android:contentDescription="@string/todo"
                     android:src="@drawable/shine_button_black_bar" />
             </com.facebook.shimmer.ShimmerFrameLayout>
             <LinearLayout
                 android:id="@+id/vibrateSett"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="@dimen/_54sdp"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/settVibrateIcon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="@dimen/_43sdp"
+                    android:layout_height="@dimen/_43sdp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="@dimen/_11sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_marginBottom="@dimen/_7sdp"
                     android:background="@drawable/border_off_orange"
-                    android:elevation="20dp"
+                    android:elevation="@dimen/_14sdp"
                     android:contentDescription="TODO"
                     android:soundEffectsEnabled="true"
                     android:onClick="vibrate"
@@ -870,11 +870,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center|start"
-                    android:paddingStart="15dp"
+                    android:paddingStart="@dimen/_11sdp"
                     android:paddingEnd="0dp"
                     android:text="@string/vibrate"
                     android:textColor="@color/font_grey_settings"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/_17ssp"
                     android:textStyle="bold" />
 
                 <RelativeLayout
@@ -887,7 +887,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="@dimen/_11sdp"
                         android:checked="true"
                         android:onClick="vibrate"
                         android:thumb="@drawable/thumb_vibrate"
@@ -899,8 +899,8 @@
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
                 app:shimmer_auto_start="true"
                 app:shimmer_duration="1800"
                 app:shimmer_highlight_alpha="1"
@@ -910,7 +910,7 @@
                 app:shimmer_shape="linear">
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="@dimen/_1sdp"
                     android:src="@drawable/shine_button_black_bar" />
             </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -924,16 +924,16 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="@dimen/_7sdp"
+                    android:layout_marginEnd="@dimen/_7sdp"
                     android:fadeScrollbars="false"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="4dp"
+                    android:paddingTop="@dimen/_11sdp"
+                    android:paddingBottom="@dimen/_3sdp"
                     android:scrollIndicators="bottom"
-                    android:scrollX="50dp"
-                    android:scrollY="20dp"
+                    android:scrollX="@dimen/_36sdp"
+                    android:scrollY="@dimen/_14sdp"
                     android:scrollbarAlwaysDrawHorizontalTrack="true"
-                    android:scrollbarSize="3dp"
+                    android:scrollbarSize="@dimen/_2sdp"
                     android:scrollbarStyle="outsideInset"
                     android:scrollbarThumbHorizontal="@drawable/track_scroll_bar"
                     android:scrollbars="horizontal">
@@ -942,7 +942,7 @@
                     <com.google.android.material.chip.ChipGroup
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:chipSpacingHorizontal="6dp">
+                        app:chipSpacingHorizontal="@dimen/_5sdp">
 
                         <com.facebook.shimmer.ShimmerFrameLayout
                             android:id="@+id/frameShimmer1"
@@ -958,8 +958,8 @@
                             app:shimmer_shape="radial"
                             app:shimmer_tilt="0">
                             <ImageView
-                                android:layout_width="75dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/_54sdp"
+                                android:layout_height="@dimen/_72sdp"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_blue"
                                 android:tag="shine_blue" />
@@ -978,8 +978,8 @@
                             app:shimmer_shape="radial"
                             app:shimmer_tilt="0">
                             <ImageView
-                                android:layout_width="75dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/_54sdp"
+                                android:layout_height="@dimen/_72sdp"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_orange"
                                 android:tag="shine_orange" />
@@ -998,8 +998,8 @@
                             app:shimmer_shape="radial"
                             app:shimmer_tilt="0">
                             <ImageView
-                                android:layout_width="75dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/_54sdp"
+                                android:layout_height="@dimen/_72sdp"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_purple_dark"
                                 android:tag="shine_purple_dark" />
@@ -1018,8 +1018,8 @@
                             app:shimmer_shape="radial"
                             app:shimmer_tilt="0">
                             <ImageView
-                                android:layout_width="75dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/_54sdp"
+                                android:layout_height="@dimen/_72sdp"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_green_radial"
                                 android:tag="shine_green_radial" />
@@ -1039,8 +1039,8 @@
                             app:shimmer_shape="radial"
                             app:shimmer_tilt="0">
                             <ImageView
-                                android:layout_width="75dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/_54sdp"
+                                android:layout_height="@dimen/_72sdp"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_bk"
                                 android:tag="shine_bk" />
@@ -1060,8 +1060,8 @@
                             app:shimmer_shape="radial"
                             app:shimmer_tilt="0">
                             <ImageView
-                                android:layout_width="75dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/_54sdp"
+                                android:layout_height="@dimen/_72sdp"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_purple"
                                 android:tag="shine_purple" />
@@ -1081,8 +1081,8 @@
                             app:shimmer_shape="radial"
                             app:shimmer_tilt="0">
                             <ImageView
-                                android:layout_width="75dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/_54sdp"
+                                android:layout_height="@dimen/_72sdp"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_yellow"
                                 android:tag="shine_yellow" />
@@ -1102,8 +1102,8 @@
                             app:shimmer_shape="radial"
                             app:shimmer_tilt="0">
                             <ImageView
-                                android:layout_width="75dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/_54sdp"
+                                android:layout_height="@dimen/_72sdp"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_pink"
                                 android:tag="shine_pink" />
@@ -1119,8 +1119,8 @@
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
                 app:shimmer_auto_start="true"
                 app:shimmer_duration="2000"
                 app:shimmer_highlight_alpha="1"
@@ -1129,20 +1129,20 @@
                 app:shimmer_shape="linear">
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
+                    android:layout_height="@dimen/_2sdp"
                     android:src="@drawable/shine_button_black_bar" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </LinearLayout>
 
         <ImageView
             android:id="@+id/closeSettings"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
             android:layout_below="@+id/settingsLayouttemp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-25dp"
+            android:layout_marginTop="@dimen/_minus18sdp"
             android:clickable="true"
-            android:elevation="100dp"
+            android:elevation="@dimen/_72sdp"
             android:onClick="closeSettingsWindow"
             app:srcCompat="@drawable/stop_sign" />
 
@@ -1154,83 +1154,83 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/profilePic"
         android:layout_alignBottom="@+id/profilePic"
-        android:layout_marginStart="-28dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginStart="@dimen/_minus20sdp"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/profilePic"
         android:background="@color/Black"
         android:backgroundTint="@color/Black"
         android:backgroundTintMode="add"
-        android:elevation="90dp"
+        android:elevation="@dimen/_64sdp"
         android:fontFamily="@font/nosifer"
         android:hapticFeedbackEnabled="true"
         android:onClick="openClosePlayerStats"
-        android:paddingStart="35dp"
+        android:paddingStart="@dimen/_25sdp"
         android:text="@string/playeName"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="24sp"
+        android:textSize="@dimen/_17ssp"
         android:textStyle="bold"
-        android:translationZ="50dp"
-        app:cornerRadius="20dp"
+        android:translationZ="@dimen/_36sdp"
+        app:cornerRadius="@dimen/_14sdp"
         app:rippleColor="@color/white"
         app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="@dimen/_1sdp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/userScore"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/coinIcon"
         android:layout_alignBottom="@+id/coinIcon"
-        android:layout_marginEnd="-25dp"
+        android:layout_marginEnd="@dimen/_minus18sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:elevation="@dimen/_72sdp"
         android:background="@drawable/shine_button_black"
-        android:layout_marginBottom="17dp"
-        android:onClick="openClosePlayerStats"
         android:layout_toStartOf="@+id/coinIcon"
         android:fontFamily="@font/codystar"
-        android:elevation="100dp"
+        android:onClick="openClosePlayerStats"
         android:gravity="start|center_vertical"
-        android:paddingEnd="29dp"
-        android:paddingStart="20dp"
+        android:paddingStart="@dimen/_14sdp"
+        android:paddingEnd="@dimen/_21sdp"
         android:text="@string/bidValue1"
         android:paddingTop="0dp"
-        android:textSize="22sp"
+        android:textSize="@dimen/_16ssp"
         android:textAlignment="textStart"
         android:textAllCaps="false"
         android:textColor="@color/font_yellow"
         android:textStyle="bold"
-        android:translationZ="50dp"
-        app:cornerRadius="27dp"
+        android:translationZ="@dimen/_36sdp"
+        app:cornerRadius="@dimen/_19sdp"
         app:rippleColor="@color/white"
         app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="@dimen/_1sdp"/>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/coinIcon"
-        android:layout_marginTop="-38dp"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
+        android:layout_marginTop="@dimen/_minus27sdp"
         android:layout_below="@+id/welcomeUserNameview"
         android:layout_alignParentEnd="true"
         android:onClick="openClosePlayerStats"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="@dimen/_4sdp"
         android:background="@drawable/border"
-        android:elevation="60dp"
+        android:elevation="@dimen/_43sdp"
         android:src="@drawable/coins12" />
 
     <ImageView
         android:id="@+id/profilePic"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="@dimen/_64sdp"
+        android:layout_height="@dimen/_64sdp"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_7sdp"
         android:background="@drawable/border"
         android:backgroundTintMode="add"
-        android:elevation="100dp"
+        android:elevation="@dimen/_72sdp"
         android:src="@drawable/_s_icon_3shadow"
         android:onClick="openClosePlayerStats"
         android:soundEffectsEnabled="true" />
@@ -1241,78 +1241,87 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:layout_centerVertical="true"
-        android:background="@drawable/shine_player_stats"
+        android:background="@drawable/button_daily_reward"
         android:clickable="true"
-        android:elevation="200dp"
+        android:elevation="@dimen/_143sdp"
         android:focusable="true"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
-        <com.romainpiel.shimmer.ShimmerTextView
-            android:id="@+id/dailyRewardsTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:text="@string/daily_rewards"
-            android:textColor="@color/font_grey_settings"
-            android:textSize="26sp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_72sdp"
+            android:src="@drawable/ribbon"/>
+
+<!--            <com.romainpiel.shimmer.ShimmerTextView-->
+<!--                android:id="@+id/dailyRewardsTitle"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="top"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:layout_marginTop="@dimen/_11sdp"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/daily_rewards"-->
+<!--                android:textColor="@color/font_grey_settings"-->
+<!--                android:textSize="@dimen/_16ssp" />-->
+<!--        -->
         <GridView
             android:id="@+id/dailyRewardGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="15dp"
-            android:columnWidth="85dp"
-            android:elevation="200dp"
+            android:layout_marginStart="@dimen/_7sdp"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginEnd="@dimen/_7sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:columnWidth="@dimen/_57sdp"
+            android:elevation="@dimen/_143sdp"
             android:gravity="center|top"
-            android:horizontalSpacing="3dp"
+            android:horizontalSpacing="@dimen/_1sdp"
             android:numColumns="auto_fit"
-            android:verticalSpacing="10dp"/>
+            android:verticalSpacing="@dimen/_4sdp"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="30dp">
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginBottom="@dimen/_22sdp">
 
             <TextView
                 android:id="@+id/claimReward"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/_36sdp"
                 android:background="@drawable/button_square"
                 android:gravity="center_vertical"
                 android:onClick="claimDailyReward"
-                android:paddingStart="20dp"
-                android:paddingTop="3dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="5dp"
+                android:paddingStart="@dimen/_14sdp"
+                android:paddingTop="@dimen/_2sdp"
+                android:paddingEnd="@dimen/_9sdp"
+                android:paddingBottom="@dimen/_4sdp"
                 android:text="Claim Reward "
-                android:textColor="#D3D3D3"
-                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13ssp"
                 android:tint="?attr/colorControlNormal"
                 app:drawableRightCompat="@drawable/watch_video" />
             <TextView
                 android:id="@+id/claimRewardCancel"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="20dp"
+                android:layout_height="@dimen/_36sdp"
+                android:layout_marginStart="@dimen/_14sdp"
                 android:layout_toEndOf="@+id/claimReward"
                 android:background="@drawable/button_square_red"
                 android:gravity="center_vertical"
                 android:onClick="closedailyRewardWindowDisplay"
-                android:paddingStart="20dp"
-                android:paddingTop="3dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="5dp"
+                android:paddingStart="@dimen/_14sdp"
+                android:paddingTop="@dimen/_2sdp"
+                android:paddingEnd="@dimen/_9sdp"
+                android:paddingBottom="@dimen/_4sdp"
                 android:text="Cancel "
                 android:textColor="#D3D3D3"
-                android:textSize="18sp"
+                android:textSize="@dimen/_13ssp"
                 app:drawableRightCompat="@drawable/watch_video_cancel" />
 
         </RelativeLayout>
@@ -1321,12 +1330,13 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/sizeMHS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:text="L"
+        android:gravity="end"
+        android:textSize="@dimen/_9ssp"
         android:textAlignment="viewEnd"
         android:textColor="#FFFFFF" />
 </RelativeLayout>

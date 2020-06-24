@@ -93,8 +93,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SlideView" />
-
         <activity android:name="com.kaalikiteeggi.three_of_spades.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

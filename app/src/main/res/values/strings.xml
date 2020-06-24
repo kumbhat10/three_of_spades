@@ -1,7 +1,7 @@
 <resources>
-    <string name="test">n</string>
-    <string name="testGameData">n</string>
-    <string name="useTestDevice">n</string>
+    <string name="test">y</string>
+    <string name="testGameData">y</string>
+    <string name="useTestDevice">y</string>
     <string name="nPlayers">7</string>
 
     <string name="noti_DR_title">Have you collected your Daily Rewards ?</string>
@@ -102,7 +102,7 @@
 
     <string name="todo">TODO</string>
     <string name="player_stats">Player Stats</string>
-    <string name="daily_rewards">Collect your Daily Rewards</string>
+    <string name="daily_rewards">Daily Rewards</string>
     <string name="rounds_played">Rounds played :</string>
     <string name="nill">Nill</string>
     <string name="rounds_won">Rounds won :</string>

@@ -133,6 +133,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             .apply()
 
         setContentView(R.layout.activity_main_home_screen)
+        findViewById<TextView>(R.id.sizeMHS).text = resources.configuration.screenWidthDp.toString() + "\n" + resources.configuration.screenHeightDp.toString()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         findViewById<GifImageView>(R.id.watchVideo).visibility = View.GONE
         soundUpdate = MediaPlayer.create(applicationContext, R.raw.player_moved)
@@ -178,7 +179,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if(soundStatus) soundUpdate.start()
         if (musicStatus) soundBkgd.start()
         if (mInterstitialAd.isLoaded) {
-            if (!premiumStatus) mInterstitialAd.show()
+            if (!premiumStatus) {
+//                mInterstitialAd.show() // dummy - check if needed
+            }
         } else if (!premiumStatus && getString(R.string.test).contains('n')) mInterstitialAd.loadAd(AdRequest.Builder().build())
     }
 
@@ -815,7 +818,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         shimmer.start(findViewById<ShimmerTextView>(R.id.gamesPlayedStats))
         shimmer.start(findViewById<ShimmerTextView>(R.id.gamesWonStats))
         shimmer.start(findViewById<ShimmerTextView>(R.id.gamesBidedStats))
-        shimmer.start(findViewById<ShimmerTextView>(R.id.dailyRewardsTitle))
+//        shimmer.start(findViewById<ShimmerTextView>(R.id.dailyRewardsTitle))
 
         anim(findViewById(R.id.developerIcon),R.anim.anim_scale_infinite)
         anim(findViewById(R.id.claimReward),R.anim.anim_scale_appeal)

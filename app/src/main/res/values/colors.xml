@@ -14,7 +14,7 @@
 
     <color name="font_yellow">#FFB300</color>
     <color name="font_yellow_trans">#D8FFB300</color>
-    <color name="font_grey_settings">#676767</color>
+    <color name="font_grey_settings">#8C8C8C</color>
 
     <color name="progressBarPlayer2">#CA0000</color>
     <color name = "backgroundDarkOpaque">#F30A1B4A</color>

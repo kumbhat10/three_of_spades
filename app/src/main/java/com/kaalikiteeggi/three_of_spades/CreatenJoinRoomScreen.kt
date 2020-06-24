@@ -11,10 +11,10 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.os.*
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -22,7 +22,10 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.drawToBitmap
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.InterstitialAd
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.DocumentSnapshot
@@ -37,7 +40,6 @@ import com.squareup.picasso.Target
 import pl.droidsonroids.gif.GifImageView
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.Exception
 
 class CreatenJoinRoomScreen : AppCompatActivity() {
     private lateinit var soundUpdate: MediaPlayer
@@ -425,36 +427,36 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     private fun changeBackground(color: String){
         when(color){
             "shine_blue"-> {
-                findViewById<GifImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_blue)
+                findViewById<ImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_blue)
             }
             "shine_bk"-> {
-                findViewById<GifImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_bk)
-//                findViewById<GifImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_player_stats)
+                findViewById<ImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_bk)
+//                findViewById<ImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_player_stats)
 
             }
             "shine_orange"-> {
-                findViewById<GifImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_orange)
+                findViewById<ImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_orange)
             }
             "shine_green_radial"-> {
-                findViewById<GifImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_green_radial)
+                findViewById<ImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_green_radial)
             }
             "shine_pink"-> {
-                findViewById<GifImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_pink)
+                findViewById<ImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_pink)
             }
             "shine_purple"-> {
-                findViewById<GifImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_purple)
+                findViewById<ImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_purple)
             }
             "shine_yellow"-> {
-                findViewById<GifImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_yellow)
+                findViewById<ImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_yellow)
             }
             "shine_purple_dark"-> {
-                findViewById<GifImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_purple_dark)
+                findViewById<ImageView>(R.id.backgroundJoiningRoom).setImageResource(R.drawable.shine_purple_dark)
             }
         }
     }
     private fun getSharedPrefs(){
         if (sharedPreferences.contains("themeColor")) {
-            changeBackground(sharedPreferences.getString("themeColor", "shine_bk").toString())
+//            changeBackground(sharedPreferences.getString("themeColor", "shine_bk").toString())
         }
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)

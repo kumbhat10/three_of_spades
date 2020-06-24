@@ -542,7 +542,7 @@ class GameScreen : AppCompatActivity() {
                     updatePlayerNames()
                     shufflingWindow(gameStateChange = true) // gameStateChange = change game state to 2 after shuffling
                 }
-                if (gameState == 2) {
+                if (gameState == 2) { // bidding moved to state 1 after shuffling and displaying own cards
                     soundUpdate.start()
 //                    getCardsAndDisplay(animation = true)
 //                    displaySelfCards(animations = true)
@@ -595,7 +595,7 @@ class GameScreen : AppCompatActivity() {
                         }
                     })
                     Handler().postDelayed({
-                        if (mInterstitialAd.isLoaded) mInterstitialAd.show()
+                        if (!premiumStatus && mInterstitialAd.isLoaded) mInterstitialAd.show()
                         if(from == "p1") {
                             findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext,R.color.inActiveCard))
                             findViewById<AppCompatButton>(R.id.startNextRoundButton).visibility = View.VISIBLE
@@ -1509,7 +1509,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             centralText("Congratulations ${playerName(bidder)} \n You won the bid round", 0)
 
             findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility= View.VISIBLE
-//            trumpAnimation("start")
+            trumpAnimation("start")
             if(vibrateStatus) vibrationStart()
         }
     }
@@ -1523,22 +1523,20 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
         write("GS",4)
         findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.GONE
-//        trumpAnimation("clear")
+        trumpAnimation("clear")
     }
     private fun trumpAnimation(task: String){
         if(task=="start"){
-            findViewById<ImageView>(R.id.imageViewTrumpHearts).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-            findViewById<ImageView>(R.id.imageViewTrumpSpades).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-            findViewById<ImageView>(R.id.imageViewTrumpDiamonds).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-            findViewById<ImageView>(R.id.imageViewTrumpClubs).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-//            findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.progressBarPlayer4))
+            findViewById<ImageView>(R.id.imageViewTrumpHearts).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
+            findViewById<ImageView>(R.id.imageViewTrumpSpades).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
+            findViewById<ImageView>(R.id.imageViewTrumpDiamonds).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
+            findViewById<ImageView>(R.id.imageViewTrumpClubs).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
 
         }else if (task == "clear"){
             findViewById<ImageView>(R.id.imageViewTrumpHearts).clearAnimation()
             findViewById<ImageView>(R.id.imageViewTrumpSpades).clearAnimation()
             findViewById<ImageView>(R.id.imageViewTrumpDiamonds).clearAnimation()
             findViewById<ImageView>(R.id.imageViewTrumpClubs).clearAnimation()
-//            findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.layoutBackground))
             findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
         }
     }

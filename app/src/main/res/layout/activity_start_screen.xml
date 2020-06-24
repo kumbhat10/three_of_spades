@@ -35,62 +35,73 @@
         android:contentDescription="@null"
         android:src="@drawable/_s_icon_3shadow"/>
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebookLoginButton"
+        android:layout_width="@dimen/loginWidth"
+        android:layout_height="80dp"
+        android:layout_above="@+id/orOption"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/_1sdp"
+        android:paddingTop="@dimen/_7sdp"
+        android:paddingBottom="@dimen/_7sdp"
+        android:textSize="@dimen/_11ssp" />
+
+    <TextView
+        android:id="@+id/orOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/googleSignInButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/_1sdp"
+        android:gravity="center"
+        android:text="or"
+        android:textColor="#BAB9B9"
+        android:textSize="@dimen/_11ssp"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleSignInButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/facebookLoginButton"
-        android:layout_alignStart="@+id/facebookLoginButton"
-        android:layout_alignEnd="@+id/facebookLoginButton"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="6dp"
+        android:layout_width="@dimen/loginWidthGoogle"
+        android:layout_height="@dimen/loginHeightGoogle"
+        android:layout_above="@+id/twitterLoginButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:insetBottom="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         android:visibility="visible" />
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/facebookLoginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/twitterLoginButton"
-        android:layout_alignStart="@+id/twitterLoginButton"
-        android:layout_alignEnd="@+id/twitterLoginButton"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="10dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp" />
+
 
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
         android:id="@+id/twitterLoginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/loginWidth"
+        android:layout_height="@dimen/loginHeight"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:backgroundTint="#0D5098"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:backgroundTint="#338BCD"
         android:textColor="#FFFFFF" />
 
 <RelativeLayout
     android:id="@+id/maskButtons"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignTop="@+id/googleSignInButton"
+    android:layout_alignTop="@+id/facebookLoginButton"
     android:layout_alignParentStart="true"
     android:layout_alignParentEnd="true"
     android:layout_alignParentBottom="true"
-    android:layout_marginTop="-2dp"
+    android:layout_marginTop="@dimen/_minus2sdp"
     android:background="@color/BlackTrans"
     android:clickable="true"
-    android:elevation="90dp"
+    android:elevation="@dimen/_64sdp"
     android:focusable="true"
     android:visibility="gone">
 
     <ProgressBar
         android:id="@+id/progressBarLoading2"
         style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
+        android:layout_width="@dimen/_65sdp"
+        android:layout_height="@dimen/_65sdp"
         android:layout_centerInParent="true"
         android:indeterminate="true"
         android:indeterminateBehavior="cycle"
@@ -107,12 +118,12 @@
         android:background="@drawable/shine_button_black"
         android:fadingEdge="horizontal|vertical"
         android:fontFamily="sans-serif-condensed"
-        android:paddingStart="30dp"
-        android:paddingEnd="30dp"
+        android:paddingStart="@dimen/_22sdp"
+        android:paddingEnd="@dimen/_22sdp"
         android:text="@string/signinsuccess"
         android:textAlignment="center"
         android:textColor="@color/progressBarPlayer4"
-        android:textSize="22sp"
+        android:textSize="@dimen/_16ssp"
         android:visibility="gone" />
 
 </RelativeLayout>
