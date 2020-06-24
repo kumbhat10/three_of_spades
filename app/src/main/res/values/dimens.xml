@@ -5,11 +5,20 @@
     <dimen name="loginHeightGoogle">@dimen/_34sdp</dimen>
     <dimen name="loginWidthGoogle">@dimen/_198sdp</dimen>
 
+    <dimen name="tableInner1">@dimen/_8sdp</dimen>
+    <dimen name="tableInner2">@dimen/_10sdp</dimen>
+    <dimen name="radiusInner1">@dimen/_98sdp</dimen>
+    <dimen name="radiusInner2">@dimen/_90sdp</dimen>
+
 
     <dimen name="imageGapEnd">0dp</dimen>
-    <dimen name="imageWidth">@dimen/_57sdp</dimen>
-    <dimen name="width_playername">@dimen/_57sdp</dimen>
-    <dimen name="imageHeight">@dimen/_57sdp</dimen>
+    <dimen name="imagePadding">@dimen/_3sdp</dimen>
+    <dimen name="imagePaddingTextGap">@dimen/_minus2sdp</dimen>
+
+    <dimen name="imageWidth">@dimen/_64sdp</dimen>
+
+    <dimen name="width_playername">@dimen/imageWidth</dimen>
+    <dimen name="imageHeight">@dimen/imageWidth</dimen>
     <dimen name="trumpSelectionImageWidth">@dimen/_72sdp</dimen>
     <dimen name="trumpSelectionImageHeight">@dimen/_72sdp</dimen>
     

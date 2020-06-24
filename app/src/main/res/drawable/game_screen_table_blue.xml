@@ -11,44 +11,41 @@
                 android:startColor="@color/shine0bk"
                 android:type="radial" />
             <corners
-                android:radius="200dp"/>
+                android:radius="@dimen/radiusInner1"/>
         </shape>
     </item>
 
     <item
-        android:bottom="12dp"
-        android:left="12dp"
-        android:right="12dp"
-        android:top="12dp">
+        android:bottom="@dimen/tableInner1"
+        android:left="@dimen/tableInner1"
+        android:right="@dimen/tableInner1"
+        android:top="@dimen/tableInner1">
         <shape android:shape="rectangle"
-            android:thickness="50dp">
+            android:thickness="@dimen/_36sdp">
             <solid
-                android:color="@color/shine2bk"/>
+                android:color="@color/borderNblueDark3b"/>
             <corners
-                android:radius="150dp"/>
-
+                android:radius="@dimen/radiusInner2"/>
         </shape>
     </item>
 
     <item
-        android:bottom="13dp"
-        android:left="13dp"
-        android:right="13dp"
-        android:top="13dp">
+        android:bottom="@dimen/tableInner2"
+        android:left="@dimen/tableInner2"
+        android:right="@dimen/tableInner2"
+        android:top="@dimen/tableInner2">
         <shape android:shape="rectangle">
             <gradient
                 android:centerColor="@color/borderNblueDark1b"
                 android:centerX="0.5"
                 android:centerY="0.5"
                 android:endColor="@color/borderNblueDark2b"
-                android:gradientRadius="90%p"
+                android:gradientRadius="100%p"
                 android:startColor="@color/borderNblueDark0b"
                 android:type="radial" />
             <corners
-                android:radius="150dp"/>
-
+                android:radius="@dimen/radiusInner2"/>
         </shape>
     </item>
-
 
 </layer-list>

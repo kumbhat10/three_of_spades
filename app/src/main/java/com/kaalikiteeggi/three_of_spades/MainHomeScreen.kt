@@ -66,10 +66,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private lateinit var soundBkgd: MediaPlayer
     private lateinit var soundSuccess: MediaPlayer
     private lateinit var soundCollectCards: MediaPlayer
+    private lateinit var soundUpdate: MediaPlayer
     private var rewardStatus = false
 
     private var rewardAmount = 0
-    private lateinit var soundUpdate: MediaPlayer
     private var createRoomStatus = false
     private var onceAdWatched = false
 
@@ -176,7 +176,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     override fun onStart() {
         super.onStart()
-        if(soundStatus) soundUpdate.start()
+//        if(soundStatus) soundUpdate.start()
         if (musicStatus) soundBkgd.start()
         if (mInterstitialAd.isLoaded) {
             if (!premiumStatus) {

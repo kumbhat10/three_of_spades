@@ -17,7 +17,7 @@
         android:layout_marginBottom="@dimen/_minus1sdp"
         android:background="@drawable/button_square_cardpoints"
         android:fontFamily="sans-serif"
-        android:gravity="center"
+        android:gravity="top|center_horizontal"
         android:text="@string/_10_pts"
         android:textColor="@color/Black"
         android:textSize="@dimen/_9ssp"

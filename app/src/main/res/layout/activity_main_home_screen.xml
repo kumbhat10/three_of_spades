@@ -1249,7 +1249,7 @@
         android:elevation="@dimen/_143sdp"
         android:focusable="true"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"

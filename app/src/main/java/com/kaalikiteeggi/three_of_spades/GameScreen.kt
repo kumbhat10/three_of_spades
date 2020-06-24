@@ -47,6 +47,8 @@ class GameScreen : AppCompatActivity() {
     private lateinit var soundSuccess: MediaPlayer
     private lateinit var soundShuffle: MediaPlayer
     private lateinit var soundChat: MediaPlayer
+    private lateinit var soundCardPlayed: MediaPlayer
+
     private lateinit var soundCollectCards: MediaPlayer
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
@@ -215,6 +217,7 @@ class GameScreen : AppCompatActivity() {
         soundSuccess= MediaPlayer.create(applicationContext,R.raw.player_success_chime)
         soundShuffle = MediaPlayer.create(applicationContext,R.raw.cards_shuffle)
         soundChat = MediaPlayer.create(applicationContext,R.raw.chat_new1)
+        soundCardPlayed = MediaPlayer.create(applicationContext,R.raw.card_moved)
         soundTimerFinish = MediaPlayer.create(applicationContext,R.raw.timer_over)
         soundCollectCards = MediaPlayer.create(applicationContext,R.raw.collect_cards)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -263,7 +266,7 @@ class GameScreen : AppCompatActivity() {
                 ct1 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct1 <=97){
-                    soundUpdate.start()
+                    soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[0]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[0]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[0]))
                     findViewById<ImageView>(refIDMappedTableImageView[0]).setImageResource(cardsDrawableDoubleDeck[ct1])
@@ -279,7 +282,7 @@ class GameScreen : AppCompatActivity() {
                 ct2 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct2 <=97){
-                    soundUpdate.start()
+                    soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[1]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[1]))
                     findViewById<ImageView>(refIDMappedTableImageView[1]).setImageResource(cardsDrawableDoubleDeck[ct2])
@@ -295,7 +298,7 @@ class GameScreen : AppCompatActivity() {
                 ct3 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct3 <=97){
-                    soundUpdate.start()
+                    soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[2]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[2]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[2]))
                     findViewById<ImageView>(refIDMappedTableImageView[2]).setImageResource(cardsDrawableDoubleDeck[ct3])
@@ -311,7 +314,7 @@ class GameScreen : AppCompatActivity() {
                 ct4 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct4 <=97){
-                    soundUpdate.start()
+                    soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[3]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[3]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[3]))
                     findViewById<ImageView>(refIDMappedTableImageView[3]).setImageResource(cardsDrawableDoubleDeck[ct4])
@@ -327,7 +330,7 @@ class GameScreen : AppCompatActivity() {
                 ct5 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct5 <=97){
-                    soundUpdate.start()
+                    soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[4]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[4]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[4]))
                     findViewById<ImageView>(refIDMappedTableImageView[4]).setImageResource(cardsDrawableDoubleDeck[ct5])
@@ -343,7 +346,7 @@ class GameScreen : AppCompatActivity() {
                 ct6 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct6 <=97){
-                    soundUpdate.start()
+                    soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[5]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[5]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[5]))
                     findViewById<ImageView>(refIDMappedTableImageView[5]).setImageResource(cardsDrawableDoubleDeck[ct6])
@@ -359,7 +362,7 @@ class GameScreen : AppCompatActivity() {
                 ct7 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct7 <=97){
-                    soundUpdate.start()
+                    soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[6]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[6]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[6]))
                     findViewById<ImageView>(refIDMappedTableImageView[6]).setImageResource(cardsDrawableDoubleDeck[ct7])
@@ -581,7 +584,7 @@ class GameScreen : AppCompatActivity() {
                     if(vibrateStatus) vibrationStart()
                     soundShuffle.start()
                     displayShufflingCards()
-                    if(scoreSheetNotUpdated) scoreBoardTable(display = false,data = listOf("#",p1+ "\n${emoji}500,000",p2+ "\n${emoji}500,000",p3+ "\n${emoji}500,000",p4+ "\n${emoji}500,000",p5+ "\n${emoji}500,000",p6+ "\n${emoji}500,000",p7+ "\n${emoji}500,000"))
+                    if(scoreSheetNotUpdated) scoreBoardTable(display = false,data = listOf("#",p1+ "\n${emoji}5,000",p2+ "\n${emoji}5,000",p3+ "\n${emoji}5,000",p4+ "\n${emoji}5,000",p5+ "\n${emoji}5,000",p6+ "\n${emoji}5,000",p7+ "\n${emoji}5,000"))
                     scoreSheetNotUpdated = false
                     refGameData.child("S").addListenerForSingleValueEvent(object: ValueEventListener{
                         override fun onCancelled(p0: DatabaseError) {}
@@ -595,13 +598,14 @@ class GameScreen : AppCompatActivity() {
                         }
                     })
                     Handler().postDelayed({
-                        if (!premiumStatus && mInterstitialAd.isLoaded) mInterstitialAd.show()
+                        if(getString(R.string.test).contains('n')) {
+                            if (!premiumStatus && mInterstitialAd.isLoaded) mInterstitialAd.show()
+                        }
                         if(from == "p1") {
                             findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext,R.color.inActiveCard))
                             findViewById<AppCompatButton>(R.id.startNextRoundButton).visibility = View.VISIBLE
                             findViewById<AppCompatButton>(R.id.startNextRoundButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
                         }
-
                     },3000)
 
 
@@ -1289,12 +1293,10 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     private fun animatePlayerPlayingRound(index: Int){
         findViewById<ImageView>(refIDMappedImageView[index-1]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
         findViewById<ImageView>(refIDMappedImageView[index-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
-//        findViewById<TextView>(refIDMappedTextView[index-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
         if("p$index"==from){
 //        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
 //            if(gameTurn==1) findViewById<LinearLayout>(R.id.imageGallery).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_active_cards))
 //            if(gameTurn==1) findViewById<LinearLayout>(R.id.imageGallery).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
-
         }
     }
     private fun clearAllAnimation(){
@@ -1641,6 +1643,10 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             findViewById<Button>(R.id.bidpassbutton).clearAnimation()
         }
   }
+    private fun animatePlayer(index: Int){
+        findViewById<ImageView>(refIDMappedImageView[index-1]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
+        findViewById<ImageView>(refIDMappedImageView[index-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
+    }
     private fun resetBackgroundAnimationBidding(dataLoad: DataSnapshot) {
         for (i in 0..6) {
             val iPlayer = i+1
@@ -1827,13 +1833,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         } else if(current==7) next = 1
         return next
     }
-    private fun animatePlayer(index: Int){
-        findViewById<ImageView>(refIDMappedImageView[index-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-//        findViewById<TextView>(refIDMappedTextView[index-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-        if("p$index"==from)
-            findViewById<LinearLayout>(R.id.imageGallery).
-            startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_linearlayout))
-    }
+
     fun openCloseChatWindow(view: View){
         if (findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility == View.VISIBLE){ //close chat display
             findViewById<RelativeLayout>(R.id.chatLinearLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomout_chat_close))
@@ -1862,7 +1862,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
         else {
             scoreOpenStatus = true
-            if(scoreSheetNotUpdated) scoreBoardTable(display = false,data = listOf("#",p1+ "\n${emoji}500,000",p2+ "\n${emoji}500,000",p3+ "\n${emoji}500,000",p4+ "\n${emoji}500,000",p5+ "\n${emoji}500,000",p6+ "\n${emoji}500,000",p7+ "\n${emoji}500,000"))
+            if(scoreSheetNotUpdated) scoreBoardTable(display = false,data = listOf("#",p1+ "\n${emoji}5,000",p2+ "\n${emoji}5,000",p3+ "\n${emoji}5,000",p4+ "\n${emoji}5,000",p5+ "\n${emoji}5,000",p6+ "\n${emoji}5,000",p7+ "\n${emoji}5,000"))
             scoreSheetNotUpdated = false
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
             findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.VISIBLE

@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/textViewDisplayCard"
         android:layout_width="@dimen/_46sdp"
-        android:layout_height="@dimen/_11sdp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/imageViewDisplayCard"
         android:layout_alignEnd="@+id/imageViewDisplayCard"
         android:layout_alignParentStart="true"
@@ -17,7 +17,7 @@
         android:layout_marginBottom="@dimen/_minus1sdp"
         android:background="@drawable/button_square_cardpoints"
         android:fontFamily="sans-serif"
-        android:gravity="center"
+        android:gravity="top|center_horizontal"
         android:text="@string/_10_pts"
         android:textColor="@color/Black"
         android:textSize="@dimen/_9ssp"
