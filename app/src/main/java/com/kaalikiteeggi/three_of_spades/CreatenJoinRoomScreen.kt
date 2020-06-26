@@ -84,6 +84,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     private lateinit var t6: Target
     private lateinit var t7: Target
     private lateinit var playerInfo: ArrayList<String>
+    private lateinit var playerInfoCoins: ArrayList<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +102,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
 
         if (sharedPreferences.contains("themeColor")) {
-            changeBackground(sharedPreferences.getString("themeColor", "shine_bk").toString())
+//            changeBackground(sharedPreferences.getString("themeColor", "shine_bk").toString())
         }
         v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         soundUpdate = MediaPlayer.create(applicationContext,R.raw.player_moved)
@@ -153,6 +154,13 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         val p2h = dataSnapshot?.data?.get("p2h").toString()
         val p3h = dataSnapshot?.data?.get("p3h").toString()
         val p4h = dataSnapshot?.data?.get("p4h").toString()
+        val p1c = dataSnapshot?.data?.get("p1c").toString().toInt()
+        val p2c = dataSnapshot?.data?.get("p2c").toString().toInt()
+        val p3c = dataSnapshot?.data?.get("p3c").toString().toInt()
+        val p4c = dataSnapshot?.data?.get("p4c").toString().toInt()
+        val p5c = dataSnapshot?.data?.get("p5c").toString().toInt()
+        val p6c = dataSnapshot?.data?.get("p6c").toString().toInt()
+        val p7c = dataSnapshot?.data?.get("p7c").toString().toInt()
         val p5 = dataSnapshot?.data?.get("p5").toString()
         val p6 = dataSnapshot?.data?.get("p6").toString()
         val p7 = dataSnapshot?.data?.get("p7").toString()
@@ -222,11 +230,15 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         if(playerJoining==10){
             registration.remove()
             playerInfo = ArrayList()
+            playerInfoCoins = ArrayList()
             if(nPlayers==7) {
                 playerInfo.addAll(listOf(p1, p2, p3, p4, p5, p6, p7, p1h, p2h, p3h, p4h, p5h, p6h, p7h))
+                playerInfoCoins.addAll(listOf(p1c, p2c, p3c, p4c, p5c, p6c, p7c))
             }
             else if(nPlayers == 4){
                 playerInfo.addAll(listOf(p1, p2, p3, p4, p1h, p2h, p3h, p4h))
+                playerInfoCoins.addAll(listOf(p1c, p2c, p3c, p4c))
+
             }
             when {
                 premiumStatus -> startNextActivity()
@@ -357,7 +369,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         soundUpdate.start()
         startActivity(Intent(this@CreatenJoinRoomScreen,GameScreen::class.java).apply { putExtra("selfName",selfName) }
             .apply { putExtra("from",from) }.apply { putExtra("nPlayers", nPlayers) }
-            .apply { putExtra("roomID",roomID) }.putStringArrayListExtra("playerInfo",playerInfo))
+            .apply { putExtra("roomID",roomID) }.putStringArrayListExtra("playerInfo",playerInfo).putIntegerArrayListExtra("playerInfoCoins",playerInfoCoins))
         overridePendingTransition(R.anim.slide_top_in_activity,R.anim.slide_top_in_activity)
         Handler().postDelayed({finish()},400)
 //        finish()
@@ -473,7 +485,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         }
     }
     @SuppressLint("NewApi")
-    fun vibrationStart(duration: Long = 300){
+    fun vibrationStart(duration: Long = 150){
         if(versionStatus){
             v.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
         }else{

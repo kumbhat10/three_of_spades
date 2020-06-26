@@ -8,10 +8,11 @@
         android:startColor="@color/borderRed2"
         android:type="linear"/>
     <corners
-        android:radius="10dp"/>
+        android:radius="@dimen/_7sdp"/>
     <stroke
-        android:width="2dp"
+        android:width="@dimen/_1sdp"
         android:color="@color/borderRed2"
         />
 
 </shape>
+

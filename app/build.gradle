@@ -14,8 +14,8 @@ android {
         applicationId "com.kaalikiteeggi.three_of_spades"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 14
-        versionName "14.0"
+        versionCode 15
+        versionName "15.0"
         ndkVersion "21.1.6363665"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug

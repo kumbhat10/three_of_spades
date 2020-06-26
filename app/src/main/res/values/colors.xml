@@ -62,7 +62,11 @@
 
     <color name = "borderRed0">#B60000</color>
     <color name = "borderRed1">#A30E0E</color>
-    <color name = "borderRed2">#870F0F</color>
+    <color name = "borderRed2">#400E0E</color>
+
+    <color name = "h1">#FF5652</color>
+    <color name = "h2">#AA211D</color>
+    <color name = "h3">#471816</color>
 
 
     <color name = "borderblueDark0o">#FF7D36</color>

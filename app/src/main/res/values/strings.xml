@@ -112,5 +112,6 @@
     <string name="claim_reward">Claim \n Reward</string>
     <string name="score_board">Score Board</string>
     <string name="start_next_game">Start next game</string>
+    <string name="fetching_player">Fetching Player data....</string>
 
 </resources>

@@ -26,14 +26,16 @@
 
     <dimen name="imageGapBetween">@dimen/_47sdp</dimen>
     <dimen name="imageGapBetweenHorizontal">@dimen/_11sdp</dimen>
+    <dimen name="imageGapBetweenHorizontalTop">@dimen/_21sdp</dimen>
 
-    <dimen name="imageGapBetween1">@dimen/_7sdp</dimen>
+    <dimen name="imageGapBetween1">@dimen/_9sdp</dimen>
     <dimen name="imageGapBetweenCards">@dimen/_4sdp</dimen>
 
     <dimen name="tableCardImageWidth">@dimen/_32sdp</dimen>
     <dimen name="tableCardImageHeight">@dimen/_43sdp</dimen>
     <dimen name="scoreTableHeight">@dimen/_26sdp</dimen>
     <dimen name="scoreTableWidth">@dimen/_64sdp</dimen>
+    <dimen name="scoreTableWidthLarge">@dimen/_70sdp</dimen>
     <dimen name="widthDisplayCardLast">@dimen/_39sdp</dimen>
     <dimen name="status_online">@dimen/_12sdp</dimen>
     <dimen name="padding_playername">@dimen/_3sdp</dimen>

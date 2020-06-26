@@ -20,7 +20,7 @@
 
             <TextView
                 android:id="@+id/gameNumber"
-                android:layout_width="@dimen/scoreTableWidth"
+                android:layout_width="@dimen/scoreTableWidthLarge"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/_2sdp"
                 android:paddingBottom="@dimen/_2sdp"

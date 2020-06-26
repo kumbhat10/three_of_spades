@@ -116,11 +116,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/developerandAds"
+        android:layout_marginBottom="@dimen/_minus13sdp"
         android:layout_below="@+id/userScore"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_minus14sdp"
-        android:layout_marginBottom="@dimen/_minus13sdp"
         android:background="@drawable/shine_player_stats"
         android:clickable="true"
         android:elevation="@dimen/_29sdp"
@@ -1256,27 +1256,15 @@
             android:layout_height="@dimen/_72sdp"
             android:src="@drawable/ribbon"/>
 
-<!--            <com.romainpiel.shimmer.ShimmerTextView-->
-<!--                android:id="@+id/dailyRewardsTitle"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="top"-->
-<!--                android:layout_centerInParent="true"-->
-<!--                android:layout_marginTop="@dimen/_11sdp"-->
-<!--                android:gravity="center"-->
-<!--                android:text="@string/daily_rewards"-->
-<!--                android:textColor="@color/font_grey_settings"-->
-<!--                android:textSize="@dimen/_16ssp" />-->
-<!--        -->
         <GridView
             android:id="@+id/dailyRewardGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_7sdp"
-            android:layout_marginTop="@dimen/_11sdp"
-            android:layout_marginEnd="@dimen/_7sdp"
-            android:layout_marginBottom="@dimen/_11sdp"
-            android:columnWidth="@dimen/_57sdp"
+            android:layout_marginStart="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_minus6sdp"
+            android:layout_marginEnd="@dimen/_1sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:columnWidth="@dimen/_60sdp"
             android:elevation="@dimen/_143sdp"
             android:gravity="center|top"
             android:horizontalSpacing="@dimen/_1sdp"
@@ -1339,4 +1327,44 @@
         android:textSize="@dimen/_9ssp"
         android:textAlignment="viewEnd"
         android:textColor="#FFFFFF" />
+
+    <RelativeLayout
+        android:id="@+id/maskAllLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/BlackTrans"
+        android:clickable="true"
+        android:elevation="@dimen/_64sdp"
+        android:focusable="true"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/progressBarLoading3"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="@dimen/_65sdp"
+            android:layout_height="@dimen/_65sdp"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:indeterminateBehavior="cycle"
+            android:indeterminateOnly="false"
+            android:indeterminateTint="#FFE500"
+            android:progressTintMode="src_in"
+            android:rotation="360" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progressBarLoading3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:gravity="center"
+            android:text="@string/fetching_player"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14ssp"/>
+
+    </RelativeLayout>
 </RelativeLayout>

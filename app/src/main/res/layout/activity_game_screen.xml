@@ -34,7 +34,7 @@
         android:text="@string/shuffling_cards"
         android:gravity="top|center_horizontal"
         android:textColor="@color/white"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_13ssp"
         android:visibility="gone" />
 
     <ImageView
@@ -1134,7 +1134,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
-        android:layout_marginBottom="@dimen/_7sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
         android:animateLayoutChanges="true"
         android:background="@drawable/shine_scoretable_background"
         android:elevation="@dimen/_43sdp"
@@ -1146,12 +1146,11 @@
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_1sdp"
             android:layout_marginBottom="@dimen/_4sdp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@drawable/ribbon_scoreboard" />
-
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/addViewGameScreenBanner"
@@ -1163,15 +1162,40 @@
             app:adSize="BANNER"
             app:adUnitId="@string/banner" />
 
+        <LinearLayout
+            android:id="@+id/imageGalleryScoreName"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_below="@+id/scoreTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_minus7sdp"
+            android:background="@drawable/button_square_header"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_2sdp" />
+
+        <LinearLayout
+            android:id="@+id/imageGalleryScoreTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_21sdp"
+            android:layout_below="@+id/imageGalleryScoreName"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/shine_player_stats"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_2sdp" />
+
         <ScrollView
             android:id="@+id/scrollViewScore"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_below="@+id/imageGalleryScoreTotal"
             android:layout_above="@id/addViewGameScreenBanner"
-            android:layout_below="@+id/scoreTitle"
+            android:layout_marginTop="@dimen/_minus1sdp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="0dp"
             android:animateLayoutChanges="true"
+            android:background="@drawable/shine_scoretable_background"
             android:scrollbarSize="@dimen/_10sdp"
             android:scrollbarStyle="insideOverlay"
             android:visibility="visible">
@@ -1182,6 +1206,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:orientation="vertical" />
+
         </ScrollView>
     </RelativeLayout>
 
@@ -1191,7 +1216,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="0dp"
+        android:layout_marginBottom="@dimen/_5sdp"
         android:background="@drawable/start_next_game"
         android:clickable="true"
         android:contentDescription="@string/todo"

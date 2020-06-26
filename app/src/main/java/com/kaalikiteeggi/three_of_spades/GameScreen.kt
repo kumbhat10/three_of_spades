@@ -7,10 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
-import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.os.*
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -25,12 +25,14 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
@@ -38,6 +40,7 @@ import kotlinx.android.synthetic.main.activity_game_screen.*
 import pl.droidsonroids.gif.GifImageView
 import java.util.*
 import kotlin.math.round
+import kotlin.properties.Delegates
 import kotlin.random.Random
 
 class GameScreen : AppCompatActivity() {
@@ -76,6 +79,8 @@ class GameScreen : AppCompatActivity() {
     private lateinit var selfName: String
     private lateinit var from: String
     private var nPlayers = 0
+    private var nPlayers7 = false
+    private var nPlayers4 = false
     private val emoji = String(Character.toChars(0x1F4B0))
     private val emojiScore = String(Character.toChars(0x1F3AF))
     private val emojiMessage = String(Character.toChars(0x1F4AC))
@@ -83,10 +88,10 @@ class GameScreen : AppCompatActivity() {
 
     private lateinit var refGameData: DatabaseReference
     private var refRoomFirestore = Firebase.firestore.collection("Rooms")
+    private var refUsersData = Firebase.firestore.collection("Users")
     private lateinit var chatRegistration: ListenerRegistration
 
     private lateinit var gameStateListener:ValueEventListener
-    private lateinit var chatListener: ValueEventListener
     private lateinit var countDownBidding: CountDownTimer
     private lateinit var countDownPlayCard: CountDownTimer
     private lateinit var bidingTurnListener:ValueEventListener
@@ -119,6 +124,7 @@ class GameScreen : AppCompatActivity() {
     private lateinit var trump: String
     private lateinit var trumpStart: String
     private lateinit var playerInfo: ArrayList<String>
+    private lateinit var playerInfoCoins: ArrayList<Int>
 
     private lateinit var p1: String
     private lateinit var p2: String
@@ -127,6 +133,20 @@ class GameScreen : AppCompatActivity() {
     private lateinit var p5: String
     private lateinit var p6: String
     private lateinit var p7: String
+    private var p1Coins by Delegates.notNull<Int>()
+    private var p2Coins by Delegates.notNull<Int>()
+    private var p3Coins by Delegates.notNull<Int>()
+    private var p4Coins by Delegates.notNull<Int>()
+    private var p5Coins by Delegates.notNull<Int>()
+    private var p6Coins by Delegates.notNull<Int>()
+    private var p7Coins by Delegates.notNull<Int>()
+    private var p1Gain = 0
+    private var p2Gain = 0
+    private var p3Gain = 0
+    private var p4Gain = 0
+    private var p5Gain = 0
+    private var p6Gain = 0
+    private var p7Gain = 0
     private lateinit var toast: Toast
     private lateinit var cardsInHand: MutableList<Long>
 
@@ -146,7 +166,8 @@ class GameScreen : AppCompatActivity() {
     private var onlineP5 = 0
     private var onlineP6 = 0
     private var onlineP7 = 0
-    private var timeCountdown = 10000L
+    private var timeCountdownPlayCard = 10000L
+    private var timeCountdownBid = 15000L
     private var lastChat = ""
     private var scoreSheetNotUpdated = true
 
@@ -208,7 +229,10 @@ class GameScreen : AppCompatActivity() {
         from     = intent.getStringExtra("from")!!.toString()    //check if user has joined room or created one and display Toast
         selfName = intent.getStringExtra("selfName")!!.toString()
         playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
+        playerInfoCoins = intent.getStringArrayListExtra("playerInfoCoins") as ArrayList<Int>
         nPlayers = intent.getIntExtra("nPlayers", 4)
+        if(nPlayers==7) nPlayers7 = true
+        if(nPlayers==4) nPlayers4 = true
         p5 = "ds"
         p6 = "ds"
         p7 = "ds"
@@ -571,44 +595,15 @@ class GameScreen : AppCompatActivity() {
                     updatePlayerScoreInfo(ptAll)
                     getCardsAndDisplay(animation = true)
                     Handler().postDelayed( { startPlayingRound() },3000)
-                    if("p$playerTurn"!=from)  centralText("${playerName(bidder)} will play first \n You get ${(timeCountdown/1000).toInt()} seconds to play card")
-                    if("p$playerTurn"==from) centralText("${playerName(bidder)}, \n You will have ${(timeCountdown/1000).toInt()} seconds to play card")
+                    if("p$playerTurn"!=from)  centralText("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard/1000).toInt()} seconds to play card")
+                    if("p$playerTurn"==from) centralText("${playerName(bidder)}, \n You will have ${(timeCountdownPlayCard/1000).toInt()} seconds to play card")
                 }else{
                     getCardsAndDisplay()
                     startPlayingRound()
                 }
             }
                 if (gameState == 6) {
-                    findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
-                    countDownTimer("PlayCard",purpose = "cancel")
-                    if(vibrateStatus) vibrationStart()
-                    soundShuffle.start()
-                    displayShufflingCards()
-                    if(scoreSheetNotUpdated) scoreBoardTable(display = false,data = listOf("#",p1+ "\n${emoji}5,000",p2+ "\n${emoji}5,000",p3+ "\n${emoji}5,000",p4+ "\n${emoji}5,000",p5+ "\n${emoji}5,000",p6+ "\n${emoji}5,000",p7+ "\n${emoji}5,000"))
-                    scoreSheetNotUpdated = false
-                    refGameData.child("S").addListenerForSingleValueEvent(object: ValueEventListener{
-                        override fun onCancelled(p0: DatabaseError) {}
-                        override fun onDataChange(p0: DataSnapshot) {
-                            if(scoreList != p0.value as List<Int> || newGameStatus){// dummy - if exactly same score list than not update - check if issue
-                                newGameStatus = false
-                                scoreList  = p0.value as List<Int>
-                                scoreBoardTable(data = scoreList)
-                                gameNumber += 1
-                            }
-                        }
-                    })
-                    Handler().postDelayed({
-                        if(getString(R.string.test).contains('n')) {
-                            if (!premiumStatus && mInterstitialAd.isLoaded) mInterstitialAd.show()
-                        }
-                        if(from == "p1") {
-                            findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext,R.color.inActiveCard))
-                            findViewById<AppCompatButton>(R.id.startNextRoundButton).visibility = View.VISIBLE
-                            findViewById<AppCompatButton>(R.id.startNextRoundButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
-                        }
-                    },3000)
-
-
+                    gameMode6()
             }
         }}
 // endregion
@@ -768,11 +763,11 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         refGameData.child("OL/p7").addValueEventListener(onlineStatusListener7)
 //        endregion
         // region       Countdown PlayCard
-        countDownPlayCard = object: CountDownTimer(timeCountdown,100){
+        countDownPlayCard = object: CountDownTimer(timeCountdownPlayCard,100){
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-                findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished*100/timeCountdown).toInt()
+                findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished*100/timeCountdownPlayCard).toInt()
                 findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished/1000).toDouble() +1).toInt().toString() + "s"
             }
             override fun onFinish() {
@@ -789,11 +784,11 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
 //        endregion
         // region       Countdown Biding
-        countDownBidding = object: CountDownTimer(timeCountdown,100){
+        countDownBidding = object: CountDownTimer(timeCountdownBid,100){
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-                findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished*100/timeCountdown).toInt()
+                findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished*100/timeCountdownBid).toInt()
                 findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished/1000).toDouble()).toInt().toString() + "s"
             }
             override fun onFinish() {
@@ -820,6 +815,145 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             toastCenter(error.toString()) // dummy
     }
     }
+
+    private fun gameMode6() {
+        findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
+        countDownTimer("PlayCard",purpose = "cancel")
+        if(vibrateStatus) vibrationStart()
+        soundShuffle.start()
+        displayShufflingCards()
+        scoreOpenStatus = true
+//        if(scoreSheetNotUpdated) {
+//            scoreBoardTable(display = false,data = createScoreTableHeader(), upDateHeader = true)
+//            scoreBoardTable(display = false,data = createScoreTableTotal(), upDateTotal = true)
+//        }
+//        scoreSheetNotUpdated = false
+        refGameData.child("S").addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {}
+            override fun onDataChange(p0: DataSnapshot) {
+                if(scoreList != p0.value as List<Int> || newGameStatus){// dummy - newGameStatus not needed as Scorelist has game index which is unique
+                    newGameStatus = false
+                    scoreList  = p0.value as List<Int>
+                    updateWholeScoreBoard()
+                    gameNumber += 1
+                }
+            }
+        })
+        Handler().postDelayed({
+            if(getString(R.string.test).contains('n')) {
+                if (!premiumStatus && mInterstitialAd.isLoaded) mInterstitialAd.show()
+            }
+            if(from == "p1") {
+                findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext,R.color.inActiveCard))
+                findViewById<AppCompatButton>(R.id.startNextRoundButton).visibility = View.VISIBLE
+                findViewById<AppCompatButton>(R.id.startNextRoundButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
+            }
+        },3000)    }
+    private fun updateWholeScoreBoard(){
+        p1Gain += scoreList[1].toString().toInt()
+        p2Gain += scoreList[2].toString().toInt()
+        p3Gain += scoreList[3].toString().toInt()
+        p4Gain += scoreList[4].toString().toInt()
+
+        p1Coins += scoreList[1].toString().toInt()
+        p2Coins += scoreList[2].toString().toInt()
+        p3Coins += scoreList[3].toString().toInt()
+        p4Coins += scoreList[4].toString().toInt()
+
+        if(nPlayers7) {
+            p5Gain += scoreList[5].toString().toInt()
+            p6Gain += scoreList[6].toString().toInt()
+            p7Gain += scoreList[7].toString().toInt()
+
+            p5Coins += scoreList[5].toString().toInt()
+            p6Coins += scoreList[6].toString().toInt()
+            p7Coins += scoreList[7].toString().toInt()
+        }
+        scoreBoardTable(display = false,data = createScoreTableHeader(), upDateHeader = true)
+        scoreBoardTable(display = false,data = createScoreTableTotal(), upDateTotal = true)
+        scoreBoardTable(data = scoreList)
+
+        val uid = FirebaseAuth.getInstance().uid.toString()
+        refUsersData.document(uid).set(hashMapOf("sc" to playerCoins(from) ), SetOptions.merge())
+    }
+    private fun createScoreTableHeader(): List<String>{
+
+        return if(nPlayers ==7) listOf("Player\n$emoji",
+            p1 + "\n$emoji${String.format("%,d", p1Coins)}",
+            p2 + "\n$emoji${String.format("%,d", p2Coins)}",
+            p3 + "\n$emoji${String.format("%,d", p3Coins)}",
+            p4 + "\n$emoji${String.format("%,d", p4Coins)}",
+            p5 + "\n$emoji${String.format("%,d", p5Coins)}",
+            p6 + "\n$emoji${String.format("%,d", p6Coins)}",
+            p7 + "\n$emoji${String.format("%,d", p7Coins)}")
+
+        else listOf("Player\n$emoji",
+            p1 + "\n$emoji${String.format("%,d", p1Coins)}",
+            p2 + "\n$emoji${String.format("%,d", p2Coins)}",
+            p3 + "\n$emoji${String.format("%,d", p3Coins)}",
+            p4 + "\n$emoji${String.format("%,d", p4Coins)}")
+    }
+    private fun createScoreTableTotal(): List<Any> {
+        return if(nPlayers ==7) listOf("Gain/Loss", p1Gain , p2Gain , p3Gain , p4Gain , p5Gain , p6Gain , p7Gain )
+        else listOf("Gain/Loss", p1Gain , p2Gain , p3Gain , p4Gain )
+    }
+    private fun scoreBoardTable(data: List<Any>,display: Boolean = true, upDateHeader: Boolean = false, upDateTotal:Boolean = false) {
+        if(display) {
+            scoreOpenStatus = true
+            findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
+            findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.VISIBLE
+            findViewById<RelativeLayout>(R.id.scoreViewLayout).visibility = View.VISIBLE
+            findViewById<RelativeLayout>(R.id.scoreViewLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomin_scoretable_open))
+        }
+        val inflater = LayoutInflater.from(applicationContext)
+        val viewTemp = when {
+            upDateHeader -> inflater.inflate(R.layout.score_board_table_7, findViewById<LinearLayout>(R.id.imageGalleryScoreName), false)
+            upDateTotal -> inflater.inflate(R.layout.score_board_table_7, findViewById<LinearLayout>(R.id.imageGalleryScoreTotal), false)
+            else -> inflater.inflate(R.layout.score_board_table_7, findViewById<LinearLayout>(R.id.imageGalleryScore), false)
+        }
+        for(i in 0..nPlayers){
+            viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).text = data[i].toString()
+            if(!upDateHeader)  viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX,resources.getDimension(R.dimen._12ssp))
+            if(i>0 && !upDateHeader && data[i].toString().toInt() <0){
+//                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
+                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.Red))
+            }else if(i>0 && !upDateHeader){
+//                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
+                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.borderblueDark1g))
+            }
+        }
+        when {
+            upDateHeader -> {
+                findViewById<LinearLayout>(R.id.imageGalleryScoreName).removeAllViews()
+                findViewById<LinearLayout>(R.id.imageGalleryScoreName).addView(viewTemp)
+            }
+            upDateTotal -> {
+                findViewById<LinearLayout>(R.id.imageGalleryScoreTotal).removeAllViews()
+                findViewById<LinearLayout>(R.id.imageGalleryScoreTotal).addView(viewTemp)
+            }
+            else -> findViewById<LinearLayout>(R.id.imageGalleryScore).addView(viewTemp)
+        }
+    }
+    fun closeChatScoreWindow (view: View){
+        findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.GONE
+        findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.GONE
+        findViewById<RelativeLayout>(R.id.scoreViewLayout).visibility = View.GONE
+        findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
+    }
+    private fun playerCoins(p: String): Int {
+        var coins = 0
+        when(p){
+            "p1"-> coins = p1Coins
+            "p2"-> coins = p2Coins
+            "p3"-> coins = p3Coins
+            "p4"-> coins = p4Coins
+            "p5"-> coins = p5Coins
+            "p6"-> coins = p6Coins
+            "p7"-> coins = p7Coins
+        }
+        return coins
+    }
+
     private fun resetVariables(){
         findViewById<ImageView>(R.id.imageViewP1).setImageResource(R.drawable.ic_back_side_red)
         findViewById<ImageView>(R.id.imageViewP2).setImageResource(R.drawable.ic_back_side_blue)
@@ -890,11 +1024,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         write( "BU1" ,mutableMapOf("b1" to 8,"s1" to 0))
         write("BU" , mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""))
         write("GS" , 1)
-    }
-    private fun checkAllOnlinetoContinue(){
-        if(onlineP1==1 && onlineP2==1 && onlineP3==1 && onlineP4==1 && onlineP5==1 && onlineP6==1 && onlineP7==1 ){
-        }
-
     }
     private fun tablePointsCalculator(){
         tablePoints = cardPointsDoubleDeck[ct1] + cardPointsDoubleDeck[ct2] +cardPointsDoubleDeck[ct3] +
@@ -1098,9 +1227,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         if(!played){
             played = true
             if(playerTurn != bidder) checkIfPartnerandUpdateServer(cardSelected, playerTurn)
-//            write("CT/$from",cardSelected)
-//            write("RO/P",nextTurn(playerTurn))
-//            if(gameTurn==1) write("RO/R",cardSuitDoubleDeck[cardSelected.toString().toInt()])
             refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener{
 //                write("RO/T",gameTurn+1)
                 if(gameTurn==1) write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to cardSuitDoubleDeck[cardSelected.toString().toInt()] ))
@@ -1122,7 +1248,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 findViewById<LinearLayout>(R.id.imageGallery).removeAllViews() // show no self cards
             }
         }
-
     }
     private fun checkIfPartnerandUpdateServer(cardSelected: Any, playerTurn: Int?){
         if((cardSelected.toString().toInt() == bu1*2 || cardSelected.toString().toInt() == bu1*2+1 ) && buFound1 != 1){
@@ -1193,37 +1318,14 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         if(buFound1 == 2) write("BU1/s1",1)  // locking the partner by 1
         if(buFound2 == 2) write("BU2/s2",1)  // locking the partner by 1
         write("CT", mutableMapOf("p1" to 99,"p2" to 99,"p3" to 99,"p4" to 99,"p5" to 99,"p6" to 99,"p7" to 99))
-        write("SC/p$roundWinner",tablePoints + ptAll[roundWinner-1])
-        write("RO/P",roundWinner)
+        write("SC/p$roundWinner",tablePoints + ptAll[roundWinner-1]) // add table points to the round winner player
+        write("RO/P",roundWinner) // write next player turn to be round player turn
         write("RO/R","")
         write("RO/T",1)
         write("R",roundNumber+1)
-        centralText("Please play next card",2000)
+        centralText("Please play your next card",2000)
     }
-    private fun scoreBoardTable(data: List<Any>,display: Boolean = true) {
-        if(display) {
-            scoreOpenStatus = true
-            findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-            findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.VISIBLE
-            findViewById<RelativeLayout>(R.id.scoreViewLayout).visibility = View.VISIBLE
-            findViewById<RelativeLayout>(R.id.scoreViewLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomin_scoretable_open))
-        }
-        val inflater = LayoutInflater.from(applicationContext)
-        val viewTemp = inflater.inflate(R.layout.score_board_table, findViewById<LinearLayout>(R.id.imageGalleryScore), false)
-        for(i in 0..7){
-            viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).text = data[i].toString()
-            if(!scoreSheetNotUpdated)  viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).textSize = 15F
-            if(i>0 && !scoreSheetNotUpdated && data[i].toString().toInt() <0){
-                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
-                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.Red))
-            }else if(i>0 && !scoreSheetNotUpdated){
-                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
-                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.borderblueDark1g))
-            }
-        }
-        findViewById<LinearLayout>(R.id.imageGalleryScore).addView(viewTemp)
-        findViewById<LinearLayout>(R.id.imageGalleryScore).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_up_in_score_table))
-    }
+
 
     private fun compareCardsforWinner(currentCard: Int, winnerCard: Int): Int{
         var w = winnerCard
@@ -1280,7 +1382,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             }
             viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).setOnClickListener(View.OnClickListener {
                 validateSelfPlayedCard(it)
-                viewTemp.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
+                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
             })
             gallery.addView(viewTemp)
         }
@@ -1288,7 +1390,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             findViewById<RelativeLayout>(R.id.horizontalScrollView).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
         }
         if(bidingRequest) startBidding()
-
     }
     private fun animatePlayerPlayingRound(index: Int){
         findViewById<ImageView>(refIDMappedImageView[index-1]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
@@ -1556,7 +1657,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                         val bidStatus = (dataLoad.child("BS/p$playerTurn").value as Long).toInt()
                         if (!bidingStarted) {
                             centralText("${playerName(playerTurn)} will start bidding", 0) //display message only first time
-//                            bidingStarted = true
                         }else{
                             centralText("Waiting for ${playerName(playerTurn)} to bid", 0) //display message only first time
                         }
@@ -1722,36 +1822,31 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         p2 = playerInfo[1]
         p3 = playerInfo[2]
         p4 = playerInfo[3]
+        p1Coins = playerInfoCoins[0]
+        p2Coins = playerInfoCoins[1]
+        p3Coins = playerInfoCoins[2]
+        p4Coins = playerInfoCoins[3]
        if(nPlayers==7){
            p5 = playerInfo[4]
            p6 = playerInfo[5]
            p7 = playerInfo[6]
+           p5Coins = playerInfoCoins[4]
+           p6Coins = playerInfoCoins[5]
+           p7Coins = playerInfoCoins[6]
        }
         updatePlayerNames()
         for(i in 0 until nPlayers) {
             val j = i+nPlayers
-            if(playerInfo[j].isNotEmpty()){
-//            Picasso.get().load(playerInfo[j]).transform(CircleTransform()).into(object : Target {
-                Picasso.get().load(playerInfo[j]).resize(300,300).centerCrop().error(R.drawable.s3).into(findViewById<ImageView>(refIDMappedImageView[i]))
-//                Picasso.get().load(playerInfo[j]).fit().into(object : Target {
-//                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-//                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
-//                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-//                    if (bitmap != null) {
-//                        findViewById<ImageView>(refIDMappedImageView[i]).setImageDrawable(bitmap.toDrawable(resources))
-//                    }
-//                }
-//            })
+            if(playerInfo[j].isNotEmpty()) {
+                Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().error(R.drawable.s3)
+                    .into(findViewById<ImageView>(refIDMappedImageView[i]))
             }
-//            val uni = 0x1F60A
-//            val uniMoney = 0x1F4B0
-//            val emoji = String(Character.toChars(uniMoney))
-//            findViewById<TextView>(refIDMappedTextView[i]).text = playerName(j) + "\n dk $emoji"
         }
     }
+    @SuppressLint("SetTextI18n")
     private fun updatePlayerNames(){
         for(i in 0 until nPlayers) {
-            findViewById<TextView>(refIDMappedTextView[i]).text = playerName(i+1) + "\n${emoji}5,000"
+            findViewById<TextView>(refIDMappedTextView[i]).text = playerName(i+1) + "\n${emoji}${String.format("%,d", playerInfoCoins[i])}"
         }
     }
     private fun shufflingWindow(time: Long = 4900,fadeOffTime: Long = 700, gameStateChange: Boolean = false){
@@ -1862,19 +1957,17 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
         else {
             scoreOpenStatus = true
-            if(scoreSheetNotUpdated) scoreBoardTable(display = false,data = listOf("#",p1+ "\n${emoji}5,000",p2+ "\n${emoji}5,000",p3+ "\n${emoji}5,000",p4+ "\n${emoji}5,000",p5+ "\n${emoji}5,000",p6+ "\n${emoji}5,000",p7+ "\n${emoji}5,000"))
+            if(scoreSheetNotUpdated) {
+                scoreBoardTable(display = false,data = createScoreTableHeader(), upDateHeader = true)
+                scoreBoardTable(display = false,data = createScoreTableTotal(), upDateTotal = true)
+            }
             scoreSheetNotUpdated = false
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
             findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.VISIBLE
             findViewById<RelativeLayout>(R.id.scoreViewLayout).visibility = View.VISIBLE
             findViewById<RelativeLayout>(R.id.scoreViewLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomin_scoretable_open))}
     }
-    fun closeChatScoreWindow (view: View){
-        findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.GONE
-        findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.GONE
-        findViewById<RelativeLayout>(R.id.scoreViewLayout).visibility = View.GONE
-        findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
-    }
+
     fun sendChat(view: View) {
 //        val uni = 0x1F60A
 ////        val emoji = String(Character.toChars(uni))
@@ -1910,7 +2003,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             findViewById<AdView>(R.id.addViewGameScreenBanner).loadAd(AdRequest.Builder().build())
             findViewById<AdView>(R.id.addViewChatGameScreenBanner).visibility = View.VISIBLE
             findViewById<AdView>(R.id.addViewChatGameScreenBanner).loadAd(AdRequest.Builder().build())
-
             mInterstitialAd = InterstitialAd(this)
             mInterstitialAd.adUnitId = resources.getString(R.string.interstitial)
             mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time

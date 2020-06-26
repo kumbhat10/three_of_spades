@@ -7,6 +7,6 @@
         android:endColor="@color/shine2blackbar"
         android:startColor="@color/shine2blackbar"
         android:type="linear"/>
-    <corners android:radius="20dp"/>
+    <corners android:radius="@dimen/_14sdp"/>
 
 </shape>

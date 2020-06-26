@@ -354,8 +354,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     photoURL = dataSnapshot.get("ph").toString()
                     Picasso.get().load(photoURL).transform(CircleTransform()).into(target)
                     totalCoins = dataSnapshot.get("sc").toString().toInt()
-                    findViewById<AppCompatButton>(R.id.userScore).text =
-                        String.format("%,d", totalCoins)
+                    findViewById<AppCompatButton>(R.id.userScore).text = String.format("%,d", totalCoins)
+                    findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
                     val ngamesPlayedStats = dataSnapshot.get("p").toString().toInt()
                     val ngamesBidedStats = dataSnapshot.get("b").toString().toInt()
                     val ngamesWonStats = dataSnapshot.get("w").toString().toInt()
@@ -465,7 +465,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 //        showNotification()
         if(premiumStatus) openClosePlayerStats(View(applicationContext))
         else {
-            if(vibrateStatus) vibrationStart()
+
             querySkuDetailsRequest()
         }
 
@@ -654,7 +654,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         playerStatsWindowStatus = !playerStatsWindowStatus
         if(playerStatsWindowStatus){
             if(soundStatus) soundUpdate.start()
-            if(vibrateStatus) vibrationStart()
+
             findViewById<RelativeLayout>(R.id.playerStats).visibility = View.VISIBLE
             anim(findViewById(R.id.playerStats),R.anim.slide_down_player_stats)
             anim(findViewById(R.id.signoutbutton),R.anim.slide_buttons)
@@ -670,7 +670,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     fun openSettingsWindow(view: View){
         settingsWindowStatus = true
         if(soundStatus) soundUpdate.start()
-        if(vibrateStatus) vibrationStart()
+
 
         findViewById<RelativeLayout>(R.id.settingsLayout).visibility = View.VISIBLE
         Handler().postDelayed({
@@ -685,7 +685,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
     fun closeSettingsWindow(view: View){
         settingsWindowStatus = false
-        if(vibrateStatus) vibrationStart()
+
 
         anim(findViewById(R.id.settingsLayouttemp),R.anim.zoomout)
         findViewById<ImageView>(R.id.closeSettings).visibility = View.INVISIBLE
@@ -711,12 +711,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             val roomID = (1..4).map { allowedChars.random() }.joinToString ("")
             val nPlayers = getString(R.string.nPlayers).toInt()
             if(nPlayers==7) {
-                if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).data7)
-                else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).dummyData7)
+                if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).data7)
+                else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).dummyData7)
             }
            else if(nPlayers==4){
-                if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).data4)
-                else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL).dummyData4)
+                if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).data4)
+                else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).dummyData4)
             }
 
             soundSuccess.start()
@@ -745,7 +745,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         if(vibrateStatus) vibrationStart()
                         soundSuccess.start()
                         val playerJoining = playersJoined + 1
-                        refRoomData.document(roomID).set(hashMapOf("p$playerJoining" to userName, "PJ" to playerJoining, "p${playerJoining}h" to photoURL), SetOptions.merge())
+                        refRoomData.document(roomID).set(hashMapOf("p$playerJoining" to userName, "PJ" to playerJoining, "p${playerJoining}h" to photoURL, "p${playerJoining}c" to totalCoins), SetOptions.merge())
                             .addOnSuccessListener {
                                 startActivity(Intent(applicationContext, CreatenJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
                                     .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p$playerJoining") }.apply {putExtra("nPlayers", nPlayers)})
@@ -767,7 +767,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     fun joinRoomWindowOpen(view: View) {
         if(soundStatus) soundUpdate.start()
-        if(vibrateStatus) vibrationStart()
+
         if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched) {
             mInterstitialAd.show()
         }
@@ -782,7 +782,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         joinRoomWindowStatus = true
     }
     fun joinRoomWindowExit(view: View) {
-        if(vibrateStatus) vibrationStart()
+
         findViewById<ImageButton>(R.id.joinRoomFrameIcon).clearAnimation()
         findViewById<ImageView>(R.id.closeJoinRoom).clearAnimation()
         findViewById<ImageView>(R.id.closeJoinRoom).visibility = View.INVISIBLE
@@ -796,7 +796,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     fun developerCredits(view: View){
 //        makeCall()
 //        recordAudio()
-        if(vibrateStatus) vibrationStart()
+
         if(soundStatus) soundUpdate.start()//Pass username and current activity alias to be able to come back with same info
         startActivity(Intent(this,DeveloperCredits::class.java))
         overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
@@ -924,10 +924,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun inviteFriends(view: View){
-        if(vibrateStatus) vibrationStart()
+
         if(soundStatus) soundUpdate.start()
         val image = ContextCompat.getDrawable(applicationContext,R.drawable.game_screen)
-            ?.toBitmap(1017,2034,Bitmap.Config.ARGB_8888)
+            ?.toBitmap(1013,2141,Bitmap.Config.ARGB_8888)
         val imagePath = File(applicationContext.getExternalFilesDir(null).toString() + "/gamescreen.jpg")
         val fos = FileOutputStream(imagePath)
         image?.compress(Bitmap.CompressFormat.JPEG,100,fos)
@@ -954,7 +954,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             data = Uri.parse(
                 "https://sites.google.com/view/kaali-ki-teeggi/")
         }
-        if(vibrateStatus) vibrationStart()
+
         startActivity(intent)
     }
     fun rateUs(view: View){
@@ -963,7 +963,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 "https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades")
             setPackage("com.android.vending")
         }
-        if(vibrateStatus) vibrationStart()
+
         startActivity(intent)
 //        throw RuntimeException("Boom!");
     }
