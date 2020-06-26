@@ -221,8 +221,6 @@ class GameScreen : AppCompatActivity() {
             .errorDrawable(R.drawable._s_icon_3shadow_bug1) //default: bug image
             .restartActivity(MainHomeScreen::class.java)
             .apply()
-//        if(savedInstanceState!= null)  Toast.makeText(applicationContext,"Destroyed Previously",Toast.LENGTH_SHORT).show()
-//        if(savedInstanceState == null) Toast.makeText(applicationContext," Fresh Start",Toast.LENGTH_SHORT).show()
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE // keep screen in landscape mode always
         roomID   = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
@@ -233,9 +231,7 @@ class GameScreen : AppCompatActivity() {
         nPlayers = intent.getIntExtra("nPlayers", 4)
         if(nPlayers==7) nPlayers7 = true
         if(nPlayers==4) nPlayers4 = true
-        p5 = "ds"
-        p6 = "ds"
-        p7 = "ds"
+        updateGameScreen()
         soundUpdate = MediaPlayer.create(applicationContext,R.raw.player_moved)
         soundError = MediaPlayer.create(applicationContext,R.raw.error_entry)
         soundSuccess= MediaPlayer.create(applicationContext,R.raw.player_success_chime)
@@ -265,14 +261,70 @@ class GameScreen : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
         editor = sharedPreferences.edit()
-        editor.putString("Room", roomID) // write room ID in storage - to delete later
-        editor.apply()
+        if(from == "p1"){
+            editor.putString("Room", roomID)
+         // write room ID in storage - to delete later / dummy redundant as not required
+            editor.apply()
+        }
         //region Player Info Update
         updatePlayerInfo()
 //        createTargetPicasso()
 // endregion
         getSharedPrefs()
         if(getString(R.string.test).contains('n')) initializeAds()
+    }
+
+    private fun updateGameScreen() {
+
+        if(nPlayers7) {
+            findViewById<TextView>(R.id.textView1).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.onlinep1).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView1).visibility = View.VISIBLE
+
+            findViewById<TextView>(R.id.textView2).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.onlinep2).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView2).visibility = View.VISIBLE
+
+            findViewById<TextView>(R.id.textView3).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.onlinep3).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView3).visibility = View.VISIBLE
+
+            findViewById<TextView>(R.id.textView4).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.onlinep4).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView4).visibility = View.VISIBLE
+
+            findViewById<TextView>(R.id.textView5).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.onlinep5).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView5).visibility = View.VISIBLE
+
+            findViewById<TextView>(R.id.textView6).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.onlinep6).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView6).visibility = View.VISIBLE
+
+            findViewById<TextView>(R.id.textView7).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView7).visibility = View.VISIBLE
+
+            findViewById<TextView>(R.id.trumpText2).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.trumpImage2).visibility = View.VISIBLE
+        }
+        if(nPlayers4){
+
+            findViewById<TextView>(R.id.textView1_4).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.onlinep1_4).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView1_4).visibility = View.VISIBLE
+
+            findViewById<TextView>(R.id.textView2_4).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.onlinep2_4).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView2_4).visibility = View.VISIBLE
+
+            findViewById<TextView>(R.id.textView3_4).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.onlinep3_4).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.playerView3_4).visibility = View.VISIBLE
+
+        }
+
+
+
     }
 
     override fun onStart() {
@@ -701,7 +753,7 @@ class GameScreen : AppCompatActivity() {
                         }
                         buPlayer1 = data.child("b1").value.toString().toInt()
                         buFound1 = data.child("s1").value.toString().toInt()
-                        if (buPlayer1 != 0 && buFound1 == 1) findViewById<TextView>(R.id.textViewP1).text =
+                        if (buPlayer1 != 0 && buFound1 == 1) findViewById<TextView>(R.id.trumpText1).text =
                             playerName(buPlayer1)
                         displayPartnerIcon()
                     }
@@ -718,7 +770,7 @@ class GameScreen : AppCompatActivity() {
                         ) soundSuccess.start()
                         buPlayer2 = data.child("b2").value.toString().toInt()
                         buFound2 = data.child("s2").value.toString().toInt()
-                        if (buPlayer2 != 0 && buFound2 == 1) findViewById<TextView>(R.id.textViewP2).text =
+                        if (buPlayer2 != 0 && buFound2 == 1) findViewById<TextView>(R.id.trumpText2).text =
                             playerName(buPlayer2)
                         displayPartnerIcon()
                     }
@@ -955,14 +1007,14 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     }
 
     private fun resetVariables(){
-        findViewById<ImageView>(R.id.imageViewP1).setImageResource(R.drawable.ic_back_side_red)
-        findViewById<ImageView>(R.id.imageViewP2).setImageResource(R.drawable.ic_back_side_blue)
-        findViewById<GifImageView>(R.id.imageViewTrump).setImageResource(R.drawable.trump1)
+        findViewById<ImageView>(R.id.trumpImage1).setImageResource(R.drawable.ic_back_side_red)
+        findViewById<ImageView>(R.id.trumpImage2).setImageResource(R.drawable.ic_back_side_blue)
+        findViewById<GifImageView>(R.id.trumpImage).setImageResource(R.drawable.trump1)
         findViewById<TextView>(R.id.textViewBidValue).text = "$emojiScore ${getString(R.string.bidValue1)}"
         findViewById<TextView>(R.id.textViewBider).text = getString(R.string.Bider)
-        findViewById<TextView>(R.id.textViewP2).text = getString(R.string.partner2)
-        findViewById<TextView>(R.id.textViewP1).text = getString(R.string.partner1)
-        findViewById<TextView>(R.id.textViewTrump).text = getString(R.string.Trump)
+        findViewById<TextView>(R.id.trumpText2).text = getString(R.string.partner2)
+        findViewById<TextView>(R.id.trumpText1).text = getString(R.string.partner1)
+        findViewById<TextView>(R.id.trumpText).text = getString(R.string.Trump)
         for (i in 0..6) { // first reset background and animation of all partner icon
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).clearAnimation()
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
@@ -1433,20 +1485,20 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             bu1Flag = BU.child("b1s").value.toString().toInt()
             bu2Flag = BU.child("b2s").value.toString().toInt()
             if(vibrateStatus) vibrationStart()
-            findViewById<ImageView>(R.id.imageViewP1).setImageResource(cardsDrawableSingleDeck[bu1])
-            findViewById<ImageView>(R.id.imageViewP2).setImageResource(cardsDrawableSingleDeck[bu2])
-            findViewById<ImageView>(R.id.imageViewP1).clearAnimation()
-            findViewById<ImageView>(R.id.imageViewP2).clearAnimation()
-            findViewById<TextView>(R.id.textViewP1).clearAnimation()
-            findViewById<TextView>(R.id.textViewP2).clearAnimation()
+            findViewById<ImageView>(R.id.trumpImage1).setImageResource(cardsDrawableSingleDeck[bu1])
+            findViewById<ImageView>(R.id.trumpImage2).setImageResource(cardsDrawableSingleDeck[bu2])
+            findViewById<ImageView>(R.id.trumpImage1).clearAnimation()
+            findViewById<ImageView>(R.id.trumpImage2).clearAnimation()
+            findViewById<TextView>(R.id.trumpText1).clearAnimation()
+            findViewById<TextView>(R.id.trumpText2).clearAnimation()
             if(bu1==bu2){
-                findViewById<TextView>(R.id.textViewP1).text = getString(R.string.bothPartner)
-                findViewById<TextView>(R.id.textViewP2).text = getString(R.string.bothPartner)
+                findViewById<TextView>(R.id.trumpText1).text = getString(R.string.bothPartner)
+                findViewById<TextView>(R.id.trumpText2).text = getString(R.string.bothPartner)
             }else {
-                if (bu1Flag == 1) findViewById<TextView>(R.id.textViewP1).text = getString(R.string.onlyPartner)
-                if (bu1Flag == 0) findViewById<TextView>(R.id.textViewP1).text = getString(R.string.anyPartner)
-                if (bu2Flag == 1) findViewById<TextView>(R.id.textViewP2).text = getString(R.string.onlyPartner)
-                if (bu2Flag == 0) findViewById<TextView>(R.id.textViewP2).text = getString(R.string.anyPartner)
+                if (bu1Flag == 1) findViewById<TextView>(R.id.trumpText1).text = getString(R.string.onlyPartner)
+                if (bu1Flag == 0) findViewById<TextView>(R.id.trumpText1).text = getString(R.string.anyPartner)
+                if (bu2Flag == 1) findViewById<TextView>(R.id.trumpText2).text = getString(R.string.onlyPartner)
+                if (bu2Flag == 0) findViewById<TextView>(R.id.trumpText2).text = getString(R.string.anyPartner)
             }
         }
     })
@@ -1480,7 +1532,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                     write("BU/b1",cardSelected)
                     bu1 = cardSelected
                     bu1Flag = 1
-                    findViewById<ImageView>(R.id.imageViewP1).setImageResource(cardsDrawableSingleDeck[cardSelected])
+                    findViewById<ImageView>(R.id.trumpImage1).setImageResource(cardsDrawableSingleDeck[cardSelected])
                     findViewById<TextView>(R.id.textViewPartnerSelect).text = getString(R.string.partnerSelection2)//choose 2nd buddy
                     counterPartnerSelection =1
                 }
@@ -1489,7 +1541,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                     bu1 = cardSelected
                     write("BU/b1",bu1)
                     bu1Flag = 0
-                    findViewById<ImageView>(R.id.imageViewP1).setImageResource(cardsDrawableSingleDeck[cardSelected])
+                    findViewById<ImageView>(R.id.trumpImage1).setImageResource(cardsDrawableSingleDeck[cardSelected])
                     findViewById<TextView>(R.id.textViewPartnerSelect).text = getString(R.string.partnerSelection2)//choose 2nd buddy
                     counterPartnerSelection =1
                 }
@@ -1559,46 +1611,46 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     private fun displayTrumpCard() {
         when (trump) {
             "H" -> {
-                findViewById<GifImageView>(R.id.imageViewTrump).setImageDrawable(
+                findViewById<GifImageView>(R.id.trumpImage).setImageDrawable(
                     ContextCompat.getDrawable(
                         applicationContext,
                         R.drawable.ic_hearts
                     )
                 )
-                findViewById<TextView>(R.id.textViewTrump).text = "Heart"
+                findViewById<TextView>(R.id.trumpText).text = "Heart"
             }
             "S" -> {
-                findViewById<GifImageView>(R.id.imageViewTrump).setImageDrawable(
+                findViewById<GifImageView>(R.id.trumpImage).setImageDrawable(
                     ContextCompat.getDrawable(
                         applicationContext,
                         R.drawable.ic_spades
                     )
                 )
-                findViewById<TextView>(R.id.textViewTrump).text = "Spade"
+                findViewById<TextView>(R.id.trumpText).text = "Spade"
 
             }
             "D" -> {
-                findViewById<GifImageView>(R.id.imageViewTrump).setImageDrawable(
+                findViewById<GifImageView>(R.id.trumpImage).setImageDrawable(
                     ContextCompat.getDrawable(
                         applicationContext,
                         R.drawable.ic_diamonds
                     )
                 )
-                findViewById<TextView>(R.id.textViewTrump).text = "Diamond"
+                findViewById<TextView>(R.id.trumpText).text = "Diamond"
 
             }
             "C" -> {
-                findViewById<GifImageView>(R.id.imageViewTrump).setImageDrawable(
+                findViewById<GifImageView>(R.id.trumpImage).setImageDrawable(
                     ContextCompat.getDrawable(
                         applicationContext,
                         R.drawable.ic_clubs
                     )
                 )
-                findViewById<TextView>(R.id.textViewTrump).text = "Club"
+                findViewById<TextView>(R.id.trumpText).text = "Club"
 
             }
         }
-        findViewById<GifImageView>(R.id.imageViewTrump).clearAnimation() // main trump showing view
+        findViewById<GifImageView>(R.id.trumpImage).clearAnimation() // main trump showing view
     } // just displaying trump card
 
     private fun startTrumpSelection() {
@@ -1802,9 +1854,9 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext,R.color.layoutBackground))
         findViewById<TextView>(R.id.textViewBider).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.blink_infinite_700ms))
         findViewById<TextView>(R.id.textViewBidValue).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.blink_infinite_700ms))
-        findViewById<ImageView>(R.id.imageViewP1).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_hanging))
-        findViewById<ImageView>(R.id.imageViewP2).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_hanging))
-        findViewById<GifImageView>(R.id.imageViewTrump).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_hanging))
+        findViewById<ImageView>(R.id.trumpImage1).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_hanging))
+        findViewById<ImageView>(R.id.trumpImage2).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_hanging))
+        findViewById<GifImageView>(R.id.trumpImage).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_hanging))
 //        findViewById<Button>(R.id.bid05button).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
 //        findViewById<Button>(R.id.bid10button).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
 //        findViewById<Button>(R.id.bid20button).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))

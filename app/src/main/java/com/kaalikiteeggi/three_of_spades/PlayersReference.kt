@@ -24,8 +24,8 @@ class PlayersReference {
     private val refIDValuesPartnerIconImageView  = listOf<Int>(R.id.partnerIcon1,R.id.partnerIcon2,R.id.partnerIcon3,R.id.partnerIcon4,
         R.id.partnerIcon5,R.id.partnerIcon6,R.id.partnerIcon7)
 
-    private val refIDValuesOnlineIconImageView  = listOf<Int>(R.id.p1Online,R.id.p2Online,R.id.p3Online,R.id.p4Online,
-        R.id.p5Online,R.id.p6Online,R.id.p7Online)
+    private val refIDValuesOnlineIconImageView  = listOf<Int>(R.id.onlinep1,R.id.onlinep2,R.id.onlinep3,R.id.onlinep4,
+        R.id.onlinep5,R.id.onlinep6,R.id.onlinep7)
 
     private val refIDValuesTableImageView  = listOf<Int>(R.id.imageViewTable1,R.id.imageViewTable2,R.id.imageViewTable3,R.id.imageViewTable4,
         R.id.imageViewTable5,R.id.imageViewTable6,R.id.imageViewSelf)

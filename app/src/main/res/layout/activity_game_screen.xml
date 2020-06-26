@@ -13,28 +13,201 @@
         android:id="@+id/gifViewGameScreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/playerView3"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_minus14sdp"
+        android:layout_marginTop="@dimen/_57sdp"
         android:layout_marginEnd="@dimen/_7sdp"
-        android:layout_marginBottom="@dimen/_22sdp"
+        android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
         android:onClick="closeChatScoreWindow"
         android:src="@drawable/game_screen_table_blue"
         android:visibility="visible" />
+    <TextView
+        android:id="@+id/centerPoint"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/textViewShuffling"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewP1"
+        android:layout_below="@+id/trumpText1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_20sdp"
         android:text="@string/shuffling_cards"
         android:gravity="top|center_horizontal"
         android:textColor="@color/white"
         android:textSize="@dimen/_13ssp"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/playerView1_4"
+        android:layout_width="@dimen/imageWidth"
+        android:layout_height="@dimen/imageHeight"
+        android:layout_below="@+id/centerPoint"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/imageGapEnd_4player"
+        android:layout_marginTop="@dimen/_minus52sdp"
+        android:contentDescription="@string/app_name"
+        android:padding="@dimen/imagePadding"
+        android:src="@drawable/s3"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textView1_4"
+        android:layout_width="@dimen/width_playername"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerView1_4"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/imageGapEnd_4player"
+        android:layout_marginTop="@dimen/imagePaddingTextGap"
+        android:background="@drawable/button_square_userinfo"
+        android:gravity="center|top"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
+        android:text="@string/playerView1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/usernameTextSize"
+        android:visibility="gone"
+        tools:ignore="SmallSp" />
+
+    <ImageView
+        android:id="@+id/partnerIcon1_4"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep1_4"
+        android:layout_marginStart="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_toEndOf="@id/playerView1_4"
+        android:contentDescription="@string/app_name"
+        android:elevation="@dimen/_36sdp"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep1_4"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView1_4"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@id/textView1_4"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/playerView2_4"
+        android:layout_width="@dimen/imageWidth"
+        android:layout_height="@dimen/imageHeight"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/imageGapNew_4player"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/trumpImage1"
+        android:contentDescription="@string/app_name"
+        android:padding="@dimen/imagePadding"
+        android:src="@drawable/s3"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textView2_4"
+        android:layout_width="@dimen/width_playername"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerView2_4"
+        android:layout_marginStart="@dimen/imageGapNew_4player"
+        android:layout_marginTop="@dimen/imagePaddingTextGap"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/trumpImage1"
+        android:background="@drawable/button_square_userinfo"
+        android:gravity="center|top"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
+        android:text="@string/playerView4"
+        android:textColor="@color/white"
+        android:textSize="@dimen/usernameTextSize"
+        android:visibility="gone"
+        tools:ignore="SmallSp" />
+
+
+    <ImageView
+        android:id="@+id/partnerIcon2_4"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep2_4"
+        android:layout_marginStart="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_toEndOf="@id/playerView2_4"
+        android:contentDescription="@string/app_name"
+        android:elevation="@dimen/_36sdp"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep2_4"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView2_4"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_toEndOf="@id/textView2_4"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/playerView3_4"
+        android:layout_width="@dimen/imageWidth"
+        android:layout_height="@dimen/imageHeight"
+        android:layout_below="@+id/centerPoint"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_minus52sdp"
+        android:layout_marginEnd="@dimen/imageGapEnd_4player"
+        android:contentDescription="@string/app_name"
+        android:padding="@dimen/imagePadding"
+        android:src="@drawable/s3"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textView3_4"
+        android:layout_width="@dimen/width_playername"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerView3_4"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/imagePaddingTextGap"
+        android:layout_marginEnd="@dimen/imageGapEnd_4player"
+        android:background="@drawable/button_square_userinfo"
+        android:gravity="center|top"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
+        android:text="@string/playerView1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/usernameTextSize"
+        android:visibility="gone"
+        tools:ignore="SmallSp" />
+
+    <ImageView
+        android:id="@+id/partnerIcon3_4"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep3_4"
+        android:layout_marginEnd="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_toStartOf="@id/playerView3_4"
+        android:contentDescription="@string/app_name"
+        android:elevation="@dimen/_36sdp"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep3_4"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView3_4"
+        android:layout_marginEnd="0dp"
+        android:layout_toStartOf="@id/textView3_4"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online"
         android:visibility="gone" />
 
     <ImageView
@@ -48,30 +221,7 @@
         android:layout_marginTop="@dimen/_minus14sdp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/s3"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/partnerIcon1"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/p1Online"
-        android:layout_marginStart="@dimen/_minus6sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:elevation="@dimen/_36sdp"
-        android:layout_toEndOf="@id/playerView1"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/partnericon"
         android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/p1Online"
-        android:layout_width="@dimen/status_online"
-        android:layout_height="@dimen/status_online"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_marginStart="0dp"
-        android:layout_toEndOf="@id/textView1"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/status_online" />
 
     <TextView
         android:id="@+id/textView1"
@@ -88,7 +238,32 @@
         android:text="@string/playerView1"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
+        android:visibility="gone"
         tools:ignore="SmallSp" />
+
+    <ImageView
+        android:id="@+id/partnerIcon1"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep1"
+        android:layout_marginStart="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:elevation="@dimen/_36sdp"
+        android:layout_toEndOf="@id/playerView1"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep1"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@id/textView1"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/playerView2"
@@ -100,31 +275,8 @@
         android:layout_marginTop="@dimen/imageGapBetween"
         android:layout_toEndOf="@+id/playerView1"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/s3" />
-
-    <ImageView
-        android:id="@+id/partnerIcon2"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/p2Online"
-        android:layout_marginStart="@dimen/_minus6sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:elevation="@dimen/_36sdp"
-        android:layout_toEndOf="@id/playerView2"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/partnericon"
+        android:src="@drawable/s3"
         android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/p2Online"
-        android:layout_width="@dimen/status_online"
-        android:layout_height="@dimen/status_online"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_toEndOf="@id/textView2"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/status_online" />
 
     <TextView
         android:id="@+id/textView2"
@@ -141,7 +293,33 @@
         android:text="@string/playerView2"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
+        android:visibility="gone"
         tools:ignore="SmallSp" />
+
+    <ImageView
+        android:id="@+id/partnerIcon2"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep2"
+        android:layout_marginStart="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:elevation="@dimen/_36sdp"
+        android:layout_toEndOf="@id/playerView2"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep2"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_toEndOf="@id/textView2"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/playerView3"
@@ -150,34 +328,11 @@
         android:padding="@dimen/imagePadding"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/imageGapBetweenHorizontal"
-        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/playerView2"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/s3" />
-
-    <ImageView
-        android:id="@+id/partnerIcon3"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/p3Online"
-        android:layout_marginStart="@dimen/_minus6sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:elevation="@dimen/_36sdp"
-        android:layout_toEndOf="@id/playerView3"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/partnericon"
+        android:src="@drawable/s3"
         android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/p3Online"
-        android:layout_width="@dimen/status_online"
-        android:layout_height="@dimen/status_online"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_toEndOf="@id/textView3"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/status_online" />
 
     <TextView
         android:id="@+id/textView3"
@@ -194,7 +349,33 @@
         android:text="@string/playerView3"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
+        android:visibility="gone"
         tools:ignore="SmallSp" />
+
+    <ImageView
+        android:id="@+id/partnerIcon3"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep3"
+        android:layout_marginStart="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:elevation="@dimen/_36sdp"
+        android:layout_toEndOf="@id/playerView3"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep3"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_toEndOf="@id/textView3"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/playerView4"
@@ -202,34 +383,12 @@
         android:layout_height="@dimen/imageHeight"
         android:padding="@dimen/imagePadding"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="@dimen/imageGapBetweenHorizontal"
         android:layout_toStartOf="@+id/playerView5"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/s3" />
-
-    <ImageView
-        android:id="@+id/partnerIcon4"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/p4Online"
-        android:layout_marginEnd="@dimen/_minus6sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:elevation="@dimen/_36sdp"
-        android:layout_toStartOf="@id/playerView4"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/partnericon"
+        android:src="@drawable/s3"
         android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/p4Online"
-        android:layout_width="@dimen/status_online"
-        android:layout_height="@dimen/status_online"
-        android:layout_alignBottom="@+id/textView4"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_toStartOf="@id/textView4"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/status_online" />
 
     <TextView
         android:id="@+id/textView4"
@@ -247,7 +406,32 @@
         android:text="@string/playerView4"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
+        android:visibility="gone"
         tools:ignore="SmallSp" />
+
+    <ImageView
+        android:id="@+id/partnerIcon4"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep4"
+        android:layout_marginEnd="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:elevation="@dimen/_36sdp"
+        android:layout_toStartOf="@id/playerView4"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep4"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_toStartOf="@id/textView4"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/status_online"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/playerView5"
@@ -260,13 +444,14 @@
         android:layout_marginBottom="0dp"
         android:layout_toStartOf="@+id/playerView6"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/s3" />
+        android:src="@drawable/s3"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/partnerIcon5"
         android:layout_width="@dimen/imageWidthCoin"
         android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/p5Online"
+        android:layout_above="@+id/onlinep5"
         android:layout_marginEnd="@dimen/_minus6sdp"
         android:layout_marginBottom="@dimen/_minus4sdp"
         android:elevation="@dimen/_36sdp"
@@ -276,14 +461,15 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/p5Online"
+        android:id="@+id/onlinep5"
         android:layout_width="@dimen/status_online"
         android:layout_height="@dimen/status_online"
         android:layout_alignBottom="@+id/textView5"
         android:layout_marginTop="@dimen/_2sdp"
         android:layout_toStartOf="@id/textView5"
         android:contentDescription="@string/todo"
-        android:src="@drawable/status_online" />
+        android:src="@drawable/status_online"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textView5"
@@ -300,7 +486,8 @@
         android:text="@string/playerView5"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
-        tools:ignore="SmallSp" />
+        android:visibility="gone"
+        tools:ignore="SmallSp"/>
 
     <ImageView
         android:id="@+id/playerView6"
@@ -312,13 +499,14 @@
         android:layout_marginTop="@dimen/_minus14sdp"
         android:layout_marginEnd="@dimen/imageGapEnd"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/s3" />
+        android:src="@drawable/s3"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/partnerIcon6"
         android:layout_width="@dimen/imageWidthCoin"
         android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/p6Online"
+        android:layout_above="@+id/onlinep6"
         android:layout_marginEnd="@dimen/_minus6sdp"
         android:layout_marginBottom="@dimen/_minus4sdp"
         android:elevation="@dimen/_36sdp"
@@ -328,14 +516,15 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/p6Online"
+        android:id="@+id/onlinep6"
         android:layout_width="@dimen/status_online"
         android:layout_height="@dimen/status_online"
         android:layout_alignBottom="@+id/textView6"
         android:layout_marginTop="@dimen/_2sdp"
         android:layout_toStartOf="@id/textView6"
         android:contentDescription="@string/todo"
-        android:src="@drawable/status_online" />
+        android:src="@drawable/status_online"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textView6"
@@ -352,6 +541,7 @@
         android:text="@string/playerView6"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
+        android:visibility="gone"
         tools:ignore="SmallSp" />
 
     <ImageView
@@ -366,7 +556,7 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/p7Online"
+        android:id="@+id/onlinep7"
         android:layout_width="@dimen/status_online"
         android:layout_height="@dimen/status_online"
         android:layout_alignStart="@id/textView7"
@@ -381,8 +571,8 @@
         android:layout_width="@dimen/_54sdp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/horizontalScrollView"
-        android:layout_marginEnd="0dp"
-        android:layout_toStartOf="@+id/partnerIcon6"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/_83sdp"
         android:layout_marginBottom="0dp"
         android:background="@drawable/button_square_userinfo"
         android:gravity="center|top"
@@ -400,30 +590,31 @@
         android:layout_height="@dimen/imageWidthCoin"
         android:layout_above="@+id/horizontalScrollView"
         android:layout_marginEnd="@dimen/_minus3sdp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:layout_toStartOf="@+id/textView7"
         android:contentDescription="@string/app_name"
         android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/imageViewP2"
+        android:id="@+id/trumpImage2"
         android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/imageGapBetweenCards"
         android:layout_marginTop="@dimen/imageGapEnd"
-        android:layout_toEndOf="@+id/imageViewP1"
+        android:layout_toEndOf="@+id/trumpImage1"
         android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/ic_back_side_blue" />
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_back_side_blue"/>
 
     <TextView
-        android:id="@+id/textViewP2"
+        android:id="@+id/trumpText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageViewP2"
-        android:layout_alignStart="@+id/imageViewP2"
-        android:layout_alignEnd="@+id/imageViewP2"
+        android:layout_below="@+id/trumpImage2"
+        android:layout_alignStart="@+id/trumpImage2"
+        android:layout_alignEnd="@+id/trumpImage2"
         android:layout_marginStart="0dp"
         android:layout_marginTop="@dimen/_minus2sdp"
         android:layout_marginEnd="0dp"
@@ -434,10 +625,11 @@
         android:text="@string/partner2"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
-        tools:ignore="SmallSp" />
+        android:visibility="gone"
+        tools:ignore="SmallSp"/>
 
     <ImageView
-        android:id="@+id/imageViewP1"
+        android:id="@+id/trumpImage1"
         android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentTop="true"
@@ -447,10 +639,10 @@
         app:srcCompat="@drawable/ic_back_side_red" />
 
     <TextView
-        android:id="@+id/textViewP1"
+        android:id="@+id/trumpText1"
         android:layout_width="@dimen/_36sdp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageViewP1"
+        android:layout_below="@+id/trumpImage1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_minus2sdp"
         android:background="@drawable/button_square_userinfo"
@@ -463,27 +655,27 @@
         tools:ignore="SmallSp" />
 
     <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/imageViewTrump"
+        android:id="@+id/trumpImage"
         android:layout_width="@dimen/_42sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/imageGapEnd"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
-        android:layout_toStartOf="@id/imageViewP1"
+        android:layout_toStartOf="@id/trumpImage1"
         android:background="#FFFFFF"
         android:paddingBottom="@dimen/_minus4sdp"
         android:src="@drawable/trump1" />
 
     <TextView
-        android:id="@+id/textViewTrump"
+        android:id="@+id/trumpText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textViewP1"
-        android:layout_alignStart="@+id/imageViewTrump"
+        android:layout_alignStart="@+id/trumpImage"
+        android:layout_alignTop="@+id/trumpText1"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
-        android:layout_toStartOf="@+id/imageViewP1"
+        android:layout_toStartOf="@+id/trumpImage1"
         android:background="@drawable/button_square_userinfo"
         android:gravity="center_horizontal|top"
         android:paddingTop="@dimen/padding_playername"
@@ -644,7 +836,7 @@
         android:layout_marginStart="@dimen/_2sdp"
         android:layout_marginTop="@dimen/imageGapEnd"
         android:layout_marginEnd="@dimen/_22sdp"
-        android:layout_toStartOf="@+id/imageViewTrump"
+        android:layout_toStartOf="@+id/trumpImage"
         android:layout_toEndOf="@+id/textViewBid"
         android:text="@string/Bider"
         android:textColor="@color/progressBarPlayer4"
@@ -1024,6 +1216,24 @@
             android:textStyle="bold"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/textViewCenterPoints_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/imageViewSelf_4"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/_3sdp"
+            android:gravity="center"
+            android:shadowColor="#3E3E3E"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="3"
+            android:text="@string/_400"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/_13ssp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/imageViewTable1"
             android:layout_width="@dimen/tableCardImageWidth"
@@ -1108,10 +1318,58 @@
             android:id="@+id/imageViewSelf"
             android:layout_width="@dimen/tableCardImageWidth"
             android:layout_height="@dimen/tableCardImageHeight"
-            android:layout_marginBottom="@dimen/_12sdp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/_12sdp"
             android:contentDescription="@string/app_name"
+            android:visibility="gone"
+            app:srcCompat="@drawable/c10" />
+
+        <ImageView
+            android:id="@+id/imageViewSelf_4"
+            android:layout_width="@dimen/tableCardImageWidth_4"
+            android:layout_height="@dimen/tableCardImageHeight_4"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:contentDescription="@string/app_name"
+            android:visibility="gone"
+            app:srcCompat="@drawable/c10" />
+
+        <ImageView
+            android:id="@+id/imageViewTable3_4"
+            android:layout_width="@dimen/tableCardImageWidth_4"
+            android:layout_height="@dimen/tableCardImageHeight_4"
+            android:layout_above="@+id/imageViewSelf_4"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_minus24sdp"
+            android:layout_toEndOf="@+id/imageViewSelf_4"
+            android:contentDescription="@string/app_name"
+            android:rotation="90"
+            android:visibility="gone"
+            app:srcCompat="@drawable/c10" />
+
+        <ImageView
+            android:id="@+id/imageViewTable2_4"
+            android:layout_width="@dimen/tableCardImageWidth_4"
+            android:layout_height="@dimen/tableCardImageHeight_4"
+            android:layout_above="@id/imageViewTable1_4"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/_minus13sdp"
+            android:contentDescription="@string/app_name"
+            android:visibility="gone"
+            app:srcCompat="@drawable/c10" />
+
+        <ImageView
+            android:id="@+id/imageViewTable1_4"
+            android:layout_width="@dimen/tableCardImageWidth_4"
+            android:layout_height="@dimen/tableCardImageHeight_4"
+            android:layout_above="@+id/imageViewSelf_4"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_minus24sdp"
+            android:layout_toStartOf="@+id/imageViewSelf_4"
+            android:contentDescription="@string/app_name"
+            android:rotation="-90"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
 
@@ -1122,8 +1380,19 @@
             android:layout_above="@+id/imageViewSelf"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/app_name"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_back_side_blue" />
+
+        <ImageView
+            android:id="@+id/imageViewWinnerCenter_4"
+            android:layout_width="@dimen/tableCardImageWidth_4"
+            android:layout_height="@dimen/tableCardImageHeight_4"
+            android:layout_above="@+id/imageViewSelf"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/app_name"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_back_side_blue" />
+
     </RelativeLayout>
 
     <RelativeLayout

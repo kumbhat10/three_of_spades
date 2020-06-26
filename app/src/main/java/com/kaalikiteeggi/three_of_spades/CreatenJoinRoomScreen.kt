@@ -85,6 +85,15 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     private lateinit var t7: Target
     private lateinit var playerInfo: ArrayList<String>
     private lateinit var playerInfoCoins: ArrayList<Int>
+    private var p5c = 0
+    private var p6c = 0
+    private var p7c = 0
+    private lateinit var p5: String
+    private lateinit var p6: String
+    private lateinit var p7: String
+    private lateinit var p5h: String
+    private lateinit var p6h: String
+    private lateinit var p7h: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -158,16 +167,17 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         val p2c = dataSnapshot?.data?.get("p2c").toString().toInt()
         val p3c = dataSnapshot?.data?.get("p3c").toString().toInt()
         val p4c = dataSnapshot?.data?.get("p4c").toString().toInt()
-        val p5c = dataSnapshot?.data?.get("p5c").toString().toInt()
-        val p6c = dataSnapshot?.data?.get("p6c").toString().toInt()
-        val p7c = dataSnapshot?.data?.get("p7c").toString().toInt()
-        val p5 = dataSnapshot?.data?.get("p5").toString()
-        val p6 = dataSnapshot?.data?.get("p6").toString()
-        val p7 = dataSnapshot?.data?.get("p7").toString()
-        val p5h = dataSnapshot?.data?.get("p5h").toString()
-        val p6h = dataSnapshot?.data?.get("p6h").toString()
-        val p7h = dataSnapshot?.data?.get("p7h").toString()
-        if(nPlayers>4){
+
+        if(nPlayers==7){
+            p5c = dataSnapshot?.data?.get("p5c").toString().toInt()
+            p6c = dataSnapshot?.data?.get("p6c").toString().toInt()
+            p7c = dataSnapshot?.data?.get("p7c").toString().toInt()
+            p5 = dataSnapshot?.data?.get("p5").toString()
+            p6 = dataSnapshot?.data?.get("p6").toString()
+            p7 = dataSnapshot?.data?.get("p7").toString()
+            p5h = dataSnapshot?.data?.get("p5h").toString()
+            p6h = dataSnapshot?.data?.get("p6h").toString()
+            p7h = dataSnapshot?.data?.get("p7h").toString()
             if(p5.isNotEmpty() && p5h.isNotEmpty() && !p5Status){
                 findViewById<AppCompatButton>(R.id.player5Text).text = p5
                 Picasso.get().load(p5h).transform(CircleTransform()).into(t5)
@@ -238,7 +248,6 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
             else if(nPlayers == 4){
                 playerInfo.addAll(listOf(p1, p2, p3, p4, p1h, p2h, p3h, p4h))
                 playerInfoCoins.addAll(listOf(p1c, p2c, p3c, p4c))
-
             }
             when {
                 premiumStatus -> startNextActivity()

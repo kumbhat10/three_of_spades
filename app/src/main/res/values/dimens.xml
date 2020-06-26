@@ -12,6 +12,7 @@
 
 
     <dimen name="imageGapEnd">0dp</dimen>
+    <dimen name="imageGapEnd_4player">@dimen/_25sdp</dimen>
     <dimen name="imagePadding">@dimen/_3sdp</dimen>
     <dimen name="imagePaddingTextGap">@dimen/_minus2sdp</dimen>
 
@@ -30,9 +31,14 @@
 
     <dimen name="imageGapBetween1">@dimen/_9sdp</dimen>
     <dimen name="imageGapBetweenCards">@dimen/_4sdp</dimen>
+    <dimen name="imageGapNew_4player">@dimen/_15sdp</dimen>
 
     <dimen name="tableCardImageWidth">@dimen/_32sdp</dimen>
     <dimen name="tableCardImageHeight">@dimen/_43sdp</dimen>
+    <dimen name="tableCardImageWidth_4">@dimen/_42sdp</dimen>
+    <dimen name="tableCardImageHeight_4">@dimen/_58sdp</dimen>
+
+
     <dimen name="scoreTableHeight">@dimen/_26sdp</dimen>
     <dimen name="scoreTableWidth">@dimen/_64sdp</dimen>
     <dimen name="scoreTableWidthLarge">@dimen/_70sdp</dimen>
