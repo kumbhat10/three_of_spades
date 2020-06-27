@@ -231,7 +231,15 @@ class GameScreen : AppCompatActivity() {
         nPlayers = intent.getIntExtra("nPlayers", 4)
         if(nPlayers==7) nPlayers7 = true
         if(nPlayers==4) nPlayers4 = true
-        updateGameScreen()
+        setupGame4or7()
+        refIDMappedTextView = PlayersReference().refIDMappedTextView(from,nPlayers)
+        refIDMappedImageView = PlayersReference().refIDMappedImageView(from, nPlayers)
+        refIDMappedPartnerIconImageView =  PlayersReference().refIDMappedPartnerIconImageView(from, nPlayers)
+        refIDMappedOnlineIconImageView =  PlayersReference().refIDMappedOnlineIconImageView(from, nPlayers)
+        refIDMappedTableAnim =  PlayersReference().refIDMappedTableAnim(from, nPlayers)
+        refIDMappedTableWinnerAnim =  PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
+        refIDMappedTableImageView =  PlayersReference().refIDMappedTableImageView(from, nPlayers)
+
         soundUpdate = MediaPlayer.create(applicationContext,R.raw.player_moved)
         soundError = MediaPlayer.create(applicationContext,R.raw.error_entry)
         soundSuccess= MediaPlayer.create(applicationContext,R.raw.player_success_chime)
@@ -241,15 +249,6 @@ class GameScreen : AppCompatActivity() {
         soundTimerFinish = MediaPlayer.create(applicationContext,R.raw.timer_over)
         soundCollectCards = MediaPlayer.create(applicationContext,R.raw.collect_cards)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-        refIDMappedTextView = PlayersReference().refIDMappedTextView(from)
-        refIDMappedImageView = PlayersReference().refIDMappedImageView(from)
-        refIDMappedTableImageView =  PlayersReference().refIDMappedTableImageView(from)
-        refIDMappedTableAnim =  PlayersReference().refIDMappedTableAnim(from)
-        refIDMappedTableWinnerAnim =  PlayersReference().refIDMappedTableWinnerAnim(from)
-        refIDValesTextViewScore = PlayersReference().refIDValuesTextViewScoreSheet
-        refIDMappedPartnerIconImageView =  PlayersReference().refIDMappedPartnerIconImageView(from)
-        refIDMappedOnlineIconImageView =  PlayersReference().refIDMappedOnlineIconImageView(from)
 
         refGameData = Firebase.database.getReference("GameData/$roomID")
 
@@ -273,8 +272,7 @@ class GameScreen : AppCompatActivity() {
         getSharedPrefs()
         if(getString(R.string.test).contains('n')) initializeAds()
     }
-
-    private fun updateGameScreen() {
+    private fun setupGame4or7() {
 
         if(nPlayers7) {
             findViewById<TextView>(R.id.textView1).visibility = View.VISIBLE
@@ -306,34 +304,28 @@ class GameScreen : AppCompatActivity() {
 
             findViewById<TextView>(R.id.trumpText2).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.trumpImage2).visibility = View.VISIBLE
+
+            refIDValesTextViewScore = PlayersReference().refIDTextViewScoreSheet7
         }
         if(nPlayers4){
-
+            refIDValesTextViewScore = PlayersReference().refIDTextViewScoreSheet4
             findViewById<TextView>(R.id.textView1_4).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.onlinep1_4).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.playerView1_4).visibility = View.VISIBLE
-
             findViewById<TextView>(R.id.textView2_4).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.onlinep2_4).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.playerView2_4).visibility = View.VISIBLE
-
             findViewById<TextView>(R.id.textView3_4).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.onlinep3_4).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.playerView3_4).visibility = View.VISIBLE
-
         }
-
-
 
     }
 
     override fun onStart() {
         super.onStart()
-        try{
-//            toastCenter("Screen width : ${resources.configuration.screenWidthDp.toString()}  Screen Height : ${resources.configuration.screenHeightDp.toString()}")
-            write("OL/$from",1)
-            getCardsAndDisplay(display = false)
-//            animateElements()
+        write("OL/$from",1)
+        getCardsAndDisplay(display = false)
 
 // region table card listener
         cardsOnTableListener1 = object :ValueEventListener{
@@ -400,54 +392,74 @@ class GameScreen : AppCompatActivity() {
                 }
             }
         }
-        cardsOnTableListener5 = object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(p0: DataSnapshot) {
-                ct5 = p0.value.toString().toInt()
-                tablePointsCalculator()
-                if(ct5 <=97){
-                    soundCardPlayed.start()
-                    findViewById<ImageView>(refIDMappedTableImageView[4]).visibility = View.VISIBLE
-                    findViewById<ImageView>(refIDMappedTableImageView[4]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[4]))
-                    findViewById<ImageView>(refIDMappedTableImageView[4]).setImageResource(cardsDrawableDoubleDeck[ct5])
-                }else{
-                    findViewById<ImageView>(refIDMappedTableImageView[4]).visibility = View.INVISIBLE
-                    findViewById<ImageView>(refIDMappedTableImageView[4]).clearAnimation()
-                }
-            }
-        }
-        cardsOnTableListener6 = object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(p0: DataSnapshot) {
-                ct6 = p0.value.toString().toInt()
-                tablePointsCalculator()
-                if(ct6 <=97){
-                    soundCardPlayed.start()
-                    findViewById<ImageView>(refIDMappedTableImageView[5]).visibility = View.VISIBLE
-                    findViewById<ImageView>(refIDMappedTableImageView[5]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[5]))
-                    findViewById<ImageView>(refIDMappedTableImageView[5]).setImageResource(cardsDrawableDoubleDeck[ct6])
-                }else{
-                    findViewById<ImageView>(refIDMappedTableImageView[5]).visibility = View.INVISIBLE
-                    findViewById<ImageView>(refIDMappedTableImageView[5]).clearAnimation()
-                }
-            }
-        }
-        cardsOnTableListener7 = object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(p0: DataSnapshot) {
-                ct7 = p0.value.toString().toInt()
-                tablePointsCalculator()
-                if(ct7 <=97){
-                    soundCardPlayed.start()
-                    findViewById<ImageView>(refIDMappedTableImageView[6]).visibility = View.VISIBLE
-                    findViewById<ImageView>(refIDMappedTableImageView[6]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[6]))
-                    findViewById<ImageView>(refIDMappedTableImageView[6]).setImageResource(cardsDrawableDoubleDeck[ct7])
-                }else{
-                    findViewById<ImageView>(refIDMappedTableImageView[6]).visibility = View.INVISIBLE
-                    findViewById<ImageView>(refIDMappedTableImageView[6]).clearAnimation()
-                }
-            }
-        }
+       if(nPlayers7) {
+           cardsOnTableListener5 = object : ValueEventListener {
+               override fun onCancelled(p0: DatabaseError) {}
+               override fun onDataChange(p0: DataSnapshot) {
+                   ct5 = p0.value.toString().toInt()
+                   tablePointsCalculator()
+                   if (ct5 <= 97) {
+                       soundCardPlayed.start()
+                       findViewById<ImageView>(refIDMappedTableImageView[4]).visibility =
+                           View.VISIBLE
+                       findViewById<ImageView>(refIDMappedTableImageView[4]).startAnimation(
+                           AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[4])
+                       )
+                       findViewById<ImageView>(refIDMappedTableImageView[4]).setImageResource(
+                           cardsDrawableDoubleDeck[ct5]
+                       )
+                   } else {
+                       findViewById<ImageView>(refIDMappedTableImageView[4]).visibility =
+                           View.INVISIBLE
+                       findViewById<ImageView>(refIDMappedTableImageView[4]).clearAnimation()
+                   }
+               }
+           }
+           cardsOnTableListener6 = object : ValueEventListener {
+               override fun onCancelled(p0: DatabaseError) {}
+               override fun onDataChange(p0: DataSnapshot) {
+                   ct6 = p0.value.toString().toInt()
+                   tablePointsCalculator()
+                   if (ct6 <= 97) {
+                       soundCardPlayed.start()
+                       findViewById<ImageView>(refIDMappedTableImageView[5]).visibility =
+                           View.VISIBLE
+                       findViewById<ImageView>(refIDMappedTableImageView[5]).startAnimation(
+                           AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[5])
+                       )
+                       findViewById<ImageView>(refIDMappedTableImageView[5]).setImageResource(
+                           cardsDrawableDoubleDeck[ct6]
+                       )
+                   } else {
+                       findViewById<ImageView>(refIDMappedTableImageView[5]).visibility =
+                           View.INVISIBLE
+                       findViewById<ImageView>(refIDMappedTableImageView[5]).clearAnimation()
+                   }
+               }
+           }
+           cardsOnTableListener7 = object : ValueEventListener {
+               override fun onCancelled(p0: DatabaseError) {}
+               override fun onDataChange(p0: DataSnapshot) {
+                   ct7 = p0.value.toString().toInt()
+                   tablePointsCalculator()
+                   if (ct7 <= 97) {
+                       soundCardPlayed.start()
+                       findViewById<ImageView>(refIDMappedTableImageView[6]).visibility =
+                           View.VISIBLE
+                       findViewById<ImageView>(refIDMappedTableImageView[6]).startAnimation(
+                           AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[6])
+                       )
+                       findViewById<ImageView>(refIDMappedTableImageView[6]).setImageResource(
+                           cardsDrawableDoubleDeck[ct7]
+                       )
+                   } else {
+                       findViewById<ImageView>(refIDMappedTableImageView[6]).visibility =
+                           View.INVISIBLE
+                       findViewById<ImageView>(refIDMappedTableImageView[6]).clearAnimation()
+                   }
+               }
+           }
+       }
 // endregion
 // region Chat Listener
             chatRegistration = refRoomFirestore.document(roomID+"_chat").addSnapshotListener{ dataSnapshot, error ->
@@ -788,31 +800,34 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
 }  // close keyboard after sending chat
 //        region Attach Listener
 //            refGameData.child("M").addValueEventListener(chatListener) //attach chat listener
-            refGameData.child("BU1").addValueEventListener(partnerListener1)
-            refGameData.child("BU2").addValueEventListener(partnerListener2)
-            refGameData.child("SC/p1").addValueEventListener(pointsListener1)
-            refGameData.child("SC/p2").addValueEventListener(pointsListener2)
-            refGameData.child("SC/p3").addValueEventListener(pointsListener3)
-            refGameData.child("SC/p4").addValueEventListener(pointsListener4)
-            refGameData.child("SC/p5").addValueEventListener(pointsListener5)
-            refGameData.child("SC/p6").addValueEventListener(pointsListener6)
-            refGameData.child("SC/p7").addValueEventListener(pointsListener7)
-            refGameData.child("R").addValueEventListener(roundNumberListener)
-            refGameData.child("GS").addValueEventListener(gameStateListener) // attach the created game data listener        refGameData.child("M").addValueEventListener(chatListener) //attach chat listener
+        refGameData.child("BU1").addValueEventListener(partnerListener1)
+        refGameData.child("BU2").addValueEventListener(partnerListener2)
+        refGameData.child("SC/p1").addValueEventListener(pointsListener1)
+        refGameData.child("SC/p2").addValueEventListener(pointsListener2)
+        refGameData.child("SC/p3").addValueEventListener(pointsListener3)
+        refGameData.child("SC/p4").addValueEventListener(pointsListener4)
+        refGameData.child("R").addValueEventListener(roundNumberListener)
+        refGameData.child("GS").addValueEventListener(gameStateListener) // attach the created game data listener        refGameData.child("M").addValueEventListener(chatListener) //attach chat listener
         refGameData.child("CT/p1").addValueEventListener(cardsOnTableListener1) // player 1 cards on table listener
         refGameData.child("CT/p2").addValueEventListener(cardsOnTableListener2) // player 1 cards on table listener
         refGameData.child("CT/p3").addValueEventListener(cardsOnTableListener3) // player 1 cards on table listener
         refGameData.child("CT/p4").addValueEventListener(cardsOnTableListener4) // player 1 cards on table listener
-        refGameData.child("CT/p5").addValueEventListener(cardsOnTableListener5) // player 1 cards on table listener
-        refGameData.child("CT/p6").addValueEventListener(cardsOnTableListener6) // player 1 cards on table listener
-        refGameData.child("CT/p7").addValueEventListener(cardsOnTableListener7) // player 1 cards on table listener
         refGameData.child("OL/p1").addValueEventListener(onlineStatusListener1)
         refGameData.child("OL/p2").addValueEventListener(onlineStatusListener2)
         refGameData.child("OL/p3").addValueEventListener(onlineStatusListener3)
         refGameData.child("OL/p4").addValueEventListener(onlineStatusListener4)
-        refGameData.child("OL/p5").addValueEventListener(onlineStatusListener5)
-        refGameData.child("OL/p6").addValueEventListener(onlineStatusListener6)
-        refGameData.child("OL/p7").addValueEventListener(onlineStatusListener7)
+
+        if(nPlayers7){
+            refGameData.child("SC/p5").addValueEventListener(pointsListener5)
+            refGameData.child("SC/p6").addValueEventListener(pointsListener6)
+            refGameData.child("SC/p7").addValueEventListener(pointsListener7)
+            refGameData.child("CT/p5").addValueEventListener(cardsOnTableListener5) // player 1 cards on table listener
+            refGameData.child("CT/p6").addValueEventListener(cardsOnTableListener6) // player 1 cards on table listener
+            refGameData.child("CT/p7").addValueEventListener(cardsOnTableListener7) // player 1 cards on table listener
+            refGameData.child("OL/p5").addValueEventListener(onlineStatusListener5)
+            refGameData.child("OL/p6").addValueEventListener(onlineStatusListener6)
+            refGameData.child("OL/p7").addValueEventListener(onlineStatusListener7)
+        }
 //        endregion
         // region       Countdown PlayCard
         countDownPlayCard = object: CountDownTimer(timeCountdownPlayCard,100){
@@ -862,10 +877,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
 //        endregion
 
-    }catch (error: Exception){
-            if(vibrateStatus) vibrationStart()
-            toastCenter(error.toString()) // dummy
-    }
     }
 
     private fun gameMode6() {
@@ -959,9 +970,9 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
         val inflater = LayoutInflater.from(applicationContext)
         val viewTemp = when {
-            upDateHeader -> inflater.inflate(R.layout.score_board_table_7, findViewById<LinearLayout>(R.id.imageGalleryScoreName), false)
-            upDateTotal -> inflater.inflate(R.layout.score_board_table_7, findViewById<LinearLayout>(R.id.imageGalleryScoreTotal), false)
-            else -> inflater.inflate(R.layout.score_board_table_7, findViewById<LinearLayout>(R.id.imageGalleryScore), false)
+            upDateHeader -> inflater.inflate(PlayersReference().refIDScoreLayout(nPlayers), findViewById<LinearLayout>(R.id.imageGalleryScoreName), false)
+            upDateTotal -> inflater.inflate(PlayersReference().refIDScoreLayout(nPlayers), findViewById<LinearLayout>(R.id.imageGalleryScoreTotal), false)
+            else -> inflater.inflate(PlayersReference().refIDScoreLayout(nPlayers), findViewById<LinearLayout>(R.id.imageGalleryScore), false)
         }
         for(i in 0..nPlayers){
             viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).text = data[i].toString()
@@ -1015,7 +1026,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         findViewById<TextView>(R.id.trumpText2).text = getString(R.string.partner2)
         findViewById<TextView>(R.id.trumpText1).text = getString(R.string.partner1)
         findViewById<TextView>(R.id.trumpText).text = getString(R.string.Trump)
-        for (i in 0..6) { // first reset background and animation of all partner icon
+        for (i in 0 until nPlayers) { // first reset background and animation of all partner icon
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).clearAnimation()
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).setImageResource(R.drawable.partnericon)
@@ -1098,7 +1109,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             if(buFound2!=0 && buPlayer1!=buPlayer2)  t2 = pointsList[buPlayer2-1] // if not same partners then only add other points
             bidTeamScore   = pointsList[bidder-1] + t1 + t2
 
-            for(i in 0..6) {
+            for(i in 0 until nPlayers) {
                 val j = i+1
                 if(j == bidder || (j == buPlayer1 && buFound1!=0) || (j == buPlayer2 && buFound2!=0))
                     findViewById<TextView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  $bidTeamScore /$bidValue"
@@ -1166,7 +1177,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     }
 
     private fun displayPartnerIcon() {
-        for (i in 0..6) { // first reset background and animation of partner icon
+        for (i in 0 until nPlayers) { // first reset background and animation of partner icon
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).clearAnimation()
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).setImageResource(R.drawable.partnericon)
@@ -1329,10 +1340,10 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         var winnerCard = roundCards[playerTurn-1]
         var startTurn = playerTurn
         var points = 0
-        for(k in 0..6){
+        for(k in 0 until nPlayers){
             points += cardPointsDoubleDeck[roundCards[k]]
         }
-        for(i in 1..6){
+        for(i in 1..nPlayers-1){
             startTurn = nextTurn(startTurn)
             winnerCard = compareCardsforWinner(roundCards[startTurn -1], winnerCard)
         }
@@ -1377,7 +1388,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         write("R",roundNumber+1)
         centralText("Please play your next card",2000)
     }
-
 
     private fun compareCardsforWinner(currentCard: Int, winnerCard: Int): Int{
         var w = winnerCard
@@ -1453,7 +1463,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
     }
     private fun clearAllAnimation(){
-        for (i in 0..6) { // first reset background and animation
+        for (i in 0 until nPlayers) { // first reset background and animation
             findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
             findViewById<ImageView>(refIDMappedImageView[i]).clearAnimation()
             findViewById<TextView>(refIDMappedTextView[i]).clearAnimation()
@@ -1471,7 +1481,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.INVISIBLE
         },1500)
 
-        for(i in 0..6){
+        for(i in 0 until nPlayers){
             findViewById<ImageView>(refIDMappedTableImageView[i]).visibility = View.INVISIBLE
         }
     }
@@ -1800,7 +1810,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         findViewById<ImageView>(refIDMappedImageView[index-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
     }
     private fun resetBackgroundAnimationBidding(dataLoad: DataSnapshot) {
-        for (i in 0..6) {
+        for (i in 0 until nPlayers) {
             val iPlayer = i+1
             val bidStatus = (dataLoad.child("BS/p$iPlayer").value as Long).toInt()
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
@@ -1820,7 +1830,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
     }
     private fun finishBackgroundAnimationBidding(){  //clear Everything on finish of biding round
-        for (i in 0..6) {
+        for (i in 0 until nPlayers) {
             findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
             findViewById<ImageView>(refIDMappedImageView[i]).clearAnimation()
             findViewById<TextView>(refIDMappedTextView[i]).clearAnimation()
@@ -1975,9 +1985,9 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     }
     private fun nextTurn(current: Int): Int {
         var next = 0
-        if (current != 7) {
+        if ((current != 7 && nPlayers7) || (current!=4 && nPlayers4)) {
             next = current + 1
-        } else if(current==7) next = 1
+        } else if((current==7 && nPlayers7) || (current==4 && nPlayers4)) next = 1
         return next
     }
 
