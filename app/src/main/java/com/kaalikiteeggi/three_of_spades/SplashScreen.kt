@@ -15,18 +15,14 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toDrawable
-import androidx.lifecycle.lifecycleScope
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.adcolony.sdk.AdColony
-import com.adcolony.sdk.AdColonyAppOptions
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AudienceNetworkAds
 import com.facebook.login.LoginManager
 import com.google.ads.mediation.adcolony.AdColonyMediationAdapter
 import com.google.ads.mediation.inmobi.InMobiConsent
 import com.google.android.gms.ads.*
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
@@ -36,11 +32,8 @@ import com.inmobi.sdk.InMobiSdk
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import com.unity3d.ads.UnityAds
-import com.unity3d.ads.metadata.MetaData
-import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
-import pl.droidsonroids.gif.GifImageView
 import java.util.*
 
 class SplashScreen: AppCompatActivity() {
@@ -72,7 +65,7 @@ class SplashScreen: AppCompatActivity() {
             .showRestartButton(true) //default: true
             .logErrorOnRestart(false) //default: true
             .trackActivities(false) //default: false
-            .errorDrawable(R.drawable._s_icon_3shadow_bug11) //default: bug image
+            .errorDrawable(R.drawable._s_icon_bug) //default: bug image
             .apply()
         setContentView(R.layout.activity_splash_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR

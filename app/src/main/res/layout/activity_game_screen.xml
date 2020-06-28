@@ -20,8 +20,9 @@
         android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
         android:onClick="closeChatScoreWindow"
-        android:src="@drawable/game_screen_table_blue"
+        android:src="@drawable/game_screen_table_green"
         android:visibility="visible" />
+
     <TextView
         android:id="@+id/centerPoint"
         android:layout_width="1dp"
@@ -36,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/trumpText1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_30sdp"
         android:text="@string/shuffling_cards"
         android:gravity="top|center_horizontal"
         android:textColor="@color/white"
@@ -45,8 +46,8 @@
 
     <ImageView
         android:id="@+id/playerView1_4"
-        android:layout_width="@dimen/imageWidth"
-        android:layout_height="@dimen/imageHeight"
+        android:layout_width="@dimen/imageWidth_4"
+        android:layout_height="@dimen/imageHeight_4"
         android:layout_below="@+id/centerPoint"
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/imageGapEnd_4player"
@@ -58,7 +59,7 @@
 
     <TextView
         android:id="@+id/textView1_4"
-        android:layout_width="@dimen/width_playername"
+        android:layout_width ="@dimen/width_playername_4"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView1_4"
         android:layout_alignParentStart="true"
@@ -100,8 +101,8 @@
 
     <ImageView
         android:id="@+id/playerView2_4"
-        android:layout_width="@dimen/imageWidth"
-        android:layout_height="@dimen/imageHeight"
+        android:layout_width="@dimen/imageWidth_4"
+        android:layout_height="@dimen/imageHeight_4"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/imageGapNew_4player"
         android:layout_marginTop="0dp"
@@ -113,7 +114,7 @@
 
     <TextView
         android:id="@+id/textView2_4"
-        android:layout_width="@dimen/width_playername"
+        android:layout_width="@dimen/width_playername_4"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView2_4"
         android:layout_marginStart="@dimen/imageGapNew_4player"
@@ -157,8 +158,8 @@
 
     <ImageView
         android:id="@+id/playerView3_4"
-        android:layout_width="@dimen/imageWidth"
-        android:layout_height="@dimen/imageHeight"
+        android:layout_width="@dimen/imageWidth_4"
+        android:layout_height="@dimen/imageHeight_4"
         android:layout_below="@+id/centerPoint"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_minus52sdp"
@@ -170,7 +171,7 @@
 
     <TextView
         android:id="@+id/textView3_4"
-        android:layout_width="@dimen/width_playername"
+        android:layout_width="@dimen/width_playername_4"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView3_4"
         android:layout_alignParentEnd="true"
@@ -272,7 +273,7 @@
         android:padding="@dimen/imagePadding"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/imageGapBetween1"
-        android:layout_marginTop="@dimen/imageGapBetween"
+        android:layout_marginTop="@dimen/imageGapTopMiddle"
         android:layout_toEndOf="@+id/playerView1"
         android:contentDescription="@string/app_name"
         android:src="@drawable/s3"
@@ -439,7 +440,7 @@
         android:layout_height="@dimen/imageHeight"
         android:padding="@dimen/imagePadding"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/imageGapBetween"
+        android:layout_marginTop="@dimen/imageGapTopMiddle"
         android:layout_marginEnd="@dimen/imageGapBetween1"
         android:layout_marginBottom="0dp"
         android:layout_toStartOf="@+id/playerView6"
@@ -614,10 +615,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/trumpImage2"
         android:layout_alignStart="@+id/trumpImage2"
-        android:layout_alignEnd="@+id/trumpImage2"
+        android:layout_alignEnd="@id/trumpImage2"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="@dimen/_minus2sdp"
         android:layout_marginEnd="0dp"
+        android:layout_marginTop="@dimen/_minus2sdp"
         android:background="@drawable/button_square_userinfo"
         android:gravity="center_horizontal|top"
         android:paddingTop="@dimen/padding_playername"
@@ -970,7 +971,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="@dimen/_89sdp"
-        android:layout_marginTop="@dimen/_36sdp"
+        android:layout_marginTop="@dimen/_56sdp"
         android:layout_marginEnd="@dimen/_89sdp"
         android:layout_marginBottom="0dp"
         android:elevation="@dimen/_72sdp"
@@ -1000,7 +1001,7 @@
                 android:id="@+id/imageViewTrumpHearts"
                 android:layout_width="@dimen/trumpSelectionImageWidth"
                 android:layout_height="@dimen/trumpSelectionImageHeight"
-                android:background="#C6040E17"
+                android:background="@drawable/button_score_total"
                 android:contentDescription="@string/app_name"
                 android:onClick="onTrumpSelectionClick"
                 android:tag="h"
@@ -1020,7 +1021,7 @@
                 android:id="@+id/imageViewTrumpDiamonds"
                 android:layout_width="@dimen/trumpSelectionImageWidth"
                 android:layout_height="@dimen/trumpSelectionImageHeight"
-                android:background="#C6040E17"
+                android:background="@drawable/button_score_total"
                 android:contentDescription="@string/app_name"
                 android:onClick="onTrumpSelectionClick"
                 android:tag="d"
@@ -1204,7 +1205,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/imageViewSelf"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
             android:gravity="center"
             android:shadowColor="#3E3E3E"
             android:shadowDx="3"
@@ -1212,8 +1213,8 @@
             android:shadowRadius="3"
             android:text="@string/_400"
             android:textColor="#FFFFFF"
-            android:textSize="@dimen/_12ssp"
-            android:textStyle="bold"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="normal"
             android:visibility="gone" />
 
         <TextView
@@ -1230,8 +1231,8 @@
             android:shadowRadius="3"
             android:text="@string/_400"
             android:textColor="#FFFFFF"
-            android:textSize="@dimen/_13ssp"
-            android:textStyle="bold"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="normal"
             android:visibility="gone" />
 
         <ImageView
@@ -1320,7 +1321,7 @@
             android:layout_height="@dimen/tableCardImageHeight"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
             android:contentDescription="@string/app_name"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
@@ -1450,7 +1451,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginTop="0dp"
-            android:background="@drawable/shine_player_stats"
+            android:background="@drawable/button_score_total"
             android:orientation="vertical"
             android:paddingBottom="@dimen/_2sdp" />
 

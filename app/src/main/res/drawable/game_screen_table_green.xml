@@ -23,7 +23,7 @@
         <shape android:shape="rectangle"
             android:thickness="50dp">
             <solid
-                android:color="@color/shine2bk"/>
+                android:color="@color/borderblueDark3g"/>
             <corners
                 android:radius="150dp"/>
 
@@ -31,10 +31,10 @@
     </item>
 
     <item
-        android:bottom="13dp"
-        android:left="13dp"
-        android:right="13dp"
-        android:top="13dp">
+        android:bottom="14dp"
+        android:left="14dp"
+        android:right="14dp"
+        android:top="14dp">
         <shape android:shape="rectangle">
             <gradient
                 android:centerColor="@color/borderblueDark2g"

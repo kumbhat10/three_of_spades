@@ -225,7 +225,7 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_17ssp"
+        android:textSize="@dimen/cjrButtonsTextSize"
         android:textStyle="bold"
         android:visibility="visible" />
 
@@ -286,7 +286,7 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_17ssp"
+        android:textSize="@dimen/cjrButtonsTextSize"
         android:textStyle="bold"
         android:visibility="visible"/>
 
@@ -348,7 +348,7 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_17ssp"
+        android:textSize="@dimen/cjrButtonsTextSize"
         android:textStyle="bold"
         android:visibility="visible" />
 
@@ -410,7 +410,7 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_17ssp"
+        android:textSize="@dimen/cjrButtonsTextSize"
         android:textStyle="bold"
         android:visibility="invisible"
         app:cornerRadius="@dimen/_14sdp"/>
@@ -474,7 +474,7 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_17ssp"
+        android:textSize="@dimen/cjrButtonsTextSize"
         android:textStyle="bold"
         android:visibility="invisible"
         app:cornerRadius="@dimen/_14sdp"/>
@@ -538,7 +538,7 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_17ssp"
+        android:textSize="@dimen/cjrButtonsTextSize"
         android:textStyle="bold"
         android:visibility="invisible"/>
 
@@ -596,7 +596,7 @@
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="@color/font_yellow"
-            android:textSize="@dimen/_17ssp"
+            android:textSize="@dimen/_15ssp"
             android:textStyle="bold"
             android:visibility="visible"
             app:cornerRadius="@dimen/_14sdp"

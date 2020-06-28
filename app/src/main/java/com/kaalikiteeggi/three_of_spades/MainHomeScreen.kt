@@ -111,6 +111,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private lateinit var shimmer: Shimmer
 //    private var versionStatus = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     private var totalCoins = 0
+    private var ngamesPlayed = 0
+    private var ngamesWon = 0
+    private var ngamesBided = 0
+
     private var loadRewardedAdTry = 0
     private var countRewardWatch = 1
     private lateinit var rewardedAdLoadCallback: RewardedAdLoadCallback
@@ -129,11 +133,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             .showRestartButton(true) //default: true
             .logErrorOnRestart(false) //default: true
             .trackActivities(false) //default: false
-            .errorDrawable(R.drawable._s_icon_3shadow_bug11) //default: bug image
+            .errorDrawable(R.drawable._s_icon_bug) //default: bug image
             .apply()
 
         setContentView(R.layout.activity_main_home_screen)
-        findViewById<TextView>(R.id.sizeMHS).text = resources.configuration.screenWidthDp.toString() + "\n" + resources.configuration.screenHeightDp.toString()
+//        val p = packageManager.getPackageInfo(packageName,0).versionName
+//        findViewById<TextView>(R.id.sizeMHS).text = p +"\n"+ resources.configuration.screenWidthDp.toString() + "\n" + resources.configuration.screenHeightDp.toString()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         findViewById<GifImageView>(R.id.watchVideo).visibility = View.GONE
         soundUpdate = MediaPlayer.create(applicationContext, R.raw.player_moved)
@@ -356,9 +361,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     totalCoins = dataSnapshot.get("sc").toString().toInt()
                     findViewById<AppCompatButton>(R.id.userScore).text = String.format("%,d", totalCoins)
                     findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
-                    val ngamesPlayedStats = dataSnapshot.get("p").toString().toInt()
-                    val ngamesBidedStats = dataSnapshot.get("b").toString().toInt()
-                    val ngamesWonStats = dataSnapshot.get("w").toString().toInt()
+                    ngamesPlayed = dataSnapshot.get("p").toString().toInt()
+                    ngamesWon = dataSnapshot.get("w").toString().toInt()
+                    ngamesBided = dataSnapshot.get("b").toString().toInt()
                     premiumStatus = dataSnapshot.get("pr").toString().toInt() == 1
                     if (premiumStatus) {
                         findViewById<GifImageView>(R.id.removeAds).setImageResource(R.drawable.premium)
@@ -394,14 +399,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     }
                     if (!claimedToday) {//if not claimed today
                        Handler().postDelayed({
-                           dailyRewardWindowDisplay()},1500)
+                           dailyRewardWindowDisplay()},1000)
                     }
                     findViewById<ShimmerTextView>(R.id.ngamesPlayedStats).text =
-                        ngamesPlayedStats.toString()
+                        ngamesPlayed.toString()
                     findViewById<ShimmerTextView>(R.id.ngamesBidedStats).text =
-                        ngamesBidedStats.toString()
+                        ngamesBided.toString()
                     findViewById<ShimmerTextView>(R.id.ngamesWonStats).text =
-                        ngamesWonStats.toString()
+                        ngamesWon.toString()
                     editor.putString("photoURL", photoURL) // write username to preference file
                     editor.apply()
                     editor.putBoolean("premium", premiumStatus) // write username to preference file
@@ -423,7 +428,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
     private fun getSharedPrefs(){
         if (sharedPreferences.contains("themeColor")) {
-            changeBackground(sharedPreferences.getString("themeColor", "shine_bk").toString())
+//            changeBackground(sharedPreferences.getString("themeColor", "shine_bk").toString())
         }
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
@@ -478,7 +483,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 checkPendingPurchases()
             }
             override fun onBillingServiceDisconnected() {
-                toastCenter("Billing Service was disconnected")
+//                toastCenter("Billing Service was disconnected")
                 setupBillingClient()
             }
         })
@@ -721,7 +726,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
             soundSuccess.start()
             startActivity(Intent(applicationContext, CreatenJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
-                .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p1") }.apply { putExtra("nPlayers", nPlayers) })
+                .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p1") }
+                .apply { putExtra("nPlayers", nPlayers) }
+                .putIntegerArrayListExtra("userStats", ArrayList(listOf(ngamesPlayed, ngamesWon, ngamesBided ))))
             overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
             editor.putString("Room", roomID) // write room ID in storage - to delete later
             editor.apply()
@@ -748,7 +755,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         refRoomData.document(roomID).set(hashMapOf("p$playerJoining" to userName, "PJ" to playerJoining, "p${playerJoining}h" to photoURL, "p${playerJoining}c" to totalCoins), SetOptions.merge())
                             .addOnSuccessListener {
                                 startActivity(Intent(applicationContext, CreatenJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
-                                    .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p$playerJoining") }.apply {putExtra("nPlayers", nPlayers)})
+                                    .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p$playerJoining") }.apply {putExtra("nPlayers", nPlayers)}
+                                    .putIntegerArrayListExtra("userStats", ArrayList(listOf(ngamesPlayed, ngamesWon, ngamesBided ))))
                                 overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
                                 Handler().postDelayed({finish()},3000)} }
                 }else {

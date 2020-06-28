@@ -305,7 +305,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/createRoomButton"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/mhsButtonsTextWidth"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/createRoomIcon"
         android:layout_alignBottom="@+id/createRoomIcon"
@@ -318,12 +318,12 @@
         android:fontFamily="sans-serif-smallcaps"
         android:onClick="createRoomButtonClicked"
         android:paddingStart="@dimen/_29sdp"
-        android:paddingEnd="@dimen/_9sdp"
+        android:paddingEnd="@dimen/_11sdp"
         android:text="@string/createRoom"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_16ssp"
+        android:textSize="@dimen/mhsButtonsTextSize"
         />
     <ImageView
         android:id="@+id/createRoomIcon"
@@ -340,7 +340,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/joinRoomButton"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/mhsButtonsTextWidth"
         android:layout_height="@dimen/_47sdp"
         android:layout_alignTop="@+id/joinRoomIcon"
         android:layout_alignBottom="@+id/joinRoomIcon"
@@ -359,7 +359,7 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_16ssp" />
+        android:textSize="@dimen/mhsButtonsTextSize" />
 
     <ImageView
         android:id="@+id/joinRoomIcon"
@@ -394,7 +394,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonInvite"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/mhsButtonsTextWidth"
         android:layout_height="@dimen/_47sdp"
         android:layout_alignTop="@+id/inviteIcon"
         android:layout_alignBottom="@+id/inviteIcon"
@@ -411,7 +411,7 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_16ssp" />
+        android:textSize="@dimen/mhsButtonsTextSize" />
 
     <ImageView
         android:id="@+id/settingsIcon"
@@ -425,7 +425,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonSettings"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/mhsButtonsTextWidth"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/settingsIcon"
         android:layout_alignBottom="@+id/settingsIcon"
@@ -445,7 +445,7 @@
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
         android:focusable="true"
-        android:textSize="@dimen/_16ssp" />
+        android:textSize="@dimen/mhsButtonsTextSize" />
     <LinearLayout
         android:id="@+id/developerandAds"
         android:layout_width="match_parent"
@@ -1324,9 +1324,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:gravity="end"
-        android:textSize="@dimen/_9ssp"
+        android:textColor="#FFFFFF"
         android:textAlignment="viewEnd"
-        android:textColor="#FFFFFF" />
+        android:textSize="@dimen/_7ssp"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/maskAllLoading"
@@ -1364,7 +1365,7 @@
             android:gravity="center"
             android:text="@string/fetching_player"
             android:textColor="@color/white"
-            android:textSize="@dimen/_14ssp"/>
+            android:textSize="@dimen/_14ssp" />
 
     </RelativeLayout>
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.os.*
+import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
@@ -94,6 +95,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     private lateinit var p5h: String
     private lateinit var p6h: String
     private lateinit var p7h: String
+    private lateinit var userStats: ArrayList<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +105,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
             .showRestartButton(true) //default: true
             .logErrorOnRestart(false) //default: true
             .trackActivities(false) //default: false
-            .errorDrawable(R.drawable._s_icon_3shadow_bug11) //default: bug image
+            .errorDrawable(R.drawable._s_icon_bug) //default: bug image
             .apply()
 
          setContentView(R.layout.activity_create_join_room_screen)
@@ -120,6 +122,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         soundBkgd = MediaPlayer.create(applicationContext, R.raw.main_screen_bkgd)
         soundBkgd.isLooping = true
         toast = Toast.makeText(applicationContext,"",Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER, 0, 0)
         toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.Black))
         toast.view.findViewById<TextView>(android.R.id.message).setTextColor(ContextCompat.getColor(applicationContext,R.color.font_yellow))
         toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
@@ -143,7 +146,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
                 updateRoomInfo(dataSnapshot)
             }else if (dataSnapshot != null && !dataSnapshot.exists()) {
                 soundError.start()
-                toastCenter("Sorry $selfName \n$p1 has removed the room. \nYou can create your own room or join other")
+                toastCenter("Sorry $selfName \n$p1 has left the room. \nYou can create your own room or join other")
                 Handler().postDelayed({closeJoiningRoom(View(applicationContext))},4000)
             } else if(error != null){
                     toastCenter(error.localizedMessage!!.toString())
@@ -263,9 +266,11 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     fun startGame(view: View){
         if(from=="p1") {
             val gd = if(getString(R.string.testGameData).contains('n')) {
-                CreateGameData().gameData
+                if(nPlayers==7) CreateGameData().gameData7
+                else CreateGameData().gameData4
             }else{
-                CreateGameData().gameDataDummy
+                if(nPlayers==7) CreateGameData().gameDataDummy7
+                else CreateGameData().gameDataDummy4
             }
             myRefGameData.child(roomID).setValue(gd).addOnSuccessListener {
                 refRoomData.document(roomID).set(hashMapOf("PJ" to 10), SetOptions.merge())
@@ -378,7 +383,8 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         soundUpdate.start()
         startActivity(Intent(this@CreatenJoinRoomScreen,GameScreen::class.java).apply { putExtra("selfName",selfName) }
             .apply { putExtra("from",from) }.apply { putExtra("nPlayers", nPlayers) }
-            .apply { putExtra("roomID",roomID) }.putStringArrayListExtra("playerInfo",playerInfo).putIntegerArrayListExtra("playerInfoCoins",playerInfoCoins))
+            .apply { putExtra("roomID",roomID) }.putStringArrayListExtra("playerInfo",playerInfo)
+            .putIntegerArrayListExtra("playerInfoCoins",playerInfoCoins).putIntegerArrayListExtra("userStats",userStats))
         overridePendingTransition(R.anim.slide_top_in_activity,R.anim.slide_top_in_activity)
         Handler().postDelayed({finish()},400)
 //        finish()
@@ -388,6 +394,8 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         selfName = intent.getStringExtra("selfName")!!.toString()  //Get Username first  - selfName ,roomID available
         from     = intent.getStringExtra("from")!!.toString()     //check if user has joined room or created one and display Toast
         nPlayers = intent.getIntExtra("nPlayers", 4)
+        userStats = intent.getIntegerArrayListExtra("userStats")
+
         findViewById<ImageView>(R.id.imageViewShareButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
         findViewById<Button>(R.id.button_roomID).text = "Room : $roomID"   // display the room ID
 
@@ -395,9 +403,9 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
             findViewById<ImageView>(R.id.leaveJoiningRoomIcon).visibility = View.VISIBLE
             anim(findViewById(R.id.leaveJoiningRoomIcon),R.anim.anim_scale_infinite)
         }
-        else{ //dummy diabaled
-//            findViewById<ImageView>(R.id.leaveJoiningRoomIcon).visibility = View.GONE
-//            findViewById<ImageView>(R.id.leaveJoiningRoomIcon).clearAnimation()
+        else if(getString(R.string.test).contains('n')){
+            findViewById<ImageView>(R.id.leaveJoiningRoomIcon).visibility = View.GONE
+            findViewById<ImageView>(R.id.leaveJoiningRoomIcon).clearAnimation()
         }
         shimmer = Shimmer()
         shimmer.duration = 1800

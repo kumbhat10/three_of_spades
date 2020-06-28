@@ -9,32 +9,35 @@
     <dimen name="tableInner2">@dimen/_10sdp</dimen>
     <dimen name="radiusInner1">@dimen/_98sdp</dimen>
     <dimen name="radiusInner2">@dimen/_90sdp</dimen>
-
-
     <dimen name="imageGapEnd">0dp</dimen>
     <dimen name="imageGapEnd_4player">@dimen/_25sdp</dimen>
     <dimen name="imagePadding">@dimen/_3sdp</dimen>
     <dimen name="imagePaddingTextGap">@dimen/_minus2sdp</dimen>
 
-    <dimen name="imageWidth">@dimen/_64sdp</dimen>
-
-    <dimen name="width_playername">@dimen/imageWidth</dimen>
+    <dimen name="imageWidth">@dimen/_57sdp</dimen>
     <dimen name="imageHeight">@dimen/imageWidth</dimen>
+    <dimen name="width_playername">@dimen/imageWidth</dimen>
+
+    <dimen name="imageWidth_4">@dimen/_64sdp</dimen>
+    <dimen name="imageHeight_4">@dimen/imageWidth_4</dimen>
+    <dimen name="width_playername_4">@dimen/imageWidth_4</dimen>
+
+
     <dimen name="trumpSelectionImageWidth">@dimen/_72sdp</dimen>
     <dimen name="trumpSelectionImageHeight">@dimen/_72sdp</dimen>
     
     <dimen name="imageWidthCoin">@dimen/_25sdp</dimen>
 
-    <dimen name="imageGapBetween">@dimen/_47sdp</dimen>
-    <dimen name="imageGapBetweenHorizontal">@dimen/_11sdp</dimen>
+    <dimen name="imageGapTopMiddle">@dimen/_47sdp</dimen>
+    <dimen name="imageGapBetweenHorizontal">@dimen/_12sdp</dimen>
     <dimen name="imageGapBetweenHorizontalTop">@dimen/_21sdp</dimen>
 
-    <dimen name="imageGapBetween1">@dimen/_9sdp</dimen>
+    <dimen name="imageGapBetween1">@dimen/_13sdp</dimen>
     <dimen name="imageGapBetweenCards">@dimen/_4sdp</dimen>
     <dimen name="imageGapNew_4player">@dimen/_15sdp</dimen>
 
-    <dimen name="tableCardImageWidth">@dimen/_32sdp</dimen>
-    <dimen name="tableCardImageHeight">@dimen/_43sdp</dimen>
+    <dimen name="tableCardImageWidth">@dimen/_36sdp</dimen>
+    <dimen name="tableCardImageHeight">@dimen/_49sdp</dimen>
     <dimen name="tableCardImageWidth_4">@dimen/_42sdp</dimen>
     <dimen name="tableCardImageHeight_4">@dimen/_58sdp</dimen>
 
@@ -47,5 +50,8 @@
     <dimen name="padding_playername">@dimen/_3sdp</dimen>
     <dimen name="usernameTextSize">@dimen/_8ssp</dimen>
     <dimen name="scoreTableTextSize">@dimen/_9ssp</dimen>
+    <dimen name="mhsButtonsTextSize">@dimen/_14ssp</dimen>
+    <dimen name="mhsButtonsTextWidth">@dimen/_140sdp</dimen>
+    <dimen name="cjrButtonsTextSize">@dimen/_14ssp</dimen>
 
 </resources>

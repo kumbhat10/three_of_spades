@@ -4,11 +4,13 @@ package com.kaalikiteeggi.three_of_spades
 
 import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_developer_credits.*
 import kotlinx.android.synthetic.main.activity_game_screen.*
 import kotlin.random.Random
@@ -18,7 +20,15 @@ class DeveloperCredits : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_developer_credits)
         findViewById<ImageView>(R.id.icon_3developer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
+        val p = packageManager.getPackageInfo(packageName,0).versionName
+        findViewById<TextView>(R.id.sizeDC).text = "VC: $p\n W: ${resources.configuration.screenWidthDp.toString()}\nH: ${resources.configuration.screenHeightDp.toString()}"
     }
+    fun openWebsite(view: View){
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://sites.google.com/view/kaali-ki-teeggi/") }
+        startActivity(intent)
+    }
+
 //    fun exitDeveloperScreen(view: View) {
 //        val parentScreen = intent.getBooleanExtra("from", true) //true means come from login screen
 //        if (parentScreen) {

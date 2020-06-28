@@ -1,8 +1,8 @@
 <resources>
-    <string name="test">y</string>
-    <string name="testGameData">y</string>
+    <string name="test">n</string>
+    <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
-    <string name="nPlayers">4</string>
+    <string name="nPlayers">7</string>
 
     <string name="noti_DR_title">Have you collected your Daily Rewards ?</string>
     <string name="noti_DR_info">Click here to collect your Daily Reward</string>
@@ -67,7 +67,7 @@
     <string name="playerView1">Player</string>
     <string name="Trump">Trump</string>
     <string name="partner1">Buddy 1</string>
-    <string name="partner2">Buddy 2</string>
+    <string name="partner2">  Buddy 2  </string>
     <string name="bidValue"> Bid : </string>
     <string name="bidValue1">NIL</string>
     <string name="bid05button"> +5</string>
@@ -106,7 +106,7 @@
     <string name="rounds_played">Rounds played :</string>
     <string name="nill">Nill</string>
     <string name="rounds_won">Rounds won :</string>
-    <string name="rounds_bided">Rounds bided :</string>
+    <string name="rounds_bided">Placed bid :</string>
     <string name="sound">Sound</string>
     <string name="vibrate">Vibrate</string>
     <string name="claim_reward">Claim \n Reward</string>

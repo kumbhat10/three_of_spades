@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER", "UNCHECKED_CAST", "PLUGIN_WARNING")
+@file:Suppress("UNUSED_PARAMETER", "UNCHECKED_CAST", "PLUGIN_WARNING", "ImplicitThis")
 
 package com.kaalikiteeggi.three_of_spades
 
@@ -42,7 +42,7 @@ import java.util.*
 import kotlin.math.round
 import kotlin.properties.Delegates
 import kotlin.random.Random
-
+@SuppressLint("SetTextI18n")
 class GameScreen : AppCompatActivity() {
     //    region Initialization
     private lateinit var soundUpdate: MediaPlayer
@@ -72,12 +72,14 @@ class GameScreen : AppCompatActivity() {
 
     private var premiumStatus = false
     private var scoreOpenStatus = false
+    private var activityExists = true
     private var versionStatus = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     private lateinit var mInterstitialAd: InterstitialAd
 
     private lateinit var roomID: String
     private lateinit var selfName: String
     private lateinit var from: String
+    private var fromInt = 0
     private var nPlayers = 0
     private var nPlayers7 = false
     private var nPlayers4 = false
@@ -125,6 +127,9 @@ class GameScreen : AppCompatActivity() {
     private lateinit var trumpStart: String
     private lateinit var playerInfo: ArrayList<String>
     private lateinit var playerInfoCoins: ArrayList<Int>
+    private var ngamesPlayed = 0
+    private var ngamesWon = 0
+    private var ngamesBided = 0
 
     private lateinit var p1: String
     private lateinit var p2: String
@@ -218,15 +223,20 @@ class GameScreen : AppCompatActivity() {
             .showRestartButton(true) //default: true
             .logErrorOnRestart(false) //default: true
             .trackActivities(false) //default: false
-            .errorDrawable(R.drawable._s_icon_3shadow_bug1) //default: bug image
+            .errorDrawable(R.drawable._s_icon_bug) //default: bug image
             .restartActivity(MainHomeScreen::class.java)
             .apply()
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE // keep screen in landscape mode always
         roomID   = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
         from     = intent.getStringExtra("from")!!.toString()    //check if user has joined room or created one and display Toast
+        fromInt  = from.split("")[2].toInt()
         selfName = intent.getStringExtra("selfName")!!.toString()
         playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
+        val userStats = intent.getIntegerArrayListExtra("userStats")
+        ngamesPlayed = userStats[0]
+        ngamesWon    = userStats[1]
+        ngamesBided  = userStats[2]
         playerInfoCoins = intent.getStringArrayListExtra("playerInfoCoins") as ArrayList<Int>
         nPlayers = intent.getIntExtra("nPlayers", 4)
         if(nPlayers==7) nPlayers7 = true
@@ -257,14 +267,8 @@ class GameScreen : AppCompatActivity() {
         toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.cardsBackgroundDark))
         toast.view.findViewById<TextView>(android.R.id.message).setTextColor(ContextCompat.getColor(applicationContext,R.color.font_yellow))
         toast.view.findViewById<TextView>(android.R.id.message).textSize = 14F
-
         sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
-        editor = sharedPreferences.edit()
-        if(from == "p1"){
-            editor.putString("Room", roomID)
-         // write room ID in storage - to delete later / dummy redundant as not required
-            editor.apply()
-        }
+//        editor = sharedPreferences.edit()
         //region Player Info Update
         updatePlayerInfo()
 //        createTargetPicasso()
@@ -334,7 +338,7 @@ class GameScreen : AppCompatActivity() {
                 ct1 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct1 <=97){
-                    soundCardPlayed.start()
+                    if(soundStatus) soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[0]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[0]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[0]))
                     findViewById<ImageView>(refIDMappedTableImageView[0]).setImageResource(cardsDrawableDoubleDeck[ct1])
@@ -350,7 +354,7 @@ class GameScreen : AppCompatActivity() {
                 ct2 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct2 <=97){
-                    soundCardPlayed.start()
+                    if(soundStatus) soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[1]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[1]))
                     findViewById<ImageView>(refIDMappedTableImageView[1]).setImageResource(cardsDrawableDoubleDeck[ct2])
@@ -366,7 +370,7 @@ class GameScreen : AppCompatActivity() {
                 ct3 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct3 <=97){
-                    soundCardPlayed.start()
+                    if(soundStatus) soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[2]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[2]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[2]))
                     findViewById<ImageView>(refIDMappedTableImageView[2]).setImageResource(cardsDrawableDoubleDeck[ct3])
@@ -382,7 +386,7 @@ class GameScreen : AppCompatActivity() {
                 ct4 = p0.value.toString().toInt()
                 tablePointsCalculator()
                 if(ct4 <=97){
-                    soundCardPlayed.start()
+                    if(soundStatus) soundCardPlayed.start()
                     findViewById<ImageView>(refIDMappedTableImageView[3]).visibility = View.VISIBLE
                     findViewById<ImageView>(refIDMappedTableImageView[3]).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableAnim[3]))
                     findViewById<ImageView>(refIDMappedTableImageView[3]).setImageResource(cardsDrawableDoubleDeck[ct4])
@@ -399,7 +403,7 @@ class GameScreen : AppCompatActivity() {
                    ct5 = p0.value.toString().toInt()
                    tablePointsCalculator()
                    if (ct5 <= 97) {
-                       soundCardPlayed.start()
+                       if(soundStatus) soundCardPlayed.start()
                        findViewById<ImageView>(refIDMappedTableImageView[4]).visibility =
                            View.VISIBLE
                        findViewById<ImageView>(refIDMappedTableImageView[4]).startAnimation(
@@ -421,7 +425,7 @@ class GameScreen : AppCompatActivity() {
                    ct6 = p0.value.toString().toInt()
                    tablePointsCalculator()
                    if (ct6 <= 97) {
-                       soundCardPlayed.start()
+                       if(soundStatus) soundCardPlayed.start()
                        findViewById<ImageView>(refIDMappedTableImageView[5]).visibility =
                            View.VISIBLE
                        findViewById<ImageView>(refIDMappedTableImageView[5]).startAnimation(
@@ -443,7 +447,7 @@ class GameScreen : AppCompatActivity() {
                    ct7 = p0.value.toString().toInt()
                    tablePointsCalculator()
                    if (ct7 <= 97) {
-                       soundCardPlayed.start()
+                       if(soundStatus) soundCardPlayed.start()
                        findViewById<ImageView>(refIDMappedTableImageView[6]).visibility =
                            View.VISIBLE
                        findViewById<ImageView>(refIDMappedTableImageView[6]).startAnimation(
@@ -466,7 +470,7 @@ class GameScreen : AppCompatActivity() {
                 if (dataSnapshot != null && dataSnapshot.exists() && error == null) {
                     val data = (dataSnapshot.data as Map<String, String>)["M"].toString()
                     if(data.isNotEmpty() && lastChat != data) { // if chat is not empty
-                        soundChat.start()
+                        if(soundStatus) soundChat.start()
                         findViewById<TextView>(R.id.textViewChatDisplay).text = findViewById<TextView>(R.id.textViewChatDisplay).text.toString() + "\n$emojiGuard " + data
                         findViewById<TextView>(R.id.textViewChatDisplay).requestLayout()
                         lastChat = data
@@ -478,7 +482,7 @@ class GameScreen : AppCompatActivity() {
                         }
                     }
                 }else if (dataSnapshot != null && !dataSnapshot.exists()) { // dummy
-//                    soundError.start()
+//                    if(soundStatus) soundError.start()
 //                    toastCenter("Sorry $selfName \n$p1 has left the room. \nYou can create your own room or join other")
                 } else if(error != null){
                     toastCenter(error.localizedMessage!!.toString()) // dummy
@@ -562,61 +566,84 @@ class GameScreen : AppCompatActivity() {
                     }}
             }
         }
-        onlineStatusListener5 = object: ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(data: DataSnapshot) {
-                if(onlineP5 != data.value.toString().toInt()){
-                    onlineP5 = data.value.toString().toInt()
-                    if(onlineP5==0 && from!="p5"){
-                        findViewById<ImageView>(refIDMappedOnlineIconImageView[4]).setImageResource(R.drawable.status_offline)
-                        toastCenter("${playerName(5)} is Offline !")
+        if(nPlayers7) {
+            onlineStatusListener5 = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(data: DataSnapshot) {
+                    if (onlineP5 != data.value.toString().toInt()) {
+                        onlineP5 = data.value.toString().toInt()
+                        if (onlineP5 == 0 && from != "p5") {
+                            findViewById<ImageView>(refIDMappedOnlineIconImageView[4]).setImageResource(
+                                R.drawable.status_offline
+                            )
+                            toastCenter("${playerName(5)} is Offline !")
+                        }
+                        if (onlineP5 == 1 && from != "p5") {
+                            findViewById<ImageView>(refIDMappedOnlineIconImageView[4]).setImageResource(
+                                R.drawable.status_online
+                            )
+                            toastCenter("${playerName(5)} is Online !")
+                        }
+                        if (onlineP5 == 2 && from != "p5") {
+                            findViewById<ImageView>(refIDMappedOnlineIconImageView[4]).setImageResource(
+                                R.drawable.status_offline
+                            )
+                            toastCenter("${playerName(5)} has left the room !")
+                        }
                     }
-                    if(onlineP5==1 && from!="p5") {
-                        findViewById<ImageView>(refIDMappedOnlineIconImageView[4]).setImageResource(R.drawable.status_online)
-                        toastCenter("${playerName(5)} is Online !")
-                    }
-                    if(onlineP5==2 && from!="p5") {
-                        findViewById<ImageView>(refIDMappedOnlineIconImageView[4]).setImageResource(R.drawable.status_offline)
-                        toastCenter("${playerName(5)} has left the room !")
-                    }}
+                }
             }
-        }
-        onlineStatusListener6 = object: ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(data: DataSnapshot) {
-                if(onlineP6 != data.value.toString().toInt()){
-                    onlineP6 = data.value.toString().toInt()
-                    if(onlineP6==0 && from!="p6") {
-                        findViewById<ImageView>(refIDMappedOnlineIconImageView[5]).setImageResource(R.drawable.status_offline)
-                        toastCenter("${playerName(6)} is Offline !")
+            onlineStatusListener6 = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(data: DataSnapshot) {
+                    if (onlineP6 != data.value.toString().toInt()) {
+                        onlineP6 = data.value.toString().toInt()
+                        if (onlineP6 == 0 && from != "p6") {
+                            findViewById<ImageView>(refIDMappedOnlineIconImageView[5]).setImageResource(
+                                R.drawable.status_offline
+                            )
+                            toastCenter("${playerName(6)} is Offline !")
+                        }
+                        if (onlineP6 == 1 && from != "p6") {
+                            findViewById<ImageView>(refIDMappedOnlineIconImageView[5]).setImageResource(
+                                R.drawable.status_online
+                            )
+                            toastCenter("${playerName(6)} is Online !")
+                        }
+                        if (onlineP6 == 2 && from != "p6") {
+                            findViewById<ImageView>(refIDMappedOnlineIconImageView[5]).setImageResource(
+                                R.drawable.status_offline
+                            )
+                            toastCenter("${playerName(6)} has left the room !")
+                        }
                     }
-                    if(onlineP6==1 && from!="p6") {
-                        findViewById<ImageView>(refIDMappedOnlineIconImageView[5]).setImageResource(R.drawable.status_online)
-                        toastCenter("${playerName(6)} is Online !")
-                    }
-                    if(onlineP6==2 && from!="p6"){
-                        findViewById<ImageView>(refIDMappedOnlineIconImageView[5]).setImageResource(R.drawable.status_offline)
-                        toastCenter("${playerName(6)} has left the room !")
-                    }}
+                }
             }
-        }
-        onlineStatusListener7 = object: ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(data: DataSnapshot) {
-                if(onlineP7 != data.value.toString().toInt()){
-                    onlineP7 = data.value.toString().toInt()
-                    if(onlineP7==0 && from!="p7") {
-                        findViewById<ImageView>(refIDMappedOnlineIconImageView[6]).setImageResource(R.drawable.status_offline)
-                        toastCenter("${playerName(7)} is Offline !")
+            onlineStatusListener7 = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(data: DataSnapshot) {
+                    if (onlineP7 != data.value.toString().toInt()) {
+                        onlineP7 = data.value.toString().toInt()
+                        if (onlineP7 == 0 && from != "p7") {
+                            findViewById<ImageView>(refIDMappedOnlineIconImageView[6]).setImageResource(
+                                R.drawable.status_offline
+                            )
+                            toastCenter("${playerName(7)} is Offline !")
+                        }
+                        if (onlineP7 == 1 && from != "p7") {
+                            findViewById<ImageView>(refIDMappedOnlineIconImageView[6]).setImageResource(
+                                R.drawable.status_online
+                            )
+                            toastCenter("${playerName(7)} is Online !")
+                        }
+                        if (onlineP7 == 2 && from != "p7") {
+                            findViewById<ImageView>(refIDMappedOnlineIconImageView[6]).setImageResource(
+                                R.drawable.status_offline
+                            )
+                            toastCenter("${playerName(7)} has left the room !")
+                        }
                     }
-                    if(onlineP7==1 && from!="p7") {
-                        findViewById<ImageView>(refIDMappedOnlineIconImageView[6]).setImageResource(R.drawable.status_online)
-                        toastCenter("${playerName(7)} is Online !")
-                    }
-                    if(onlineP7==2 && from!="p7") {
-                        findViewById<ImageView>(refIDMappedOnlineIconImageView[6]).setImageResource(R.drawable.status_offline)
-                        toastCenter("${playerName(7)} has left the room !")
-                    }}
+                }
             }
         }
         // endregion
@@ -634,13 +661,13 @@ class GameScreen : AppCompatActivity() {
                     shufflingWindow(gameStateChange = true) // gameStateChange = change game state to 2 after shuffling
                 }
                 if (gameState == 2) { // bidding moved to state 1 after shuffling and displaying own cards
-                    soundUpdate.start()
+                    if(soundStatus) soundUpdate.start()
 //                    getCardsAndDisplay(animation = true)
 //                    displaySelfCards(animations = true)
 //                    startBidding()
                 }
                 if (gameState == 3) {
-                soundSuccess.start()
+                if(soundStatus) soundSuccess.start()
                 refGameData.child("Bid").removeEventListener(bidingTurnListener)
                 bidingStarted = false
                 finishBackgroundAnimationBidding() // also highlight bidder winner & removed automatically at game state 5
@@ -648,14 +675,14 @@ class GameScreen : AppCompatActivity() {
             }
                 if (gameState == 4) {
                 getCardsAndDisplay() // dummy - check if really required to read cards again from firebase - looks like waste
-                soundSuccess.start()
+                if(soundStatus) soundSuccess.start()
                 getTrumpStartPartnerSelection()
             }
                 if (gameState == 5) {
                     newGameStatus = true
                 getBuddyandDisplay()
                 if(!roundStarted){
-                    soundSuccess.start()
+                    if(soundStatus) soundSuccess.start()
                     updatePlayerScoreInfo(ptAll)
                     getCardsAndDisplay(animation = true)
                     Handler().postDelayed( { startPlayingRound() },3000)
@@ -720,33 +747,35 @@ class GameScreen : AppCompatActivity() {
                 }
             }
         }
-        pointsListener5 = object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(p0: DataSnapshot) {
-                if(pt5!=p0.value.toString().toInt()){
-                    pt5 = p0.value.toString().toInt()
-                    ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
-                    if(gameState==5) updatePlayerScoreInfo(ptAll)
+        if(nPlayers7) {
+            pointsListener5 = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (pt5 != p0.value.toString().toInt()) {
+                        pt5 = p0.value.toString().toInt()
+                        ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                        if (gameState == 5) updatePlayerScoreInfo(ptAll)
+                    }
                 }
             }
-        }
-        pointsListener6 = object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(p0: DataSnapshot) {
-                if(pt6!=p0.value.toString().toInt()){
-                    pt6 = p0.value.toString().toInt()
-                    ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
-                    if(gameState==5) updatePlayerScoreInfo(ptAll)
+            pointsListener6 = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (pt6 != p0.value.toString().toInt()) {
+                        pt6 = p0.value.toString().toInt()
+                        ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                        if (gameState == 5) updatePlayerScoreInfo(ptAll)
+                    }
                 }
             }
-        }
-        pointsListener7 = object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-            override fun onDataChange(p0: DataSnapshot) {
-                if(pt7!=p0.value.toString().toInt()){
-                    pt7 = p0.value.toString().toInt()
-                    ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
-                    if(gameState==5) updatePlayerScoreInfo(ptAll)
+            pointsListener7 = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (pt7 != p0.value.toString().toInt()) {
+                        pt7 = p0.value.toString().toInt()
+                        ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                        if (gameState == 5) updatePlayerScoreInfo(ptAll)
+                    }
                 }
             }
         }
@@ -757,29 +786,26 @@ class GameScreen : AppCompatActivity() {
                 override fun onCancelled(errorDataLoad: DatabaseError) {}
                 override fun onDataChange(data: DataSnapshot) {
                     if (data.value != null) {
-                        if (buFound1 != data.child("s1").value.toString()
-                                .toInt() && buFound1 != 1
-                        ) {
-                            soundSuccess.start()
+                        if (buFound1 != data.child("s1").value.toString().toInt() && buFound1 != 1) {
+                            if(soundStatus) soundSuccess.start()
                             if (vibrateStatus) vibrationStart()
                         }
                         buPlayer1 = data.child("b1").value.toString().toInt()
                         buFound1 = data.child("s1").value.toString().toInt()
-                        if (buPlayer1 != 0 && buFound1 == 1) findViewById<TextView>(R.id.trumpText1).text =
-                            playerName(buPlayer1)
+                        if (buPlayer1 != 0 && buFound1 == 1) findViewById<TextView>(R.id.trumpText1).text = playerName(buPlayer1)
                         displayPartnerIcon()
                     }
                 }
             }
 //            endregion
 //            region Partner listener 2
-            partnerListener2 = object : ValueEventListener {
+           if(nPlayers7) partnerListener2 = object : ValueEventListener {
                 override fun onCancelled(errorDataLoad: DatabaseError) {}
                 override fun onDataChange(data: DataSnapshot) {
                     if (data.value != null) {
-                        if (buFound2 != data.child("s2").value.toString()
-                                .toInt() && buFound2 != 1
-                        ) soundSuccess.start()
+                        if (buFound2 != data.child("s2").value.toString().toInt() && buFound2 != 1){
+                            if (soundStatus) soundSuccess.start()
+                    }
                         buPlayer2 = data.child("b2").value.toString().toInt()
                         buFound2 = data.child("s2").value.toString().toInt()
                         if (buPlayer2 != 0 && buFound2 == 1) findViewById<TextView>(R.id.trumpText2).text =
@@ -799,25 +825,24 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     }
 }  // close keyboard after sending chat
 //        region Attach Listener
-//            refGameData.child("M").addValueEventListener(chatListener) //attach chat listener
         refGameData.child("BU1").addValueEventListener(partnerListener1)
-        refGameData.child("BU2").addValueEventListener(partnerListener2)
         refGameData.child("SC/p1").addValueEventListener(pointsListener1)
         refGameData.child("SC/p2").addValueEventListener(pointsListener2)
         refGameData.child("SC/p3").addValueEventListener(pointsListener3)
         refGameData.child("SC/p4").addValueEventListener(pointsListener4)
         refGameData.child("R").addValueEventListener(roundNumberListener)
-        refGameData.child("GS").addValueEventListener(gameStateListener) // attach the created game data listener        refGameData.child("M").addValueEventListener(chatListener) //attach chat listener
+        refGameData.child("GS").addValueEventListener(gameStateListener) // attach the created game data listener
         refGameData.child("CT/p1").addValueEventListener(cardsOnTableListener1) // player 1 cards on table listener
-        refGameData.child("CT/p2").addValueEventListener(cardsOnTableListener2) // player 1 cards on table listener
-        refGameData.child("CT/p3").addValueEventListener(cardsOnTableListener3) // player 1 cards on table listener
-        refGameData.child("CT/p4").addValueEventListener(cardsOnTableListener4) // player 1 cards on table listener
+        refGameData.child("CT/p2").addValueEventListener(cardsOnTableListener2) // player 2 cards on table listener
+        refGameData.child("CT/p3").addValueEventListener(cardsOnTableListener3) // player 3 cards on table listener
+        refGameData.child("CT/p4").addValueEventListener(cardsOnTableListener4) // player 4 cards on table listener
         refGameData.child("OL/p1").addValueEventListener(onlineStatusListener1)
         refGameData.child("OL/p2").addValueEventListener(onlineStatusListener2)
         refGameData.child("OL/p3").addValueEventListener(onlineStatusListener3)
         refGameData.child("OL/p4").addValueEventListener(onlineStatusListener4)
 
         if(nPlayers7){
+            refGameData.child("BU2").addValueEventListener(partnerListener2)
             refGameData.child("SC/p5").addValueEventListener(pointsListener5)
             refGameData.child("SC/p6").addValueEventListener(pointsListener6)
             refGameData.child("SC/p7").addValueEventListener(pointsListener7)
@@ -883,14 +908,9 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
         countDownTimer("PlayCard",purpose = "cancel")
         if(vibrateStatus) vibrationStart()
-        soundShuffle.start()
+        if(soundStatus) soundShuffle.start()
         displayShufflingCards()
         scoreOpenStatus = true
-//        if(scoreSheetNotUpdated) {
-//            scoreBoardTable(display = false,data = createScoreTableHeader(), upDateHeader = true)
-//            scoreBoardTable(display = false,data = createScoreTableTotal(), upDateTotal = true)
-//        }
-//        scoreSheetNotUpdated = false
         refGameData.child("S").addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(p0: DataSnapshot) {
@@ -911,7 +931,8 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 findViewById<AppCompatButton>(R.id.startNextRoundButton).visibility = View.VISIBLE
                 findViewById<AppCompatButton>(R.id.startNextRoundButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
             }
-        },3000)    }
+        },3000)
+    }
     private fun updateWholeScoreBoard(){
         p1Gain += scoreList[1].toString().toInt()
         p2Gain += scoreList[2].toString().toInt()
@@ -936,8 +957,15 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         scoreBoardTable(display = false,data = createScoreTableTotal(), upDateTotal = true)
         scoreBoardTable(data = scoreList)
 
+        if(bidder==fromInt){
+            ngamesBided += 1
+        }
+        if(scoreList[fromInt] >0){
+            ngamesWon += 1
+        }
+        ngamesPlayed += 1
         val uid = FirebaseAuth.getInstance().uid.toString()
-        refUsersData.document(uid).set(hashMapOf("sc" to playerCoins(from) ), SetOptions.merge())
+        refUsersData.document(uid).set(hashMapOf("sc" to playerCoins(from), "w" to ngamesWon, "b" to ngamesBided, "p" to ngamesPlayed), SetOptions.merge())
     }
     private fun createScoreTableHeader(): List<String>{
 
@@ -1074,19 +1102,23 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
 
         val cardsShuffled =  (0..97).shuffled()  // create shuffled pack of 2 decks with 6 cards removed ( 7Player x 14 = 98 cards only)
         val playerTurn = Random.nextInt(1, 7)
-        write("CT" , mutableMapOf("p1" to 99,"p2" to 99,"p3" to 99,"p4" to 99,"p5" to 99,"p6" to 99,"p7" to 99))
-        write("CH" , mutableMapOf<String ,List<Int>>("p1" to cardsShuffled.slice(0..13).sortedBy {it},"p2" to cardsShuffled.slice(14..27).sortedBy {it}
+        write("CT", mutableMapOf("p1" to 99,"p2" to 99,"p3" to 99,"p4" to 99,"p5" to 99,"p6" to 99,"p7" to 99))
+        write("CH", mutableMapOf("p1" to cardsShuffled.slice(0..13).sortedBy {it},"p2" to cardsShuffled.slice(14..27).sortedBy {it}
         ,"p3" to cardsShuffled.slice(28..41).sortedBy {it},"p4" to cardsShuffled.slice(42..55).sortedBy {it},"p5" to cardsShuffled.slice(56..69).sortedBy {it}
         ,"p6" to cardsShuffled.slice(70..83).sortedBy {it},"p7" to cardsShuffled.slice(84..97).sortedBy {it}))
-        write("Bid" , mutableMapOf("BV" to 350, "BT" to 1,"BB" to 3,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1,"p5" to 1,"p6" to 1,"p7" to 1)))
-        write("SC" , mutableMapOf("p1" to 0,"p2" to 0,"p3" to 0,"p4" to 0,"p5" to 0,"p6" to 0,"p7" to 0))
-        write( "Tr" , "")
-        write(   "R" , 1)
-        write("RO" , mutableMapOf("T" to 1,"P" to 0,"R" to ""))
-        write("BU2" , mutableMapOf("b2" to 8,"s2" to 0))
-        write( "BU1" ,mutableMapOf("b1" to 8,"s1" to 0))
-        write("BU" , mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""))
-        write("GS" , 1)
+        if(getString(R.string.test).contains('n'))  {
+            write("Bid", mutableMapOf("BV" to 350, "BT" to playerTurn,"BB" to playerTurn,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1,"p5" to 1,"p6" to 1,"p7" to 1)))
+        } else{
+            write("Bid", mutableMapOf("BV" to 350, "BT" to 1,"BB" to 3,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1,"p5" to 1,"p6" to 1,"p7" to 1)))
+        }
+        write("SC", mutableMapOf("p1" to 0,"p2" to 0,"p3" to 0,"p4" to 0,"p5" to 0,"p6" to 0,"p7" to 0))
+        write("Tr", "")
+        write("R", 1)
+        write("RO", mutableMapOf("T" to 1,"P" to 0,"R" to ""))
+        write("BU2",mutableMapOf("b2" to 8,"s2" to 0))
+        write("BU1",mutableMapOf("b1" to 8,"s1" to 0))
+        write("BU", mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""))
+        write("GS", 1)
     }
     private fun tablePointsCalculator(){
         tablePoints = cardPointsDoubleDeck[ct1] + cardPointsDoubleDeck[ct2] +cardPointsDoubleDeck[ct3] +
@@ -1094,10 +1126,9 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         if(tablePoints > 0 && gameState == 5){
             textViewCenterPoints.text = tablePoints.toString()
             textViewCenterPoints.visibility = View.VISIBLE
-//            textViewCenterPoints.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.blink_infinite_700ms))
+//            textViewCenterPoints.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
         }
         else{
-//            textViewCenterPoints.clearAnimation()
             textViewCenterPoints.visibility = View.GONE
         }
     }
@@ -1127,7 +1158,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 toastCenter("Game Over: Bidder team Won \n         Defender team Lost")
                 centralText("Game Over: Bidder team Won \n         Defender team Lost")
                 if ("p$bidder" == from) {// bidder will change game state to 6
-                    val pointsListTemp = mutableListOf<Int>(gameNumber,-bidValue,-bidValue,-bidValue,-bidValue,-bidValue,-bidValue,-bidValue)
+                    val pointsListTemp = mutableListOf(gameNumber,-bidValue,-bidValue,-bidValue,-bidValue,-bidValue,-bidValue,-bidValue)
                     if(buFound1!= 1 && buFound2!=1 ){ //No partners found so far
                         pointsListTemp[bidder] = bidValue*6
                     }
@@ -1280,7 +1311,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 startNextTurn(cardSelected.toLong()) // allow throw if first chance, or same suit as first turn or doesn't have same suit card
             }
                 else{
-                soundError.start()
+                if(soundStatus) soundError.start()
                 if(vibrateStatus) vibrationStart()
                 toastCenter("${playerName(playerTurn)}, please play ${getSuitName(trumpStart)} card")
             }
@@ -1339,11 +1370,11 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         val roundCards =  listOf(ct1, ct2, ct3, ct4, ct5, ct6, ct7)
         var winnerCard = roundCards[playerTurn-1]
         var startTurn = playerTurn
-        var points = 0
-        for(k in 0 until nPlayers){
-            points += cardPointsDoubleDeck[roundCards[k]]
-        }
-        for(i in 1..nPlayers-1){
+//        var points = 0
+//        for(k in 0 until nPlayers){
+//            points += cardPointsDoubleDeck[roundCards[k]]
+//        }
+        for(i in 1 until nPlayers){
             startTurn = nextTurn(startTurn)
             winnerCard = compareCardsforWinner(roundCards[startTurn -1], winnerCard)
         }
@@ -1393,7 +1424,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         var w = winnerCard
         val wSuit = cardSuitDoubleDeck[winnerCard]
         val cSuit = cardSuitDoubleDeck[currentCard]
-        if( (cSuit == trump && wSuit != trump) || ((cSuit == wSuit) && ((currentCard - winnerCard ) >1 || (currentCard%2==1 && winnerCard==currentCard-1)  || (winnerCard%2==1 && currentCard==winnerCard-1))))
+        if( (cSuit == trump && wSuit != trump) || ((cSuit == wSuit) && ((currentCard - winnerCard ) >=1 || (currentCard%2==1 && winnerCard==currentCard-1)  || (winnerCard%2==1 && currentCard==winnerCard-1))))
             w = currentCard
         return w
     }
@@ -1451,7 +1482,9 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         if (animations) {
             findViewById<RelativeLayout>(R.id.horizontalScrollView).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
         }
-        if(bidingRequest) startBidding()
+        if(bidingRequest && activityExists){
+            startBidding()
+        }
     }
     private fun animatePlayerPlayingRound(index: Int){
         findViewById<ImageView>(refIDMappedImageView[index-1]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
@@ -1473,13 +1506,17 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     }
     private fun animateWinner(){
         soundCollectCards.start()
-        findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.VISIBLE
-        findViewById<ImageView>(R.id.imageViewWinnerCenter).startAnimation(AnimationUtils.loadAnimation(applicationContext,refIDMappedTableWinnerAnim[roundWinner-1]))
-        findViewById<ImageView>(refIDMappedTableImageView[roundWinner-1]).clearAnimation()
+        if(nPlayers7) {
+            findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.imageViewWinnerCenter).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
+            Handler().postDelayed( { findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.GONE },1500)
+        }else if(nPlayers4){
+            findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.VISIBLE
+            findViewById<ImageView>(R.id.imageViewWinnerCenter_4).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
+            Handler().postDelayed( { findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.GONE },1500)
+        }
 
-        Handler().postDelayed( {
-            findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.INVISIBLE
-        },1500)
+        findViewById<ImageView>(refIDMappedTableImageView[roundWinner-1]).clearAnimation()
 
         for(i in 0 until nPlayers){
             findViewById<ImageView>(refIDMappedTableImageView[i]).visibility = View.INVISIBLE
@@ -1533,12 +1570,12 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         if( counterPartnerSelection == 0){
             when {
                 (cardsInHand as List<*>).contains((cardSelected*2).toLong()) and (cardsInHand as List<*>).contains((cardSelected*2+1).toLong()) -> {
-                    soundError.start()
+                    if(soundStatus) soundError.start()
                     if(vibrateStatus) vibrationStart()
                     toastCenter("$selfName, You already have both of these cards ")
                 }
                 (cardsInHand as List<*>).contains((cardSelected*2).toLong()) or (cardsInHand as List<*>).contains((cardSelected*2+1).toLong()) -> {
-                    soundUpdate.start()
+                    if(soundStatus) soundUpdate.start()
                     write("BU/b1",cardSelected)
                     bu1 = cardSelected
                     bu1Flag = 1
@@ -1547,7 +1584,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                     counterPartnerSelection =1
                 }
                 else -> {
-                    soundUpdate.start()
+                    if(soundStatus) soundUpdate.start()
                     bu1 = cardSelected
                     write("BU/b1",bu1)
                     bu1Flag = 0
@@ -1558,7 +1595,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             }
         }else if( counterPartnerSelection == 1){
             if((cardsInHand as List<*>).contains((cardSelected*2).toLong()) and (cardsInHand as List<*>).contains((cardSelected*2+1).toLong())) {
-                soundError.start()
+                if(soundStatus) soundError.start()
                 if(vibrateStatus) vibrationStart()
                 toastCenter("$selfName, You already have 2 same cards")
             }
@@ -1572,7 +1609,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.GONE
                     findViewById<LinearLayout>(R.id.partnerSelectionGallery).clearAnimation()}
                 else{
-                    soundError.start()
+                    if(soundStatus) soundError.start()
                     if(vibrateStatus) vibrationStart()
                     toastCenter("You have one and another already choosen")
                 }
@@ -1679,7 +1716,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
     }
     fun onTrumpSelectionClick(view: View) {
-        soundUpdate.start()
+        if(soundStatus) soundUpdate.start()
         when(view.tag){
             "h"-> write("Tr","H")
             "s"-> write("Tr","S")
@@ -1722,7 +1759,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                         }else{
                             centralText("Waiting for ${playerName(playerTurn)} to bid", 0) //display message only first time
                         }
-                        soundUpdate.start()
+                        if(soundStatus) soundUpdate.start()
                         findViewById<TextView>(R.id.textViewBidValue).text = "$emojiScore$bidValue" //.toString() //show current bid value
                         findViewById<TextView>(R.id.textViewBider).text = playerName(bidder)
                         findViewById<TextView>(R.id.textViewBidValue).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
@@ -1758,11 +1795,11 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 bidingStarted = true
             }
         }
-        refGameData.child("Bid").addValueEventListener(bidingTurnListener)
+        if(activityExists) refGameData.child("Bid").addValueEventListener(bidingTurnListener)
     }
     fun askToBid(view: View) {
         countDownTimer("Bidding", purpose = "cancel")
-        soundUpdate.start()
+        if(soundStatus) soundUpdate.start()
         when(view.tag){
             "pass"-> {
                 write("Bid/BS/$from", 0)
@@ -1912,7 +1949,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
     }
     private fun shufflingWindow(time: Long = 4900,fadeOffTime: Long = 700, gameStateChange: Boolean = false){
-        Handler().postDelayed({soundShuffle.start()},400)//delayed sound play of shuffling
+        if(soundStatus) Handler().postDelayed({ soundShuffle.start()},400)//delayed sound play of shuffling
         displayShufflingCards() //show suits cards and animate
         centralText(getString(R.string.shufflingcards),5200)
         Handler().postDelayed({
@@ -2084,6 +2121,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
     }
     fun closeGameRoom(view: View){
+        activityExists = false
         finish()
         startActivity(
             Intent(this, MainHomeScreen::class.java)
@@ -2103,33 +2141,36 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }catch(me: Exception){
 //            toastCenter(me.toString()) // dummy think to implement a good way
         }
-//        refRooms.removeEventListener(roomListener)
         refGameData.child("BU1").removeEventListener(partnerListener1)
-        refGameData.child("BU2").removeEventListener(partnerListener2)
         refGameData.child("R").removeEventListener(roundNumberListener)
         chatRegistration.remove()
-//        refGameData.child("M").removeEventListener(chatListener) //attach chat listener
         refGameData.child("SC/p1").removeEventListener(pointsListener1)
         refGameData.child("SC/p2").removeEventListener(pointsListener2)
         refGameData.child("SC/p3").removeEventListener(pointsListener3)
         refGameData.child("SC/p4").removeEventListener(pointsListener4)
-        refGameData.child("SC/p5").removeEventListener(pointsListener5)
-        refGameData.child("SC/p6").removeEventListener(pointsListener6)
-        refGameData.child("SC/p7").removeEventListener(pointsListener7)
+
         refGameData.child("CT/p1").removeEventListener(cardsOnTableListener1) // player 1 cards on table listener
         refGameData.child("CT/p2").removeEventListener(cardsOnTableListener2) // player 1 cards on table listener
         refGameData.child("CT/p3").removeEventListener(cardsOnTableListener3) // player 1 cards on table listener
         refGameData.child("CT/p4").removeEventListener(cardsOnTableListener4) // player 1 cards on table listener
-        refGameData.child("CT/p5").removeEventListener(cardsOnTableListener5) // player 1 cards on table listener
-        refGameData.child("CT/p6").removeEventListener(cardsOnTableListener6) // player 1 cards on table listener
-        refGameData.child("CT/p7").removeEventListener(cardsOnTableListener7) // player 1 cards on table listener
+
         refGameData.child("OL/p1").removeEventListener(onlineStatusListener1)
         refGameData.child("OL/p2").removeEventListener(onlineStatusListener2)
         refGameData.child("OL/p3").removeEventListener(onlineStatusListener3)
         refGameData.child("OL/p4").removeEventListener(onlineStatusListener4)
-        refGameData.child("OL/p5").removeEventListener(onlineStatusListener5)
-        refGameData.child("OL/p6").removeEventListener(onlineStatusListener6)
-        refGameData.child("OL/p7").removeEventListener(onlineStatusListener7)
+
+        if(nPlayers7){
+            refGameData.child("BU2").removeEventListener(partnerListener2)
+            refGameData.child("SC/p5").removeEventListener(pointsListener5)
+            refGameData.child("SC/p6").removeEventListener(pointsListener6)
+            refGameData.child("SC/p7").removeEventListener(pointsListener7)
+            refGameData.child("CT/p5").removeEventListener(cardsOnTableListener5) // player 1 cards on table listener
+            refGameData.child("CT/p6").removeEventListener(cardsOnTableListener6) // player 1 cards on table listener
+            refGameData.child("CT/p7").removeEventListener(cardsOnTableListener7) // player 1 cards on table listener
+            refGameData.child("OL/p5").removeEventListener(onlineStatusListener5)
+            refGameData.child("OL/p6").removeEventListener(onlineStatusListener6)
+            refGameData.child("OL/p7").removeEventListener(onlineStatusListener7)
+        }
     }
     private fun deleteAllRoomdata(){
         write("OL/$from",2)

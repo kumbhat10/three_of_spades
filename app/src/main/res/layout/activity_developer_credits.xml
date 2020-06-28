@@ -8,16 +8,19 @@
     android:clickable="false"
     android:contextClickable="true"
     android:focusable="true"
+    android:onClick="openWebsite"
     tools:context=".DeveloperCredits">
 
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
+        android:onClick="openWebsite"
         android:layout_height="match_parent"
         android:src="@drawable/black_squares" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:onClick="openWebsite"
         android:scaleX= "0.9"
         android:scaleY="0.9"
         android:src= "@drawable/_s_icon_spadeedit" />
@@ -25,6 +28,7 @@
 
     <ImageView
         android:id="@+id/icon_3developer"
+        android:onClick="openWebsite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleX= "0.8"
@@ -33,6 +37,7 @@
 
     <TextView
         android:layout_width="wrap_content"
+        android:onClick="openWebsite"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView4"
         android:layout_alignParentStart="true"
@@ -43,10 +48,11 @@
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Display3"
         android:textColor="#FFFFFF"
-        android:textSize="@dimen/_20ssp" />
+        android:textSize="@dimen/_22ssp" />
 
     <TextView
         android:id="@+id/textView4"
+        android:onClick="openWebsite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -56,6 +62,18 @@
         android:fontFamily="@font/armata"
         android:text="@string/developer_contact"
         android:textColor="#FFD500"
+        android:textSize="@dimen/_9ssp" />
+
+    <TextView
+        android:id="@+id/sizeDC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="end"
+        android:onClick="openWebsite"
+        android:textAlignment="viewEnd"
+        android:textColor="#FFFFFF"
         android:textSize="@dimen/_8ssp" />
 
 </RelativeLayout>
