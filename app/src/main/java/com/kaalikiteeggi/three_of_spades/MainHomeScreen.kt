@@ -74,6 +74,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var onceAdWatched = false
 
     private var joinRoomWindowStatus = false
+    private var createRoomWindowStatus = false
     private var settingsWindowStatus = false
     private var playerStatsWindowStatus = false
 
@@ -114,6 +115,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var ngamesPlayed = 0
     private var ngamesWon = 0
     private var ngamesBided = 0
+    private var nPlayers = 0
 
     private var loadRewardedAdTry = 0
     private var countRewardWatch = 1
@@ -460,8 +462,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if (sharedPreferences.contains("Room")) {
             val roomID = sharedPreferences.getString("Room","").toString()
             if(roomID.isNotEmpty()) {
-//               Handler().postDelayed({deleteAllRoomdata(roomID)},2000)
-                deleteAllRoomdata(roomID)
+               Handler().postDelayed({deleteAllRoomdata(roomID)},1000)
+//                deleteAllRoomdata(roomID)
             }
             editor.remove("Room").apply()
         }
@@ -704,6 +706,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
     fun createRoomButtonClicked(view: View) {
         createRoomStatus = true
+        nPlayers = view.tag.toString().toInt()
         if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched) {
             mInterstitialAd.show()
         } else {
@@ -714,7 +717,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if (createRoomStatus) {
             val allowedChars = ('A'..'H')+ ('J'..'N') + ('P'..'Z')+('2'..'9')  // 1, I , O and 0 skipped
             val roomID = (1..4).map { allowedChars.random() }.joinToString ("")
-            val nPlayers = getString(R.string.nPlayers).toInt()
             if(nPlayers==7) {
                 if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).data7)
                 else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).dummyData7)
@@ -723,7 +725,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).data4)
                 else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).dummyData4)
             }
-
             soundSuccess.start()
             startActivity(Intent(applicationContext, CreatenJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
                 .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p1") }
@@ -734,6 +735,27 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             editor.apply()
             Handler().postDelayed({finish()},500)
         }
+    }
+
+    fun createRoomWindowOpen(view: View) {
+        if(soundStatus) soundUpdate.start()
+        Handler().postDelayed({
+            findViewById<ImageView>(R.id.closeCreateRoom).visibility = View.VISIBLE
+            anim(findViewById(R.id.closeCreateRoom),R.anim.anim_scale_infinite)
+        }, 270)
+        findViewById<RelativeLayout>(R.id.createRoomFrame).visibility = View.VISIBLE
+        anim(findViewById(R.id.createRoomFrameTemp),R.anim.zoomin_center)
+        anim(findViewById(R.id.closeCreateRoom),R.anim.zoomin_center)
+        createRoomWindowStatus = true
+    }
+    fun createRoomWindowExit(view: View) {
+        findViewById<ImageView>(R.id.closeCreateRoom).clearAnimation()
+        findViewById<ImageView>(R.id.closeCreateRoom).visibility = View.GONE
+        anim(findViewById(R.id.createRoomFrameTemp),R.anim.zoomout)
+        createRoomWindowStatus = false
+        Handler().postDelayed({
+            findViewById<RelativeLayout>(R.id.createRoomFrame).visibility = View.GONE
+        }, 230)
     }
     fun joinRoomButtonClicked(view: View) {
         if(vibrateStatus) vibrationStart()
@@ -775,7 +797,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     fun joinRoomWindowOpen(view: View) {
         if(soundStatus) soundUpdate.start()
-
         if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched) {
             mInterstitialAd.show()
         }
@@ -789,17 +810,18 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         anim(findViewById(R.id.joinRoomFrameIcon),R.anim.clockwise)
         joinRoomWindowStatus = true
     }
-    fun joinRoomWindowExit(view: View) {
 
+    fun joinRoomWindowExit(view: View) {
         findViewById<ImageButton>(R.id.joinRoomFrameIcon).clearAnimation()
         findViewById<ImageView>(R.id.closeJoinRoom).clearAnimation()
-        findViewById<ImageView>(R.id.closeJoinRoom).visibility = View.INVISIBLE
+        findViewById<ImageView>(R.id.closeJoinRoom).visibility = View.GONE
         anim(findViewById(R.id.joinRoomFrameTemp),R.anim.zoomout)
         joinRoomWindowStatus = false
         Handler().postDelayed({
             findViewById<RelativeLayout>(R.id.joinRoomFrame).visibility = View.INVISIBLE
         }, 230)
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun developerCredits(view: View){
 //        makeCall()
@@ -984,8 +1006,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         finish()
     }
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
-        if(!(joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus )) moveTaskToBack(true)
+        if(!(joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus || createRoomWindowStatus )) moveTaskToBack(true)
        if(joinRoomWindowStatus) joinRoomWindowExit(View(applicationContext))
+       if(createRoomWindowStatus) createRoomWindowExit(View(applicationContext))
         if(settingsWindowStatus) closeSettingsWindow(View(applicationContext))
         if(playerStatsWindowStatus) openClosePlayerStats(View(applicationContext))
 //           super.onBackPressed()

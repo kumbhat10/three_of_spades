@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="Black">#000000</color>
+    <color name="shimmerImageBackground">#FFFFFF</color>
+    <color name="shimmerBackground">@color/Black</color>
     <color name="BlackTrans">#D2000000</color>
     <color name="BlackTransUserStats">#FD000000</color>
     <color name="BlackTransUserStats2">#EE000000</color>
@@ -38,14 +40,18 @@
     <color name = "borderblueDark1b">#008DD8</color>
     <color name = "borderblueDark2b">#006FAA</color>
 
-    <color name = "borderNblueDark0b">#0D9CC8</color>
-    <color name = "borderNblueDark1b">#1288AC</color>
-    <color name = "borderNblueDark2b">#167A98</color>
-    <color name = "borderNblueDark3b">#A944707E</color>
+    <color name = "borderNblueDark0b">#3EB9D8</color>
+    <color name = "borderNblueDark1b">#3499B3</color>
+    <color name = "borderNblueDark2b">#266F81</color>
+    <color name = "borderNblueDark3b">#1F434C</color>
 
     <color name = "shine0black">#FFFFFF</color>
     <color name = "shine1black">#2C2C2C</color>
     <color name = "shine2black">#000000</color>
+
+    <color name = "brown0">#9E3030</color>
+    <color name = "brown1">#7C2424</color>
+    <color name = "brown2">#501717</color>
 
     <color name = "shine0blackbar">#FFFFFF</color>
     <color name = "shine2blackbar">#000000</color>
@@ -96,4 +102,5 @@
     <color name="frameLayoutBackground">#C80E2043</color>
     <color name="scoreTableText">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="shimmerHighlight">#66FF00</color>
 </resources>

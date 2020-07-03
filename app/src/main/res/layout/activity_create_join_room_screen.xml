@@ -13,14 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/addViewCreateJoinRoom"
-        app:shimmer_base_alpha="0.9"
-        app:shimmer_clip_to_children="true"
-        app:shimmer_colored="false"
-        app:shimmer_direction="bottom_to_top"
-        app:shimmer_duration="1500"
+        app:shimmer_auto_start="true"
+        app:shimmer_colored="true"
+        app:shimmer_direction="top_to_bottom"
+        app:shimmer_duration="2000"
+        app:shimmer_fixed_width="@dimen/_10sdp"
+        app:shimmer_highlight_alpha="1"
+        app:shimmer_highlight_color="#C1D6D3D3"
+        app:shimmer_intensity="0.1"
         app:shimmer_repeat_delay="0"
         app:shimmer_repeat_mode="reverse"
-        app:shimmer_shape="radial"
+        app:shimmer_shape="linear"
         app:shimmer_tilt="0">
 
         <ImageView
@@ -29,10 +32,18 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/game_screen_table_green" />
+            android:src="@drawable/game_screen_table_blue" />
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
+    <ImageView
+        android:id="@+id/backgroundJoiningRoomCore"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/addViewCreateJoinRoom"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/game_screen_table_core" />
 
     <ImageView
         android:id="@+id/leaveJoiningRoomIcon"

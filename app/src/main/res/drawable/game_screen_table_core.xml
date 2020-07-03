@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item >
-        <shape android:shape="rectangle">
-            <gradient
-                android:centerColor="@color/brown1"
-                android:centerX="0.5"
-                android:centerY="0.5"
-                android:endColor="@color/brown0"
-                android:gradientRadius="130%"
-                android:startColor="@color/brown0"
-                android:type="radial" />
-            <corners
-                android:radius="@dimen/radiusInner1"/>
-        </shape>
-    </item>
+
 
     <item
         android:bottom="@dimen/tableInner1"
@@ -23,7 +10,7 @@
         <shape android:shape="rectangle"
             android:thickness="@dimen/_36sdp">
             <solid
-                android:color="@color/Black"/>
+                android:color="@color/borderNblueDark3b"/>
             <corners
                 android:radius="@dimen/radiusInner2"/>
         </shape>

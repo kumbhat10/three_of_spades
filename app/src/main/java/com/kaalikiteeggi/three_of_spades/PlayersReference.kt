@@ -15,7 +15,11 @@ class PlayersReference {
      private val refIDImageView7 = listOf<Int>(R.id.playerView1,R.id.playerView2,R.id.playerView3,
         R.id.playerView4,R.id.playerView5,R.id.playerView6,R.id.playerView7)
 
+     private val refIDHighlightView7 = listOf<Int>(R.id.highlight1,R.id.highlight2,R.id.highlight3,
+        R.id.highlight4,R.id.highlight5,R.id.highlight6,R.id.highlight7)
+
     private val refIDImageView4 = listOf<Int>(R.id.playerView1_4,R.id.playerView2_4,R.id.playerView3_4, R.id.playerView7)
+    private val refIDHighlightView4 = listOf<Int>(R.id.highlight1_4,R.id.highlight2_4,R.id.highlight3_4, R.id.highlight7)
 
     private val refIDPartnerIconImageView7  = listOf<Int>(R.id.partnerIcon1,R.id.partnerIcon2,R.id.partnerIcon3,R.id.partnerIcon4,
         R.id.partnerIcon5,R.id.partnerIcon6,R.id.partnerIcon7)
@@ -40,8 +44,8 @@ class PlayersReference {
     private val refIDTableWinnerAnim4 = listOf<Int>(R.anim.anim_table_card_winner_1,R.anim.anim_table_card_winner_2_4,R.anim.anim_table_card_winner_6,R.anim.anim_table_card_winner_self)
 
     fun refIDMappedOnlineIconImageView(player: String, nPlayer: Int): List<Int>{
-        return if(nPlayer==7) createRefID_7(player, refIDOnlineIconImageView7)
-        else createRefID_4(player, refIDOnlineIconImageView4)
+        return if(nPlayer==7) createRefID7(player, refIDOnlineIconImageView7)
+        else createRefID4(player, refIDOnlineIconImageView4)
     }
     fun refIDScoreLayout(nPlayer: Int): Int {
         return if(nPlayer==7) R.layout.score_board_table_7
@@ -49,31 +53,37 @@ class PlayersReference {
     }
 
     fun refIDMappedPartnerIconImageView(player: String, nPlayer: Int): List<Int>{
-        return if(nPlayer==7) createRefID_7(player, refIDPartnerIconImageView7)
-        else createRefID_4(player, refIDPartnerIconImageView4)
+        return if(nPlayer==7) createRefID7(player, refIDPartnerIconImageView7)
+        else createRefID4(player, refIDPartnerIconImageView4)
     }
     fun refIDMappedTextView(player: String, nPlayer: Int): List<Int>{
-        return if(nPlayer==7) createRefID_7(player, refIDTextView7)
-        else createRefID_4(player, refIDTextView4)
+        return if(nPlayer==7) createRefID7(player, refIDTextView7)
+        else createRefID4(player, refIDTextView4)
     }
     fun refIDMappedImageView(player: String, nPlayer: Int): List<Int>{
-        return if(nPlayer==7) createRefID_7(player, refIDImageView7)
-        else createRefID_4(player, refIDImageView4)
+        return if(nPlayer==7) createRefID7(player, refIDImageView7)
+        else createRefID4(player, refIDImageView4)
     }
-    fun refIDMappedTableImageView(player: String, nPlayer: Int): List<Int>{
-        return if(nPlayer==7) createRefID_7(player, refIDTableImageView7)
-        else createRefID_4(player, refIDTableImageView4)
-    }
-    fun refIDMappedTableAnim(player: String, nPlayer: Int): List<Int>{
-        return if(nPlayer==7) createRefID_7(player, refIDTableAnim7)
-        else createRefID_4(player, refIDTableAnim4)
-    }
-    fun refIDMappedTableWinnerAnim(player: String, nPlayer: Int): List<Int>{
-        return if(nPlayer==7) createRefID_7(player, refIDTableWinnerAnim7)
-        else createRefID_4(player, refIDTableWinnerAnim4)
+    fun refIDMappedHighlightView(player: String, nPlayer: Int): List<Int>{
+        return if(nPlayer==7) createRefID7(player, refIDHighlightView7)
+        else createRefID4(player, refIDHighlightView4)
     }
 
-    private fun createRefID_7(player: String, listToExtract: List<Int> ): List<Int>{
+
+    fun refIDMappedTableImageView(player: String, nPlayer: Int): List<Int>{
+        return if(nPlayer==7) createRefID7(player, refIDTableImageView7)
+        else createRefID4(player, refIDTableImageView4)
+    }
+    fun refIDMappedTableAnim(player: String, nPlayer: Int): List<Int>{
+        return if(nPlayer==7) createRefID7(player, refIDTableAnim7)
+        else createRefID4(player, refIDTableAnim4)
+    }
+    fun refIDMappedTableWinnerAnim(player: String, nPlayer: Int): List<Int>{
+        return if(nPlayer==7) createRefID7(player, refIDTableWinnerAnim7)
+        else createRefID4(player, refIDTableWinnerAnim4)
+    }
+
+    private fun createRefID7(player: String, listToExtract: List<Int> ): List<Int>{
         var listExtracted = listOf<Int>()
         when(player){
             "p7"-> listExtracted = extractRefID(listOf(0,1,2,3,4,5,6),listToExtract)
@@ -87,7 +97,7 @@ class PlayersReference {
         return listExtracted
     }
 
-    private fun createRefID_4(player: String, listToExtract: List<Int> ): List<Int>{
+    private fun createRefID4(player: String, listToExtract: List<Int> ): List<Int>{
         var listExtracted = listOf<Int>()
         when(player){
             "p4"-> listExtracted = extractRefID(listOf(0,1,2,3),listToExtract)

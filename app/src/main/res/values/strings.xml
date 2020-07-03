@@ -2,7 +2,7 @@
     <string name="test">n</string>
     <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
-    <string name="nPlayers">7</string>
+    <string name="nPlayers">4</string>
 
     <string name="noti_DR_title">Have you collected your Daily Rewards ?</string>
     <string name="noti_DR_info">Click here to collect your Daily Reward</string>
@@ -85,6 +85,7 @@
     <string name="Bider">Player</string>
     <string name="timerStart">10s</string>
     <string name="partnerSelection1">Choose your 1st Buddy</string>
+    <string name="partnerSelection1_4">Choose your Buddy</string>
     <string name="partnerSelection2">Choose your 2nd Buddy</string>
     <string name="shufflingcards">Shuffling Cards</string>
     <string name="bothPartner">Both</string>

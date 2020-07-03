@@ -5,13 +5,14 @@
     <dimen name="loginHeightGoogle">@dimen/_34sdp</dimen>
     <dimen name="loginWidthGoogle">@dimen/_198sdp</dimen>
 
-    <dimen name="tableInner1">@dimen/_8sdp</dimen>
+    <dimen name="tableInner1">@dimen/_9sdp</dimen>
     <dimen name="tableInner2">@dimen/_10sdp</dimen>
-    <dimen name="radiusInner1">@dimen/_98sdp</dimen>
-    <dimen name="radiusInner2">@dimen/_90sdp</dimen>
+    <dimen name="radiusInner1">@dimen/_104sdp</dimen>
+    <dimen name="radiusInner2">@dimen/_96sdp</dimen>
+    <dimen name="radiusInner3">@dimen/_96sdp</dimen>
     <dimen name="imageGapEnd">0dp</dimen>
     <dimen name="imageGapEnd_4player">@dimen/_25sdp</dimen>
-    <dimen name="imagePadding">@dimen/_3sdp</dimen>
+    <dimen name="imagePadding">@dimen/_4sdp</dimen>
     <dimen name="imagePaddingTextGap">@dimen/_minus2sdp</dimen>
 
     <dimen name="imageWidth">@dimen/_57sdp</dimen>
@@ -41,7 +42,6 @@
     <dimen name="tableCardImageWidth_4">@dimen/_42sdp</dimen>
     <dimen name="tableCardImageHeight_4">@dimen/_58sdp</dimen>
 
-
     <dimen name="scoreTableHeight">@dimen/_26sdp</dimen>
     <dimen name="scoreTableWidth">@dimen/_64sdp</dimen>
     <dimen name="scoreTableWidthLarge">@dimen/_70sdp</dimen>
@@ -53,5 +53,8 @@
     <dimen name="mhsButtonsTextSize">@dimen/_14ssp</dimen>
     <dimen name="mhsButtonsTextWidth">@dimen/_140sdp</dimen>
     <dimen name="cjrButtonsTextSize">@dimen/_14ssp</dimen>
+    <dimen name="shimmerWidth">@dimen/_60sdp</dimen>
+    <dimen name="deckWidth">@dimen/_85sdp</dimen>
+    <dimen name="deckHeight">@dimen/_100sdp</dimen>
 
 </resources>

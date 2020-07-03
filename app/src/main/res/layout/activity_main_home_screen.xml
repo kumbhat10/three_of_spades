@@ -316,7 +316,7 @@
         android:background="@drawable/shine_button_black"
         android:fadingEdge="horizontal|vertical"
         android:fontFamily="sans-serif-smallcaps"
-        android:onClick="createRoomButtonClicked"
+        android:onClick="createRoomWindowOpen"
         android:paddingStart="@dimen/_29sdp"
         android:paddingEnd="@dimen/_11sdp"
         android:text="@string/createRoom"
@@ -335,7 +335,7 @@
         android:layout_marginTop="@dimen/_7sdp"
         android:elevation="@dimen/_14sdp"
         android:src="@drawable/chip_coin_trans"
-        android:onClick="createRoomButtonClicked"
+        android:onClick="createRoomWindowOpen"
         android:soundEffectsEnabled="true" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -556,6 +556,7 @@
             android:layout_alignEnd="@+id/joinRoomFrameTemp"
             android:layout_marginStart="@dimen/_11sdp"
             android:layout_marginTop="0dp"
+            app:shimmer_colored="true"
             app:shimmer_auto_start="true"
             app:shimmer_duration="1800"
             app:shimmer_highlight_alpha="1"
@@ -1178,6 +1179,141 @@
         app:strokeColor="@color/progressBarPlayer4"
         app:strokeWidth="@dimen/_1sdp"/>
 
+    <RelativeLayout
+        android:id="@+id/createRoomFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/layoutBackgroundLittle"
+        android:clickable="true"
+        android:elevation="@dimen/_143sdp"
+        android:focusable="true"
+        android:onClick="createRoomWindowExit"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/closeCreateRoom"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_below="@+id/createRoomFrameTemp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_minus18sdp"
+            android:clickable="true"
+            android:elevation="@dimen/_72sdp"
+            android:focusable="true"
+            android:onClick="createRoomWindowExit"
+            app:srcCompat="@drawable/stop_sign" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/createRoomFrameTemp"
+            android:layout_alignStart="@+id/createRoomFrameTemp"
+            android:layout_alignEnd="@+id/createRoomFrameTemp"
+            android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginTop="0dp"
+            app:shimmer_auto_start="true"
+            app:shimmer_colored="true"
+            app:shimmer_duration="1800"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="#FFFFFF"
+            app:shimmer_repeat_mode="restart"
+            app:shimmer_shape="linear">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_2sdp"
+                android:src="@drawable/shine_button_black_bar" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <LinearLayout
+            android:id="@+id/createRoomFrameTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/_22sdp"
+            android:layout_marginEnd="@dimen/_22sdp"
+            android:background="@color/BlackTrans"
+            android:clickable="true"
+            android:elevation="@dimen/_36sdp"
+            android:focusable="true"
+            android:foregroundTintMode="multiply"
+            android:hapticFeedbackEnabled="true"
+            android:orientation="horizontal"
+            android:soundEffectsEnabled="true">
+
+            <RelativeLayout
+                android:layout_width="@dimen/deckWidth"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_20sdp"
+                android:background="@drawable/border_square_reward"
+                android:onClick="createRoomButtonClicked"
+                android:tag="4">
+
+                <ImageView
+                    android:id="@+id/p4Image"
+                    android:layout_width="@dimen/deckWidth"
+                    android:layout_height="@dimen/deckHeight"
+                    android:onClick="createRoomButtonClicked"
+                    android:scaleX="0.9"
+                    android:scaleY="0.9"
+                    android:src="@drawable/single_deck"
+                    android:tag="4" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/p4Text"
+                    android:layout_width="@dimen/deckWidth"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/p4Image"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/button_square"
+                    android:gravity="bottom|center_horizontal"
+                    android:onClick="createRoomButtonClicked"
+                    android:padding="@dimen/_2sdp"
+                    android:tag="4"
+                    android:text="Single Deck\n(4 Players)"
+                    android:textColor="@color/Black"
+                    android:textSize="@dimen/_10ssp"
+                    tools:ignore="HardcodedText" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="@dimen/deckWidth"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_20sdp"
+                android:background="@drawable/border_square_reward"
+                android:onClick="createRoomButtonClicked"
+                android:tag="7">
+
+                <ImageView
+                    android:id="@+id/p7Image"
+                    android:layout_width="@dimen/deckWidth"
+                    android:layout_height="@dimen/deckHeight"
+                    android:onClick="createRoomButtonClicked"
+                    android:src="@drawable/double_deck"
+                    android:tag="7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/p7Text"
+                    android:layout_width="@dimen/deckWidth"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/p7Image"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/button_square"
+                    android:gravity="bottom|center_horizontal"
+                    android:onClick="createRoomButtonClicked"
+                    android:padding="@dimen/_2sdp"
+                    android:tag="7"
+                    android:text="Double Deck\n(7 Players)"
+                    android:textColor="@color/Black"
+                    android:textSize="@dimen/_10ssp"
+                    tools:ignore="HardcodedText" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/userScore"
         android:layout_marginTop="@dimen/_15sdp"
@@ -1251,10 +1387,24 @@
         android:orientation="vertical"
         android:visibility="gone">
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.75"
+            app:shimmer_direction="left_to_right"
+            app:shimmer_duration="1800"
+            app:shimmer_fixed_width="@dimen/_40sdp"
+            app:shimmer_repeat_delay="500"
+            app:shimmer_repeat_mode="restart"
+            app:shimmer_shape="linear"
+            app:shimmer_tilt="0">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_72sdp"
             android:src="@drawable/ribbon"/>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <GridView
             android:id="@+id/dailyRewardGrid"
@@ -1316,18 +1466,6 @@
 
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/sizeMHS"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:gravity="end"
-        android:textColor="#FFFFFF"
-        android:textAlignment="viewEnd"
-        android:textSize="@dimen/_7ssp"
-        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/maskAllLoading"

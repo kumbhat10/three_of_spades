@@ -489,6 +489,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         }
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
+            if(premiumStatus) findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.GONE
         }
         if (sharedPreferences.contains("musicStatus")) {
             musicStatus = sharedPreferences.getBoolean("musicStatus", true)
