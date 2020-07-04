@@ -191,41 +191,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             }
         } else if (!premiumStatus && getString(R.string.test).contains('n')) mInterstitialAd.loadAd(AdRequest.Builder().build())
     }
-
-    private fun showNotification(){
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificBuilder = NotificationCompat.Builder(applicationContext, "ch_id")
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificBuilder
-                .setSmallIcon(R.drawable.ic_notification)
-                .setColor(ContextCompat.getColor(applicationContext, R.color.icon_yellow))
-                .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                .setContentTitle(getString(R.string.noti_DR_title))
-                .setContentText(getString(R.string.noti_DR_info))
-
-            val notificationChannel = NotificationChannel(getString(R.string.default_notification_channel_id), "My Notifications", NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.description = "Channel description"
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.GREEN
-            notificationChannel.vibrationPattern = longArrayOf(0, 700, 500, 700)
-            notificationChannel.enableVibration(true)
-            notificationManager.createNotificationChannel(notificationChannel)
-        }else {
-
-            notificBuilder
-                .setSmallIcon(R.drawable.ic_notification)
-                .setColor(ContextCompat.getColor(applicationContext, R.color.icon_yellow))
-                .setPriority(Notification.PRIORITY_MAX)
-                .setContentTitle(getString(R.string.noti_DR_title))
-                .setContentText(getString(R.string.noti_DR_info))
-        }
-
-        val notificIntent = Intent(this,MainHomeScreen::class.java).apply {putExtra("newUser",false)}
-        val contentIntent = PendingIntent.getActivity(this,0, notificIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        notificBuilder.setContentIntent(contentIntent)
-        notificationManager.notify(0, notificBuilder.build())
-    }
     private fun dailyRewardWindowDisplay() {
         soundSuccess.start()
         val gridView = findViewById<GridView>(R.id.dailyRewardGrid)

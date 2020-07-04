@@ -1183,7 +1183,7 @@
         android:id="@+id/createRoomFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/layoutBackgroundLittle"
+        android:background="@color/cardsBackgroundDark"
         android:clickable="true"
         android:elevation="@dimen/_143sdp"
         android:focusable="true"
@@ -1196,7 +1196,7 @@
             android:layout_height="@dimen/_36sdp"
             android:layout_below="@+id/createRoomFrameTemp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_minus18sdp"
+            android:layout_marginTop="@dimen/_2sdp"
             android:clickable="true"
             android:elevation="@dimen/_72sdp"
             android:focusable="true"
@@ -1210,7 +1210,7 @@
             android:layout_alignStart="@+id/createRoomFrameTemp"
             android:layout_alignEnd="@+id/createRoomFrameTemp"
             android:layout_marginStart="@dimen/_11sdp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="@dimen/_20sdp"
             app:shimmer_auto_start="true"
             app:shimmer_colored="true"
             app:shimmer_duration="1800"
@@ -1230,86 +1230,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginStart="@dimen/_22sdp"
-            android:layout_marginEnd="@dimen/_22sdp"
-            android:background="@color/BlackTrans"
             android:clickable="true"
             android:elevation="@dimen/_36sdp"
             android:focusable="true"
             android:foregroundTintMode="multiply"
             android:hapticFeedbackEnabled="true"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:soundEffectsEnabled="true">
 
-            <RelativeLayout
+            <pl.droidsonroids.gif.GifImageButton
                 android:layout_width="@dimen/deckWidth"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_20sdp"
-                android:background="@drawable/border_square_reward"
+                android:layout_height="@dimen/deckHeight"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/single_deck"
                 android:onClick="createRoomButtonClicked"
-                android:tag="4">
+                android:tag="4"></pl.droidsonroids.gif.GifImageButton>
 
-                <ImageView
-                    android:id="@+id/p4Image"
-                    android:layout_width="@dimen/deckWidth"
-                    android:layout_height="@dimen/deckHeight"
-                    android:onClick="createRoomButtonClicked"
-                    android:scaleX="0.9"
-                    android:scaleY="0.9"
-                    android:src="@drawable/single_deck"
-                    android:tag="4" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/p4Text"
-                    android:layout_width="@dimen/deckWidth"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/p4Image"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/button_square"
-                    android:gravity="bottom|center_horizontal"
-                    android:onClick="createRoomButtonClicked"
-                    android:padding="@dimen/_2sdp"
-                    android:tag="4"
-                    android:text="Single Deck\n(4 Players)"
-                    android:textColor="@color/Black"
-                    android:textSize="@dimen/_10ssp"
-                    tools:ignore="HardcodedText" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
+            <pl.droidsonroids.gif.GifImageButton
                 android:layout_width="@dimen/deckWidth"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_20sdp"
-                android:background="@drawable/border_square_reward"
+                android:layout_height="@dimen/deckHeight"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/double_deck"
                 android:onClick="createRoomButtonClicked"
-                android:tag="7">
-
-                <ImageView
-                    android:id="@+id/p7Image"
-                    android:layout_width="@dimen/deckWidth"
-                    android:layout_height="@dimen/deckHeight"
-                    android:onClick="createRoomButtonClicked"
-                    android:src="@drawable/double_deck"
-                    android:tag="7" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/p7Text"
-                    android:layout_width="@dimen/deckWidth"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/p7Image"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/button_square"
-                    android:gravity="bottom|center_horizontal"
-                    android:onClick="createRoomButtonClicked"
-                    android:padding="@dimen/_2sdp"
-                    android:tag="7"
-                    android:text="Double Deck\n(7 Players)"
-                    android:textColor="@color/Black"
-                    android:textSize="@dimen/_10ssp"
-                    tools:ignore="HardcodedText" />
-
-            </RelativeLayout>
+                android:tag="7"></pl.droidsonroids.gif.GifImageButton>
 
         </LinearLayout>
     </RelativeLayout>

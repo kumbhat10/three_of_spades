@@ -54,7 +54,7 @@
     <dimen name="mhsButtonsTextWidth">@dimen/_140sdp</dimen>
     <dimen name="cjrButtonsTextSize">@dimen/_14ssp</dimen>
     <dimen name="shimmerWidth">@dimen/_60sdp</dimen>
-    <dimen name="deckWidth">@dimen/_85sdp</dimen>
-    <dimen name="deckHeight">@dimen/_100sdp</dimen>
+    <dimen name="deckWidth">@dimen/_200sdp</dimen>
+    <dimen name="deckHeight">@dimen/_80sdp</dimen>
 
 </resources>

@@ -20,8 +20,9 @@ class DeveloperCredits : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_developer_credits)
         findViewById<ImageView>(R.id.icon_3developer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-        val p = packageManager.getPackageInfo(packageName,0).versionName
-        findViewById<TextView>(R.id.sizeDC).text = "VC: $p\n W: ${resources.configuration.screenWidthDp.toString()}\nH: ${resources.configuration.screenHeightDp.toString()}"
+        val vn = packageManager.getPackageInfo(packageName,0).versionName
+        val vc = packageManager.getPackageInfo(packageName,0).versionCode
+        findViewById<TextView>(R.id.sizeDC).text = "VC: $vc\nVN: $vn\n W: ${resources.configuration.screenWidthDp.toString()}\nH: ${resources.configuration.screenHeightDp.toString()}"
     }
     fun openWebsite(view: View){
         val intent = Intent(Intent.ACTION_VIEW).apply {

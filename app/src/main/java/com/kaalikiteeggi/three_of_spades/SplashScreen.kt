@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
@@ -23,7 +24,10 @@ import com.facebook.login.LoginManager
 import com.google.ads.mediation.adcolony.AdColonyMediationAdapter
 import com.google.ads.mediation.inmobi.InMobiConsent
 import com.google.android.gms.ads.*
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.testing.FakeAppUpdateManager
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.auth.FirebaseAuth
@@ -42,6 +46,8 @@ class SplashScreen: AppCompatActivity() {
     private lateinit var mInterstitialAd: InterstitialAd
     private var user: FirebaseUser? = null
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var appUpdateManager: AppUpdateManager
+
     private var premiumStatus = false
     private var target = object : Target {
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
@@ -157,7 +163,8 @@ class SplashScreen: AppCompatActivity() {
     private fun mobileAds(){
 //        MobileAds.initialize(this) {}   // initialize mobileAdds
         mInterstitialAd = InterstitialAd(this)
-        mInterstitialAd.adUnitId = getString(R.string.interstitial)
+        if(getString(R.string.test).contains('n')) mInterstitialAd.adUnitId = getString(R.string.interstitial)
+        else mInterstitialAd.adUnitId = getString(R.string.interstitialTestVideo)
         mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
         mInterstitialAd.adListener = object : AdListener() {
             override fun onAdClosed() {
@@ -168,19 +175,36 @@ class SplashScreen: AppCompatActivity() {
     }
 
     fun checkAppUpdate(){
-//        val versionCode = BuildConfig.VERSION_CODE
-        val appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
+//        val appUpdateManager : AppUpdateManager
+//        if (BuildConfig.DEBUG) {
+//            appUpdateManager = FakeAppUpdateManager(baseContext)
+//            appUpdateManager.setUpdateAvailable(2)
+//        } else {
+//            appUpdateManager = AppUpdateManagerFactory.create(baseContext)
+//        }
+        appUpdateManager = AppUpdateManagerFactory.create(baseContext)
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE){
+        appUpdateInfoTask.addOnSuccessListener {
+                appUpdateInfo ->
+            if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)){
+                Log.v("IAU : ","Update Available")
                 appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 88)
             }else{
+                Log.v("IAU : ","No Update Available")
                 isAppLatest = true
                 if(isTimerOver) nextActivity()
             }
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager.appUpdateInfo.addOnSuccessListener {
+            appUpdateInfo -> if(appUpdateInfo.updateAvailability()== UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
+            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 88)
+        }
+        }
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode== 88){
             if(resultCode != Activity.RESULT_OK){
