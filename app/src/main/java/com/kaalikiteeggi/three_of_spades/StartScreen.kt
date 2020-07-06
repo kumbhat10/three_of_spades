@@ -65,6 +65,7 @@ class StartScreen : AppCompatActivity() {
         val twitterConfig = TwitterConfig.Builder(applicationContext).twitterAuthConfig(mTwitterAuthConfig).build()
         Twitter.initialize(twitterConfig)
         setContentView(R.layout.activity_start_screen)
+        findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         soundError = MediaPlayer.create(applicationContext,R.raw.error_entry)
         soundUpdate = MediaPlayer.create(applicationContext,R.raw.player_moved)
@@ -76,7 +77,6 @@ class StartScreen : AppCompatActivity() {
         toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
         soundUpdate.start()
         mAuth = FirebaseAuth.getInstance()
-        findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
         //region Twitter Login
         findViewById<TwitterLoginButton>(R.id.twitterLoginButton).setOnClickListener{
             findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.VISIBLE

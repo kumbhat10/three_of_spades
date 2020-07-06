@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:anim/accelerate_interpolator">
+    android:interpolator="@android:anim/accelerate_decelerate_interpolator">
     <translate
         android:duration="600"
         android:fromYDelta="100%p"
-        android:interpolator="@android:anim/accelerate_interpolator"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
         android:toYDelta="-10%p"/>
 
     <translate android:duration="200"
         android:fromYDelta="-10%p"
-        android:interpolator="@android:anim/accelerate_interpolator"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
         android:startOffset="600"
         android:toYDelta="10%p"/>
 
@@ -18,18 +18,18 @@
         android:toXDelta="-20%p"
         android:duration="700"
         android:startOffset="850"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
     <translate
         android:fromXDelta="-20%p"
         android:toXDelta="20%p"
         android:duration="700"
         android:startOffset="1500"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
     <translate
         android:fromXDelta="20%p"
         android:toXDelta="0%p"
         android:duration="900"
         android:startOffset="2200"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
 
 </set>

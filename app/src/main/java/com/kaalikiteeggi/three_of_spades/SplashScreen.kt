@@ -55,7 +55,7 @@ class SplashScreen: AppCompatActivity() {
         override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
             if (bitmap != null) {
                 findViewById<ImageView>(R.id.profilePic2).setImageDrawable(bitmap.toDrawable(resources))
-                findViewById<ImageView>(R.id.profilePic2).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
+                findViewById<ImageView>(R.id.profilePic2).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_zoom))
             }
         }
     }

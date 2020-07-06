@@ -120,7 +120,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var loadRewardedAdTry = 0
     private var countRewardWatch = 1
     private lateinit var rewardedAdLoadCallback: RewardedAdLoadCallback
-    private var dailuRewardList = listOf(250,500,1000,2000,3000,4000,5000)
+    private var dailuRewardList = listOf(250,500,750,1000,1500,2000,2500)
     private var dailyRewardAmount = 0
     private var dailyRewardClicked = false
     private var claimedToday = false
@@ -946,21 +946,17 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
     fun howToPlay(view: View){
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(
-                "https://sites.google.com/view/kaali-ki-teeggi/")
+            data = Uri.parse("https://sites.google.com/view/kaali-ki-teeggi/")
         }
-
-        startActivity(intent)
+//        startActivity(intent)
+        startActivity(Intent(applicationContext, HowToPlayActivity::class.java))
     }
     fun rateUs(view: View){
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(
-                "https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades")
+            data = Uri.parse("https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades")
             setPackage("com.android.vending")
         }
-
         startActivity(intent)
-//        throw RuntimeException("Boom!");
     }
     fun signOut(view: View){
         if(vibrateStatus) vibrationStart()

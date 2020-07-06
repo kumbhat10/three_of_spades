@@ -5,7 +5,7 @@
     android:id="@+id/mainView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/Black"
     android:elevation="@dimen/_14sdp"
     tools:context=".GameScreen">
 
@@ -1379,7 +1379,7 @@
         android:background="@drawable/shine_chat_background"
         android:elevation="@dimen/_72sdp"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/addViewChatGameScreenBanner"
@@ -1395,7 +1395,7 @@
             android:id="@+id/textViewChatDisplayScroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/chatInput"
+            android:layout_above="@+id/templateGrid"
             android:layout_below="@+id/addViewChatGameScreenBanner"
             android:elevation="@dimen/_72sdp"
             android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -1418,6 +1418,22 @@
                 android:textSize="@dimen/_10ssp" />
         </ScrollView>
 
+        <GridView
+            android:id="@+id/templateGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/chatInput"
+            android:layout_marginStart="@dimen/_1sdp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="@dimen/_1sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:columnWidth="@dimen/_60sdp"
+            android:elevation="@dimen/_143sdp"
+            android:gravity="center|top"
+            android:horizontalSpacing="@dimen/_1sdp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="@dimen/_4sdp"/>
+
         <LinearLayout
             android:id="@+id/chatInput"
             android:layout_width="match_parent"
@@ -1437,7 +1453,7 @@
                 android:background="@drawable/shine_chat_background"
                 android:elevation="@dimen/_72sdp"
                 android:hint="@string/chatInputHint"
-                android:imeOptions="actionSend"
+                android:imeOptions="actionSend|flagNoFullscreen"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
                 android:paddingStart="@dimen/_6sdp"
@@ -1748,15 +1764,28 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ribbon_scoreboard" />
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/addViewGameScreenBanner"
-            android:layout_width="wrap_content"
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerScoreTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="0dp"
-            app:adSize="BANNER"
-            app:adUnitId="@string/banner" />
+            android:layout_below="@+id/scoreTitle"
+            android:layout_alignStart="@+id/imageGalleryScoreName"
+            android:layout_alignEnd="@+id/imageGalleryScoreName"
+            android:layout_marginTop="@dimen/_minus8sdp"
+            app:shimmer_auto_start="true"
+            app:shimmer_colored="true"
+            app:shimmer_duration="1500"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="#FFFFFF"
+            app:shimmer_repeat_delay="0"
+            app:shimmer_repeat_mode="restart"
+            app:shimmer_shape="linear">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/shine_button_black_bar" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <LinearLayout
             android:id="@+id/imageGalleryScoreName"
@@ -1781,17 +1810,39 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/_2sdp" />
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageGalleryScoreTotal"
+            android:layout_alignStart="@+id/imageGalleryScoreName"
+            android:layout_alignEnd="@+id/imageGalleryScoreName"
+            app:shimmer_auto_start="true"
+            app:shimmer_colored="true"
+            app:shimmer_duration="1500"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="#FFFFFF"
+            app:shimmer_repeat_delay="0"
+            app:shimmer_repeat_mode="restart"
+            app:shimmer_shape="linear">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/shine_button_black_bar" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <ScrollView
             android:id="@+id/scrollViewScore"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_below="@+id/imageGalleryScoreTotal"
+            android:layout_below="@+id/shimmerScore"
             android:layout_above="@id/addViewGameScreenBanner"
             android:layout_marginTop="@dimen/_minus1sdp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="0dp"
             android:animateLayoutChanges="true"
-            android:background="@drawable/shine_scoretable_background"
             android:scrollbarSize="@dimen/_10sdp"
             android:scrollbarStyle="insideOverlay"
             android:visibility="visible">
@@ -1802,8 +1853,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:orientation="vertical" />
-
         </ScrollView>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/addViewGameScreenBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dp"
+            app:adSize="BANNER"
+            app:adUnitId="@string/banner" />
+
     </RelativeLayout>
 
     <androidx.appcompat.widget.AppCompatButton

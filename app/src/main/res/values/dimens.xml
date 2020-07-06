@@ -26,7 +26,7 @@
 
     <dimen name="trumpSelectionImageWidth">@dimen/_72sdp</dimen>
     <dimen name="trumpSelectionImageHeight">@dimen/_72sdp</dimen>
-    
+
     <dimen name="imageWidthCoin">@dimen/_25sdp</dimen>
 
     <dimen name="imageGapTopMiddle">@dimen/_47sdp</dimen>
@@ -56,5 +56,18 @@
     <dimen name="shimmerWidth">@dimen/_60sdp</dimen>
     <dimen name="deckWidth">@dimen/_200sdp</dimen>
     <dimen name="deckHeight">@dimen/_80sdp</dimen>
+    <!--
+    Because the window insets on round devices are larger than 15dp, this padding only applies
+    to square screens.
+    -->
+    <dimen name="box_inset_layout_padding">0dp</dimen>
+
+    <!--
+    This padding applies to both square and round screens. The total padding between the buttons
+    and the window insets is box_inset_layout_padding (above variable) on square screens and
+    inner_frame_layout_padding (below variable) on round screens.
+    -->
+    <dimen name="inner_frame_layout_padding">5dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

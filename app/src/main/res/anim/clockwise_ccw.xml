@@ -10,7 +10,7 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:duration="800"
-        android:interpolator="@android:anim/accelerate_interpolator"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
         android:startOffset="200"
         >
     </rotate>
@@ -21,7 +21,7 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:duration="900"
-        android:interpolator="@android:anim/accelerate_interpolator">
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator">
     </rotate>
     <rotate
         android:startOffset="2000"
@@ -30,7 +30,7 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:duration="900"
-        android:interpolator="@android:anim/accelerate_interpolator">
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator">
     </rotate>
     <rotate
         android:startOffset="3000"
@@ -39,7 +39,7 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:duration="900"
-        android:interpolator="@android:anim/accelerate_interpolator">
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator">
     </rotate>
     <rotate
         android:startOffset="4000"
@@ -48,7 +48,7 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:duration="900"
-        android:interpolator="@android:anim/accelerate_interpolator"> <!-- duration of shuffling is 4900 so 1500 + 4000 offset -->
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"> <!-- duration of shuffling is 4900 so 1500 + 4000 offset -->
     </rotate>
 
 </set>

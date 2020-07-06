@@ -56,9 +56,10 @@
     <color name = "shine0blackbar">#FFFFFF</color>
     <color name = "shine2blackbar">#000000</color>
 
-    <color name = "shine0bk">#8E8E8E</color>
-    <color name = "shine1bk">#3E3E3E</color>
-    <color name = "shine2bk">#000000</color>
+    <color name = "shine0bk">#6E6E6E</color>
+    <color name = "shine1bk">#353535</color>
+    <color name = "shine2bk">#191919</color>
+    <color name = "shine3bk">#151515</color>
 
     <color name = "borderblueDark0g">#A5FF47</color>
     <color name = "borderblueDark1g">#63C300</color>

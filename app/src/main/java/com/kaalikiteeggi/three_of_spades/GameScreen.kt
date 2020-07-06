@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -951,6 +952,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     return@setOnEditorActionListener when (actionId) {
         EditorInfo.IME_ACTION_SEND -> {
             sendChat(v)
+            hideKeyboard()
             false
         }
         else -> false
@@ -1051,6 +1053,15 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
     }
 
+    private fun hideKeyboard(){
+        val view = this.currentFocus
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        if (imm != null) {
+            view?.let { v ->
+                imm.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+        }
+    }
     private fun gameMode6() {
         findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
         countDownTimer("PlayCard",purpose = "cancel")
@@ -2110,14 +2121,17 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     private fun animatePlayer(index: Int){
 //        findViewById<ImageView>(refIDMappedImageView[index-1]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
         findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[playerTurn-1]).visibility = View.VISIBLE
+        findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[playerTurn-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal_large))
 
     }
+
     private fun resetBackgroundAnimationBidding(dataLoad: DataSnapshot) {
         for (i in 0 until nPlayers) {
             val iPlayer = i+1
             val bidStatus = (dataLoad.child("BS/p$iPlayer").value as Long).toInt()
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
+            findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).clearAnimation()
             if(bidStatus==0){
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.progressBarPlayer2))
 //                findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.VISIBLE
@@ -2137,11 +2151,13 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         for (i in 0 until nPlayers) {
             findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
+            findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).clearAnimation()
         }
         findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.layoutBackground))
         findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
 //        findViewById<ImageView>(refIDMappedImageView[bidder -1]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4)) // highlight bidder winner
         findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[bidder -1]).visibility = View.VISIBLE
+        findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[playerTurn-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal_large))
 
         findViewById<TextView>(R.id.textViewBidValue).clearAnimation()
         findViewById<TextView>(R.id.textViewBider).clearAnimation()
@@ -2300,6 +2316,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
 
     fun openCloseChatWindow(view: View){
         if (findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility == View.VISIBLE){ //close chat display
+            hideKeyboard()
             findViewById<RelativeLayout>(R.id.chatLinearLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomout_chat_close))
             Handler().postDelayed({
                 findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.GONE
