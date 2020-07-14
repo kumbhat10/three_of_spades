@@ -1628,7 +1628,7 @@
         android:clickable="true"
         android:elevation="@dimen/_64sdp"
         android:focusable="true"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ProgressBar
             android:id="@+id/progressBarLoading3"
