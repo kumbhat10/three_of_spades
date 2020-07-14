@@ -1,5 +1,7 @@
 package com.kaalikiteeggi.three_of_spades
 
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.random.Random
 
 class CreateGameData() {
@@ -10,6 +12,7 @@ class CreateGameData() {
 
 //// region real data
     val gameData7 = mutableMapOf(
+    "ADate" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
     "Bid" to mutableMapOf("BV" to 350, "BT" to playerTurn7,"BB" to playerTurn7,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1,"p5" to 1,"p6" to 1,"p7" to 1)),
     "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
     "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
@@ -27,6 +30,7 @@ class CreateGameData() {
     "Tr" to "")
 
     val gameDataDummy7 = mutableMapOf(
+        "ADate" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
         "Bid" to mutableMapOf("BV" to 350, "BT" to 1,"BB" to 3,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1,"p5" to 1,"p6" to 1,"p7" to 1)),
         "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
         "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
@@ -44,11 +48,12 @@ class CreateGameData() {
         "Tr" to "")
 
     val gameData4 = mutableMapOf(
-    "Bid" to mutableMapOf("BV" to 175, "BT" to playerTurn4,"BB" to playerTurn4,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)),
+        "ADate" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "Bid" to mutableMapOf("BV" to 175, "BT" to playerTurn4,"BB" to playerTurn4,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)),
     "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
     "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
     "CH" to mutableMapOf("p1" to cardsShuffled4.slice(0..12).sortedBy {it},"p2" to cardsShuffled4.slice(13..25).sortedBy {it},
-        "p3" to cardsShuffled7.slice(26..38).sortedBy {it},"p4" to cardsShuffled7.slice(38..51).sortedBy {it}),
+        "p3" to cardsShuffled4.slice(26..38).sortedBy {it},"p4" to cardsShuffled4.slice(38..51).sortedBy {it}),
     "CT" to mutableMapOf("p1" to 53,"p2" to 53,"p3" to 53,"p4" to 53),
     "GS" to 1, // 0 means joining state
     "M" to "",
@@ -59,7 +64,8 @@ class CreateGameData() {
     "Tr" to "")
 
     val gameDataDummy4 = mutableMapOf(
-    "Bid" to mutableMapOf("BV" to 175, "BT" to 1,"BB" to 3,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)),
+        "ADate" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "Bid" to mutableMapOf("BV" to 175, "BT" to 1,"BB" to 3,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)),
     "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
     "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
     "CH" to mutableMapOf("p1" to cardsShuffled4.slice(0..12).sortedBy {it},"p2" to cardsShuffled4.slice(13..25).sortedBy {it},

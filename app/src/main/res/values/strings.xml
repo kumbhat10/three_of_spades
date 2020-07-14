@@ -1,6 +1,6 @@
 <resources>
     <string name="test">n</string>
-    <string name="testGameData">y</string>
+    <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
     <string name="nPlayers">4</string>
 
@@ -56,7 +56,7 @@
 
     <string name="hinRoomID">Room ID</string>
     <string name="developerCredits">Contact Developer</string>
-    <string name="waitingToJoin">Waiting for players</string>
+    <string name="waitingToJoin">Invite other players to join</string>
     <string name="playerJoinedConfirmation">Ready to Start</string>
     <string name="shuffling_cards">Shuffling Cards</string>
     <string name="playerView6">Player</string>
@@ -84,9 +84,9 @@
     <string name="noOfChat">0</string>
     <string name="Bider">Player</string>
     <string name="timerStart">10s</string>
-    <string name="partnerSelection1">Choose your 1st Buddy</string>
-    <string name="partnerSelection1_4">Choose your Buddy</string>
-    <string name="partnerSelection2">Choose your 2nd Buddy</string>
+    <string name="partnerSelection1">Choose your 1st partner card</string>
+    <string name="partnerSelection1_4">Choose your partner card</string>
+    <string name="partnerSelection2">Choose your 2nd partner card</string>
     <string name="shufflingcards">Shuffling Cards</string>
     <string name="bothPartner">Both</string>
     <string name="onlyPartner">Only</string>

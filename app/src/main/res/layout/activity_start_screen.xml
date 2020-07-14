@@ -30,8 +30,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/googleSignInButton"
-        android:scaleX="0.9"
-        android:scaleY="0.9"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
         android:contentDescription="@null"
         android:src="@drawable/_s_icon_3shadow"/>
 
@@ -55,8 +55,9 @@
         android:layout_marginBottom="@dimen/_1sdp"
         android:gravity="center"
         android:text="or"
-        android:textColor="#BAB9B9"
-        android:textSize="@dimen/_11ssp"/>
+        android:textColor="#CFCCCC"
+        android:textSize="@dimen/_11ssp"
+        tools:ignore="HardcodedText" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleSignInButton"

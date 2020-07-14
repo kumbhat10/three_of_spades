@@ -56,6 +56,11 @@
     <dimen name="shimmerWidth">@dimen/_60sdp</dimen>
     <dimen name="deckWidth">@dimen/_200sdp</dimen>
     <dimen name="deckHeight">@dimen/_80sdp</dimen>
+    <dimen name="rateUsWidth">@dimen/_170sdp</dimen>
+    <dimen name="rateUsHeight">@dimen/_52sdp</dimen>
+
+
+
     <!--
     Because the window insets on round devices are larger than 15dp, this padding only applies
     to square screens.

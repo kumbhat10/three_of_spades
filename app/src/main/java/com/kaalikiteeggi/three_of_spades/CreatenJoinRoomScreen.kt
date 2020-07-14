@@ -59,9 +59,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     private var nPlayers = 0
     private lateinit var toast: Toast
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
     private lateinit var shimmer: Shimmer
-    private lateinit var mAuth: FirebaseAuth
     private lateinit var roomData: Map<String, Any>
     private var p1Status = false
     private var p2Status = false
@@ -254,9 +252,6 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
             }
             when {
                 premiumStatus -> startNextActivity()
-//                mInterstitialAd.isLoaded -> {
-//                    mInterstitialAd.show() // dummy - check this implementation - Synchronize premium and non premium - or Interstitial with only images
-//                }
                 else -> {
                     startNextActivity()
                 }
@@ -283,7 +278,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         }
         else{
             soundError.start()
-            toastCenter("Host will START")
+            toastCenter("Only Host can Start")
         }
     }
     private fun createTargetPicasso() {
@@ -366,14 +361,14 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
 //            MobileAds.initialize(this)
             findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.VISIBLE
             findViewById<AdView>(R.id.addViewCreateJoinRoom).loadAd(AdRequest.Builder().build())
-            mInterstitialAd = InterstitialAd(this)
-            mInterstitialAd.adUnitId = resources.getString(R.string.interstitial)
-            mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
-            mInterstitialAd.adListener = object : AdListener() {
-                override fun onAdClosed() {
-                    startNextActivity()
-                }
-            }
+//            mInterstitialAd = InterstitialAd(this)
+//            mInterstitialAd.adUnitId = resources.getString(R.string.interstitial)
+//            mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
+//            mInterstitialAd.adListener = object : AdListener() {
+//                override fun onAdClosed() {
+//                    startNextActivity()
+//                }
+//            }
         }
         else  {
             findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.GONE
@@ -393,17 +388,17 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         roomID   = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display
         selfName = intent.getStringExtra("selfName")!!.toString()  //Get Username first  - selfName ,roomID available
         from     = intent.getStringExtra("from")!!.toString()     //check if user has joined room or created one and display Toast
-        nPlayers = intent.getIntExtra("nPlayers", 4)
+        nPlayers = intent.getIntExtra("nPlayers", 0)
         userStats = intent.getIntegerArrayListExtra("userStats")
 
         findViewById<ImageView>(R.id.imageViewShareButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-        findViewById<Button>(R.id.button_roomID).text = "Room : $roomID"   // display the room ID
+        findViewById<Button>(R.id.button_roomID).text = "Room ID: $roomID"   // display the room ID
 
         if(from=="p1") { //  close icon only to host
             findViewById<ImageView>(R.id.leaveJoiningRoomIcon).visibility = View.VISIBLE
             anim(findViewById(R.id.leaveJoiningRoomIcon),R.anim.anim_scale_infinite)
         }
-        else if(getString(R.string.test).contains('n')){
+        else if(getString(R.string.test).contains('n')){ // dummy
             findViewById<ImageView>(R.id.leaveJoiningRoomIcon).visibility = View.GONE
             findViewById<ImageView>(R.id.leaveJoiningRoomIcon).clearAnimation()
         }

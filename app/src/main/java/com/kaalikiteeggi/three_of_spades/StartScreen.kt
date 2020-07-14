@@ -10,6 +10,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.speech.tts.TextToSpeech
 import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -32,12 +33,14 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterLoginButton
+import java.util.*
 
 
 class StartScreen : AppCompatActivity() {
     private lateinit var soundUpdate: MediaPlayer
     private lateinit var soundError: MediaPlayer
     private lateinit var soundSuccess: MediaPlayer
+    private lateinit var textToSpeech: TextToSpeech
     private lateinit var toast: Toast
     private lateinit var callBackManager: CallbackManager
     private lateinit var mAuth: FirebaseAuth
@@ -137,8 +140,8 @@ class StartScreen : AppCompatActivity() {
             findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.VISIBLE
         })
         //endregion
+        initializeSpeechEngine()
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -205,7 +208,7 @@ class StartScreen : AppCompatActivity() {
                refUsersData.document(uid).get().addOnSuccessListener {
                        documentSnapshot -> if(documentSnapshot.data != null) {
                    refUsersData.document(uid).set(hashMapOf("n" to userGivenName, "ph" to userPhotoUrl),SetOptions.merge() )
-                       .addOnSuccessListener {startNextActivity()   }
+                       .addOnSuccessListener {   startNextActivity(userGivenName)   }
                        .addOnFailureListener{exception ->
                            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
                            toastCenter("${exception.message} \n Failed to merge with existing player data\n" +
@@ -213,7 +216,7 @@ class StartScreen : AppCompatActivity() {
                }
                else {
                    refUsersData.document(uid).set(CreateUser(userGivenName.toString(), userPhotoUrl).data)
-                       .addOnSuccessListener {startNextActivity() }
+                       .addOnSuccessListener {startNextActivity(userGivenName) }
                        .addOnFailureListener{exception ->
                            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
                            toastCenter("${exception.message} \n Failed to create new player \nPlease try again") }
@@ -229,8 +232,9 @@ class StartScreen : AppCompatActivity() {
         }
     }
 
-    private fun startNextActivity(){
+    private fun startNextActivity(userGivenName: String?){
         soundSuccess.start()
+        speak("Hello ${userGivenName.toString().split(" ")[0]}")
         findViewById<ProgressBar>(R.id.progressBarLoading2).visibility = View.GONE
         findViewById<AppCompatButton>(R.id.signInSuccess).visibility = View.VISIBLE
         findViewById<AppCompatButton>(R.id.signInSuccess).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_left_activity))
@@ -249,12 +253,33 @@ class StartScreen : AppCompatActivity() {
         toast.show()
 
     }
+    private fun speak(speechText:String, pitch:Float = 0.9f, speed:Float = 1f) {
+            textToSpeech.setPitch(pitch)
+            textToSpeech.setSpeechRate(speed)
+            textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, null)
+
+    }
+    private fun initializeSpeechEngine(){
+        textToSpeech = TextToSpeech(applicationContext,
+            TextToSpeech.OnInitListener { status ->
+                if(status == TextToSpeech.SUCCESS) {
+                    val result = textToSpeech.setLanguage(Locale.ENGLISH)
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        toastCenter("Missing Language data - Text to speech")
+                    }
+                }
+            })
+    }
+
     override fun onStop() {
         toast.cancel()
         super.onStop()
     }
     override fun onDestroy() {
         toast.cancel()
+        try{
+            textToSpeech.shutdown()
+        }catch(me:java.lang.Exception) {}
         super.onDestroy()
 
     }

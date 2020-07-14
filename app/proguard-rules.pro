@@ -15,6 +15,7 @@
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 -keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
@@ -47,12 +48,9 @@
     native <methods>;
 }
 
--keep class com.sinch.* { *; }
--keep interface com.sinch.* { *; }
 -keep class org.webrtc.* { *; }
 -keep class com.google.android.gms.*
 { *; }
 
 -dontwarn com.google.android.gms.**
 -dontwarn android.media.**
--dontwarn com.sinch.android.rtc.internal.client.fcm.**

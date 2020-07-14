@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:background="@color/Black"
     tools:context=".MainHomeScreen">
 
@@ -28,6 +31,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:onClick="joinRoomWindowExit"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/shine_yellow" />
 
     </com.facebook.shimmer.ShimmerFrameLayout>
@@ -39,6 +45,9 @@
         android:layout_below="@+id/watchVideo"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_11sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginEnd="@dimen/_7sdp"
         android:elevation="@dimen/_22sdp"
         android:onClick="removeAdsorPremium"
@@ -125,6 +134,7 @@
         android:clickable="true"
         android:elevation="@dimen/_29sdp"
         android:onClick="openClosePlayerStats"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:focusable="true"
         android:visibility="gone">
 
@@ -259,7 +269,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/shine_button_black"
+                    android:background="@drawable/button_pressed_shine_black"
                     android:clickable="true"
                     android:onClick="signOut"
                     android:focusable="true"
@@ -287,6 +297,9 @@
         android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginEnd="0dp"
         android:elevation="@dimen/_22sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="howToPlay"
         android:src="@drawable/howtoplay1" />
 
@@ -296,10 +309,13 @@
         android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/howToPlay"
         android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginTop="@dimen/_4sdp"
         android:layout_marginEnd="0dp"
         android:elevation="@dimen/_22sdp"
-        android:onClick="rateUs"
+        android:onClick="openRatingWindow"
         android:src="@drawable/rateus" />
 
 
@@ -314,6 +330,9 @@
         android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/createRoomIcon"
         android:background="@drawable/shine_button_black"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:fadingEdge="horizontal|vertical"
         android:fontFamily="sans-serif-smallcaps"
         android:onClick="createRoomWindowOpen"
@@ -349,6 +368,9 @@
         android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/joinRoomIcon"
         android:background="@drawable/shine_button_black"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:fadingEdge="horizontal|vertical"
         android:fontFamily="sans-serif-smallcaps"
         android:hapticFeedbackEnabled="true"
@@ -403,6 +425,9 @@
         android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/inviteIcon"
         android:background="@drawable/shine_button_black"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:fontFamily="sans-serif-smallcaps"
         android:onClick="inviteFriends"
         android:paddingStart="@dimen/_29sdp"
@@ -434,6 +459,8 @@
         android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/settingsIcon"
         android:background="@drawable/shine_button_black"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:fontFamily="sans-serif-smallcaps"
         android:onClick="openSettingsWindow"
@@ -444,7 +471,6 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
-        android:focusable="true"
         android:textSize="@dimen/mhsButtonsTextSize" />
     <LinearLayout
         android:id="@+id/developerandAds"
@@ -472,6 +498,8 @@
                 android:background="@drawable/border_yellow_only"
                 android:backgroundTintMode="add"
                 android:elevation="@dimen/_64sdp"
+                android:clickable="true"
+                android:focusable="true"
                 android:foreground="@drawable/_s_icon_3shadow"
                 android:onClick="developerCredits"
                 android:soundEffectsEnabled="true"
@@ -487,6 +515,9 @@
                 android:layout_marginTop="@dimen/_13sdp"
                 android:layout_marginBottom="@dimen/_13sdp"
                 android:background="@drawable/shine_button_black"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:fadingEdge="horizontal|vertical"
                 android:fontFamily="sans-serif-smallcaps"
                 android:onClick="developerCredits"
@@ -531,6 +562,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/layoutBackgroundLittle"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:elevation="@dimen/_143sdp"
         android:onClick="joinRoomWindowExit"
@@ -543,9 +576,11 @@
             android:layout_below="@+id/joinRoomFrameTemp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_minus18sdp"
-            android:clickable="true"
             android:elevation="@dimen/_72sdp"
             android:onClick="joinRoomWindowExit"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/stop_sign" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
@@ -687,6 +722,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/layoutBackgroundLittle"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:elevation="@dimen/_143sdp"
         android:onClick="closeSettingsWindow"
@@ -1142,10 +1179,13 @@
             android:layout_below="@+id/settingsLayouttemp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_minus18sdp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:elevation="@dimen/_72sdp"
             android:onClick="closeSettingsWindow"
-            app:srcCompat="@drawable/stop_sign" />
+            app:srcCompat="@drawable/stop_sign"
+            tools:ignore="ContentDescription" />
 
     </RelativeLayout>
 
@@ -1184,9 +1224,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/cardsBackgroundDark"
-        android:clickable="true"
         android:elevation="@dimen/_143sdp"
+        android:clickable="true"
         android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="createRoomWindowExit"
         android:visibility="gone">
 
@@ -1239,20 +1280,28 @@
             android:soundEffectsEnabled="true">
 
             <pl.droidsonroids.gif.GifImageButton
+                android:id="@+id/createSingle"
                 android:layout_width="@dimen/deckWidth"
                 android:layout_height="@dimen/deckHeight"
                 android:layout_margin="@dimen/_5sdp"
                 android:background="@drawable/single_deck"
                 android:onClick="createRoomButtonClicked"
-                android:tag="4"></pl.droidsonroids.gif.GifImageButton>
-
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:tag="4"/>
+            
             <pl.droidsonroids.gif.GifImageButton
+                android:id="@+id/createDouble"
                 android:layout_width="@dimen/deckWidth"
                 android:layout_height="@dimen/deckHeight"
                 android:layout_margin="@dimen/_5sdp"
                 android:background="@drawable/double_deck"
                 android:onClick="createRoomButtonClicked"
-                android:tag="7"></pl.droidsonroids.gif.GifImageButton>
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:tag="7" />
 
         </LinearLayout>
     </RelativeLayout>
@@ -1268,6 +1317,9 @@
         android:layout_marginBottom="@dimen/_12sdp"
         android:elevation="@dimen/_72sdp"
         android:background="@drawable/shine_button_black"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_toStartOf="@+id/coinIcon"
         android:fontFamily="@font/codystar"
         android:onClick="openClosePlayerStats"
@@ -1314,6 +1366,150 @@
         android:onClick="openClosePlayerStats"
         android:soundEffectsEnabled="true" />
 
+
+    <RelativeLayout
+        android:id="@+id/rateUsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/layoutBackgroundLittle"
+        android:clickable="true"
+        android:elevation="200dp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="closeRatingWindow"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/button_daily_reward"
+            android:clickable="true"
+            android:elevation="@dimen/_143sdp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/rateUsImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.85"
+                app:shimmer_direction="left_to_right"
+                app:shimmer_duration="1800"
+                app:shimmer_fixed_width="@dimen/_50sdp"
+                app:shimmer_repeat_delay="500"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="linear"
+                app:shimmer_tilt="60">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_72sdp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/rate_us" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <TextView
+                android:id="@+id/rateUsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rateUsImage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_minus12sdp"
+                android:fontFamily="@font/lily_script_one"
+                android:text="Enjoying the game?"
+                android:textColor="@color/font_yellow"
+                android:textSize="@dimen/_21ssp"
+                android:textStyle="normal" />
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/rateUsIcon1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rateUsText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.9"
+                app:shimmer_direction="left_to_right"
+                app:shimmer_duration="800"
+                app:shimmer_repeat_delay="300"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="linear"
+                app:shimmer_tilt="45">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/loveIt"
+                    android:layout_width="@dimen/rateUsWidth"
+                    android:layout_height="@dimen/rateUsHeight"
+                    android:background="@drawable/love_it"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="rateUs" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/rateUsIcon2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rateUsIcon1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.9"
+                app:shimmer_direction="left_to_right"
+                app:shimmer_duration="800"
+                app:shimmer_repeat_delay="300"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="linear"
+                app:shimmer_tilt="60">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/beBetter"
+                    android:layout_width="@dimen/rateUsWidth"
+                    android:layout_height="@dimen/rateUsHeight"
+                    android:background="@drawable/be_better"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="rateUs" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/askLater"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_below="@+id/rateUsIcon2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:background="@color/transparent"
+                android:clickable="true"
+                android:drawableEnd="@drawable/later"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:onClick="askLaterRating"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:text="  Ask me Later "
+                android:textAllCaps="false"
+                android:textColor="@color/borderblue"
+                android:textSize="@dimen/_10ssp"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
     <LinearLayout
         android:id="@+id/dailyRewardGridLayout"
         android:layout_width="match_parent"
@@ -1324,9 +1520,10 @@
         android:layout_marginEnd="@dimen/_10sdp"
         android:layout_centerVertical="true"
         android:background="@drawable/button_daily_reward"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:elevation="@dimen/_143sdp"
-        android:focusable="true"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -1337,7 +1534,7 @@
             app:shimmer_base_alpha="0.75"
             app:shimmer_direction="left_to_right"
             app:shimmer_duration="1800"
-            app:shimmer_fixed_width="@dimen/_40sdp"
+            app:shimmer_fixed_width="@dimen/_50sdp"
             app:shimmer_repeat_delay="500"
             app:shimmer_repeat_mode="restart"
             app:shimmer_shape="linear"
@@ -1346,6 +1543,9 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_72sdp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ribbon"/>
         </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -1382,6 +1582,9 @@
                 android:paddingTop="@dimen/_2sdp"
                 android:paddingEnd="@dimen/_9sdp"
                 android:paddingBottom="@dimen/_4sdp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:text="Claim Reward "
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13ssp"
@@ -1395,6 +1598,9 @@
                 android:layout_toEndOf="@+id/claimReward"
                 android:background="@drawable/button_square_red"
                 android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:onClick="closedailyRewardWindowDisplay"
                 android:paddingStart="@dimen/_14sdp"
                 android:paddingTop="@dimen/_2sdp"
@@ -1422,7 +1628,7 @@
         android:clickable="true"
         android:elevation="@dimen/_64sdp"
         android:focusable="true"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progressBarLoading3"

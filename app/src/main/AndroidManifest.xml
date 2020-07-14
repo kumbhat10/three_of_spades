@@ -35,7 +35,7 @@
         <activity
             android:name=".HowToPlayActivity"
             android:label="@string/title_activity_how_to_play"
-            android:theme="@style/Theme.App.NoActionBar"></activity>
+            android:theme="@style/Theme.App.NoActionBar" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -118,7 +118,7 @@
             android:name=".MainHomeScreen"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".StartScreen"></activity>
+        <activity android:name=".StartScreen" />
 
         <meta-data
             android:name="preloaded_fonts"

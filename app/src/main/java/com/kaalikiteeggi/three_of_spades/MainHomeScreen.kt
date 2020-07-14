@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER")
+@file:Suppress("UNUSED_PARAMETER", "DEPRECATION")
 
 package com.kaalikiteeggi.three_of_spades
 
@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
+import android.speech.tts.TextToSpeech
 import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -34,6 +35,7 @@ import androidx.lifecycle.lifecycleScope
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.android.billingclient.api.*
 import com.facebook.login.LoginManager
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
@@ -53,6 +55,7 @@ import com.romainpiel.shimmer.ShimmerTextView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.coroutines.launch
+import pl.droidsonroids.gif.GifImageButton
 import pl.droidsonroids.gif.GifImageView
 import java.io.File
 import java.io.FileOutputStream
@@ -62,18 +65,23 @@ import kotlin.collections.ArrayList
 import kotlin.math.min
 
 class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
+    private var requestRatingAfterDays = 2 //dummy
+    private var ratingRequestDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt()
     private lateinit var soundError: MediaPlayer
     private lateinit var soundBkgd: MediaPlayer
     private lateinit var soundSuccess: MediaPlayer
     private lateinit var soundCollectCards: MediaPlayer
     private lateinit var soundUpdate: MediaPlayer
-    private var rewardStatus = false
+    private lateinit var textToSpeech: TextToSpeech
 
+    private var rewardStatus = false
     private var rewardAmount = 0
     private var createRoomStatus = false
     private var onceAdWatched = false
 
+    private var backButtonPressedStatus = false
     private var joinRoomWindowStatus = false
+    private var ratingWindowOpenStatus = false
     private var createRoomWindowStatus = false
     private var settingsWindowStatus = false
     private var playerStatsWindowStatus = false
@@ -103,6 +111,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var soundStatus = true
     private var vibrateStatus = true
     private var premiumStatus = false
+    private var rated = false
     private val today =  SimpleDateFormat("yyyyMMdd").format(Date()).toInt()
     private var consecutiveDay = 1
     private lateinit var sharedPreferences: SharedPreferences
@@ -139,8 +148,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             .apply()
 
         setContentView(R.layout.activity_main_home_screen)
-//        val p = packageManager.getPackageInfo(packageName,0).versionName
-//        findViewById<TextView>(R.id.sizeMHS).text = p +"\n"+ resources.configuration.screenWidthDp.toString() + "\n" + resources.configuration.screenHeightDp.toString()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         findViewById<GifImageView>(R.id.watchVideo).visibility = View.GONE
         soundUpdate = MediaPlayer.create(applicationContext, R.raw.player_moved)
@@ -152,20 +159,15 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.BOTTOM, 0, 300)
-        toast.view.setBackgroundColor(
-            ContextCompat.getColor(
-                   applicationContext,
-                   R.color.cardsBackgroundDark
-               )
-           )
-           toast.view.findViewById<TextView>(android.R.id.message)
-               .setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
-           toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
+        toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundDark))
+        toast.view.findViewById<TextView>(android.R.id.message)
+            .setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
+        toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
 
-           sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
-           editor = sharedPreferences.edit()
-           shimmer = Shimmer()
-           shimmer.duration = 1800
+        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
+        editor = sharedPreferences.edit()
+        shimmer = Shimmer()
+        shimmer.duration = 1800
 
         mAuth = FirebaseAuth.getInstance()
         uid = mAuth.uid.toString()
@@ -183,7 +185,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     override fun onStart() {
         super.onStart()
-//        if(soundStatus) soundUpdate.start()
+        if(rated) closeRatingWindow(View(applicationContext))
         if (musicStatus) soundBkgd.start()
         if (mInterstitialAd.isLoaded) {
             if (!premiumStatus) {
@@ -311,6 +313,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             findViewById<Button>(R.id.welcomeUserNameview).text = userName
             if(intent.getBooleanExtra("newUser",false)) {//check if user has joined room or created one and display Toast
                 toastCenter("Hi $userName") // dummy - add tutorial
+                editor.putBoolean("rated",rated)
+                editor.putInt("joinDate",SimpleDateFormat("yyyyMMdd").format(Date()).toInt())
+                editor.putInt("ratingRequestDate",SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays)
                 editor.putBoolean("premium",false) // make premium false
                 editor.apply()
             } // check if new user
@@ -400,6 +405,25 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
             if(premiumStatus) findViewById<GifImageView>(R.id.removeAds).setImageResource(R.drawable.premium)
+        }
+        if (sharedPreferences.contains("rated")) {
+            rated = sharedPreferences.getBoolean("rated", false)
+        }else{
+            editor.putBoolean("rated",rated)
+            editor.apply()
+        }
+        if (!sharedPreferences.contains("joinDate")) {
+            editor.putInt("joinDate",SimpleDateFormat("yyyyMMdd").format(Date()).toInt())
+            editor.apply()
+        }
+        if (!sharedPreferences.contains("ratingRequestDate")) {
+            toastCenter("not present")
+            ratingRequestDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays
+            editor.putInt("ratingRequestDate", ratingRequestDate)
+            editor.apply()
+        }else{
+            toastCenter(" present")
+            ratingRequestDate = sharedPreferences.getInt("ratingRequestDate", 0)
         }
         if (sharedPreferences.contains("musicStatus")) {
             musicStatus = sharedPreferences.getBoolean("musicStatus", true)
@@ -525,7 +549,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     dailyRewardClicked = false
                 } else if(createRoomStatus){
                     createRoom()
-                    createRoomStatus
+                    createRoomStatus = false
                 }
                 if (!premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder().build())
             }
@@ -605,12 +629,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     findViewById<GifImageView>(R.id.watchVideo).clearAnimation()
                     findViewById<GifImageView>(R.id.watchVideo).visibility = View.GONE
                     loadRewardAd()
-//                    when(errorCode){//dummy
-//                        ERROR_CODE_INTERNAL_ERROR -> toastCenter("ERROR_CODE_INTERNAL_ERROR")
-//                        ERROR_CODE_AD_REUSED  -> toastCenter("ERROR_CODE_AD_REUSED ")
-//                        ERROR_CODE_NOT_READY  -> toastCenter("ERROR_CODE_NOT_READY ")
-//                        ERROR_CODE_APP_NOT_FOREGROUND  -> toastCenter("ERROR_CODE_APP_NOT_FOREGROUND ")
-//                    }
                 }
             }
             rewardedAd.show(activityContext, adCallback)
@@ -669,6 +687,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         findViewById<ImageView>(R.id.settVibrateIcon).clearAnimation()
         findViewById<ImageView>(R.id.closeSettings).clearAnimation()
     }
+
     fun createRoomButtonClicked(view: View) {
         createRoomStatus = true
         nPlayers = view.tag.toString().toInt()
@@ -676,10 +695,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             mInterstitialAd.show()
         } else {
             createRoom()
+            createRoomStatus = false
         }
     }
     private fun createRoom() {
-        if (createRoomStatus) {
             val allowedChars = ('A'..'H')+ ('J'..'N') + ('P'..'Z')+('2'..'9')  // 1, I , O and 0 skipped
             val roomID = (1..4).map { allowedChars.random() }.joinToString ("")
             if(nPlayers==7) {
@@ -699,9 +718,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             editor.putString("Room", roomID) // write room ID in storage - to delete later
             editor.apply()
             Handler().postDelayed({finish()},500)
-        }
     }
-
     fun createRoomWindowOpen(view: View) {
         if(soundStatus) soundUpdate.start()
         Handler().postDelayed({
@@ -711,10 +728,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         findViewById<RelativeLayout>(R.id.createRoomFrame).visibility = View.VISIBLE
         anim(findViewById(R.id.createRoomFrameTemp),R.anim.zoomin_center)
         anim(findViewById(R.id.closeCreateRoom),R.anim.zoomin_center)
+        anim(findViewById(R.id.createSingle),R.anim.anim_scale_appeal)
+        anim(findViewById(R.id.createDouble),R.anim.anim_scale_appeal)
         createRoomWindowStatus = true
     }
     fun createRoomWindowExit(view: View) {
         findViewById<ImageView>(R.id.closeCreateRoom).clearAnimation()
+        findViewById<GifImageButton>(R.id.createSingle).clearAnimation()
+        findViewById<GifImageButton>(R.id.createDouble).clearAnimation()
         findViewById<ImageView>(R.id.closeCreateRoom).visibility = View.GONE
         anim(findViewById(R.id.createRoomFrameTemp),R.anim.zoomout)
         createRoomWindowStatus = false
@@ -722,6 +743,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             findViewById<RelativeLayout>(R.id.createRoomFrame).visibility = View.GONE
         }, 230)
     }
+
     fun joinRoomButtonClicked(view: View) {
         if(vibrateStatus) vibrationStart()
         val roomID = findViewById<EditText>(R.id.roomIDInput).text.toString()//read text field
@@ -759,7 +781,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             findViewById<EditText>(R.id.roomIDInput).hint = "Enter ID"
         }
     }
-
     fun joinRoomWindowOpen(view: View) {
         if(soundStatus) soundUpdate.start()
         if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched) {
@@ -775,7 +796,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         anim(findViewById(R.id.joinRoomFrameIcon),R.anim.clockwise)
         joinRoomWindowStatus = true
     }
-
     fun joinRoomWindowExit(view: View) {
         findViewById<ImageButton>(R.id.joinRoomFrameIcon).clearAnimation()
         findViewById<ImageView>(R.id.closeJoinRoom).clearAnimation()
@@ -912,12 +932,28 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             }
         }
     }
-
     private fun toastCenter(message: String){
         toast.setText(message)
         toast.show()
     }
-
+//    private fun speak(speechText:String, pitch:Float = 0.7f, speed:Float = 1.05f) {
+//        if(soundStatus) {
+//            textToSpeech.setPitch(pitch)
+//            textToSpeech.setSpeechRate(speed)
+//            textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, null)
+//        }
+//    }
+//    private fun initializeSpeechEngine(){
+//        textToSpeech = TextToSpeech(applicationContext,
+//            TextToSpeech.OnInitListener { status ->
+//                if(status == TextToSpeech.SUCCESS) {
+//                    val result = textToSpeech.setLanguage(Locale.ENGLISH)
+//                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+//                        toastCenter("Missing Language data - Text to speech")
+//                    }
+//                }
+//            })
+//    }
     fun inviteFriends(view: View){
 
         if(soundStatus) soundUpdate.start()
@@ -948,15 +984,60 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse("https://sites.google.com/view/kaali-ki-teeggi/")
         }
-//        startActivity(intent)
-        startActivity(Intent(applicationContext, HowToPlayActivity::class.java))
+        startActivity(intent)
+//        startActivity(Intent(applicationContext, HowToPlayActivity::class.java))
     }
-    fun rateUs(view: View){
+    fun openRatingWindow(view: View){
+//        backButtonPressedStatus = false
+        anim(findViewById(R.id.rateUsIcon1),R.anim.anim_scale_appeal)
+        findViewById<RelativeLayout>(R.id.rateUsLayout).visibility = View.VISIBLE
+        ratingWindowOpenStatus = true
+    }
+    fun closeRatingWindow(view: View){
+        findViewById<ShimmerFrameLayout>(R.id.rateUsIcon1).clearAnimation()
+        findViewById<RelativeLayout>(R.id.rateUsLayout).visibility = View.GONE
+        ratingWindowOpenStatus = false
+    }
+    fun askLaterRating(view:View){ // request for rating after x days from today if choose ask later
+        closeRatingWindow(View(applicationContext))
+        editor.putInt("ratingRequestDate",SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays)
+        editor.apply()
+        if(backButtonPressedStatus) moveTaskToBack(true)
+        backButtonPressedStatus = false
+    }
+    fun rateUs(view: View){ // once clicked never ask to rate again
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse("https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades")
             setPackage("com.android.vending")
         }
         startActivity(intent)
+        rated = true
+        editor.putBoolean("rated",rated)
+        editor.apply()
+    }
+    private fun checkRatingRequest(): Boolean{
+        toastCenter(ratingRequestDate.toString())
+        return !rated && (SimpleDateFormat("yyyyMMdd").format(Date()).toInt() >= ratingRequestDate)
+    }
+    override fun onBackPressed() { //minimize the app and avoid destroying the activity
+
+        if(!(joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus || createRoomWindowStatus) && ratingWindowOpenStatus && backButtonPressedStatus) {
+            moveTaskToBack(true)
+            closeRatingWindow(View(applicationContext))
+            backButtonPressedStatus = false
+        }
+        else if(!(joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus || createRoomWindowStatus || ratingWindowOpenStatus) && checkRatingRequest()) {
+            toastCenter("open window rating")
+            backButtonPressedStatus = true
+            openRatingWindow(View(applicationContext))
+        }
+        else if(! (joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus || createRoomWindowStatus || ratingWindowOpenStatus)) moveTaskToBack(true) // none should be visible
+       else if(ratingWindowOpenStatus) closeRatingWindow(View(applicationContext))
+       if(joinRoomWindowStatus) joinRoomWindowExit(View(applicationContext))
+       if(createRoomWindowStatus) createRoomWindowExit(View(applicationContext))
+        if(settingsWindowStatus) closeSettingsWindow(View(applicationContext))
+        if(playerStatsWindowStatus) openClosePlayerStats(View(applicationContext))
+//           super.onBackPressed()
     }
     fun signOut(view: View){
         if(vibrateStatus) vibrationStart()
@@ -965,14 +1046,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         startActivity(Intent(applicationContext, StartScreen::class.java))
         overridePendingTransition(R.anim.slide_right_activity,R.anim.slide_right_activity)
         finish()
-    }
-    override fun onBackPressed() { //minimize the app and avoid destroying the activity
-        if(!(joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus || createRoomWindowStatus )) moveTaskToBack(true)
-       if(joinRoomWindowStatus) joinRoomWindowExit(View(applicationContext))
-       if(createRoomWindowStatus) createRoomWindowExit(View(applicationContext))
-        if(settingsWindowStatus) closeSettingsWindow(View(applicationContext))
-        if(playerStatsWindowStatus) openClosePlayerStats(View(applicationContext))
-//           super.onBackPressed()
     }
     private fun deleteAllRoomdata(roomID: String){
         refRoomData.document(roomID + "_chat").delete()
@@ -988,8 +1061,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if(musicStatus) soundBkgd.start()
     }
     override fun onDestroy() {
-        super.onDestroy()
         billingClient.endConnection()
+        try{
+            textToSpeech.shutdown()
+        }catch(me:java.lang.Exception) {}
+        super.onDestroy()
+
     }
 
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
