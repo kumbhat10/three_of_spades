@@ -185,7 +185,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     override fun onStart() {
         super.onStart()
-        if(rated) closeRatingWindow(View(applicationContext))
+        if(rated && ratingWindowOpenStatus) closeRatingWindow(View(applicationContext))
         if (musicStatus) soundBkgd.start()
         if (mInterstitialAd.isLoaded) {
             if (!premiumStatus) {
@@ -417,12 +417,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             editor.apply()
         }
         if (!sharedPreferences.contains("ratingRequestDate")) {
-            toastCenter("not present")
             ratingRequestDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays
             editor.putInt("ratingRequestDate", ratingRequestDate)
             editor.apply()
         }else{
-            toastCenter(" present")
             ratingRequestDate = sharedPreferences.getInt("ratingRequestDate", 0)
         }
         if (sharedPreferences.contains("musicStatus")) {
@@ -661,11 +659,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         settingsWindowStatus = true
         if(soundStatus) soundUpdate.start()
 
-
         findViewById<RelativeLayout>(R.id.settingsLayout).visibility = View.VISIBLE
         Handler().postDelayed({
             findViewById<ImageView>(R.id.closeSettings).visibility = View.VISIBLE
-            anim(findViewById(R.id.closeSettings),R.anim.anim_scale_infinite)
+//            anim(findViewById(R.id.closeSettings),R.anim.anim_scale_infinite)
         }, 220)
 
         anim(findViewById(R.id.settingsLayouttemp),R.anim.zoomin)
@@ -675,8 +672,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
     fun closeSettingsWindow(view: View){
         settingsWindowStatus = false
-
-
         anim(findViewById(R.id.settingsLayouttemp),R.anim.zoomout)
         findViewById<ImageView>(R.id.closeSettings).visibility = View.INVISIBLE
         Handler().postDelayed({
@@ -723,13 +718,13 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if(soundStatus) soundUpdate.start()
         Handler().postDelayed({
             findViewById<ImageView>(R.id.closeCreateRoom).visibility = View.VISIBLE
-            anim(findViewById(R.id.closeCreateRoom),R.anim.anim_scale_infinite)
+//            anim(findViewById(R.id.closeCreateRoom),R.anim.anim_scale_infinite)
         }, 270)
         findViewById<RelativeLayout>(R.id.createRoomFrame).visibility = View.VISIBLE
         anim(findViewById(R.id.createRoomFrameTemp),R.anim.zoomin_center)
         anim(findViewById(R.id.closeCreateRoom),R.anim.zoomin_center)
-        anim(findViewById(R.id.createSingle),R.anim.anim_scale_appeal)
-        anim(findViewById(R.id.createDouble),R.anim.anim_scale_appeal)
+//        anim(findViewById(R.id.createSingle),R.anim.anim_scale_appeal)
+//        anim(findViewById(R.id.createDouble),R.anim.anim_scale_appeal)
         createRoomWindowStatus = true
     }
     fun createRoomWindowExit(view: View) {
@@ -788,7 +783,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         }
         Handler().postDelayed({
             findViewById<ImageView>(R.id.closeJoinRoom).visibility = View.VISIBLE
-            anim(findViewById(R.id.closeJoinRoom),R.anim.anim_scale_infinite)
+//            anim(findViewById(R.id.closeJoinRoom),R.anim.anim_scale_infinite)
         }, 270)
         findViewById<RelativeLayout>(R.id.joinRoomFrame).visibility = View.VISIBLE
         anim(findViewById(R.id.joinRoomFrameTemp),R.anim.zoomin)
@@ -936,24 +931,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         toast.setText(message)
         toast.show()
     }
-//    private fun speak(speechText:String, pitch:Float = 0.7f, speed:Float = 1.05f) {
-//        if(soundStatus) {
-//            textToSpeech.setPitch(pitch)
-//            textToSpeech.setSpeechRate(speed)
-//            textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, null)
-//        }
-//    }
-//    private fun initializeSpeechEngine(){
-//        textToSpeech = TextToSpeech(applicationContext,
-//            TextToSpeech.OnInitListener { status ->
-//                if(status == TextToSpeech.SUCCESS) {
-//                    val result = textToSpeech.setLanguage(Locale.ENGLISH)
-//                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-//                        toastCenter("Missing Language data - Text to speech")
-//                    }
-//                }
-//            })
-//    }
+
     fun inviteFriends(view: View){
 
         if(soundStatus) soundUpdate.start()
@@ -975,9 +953,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         intent.putExtra(Intent.EXTRA_TEXT,message)
         intent.putExtra(Intent.EXTRA_STREAM, uri)
         try{
-            startActivity(Intent.createChooser(intent,"Share app via :"))
+            startActivity(Intent.createChooser(intent,"Invite friends via "))
         }catch(me: Exception){
-            toastCenter(me.toString())
+//            toastCenter(me.toString())
         }
     }
     fun howToPlay(view: View){
@@ -989,18 +967,21 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
     fun openRatingWindow(view: View){
 //        backButtonPressedStatus = false
+        anim(findViewById(R.id.rateUsLayout),R.anim.zoomin_center)
         anim(findViewById(R.id.rateUsIcon1),R.anim.anim_scale_appeal)
         findViewById<RelativeLayout>(R.id.rateUsLayout).visibility = View.VISIBLE
         ratingWindowOpenStatus = true
     }
     fun closeRatingWindow(view: View){
+//        anim(findViewById(R.id.rateUsLayout),R.anim.zoomout_center)
         findViewById<ShimmerFrameLayout>(R.id.rateUsIcon1).clearAnimation()
         findViewById<RelativeLayout>(R.id.rateUsLayout).visibility = View.GONE
         ratingWindowOpenStatus = false
     }
     fun askLaterRating(view:View){ // request for rating after x days from today if choose ask later
         closeRatingWindow(View(applicationContext))
-        editor.putInt("ratingRequestDate",SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays)
+        ratingRequestDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays
+        editor.putInt("ratingRequestDate", ratingRequestDate)
         editor.apply()
         if(backButtonPressedStatus) moveTaskToBack(true)
         backButtonPressedStatus = false
@@ -1016,7 +997,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         editor.apply()
     }
     private fun checkRatingRequest(): Boolean{
-        toastCenter(ratingRequestDate.toString())
         return !rated && (SimpleDateFormat("yyyyMMdd").format(Date()).toInt() >= ratingRequestDate)
     }
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
@@ -1027,12 +1007,15 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             backButtonPressedStatus = false
         }
         else if(!(joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus || createRoomWindowStatus || ratingWindowOpenStatus) && checkRatingRequest()) {
-            toastCenter("open window rating")
             backButtonPressedStatus = true
             openRatingWindow(View(applicationContext))
         }
-        else if(! (joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus || createRoomWindowStatus || ratingWindowOpenStatus)) moveTaskToBack(true) // none should be visible
-       else if(ratingWindowOpenStatus) closeRatingWindow(View(applicationContext))
+        else if(! (joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus || createRoomWindowStatus || ratingWindowOpenStatus)) {
+            moveTaskToBack(true)
+        } // none should be visible
+       else if(ratingWindowOpenStatus) {
+            closeRatingWindow(View(applicationContext))
+        }
        if(joinRoomWindowStatus) joinRoomWindowExit(View(applicationContext))
        if(createRoomWindowStatus) createRoomWindowExit(View(applicationContext))
         if(settingsWindowStatus) closeSettingsWindow(View(applicationContext))
@@ -1092,10 +1075,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         toastCenter("Payment Failed. Try again \n ${billingResult.responseCode}")
     }
 }
-
-
 }
-
 //    private fun setupSinchClient(){
 //        val context = this.applicationContext
 //        sinchClient = Sinch.getSinchClientBuilder().context(context)

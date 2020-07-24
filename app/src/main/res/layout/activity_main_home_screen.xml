@@ -1279,30 +1279,56 @@
             android:orientation="vertical"
             android:soundEffectsEnabled="true">
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/createSingleShimmer"
+                android:layout_width="@dimen/deckWidth"
+                android:layout_height="@dimen/deckHeight"
+                android:layout_margin="@dimen/_5sdp"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.9"
+                app:shimmer_direction="left_to_right"
+                app:shimmer_duration="1000"
+                app:shimmer_repeat_delay="300"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="linear"
+                app:shimmer_tilt="45">
+
             <pl.droidsonroids.gif.GifImageButton
                 android:id="@+id/createSingle"
                 android:layout_width="@dimen/deckWidth"
                 android:layout_height="@dimen/deckHeight"
-                android:layout_margin="@dimen/_5sdp"
                 android:background="@drawable/single_deck"
                 android:onClick="createRoomButtonClicked"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:tag="4"/>
-            
-            <pl.droidsonroids.gif.GifImageButton
-                android:id="@+id/createDouble"
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/createDoubleShimmer"
                 android:layout_width="@dimen/deckWidth"
                 android:layout_height="@dimen/deckHeight"
                 android:layout_margin="@dimen/_5sdp"
-                android:background="@drawable/double_deck"
-                android:onClick="createRoomButtonClicked"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:tag="7" />
-
+                app:shimmer_auto_start="true"
+                app:shimmer_base_alpha="0.9"
+                app:shimmer_direction="left_to_right"
+                app:shimmer_duration="1000"
+                app:shimmer_repeat_delay="300"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="linear"
+                app:shimmer_tilt="45">
+                <pl.droidsonroids.gif.GifImageButton
+                    android:id="@+id/createDouble"
+                    android:layout_width="@dimen/deckWidth"
+                    android:layout_height="@dimen/deckHeight"
+                    android:background="@drawable/double_deck"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="createRoomButtonClicked"
+                    android:tag="7" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
         </LinearLayout>
     </RelativeLayout>
 

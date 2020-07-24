@@ -14,8 +14,8 @@ android {
         applicationId "com.kaalikiteeggi.three_of_spades"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 24
-        versionName "24.0"
+        versionCode 27
+        versionName "27A"
         ndkVersion "21.1.6363665"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
@@ -25,10 +25,12 @@ android {
         customDebugType {
             debuggable false }
         release {
+            shrinkResources true
             minifyEnabled true
             firebaseCrashlytics{
                 mappingFileUploadEnabled true
             }
+            android.buildTypes.release.ndk.debugSymbolLevel = 'FULL'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

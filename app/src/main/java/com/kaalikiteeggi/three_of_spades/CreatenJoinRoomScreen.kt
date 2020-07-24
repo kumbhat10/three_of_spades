@@ -23,7 +23,6 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.drawToBitmap
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
@@ -94,6 +93,8 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     private lateinit var p6h: String
     private lateinit var p7h: String
     private lateinit var userStats: ArrayList<Int>
+    private lateinit var mAuth: FirebaseAuth
+    private var uid = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,6 +131,8 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         getRoomLiveUpdates()  // keep updating the screen as the users join
         if(getString(R.string.test).contains('n')) initializeAds()
         createTargetPicasso()
+        mAuth = FirebaseAuth.getInstance()
+        uid = mAuth.uid.toString()
     }
 
     override fun onStart() {
@@ -261,11 +264,11 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     fun startGame(view: View){
         if(from=="p1") {
             val gd = if(getString(R.string.testGameData).contains('n')) {
-                if(nPlayers==7) CreateGameData().gameData7
-                else CreateGameData().gameData4
+                if(nPlayers==7) CreateGameData(uid, selfName).gameData7
+                else CreateGameData(uid, selfName).gameData4
             }else{
-                if(nPlayers==7) CreateGameData().gameDataDummy7
-                else CreateGameData().gameDataDummy4
+                if(nPlayers==7) CreateGameData(uid, selfName).gameDataDummy7
+                else CreateGameData(uid, selfName).gameDataDummy4
             }
             myRefGameData.child(roomID).setValue(gd).addOnSuccessListener {
                 refRoomData.document(roomID).set(hashMapOf("PJ" to 10), SetOptions.merge())

@@ -21,11 +21,8 @@
     <translate
         android:startOffset="900"
         android:duration="300"
-
         android:fromYDelta="0%p"
-
         android:toYDelta="40%p"
-
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
 
 </set>

@@ -17,6 +17,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -41,6 +42,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import pl.droidsonroids.gif.AnimationListener
 import pl.droidsonroids.gif.GifImageView
 import java.util.*
 import kotlin.math.round
@@ -1773,9 +1775,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             findViewById<ImageView>(R.id.imageViewWinnerCenter_4).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
             Handler().postDelayed( { findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.GONE },1500)
         }
-
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner-1]).clearAnimation()
-
         for(i in 0 until nPlayers){
             findViewById<ImageView>(refIDMappedTableImageView[i]).visibility = View.INVISIBLE
         }
@@ -2298,16 +2298,25 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         centralText(getString(R.string.shufflingcards),5200)
         speak("Please wait while i Shuffle cards")
         Handler().postDelayed({
+           if(nPlayers4) {
+               findViewById<ImageView>(R.id.imageViewWinnerCenter_4).animation = null
+               findViewById<ImageView>(R.id.imageViewWinnerCenter_4).clearAnimation()
+               findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.GONE
+           }else if(nPlayers7){
+               findViewById<ImageView>(R.id.imageViewWinnerCenter).animation = null
+               findViewById<ImageView>(R.id.imageViewWinnerCenter).clearAnimation()
+               findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.GONE
+           }
+            findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
             findViewById<LinearLayout>(R.id.imageGallery).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_down_out))
             Handler().postDelayed({
-//                findViewById<LinearLayout>(R.id.imageGallery).removeAllViews()
-//                findViewById<LinearLayout>(R.id.imageGallery).visibility= View.GONE
 //                if(from=="p1" && gameStateChange) write("GS",2) // Update Game State to start Biding round by Host only
                 displaySelfCards(animations = true, bidingRequest = true)
             },fadeOffTime)
         },time)
     }
     private fun displayShufflingCards(view: View = View(applicationContext), sets:Int = 5){
+        shufflingDistribute()
         val gallery = findViewById<LinearLayout>(R.id.imageGallery)
         gallery.removeAllViews()
         val inflater = LayoutInflater.from(applicationContext)
@@ -2332,6 +2341,33 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             }
         }
         gallery.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_left_right))
+    }
+    private fun shufflingDistribute(){
+        findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.VISIBLE
+        if(nPlayers7) {
+            findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.VISIBLE
+            val anim = AnimationUtils.loadAnimation(applicationContext,R.anim.anim_shuffle_7)
+            anim.setAnimationListener(object :Animation.AnimationListener{
+                override fun onAnimationRepeat(animation: Animation?) {}
+                override fun onAnimationEnd(animation: Animation?) {
+                    findViewById<ImageView>(R.id.imageViewWinnerCenter).startAnimation(anim)
+                }
+                override fun onAnimationStart(animation: Animation?) {}
+            })
+            findViewById<ImageView>(R.id.imageViewWinnerCenter).startAnimation(anim)
+        }else if(nPlayers4){
+            findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.VISIBLE
+            val anim = AnimationUtils.loadAnimation(applicationContext,R.anim.anim_shuffle_4)
+            anim.setAnimationListener(object :Animation.AnimationListener{
+                override fun onAnimationRepeat(animation: Animation?) {}
+                override fun onAnimationEnd(animation: Animation?) {
+                    findViewById<ImageView>(R.id.imageViewWinnerCenter_4).startAnimation(anim)
+                }
+                override fun onAnimationStart(animation: Animation?) {}
+            })
+            findViewById<ImageView>(R.id.imageViewWinnerCenter_4).startAnimation(anim)
+
+        }
     }
     private fun write(path: String, value: Any) {
         refGameData.child(path).setValue(value)

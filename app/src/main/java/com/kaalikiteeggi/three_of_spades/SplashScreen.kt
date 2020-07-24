@@ -44,14 +44,13 @@ import org.json.JSONObject
 import java.util.*
 
 class SplashScreen: AppCompatActivity() {
-    private lateinit var soundUpdate: MediaPlayer
+    private lateinit var soundInto: MediaPlayer
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mInterstitialAd: InterstitialAd
     private var user: FirebaseUser? = null
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var appUpdateManager: AppUpdateManager
     private lateinit var toast:Toast
-
     private var premiumStatus = false
     private var target = object : Target {
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
@@ -80,6 +79,9 @@ class SplashScreen: AppCompatActivity() {
             .apply()
         setContentView(R.layout.activity_splash_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+        soundInto = MediaPlayer.create(applicationContext,R.raw.cards_shuffle)
+        soundInto.start()
+
         MobileAds.initialize(this)
         AudienceNetworkAds.initialize(this)
 
