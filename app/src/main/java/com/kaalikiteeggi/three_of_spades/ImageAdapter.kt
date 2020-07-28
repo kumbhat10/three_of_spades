@@ -1,6 +1,5 @@
 package com.kaalikiteeggi.three_of_spades
 
-import DailyRewardItem
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ class ImageAdapter(var context: Context, var arrayList: ArrayList<DailyRewardIte
         val view:View = View.inflate(context, R.layout.coin_reward_grid, null)
         val icons:ImageView = view.findViewById(R.id.coinRewardIcon)
         val textDescription:TextView = view.findViewById(R.id.coinRewardText)
-        val listItem:DailyRewardItem = arrayList[position]
+        val listItem: DailyRewardItem = arrayList[position]
         textDescription.text = listItem.textDescription
 
         if(position==highlightPosition-1){

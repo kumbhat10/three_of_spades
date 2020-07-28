@@ -8,6 +8,7 @@ class CreateRoomData(username: String, userPhotoUrl: String, coins: Int) {
     @SuppressLint("SimpleDateFormat")
     val dummyData7 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),
         "p1" to username,
         "p1h" to userPhotoUrl,
         "p1c" to coins,
@@ -34,6 +35,7 @@ class CreateRoomData(username: String, userPhotoUrl: String, coins: Int) {
 
     val dummyData4 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),
         "p1" to username,
         "p1h" to userPhotoUrl,
         "p1c" to coins,
@@ -51,6 +53,7 @@ class CreateRoomData(username: String, userPhotoUrl: String, coins: Int) {
 
     val data7 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),
         "p1" to username,
         "p1h" to userPhotoUrl,
         "p1c" to coins,
@@ -78,6 +81,7 @@ class CreateRoomData(username: String, userPhotoUrl: String, coins: Int) {
     @SuppressLint("SimpleDateFormat")
     val data4 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),
         "p1" to username,
         "p1h" to userPhotoUrl,
         "p1c" to coins,

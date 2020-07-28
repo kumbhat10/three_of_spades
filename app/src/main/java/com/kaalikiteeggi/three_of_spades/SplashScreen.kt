@@ -201,8 +201,9 @@ class SplashScreen: AppCompatActivity() {
                 appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 88)
             }else{
 //                toastCenter("App is latest") // dummy
+                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 88)
                 isAppLatest = true
-                if(isTimerOver && !isNextActivityStarted) nextActivity()
+//                if(isTimerOver && !isNextActivityStarted) nextActivity()
             }
         }.addOnFailureListener { e -> toastCenter("failed ${e.message.toString()}")
             if(isTimerOver && !isNextActivityStarted) nextActivity()

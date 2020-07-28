@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/score_table_icon"
+        android:state_pressed="false"/>
+
+    <item android:state_pressed="true" >
+        <inset
+            android:drawable="@drawable/score_table_icon"
+            android:insetLeft="@dimen/_3sdp"
+            android:insetTop="@dimen/_3sdp"
+            android:insetRight="@dimen/_3sdp"
+            android:insetBottom="@dimen/_3sdp"/>
+    </item>
+</selector>

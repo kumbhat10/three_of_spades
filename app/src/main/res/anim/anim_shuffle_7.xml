@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/accelerate_decelerate_interpolator">
+    <translate
+        android:duration="98"
+        android:startOffset="0"
+        android:toXDelta="-40%p" />
+    <translate
+        android:duration="1"
+        android:startOffset="99"
+        android:toXDelta="40%p"/>
+
+<!--  2nd player-->
+    <translate
+        android:duration="98"
+        android:startOffset="100"
+        android:toXDelta="-30%p"
+        android:toYDelta="-20%p"/>
+    <translate
+        android:duration="1"
+        android:startOffset="199"
+        android:toXDelta="30%p"
+        android:toYDelta="20%p"/>
+
+<!--3rd player-->
+    <translate
+        android:duration="98"
+        android:startOffset="200"
+        android:toXDelta="-18%p"
+        android:toYDelta="-30%p"/>
+    <translate
+        android:duration="1"
+        android:startOffset="299"
+        android:toXDelta="18%p"
+        android:toYDelta="30%p"/>
+
+<!--4th player-->
+    <translate
+        android:duration="98"
+        android:startOffset="300"
+        android:toXDelta="18%p"
+        android:toYDelta="-30%p"/>
+    <translate
+        android:duration="1"
+        android:startOffset="399"
+        android:toXDelta="-18%p"
+        android:toYDelta="30%p"/>
+
+<!--5 player-->
+    <translate
+        android:duration="98"
+        android:startOffset="400"
+        android:toXDelta="30%p"
+        android:toYDelta="-20%p" />
+    <translate
+        android:duration="1"
+        android:startOffset="499"
+        android:toXDelta="-30%p"
+        android:toYDelta="20%p" />
+
+<!--6th player-->
+    <translate
+        android:duration="98"
+        android:startOffset="500"
+        android:toXDelta="40%p"
+        android:toYDelta="-5%p"/>
+    <translate
+        android:duration="1"
+        android:startOffset="599"
+        android:toXDelta="-40%p"
+        android:toYDelta="5%p"/>
+
+<!--7th player-->
+    <translate
+        android:duration="98"
+        android:startOffset="600"
+        android:toYDelta="40%p"/>
+    <translate
+        android:duration="1"
+        android:startOffset="699"
+        android:toYDelta="-40%p"/>
+
+</set>

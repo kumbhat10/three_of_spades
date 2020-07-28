@@ -4,7 +4,10 @@ plugins {
     id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
+
 }
+//apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
     compileSdkVersion 29
@@ -14,18 +17,16 @@ android {
         applicationId "com.kaalikiteeggi.three_of_spades"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 27
-        versionName "27A"
+        versionCode 29
+        versionName "29B"
         ndkVersion "21.1.6363665"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
     }
-
     buildTypes {
         customDebugType {
             debuggable false }
         release {
-            shrinkResources true
+            shrinkResources false
             minifyEnabled true
             firebaseCrashlytics{
                 mappingFileUploadEnabled true
@@ -44,7 +45,7 @@ android {
 }
 
 dependencies {
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha05"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06"
     implementation 'cat.ereza:customactivityoncrash:2.3.0'
     implementation 'ch.halcyon:squareprogressbar:1.6.4'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'  // keep same size across different screen resolutions
@@ -60,11 +61,13 @@ dependencies {
 
     implementation 'com.google.android.play:core:1.7.3'
     implementation 'com.google.android.play:core-ktx:1.7.0'
-    implementation 'com.google.android.gms:play-services-auth:18.0.0'
-    implementation 'com.google.android.gms:play-services-ads:19.2.0'
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
+    implementation 'com.google.android.gms:play-services-ads:19.3.0'
     implementation 'com.google.android.gms:play-services-games:19.0.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+//    implementation "androidx.gaming:gaming-frame-pacing:1.5.0-alpha01"
+//    implementation "androidx.gaming:gaming-performance-tuner:1.0.0-alpha01"
 
     implementation 'com.google.ads.mediation:adcolony:4.1.4.1'
     implementation 'com.google.ads.mediation:facebook:5.9.0.1'
@@ -86,17 +89,19 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
     implementation 'com.google.firebase:firebase-analytics:17.4.4'
     implementation 'com.google.firebase:firebase-messaging:20.2.3'
+    implementation 'com.google.firebase:firebase-perf:19.0.8'
+
 //    implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.0'
+    implementation 'androidx.core:core-ktx:1.3.1'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 //    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
 //    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+//    testImplementation 'junit:junit:4.13'
+//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

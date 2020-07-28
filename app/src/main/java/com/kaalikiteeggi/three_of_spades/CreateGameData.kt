@@ -34,6 +34,9 @@ class CreateGameData(uid: String, selfName: String) {
 
     val gameDataDummy7 = mutableMapOf(
         "ADate" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "A_Time" to SimpleDateFormat("HH:mm:ss z").format(Date()),
+        "A_Uid" to uid,
+        "A_Name" to selfName,
         "Bid" to mutableMapOf("BV" to 350, "BT" to 1,"BB" to 3,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1,"p5" to 1,"p6" to 1,"p7" to 1)),
         "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
         "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
@@ -52,6 +55,9 @@ class CreateGameData(uid: String, selfName: String) {
 
     val gameData4 = mutableMapOf(
         "ADate" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "A_Time" to SimpleDateFormat("HH:mm:ss z").format(Date()),
+        "A_Uid" to uid,
+        "A_Name" to selfName,
         "Bid" to mutableMapOf("BV" to 175, "BT" to playerTurn4,"BB" to playerTurn4,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)),
     "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
     "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
@@ -68,6 +74,9 @@ class CreateGameData(uid: String, selfName: String) {
 
     val gameDataDummy4 = mutableMapOf(
         "ADate" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "A_Time" to SimpleDateFormat("HH:mm:ss z").format(Date()),
+        "A_Uid" to uid,
+        "A_Name" to selfName,
         "Bid" to mutableMapOf("BV" to 175, "BT" to 1,"BB" to 3,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)),
     "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
     "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked

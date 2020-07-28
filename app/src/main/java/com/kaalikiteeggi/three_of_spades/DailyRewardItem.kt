@@ -1,3 +1,5 @@
+package com.kaalikiteeggi.three_of_spades
+
 class DailyRewardItem {
     var imageID: Int? = 0
     var textDescription: String ?= null

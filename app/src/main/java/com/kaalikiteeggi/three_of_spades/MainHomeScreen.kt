@@ -2,7 +2,6 @@
 
 package com.kaalikiteeggi.three_of_spades
 
-import DailyRewardItem
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
@@ -10,7 +9,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.net.Uri
@@ -20,13 +18,13 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
@@ -296,13 +294,48 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
     private fun setDataList(): ArrayList<DailyRewardItem>{
        val arrayList = ArrayList<DailyRewardItem>()
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 1 \n${dailuRewardList[0]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 2 \n${dailuRewardList[1]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 3 \n${dailuRewardList[2]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 4 \n${dailuRewardList[3]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 5 \n${dailuRewardList[4]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 6 \n${dailuRewardList[5]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 6+ \n${dailuRewardList[6]} coins"))
+        arrayList.add(
+            DailyRewardItem(
+                R.drawable.coin_trans_1,
+                "Day 1 \n${dailuRewardList[0]} coins"
+            )
+        )
+        arrayList.add(
+            DailyRewardItem(
+                R.drawable.coin_trans_1,
+                "Day 2 \n${dailuRewardList[1]} coins"
+            )
+        )
+        arrayList.add(
+            DailyRewardItem(
+                R.drawable.coin_trans_1,
+                "Day 3 \n${dailuRewardList[2]} coins"
+            )
+        )
+        arrayList.add(
+            DailyRewardItem(
+                R.drawable.coin_trans_1,
+                "Day 4 \n${dailuRewardList[3]} coins"
+            )
+        )
+        arrayList.add(
+            DailyRewardItem(
+                R.drawable.coin_trans_1,
+                "Day 5 \n${dailuRewardList[4]} coins"
+            )
+        )
+        arrayList.add(
+            DailyRewardItem(
+                R.drawable.coin_trans_1,
+                "Day 6 \n${dailuRewardList[5]} coins"
+            )
+        )
+        arrayList.add(
+            DailyRewardItem(
+                R.drawable.coin_trans_1,
+                "Day 6+ \n${dailuRewardList[6]} coins"
+            )
+        )
         return arrayList
     }
     @SuppressLint("SimpleDateFormat")
@@ -333,6 +366,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     totalCoins = dataSnapshot.get("sc").toString().toInt()
                     findViewById<AppCompatButton>(R.id.userScore).text = String.format("%,d", totalCoins)
                     findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
+                    findViewById<TextView>(R.id.loadingText).text = getString(R.string.fetching_player)
                     ngamesPlayed = dataSnapshot.get("p").toString().toInt()
                     ngamesWon = dataSnapshot.get("w").toString().toInt()
                     ngamesBided = dataSnapshot.get("b").toString().toInt()
@@ -694,25 +728,37 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         }
     }
     private fun createRoom() {
+        findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.VISIBLE
+        findViewById<TextView>(R.id.loadingText).text = getString(R.string.creatingRoom)
+
             val allowedChars = ('A'..'H')+ ('J'..'N') + ('P'..'Z')+('2'..'9')  // 1, I , O and 0 skipped
             val roomID = (1..4).map { allowedChars.random() }.joinToString ("")
             if(nPlayers==7) {
-                if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).data7)
-                else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).dummyData7)
+                if(getString(R.string.testGameData).contains('n'))   createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data7)
+                else createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData7)
             }
            else if(nPlayers==4){
-                if(getString(R.string.testGameData).contains('n'))   refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).data4)
-                else refRoomData.document(roomID).set(CreateRoomData(userName, photoURL, totalCoins).dummyData4)
+                if(getString(R.string.testGameData).contains('n'))  createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data4)
+                else createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData4)
             }
-            soundSuccess.start()
-            startActivity(Intent(applicationContext, CreatenJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
-                .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p1") }
-                .apply { putExtra("nPlayers", nPlayers) }
-                .putIntegerArrayListExtra("userStats", ArrayList(listOf(ngamesPlayed, ngamesWon, ngamesBided ))))
-            overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
-            editor.putString("Room", roomID) // write room ID in storage - to delete later
-            editor.apply()
-            Handler().postDelayed({finish()},500)
+    }
+    private fun createRoomwithID(roomID: String, roomData: Any){
+        refRoomData.document(roomID).set(roomData)
+            .addOnFailureListener{
+                findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
+                toastCenter("Failed to create room \nPlease try again or later")}
+            .addOnSuccessListener{
+        soundSuccess.start()
+        startActivity(Intent(applicationContext, CreatenJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
+            .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p1") }
+            .apply { putExtra("nPlayers", nPlayers) }
+            .putIntegerArrayListExtra("userStats", ArrayList(listOf(ngamesPlayed, ngamesWon, ngamesBided ))))
+                overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
+                editor.putString("Room", roomID) // write room ID in storage - to delete later
+                editor.apply()
+//                finish()
+        Handler().postDelayed({finish()},500)
+    }
     }
     fun createRoomWindowOpen(view: View) {
         if(soundStatus) soundUpdate.start()
@@ -743,6 +789,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if(vibrateStatus) vibrationStart()
         val roomID = findViewById<EditText>(R.id.roomIDInput).text.toString()//read text field
         if (roomID.isNotEmpty()) {
+            hideKeyboard()
+            findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.loadingText).text = getString(R.string.checkJoinRoom)
+
             refRoomData.document(roomID).get().addOnSuccessListener { dataSnapshot ->
                 if (dataSnapshot.data != null) {
                     val playersJoined = dataSnapshot.get("PJ").toString().toInt()
@@ -750,11 +800,16 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     if (playersJoined >= nPlayers) {
                         soundError.start()
                         if(vibrateStatus) vibrationStart()
+                        findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
+
                         findViewById<EditText>(R.id.roomIDInput).hint = "Room is Full"
                         findViewById<EditText>(R.id.roomIDInput).text.clear()
                     } else {
                         if(vibrateStatus) vibrationStart()
                         soundSuccess.start()
+                        findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.VISIBLE
+                        findViewById<TextView>(R.id.loadingText).text = getString(R.string.joiningRoom)
+
                         val playerJoining = playersJoined + 1
                         refRoomData.document(roomID).set(hashMapOf("p$playerJoining" to userName, "PJ" to playerJoining, "p${playerJoining}h" to photoURL, "p${playerJoining}c" to totalCoins), SetOptions.merge())
                             .addOnSuccessListener {
@@ -766,24 +821,38 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 }else {
                     soundError.start()
                     if(vibrateStatus) vibrationStart()
-                    findViewById<EditText>(R.id.roomIDInput).hint = "Wrong ID"
+                    findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
+                    findViewById<EditText>(R.id.roomIDInput).hint = "No Room found"
                     findViewById<EditText>(R.id.roomIDInput).text.clear()
                 }
-            }.addOnFailureListener {exception -> toastCenter(exception.localizedMessage!!.toString()) }
+            }.addOnFailureListener {
+                    exception ->
+                findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
+                toastCenter("Failed to create room \nPlease try again or later \n${exception.localizedMessage!!}"  ) }
         } else {
             soundError.start()
             vibrationStart()
-            findViewById<EditText>(R.id.roomIDInput).hint = "Enter ID"
+            findViewById<EditText>(R.id.roomIDInput).hint = "Enter Room ID"
+        }
+    }
+    private fun hideKeyboard(){
+        val view = this.currentFocus
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        if (imm != null) {
+            view?.let { v ->
+                imm.hideSoftInputFromWindow(v.windowToken, 0)
+            }
         }
     }
     fun joinRoomWindowOpen(view: View) {
         if(soundStatus) soundUpdate.start()
+        findViewById<EditText>(R.id.roomIDInput).hint = "Room ID"
+
         if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched) {
             mInterstitialAd.show()
         }
         Handler().postDelayed({
             findViewById<ImageView>(R.id.closeJoinRoom).visibility = View.VISIBLE
-//            anim(findViewById(R.id.closeJoinRoom),R.anim.anim_scale_infinite)
         }, 270)
         findViewById<RelativeLayout>(R.id.joinRoomFrame).visibility = View.VISIBLE
         anim(findViewById(R.id.joinRoomFrameTemp),R.anim.zoomin)

@@ -171,7 +171,7 @@ class StartScreen : AppCompatActivity() {
             findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
             if( (exception as FirebaseAuthUserCollisionException).errorCode == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL"){
                 soundError.start()
-                toastCenter("Account already exists for email" + "\n \n${(exception as FirebaseAuthUserCollisionException).email} \n \nPlease Sign in with Google or different email")
+                toastCenter("Account already exists for email" + "\n \n${exception.email} \n \nPlease Sign in with Google or different email")
                 LoginManager.getInstance().logOut()
             }else{
                 soundError.start()

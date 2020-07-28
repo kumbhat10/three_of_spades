@@ -643,7 +643,7 @@
                 android:shadowRadius="5"
                 android:textAlignment="center"
                 android:textColor="@color/Black"
-                android:textSize="@dimen/_36ssp"
+                android:textSize="@dimen/_33ssp"
                 android:textStyle="bold" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
@@ -1652,7 +1652,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/BlackTrans"
         android:clickable="true"
-        android:elevation="@dimen/_64sdp"
+        android:elevation="@dimen/_164sdp"
         android:focusable="true"
         android:visibility="visible">
 
@@ -1670,6 +1670,7 @@
             android:rotation="360" />
 
         <TextView
+            android:id="@+id/loadingText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/progressBarLoading3"

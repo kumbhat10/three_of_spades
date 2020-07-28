@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER")
+@file:Suppress("UNUSED_PARAMETER", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 
 package com.kaalikiteeggi.three_of_spades
 
@@ -92,7 +92,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     private lateinit var p5h: String
     private lateinit var p6h: String
     private lateinit var p7h: String
-    private lateinit var userStats: ArrayList<Int>
+    private lateinit var userStats: java.util.ArrayList<Int>
     private lateinit var mAuth: FirebaseAuth
     private var uid = ""
 
@@ -242,6 +242,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
             anim(findViewById(R.id.waitingToJoinText),R.anim.blink_infinite_700ms)
         }
         if(playerJoining==10){
+            if(from!="p1")  findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.VISIBLE
             registration.remove()
             playerInfo = ArrayList()
             playerInfoCoins = ArrayList()
@@ -262,26 +263,35 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         }
     }
     fun startGame(view: View){
+        findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.VISIBLE
+//        findViewById<TextView>(R.id.loadingText1).text = getString(R.string.firingServer)
+
         if(from=="p1") {
-            val gd = if(getString(R.string.testGameData).contains('n')) {
+            val gameData = if(getString(R.string.testGameData).contains('n')) {
                 if(nPlayers==7) CreateGameData(uid, selfName).gameData7
                 else CreateGameData(uid, selfName).gameData4
             }else{
                 if(nPlayers==7) CreateGameData(uid, selfName).gameDataDummy7
                 else CreateGameData(uid, selfName).gameDataDummy4
             }
-            myRefGameData.child(roomID).setValue(gd).addOnSuccessListener {
+            myRefGameData.child(roomID).setValue(gameData).addOnSuccessListener {
                 refRoomData.document(roomID).set(hashMapOf("PJ" to 10), SetOptions.merge())
                     .addOnSuccessListener {
                         findViewById<ImageView>(R.id.startGameButton).clearAnimation()
                         findViewById<ImageView>(R.id.startGameButton).visibility = View.GONE
-                        refRoomData.document(roomID+"_chat").set(hashMapOf( "M" to ""))
-                }
-            }
+                        refRoomData.document(roomID + "_chat").set(hashMapOf("M" to ""))
+                    }.addOnFailureListener { exception ->
+                        findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.GONE
+                        toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}")
+                    }
+            }.addOnFailureListener{exception ->
+                findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.GONE
+                toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}" )}
+
         }
         else{
             soundError.start()
-            toastCenter("Only Host can Start")
+            toastCenter("Only Host can Start the game")
         }
     }
     private fun createTargetPicasso() {
@@ -392,7 +402,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         selfName = intent.getStringExtra("selfName")!!.toString()  //Get Username first  - selfName ,roomID available
         from     = intent.getStringExtra("from")!!.toString()     //check if user has joined room or created one and display Toast
         nPlayers = intent.getIntExtra("nPlayers", 0)
-        userStats = intent.getIntegerArrayListExtra("userStats")
+        userStats = intent.getIntegerArrayListExtra("userStats")!!
 
         findViewById<ImageView>(R.id.imageViewShareButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
         findViewById<Button>(R.id.button_roomID).text = "Room ID: $roomID"   // display the room ID
@@ -500,6 +510,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
             vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)
         }
     }
+    @Suppress("DEPRECATION")
     @SuppressLint("NewApi")
     fun vibrationStart(duration: Long = 150){
         if(versionStatus){
