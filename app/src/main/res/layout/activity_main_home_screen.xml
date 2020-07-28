@@ -1679,7 +1679,7 @@
             android:gravity="center"
             android:text="@string/fetching_player"
             android:textColor="@color/white"
-            android:textSize="@dimen/_14ssp" />
+            android:textSize="@dimen/_13ssp" />
 
     </RelativeLayout>
 </RelativeLayout>

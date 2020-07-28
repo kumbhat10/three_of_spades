@@ -42,7 +42,6 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import pl.droidsonroids.gif.AnimationListener
 import pl.droidsonroids.gif.GifImageView
 import java.util.*
 import kotlin.math.round
@@ -289,7 +288,7 @@ class GameScreen : AppCompatActivity() {
 // endregion
         initializeSpeechEngine()
         getSharedPrefs()
-        if(getString(R.string.test).contains('n')) initializeAds()
+        if(getString(R.string.testAds).contains('n')) initializeAds()
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,typedValue, true)
     }
     private fun setupGame4or7() {
@@ -1107,7 +1106,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             }
         })
         Handler().postDelayed({
-            if(getString(R.string.test).contains('n')) {
+            if(getString(R.string.testAds).contains('n')) {
                 if (!premiumStatus && mInterstitialAd.isLoaded) mInterstitialAd.show()
             }
             if(from == "p1") {

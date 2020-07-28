@@ -132,6 +132,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var dailyRewardClicked = false
     private var claimedToday = false
     private var dailyRewardStatus = false
+    private var handler = Handler()
 
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -189,7 +190,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             if (!premiumStatus) {
 //                mInterstitialAd.show() // dummy - check if needed
             }
-        } else if (!premiumStatus && getString(R.string.test).contains('n')) mInterstitialAd.loadAd(AdRequest.Builder().build())
+        } else if (!premiumStatus && getString(R.string.testAds).contains('n')) mInterstitialAd.loadAd(AdRequest.Builder().build())
     }
     private fun dailyRewardWindowDisplay() {
         soundSuccess.start()
@@ -289,7 +290,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             findViewById<GifImageView>(R.id.watchVideo).clearAnimation()
             findViewById<GifImageView>(R.id.watchVideo).visibility = View.INVISIBLE
             loadRewardAd()
-            if (premiumStatus && getString(R.string.test).contains('n')) mInterstitialAd.loadAd(AdRequest.Builder().build())
+            if (premiumStatus && getString(R.string.testAds).contains('n')) mInterstitialAd.loadAd(AdRequest.Builder().build())
         }
     }
     private fun setDataList(): ArrayList<DailyRewardItem>{
@@ -570,9 +571,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     private fun initializeAds(){
         mInterstitialAd = InterstitialAd(this)
-        if(getString(R.string.test).contains('n')) mInterstitialAd.adUnitId = getString(R.string.interstitial)
-        if(getString(R.string.test).contains('n')) findViewById<AdView>(R.id.addViewMHS).loadAd(AdRequest.Builder().build()) // banner add load
-        if(getString(R.string.test).contains('n'))  mInterstitialAd.loadAd(AdRequest.Builder().build()) // interstitial add load
+        if(getString(R.string.testAds).contains('n')) mInterstitialAd.adUnitId = getString(R.string.interstitial)
+        if(getString(R.string.testAds).contains('n')) findViewById<AdView>(R.id.addViewMHS).loadAd(AdRequest.Builder().build()) // banner add load
+        if(getString(R.string.testAds).contains('n'))  mInterstitialAd.loadAd(AdRequest.Builder().build()) // interstitial add load
         mInterstitialAd.adListener = object : AdListener() {
             override fun onAdClosed() {
                 onceAdWatched = true
@@ -610,7 +611,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 //        AdColonyBundleBuilder.setShowPostPopup(true)
         loadRewardedAdTry += 1
         rewardedAd = RewardedAd(applicationContext, getString(R.string.rewarded))
-        if(getString(R.string.test).contains('n'))  rewardedAd.loadAd(AdRequest.Builder()
+        if(getString(R.string.testAds).contains('n'))  rewardedAd.loadAd(AdRequest.Builder()
 //            .addNetworkExtrasBundle(AdColonyAdapter::class.java,AdColonyBundleBuilder.build())
             .build(), rewardedAdLoadCallback)
     }
@@ -875,7 +876,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     fun developerCredits(view: View){
 //        makeCall()
 //        recordAudio()
-
         if(soundStatus) soundUpdate.start()//Pass username and current activity alias to be able to come back with same info
         startActivity(Intent(this,DeveloperCredits::class.java))
         overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
@@ -1032,7 +1032,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             data = Uri.parse("https://sites.google.com/view/kaali-ki-teeggi/")
         }
         startActivity(intent)
-//        startActivity(Intent(applicationContext, HowToPlayActivity::class.java))
     }
     fun openRatingWindow(view: View){
 //        backButtonPressedStatus = false

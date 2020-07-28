@@ -1,5 +1,5 @@
 <resources>
-    <string name="test">n</string>
+    <string name="testAds">n</string>
     <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
     <string name="nPlayers">4</string>
@@ -128,9 +128,10 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="creatingRoom">Creating Room...</string>
-    <string name="checkJoinRoom">Finding Room...</string>
-    <string name="joiningRoom">Room found \nJoining Room...</string>
-    <string name="firingServer">Creating Server...</string>
+    <string name="creatingRoom">Creating Room…</string>
+    <string name="checkJoinRoom">Finding Room…</string>
+    <string name="joiningRoom">Room found \nJoining Room…</string>
+    <string name="firingServer">Creating Server…</string>
+    <string name="signIN">Signing in…</string>
 
 </resources>

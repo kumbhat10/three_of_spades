@@ -4,6 +4,7 @@
     <color name="shimmerImageBackground">#FFFFFF</color>
     <color name="shimmerBackground">@color/Black</color>
     <color name="BlackTrans">#D2000000</color>
+    <color name="BlackTransDark">#E4000000</color>
     <color name="BlackTransUserStats">#FD000000</color>
     <color name="BlackTransUserStats2">#EE000000</color>
     <color name="BlackTransUserStats3">#C5C5C5</color>

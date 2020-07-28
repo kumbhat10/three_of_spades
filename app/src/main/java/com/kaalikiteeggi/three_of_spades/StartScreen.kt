@@ -83,6 +83,7 @@ class StartScreen : AppCompatActivity() {
         //region Twitter Login
         findViewById<TwitterLoginButton>(R.id.twitterLoginButton).setOnClickListener{
             findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.loadingText3).text = getString(R.string.signIN)
         }
         findViewById<TwitterLoginButton>(R.id.twitterLoginButton).callback = object:
             Callback<TwitterSession>() {
@@ -104,6 +105,7 @@ class StartScreen : AppCompatActivity() {
         val loginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
         loginButton.setOnClickListener {
             findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.loadingText3).text = getString(R.string.signIN)
         }
         callBackManager = CallbackManager.Factory.create()
         loginButton.setPermissions("email","public_profile")
@@ -138,6 +140,7 @@ class StartScreen : AppCompatActivity() {
         findViewById<SignInButton>(R.id.googleSignInButton).setOnClickListener(View.OnClickListener {
             startActivityForResult(mGoogleSignInClient.signInIntent, googleCode)
             findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.loadingText3).text = getString(R.string.signIN)
         })
         //endregion
         initializeSpeechEngine()
@@ -165,6 +168,8 @@ class StartScreen : AppCompatActivity() {
             if (task.isSuccessful) {
                 newUser = task.result?.additionalUserInfo?.isNewUser!!
                 updateUI(provider)
+            }else{
+                findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
             }
         }.addOnFailureListener(this) {
                 exception ->
@@ -180,6 +185,9 @@ class StartScreen : AppCompatActivity() {
         }
     }
     private fun updateUI(provider: String) {
+        if(newUser) findViewById<TextView>(R.id.loadingText3).text = "Adding New User"
+        else findViewById<TextView>(R.id.loadingText3).text = getString(R.string.fetching_player)
+
         val user = mAuth.currentUser
         if(user != null){
             val userGivenName = user.displayName
@@ -200,8 +208,7 @@ class StartScreen : AppCompatActivity() {
                 val profileUpdates =
                     UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(userPhotoUrl)).build()
                 user.updateProfile(profileUpdates)
-                    .addOnCompleteListener {
-//                        toastCenter("User Profile Updated")
+                    .addOnSuccessListener {
                     }
             }
            try{
@@ -234,12 +241,13 @@ class StartScreen : AppCompatActivity() {
 
     private fun startNextActivity(userGivenName: String?){
         soundSuccess.start()
-        speak("Hello ${userGivenName.toString().split(" ")[0]}")
+        speak("Hello  ${userGivenName.toString().split(" ")[0]}")
         findViewById<ProgressBar>(R.id.progressBarLoading2).visibility = View.GONE
+        findViewById<TextView>(R.id.loadingText3).visibility = View.GONE
         findViewById<AppCompatButton>(R.id.signInSuccess).visibility = View.VISIBLE
         findViewById<AppCompatButton>(R.id.signInSuccess).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_left_activity))
         Handler().postDelayed({ startActivity(Intent(this, MainHomeScreen::class.java).apply {putExtra("newUser",newUser)})
-            overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)},500)
+            overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)},400)
 //                           toastCenter("Signed in Successfully ${String(Character.toChars(0x1F60A))}")
 
         Handler().postDelayed({finish()},1500)

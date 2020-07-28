@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -26,13 +25,10 @@ import com.facebook.login.LoginManager
 import com.google.ads.mediation.adcolony.AdColonyMediationAdapter
 import com.google.ads.mediation.inmobi.InMobiConsent
 import com.google.android.gms.ads.*
-import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.appupdate.testing.FakeAppUpdateManager
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.google.android.play.core.tasks.OnFailureListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.inmobi.sdk.InMobiSdk
@@ -52,6 +48,8 @@ class SplashScreen: AppCompatActivity() {
     private lateinit var appUpdateManager: AppUpdateManager
     private lateinit var toast:Toast
     private var premiumStatus = false
+    private var handler = Handler()
+
     private var target = object : Target {
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
         override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
@@ -130,9 +128,6 @@ class SplashScreen: AppCompatActivity() {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
         }
         if(!premiumStatus) mobileAds()
-        checkAppUpdate()
-        timer = if(getString(R.string.test).contains('n')) 3500
-        else 300
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.BOTTOM, 0, 300)
         toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.BlackTransUserStats4))
@@ -140,32 +135,31 @@ class SplashScreen: AppCompatActivity() {
             .setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
 
+        timer = if(getString(R.string.testAds).contains('n')) 3500
+        else 300
+        handler.postDelayed({
+            isTimerOver = true
+            when {
+                (premiumStatus && isAppLatest) -> nextActivity()
+                (!premiumStatus && mInterstitialAd.isLoaded) -> {
+                    if(getString(R.string.testAds).contains('n')) mInterstitialAd.show() // dummy
+                    else nextActivity() // dummy
+                }
+                isAppLatest -> nextActivity()
+            }
+        }, timer.toLong()) // dummy 3500
+        checkAppUpdate()
+
     }
 
     override fun onStart() {
         super.onStart()
-
-        Handler().postDelayed({
-            isTimerOver = true
-            when {
-//                (premiumStatus && !isAppLatest) -> checkAppUpdate() - dummy - dont check again
-                (premiumStatus && isAppLatest) -> nextActivity()
-                (!premiumStatus && mInterstitialAd.isLoaded) -> {
-                   if(getString(R.string.test).contains('n')) mInterstitialAd.show() // dummy
-                   else nextActivity() // dummy
-                }
-                isAppLatest -> nextActivity()
-//                !isAppLatest -> checkAppUpdate()
-                else -> {
-//                    nextActivity()
-                }
-            }
-        }, timer.toLong()) // dummy 3500
     }
 
     fun nextActivity(){
         if(user != null && !isNextActivityStarted){
             isNextActivityStarted = true
+            handler.removeCallbacksAndMessages(null)
             startActivity(Intent(this, MainHomeScreen::class.java).apply {putExtra("newUser",false)})
             overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
             finish()
@@ -180,13 +174,12 @@ class SplashScreen: AppCompatActivity() {
     private fun mobileAds(){
 //        MobileAds.initialize(this) {}   // initialize mobileAdds
         mInterstitialAd = InterstitialAd(this)
-        if(getString(R.string.test).contains('n')) mInterstitialAd.adUnitId = getString(R.string.interstitial)
+        if(getString(R.string.testAds).contains('n')) mInterstitialAd.adUnitId = getString(R.string.interstitial)
         else mInterstitialAd.adUnitId = getString(R.string.interstitialTestVideo)
         mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
         mInterstitialAd.adListener = object : AdListener() {
             override fun onAdClosed() {
               if(isAppLatest)  nextActivity()
-//                else checkAppUpdate() //dummy - not needed to check twice
             }
         }
     }
@@ -197,13 +190,12 @@ class SplashScreen: AppCompatActivity() {
         appUpdateInfoTask.addOnSuccessListener {
                 appUpdateInfo ->
             if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)){
-                toastCenter("App Update is available")
+                handler.removeCallbacksAndMessages(null)
+                toastCenter("New App Update is available")
                 appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 88)
             }else{
-//                toastCenter("App is latest") // dummy
-                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 88)
                 isAppLatest = true
-//                if(isTimerOver && !isNextActivityStarted) nextActivity()
+                if(isTimerOver && !isNextActivityStarted) nextActivity()
             }
         }.addOnFailureListener { e -> toastCenter("failed ${e.message.toString()}")
             if(isTimerOver && !isNextActivityStarted) nextActivity()
@@ -227,10 +219,10 @@ class SplashScreen: AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode== 88){
             if(resultCode != Activity.RESULT_OK){
-//                toastCenter("App is not Updated. Please update app manually")
-//                checkAppUpdate() // dummy not needed to check again
+                checkAppUpdate()
+                toastCenter("App update failed \n Please try again")
             }else if(resultCode == Activity.RESULT_OK){
-//                toastCenter("Result ok") // dummy
+                toastCenter("App updated successfully") // dummy
                 isAppLatest = true
                 if(isTimerOver && !isNextActivityStarted) nextActivity()
             }

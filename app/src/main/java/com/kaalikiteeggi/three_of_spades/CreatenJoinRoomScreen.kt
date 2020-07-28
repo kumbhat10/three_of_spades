@@ -129,7 +129,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         updateUIandAnimateElements()
         getSharedPrefs()
         getRoomLiveUpdates()  // keep updating the screen as the users join
-        if(getString(R.string.test).contains('n')) initializeAds()
+        if(getString(R.string.testAds).contains('n')) initializeAds()
         createTargetPicasso()
         mAuth = FirebaseAuth.getInstance()
         uid = mAuth.uid.toString()
@@ -411,7 +411,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
             findViewById<ImageView>(R.id.leaveJoiningRoomIcon).visibility = View.VISIBLE
             anim(findViewById(R.id.leaveJoiningRoomIcon),R.anim.anim_scale_infinite)
         }
-        else if(getString(R.string.test).contains('n')){ // dummy
+        else if(getString(R.string.testAds).contains('n')){ // dummy
             findViewById<ImageView>(R.id.leaveJoiningRoomIcon).visibility = View.GONE
             findViewById<ImageView>(R.id.leaveJoiningRoomIcon).clearAnimation()
         }
