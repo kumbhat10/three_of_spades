@@ -243,6 +243,8 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         }
         if(playerJoining==10){
             if(from!="p1")  findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.loadingText1).text = "Starting Game..."
+
             registration.remove()
             playerInfo = ArrayList()
             playerInfoCoins = ArrayList()
@@ -263,10 +265,11 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         }
     }
     fun startGame(view: View){
-        findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.VISIBLE
-//        findViewById<TextView>(R.id.loadingText1).text = getString(R.string.firingServer)
 
         if(from=="p1") {
+            findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.loadingText1).text = getString(R.string.firingServer)
+
             val gameData = if(getString(R.string.testGameData).contains('n')) {
                 if(nPlayers==7) CreateGameData(uid, selfName).gameData7
                 else CreateGameData(uid, selfName).gameData4
@@ -287,11 +290,10 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
             }.addOnFailureListener{exception ->
                 findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.GONE
                 toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}" )}
-
         }
         else{
             soundError.start()
-            toastCenter("Only Host can Start the game")
+            toastCenter("Only Host can start the game")
         }
     }
     private fun createTargetPicasso() {

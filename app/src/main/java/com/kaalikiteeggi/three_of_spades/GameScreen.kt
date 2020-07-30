@@ -1025,12 +1025,12 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             }
 //        endregion
             // region       Countdown PlayCard
-            countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 100) {
+            countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 20) {
                 @SuppressLint("SetTextI18n")
                 override fun onTick(millisUntilFinished: Long) {
-                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
+//                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
                     findViewById<ProgressBar>(R.id.progressbarTimer).progress =
-                        (millisUntilFinished * 100 / timeCountdownPlayCard).toInt()
+                        (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
                     findViewById<TextView>(R.id.textViewTimer).text =
                         round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString() + "s"
                 }
@@ -1048,16 +1048,15 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             }
 //        endregion
             // region       Countdown Biding
-            countDownBidding = object : CountDownTimer(timeCountdownBid, 100) {
+            countDownBidding = object : CountDownTimer(timeCountdownBid, 20) {
                 @SuppressLint("SetTextI18n")
                 override fun onTick(millisUntilFinished: Long) {
-                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
+//                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
                     findViewById<ProgressBar>(R.id.progressbarTimer).progress =
-                        (millisUntilFinished * 100 / timeCountdownBid).toInt()
+                        (millisUntilFinished * 10000 / timeCountdownBid).toInt()
                     findViewById<TextView>(R.id.textViewTimer).text =
-                        round((millisUntilFinished / 1000).toDouble()).toInt().toString() + "s"
+                        round((millisUntilFinished / 1000).toDouble()+1).toInt().toString() + "s"
                 }
-
                 override fun onFinish() {
                     if (vibrateStatus) vibrationStart()
                     soundTimerFinish.start()
@@ -1233,7 +1232,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         findViewById<GifImageView>(R.id.trumpImage).setImageResource(R.drawable.trump1)
         findViewById<TextView>(R.id.textViewBidValue).text = "$emojiScore ${getString(R.string.bidValue1)}"
         findViewById<TextView>(R.id.textViewBider).text = getString(R.string.Bider)
-        findViewById<TextView>(R.id.trumpText1).text = getString(R.string.partner1)
         findViewById<TextView>(R.id.trumpText).text = getString(R.string.Trump)
         for (i in 0 until nPlayers) { // first reset background and animation of all partner icon
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).clearAnimation()
@@ -1265,9 +1263,11 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         roundWinner = 0
         tablePoints = 0
         if(nPlayers4){
+            findViewById<TextView>(R.id.trumpText1).text = getString(R.string.partner)
             scoreList = listOf(pt1, pt2, pt3, pt4)
             ptAll = listOf(pt1, pt2, pt3, pt4)
         }else{
+            findViewById<TextView>(R.id.trumpText1).text = getString(R.string.partner1)
             findViewById<TextView>(R.id.trumpText2).text = getString(R.string.partner2)
             scoreList = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
             ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
@@ -1488,13 +1488,14 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     private fun countDownTimer(task: String, purpose: String = "start") {
         if(purpose=="start"){
 //            timeCountdown = time
+            findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
             findViewById<ProgressBar>(R.id.progressbarTimer).progress = 100
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
             findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.VISIBLE
             findViewById<TextView>(R.id.textViewTimer).visibility = View.VISIBLE
             findViewById<TextView>(R.id.textViewTimer).text = "10s"
-            findViewById<ProgressBar>(R.id.progressbarTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-            findViewById<TextView>(R.id.textViewTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
+//            findViewById<ProgressBar>(R.id.progressbarTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
+//            findViewById<TextView>(R.id.textViewTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
             if (task=="Bidding") countDownBidding.start()
             if (task=="PlayCard") countDownPlayCard.start()
         }else if(purpose== "cancel"){
@@ -1816,8 +1817,8 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 findViewById<TextView>(R.id.trumpText1).text = getString(R.string.bothPartner)
                 findViewById<TextView>(R.id.trumpText2).text = getString(R.string.bothPartner)
             }else {
-                if (bu1Flag == 1) findViewById<TextView>(R.id.trumpText1).text = getString(R.string.onlyPartner)
-                if (bu1Flag == 0) findViewById<TextView>(R.id.trumpText1).text = getString(R.string.anyPartner)
+                if (bu1Flag == 1 && nPlayers7) findViewById<TextView>(R.id.trumpText1).text = getString(R.string.onlyPartner)
+                if (bu1Flag == 0 && nPlayers7) findViewById<TextView>(R.id.trumpText1).text = getString(R.string.anyPartner)
                 if (nPlayers7 && bu2Flag == 1) findViewById<TextView>(R.id.trumpText2).text = getString(R.string.onlyPartner)
                 if (nPlayers7 && bu2Flag == 0) findViewById<TextView>(R.id.trumpText2).text = getString(R.string.anyPartner)
             }

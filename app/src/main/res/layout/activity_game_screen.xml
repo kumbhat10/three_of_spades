@@ -1169,7 +1169,7 @@
         android:layout_marginTop="@dimen/_4sdp"
         android:layout_marginEnd="@dimen/_4sdp"
         android:indeterminate="false"
-        android:max="100"
+        android:max="10000"
         android:progress="100"
         android:clickable="true"
         android:focusable="true"
@@ -1191,13 +1191,11 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-
         android:gravity="center"
         android:text="@string/timerStart"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_22ssp"
+        android:textSize="@dimen/_20ssp"
         android:visibility="gone" />
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/scoreSheetButton"
@@ -1224,7 +1222,6 @@
         android:layout_marginStart="@dimen/_50sdp"
         android:layout_marginEnd="@dimen/_39sdp"
         android:layout_marginBottom="0dp">
-
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView1"

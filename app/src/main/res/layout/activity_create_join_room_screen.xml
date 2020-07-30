@@ -388,26 +388,26 @@
         android:textStyle="bold"
         android:visibility="visible" />
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/player4Photo"
-        android:layout_width="@dimen/_64sdp"
-        android:layout_height="@dimen/_64sdp"
-        android:layout_alignBottom="@+id/player4Text"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/_6sdp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginBottom="@dimen/_minus11sdp"
-        android:background="@drawable/border"
-        android:backgroundTintMode="add"
-        android:contentDescription="@string/todo"
-        android:elevation="@dimen/_22sdp"
-        android:soundEffectsEnabled="true"
-        android:src="@drawable/player_join_slow"
-        android:visibility="visible"/>
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/player4Photo"
+            android:layout_width="@dimen/_64sdp"
+            android:layout_height="@dimen/_64sdp"
+            android:layout_alignBottom="@+id/player4Text"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_minus11sdp"
+            android:background="@drawable/border"
+            android:backgroundTintMode="add"
+            android:clickable="true"
+            android:contentDescription="@string/todo"
+            android:elevation="@dimen/_22sdp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:soundEffectsEnabled="true"
+            android:src="@drawable/player_join_slow"
+            android:visibility="visible" />
 
-    <com.facebook.shimmer.ShimmerFrameLayout
+        <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/player5Shimmer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -422,7 +422,7 @@
         app:shimmer_highlight_color="#FFFFFF"
         app:shimmer_repeat_delay="0"
         app:shimmer_repeat_mode="restart"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:shimmer_shape="linear">
 
         <ImageView
@@ -454,7 +454,7 @@
         android:textColor="@color/font_yellow"
         android:textSize="@dimen/cjrButtonsTextSize"
         android:textStyle="bold"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:cornerRadius="@dimen/_14sdp"/>
 
     <pl.droidsonroids.gif.GifImageView
@@ -474,7 +474,7 @@
         android:elevation="@dimen/_22sdp"
         android:soundEffectsEnabled="true"
         android:src="@drawable/player_join_slow"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/player6Shimmer"
@@ -492,7 +492,7 @@
         app:shimmer_highlight_color="#FFFFFF"
         app:shimmer_repeat_delay="0"
         app:shimmer_repeat_mode="restart"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:shimmer_shape="linear">
 
         <ImageView
@@ -524,7 +524,7 @@
         android:textColor="@color/font_yellow"
         android:textSize="@dimen/cjrButtonsTextSize"
         android:textStyle="bold"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:cornerRadius="@dimen/_14sdp"/>
 
     <pl.droidsonroids.gif.GifImageView
@@ -544,7 +544,7 @@
         android:elevation="@dimen/_22sdp"
         android:soundEffectsEnabled="true"
         android:src="@drawable/player_join_slow"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/player7Shimmer"
@@ -561,7 +561,7 @@
         app:shimmer_highlight_color="#FFFFFF"
         app:shimmer_repeat_delay="0"
         app:shimmer_repeat_mode="restart"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:shimmer_shape="linear">
 
         <ImageView
@@ -594,7 +594,7 @@
         android:textColor="@color/font_yellow"
         android:textSize="@dimen/cjrButtonsTextSize"
         android:textStyle="bold"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/player7Photo"
@@ -613,7 +613,7 @@
         android:elevation="@dimen/_22sdp"
         android:soundEffectsEnabled="true"
         android:src="@drawable/player_join_slow"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
         <RelativeLayout
             android:layout_width="match_parent"
