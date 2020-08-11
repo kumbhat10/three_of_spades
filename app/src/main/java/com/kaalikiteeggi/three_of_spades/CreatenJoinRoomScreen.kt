@@ -67,7 +67,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     private var p5Status = false
     private var p6Status = false
     private var p7Status = false
-    private var musicStatus = true
+    private var musicStatus = false
     private var soundStatus = true
     private var vibrateStatus = true
     private var premiumStatus = false
@@ -109,35 +109,32 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
 
          setContentView(R.layout.activity_create_join_room_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
 
-        if (sharedPreferences.contains("themeColor")) {
-//            changeBackground(sharedPreferences.getString("themeColor", "shine_bk").toString())
+        Handler().post{
+            v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            soundUpdate = MediaPlayer.create(applicationContext,R.raw.player_moved)
+            soundError = MediaPlayer.create(applicationContext,R.raw.error_entry)
+            soundSuccess= MediaPlayer.create(applicationContext,R.raw.player_success_chime)
+            soundBkgd = MediaPlayer.create(applicationContext, R.raw.main_screen_bkgd)
+            soundBkgd.isLooping = true
+            toast = Toast.makeText(applicationContext,"",Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.Black))
+            toast.view.findViewById<TextView>(android.R.id.message).setTextColor(ContextCompat.getColor(applicationContext,R.color.font_yellow))
+            toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
+            updateUIandAnimateElements()
+            getSharedPrefs()
+            createTargetPicasso()
+            getRoomLiveUpdates()  // keep updating the screen as the users join
         }
-        v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        soundUpdate = MediaPlayer.create(applicationContext,R.raw.player_moved)
-        soundError = MediaPlayer.create(applicationContext,R.raw.error_entry)
-        soundSuccess= MediaPlayer.create(applicationContext,R.raw.player_success_chime)
-        soundBkgd = MediaPlayer.create(applicationContext, R.raw.main_screen_bkgd)
-        soundBkgd.isLooping = true
-        toast = Toast.makeText(applicationContext,"",Toast.LENGTH_SHORT)
-        toast.setGravity(Gravity.CENTER, 0, 0)
-        toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.Black))
-        toast.view.findViewById<TextView>(android.R.id.message).setTextColor(ContextCompat.getColor(applicationContext,R.color.font_yellow))
-        toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
 
-        updateUIandAnimateElements()
-        getSharedPrefs()
-        getRoomLiveUpdates()  // keep updating the screen as the users join
-        if(getString(R.string.testAds).contains('n')) initializeAds()
-        createTargetPicasso()
         mAuth = FirebaseAuth.getInstance()
         uid = mAuth.uid.toString()
     }
 
     override fun onStart() {
         super.onStart()
-        if (musicStatus) soundBkgd.start()
+        if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
     }
 
     private fun getRoomLiveUpdates(){
@@ -265,18 +262,18 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         }
     }
     fun startGame(view: View){
-
         if(from=="p1") {
             findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.VISIBLE
             findViewById<TextView>(R.id.loadingText1).text = getString(R.string.firingServer)
 
-            val gameData = if(getString(R.string.testGameData).contains('n')) {
+            val gameData = if(!BuildConfig.DEBUG){  //(getString(R.string.testGameData).contains('n')) {
                 if(nPlayers==7) CreateGameData(uid, selfName).gameData7
                 else CreateGameData(uid, selfName).gameData4
             }else{
                 if(nPlayers==7) CreateGameData(uid, selfName).gameDataDummy7
                 else CreateGameData(uid, selfName).gameDataDummy4
             }
+
             myRefGameData.child(roomID).setValue(gameData).addOnSuccessListener {
                 refRoomData.document(roomID).set(hashMapOf("PJ" to 10), SetOptions.merge())
                     .addOnSuccessListener {
@@ -373,17 +370,8 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     }
     private fun initializeAds(){
         if(!premiumStatus){
-//            MobileAds.initialize(this)
             findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.VISIBLE
             findViewById<AdView>(R.id.addViewCreateJoinRoom).loadAd(AdRequest.Builder().build())
-//            mInterstitialAd = InterstitialAd(this)
-//            mInterstitialAd.adUnitId = resources.getString(R.string.interstitial)
-//            mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
-//            mInterstitialAd.adListener = object : AdListener() {
-//                override fun onAdClosed() {
-//                    startNextActivity()
-//                }
-//            }
         }
         else  {
             findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.GONE
@@ -391,13 +379,12 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     }
     private fun startNextActivity(){
         soundUpdate.start()
-        startActivity(Intent(this@CreatenJoinRoomScreen,GameScreen::class.java).apply { putExtra("selfName",selfName) }
+        startActivity(Intent(this@CreatenJoinRoomScreen,GameScreen::class.java).apply { putExtra("selfName",selfName) }  // AutoPlay
             .apply { putExtra("from",from) }.apply { putExtra("nPlayers", nPlayers) }
             .apply { putExtra("roomID",roomID) }.putStringArrayListExtra("playerInfo",playerInfo)
             .putIntegerArrayListExtra("playerInfoCoins",playerInfoCoins).putIntegerArrayListExtra("userStats",userStats))
         overridePendingTransition(R.anim.slide_top_in_activity,R.anim.slide_top_in_activity)
         Handler().postDelayed({finish()},400)
-//        finish()
     }
     private fun updateUIandAnimateElements(){
         roomID   = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display
@@ -494,12 +481,15 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
         }
     }
     private fun getSharedPrefs(){
+        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
         if (sharedPreferences.contains("themeColor")) {
 //            changeBackground(sharedPreferences.getString("themeColor", "shine_bk").toString())
         }
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
             if(premiumStatus) findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.GONE
+            else initializeAds()
+
         }
         if (sharedPreferences.contains("musicStatus")) {
             musicStatus = sharedPreferences.getBoolean("musicStatus", true)
@@ -537,7 +527,7 @@ class CreatenJoinRoomScreen : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-        if(musicStatus) soundBkgd.start()
+        if(musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
     }
     override fun onDestroy() {
         super.onDestroy()

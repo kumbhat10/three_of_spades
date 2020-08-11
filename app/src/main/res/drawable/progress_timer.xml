@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/secondaryProgress">
+
         <shape
             android:innerRadiusRatio="2.7"
             android:shape="ring"
             android:thicknessRatio="10.0"
             android:useLevel="true">
             <gradient
-                android:endColor="#333333"
+                android:endColor="#000000"
                 android:centerColor="#000000"
-                android:startColor="#333333"
+                android:startColor="#000000"
                 android:type="sweep" />
         </shape>
     </item>
@@ -31,9 +32,9 @@
                     android:pivotY="50%"
                     android:toDegrees="360" />
                 <gradient
-                    android:centerColor="#00FF00"
                     android:endColor="#00FF00"
-                    android:startColor="#00FF00"
+                    android:centerColor="#FFFF00"
+                    android:startColor="#FF0000"
                     android:type="sweep" />
             </shape>
         </rotate>

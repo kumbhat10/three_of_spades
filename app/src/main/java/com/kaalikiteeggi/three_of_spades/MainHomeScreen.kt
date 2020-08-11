@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.*
 import android.speech.tts.TextToSpeech
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -83,10 +84,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var createRoomWindowStatus = false
     private var settingsWindowStatus = false
     private var playerStatsWindowStatus = false
+    private var trainAccess = false
 
     private lateinit var toast: Toast
     private var refUsersData = Firebase.firestore.collection("Users")
     private var refRoomData = Firebase.firestore.collection("Rooms")
+    private val myRefTrainingData = Firebase.database.getReference("Training") // initialize database reference
 
     private lateinit var mInterstitialAd: InterstitialAd
     private lateinit var rewardedAd: RewardedAd
@@ -105,7 +108,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             }
         }
     }
-    private var musicStatus = true
+    private var musicStatus = false
     private var soundStatus = true
     private var vibrateStatus = true
     private var premiumStatus = false
@@ -132,7 +135,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var dailyRewardClicked = false
     private var claimedToday = false
     private var dailyRewardStatus = false
-    private var handler = Handler()
 
     @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,49 +150,39 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
         setContentView(R.layout.activity_main_home_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-        findViewById<GifImageView>(R.id.watchVideo).visibility = View.GONE
-        soundUpdate = MediaPlayer.create(applicationContext, R.raw.player_moved)
-        soundError = MediaPlayer.create(applicationContext, R.raw.error_entry)
-        soundSuccess = MediaPlayer.create(applicationContext, R.raw.player_success_chime)
-        soundBkgd = MediaPlayer.create(applicationContext, R.raw.main_screen_bkgd)
-        soundCollectCards = MediaPlayer.create(applicationContext, R.raw.collect_cards)
-        soundBkgd.isLooping = true
-        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.BOTTOM, 0, 300)
         toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundDark))
         toast.view.findViewById<TextView>(android.R.id.message)
             .setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
         toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
-
-        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
-        editor = sharedPreferences.edit()
-        shimmer = Shimmer()
-        shimmer.duration = 1800
+        soundBkgd = MediaPlayer.create(applicationContext, R.raw.main_screen_bkgd)
+        soundBkgd.isLooping = true
 
         mAuth = FirebaseAuth.getInstance()
         uid = mAuth.uid.toString()
-
-        if(intent.getBooleanExtra("errorStatus",false)){
-            toastCenter("Booh !!!!\n The server is in the spirit World ")
-        }
-        initializeAds()
-        getUserData()
-        getSharedPrefs()
-        animateElements()
-        enterText() // press enter to join room
-        setupBillingClient()
+        Handler().post(Runnable {
+            soundUpdate = MediaPlayer.create(applicationContext, R.raw.player_moved)
+            soundError = MediaPlayer.create(applicationContext, R.raw.error_entry)
+            soundSuccess = MediaPlayer.create(applicationContext, R.raw.player_success_chime)
+            soundCollectCards = MediaPlayer.create(applicationContext, R.raw.collect_cards)
+            vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            getUserData()
+            animateElements()
+            getSharedPrefs()
+            initializeAds()
+            enterText() // press enter to join room
+            setupBillingClient()
+        })
     }
+
 
     override fun onStart() {
         super.onStart()
         if(rated && ratingWindowOpenStatus) closeRatingWindow(View(applicationContext))
-        if (musicStatus) soundBkgd.start()
-        if (mInterstitialAd.isLoaded) {
-            if (!premiumStatus) {
-//                mInterstitialAd.show() // dummy - check if needed
-            }
-        } else if (!premiumStatus && getString(R.string.testAds).contains('n')) mInterstitialAd.loadAd(AdRequest.Builder().build())
+        if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
+
     }
     private fun dailyRewardWindowDisplay() {
         soundSuccess.start()
@@ -282,7 +274,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             mInterstitialAd.show()
             findViewById<LinearLayout>(R.id.dailyRewardGridLayout).visibility = View.GONE
             findViewById<GifImageView>(R.id.watchVideo).clearAnimation()
-            findViewById<GifImageView>(R.id.watchVideo).visibility = View.INVISIBLE
+            findViewById<GifImageView>(R.id.watchVideo).visibility = View.GONE
             loadRewardAd()
         }else{
             findViewById<LinearLayout>(R.id.dailyRewardGridLayout).visibility = View.GONE
@@ -418,6 +410,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     editor.apply()
                     editor.putBoolean("premium", premiumStatus) // write username to preference file
                     editor.apply()
+                    checkAccesstoTrain()
                 }catch(exception: java.lang.Exception){
                     mAuth.signOut()
                     startActivity(Intent(applicationContext, StartScreen::class.java))
@@ -433,9 +426,18 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             finish()
         }
     }
+    private fun checkAccesstoTrain(){
+        Firebase.firestore.collection("Train_Access").document(uid).get().addOnSuccessListener { dataSnapshot ->
+            trainAccess = dataSnapshot.data != null
+            if(!trainAccess) findViewById<GifImageView>(R.id.helpUs).visibility = View.GONE
+        }
+    }
     private fun getSharedPrefs(){
+        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
+        editor = sharedPreferences.edit()
+
         if (sharedPreferences.contains("themeColor")) {
-//            changeBackground(sharedPreferences.getString("themeColor", "shine_bk").toString())
+            changeBackground(sharedPreferences.getString("themeColor", "shine_yellow").toString())
         }
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
@@ -462,6 +464,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             musicStatus = sharedPreferences.getBoolean("musicStatus", true)
             findViewById<SwitchCompat>(R.id.musicSwitch).isChecked = musicStatus
             if(musicStatus) {
+                soundBkgd.start()
                 findViewById<ImageView>(R.id.settMusicIcon).setImageResource(R.drawable.music)
             }else {
                 findViewById<ImageView>(R.id.settMusicIcon).setImageResource(R.drawable.nomusic)
@@ -484,7 +487,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if (sharedPreferences.contains("Room")) {
             val roomID = sharedPreferences.getString("Room","").toString()
             if(roomID.isNotEmpty()) {
-               Handler().postDelayed({deleteAllRoomdata(roomID)},1000)
+               Handler().postDelayed({deleteAllRoomdata(roomID)},0)
 //                deleteAllRoomdata(roomID)
             }
             editor.remove("Room").apply()
@@ -570,10 +573,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     private fun initializeAds(){
+        findViewById<AdView>(R.id.addViewMHS).loadAd(AdRequest.Builder().build()) // banner add load
         mInterstitialAd = InterstitialAd(this)
-        if(getString(R.string.testAds).contains('n')) mInterstitialAd.adUnitId = getString(R.string.interstitial)
-        if(getString(R.string.testAds).contains('n')) findViewById<AdView>(R.id.addViewMHS).loadAd(AdRequest.Builder().build()) // banner add load
-        if(getString(R.string.testAds).contains('n'))  mInterstitialAd.loadAd(AdRequest.Builder().build()) // interstitial add load
+        if(!BuildConfig.DEBUG)  mInterstitialAd.adUnitId = getString(R.string.interstitialReal) // real interstitial ad
+        else  mInterstitialAd.adUnitId = getString(R.string.interstitialTest) // test interstitial ad
+        mInterstitialAd.loadAd(AdRequest.Builder().build()) // interstitial add load
         mInterstitialAd.adListener = object : AdListener() {
             override fun onAdClosed() {
                 onceAdWatched = true
@@ -604,15 +608,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             }
         }
         loadRewardAd()
-
     }
     private fun loadRewardAd(){
-//        AdColonyBundleBuilder.setShowPrePopup(true)
-//        AdColonyBundleBuilder.setShowPostPopup(true)
         loadRewardedAdTry += 1
         rewardedAd = RewardedAd(applicationContext, getString(R.string.rewarded))
         if(getString(R.string.testAds).contains('n'))  rewardedAd.loadAd(AdRequest.Builder()
-//            .addNetworkExtrasBundle(AdColonyAdapter::class.java,AdColonyBundleBuilder.build())
             .build(), rewardedAdLoadCallback)
     }
     fun showRewardedVideoAd(view: View){
@@ -668,7 +668,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         }
         else{
             findViewById<GifImageView>(R.id.watchVideo).clearAnimation()
-            findViewById<GifImageView>(R.id.watchVideo).visibility = View.INVISIBLE
+            findViewById<GifImageView>(R.id.watchVideo).visibility = View.GONE
             loadRewardAd()
         }
     }
@@ -735,11 +735,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             val allowedChars = ('A'..'H')+ ('J'..'N') + ('P'..'Z')+('2'..'9')  // 1, I , O and 0 skipped
             val roomID = (1..4).map { allowedChars.random() }.joinToString ("")
             if(nPlayers==7) {
-                if(getString(R.string.testGameData).contains('n'))   createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data7)
+                if(!BuildConfig.DEBUG)   createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data7)
                 else createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData7)
             }
            else if(nPlayers==4){
-                if(getString(R.string.testGameData).contains('n'))  createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data4)
+                if(!BuildConfig.DEBUG)  createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data4)
                 else createRoomwithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData4)
             }
     }
@@ -818,7 +818,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                                     .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p$playerJoining") }.apply {putExtra("nPlayers", nPlayers)}
                                     .putIntegerArrayListExtra("userStats", ArrayList(listOf(ngamesPlayed, ngamesWon, ngamesBided ))))
                                 overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
-                                Handler().postDelayed({finish()},3000)} }
+                                Handler().postDelayed({finish()},500)} }
                 }else {
                     soundError.start()
                     if(vibrateStatus) vibrationStart()
@@ -862,7 +862,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         joinRoomWindowStatus = true
     }
     fun joinRoomWindowExit(view: View) {
-        findViewById<ImageButton>(R.id.joinRoomFrameIcon).clearAnimation()
+        findViewById<ImageView>(R.id.joinRoomFrameIcon).clearAnimation()
         findViewById<ImageView>(R.id.closeJoinRoom).clearAnimation()
         findViewById<ImageView>(R.id.closeJoinRoom).visibility = View.GONE
         anim(findViewById(R.id.joinRoomFrameTemp),R.anim.zoomout)
@@ -877,7 +877,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 //        makeCall()
 //        recordAudio()
         if(soundStatus) soundUpdate.start()//Pass username and current activity alias to be able to come back with same info
-        startActivity(Intent(this,DeveloperCredits::class.java))
+        startActivity(Intent(this,DeveloperCredits::class.java).putExtra("uid",uid))
         overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
     }
     private fun animateElements(){
@@ -888,25 +888,26 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         anim(findViewById(R.id.buttonInvite),R.anim.slide_buttons)
         anim(findViewById(R.id.buttonSettings),R.anim.slide_buttons)
         anim(findViewById(R.id.userScore),R.anim.slide_buttons_rtl)
+//        shimmer = Shimmer()
+//        shimmer.duration = 1800
+//        shimmer.start(findViewById<ShimmerButton>(R.id.developerCreditsButton))
+//        shimmer.start(findViewById<ShimmerTextView>(R.id.musicSettText))
+//        shimmer.start(findViewById<ShimmerTextView>(R.id.soundSettText))
+//        shimmer.start(findViewById<ShimmerTextView>(R.id.vibrateSettText))
+//        shimmer.start(findViewById<ShimmerTextView>(R.id.playerStatsTitle))
+//        shimmer.start(findViewById<ShimmerTextView>(R.id.gamesPlayedStats))
+//        shimmer.start(findViewById<ShimmerTextView>(R.id.gamesWonStats))
+//        shimmer.start(findViewById<ShimmerTextView>(R.id.gamesBidedStats))
 
-        shimmer.start(findViewById<ShimmerButton>(R.id.developerCreditsButton))
-        shimmer.start(findViewById<ShimmerTextView>(R.id.musicSettText))
-        shimmer.start(findViewById<ShimmerTextView>(R.id.soundSettText))
-        shimmer.start(findViewById<ShimmerTextView>(R.id.vibrateSettText))
-        shimmer.start(findViewById<ShimmerTextView>(R.id.playerStatsTitle))
-        shimmer.start(findViewById<ShimmerTextView>(R.id.gamesPlayedStats))
-        shimmer.start(findViewById<ShimmerTextView>(R.id.gamesWonStats))
-        shimmer.start(findViewById<ShimmerTextView>(R.id.gamesBidedStats))
-//        shimmer.start(findViewById<ShimmerTextView>(R.id.dailyRewardsTitle))
-
-        anim(findViewById(R.id.developerIcon),R.anim.anim_scale_infinite)
-        anim(findViewById(R.id.claimReward),R.anim.anim_scale_appeal)
+//        anim(findViewById(R.id.developerIcon),R.anim.anim_scale_infinite)
+//        anim(findViewById(R.id.claimReward),R.anim.anim_scale_appeal)
 //        anim(findViewById(R.id.claimRewardCancel),R.anim.anim_scale_infinite)
         anim(findViewById(R.id.createRoomIcon),R.anim.clockwise)
         anim(findViewById(R.id.joinRoomIcon),R.anim.clockwise_ccw_infinite)
         anim(findViewById(R.id.settingsIcon),R.anim.clockwise_ccw_infinite)
         anim(findViewById(R.id.inviteIcon),R.anim.clockwise)
     }
+
     fun anim(view: View,anim:Int){
         view.startAnimation(AnimationUtils.loadAnimation(applicationContext,anim))
     }
@@ -946,8 +947,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
     fun music(view: View){
         musicStatus = findViewById<SwitchCompat>(R.id.musicSwitch).isChecked
-        editor.putBoolean("musicStatus",musicStatus) // write username to preference file
-        editor.apply()
         if(musicStatus) {
             soundBkgd.start()
             findViewById<ImageView>(R.id.settMusicIcon).setImageResource(R.drawable.music)
@@ -955,27 +954,27 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             soundBkgd.pause()
             findViewById<ImageView>(R.id.settMusicIcon).setImageResource(R.drawable.nomusic)
         }
+        editor.putBoolean("musicStatus",musicStatus) // write username to preference file
+        editor.apply()
     }
     fun sound(view: View){
         soundStatus = findViewById<SwitchCompat>(R.id.soundSwitch).isChecked
-//        val editor  = sharedPreferences.edit()
-        editor.putBoolean("soundStatus",soundStatus) // write username to preference file
-        editor.apply()
-
         if(soundStatus) {
             soundUpdate.start()
             findViewById<ImageView>(R.id.settSoundIcon).setImageResource(R.drawable.sound_on_png)
         }else findViewById<ImageView>(R.id.settSoundIcon).setImageResource(R.drawable.sound_off_png)
+        editor.putBoolean("soundStatus",soundStatus) // write username to preference file
+        editor.apply()
+
     }
     fun vibrate(view: View){
         vibrateStatus = findViewById<SwitchCompat>(R.id.vibrateSwitch).isChecked
-        editor.putBoolean("vibrateStatus",vibrateStatus) // write username to preference file
-        editor.apply()
         if(vibrateStatus) {
             vibrationStart(1000)
             findViewById<ImageView>(R.id.settVibrateIcon).setImageResource(R.drawable.vibrateon)
         }else findViewById<ImageView>(R.id.settVibrateIcon).setImageResource(R.drawable.vibrateoff)
-
+        editor.putBoolean("vibrateStatus",vibrateStatus) // write username to preference file
+        editor.apply()
     }
     @SuppressLint("NewApi")
     private fun vibrationStart(duration: Long = 150){
@@ -1000,7 +999,18 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         toast.setText(message)
         toast.show()
     }
-
+    fun trainingStart(view: View){
+        if(trainAccess) {
+            findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.loadingText).text = getString(R.string.startTrain)
+            if (soundStatus) soundUpdate.start()//Pass username and current activity alias to be able to come back with same info
+            startActivity(Intent(applicationContext, TrainActivity::class.java))
+            overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
+            Handler().postDelayed({ finish() }, 1000)
+        }else{
+            toastCenter("Sorry You don't have access")
+        }
+}
     fun inviteFriends(view: View){
 
         if(soundStatus) soundUpdate.start()
@@ -1109,7 +1119,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
     override fun onResume() {
         super.onResume()
-        if(musicStatus) soundBkgd.start()
+        if(musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
     }
     override fun onDestroy() {
         billingClient.endConnection()

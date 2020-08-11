@@ -78,7 +78,7 @@
     <string name="raise_bid_or_pass">Raise Bid or Pass</string>
     <string name="chooseTrump">Select Trump</string>
 
-    <string name="passText">Pass</string>
+    <string name="passText">Next</string>
     <string name="chatWindowDisplay">No Messages yet. Send first message</string>
     <string name="sendChatButton">Send</string>
     <string name="chatInputHint">Type your message here......</string>
@@ -131,8 +131,10 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="creatingRoom">Creating Room…</string>
     <string name="checkJoinRoom">Finding Room…</string>
+    <string name="startTrain">Start Training.…</string>
     <string name="joiningRoom">Room found \nJoining Room…</string>
     <string name="firingServer">Creating Server…</string>
     <string name="signIN">Signing in…</string>
+    <string name="title_activity_train">TrainActivity</string>
 
 </resources>

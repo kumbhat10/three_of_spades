@@ -10,19 +10,19 @@
     android:background="@color/Black"
     tools:context=".MainHomeScreen">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/frameShimmer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:shimmer_base_alpha="0.9"
-        app:shimmer_clip_to_children="true"
-        app:shimmer_colored="false"
-        app:shimmer_direction="bottom_to_top"
-        app:shimmer_duration="1800"
-        app:shimmer_repeat_delay="0"
-        app:shimmer_repeat_mode="reverse"
-        app:shimmer_shape="radial"
-        app:shimmer_tilt="0">
+<!--    <com.facebook.shimmer.ShimmerFrameLayout-->
+<!--        android:id="@+id/frameShimmer"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:shimmer_base_alpha="0.9"-->
+<!--        app:shimmer_clip_to_children="true"-->
+<!--        app:shimmer_colored="false"-->
+<!--        app:shimmer_direction="bottom_to_top"-->
+<!--        app:shimmer_duration="1800"-->
+<!--        app:shimmer_repeat_delay="0"-->
+<!--        app:shimmer_repeat_mode="reverse"-->
+<!--        app:shimmer_shape="radial"-->
+<!--        app:shimmer_tilt="0">-->
 
         <ImageView
             android:id="@+id/backgroundHomeScreen"
@@ -36,7 +36,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/shine_yellow" />
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+<!--    </com.facebook.shimmer.ShimmerFrameLayout>-->
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/removeAds"
@@ -51,7 +51,8 @@
         android:layout_marginEnd="@dimen/_7sdp"
         android:elevation="@dimen/_22sdp"
         android:onClick="removeAdsorPremium"
-        android:src="@drawable/no_ads" />
+        android:src="@drawable/no_ads"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/welcome"
@@ -98,6 +99,8 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginEnd="0dp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:elevation="@dimen/_22sdp"
         android:onClick="showRewardedVideoAd"
         android:src="@drawable/watch_ad_100"
@@ -256,6 +259,8 @@
                     android:layout_width="@dimen/_72sdp"
                     android:layout_height="@dimen/_72sdp"
                     android:layout_centerVertical="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:layout_marginEnd="@dimen/_minus25sdp"
                     android:layout_toStartOf="@+id/signoutbutton"
                     android:contentDescription="@string/todo"
@@ -271,6 +276,7 @@
                     android:layout_centerInParent="true"
                     android:background="@drawable/button_pressed_shine_black"
                     android:clickable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:onClick="signOut"
                     android:focusable="true"
                     android:paddingStart="@dimen/_22sdp"
@@ -318,6 +324,21 @@
         android:onClick="openRatingWindow"
         android:src="@drawable/rateus" />
 
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/helpUs"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
+        android:layout_below="@+id/rateUs"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="0dp"
+        android:clickable="true"
+        android:elevation="@dimen/_22sdp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="trainingStart"
+        android:src="@drawable/brain" />
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/createRoomButton"
@@ -351,6 +372,8 @@
         android:layout_below="@+id/userScore"
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/_4sdp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginTop="@dimen/_7sdp"
         android:elevation="@dimen/_14sdp"
         android:src="@drawable/chip_coin_trans"
@@ -391,6 +414,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/_4sdp"
         android:layout_marginTop="0dp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:background="@drawable/border"
         android:backgroundTintMode="add"
         android:elevation="@dimen/_14sdp"
@@ -407,6 +432,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/_4sdp"
         android:layout_marginTop="0dp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:background="@drawable/border_blue"
         android:backgroundTintMode="add"
         android:elevation="@dimen/_14sdp"
@@ -444,6 +471,8 @@
         android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/inviteIcon"
         android:layout_marginTop="0dp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:elevation="@dimen/_22sdp"
         android:onClick="openSettingsWindow"
         android:src="@drawable/gear" />
@@ -624,7 +653,7 @@
             <EditText
                 android:id="@+id/roomIDInput"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_72sdp"
+                android:layout_height="@dimen/_65sdp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
@@ -643,29 +672,10 @@
                 android:shadowRadius="5"
                 android:textAlignment="center"
                 android:textColor="@color/Black"
-                android:textSize="@dimen/_33ssp"
+                android:textSize="@dimen/_35ssp"
                 android:textStyle="bold" />
 
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/roomIDInput"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="@dimen/_11sdp"
-                app:shimmer_auto_start="true"
-                app:shimmer_duration="1800"
-                app:shimmer_highlight_alpha="1"
-                app:shimmer_highlight_color="#FFFFFF"
-                app:shimmer_repeat_mode="restart"
-                app:shimmer_shape="linear">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_2sdp"
-                    android:src="@drawable/shine_button_black_bar" />
-            </com.facebook.shimmer.ShimmerFrameLayout>
-
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/joinRoomButtonMain"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_47sdp"
@@ -674,10 +684,9 @@
                 android:layout_marginStart="@dimen/_minus18sdp"
                 android:layout_marginTop="@dimen/_29sdp"
                 android:layout_marginBottom="@dimen/_7sdp"
-                android:background="@color/Black"
-                android:backgroundTint="@color/Black"
-                android:backgroundTintMode="add"
-                android:fadingEdge="horizontal|vertical"
+                android:background="@drawable/border_square_reward"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
                 android:hapticFeedbackEnabled="true"
@@ -685,19 +694,15 @@
                 android:insetBottom="@dimen/_4sdp"
                 android:onClick="joinRoomButtonClicked"
                 android:paddingStart="@dimen/_29sdp"
+                android:paddingEnd="@dimen/_15sdp"
                 android:text="@string/join"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/font_yellow"
                 android:textSize="@dimen/_25ssp"
-                android:textStyle="bold"
+                android:textStyle="bold" />
 
-                app:cornerRadius="@dimen/_14sdp"
-                app:rippleColor="@color/white"
-                app:strokeColor="@color/font_yellow"
-                app:strokeWidth="@dimen/_1sdp" />
-
-            <ImageButton
+            <ImageView
                 android:id="@+id/joinRoomFrameIcon"
                 android:layout_width="@dimen/_57sdp"
                 android:layout_height="@dimen/_57sdp"
@@ -706,11 +711,13 @@
                 android:layout_marginEnd="@dimen/_minus7sdp"
                 android:layout_marginBottom="@dimen/_minus7sdp"
                 android:layout_toStartOf="@+id/joinRoomButtonMain"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:background="@drawable/border"
                 android:backgroundTintMode="add"
                 android:baselineAlignBottom="true"
                 android:elevation="@dimen/_14sdp"
-                android:foreground="@drawable/joinroomicon"
+                android:src="@drawable/joinroomicon"
                 android:onClick="joinRoomWindowOpen"
                 android:soundEffectsEnabled="true" />
 
@@ -1189,7 +1196,7 @@
 
     </RelativeLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/welcomeUserNameview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -1199,13 +1206,11 @@
         android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/profilePic"
-        android:background="@color/Black"
-        android:backgroundTint="@color/Black"
-        android:backgroundTintMode="add"
         android:elevation="@dimen/_64sdp"
         android:fontFamily="@font/nosifer"
-        android:hapticFeedbackEnabled="true"
         android:onClick="openClosePlayerStats"
+        android:background="@drawable/border_square_reward"
+        android:focusable="true"
         android:paddingStart="@dimen/_25sdp"
         android:text="@string/playeName"
         android:textAlignment="center"
@@ -1213,11 +1218,8 @@
         android:textColor="@color/font_yellow"
         android:textSize="@dimen/_17ssp"
         android:textStyle="bold"
-        android:translationZ="@dimen/_36sdp"
-        app:cornerRadius="@dimen/_14sdp"
-        app:rippleColor="@color/white"
-        app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="@dimen/_1sdp"/>
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:paddingEnd="@dimen/_10sdp"/>
 
     <RelativeLayout
         android:id="@+id/createRoomFrame"
@@ -1372,6 +1374,8 @@
         android:layout_marginTop="@dimen/_minus27sdp"
         android:layout_below="@+id/welcomeUserNameview"
         android:layout_alignParentEnd="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="openClosePlayerStats"
         android:layout_marginEnd="@dimen/_4sdp"
         android:background="@drawable/border"
@@ -1387,6 +1391,8 @@
         android:layout_marginTop="@dimen/_7sdp"
         android:background="@drawable/border"
         android:backgroundTintMode="add"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:elevation="@dimen/_72sdp"
         android:src="@drawable/_s_icon_3shadow"
         android:onClick="openClosePlayerStats"

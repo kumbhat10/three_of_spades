@@ -43,9 +43,9 @@
         android:elevation="@dimen/_72sdp"
         android:soundEffectsEnabled="true"
         android:src="@drawable/_s_icon_3shadow"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/welcomeUserNameview2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,9 +55,6 @@
         android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_11sdp"
         android:layout_toEndOf="@+id/profilePic2"
-        android:background="@color/Black"
-        android:backgroundTint="@color/Black"
-        android:backgroundTintMode="add"
         android:elevation="@dimen/_64sdp"
         android:fontFamily="@font/nosifer"
         android:hapticFeedbackEnabled="true"
@@ -68,11 +65,9 @@
         android:textColor="@color/font_yellow"
         android:textSize="@dimen/_17ssp"
         android:textStyle="bold"
-        android:translationZ="@dimen/_36sdp"
-        android:visibility="gone"
-        app:cornerRadius="@dimen/_18sdp"
-        app:strokeColor="#00FF40"
-        app:strokeWidth="@dimen/_1sdp"
+        android:background="@drawable/border_square_reward"
+        android:paddingEnd="@dimen/_10sdp"
+        android:visibility="visible"
         tools:ignore="RtlSymmetry" />
 
     <TextView
@@ -90,7 +85,7 @@
         android:text="@string/welcomeBack"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/_14ssp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 
     <ProgressBar
@@ -106,6 +101,7 @@
         android:indeterminateOnly="false"
         android:indeterminateTint="#FFE500"
         android:progressTintMode="src_in"
-        android:rotation="360" />
+        android:rotation="360"
+        android:visibility="visible"/>
 
 </RelativeLayout>

@@ -1227,11 +1227,8 @@
             android:id="@+id/horizontalScrollView1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:animateLayoutChanges="true"
+            android:layout_centerHorizontal="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:scrollIndicators="top"
@@ -1248,8 +1245,8 @@
                 android:animateLayoutChanges="true"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:focusableInTouchMode="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:orientation="horizontal" />
         </HorizontalScrollView>
     </RelativeLayout>
@@ -2121,8 +2118,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/_5sdp"
         android:background="@drawable/start_next_game"
-        android:contentDescription="@string/todo"
         android:clickable="true"
+        android:contentDescription="@string/todo"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="startNextGame"

@@ -78,7 +78,7 @@
         android:src="@drawable/_s_icon_3shadow"
         android:visibility="visible"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/hostName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,10 +87,10 @@
         android:layout_marginStart="@dimen/_minus20sdp"
         android:layout_marginTop="@dimen/_13sdp"
         android:layout_marginBottom="@dimen/_13sdp"
+        android:background="@drawable/border_square_reward"
+        android:focusable="true"
         android:layout_toEndOf="@+id/hostPhoto"
-        android:background="@color/Black"
-        android:backgroundTint="@color/Black"
-        android:backgroundTintMode="add"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:elevation="@dimen/_64sdp"
         android:fontFamily="@font/nosifer"
         android:paddingStart="@dimen/_25sdp"
@@ -102,11 +102,7 @@
         android:textSize="@dimen/_19ssp"
         android:textStyle="bold"
         android:translationZ="@dimen/_36sdp"
-        android:visibility="visible"
-        app:cornerRadius="@dimen/_14sdp"
-        app:rippleColor="@color/white"
-        app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="@dimen/_1sdp" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/welcome3"

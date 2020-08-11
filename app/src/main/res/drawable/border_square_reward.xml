@@ -8,6 +8,7 @@
                 />
             <corners
                 android:radius="@dimen/_14sdp"/>
+            <solid android:color="@color/Black"/>
         </shape>
     </item>
 

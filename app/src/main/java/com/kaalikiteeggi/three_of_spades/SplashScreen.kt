@@ -56,7 +56,7 @@ class SplashScreen: AppCompatActivity() {
         override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
             if (bitmap != null) {
                 findViewById<ImageView>(R.id.profilePic2).setImageDrawable(bitmap.toDrawable(resources))
-                findViewById<ImageView>(R.id.profilePic2).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_zoom))
+//                findViewById<ImageView>(R.id.profilePic2).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_zoom))
             }
         }
     }
@@ -67,67 +67,61 @@ class SplashScreen: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
-            .enabled(true) //default: true
-            .showErrorDetails(true) //default: true
-            .showRestartButton(true) //default: true
-            .logErrorOnRestart(false) //default: true
-            .trackActivities(false) //default: false
-            .errorDrawable(R.drawable._s_icon_bug) //default: bug image
-            .apply()
+
         setContentView(R.layout.activity_splash_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-        soundInto = MediaPlayer.create(applicationContext,R.raw.cards_shuffle)
-        soundInto.start()
+        findViewById<ImageView>(R.id.icon_3).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
 
-        MobileAds.initialize(this)
-        AudienceNetworkAds.initialize(this)
-
-        if(getString(R.string.useTestDevice).contains('y')) {
-            val testDeviceIds = Arrays.asList(getString(R.string.testDeviceId))
-            val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
-            MobileAds.setRequestConfiguration(configuration)
-            AdSettings.addTestDevice("abb71e62-26ea-4afc-88f7-c370a1da45f1")
-            AdSettings.addTestDevice("ec3dd554-caf4-41cf-8747-f7a755836f05")
-        }
-
+            mAuth = FirebaseAuth.getInstance()  // dummy - could be a problem if invalid mAuth and not null
+            user = mAuth.currentUser
+            if(user != null) {
+                val userName = user!!.displayName.toString().split(" ")[0]
+                val photoURL = user!!.photoUrl.toString()
+                findViewById<ImageView>(R.id.profilePic2).visibility = View.VISIBLE
+                findViewById<Button>(R.id.welcomeUserNameview2).visibility = View.VISIBLE
+//                findViewById<Button>(R.id.welcomeUserNameview2).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_buttons))
+                findViewById<TextView>(R.id.welcome2).visibility = View.VISIBLE
+                findViewById<Button>(R.id.welcomeUserNameview2).text = userName
+                Picasso.get().load(photoURL).transform(CircleTransform()).into(target)
+            }
+            sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
+            premiumStatus = if (sharedPreferences.contains("premium")) {
+                sharedPreferences.getBoolean("premium", false)
+            }else{
+                true // dont show ADS when login for first time
+            }
+            soundInto = MediaPlayer.create(applicationContext,R.raw.cards_shuffle)
+            soundInto.start()
+            MobileAds.initialize(this)
+//            AudienceNetworkAds.initialize(this)
+            if(getString(R.string.useTestDevice).contains('y')) {
+                val testDeviceIds = Arrays.asList(getString(R.string.testDeviceId))
+                val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
+                MobileAds.setRequestConfiguration(configuration)
+                AdSettings.addTestDevice("abb71e62-26ea-4afc-88f7-c370a1da45f1")
+                AdSettings.addTestDevice("ec3dd554-caf4-41cf-8747-f7a755836f05")
+            }
+            mInterstitialAd = InterstitialAd(this)
         AdColony.configure(this,"app17c8dd48fb9945b9b4","vz3791ce293adf41e69e","vzfb9b1050f8c74cc5ad","vz6cded1664bb44e1cb9")
         val appOptions = AdColonyMediationAdapter.getAppOptions()
-        appOptions.gdprConsentString = "1"
-        appOptions.gdprRequired = true
-        appOptions.keepScreenOn = true
+            appOptions.gdprConsentString = "1"
+            appOptions.gdprRequired = true
+            appOptions.keepScreenOn = true
+
         val consentObject = JSONObject()
-        try{
-            consentObject.put(InMobiSdk.IM_GDPR_CONSENT_AVAILABLE,true)
-            consentObject.put("gdpr","1")
-        }catch(exception: JSONException){
-        }
-        InMobiConsent.updateGDPRConsent(consentObject)
+            try{
+                consentObject.put(InMobiSdk.IM_GDPR_CONSENT_AVAILABLE,true)
+                consentObject.put("gdpr","1")
+            }catch(exception: JSONException){
+            }
+            InMobiConsent.updateGDPRConsent(consentObject)
 //        val gdprMetaData = MetaData(this)  // unity consent - not required as unity asks automatically for the first time to the user based on the location
 //        gdprMetaData.set("gdpr.consent",true)
 //        gdprMetaData.commit()
-        UnityAds.initialize(this,getString(R.string.unity_game_id))
+            UnityAds.initialize(this,getString(R.string.unity_game_id))
+            mobileAds() // load mobile ads for everyone
 
-        findViewById<ImageView>(R.id.icon_3).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
-        findViewById<ProgressBar>(R.id.progressBarLoading).visibility = View.VISIBLE
 
-        mAuth = FirebaseAuth.getInstance()  // dummy - could be a problem if invalid mAuth and not null
-        user = mAuth.currentUser
-        if(user != null) {
-            val userName = user!!.displayName.toString().split(" ")[0]
-            val photoURL = user!!.photoUrl.toString()
-            findViewById<ImageView>(R.id.profilePic2).visibility = View.VISIBLE
-            findViewById<Button>(R.id.welcomeUserNameview2).visibility = View.VISIBLE
-            findViewById<Button>(R.id.welcomeUserNameview2).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_buttons))
-            findViewById<TextView>(R.id.welcome2).visibility = View.VISIBLE
-            findViewById<Button>(R.id.welcomeUserNameview2).text = userName
-            Picasso.get().load(photoURL).transform(CircleTransform()).into(target)
-        }
-        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
-        if (sharedPreferences.contains("premium")) {
-            premiumStatus = sharedPreferences.getBoolean("premium", false)
-        }
-        if(!premiumStatus) mobileAds()
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.BOTTOM, 0, 300)
         toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.BlackTransUserStats4))
@@ -135,34 +129,32 @@ class SplashScreen: AppCompatActivity() {
             .setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
 
-        timer = if(getString(R.string.testAds).contains('n')) 3500
+        timer = if(!BuildConfig.DEBUG) 3500
         else 300
         handler.postDelayed({
             isTimerOver = true
             when {
                 (premiumStatus && isAppLatest) -> nextActivity()
                 (!premiumStatus && mInterstitialAd.isLoaded) -> {
-                    if(getString(R.string.testAds).contains('n')) mInterstitialAd.show() // dummy
+                    if(!BuildConfig.DEBUG) mInterstitialAd.show() // dummy
                     else nextActivity() // dummy
                 }
                 isAppLatest -> nextActivity()
             }
         }, timer.toLong()) // dummy 3500
         checkAppUpdate()
-
     }
 
     override fun onStart() {
         super.onStart()
     }
-
     fun nextActivity(){
         if(user != null && !isNextActivityStarted){
             isNextActivityStarted = true
             handler.removeCallbacksAndMessages(null)
             startActivity(Intent(this, MainHomeScreen::class.java).apply {putExtra("newUser",false)})
             overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)
-            finish()
+            Handler().postDelayed({finish()},1000)
         }else if(!isNextActivityStarted){
             isNextActivityStarted = true
             LoginManager.getInstance().logOut()
@@ -172,10 +164,9 @@ class SplashScreen: AppCompatActivity() {
         }
     }
     private fun mobileAds(){
-//        MobileAds.initialize(this) {}   // initialize mobileAdds
         mInterstitialAd = InterstitialAd(this)
-        if(getString(R.string.testAds).contains('n')) mInterstitialAd.adUnitId = getString(R.string.interstitial)
-        else mInterstitialAd.adUnitId = getString(R.string.interstitialTestVideo)
+        if(!BuildConfig.DEBUG) mInterstitialAd.adUnitId = getString(R.string.interstitial)  // real ADS ID
+        else mInterstitialAd.adUnitId = getString(R.string.interstitialTestVideo)   // test ADs id
         mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
         mInterstitialAd.adListener = object : AdListener() {
             override fun onAdClosed() {
@@ -183,7 +174,6 @@ class SplashScreen: AppCompatActivity() {
             }
         }
     }
-
     private fun checkAppUpdate(){
         appUpdateManager = AppUpdateManagerFactory.create(baseContext)
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo

@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#FFB300</item>
+        <item name="colorPrimary">@color/borderblueDark1o</item>
         <item name="colorPrimaryDark">@color/Black</item>
-        <item name="colorAccent">@color/backgroundDarkOpaque</item>
+        <item name="colorAccent">@color/borderRed2</item>
 
     </style>
 

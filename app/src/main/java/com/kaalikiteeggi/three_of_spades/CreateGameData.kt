@@ -62,7 +62,7 @@ class CreateGameData(uid: String, selfName: String) {
     "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
     "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
     "CH" to mutableMapOf("p1" to cardsShuffled4.slice(0..12).sortedBy {it},"p2" to cardsShuffled4.slice(13..25).sortedBy {it},
-        "p3" to cardsShuffled4.slice(26..38).sortedBy {it},"p4" to cardsShuffled4.slice(38..51).sortedBy {it}),
+        "p3" to cardsShuffled4.slice(26..38).sortedBy {it},"p4" to cardsShuffled4.slice(39..51).sortedBy {it}),
     "CT" to mutableMapOf("p1" to 53,"p2" to 53,"p3" to 53,"p4" to 53),
     "GS" to 1, // 0 means joining state
     "M" to "",
@@ -81,7 +81,7 @@ class CreateGameData(uid: String, selfName: String) {
     "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
     "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
     "CH" to mutableMapOf("p1" to cardsShuffled4.slice(0..12).sortedBy {it},"p2" to cardsShuffled4.slice(13..25).sortedBy {it},
-        "p3" to cardsShuffled4.slice(26..38).sortedBy {it},"p4" to cardsShuffled4.slice(38..51).sortedBy {it}),
+        "p3" to cardsShuffled4.slice(26..38).sortedBy {it},"p4" to cardsShuffled4.slice(39..51).sortedBy {it}),
 //    "CT" to mutableMapOf("p1" to 23,"p2" to 45,"p3" to 51,"p4" to 36),
         "CT" to mutableMapOf("p1" to 53,"p2" to 53,"p3" to 53,"p4" to 53),
     "GS" to 1, // 0 means joining state

@@ -26,6 +26,8 @@
 
     <dimen name="trumpSelectionImageWidth">@dimen/_72sdp</dimen>
     <dimen name="trumpSelectionImageHeight">@dimen/_72sdp</dimen>
+   <dimen name="trumpSelectionImageWidthTrain">@dimen/_64sdp</dimen>
+    <dimen name="trumpSelectionImageHeightTrain">@dimen/_64sdp</dimen>
 
     <dimen name="imageWidthCoin">@dimen/_25sdp</dimen>
 
@@ -46,6 +48,7 @@
     <dimen name="scoreTableWidth">@dimen/_64sdp</dimen>
     <dimen name="scoreTableWidthLarge">@dimen/_70sdp</dimen>
     <dimen name="widthDisplayCardLast">@dimen/_39sdp</dimen>
+    <dimen name="widthDisplayCardLastTrain">@dimen/_42sdp</dimen>
     <dimen name="status_online">@dimen/_12sdp</dimen>
     <dimen name="padding_playername">@dimen/_3sdp</dimen>
     <dimen name="usernameTextSize">@dimen/_8ssp</dimen>
@@ -58,7 +61,6 @@
     <dimen name="deckHeight">@dimen/_80sdp</dimen>
     <dimen name="rateUsWidth">@dimen/_170sdp</dimen>
     <dimen name="rateUsHeight">@dimen/_52sdp</dimen>
-
 
 
     <!--

@@ -247,7 +247,7 @@ class StartScreen : AppCompatActivity() {
         findViewById<AppCompatButton>(R.id.signInSuccess).visibility = View.VISIBLE
         findViewById<AppCompatButton>(R.id.signInSuccess).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_left_activity))
         Handler().postDelayed({ startActivity(Intent(this, MainHomeScreen::class.java).apply {putExtra("newUser",newUser)})
-            overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)},400)
+            overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)},500)
 //                           toastCenter("Signed in Successfully ${String(Character.toChars(0x1F60A))}")
 
         Handler().postDelayed({finish()},1500)

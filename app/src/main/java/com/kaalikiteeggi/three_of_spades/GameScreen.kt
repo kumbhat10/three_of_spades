@@ -61,7 +61,6 @@ class GameScreen : AppCompatActivity() {
 
     private lateinit var soundCollectCards: MediaPlayer
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
     private lateinit var soundTimerFinish: MediaPlayer
     private lateinit var refIDMappedTextView: List<Int>
     private lateinit var refIDMappedImageView: List<Int>
@@ -83,7 +82,6 @@ class GameScreen : AppCompatActivity() {
     private var roundNumberLimit = 0
     private var scoreLimit = 0
 
-    private var musicStatus = true
     private var soundStatus = true
     private var vibrateStatus = true
     private lateinit var vibrator:Vibrator
@@ -91,7 +89,6 @@ class GameScreen : AppCompatActivity() {
     private var premiumStatus = false
     private var scoreOpenStatus = false
     private var activityExists = true
-    private var versionStatus = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     private lateinit var mInterstitialAd: InterstitialAd
 
     private lateinit var roomID: String
@@ -189,6 +186,7 @@ class GameScreen : AppCompatActivity() {
     private var scoreSheetNotUpdated = true
 
     private var played = false
+    private var bidded = false
     private var ct1: Int = cardsIndexLimit
     private var ct2: Int = cardsIndexLimit
     private var ct3: Int = cardsIndexLimit
@@ -239,7 +237,7 @@ class GameScreen : AppCompatActivity() {
             .restartActivity(MainHomeScreen::class.java)
             .apply()
         setContentView(R.layout.activity_game_screen)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE // keep screen in landscape mode always
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
         roomID   = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
         from     = intent.getStringExtra("from")!!.toString()    //check if user has joined room or created one and display Toast
         fromInt  = from.split("")[2].toInt()
@@ -263,15 +261,6 @@ class GameScreen : AppCompatActivity() {
         refIDMappedTableWinnerAnim =  PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
         refIDMappedTableImageView =  PlayersReference().refIDMappedTableImageView(from, nPlayers)
 
-        soundUpdate = MediaPlayer.create(applicationContext,R.raw.player_moved)
-        soundError = MediaPlayer.create(applicationContext,R.raw.error_entry)
-        soundSuccess= MediaPlayer.create(applicationContext,R.raw.player_success_chime)
-        soundShuffle = MediaPlayer.create(applicationContext,R.raw.cards_shuffle)
-        soundChat = MediaPlayer.create(applicationContext,R.raw.chat_new1)
-        soundCardPlayed = MediaPlayer.create(applicationContext,R.raw.card_moved)
-        soundTimerFinish = MediaPlayer.create(applicationContext,R.raw.timer_over)
-        soundCollectCards = MediaPlayer.create(applicationContext,R.raw.collect_cards)
-        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         refGameData = Firebase.database.getReference("GameData/$roomID")
 
@@ -280,15 +269,21 @@ class GameScreen : AppCompatActivity() {
         toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.cardsBackgroundDark))
         toast.view.findViewById<TextView>(android.R.id.message).setTextColor(ContextCompat.getColor(applicationContext,R.color.font_yellow))
         toast.view.findViewById<TextView>(android.R.id.message).textSize = 14F
-        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
-//        editor = sharedPreferences.edit()
         //region Player Info Update
-        updatePlayerInfo()
-//        createTargetPicasso()
-// endregion
-        initializeSpeechEngine()
-        getSharedPrefs()
-        if(getString(R.string.testAds).contains('n')) initializeAds()
+        Handler().post{
+            soundUpdate = MediaPlayer.create(applicationContext,R.raw.player_moved)
+            soundError = MediaPlayer.create(applicationContext,R.raw.error_entry)
+            soundSuccess= MediaPlayer.create(applicationContext,R.raw.player_success_chime)
+            soundShuffle = MediaPlayer.create(applicationContext,R.raw.cards_shuffle)
+            soundChat = MediaPlayer.create(applicationContext,R.raw.chat_new1)
+            soundCardPlayed = MediaPlayer.create(applicationContext,R.raw.card_moved)
+            soundTimerFinish = MediaPlayer.create(applicationContext,R.raw.timer_over)
+            soundCollectCards = MediaPlayer.create(applicationContext,R.raw.collect_cards)
+            vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            updatePlayerInfo()
+            initializeSpeechEngine()
+            getSharedPrefs()
+        }// endregion
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,typedValue, true)
     }
     private fun setupGame4or7() {
@@ -1025,12 +1020,13 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             }
 //        endregion
             // region       Countdown PlayCard
-            countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 20) {
+            countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 50) {
                 @SuppressLint("SetTextI18n")
                 override fun onTick(millisUntilFinished: Long) {
 //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
                     findViewById<ProgressBar>(R.id.progressbarTimer).progress =
                         (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
+                    findViewById<ProgressBar>(R.id.progressbarTimer).secondaryProgress = ((timeCountdownPlayCard-millisUntilFinished) * 10000 / timeCountdownPlayCard).toInt()
                     findViewById<TextView>(R.id.textViewTimer).text =
                         round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString() + "s"
                 }
@@ -1048,7 +1044,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             }
 //        endregion
             // region       Countdown Biding
-            countDownBidding = object : CountDownTimer(timeCountdownBid, 20) {
+            countDownBidding = object : CountDownTimer(timeCountdownBid, 50) {
                 @SuppressLint("SetTextI18n")
                 override fun onTick(millisUntilFinished: Long) {
 //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
@@ -1058,20 +1054,23 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                         round((millisUntilFinished / 1000).toDouble()+1).toInt().toString() + "s"
                 }
                 override fun onFinish() {
-                    if (vibrateStatus) vibrationStart()
-                    soundTimerFinish.start()
-                    write("Bid/BS/p$playerTurn", 0) // pass the bid if times up
-                    write("Bid/BT", nextTurn(playerTurn))
-                    findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
-                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
-                    findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
-                    findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
-                    findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
-                    findViewById<TextView>(R.id.textViewTimer).clearAnimation()
-                    findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
-                    findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
-                    bidButtonsAnimation("clear")
-                    centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
+                    if(!bidded) {
+                        bidded = true
+                        if (vibrateStatus) vibrationStart()
+                        soundTimerFinish.start()
+                        write("Bid/BS/p$fromInt", 0) // pass the bid if times up
+                        write("Bid/BT", nextTurn(fromInt))
+                        findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
+                        findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
+                        findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
+                        findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
+                        findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
+                        findViewById<TextView>(R.id.textViewTimer).clearAnimation()
+                        findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
+                        findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
+                        bidButtonsAnimation("clear")
+                        centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
+                    }
                 }
             }
 //        endregion
@@ -1105,7 +1104,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             }
         })
         Handler().postDelayed({
-            if(getString(R.string.testAds).contains('n')) {
+            if(!BuildConfig.DEBUG)  {
                 if (!premiumStatus && mInterstitialAd.isLoaded) mInterstitialAd.show()
             }
             if(from == "p1") {
@@ -1306,7 +1305,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }else if(nPlayers4){
             write("CT", mutableMapOf("p1" to cardsIndexLimit,"p2" to cardsIndexLimit,"p3" to cardsIndexLimit,"p4" to cardsIndexLimit))
             write("CH", mutableMapOf("p1" to cardsShuffled.slice(0..12).sortedBy {it},"p2" to cardsShuffled.slice(13..25).sortedBy {it},
-                "p3" to cardsShuffled.slice(26..38).sortedBy {it},"p4" to cardsShuffled.slice(38..51).sortedBy {it}))
+                "p3" to cardsShuffled.slice(26..38).sortedBy {it},"p4" to cardsShuffled.slice(39..51).sortedBy {it}))
             if(getString(R.string.testGameData).contains('n'))  {
                 write("Bid", mutableMapOf("BV" to 175, "BT" to playerTurn,"BB" to playerTurn,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)))
             } else{
@@ -1592,15 +1591,13 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 if(nPlayers4) checkIfPartnerandUpdateServer4(cardSelected, playerTurn)
             }
             refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener{
-//                write("RO/T",gameTurn+1)
-                if(gameTurn==1) write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to cardsSuit[cardSelected.toString().toInt()] ))
+                if(gameTurn==1) write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(fromInt),"R" to cardsSuit[cardSelected.toString().toInt()] ))
                else write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to trumpStart))
             }.addOnFailureListener{ // try again  - dummy - check if any other way could be done
-                refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener{
-//                write("RO/T",gameTurn+1)
-                    if(gameTurn==1) write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to cardsSuit[cardSelected.toString().toInt()] ))
-                    else write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to trumpStart))
-                }
+//                refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener{
+//                    if(gameTurn==1) write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to cardsSuit[cardSelected.toString().toInt()] ))
+//                    else write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to trumpStart))
+//                }
             }
             cardsInHand.remove(cardSelected)
             if (roundNumber != roundNumberLimit) {
@@ -1611,6 +1608,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 write("CH/$from","")
                 findViewById<LinearLayout>(R.id.imageGallery).removeAllViews() // show no self cards after throwing last card
             }
+            write("OL/$from",1) // Turn them online again
         }
     }
     private fun checkIfPartnerandUpdateServer4(cardSelected: Any, playerTurn: Int?){
@@ -2016,7 +2014,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         findViewById<TextView>(R.id.textViewBider).setTextColor(   ContextCompat.getColor(applicationContext,R.color.progressBarPlayer4))
         if("p$bidder" != from){     //  show to everyone except bidder
             toastCenter("${playerName(bidder)} won the bid round")
-            speak("${playerName(bidder)} won the bid round. Waiting for ${playerName(bidder)} to choose thr trumph")
+            speak("${playerName(bidder)} won the bid round. Waiting for ${playerName(bidder)} to choose the trumph")
             centralText("Waiting for ${playerName(bidder)} \n to choose Trump", 0)
              }
             else{ // show to bidder only
@@ -2111,11 +2109,12 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                                 )
                                 findViewById<FrameLayout>(R.id.frameAskBid).visibility =
                                     View.VISIBLE // this path is ciritical
+                                bidded = false
                                 bidButtonsAnimation("start")
                                 countDownTimer("Bidding", purpose = "start")
                                 if (vibrateStatus) vibrationStart()
                             } else if (bidStatus == 0) {
-//                                if (vibrateStatus) vibrationStart()
+                                bidded = true
                                 toastCenter("   Sorry $selfName \n You cannot bid anymore")
                                 write("Bid/BT", nextTurn(playerTurn))
                             }
@@ -2136,7 +2135,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         if(activityExists) refGameData.child("Bid").addValueEventListener(bidingTurnListener)
     }
 
-    private fun speak(speechText:String, pitch:Float = 0.7f, speed:Float = 1.05f) {
+    private fun speak(speechText:String, pitch:Float = 0.75f, speed:Float = 1.05f) {
         if(soundStatus) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
@@ -2156,34 +2155,37 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     }
 
     fun askToBid(view: View) {
-        countDownTimer("Bidding", purpose = "cancel")
-        if(soundStatus) soundUpdate.start()
-        when(view.tag){
-            "pass"-> {
-                write("Bid/BS/$from", 0)
-               centralText("    Time's Up !!  \n You cannot bid anymore",2500)
+        if(!bidded) {
+            countDownTimer("Bidding", purpose = "cancel")
+            bidded = true
+            if (soundStatus) soundUpdate.start()
+            when (view.tag) {
+                "pass" -> {
+                    write("Bid/BS/$from", 0)
+                    centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
+                }
+                "5" -> {
+                    write("Bid/BV/", bidValue.plus(5))
+                    write("Bid/BB", playerTurn)
+                }
+                "10" -> {
+                    write("Bid/BV/", bidValue.plus(10))
+                    write("Bid/BB", playerTurn)
+                }
+                "20" -> {
+                    write("Bid/BV/", bidValue.plus(20))
+                    write("Bid/BB", playerTurn)
+                }
+                "50" -> {
+                    write("Bid/BV/", bidValue.plus(50))
+                    write("Bid/BB", playerTurn)
+                }
             }
-            "5"->{
-                write("Bid/BV/", bidValue.plus(5))
-                write("Bid/BB", playerTurn)
-            }
-            "10"->{
-                write("Bid/BV/", bidValue.plus(10))
-                write("Bid/BB", playerTurn)
-            }
-            "20"->{
-                write("Bid/BV/", bidValue.plus(20))
-                write("Bid/BB", playerTurn)
-            }
-            "50"->{
-                write("Bid/BV/", bidValue.plus(50))
-                write("Bid/BB", playerTurn)
-            }
-        }
-        write("Bid/BT",nextTurn(playerTurn))
-        findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
-        findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
+            write("Bid/BT", nextTurn(fromInt))
+            findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
+            findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
 //        bidButtonsAnimation("clear")
+        }
     }
     private fun bidButtonsAnimation(task: String){
         if(task=="start"){
@@ -2469,8 +2471,11 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
     }
     private fun getSharedPrefs(){
+        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
+
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
+            if (!premiumStatus) initializeAds()
         }
         if (sharedPreferences.contains("soundStatus")) {
             soundStatus = sharedPreferences.getBoolean("soundStatus", true)

@@ -17,7 +17,8 @@
 
     <color name="font_yellow">#FFB300</color>
     <color name="font_yellow_trans">#D8FFB300</color>
-    <color name="font_grey_settings">#8C8C8C</color>
+    <color name="font_grey_settings">#DCDCDC</color>
+    <color name="light_grey_settings">#BABABA</color>
 
     <color name="progressBarPlayer2">#CA0000</color>
     <color name = "backgroundDarkOpaque">#F30A1B4A</color>
@@ -28,6 +29,8 @@
     <color name = "layoutBackgroundLittle">#7A04061E</color>
 
     <color name = "inActiveCard">#CE434343</color>
+    <color name = "highlightCard">#B43AED06</color>
+    <color name = "highlightCard1">#9A39FF00</color>
 
     <color name="trackSwitchON">#0F56F100</color>
     <color name="trackSwitchOFF">#2AA3A3A3</color>
