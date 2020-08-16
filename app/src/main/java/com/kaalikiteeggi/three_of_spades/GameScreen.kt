@@ -824,6 +824,7 @@ class GameScreen : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 if(p0.value != null && activityExists) {
                     roundNumber = p0.value.toString().toInt()
+                    if(roundNumber>11 && !premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the ad again
                 }
             }
 }
@@ -1066,10 +1067,14 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                         findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
                         findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
                         findViewById<TextView>(R.id.textViewTimer).clearAnimation()
-                        findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
-                        findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
+                        findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomout_center))
+                        Handler().postDelayed({
+                            findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
+                            findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
+                        },220)
                         bidButtonsAnimation("clear")
-                        centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
+                        centralText("    Time's Up !!  \nYou cannot bid anymore", 2500)
+                        speak("Time's Up. ${playerName(fromInt)} You cannot bid anymore",speed = 1.1f)
                     }
                 }
             }
@@ -1112,7 +1117,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 findViewById<AppCompatButton>(R.id.startNextRoundButton).visibility = View.VISIBLE
                 findViewById<AppCompatButton>(R.id.startNextRoundButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
             }
-        },3000)
+        },3500)
     }
     private fun updateWholeScoreBoard(){
         p1Gain += scoreList[1].toString().toInt()
@@ -1258,7 +1263,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         pt3 = 0
         pt4 = 0
         roundStarted = false
-        roundNumber = 0
+        roundNumber = 1
         roundWinner = 0
         tablePoints = 0
         if(nPlayers4){
@@ -1423,8 +1428,8 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             toastCenter("Game Over: Bidder team Won \n         Defender team Lost")
             centralText("Game Over: Bidder team Won \n         Defender team Lost")
 
-            if(from == "p$bidder" && buFound1!= 1) speak("Congratulations You won")
-            else if((from == "p$bidder" || from == "p$buPlayer1") && buFound1 == 1) speak("Congratulations Your team has won")
+            if(from == "p$bidder" && buFound1!= 1) speak("Congratulations ! You won")
+            else if((from == "p$bidder" || from == "p$buPlayer1") && buFound1 == 1) speak("Congratulations! Your team has won")
             else speak("Sorry Your team has lost")
 
             if ("p$bidder" == from) {// bidder will change game state to 6
@@ -1448,7 +1453,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             centralText("Game Over: Defender team Won \n         Bidder team Lost")
 
             if(from == "p$bidder" || from == "p$buPlayer1") speak("Sorry Your team has lost")
-            else speak("Congratulations Your team has won")
+            else speak("Congratulations! Your team has won")
 
             if ("p$bidder" == from) {// winner will change game state to 6
                 val pointsListTemp = mutableListOf(gameNumber,bidValue,bidValue,bidValue,bidValue)
@@ -1593,12 +1598,13 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener{
                 if(gameTurn==1) write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(fromInt),"R" to cardsSuit[cardSelected.toString().toInt()] ))
                else write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to trumpStart))
-            }.addOnFailureListener{ // try again  - dummy - check if any other way could be done
+            }
+//                .addOnFailureListener{ // try again  - dummy - check if any other way could be done
 //                refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener{
 //                    if(gameTurn==1) write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to cardsSuit[cardSelected.toString().toInt()] ))
 //                    else write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to trumpStart))
 //                }
-            }
+//            }
             cardsInHand.remove(cardSelected)
             if (roundNumber != roundNumberLimit) {
                 write("CH/$from",cardsInHand)
@@ -1654,7 +1660,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         Handler().postDelayed( { animateWinner() },300)
             Handler().postDelayed( { // start after 1.5 seconds
                 if(roundNumber < roundNumberLimit){
-                    if("p$roundWinner" == from){// only winner can start next round
+                    if(roundWinner == fromInt){// only winner can start next round
                         startNextRound()
                     }else{
                         centralText("Waiting for ${playerName(roundWinner)} to play next card",3500)
@@ -1680,16 +1686,17 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         write("SC/p$roundWinner",tablePoints + ptAll[roundWinner-1])
     }
     private fun startNextRound(){
-        if(buFound1 == 2) write("BU1/s1",1)  // locking the partner by 1
-        if(nPlayers7 && buFound2 == 2) write("BU2/s2",1)  // locking the partner by 1
+        if(buFound1 == 2) write("BU1/s1",1)  // locking the partner found but not confirmed by 1
+        if(nPlayers7 && buFound2 == 2) write("BU2/s2",1)  // locking the partner found but not confirmed by 1
 //        write("CT", mutableMapOf("p1" to cardsIndexLimit,"p2" to cardsIndexLimit,"p3" to cardsIndexLimit,"p4" to cardsIndexLimit,"p5" to cardsIndexLimit,"p6" to cardsIndexLimit,"p7" to cardsIndexLimit))
         if(nPlayers7) write("CT", mutableMapOf("p1" to cardsIndexLimit,"p2" to cardsIndexLimit,"p3" to cardsIndexLimit,"p4" to cardsIndexLimit,"p5" to cardsIndexLimit,"p6" to cardsIndexLimit,"p7" to cardsIndexLimit))
         if(nPlayers4) write("CT", mutableMapOf("p1" to cardsIndexLimit,"p2" to cardsIndexLimit,"p3" to cardsIndexLimit,"p4" to cardsIndexLimit))
         write("SC/p$roundWinner",tablePoints + ptAll[roundWinner-1]) // add table points to the round winner player
-        write("RO/P",roundWinner) // write next player turn to be round player turn
-        write("RO/R","")
-        write("RO/T",1)
+//        write("RO/P",roundWinner) // write next player turn to be round player turn
+//        write("RO/R","")
+//        write("RO/T",1)
         write("R",roundNumber+1) // increment round number by 1
+        write("RO", mutableMapOf("T" to 1,"P" to roundWinner,"R" to ""))
 //        centralText("Please play your next card",2000)
     }
 
@@ -1729,8 +1736,9 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             if(filter && gameTurn>1 && cardsSuit[x.toInt()] != trumpStart  && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1){
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ColorDrawable(ContextCompat.getColor(applicationContext,R.color.inActiveCard))
             }else if(filter && gameTurn>1 && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1) {
-                    viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_active_cards))
-                }
+                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_active_cards))
+                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext,typedValue.resourceId)
+            }else viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext,typedValue.resourceId)
 
             viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).tag = x.toString() // tag the card number to the image
             if (cardsPoints.elementAt(x.toInt()) != 0) {
@@ -1748,7 +1756,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             } else {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).visibility = View.GONE
             }
-            viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext,typedValue.resourceId)
+//            viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext,typedValue.resourceId)
             viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).setOnClickListener(View.OnClickListener {
                 validateSelfPlayedCard(it)
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
@@ -1759,7 +1767,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             findViewById<RelativeLayout>(R.id.horizontalScrollView).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
         }
         if(bidingRequest && activityExists){
-            startBidding()
+           Handler().postDelayed({startBidding()},800)
         }
     }
     private fun animatePlayerPlayingRound(index: Int){
@@ -1830,15 +1838,16 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             override fun onDataChange(dataLoad: DataSnapshot) {
                 trump = dataLoad.value.toString()
                 displayTrumpCard()
-                if("p$bidder" == from) {  // only to bidder
+                if(bidder == fromInt) {  // only to bidder
                     findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.VISIBLE // make selection frame visible
+                    findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomin_center))
                     if(nPlayers7) {
                         findViewById<TextView>(R.id.textViewPartnerSelect).text = getString(R.string.partnerSelection1)
-                        speak("Choose your first partner card")
+                        speak("Please Choose your first partner card")
                     }//choose 1st buddy text
                     if(nPlayers4) {
                         findViewById<TextView>(R.id.textViewPartnerSelect).text = getString(R.string.partnerSelection1_4)
-                        speak("Choose your partner card")
+                        speak("Please Choose your partner card")
 
                     }//choose 1st buddy text
                     displayAllCardsForPartnerSelection()  // display all the cards to choose from
@@ -1858,14 +1867,17 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 if(soundStatus) soundError.start()
                 if(vibrateStatus) vibrationStart()
                 toastCenter("$selfName, You already have the same card")
-                speak("Please choose other card")
+                speak("You already have the same card. Please choose other card", speed = 1.1f)
             }
             else {
                 write("BU/b1",cardSelected)
                 write("BU/b1s",1)  // bider has one of card in his hand
                 write("GS",5) // change game state to next playing round
-                findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.GONE
-                findViewById<LinearLayout>(R.id.partnerSelectionGallery).clearAnimation()
+                findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomout_center))
+                Handler().postDelayed({
+                    findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.GONE
+                    findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).clearAnimation()
+                },240)
             }
     }
 
@@ -1884,7 +1896,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                     bu1Flag = 1
                     findViewById<ImageView>(R.id.trumpImage1).setImageResource(cardsDrawablePartner[cardSelected])
                     findViewById<TextView>(R.id.textViewPartnerSelect).text = getString(R.string.partnerSelection2)//choose 2nd buddy
-                    speak("choose your second partner card")
+                    speak("Please choose your second partner card")
                     counterPartnerSelection =1
                 }
                 else -> {
@@ -1894,7 +1906,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                     bu1Flag = 0
                     findViewById<ImageView>(R.id.trumpImage1).setImageResource(cardsDrawablePartner[cardSelected])
                     findViewById<TextView>(R.id.textViewPartnerSelect).text = getString(R.string.partnerSelection2)//choose 2nd buddy
-                    speak("choose your second partner card")
+                    speak("Please choose your second partner card")
                     counterPartnerSelection =1
                 }
             }
@@ -1912,8 +1924,12 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                     write("BU/b1s",bu1Flag)
                     write("GS",5) // change game state to next playing round
                 counterPartnerSelection =0
-                findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.GONE
-                    findViewById<LinearLayout>(R.id.partnerSelectionGallery).clearAnimation()}
+                    findViewById<FrameLayout>(R.id.linearLayoutPartnerSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomout_center))
+                    Handler().postDelayed({
+                        findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.GONE
+                        findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).clearAnimation()
+                    },240)
+                }
                 else{
                     if(soundStatus) soundError.start()
                     if(vibrateStatus) vibrationStart()
@@ -2019,8 +2035,9 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
              }
             else{ // show to bidder only
             centralText("Congratulations ${playerName(bidder)} \n You won the bid round", 0)
-            speak("Congratulations ${playerName(bidder)} You won bid round. Please choose your trump")
+            speak("Congratulations ${playerName(bidder)} ! You won bid round. Please choose your trump")
             findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility= View.VISIBLE
+            findViewById<FrameLayout>(R.id.frameTrumpSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomin_center))
             trumpAnimation("start")
             if(vibrateStatus) vibrationStart()
         }
@@ -2067,12 +2084,13 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                         val bidStatus = (dataLoad.child("BS/p$playerTurn").value as Long).toInt()
                         if (!bidingStarted) {
                             centralText("${playerName(playerTurn)} will start bidding", 0) //display message only first time
-                            speak("${playerName(playerTurn)} will start bidding",speed = 1.05f)
+                            if(playerTurn != fromInt) speak("${playerName(playerTurn)} will start bidding",speed = 1.05f)
+                            else speak("${playerName(playerTurn)}, You will start bidding round",speed = 1.05f)
                         } else {
-                            centralText("Waiting for ${playerName(playerTurn)} to bid", 0) //display message only first time
+                            centralText("Waiting for ${playerName(playerTurn)} to bid", 0) //display message always
                         }
 
-                        if(bidSpeak && bidingStarted && soundStatus) speak("${playerName(bidder)} raised to $bidValue", speed = 1.1f)
+                        if(bidSpeak && bidingStarted && soundStatus) speak("${playerName(bidder)} has raised bid to $bidValue", speed = 1.2f)
                         else if(soundStatus) soundUpdate.start()
 
                         findViewById<TextView>(R.id.textViewBidValue).text =
@@ -2107,16 +2125,16 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                                 findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(
                                     ContextCompat.getColor(applicationContext, R.color.font_yellow)
                                 )
-                                findViewById<FrameLayout>(R.id.frameAskBid).visibility =
-                                    View.VISIBLE // this path is ciritical
+                                findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.VISIBLE // this path is ciritical
+                                findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomin_center))
                                 bidded = false
                                 bidButtonsAnimation("start")
                                 countDownTimer("Bidding", purpose = "start")
                                 if (vibrateStatus) vibrationStart()
                             } else if (bidStatus == 0) {
                                 bidded = true
-                                toastCenter("   Sorry $selfName \n You cannot bid anymore")
-                                write("Bid/BT", nextTurn(playerTurn))
+                                toastCenter(" Sorry $selfName \n You cannot bid anymore")
+                                write("Bid/BT", nextTurn(fromInt))
                             }
                         }
                         if ("p$playerTurn" == from && bidder == playerTurn && bidingStarted) { // finish bid and move to next game state
@@ -2134,26 +2152,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
         if(activityExists) refGameData.child("Bid").addValueEventListener(bidingTurnListener)
     }
-
-    private fun speak(speechText:String, pitch:Float = 0.75f, speed:Float = 1.05f) {
-        if(soundStatus) {
-            textToSpeech.setPitch(pitch)
-            textToSpeech.setSpeechRate(speed)
-            textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, null)
-        }
-    }
-    private fun initializeSpeechEngine(){
-        textToSpeech = TextToSpeech(applicationContext,
-            TextToSpeech.OnInitListener { status ->
-                if(status == TextToSpeech.SUCCESS) {
-                    val result = textToSpeech.setLanguage(Locale.ENGLISH)
-                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    toastCenter("Missing Language data - Text to speech")
-                    }
-                }
-            })
-    }
-
     fun askToBid(view: View) {
         if(!bidded) {
             countDownTimer("Bidding", purpose = "cancel")
@@ -2162,7 +2160,8 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             when (view.tag) {
                 "pass" -> {
                     write("Bid/BS/$from", 0)
-                    centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
+//                    write("Bid", mutableMapOf("BV" to bidValue, "BT" to nextTurn(fromInt),"BB" to fromInt,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)))
+                    centralText("You passed the biding chance !!  \n You cannot bid anymore", 2500)
                 }
                 "5" -> {
                     write("Bid/BV/", bidValue.plus(5))
@@ -2182,11 +2181,34 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 }
             }
             write("Bid/BT", nextTurn(fromInt))
-            findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
-            findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
+            findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.zoomout_center))
+            Handler().postDelayed({
+                findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
+                findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
+            },230)
 //        bidButtonsAnimation("clear")
         }
     }
+
+    private fun speak(speechText:String, pitch:Float = 0.95f, speed:Float = 1.05f) {
+        if(soundStatus) {
+            textToSpeech.setPitch(pitch)
+            textToSpeech.setSpeechRate(speed)
+            textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+    }
+    private fun initializeSpeechEngine(){
+        textToSpeech = TextToSpeech(applicationContext,
+            TextToSpeech.OnInitListener { status ->
+                if(status == TextToSpeech.SUCCESS) {
+                    val result = textToSpeech.setLanguage(Locale.ENGLISH)
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    toastCenter("Missing Language data - Text to speech")
+                    }
+                }
+            })
+    }
+
     private fun bidButtonsAnimation(task: String){
         if(task=="start"){
             findViewById<Button>(R.id.bid05button).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
@@ -2303,7 +2325,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             findViewById<TextView>(refIDMappedTextView[i]).text = playerName(i+1) + "\n${emoji}${String.format("%,d", totalCoins[i])}"
         }
     }
-    private fun shufflingWindow(time: Long = 4900,fadeOffTime: Long = 700, gameStateChange: Boolean = false){
+    private fun shufflingWindow(time: Long = 4900,fadeOffTime: Long = 500, gameStateChange: Boolean = false){
         if(soundStatus) Handler().postDelayed({ soundShuffle.start()},400)//delayed sound play of shuffling
         displayShufflingCards() //show suits cards and animate
         centralText(getString(R.string.shufflingcards),5200)
@@ -2392,7 +2414,6 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                     cardsInHand = (dataLoad.value as MutableList<*>).filterNotNull() as MutableList<Long>
                     if(display) displaySelfCards(animations = animation)
                 }
-
                 } })
         }
     private fun toastCenter(message: String){
@@ -2503,6 +2524,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
             mInterstitialAd.adListener = object : AdListener() {
                 override fun onAdClosed() { // dummy - check if at some other places ads is shown-conflict with ads closed  - no start next game button needs to be added here
+                    mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the ad again
                     if(from == "p1") {
                         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext,R.color.inActiveCard))
                         findViewById<AppCompatButton>(R.id.startNextRoundButton).visibility = View.VISIBLE

@@ -3,13 +3,13 @@
 
     <translate android:duration="200"
         android:fromYDelta="0%p"
-        android:interpolator="@android:anim/accelerate_interpolator"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
         android:toYDelta="-15%p"/>
 
-    <translate android:duration="700"
+    <translate android:duration="400"
         android:fromYDelta="-10%p"
         android:startOffset="200"
         android:toYDelta="100%p"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
 
 </set>

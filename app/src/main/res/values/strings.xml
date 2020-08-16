@@ -79,6 +79,7 @@
     <string name="chooseTrump">Select Trump</string>
 
     <string name="passText">Next</string>
+    <string name="passTextGS">Pass</string>
     <string name="chatWindowDisplay">No Messages yet. Send first message</string>
     <string name="sendChatButton">Send</string>
     <string name="chatInputHint">Type your message here......</string>

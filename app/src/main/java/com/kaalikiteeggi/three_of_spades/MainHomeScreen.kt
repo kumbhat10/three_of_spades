@@ -25,6 +25,7 @@ import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -43,14 +44,13 @@ import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.romainpiel.shimmer.Shimmer
-import com.romainpiel.shimmer.ShimmerButton
-import com.romainpiel.shimmer.ShimmerTextView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.coroutines.launch
@@ -72,6 +72,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private lateinit var soundCollectCards: MediaPlayer
     private lateinit var soundUpdate: MediaPlayer
     private lateinit var textToSpeech: TextToSpeech
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var rewardStatus = false
     private var rewardAmount = 0
@@ -89,12 +90,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private lateinit var toast: Toast
     private var refUsersData = Firebase.firestore.collection("Users")
     private var refRoomData = Firebase.firestore.collection("Rooms")
-    private val myRefTrainingData = Firebase.database.getReference("Training") // initialize database reference
 
     private lateinit var mInterstitialAd: InterstitialAd
     private lateinit var rewardedAd: RewardedAd
     private lateinit var billingClient: BillingClient
-//    private lateinit var sinchClient: SinchClient
     private lateinit var mAuth: FirebaseAuth
     private var uid = ""
     private lateinit var userName: String
@@ -119,8 +118,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private lateinit var editor: SharedPreferences.Editor
 
     private lateinit var vibrator:Vibrator
-    private lateinit var shimmer: Shimmer
-//    private var versionStatus = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     private var totalCoins = 0
     private var ngamesPlayed = 0
     private var ngamesWon = 0
@@ -136,7 +133,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var claimedToday = false
     private var dailyRewardStatus = false
 
-    @SuppressLint("ShowToast")
+    @SuppressLint("ShowToast", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
@@ -162,6 +159,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
         mAuth = FirebaseAuth.getInstance()
         uid = mAuth.uid.toString()
+        getSharedPrefs()
+
         Handler().post(Runnable {
             soundUpdate = MediaPlayer.create(applicationContext, R.raw.player_moved)
             soundError = MediaPlayer.create(applicationContext, R.raw.error_entry)
@@ -170,11 +169,13 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             getUserData()
             animateElements()
-            getSharedPrefs()
             initializeAds()
             enterText() // press enter to join room
             setupBillingClient()
+            findViewById<AppCompatTextView>(R.id.versionCode).text = "V: "+packageManager.getPackageInfo(packageName,0).versionName.toString()
         })
+        firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
+
     }
 
 
@@ -334,6 +335,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     @SuppressLint("SimpleDateFormat")
     private fun getUserData(){
         val user = mAuth.currentUser
+        sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
+        editor = sharedPreferences.edit()
         if(user != null) {
             userName = user.displayName.toString().split(" ")[0]
             findViewById<Button>(R.id.welcomeUserNameview).text = userName
@@ -400,11 +403,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                        Handler().postDelayed({
                            dailyRewardWindowDisplay()},1000)
                     }
-                    findViewById<ShimmerTextView>(R.id.ngamesPlayedStats).text =
+                    findViewById<AppCompatTextView>(R.id.ngamesPlayedStats).text =
                         ngamesPlayed.toString()
-                    findViewById<ShimmerTextView>(R.id.ngamesBidedStats).text =
+                    findViewById<AppCompatTextView>(R.id.ngamesBidedStats).text =
                         ngamesBided.toString()
-                    findViewById<ShimmerTextView>(R.id.ngamesWonStats).text =
+                    findViewById<AppCompatTextView>(R.id.ngamesWonStats).text =
                         ngamesWon.toString()
                     editor.putString("photoURL", photoURL) // write username to preference file
                     editor.apply()

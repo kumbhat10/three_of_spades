@@ -147,7 +147,7 @@
             android:layout_margin="@dimen/_11sdp"
             android:orientation="vertical">
 
-            <com.romainpiel.shimmer.ShimmerTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/playerStatsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
 
                 <TableRow android:layout_marginTop="@dimen/_14sdp">
 
-                    <com.romainpiel.shimmer.ShimmerTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/gamesPlayedStats"
                         android:layout_width="@dimen/_165sdp"
                         android:layout_height="wrap_content"
@@ -196,7 +196,7 @@
                         android:textColor="@color/font_grey_settings"
                         android:textSize="@dimen/_14ssp" />
 
-                    <com.romainpiel.shimmer.ShimmerTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/ngamesPlayedStats"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -208,7 +208,7 @@
 
                 <TableRow android:layout_marginTop="@dimen/_18sdp">
 
-                    <com.romainpiel.shimmer.ShimmerTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/gamesWonStats"
                         android:layout_width="@dimen/_165sdp"
                         android:layout_height="wrap_content"
@@ -217,7 +217,7 @@
                         android:textColor="@color/font_grey_settings"
                         android:textSize="@dimen/_14ssp" />
 
-                    <com.romainpiel.shimmer.ShimmerTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/ngamesWonStats"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -229,7 +229,7 @@
 
                 <TableRow android:layout_marginTop="@dimen/_18sdp">
 
-                    <com.romainpiel.shimmer.ShimmerTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/gamesBidedStats"
                         android:layout_width="@dimen/_165sdp"
                         android:layout_height="wrap_content"
@@ -238,7 +238,7 @@
                         android:textColor="@color/font_grey_settings"
                         android:textSize="@dimen/_14ssp" />
 
-                    <com.romainpiel.shimmer.ShimmerTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/ngamesBidedStats"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -534,7 +534,7 @@
                 android:soundEffectsEnabled="true"
                 tools:ignore="ContentDescription" />
 
-            <com.romainpiel.shimmer.ShimmerButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/developerCreditsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -555,10 +555,21 @@
                 android:textAllCaps="true"
                 android:textColor="@color/font_yellow"
                 android:textSize="@dimen/_10ssp"
-                android:translationZ="@dimen/_36sdp"
-                app:cornerRadius="@dimen/_2sdp"
-                app:strokeColor="@color/font_yellow"
-                app:strokeWidth="@dimen/_1sdp" />
+                android:translationZ="@dimen/_36sdp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/versionCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom ="@+id/developerCreditsButton"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:gravity="bottom"
+                android:text="V: "
+                android:textColor="@color/white"
+                android:textSize="@dimen/_9ssp"
+                android:translationZ="@dimen/_40sdp" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
@@ -771,7 +782,7 @@
                     android:soundEffectsEnabled="true"
                     android:src="@drawable/music" />
 
-                <com.romainpiel.shimmer.ShimmerTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/musicSettText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -839,7 +850,7 @@
                     android:soundEffectsEnabled="true"
                     android:src="@drawable/sound_on_png" />
 
-                <com.romainpiel.shimmer.ShimmerTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/soundSettText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -909,7 +920,7 @@
                     android:onClick="vibrate"
                     android:src="@drawable/vibrateon" />
 
-                <com.romainpiel.shimmer.ShimmerTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/vibrateSettText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

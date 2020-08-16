@@ -1443,7 +1443,7 @@
             android:paddingBottom="@dimen/_2sdp"
             android:shadowDy="4"
             android:tag="pass"
-            android:text="@string/passText"
+            android:text="@string/passTextGS"
             android:textColor="#D3D3D3"
             android:textSize="@dimen/_25ssp" />
     </FrameLayout>
