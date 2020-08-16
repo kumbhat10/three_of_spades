@@ -31,6 +31,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -103,6 +104,7 @@ class GameScreen : AppCompatActivity() {
     private val emojiMessage = String(Character.toChars(0x1F4AC))
     private val emojiGuard = String(Character.toChars(0x1F482))
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var refGameData: DatabaseReference
     private var refRoomFirestore = Firebase.firestore.collection("Rooms")
     private var refUsersData = Firebase.firestore.collection("Users")
@@ -252,6 +254,8 @@ class GameScreen : AppCompatActivity() {
         if(nPlayers==7) nPlayers7 = true
         if(nPlayers==4) nPlayers4 = true
         setupGame4or7()
+
+
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from,nPlayers)
         refIDMappedImageView = PlayersReference().refIDMappedImageView(from, nPlayers)
         refIDMappedHighlightView = PlayersReference().refIDMappedHighlightView(from, nPlayers)
@@ -283,8 +287,15 @@ class GameScreen : AppCompatActivity() {
             updatePlayerInfo()
             initializeSpeechEngine()
             getSharedPrefs()
+            firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
+            logFirebaseEvent("game_screen",nPlayers, "start")
         }// endregion
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,typedValue, true)
+    }
+    private fun logFirebaseEvent(event:String, int: Int, key: String){
+        val params = Bundle()
+        params.putInt(key,int)
+        firebaseAnalytics.logEvent(event, params)
     }
     private fun setupGame4or7() {
 
@@ -811,9 +822,6 @@ class GameScreen : AppCompatActivity() {
                     if (gameState == 6) {
                         gameMode6()
                     }
-//                if (gameState == 10){
-//                    toastCenter("")
-//                }
                 }
             }
         }
@@ -981,7 +989,8 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         else -> false
     }
 }  // close keyboard after sending chat
-//        region Attach Listener
+
+// region Attach Listener
         if(activityExists) {
             refGameData.child("BU1").addValueEventListener(partnerListener1)
             refGameData.child("SC/p1").addValueEventListener(pointsListener1)
@@ -1020,6 +1029,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
                 refGameData.child("OL/p7").addValueEventListener(onlineStatusListener7)
             }
 //        endregion
+
             // region       Countdown PlayCard
             countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 50) {
                 @SuppressLint("SetTextI18n")
@@ -1091,6 +1101,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
         }
     }
     private fun gameMode6() {
+        if(fromInt == 1) logFirebaseEvent("game_screen",nPlayers, "played")
         findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
         countDownTimer("PlayCard",purpose = "cancel")
         if(vibrateStatus) vibrationStart()
@@ -1112,7 +1123,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             if(!BuildConfig.DEBUG)  {
                 if (!premiumStatus && mInterstitialAd.isLoaded) mInterstitialAd.show()
             }
-            if(from == "p1") {
+            if(fromInt == 1) {
                 findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext,R.color.inActiveCard))
                 findViewById<AppCompatButton>(R.id.startNextRoundButton).visibility = View.VISIBLE
                 findViewById<AppCompatButton>(R.id.startNextRoundButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
@@ -2343,7 +2354,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
             findViewById<LinearLayout>(R.id.imageGallery).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_down_out))
             Handler().postDelayed({
-//                if(from=="p1" && gameStateChange) write("GS",2) // Update Game State to start Biding round by Host only
+//                if(fromInt == 1 && gameStateChange) write("GS",2) // Update Game State to start Biding round by Host only
                 displaySelfCards(animations = true, bidingRequest = true)
             },fadeOffTime)
         },time)
@@ -2524,8 +2535,9 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
             mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
             mInterstitialAd.adListener = object : AdListener() {
                 override fun onAdClosed() { // dummy - check if at some other places ads is shown-conflict with ads closed  - no start next game button needs to be added here
+                    logFirebaseEvent("game_screen",1, "watched_ad")
                     mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the ad again
-                    if(from == "p1") {
+                    if(fromInt == 1) {
                         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext,R.color.inActiveCard))
                         findViewById<AppCompatButton>(R.id.startNextRoundButton).visibility = View.VISIBLE
                         findViewById<AppCompatButton>(R.id.startNextRoundButton).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal))
@@ -2540,7 +2552,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     }
     fun closeGameRoom(view: View){
         activityExists = false
-        if(from=="p1")  refGameData.child("OL/$from").setValue(2) // only host says offline if(from=="p1")  write("OL/$from",2) // only host says offline
+        if(fromInt == 1)  refGameData.child("OL/$from").setValue(2) // only host says offline if(fromInt == 1)  write("OL/$from",2) // only host says offline
         countDownBidding.cancel()
         countDownPlayCard.cancel()
         finish()
@@ -2595,7 +2607,7 @@ findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, ac
     }
     private fun deleteAllRoomdata(){
         write("OL/$from",2)
-        if(from=="p1") {
+        if(fromInt == 1) {
             refRoomFirestore.document(roomID + "_chat").delete()
             refRoomFirestore.document(roomID).delete()
             refGameData.removeValue()

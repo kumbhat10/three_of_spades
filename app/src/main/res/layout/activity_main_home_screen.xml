@@ -1492,6 +1492,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/loveIt"
+                    android:tag="good"
                     android:layout_width="@dimen/rateUsWidth"
                     android:layout_height="@dimen/rateUsHeight"
                     android:background="@drawable/love_it"
@@ -1519,6 +1520,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/beBetter"
+                    android:tag="bad"
                     android:layout_width="@dimen/rateUsWidth"
                     android:layout_height="@dimen/rateUsHeight"
                     android:background="@drawable/be_better"

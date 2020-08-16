@@ -18,8 +18,8 @@ android {
         applicationId "com.kaalikiteeggi.three_of_spades"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 33
-        versionName "33B"
+        versionCode 34
+        versionName "34B"
         ndkVersion "21.3.6528147" //6363665"
         signingConfig signingConfigs.debug
     }

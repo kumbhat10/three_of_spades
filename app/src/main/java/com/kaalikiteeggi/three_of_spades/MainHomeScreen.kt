@@ -175,15 +175,17 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             findViewById<AppCompatTextView>(R.id.versionCode).text = "V: "+packageManager.getPackageInfo(packageName,0).versionName.toString()
         })
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-
     }
-
-
     override fun onStart() {
         super.onStart()
         if(rated && ratingWindowOpenStatus) closeRatingWindow(View(applicationContext))
         if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
 
+    }
+    private fun logFirebaseEvent(event:String, int: Int, key: String){
+        val params = Bundle()
+        params.putInt(key,int)
+        firebaseAnalytics.logEvent(event, params)
     }
     private fun dailyRewardWindowDisplay() {
         soundSuccess.start()
@@ -198,10 +200,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if(soundStatus) soundUpdate.start()
         findViewById<LinearLayout>(R.id.dailyRewardGridLayout).visibility = View.GONE
     }
+
     fun addPoints(){
         dailyRewardClicked = false
         rewardAmount = dailyRewardAmount
         totalCoins += rewardAmount  // reward with daily reward amount for watching video
+        logFirebaseEvent("daily_rewards", rewardAmount, "coins")
         findViewById<TextView>(R.id.watchVideoCoin).text = rewardAmount.toString()
         findViewById<TextView>(R.id.watchVideoCoin).visibility = View.VISIBLE
         soundCollectCards.start()
@@ -634,6 +638,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         rewardStatus = false
                         findViewById<TextView>(R.id.watchVideoCoin).text = rewardAmount.toString()
                         findViewById<TextView>(R.id.watchVideoCoin).visibility = View.VISIBLE
+                        logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY,rewardAmount, "coins")
                         soundCollectCards.start()
                         anim(findViewById(R.id.watchVideoCoin),R.anim.slide_500_coins)
                         Handler().postDelayed({
@@ -752,8 +757,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
                 toastCenter("Failed to create room \nPlease try again or later")}
             .addOnSuccessListener{
-        soundSuccess.start()
-        startActivity(Intent(applicationContext, CreatenJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
+                soundSuccess.start()
+                logFirebaseEvent("create_join_room_screen",nPlayers, "create")
+
+                startActivity(Intent(applicationContext, CreatenJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
             .apply { putExtra("selfName", userName) }.apply { putExtra("from", "p1") }
             .apply { putExtra("nPlayers", nPlayers) }
             .putIntegerArrayListExtra("userStats", ArrayList(listOf(ngamesPlayed, ngamesWon, ngamesBided ))))
@@ -805,7 +812,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         soundError.start()
                         if(vibrateStatus) vibrationStart()
                         findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
-
                         findViewById<EditText>(R.id.roomIDInput).hint = "Room is Full"
                         findViewById<EditText>(R.id.roomIDInput).text.clear()
                     } else {
@@ -813,7 +819,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         soundSuccess.start()
                         findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.VISIBLE
                         findViewById<TextView>(R.id.loadingText).text = getString(R.string.joiningRoom)
-
+                        logFirebaseEvent("create_join_room_screen",nPlayers, "join")
                         val playerJoining = playersJoined + 1
                         refRoomData.document(roomID).set(hashMapOf("p$playerJoining" to userName, "PJ" to playerJoining, "p${playerJoining}h" to photoURL, "p${playerJoining}c" to totalCoins), SetOptions.merge())
                             .addOnSuccessListener {
@@ -1003,6 +1009,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         toast.show()
     }
     fun trainingStart(view: View){
+//        logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, rewardAmount, "coins")
+
         if(trainAccess) {
             findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.VISIBLE
             findViewById<TextView>(R.id.loadingText).text = getString(R.string.startTrain)
@@ -1060,6 +1068,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         ratingWindowOpenStatus = false
     }
     fun askLaterRating(view:View){ // request for rating after x days from today if choose ask later
+        logFirebaseEvent("rate_us", 1, "rate_later")
         closeRatingWindow(View(applicationContext))
         ratingRequestDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays
         editor.putInt("ratingRequestDate", ratingRequestDate)
@@ -1073,6 +1082,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             setPackage("com.android.vending")
         }
         startActivity(intent)
+        if(view.tag == "good") logFirebaseEvent("rate_us", 1, "rate_good")
+        else if(view.tag == "bad") logFirebaseEvent("rate_us", 1, "rate_bad")
         rated = true
         editor.putBoolean("rated",rated)
         editor.apply()
