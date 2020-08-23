@@ -38,13 +38,14 @@
         android:src= "@drawable/_s_icon_3shadow" />
 
     <TextView
+        android:id="@+id/nameDeveloper"
         android:layout_width="wrap_content"
         android:onClick="sendEmail"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView4"
+        android:layout_marginBottom="@dimen/_minus2sdp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginBottom="@dimen/_minus2sdp"
         android:fontFamily="cursive"
         android:text="@string/developer"
         android:clickable="true"
@@ -71,6 +72,24 @@
         android:text="@string/developer_contact"
         android:textColor="#FFD500"
         android:textSize="@dimen/_9ssp" />
+
+    <TextView
+        android:id="@+id/contactUs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/nameDeveloper"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_minus2sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/armata"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="sendEmail"
+        android:text="@string/click_contact"
+        android:textColor="#032DFF"
+        android:textSize="@dimen/_9ssp"
+        android:textStyle="italic" />
 
     <TextView
         android:id="@+id/sizeDC"

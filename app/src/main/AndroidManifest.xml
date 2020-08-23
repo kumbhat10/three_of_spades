@@ -33,6 +33,7 @@
         android:theme="@style/Theme.App"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
+
         tools:targetApi="n">
 
         <meta-data
@@ -103,7 +104,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".SplashScreen">
+        <activity android:name=".SplashScreen"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -112,19 +114,24 @@
         </activity>
         <activity android:name=".DeveloperCredits" />
         <activity
-            android:name=".CreatenJoinRoomScreen"
+            android:name=".CreateAndJoinRoomScreen"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
         <activity
             android:name=".TrainActivity"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"/>
         <activity
             android:name=".GameScreen"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
         <activity
             android:name=".GameScreenAutoPlay"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
         <activity
             android:name=".MainHomeScreen"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".StartScreen" />

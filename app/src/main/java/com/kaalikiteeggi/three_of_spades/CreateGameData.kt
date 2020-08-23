@@ -77,7 +77,7 @@ class CreateGameData(uid: String, selfName: String) {
         "A_Time" to SimpleDateFormat("HH:mm:ss z").format(Date()),
         "A_Uid" to uid,
         "A_Name" to selfName,
-        "Bid" to mutableMapOf("BV" to 175, "BT" to 1,"BB" to 3,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)),
+        "Bid" to mutableMapOf("BV" to 175, "BT" to 1,"BB" to 1,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)),
     "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
     "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
     "CH" to mutableMapOf("p1" to cardsShuffled4.slice(0..12).sortedBy {it},"p2" to cardsShuffled4.slice(13..25).sortedBy {it},
@@ -88,6 +88,22 @@ class CreateGameData(uid: String, selfName: String) {
     "M" to "",
     "OL" to mutableMapOf("p1" to 0,"p2" to 0,"p3" to 0,"p4" to 0),
     "R" to 1,
+    "RO" to mutableMapOf("T" to 1,"P" to 0,"R" to ""), // t game turn, p player turn, R is rung
+    "SC" to mutableMapOf("p1" to 0,"p2" to 0,"p3" to 0,"p4" to 0),
+    "Tr" to "")
+
+    val gameDataAutoPlayDummy4 = mutableMapOf(
+        "ADate" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+        "A_Time" to SimpleDateFormat("HH:mm:ss z").format(Date()),
+        "A_Uid" to uid,
+        "A_Name" to selfName,
+        "Bid" to mutableMapOf("BV" to 175, "BT" to 1,"BB" to 1,"BS" to mutableMapOf("p1" to 1,"p2" to 1,"p3" to 1,"p4" to 1)),
+    "BU" to mutableMapOf("b1" to "","b1s" to "","b2" to "","b2s" to ""),
+    "BU1" to mutableMapOf("b1" to 8,"s1" to 0),  // b1 = player number = 8 means not declared. b1s = 0 ND, 2 Not sure, 1 Locked
+    "CH" to mutableMapOf("p1" to cardsShuffled4.slice(0..12).sortedBy {it},"p2" to cardsShuffled4.slice(13..25).sortedBy {it},
+        "p3" to cardsShuffled4.slice(26..38).sortedBy {it},"p4" to cardsShuffled4.slice(39..51).sortedBy {it}),
+        "CT" to mutableMapOf("p1" to 53,"p2" to 53,"p3" to 53,"p4" to 53),
+    "GS" to 1, // 0 means joining state
     "RO" to mutableMapOf("T" to 1,"P" to 0,"R" to ""), // t game turn, p player turn, R is rung
     "SC" to mutableMapOf("p1" to 0,"p2" to 0,"p3" to 0,"p4" to 0),
     "Tr" to "")

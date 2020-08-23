@@ -1887,7 +1887,7 @@
             android:layout_marginBottom="@dimen/_9sdp"
             android:contentDescription="@string/app_name"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            android:src="@drawable/c10" />
 
         <ImageView
             android:id="@+id/imageViewTable3_4"

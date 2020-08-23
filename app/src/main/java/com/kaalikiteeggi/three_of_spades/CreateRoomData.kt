@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class CreateRoomData(username: String, userPhotoUrl: String, coins: Int) {
+
+    private val randomList =  (CelebrityData().name.indices).shuffled().shuffled().shuffled()  // create shuffled pack of 2 decks with 6 cards removed ( 7Player x 14 = 98 cards only)
+
     @SuppressLint("SimpleDateFormat")
     val dummyData7 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
@@ -12,18 +15,18 @@ class CreateRoomData(username: String, userPhotoUrl: String, coins: Int) {
         "p1" to username,
         "p1h" to userPhotoUrl,
         "p1c" to coins,
-        "p2" to "Kriti",
-        "p2h" to "https://i.pinimg.com/564x/a0/31/cf/a031cfdf6498a40a345fce8320a563dc.jpg",
-        "p3" to "Kabir",
-        "p3h" to "https://i.pinimg.com/564x/8f/03/b8/8f03b858c3bfcfa8a5027d52d5a23f78.jpg",
-        "p5" to "Priyanka",
-        "p5h" to "https://i.pinimg.com/564x/41/81/04/418104b86d8f53976b224131d0eb1801.jpg\n",
-        "p4" to "Tiger",
-        "p4h" to "https://static.toiimg.com/photo/70973522.cms",
-        "p6" to "Sandra",
-        "p6h" to "https://firebasestorage.googleapis.com/v0/b/kaali-ki-teegi.appspot.com/o/g1.jpg?alt=media&token=076029b5-d453-43ca-9e56-8cd4245d3190",
-        "p7" to "Hrithik",
-        "p7h" to "https://imagevars.gulfnews.com/2020/01/22/Hrithik-Roshan--3--1579703264814_16fcda6e62f_large.jpg",
+        "p2" to CelebrityData().name[randomList[0]][0],
+        "p2h" to CelebrityData().name[randomList[0]][1],
+        "p3" to CelebrityData().name[randomList[3]][0],
+        "p3h" to CelebrityData().name[randomList[3]][1],
+        "p4" to CelebrityData().name[randomList[5]][0],
+        "p4h" to CelebrityData().name[randomList[5]][1],
+        "p5" to CelebrityData().name[randomList[7]][0],
+        "p5h" to CelebrityData().name[randomList[7]][1],
+        "p6" to CelebrityData().name[randomList[9]][0],
+        "p6h" to CelebrityData().name[randomList[9]][1],
+        "p7" to CelebrityData().name[randomList[2]][0],
+        "p7h" to CelebrityData().name[randomList[2]][1],
         "PJ" to 7,
         "n" to 7,
         "p2c" to 6200,
@@ -39,17 +42,17 @@ class CreateRoomData(username: String, userPhotoUrl: String, coins: Int) {
         "p1" to username,
         "p1h" to userPhotoUrl,
         "p1c" to coins,
-        "p2" to "Kriti",
-        "p2h" to "https://i.pinimg.com/564x/a0/31/cf/a031cfdf6498a40a345fce8320a563dc.jpg",
-        "p3" to "Kabir",
-        "p3h" to "https://i.pinimg.com/564x/8f/03/b8/8f03b858c3bfcfa8a5027d52d5a23f78.jpg",
-         "p4" to "Tiger",
-        "p4h" to "https://static.toiimg.com/photo/70973522.cms",
+        "p2" to CelebrityData().name[randomList[0]][0],
+        "p2h" to CelebrityData().name[randomList[0]][1],
+        "p3" to CelebrityData().name[randomList[3]][0],
+        "p3h" to CelebrityData().name[randomList[3]][1],
+        "p4" to CelebrityData().name[randomList[5]][0],
+        "p4h" to CelebrityData().name[randomList[5]][1],
         "PJ" to 4,
         "n" to 4,
-        "p2c" to 5000,
-        "p3c" to 8500,
-        "p4c" to 9600)
+        "p2c" to 21500,
+        "p3c" to 16800,
+        "p4c" to 13200)
 
     val data7 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),

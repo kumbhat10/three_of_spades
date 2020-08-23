@@ -214,7 +214,10 @@ class StartScreen : AppCompatActivity() {
            try{
                refUsersData.document(uid).get().addOnSuccessListener {
                        documentSnapshot -> if(documentSnapshot.data != null) {
-                   refUsersData.document(uid).set(hashMapOf("n" to userGivenName, "ph" to userPhotoUrl),SetOptions.merge() )
+                   val setData = if(documentSnapshot.contains("p_bot")) hashMapOf("n" to userGivenName, "ph" to userPhotoUrl)
+                   else hashMapOf("n" to userGivenName, "ph" to userPhotoUrl, "b_bot" to 0,"p_bot" to 0,"w_bot" to 0)
+
+                   refUsersData.document(uid).set(setData, SetOptions.merge() )
                        .addOnSuccessListener {   startNextActivity(userGivenName)   }
                        .addOnFailureListener{exception ->
                            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE

@@ -1,8 +1,6 @@
 <resources>
-    <string name="testAds">n</string>
     <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
-    <string name="nPlayers">5</string>
 
     <string name="noti_DR_title">Have you collected your Daily Rewards ?</string>
     <string name="noti_DR_info">Click here to collect your Daily Reward</string>
@@ -45,6 +43,7 @@
     <string name="app_name">Kaali ki Tiggi</string>
     <string name="developer">Dushyant Kumbhat</string>
     <string name="developer_contact">kaaliteerifun@gmail.com</string>
+    <string name="click_contact">Click below to contact us</string>
     <string name="createRoom">Create Room</string>
     <string name="joinRoom">Join Room</string>
     <string name="join">Join</string>
@@ -137,5 +136,6 @@
     <string name="firingServer">Creating Server…</string>
     <string name="signIN">Signing in…</string>
     <string name="title_activity_train">TrainActivity</string>
+    <string name="starting_game">Starting Game...</string>
 
 </resources>

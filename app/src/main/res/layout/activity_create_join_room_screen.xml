@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/Black"
     android:visibility="visible"
-    tools:context=".CreatenJoinRoomScreen">
+    tools:context=".CreateAndJoinRoomScreen">
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/frameShimmerJoiningRoom"
@@ -741,7 +741,7 @@
             android:gravity="center"
             android:text="@string/firingServer"
             android:textColor="@color/white"
-            android:textSize="@dimen/_17ssp" />
+            android:textSize="@dimen/_13ssp" />
 
     </RelativeLayout>
 </RelativeLayout>
