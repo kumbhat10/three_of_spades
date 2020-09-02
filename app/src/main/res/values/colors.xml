@@ -21,7 +21,6 @@
     <color name="light_grey_settings">#BABABA</color>
 
     <color name="progressBarPlayer2">#CA0000</color>
-    <color name = "backgroundDarkOpaque">#F30A1B4A</color>
 
     <color name = "cardsBackgroundDark">#C6040E17</color>
     <color name = "cardsBackgroundLight">#DDFFFFFF</color>
@@ -29,7 +28,6 @@
     <color name = "layoutBackgroundLittle">#7A04061E</color>
 
     <color name = "inActiveCard">#C1323232</color>
-    <color name = "highlightCard">#B43AED06</color>
     <color name = "highlightCard1">#9A39FF00</color>
 
     <color name="trackSwitchON">#0F56F100</color>
@@ -55,7 +53,6 @@
 
     <color name = "brown0">#9E3030</color>
     <color name = "brown1">#7C2424</color>
-    <color name = "brown2">#501717</color>
 
     <color name = "shine0blackbar">#FFFFFF</color>
     <color name = "shine2blackbar">#000000</color>
@@ -63,12 +60,10 @@
     <color name = "shine0bk">#6E6E6E</color>
     <color name = "shine1bk">#353535</color>
     <color name = "shine2bk">#191919</color>
-    <color name = "shine3bk">#151515</color>
 
     <color name = "borderblueDark0g">#A5FF47</color>
     <color name = "borderblueDark1g">#63C300</color>
     <color name = "borderblueDark2g">#56A307</color>
-    <color name = "borderblueDark3g">#4F8F0C</color>
     <color name = "Red">#FF0000</color>
 
     <color name = "borderRed0">#FF4646</color>
@@ -104,7 +99,6 @@
 
 
     <color name="progressBarPlayer4">#00FF0A</color>
-    <color name="frameLayoutBackground">#C80E2043</color>
     <color name="scoreTableText">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
     <color name="shimmerHighlight">#66FF00</color>

@@ -62,6 +62,7 @@ import kotlin.collections.ArrayList
 import kotlin.math.min
 
 class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
+    //    region Initialization
     private var requestRatingAfterDays = 2 //dummy
     private var ratingRequestDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt()
     private lateinit var soundError: MediaPlayer
@@ -113,6 +114,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var soundStatus = true
     private var vibrateStatus = true
     private var premiumStatus = false
+    private var newUser = true
     private var rated = false
     private val today = SimpleDateFormat("yyyyMMdd").format(Date()).toInt()
     private var consecutiveDay = 1
@@ -137,6 +139,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var dailyRewardClicked = false
     private var claimedToday = false
     private var dailyRewardStatus = false
+    // endregion
 
     @SuppressLint("ShowToast", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -154,14 +157,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         setContentView(R.layout.activity_main_home_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
 
+        newUser = intent.getBooleanExtra("newUser", true)
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.BOTTOM, 0, 300)
-        toast.view.setBackgroundColor(
-            ContextCompat.getColor(
-                applicationContext,
-                R.color.cardsBackgroundDark
-            )
-        )
+        toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundDark))
         toast.view.findViewById<TextView>(android.R.id.message)
             .setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
         toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
@@ -251,7 +250,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if (premiumStatus) {
             findViewById<LinearLayout>(R.id.dailyRewardGridLayout).visibility = View.GONE
             addPoints()
-        } else if (rewardedAd.isLoaded) {
+        } else if (rewardedAd.isLoaded && !newUser) {
             val activityContext: Activity = this
             val adCallback = object : RewardedAdCallback() {
                 override fun onRewardedAdOpened() {
@@ -288,14 +287,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     rewardStatus = true
                     rewardAmount = dailyRewardAmount
                     totalCoins += rewardAmount  // reward with daily reward amount for watching video
-                    refUsersData.document(uid).set(
-                        hashMapOf(
-                            "sc" to totalCoins,
-                            "LSD" to today,
-                            "nDRC" to consecutiveDay,
-                            "claim" to 1
-                        ), SetOptions.merge()
-                    )
+                    refUsersData.document(uid).set(hashMapOf("sc" to totalCoins, "LSD" to today, "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
                 }
                 override fun onRewardedAdFailedToShow(errorCode: Int) {
                     dailyRewardClicked = false
@@ -305,7 +297,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 }
             }
             rewardedAd.show(activityContext, adCallback)
-        } else if (mInterstitialAd.isLoaded) {
+        } else if (mInterstitialAd.isLoaded && !newUser) {
             mInterstitialAd.show()
             findViewById<LinearLayout>(R.id.dailyRewardGridLayout).visibility = View.GONE
             findViewById<GifImageView>(R.id.watchVideo).clearAnimation()
@@ -317,9 +309,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             findViewById<GifImageView>(R.id.watchVideo).clearAnimation()
             findViewById<GifImageView>(R.id.watchVideo).visibility = View.GONE
             loadRewardAd()
-            if (premiumStatus) mInterstitialAd.loadAd(
-                AdRequest.Builder().build()
-            )
+            if (premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder().build())
         }
     }
 
@@ -381,18 +371,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if (user != null) {
             userName = user.displayName.toString().split(" ")[0]
             findViewById<Button>(R.id.welcomeUserNameview).text = userName
-            if (intent.getBooleanExtra(
-                    "newUser",
-                    false
-                )
-            ) {//check if user has joined room or created one and display Toast
+            if (intent.getBooleanExtra("newUser", false)) {//check if user has joined room or created one and display Toast
                 toastCenter("Hi $userName") // dummy - add tutorial
                 editor.putBoolean("rated", rated)
                 editor.putInt("joinDate", SimpleDateFormat("yyyyMMdd").format(Date()).toInt())
-                editor.putInt(
-                    "ratingRequestDate",
-                    SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays
-                )
+                editor.putInt("ratingRequestDate", SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays)
                 editor.putBoolean("premium", false) // make premium false
                 editor.apply()
             } // check if new user
@@ -410,18 +393,21 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     findViewById<AppCompatButton>(R.id.userScore).text =
                         String.format("%,d", totalCoins)
                     findViewById<RelativeLayout>(R.id.maskAllLoading).visibility = View.GONE
-                    findViewById<TextView>(R.id.loadingText).text =
-                        getString(R.string.fetching_player)
+                    findViewById<TextView>(R.id.loadingText).text = getString(R.string.fetching_player)
 
                     nGamesPlayed = dataSnapshot.get("p").toString().toInt()
                     nGamesWon    = dataSnapshot.get("w").toString().toInt()
                     nGamesBid  = dataSnapshot.get("b").toString().toInt()
 
-                    if(dataSnapshot.contains("p_bot")){
-                        nGamesPlayedBot =  dataSnapshot.get("p_bot").toString().toInt()
-                        nGamesWonBot    =  dataSnapshot.get("w_bot").toString().toInt()
-                        nGamesBidBot  =  dataSnapshot.get("b_bot").toString().toInt()
-                    }else Firebase.firestore.collection("Users").document(uid).set(hashMapOf("b_bot" to 0,"p_bot" to 0,"w_bot" to 0), SetOptions.merge())
+                    if(!dataSnapshot.contains("phone")) Firebase.firestore.collection("Users").document(uid).set(hashMapOf("phone" to "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}"), SetOptions.merge())
+                    when {
+                        dataSnapshot.contains("p_bot") -> {
+                            nGamesPlayedBot =  dataSnapshot.get("p_bot").toString().toInt()
+                            nGamesWonBot    =  dataSnapshot.get("w_bot").toString().toInt()
+                            nGamesBidBot  =  dataSnapshot.get("b_bot").toString().toInt()
+                        }
+                        else -> Firebase.firestore.collection("Users").document(uid).set(hashMapOf("b_bot" to 0,"p_bot" to 0,"w_bot" to 0), SetOptions.merge())
+                    }
 
                     findViewById<AppCompatTextView>(R.id.ngamesPlayedStats).text = (nGamesPlayed + nGamesPlayedBot).toString()
                     findViewById<AppCompatTextView>(R.id.ngamesBidedStats).text = (nGamesBid + nGamesBidBot).toString()
@@ -683,7 +669,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 findViewById<GifImageView>(R.id.watchVideo).visibility = View.VISIBLE
 //                anim(findViewById(R.id.watchVideo), R.anim.anim_scale_infinite)
             }
-
             override fun onRewardedAdFailedToLoad(errorCode: Int) {
                 if (loadRewardedAdTry <= 10) loadRewardAd()
             }
@@ -817,7 +802,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             4-> 4
             else-> 7
         }
-        if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched) {
+        if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched && !newUser) {
             mInterstitialAd.show()
         } else {
             if(view.tag.toString().toInt() == 0 ) createRoom(offline = true)
@@ -840,9 +825,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data4)
             else createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData4)
         }
-//        else if (nPlayers == 4 && offline) {
-//             createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData4)
-//        }
        }
     }
 
@@ -869,10 +851,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         val userStats = if(!offline) ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))
         else ArrayList(listOf(nGamesPlayedBot, nGamesWonBot, nGamesBidBot))
 
-        startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
-            .apply { putExtra("selfName", userName) }.apply { putExtra("photoURL", photoURL) }.apply { putExtra("totalCoins", totalCoins) }
+        startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java)
+            .apply { putExtra("roomID", roomID) }
+            .apply { putExtra("selfName", userName) }
+            .apply { putExtra("photoURL", photoURL) }
+            .apply { putExtra("totalCoins", totalCoins) }
             .apply { putExtra("from", "p1") }
-            .apply { putExtra("nPlayers", nPlayers)} .apply { putExtra("offline", offline) }
+            .apply { putExtra("nPlayers", nPlayers)}
+            .apply { putExtra("offline", offline) }
             .putIntegerArrayListExtra("userStats", userStats))
         overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
         Handler().postDelayed({ finish() }, 500)
@@ -930,31 +916,19 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                             getString(R.string.joiningRoom)
                         logFirebaseEvent("create_join_room_screen", nPlayers, "join")
                         val playerJoining = playersJoined + 1
-                        refRoomData.document(roomID).set(
-                            hashMapOf(
-                                "p$playerJoining" to userName,
-                                "PJ" to playerJoining,
-                                "p${playerJoining}h" to photoURL,
-                                "p${playerJoining}c" to totalCoins
-                            ), SetOptions.merge()
-                        )
+                        refRoomData.document(roomID).set(hashMapOf("p$playerJoining" to userName, "PJ" to playerJoining, "p${playerJoining}h" to photoURL, "p${playerJoining}c" to totalCoins), SetOptions.merge())
                             .addOnSuccessListener {
-                                startActivity(
-                                    Intent(
-                                        applicationContext,
-                                        CreateAndJoinRoomScreen::class.java
-                                    ).apply { putExtra("roomID", roomID) }
-                                        .apply { putExtra("selfName", userName) }
-                                        .apply { putExtra("from", "p$playerJoining") }
-                                        .apply { putExtra("nPlayers", nPlayers) }
-                                        .putIntegerArrayListExtra(
-                                            "userStats",
-                                            ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))
-                                        ))
-                                overridePendingTransition(
-                                    R.anim.slide_left_activity,
-                                    R.anim.slide_left_activity
-                                )
+                                startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java)
+                                    .apply { putExtra("roomID", roomID) }
+                                    .apply { putExtra("selfName", userName) }
+                                    .apply { putExtra("from", "p$playerJoining") }
+                                    .apply { putExtra("nPlayers", nPlayers) }
+                                    .apply { putExtra("photoURL", photoURL) }
+                                    .apply { putExtra("totalCoins", totalCoins) }
+                                    .apply { putExtra("offline", false) }
+                                    .putIntegerArrayListExtra("userStats", ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))))
+
+                                overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
                                 Handler().postDelayed({ finish() }, 500)
                             }
                     }
@@ -990,7 +964,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if (soundStatus) soundUpdate.start()
         findViewById<EditText>(R.id.roomIDInput).hint = "Room ID"
 
-        if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched) {
+        if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched && !newUser) {
             mInterstitialAd.show()
         }
         Handler().postDelayed({
@@ -1197,6 +1171,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             data = Uri.parse("https://sites.google.com/view/kaali-ki-teeggi/")
         }
         startActivity(intent)
+        logFirebaseEvent("how_to_play", 1, "click")
     }
 
     fun openRatingWindow(view: View) {

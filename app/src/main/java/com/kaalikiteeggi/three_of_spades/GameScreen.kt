@@ -55,6 +55,8 @@ import kotlin.random.Random
     private lateinit var soundSuccess: MediaPlayer
     private lateinit var soundShuffle: MediaPlayer
     private lateinit var soundChat: MediaPlayer
+    private lateinit var soundWon: MediaPlayer
+    private lateinit var soundLost: MediaPlayer
     private lateinit var soundCardPlayed: MediaPlayer
     private lateinit var textToSpeech: TextToSpeech
     private var typedValue = TypedValue()
@@ -277,6 +279,8 @@ import kotlin.random.Random
             soundSuccess = MediaPlayer.create(applicationContext, R.raw.player_success_chime)
             soundShuffle = MediaPlayer.create(applicationContext, R.raw.cards_shuffle)
             soundChat = MediaPlayer.create(applicationContext, R.raw.chat_new1)
+            soundWon = MediaPlayer.create(applicationContext, R.raw.trumpet_win)
+            soundLost = MediaPlayer.create(applicationContext, R.raw.lose)
             soundCardPlayed = MediaPlayer.create(applicationContext, R.raw.card_moved)
             soundTimerFinish = MediaPlayer.create(applicationContext, R.raw.timer_over)
             soundCollectCards = MediaPlayer.create(applicationContext, R.raw.collect_cards)
@@ -552,7 +556,9 @@ import kotlin.random.Random
                             toastCenter("Ooppps ! ${playerName(1)} has closed the room")
                             speak("Shit.   ${playerName(1)} has left the room. leaving room now", speed = 1.15f)
                             findViewById<ImageView>(refIDMappedOnlineIconImageView[0]).setImageResource(R.drawable.status_offline)
-                            Handler().postDelayed({ closeGameRoom(View(applicationContext)) }, 2500)
+                            val view = View(applicationContext)
+                            view.tag = "notclicked"
+                            Handler().postDelayed({ closeGameRoom(view) }, 2500)
                         }
                     }
                 }
@@ -735,6 +741,7 @@ import kotlin.random.Random
                         newGameStatus = true
                         getBuddyAndDisplay()
                         if (!roundStarted) {
+                            finishPassOverlay()
                             if (soundStatus) soundSuccess.start()
                             updatePlayerScoreInfo(ptAll)
                             getCardsAndDisplay(animation = false)
@@ -1342,9 +1349,18 @@ import kotlin.random.Random
             toastCenter("Game Over: Bidder team Won \n         Defender team Lost")
             centralText("Game Over: Bidder team Won \n         Defender team Lost")
 
-            if (from == "p$bidder" && buFound1 != 1) speak("Congratulations ! You won")
-            else if ((from == "p$bidder" || from == "p$buPlayer1") && buFound1 == 1) speak("Congratulations! Your team has won")
-            else speak("Sorry Your team has lost")
+            if (from == "p$bidder" && buFound1 != 1) {
+                soundWon.start()
+                speak("Congratulations ! You won")
+            }
+            else if ((from == "p$bidder" || from == "p$buPlayer1") && buFound1 == 1) {
+                soundWon.start()
+                speak("Congratulations! Your team has won")
+            }
+            else {
+                soundLost.start()
+                speak("Sorry Your team has lost")
+            }
 
             if ("p$bidder" == from) { // bidder will change game state to 6
                 val pointsListTemp = mutableListOf(gameNumber, -bidValue, -bidValue, -bidValue, -bidValue)
@@ -1355,7 +1371,7 @@ import kotlin.random.Random
                     pointsListTemp[buPlayer1] = bidValue
                 }
                 write("S", pointsListTemp) // 0-bidder won, 1 - defenders won??
-                write("GS", 6) // dummy - check if need success listner from above write to handle sync issues
+                write("GS", 6) // dummy - check if need success listener from above write to handle sync issues
             }
         } else if (buFound1 == 1 && (totalGamePoints - bidTeamScore) >= (scoreLimit - bidValue)) { // if opponent score has reached target value & both partners are disclosed
             refGameData.child("RO").removeEventListener(roundListener)
@@ -1364,8 +1380,14 @@ import kotlin.random.Random
             toastCenter("Game Over: Defender team Won \n         Bidder team Lost")
             centralText("Game Over: Defender team Won \n         Bidder team Lost")
 
-            if (from == "p$bidder" || from == "p$buPlayer1") speak("Sorry Your team has lost")
-            else speak("Congratulations! Your team has won")
+            if (from == "p$bidder" || from == "p$buPlayer1") {
+                soundLost.start()
+                speak("Sorry Your team has lost")
+            }
+            else {
+                soundWon.start()
+                speak("Congratulations! Your team has won")
+            }
 
             if ("p$bidder" == from) { // winner will change game state to 6
                 val pointsListTemp = mutableListOf(gameNumber, bidValue, bidValue, bidValue, bidValue)
@@ -1498,6 +1520,7 @@ import kotlin.random.Random
                 if (soundStatus) soundError.start()
                 if (vibrateStatus) vibrationStart()
                 toastCenter("${playerName(playerTurn)}, please play ${getSuitName(trumpStart)} card")
+                speak("please play a ${getSuitName(trumpStart)} card")
             }
         }
     }
@@ -1981,7 +2004,7 @@ import kotlin.random.Random
                             centralText("Waiting for ${playerName(playerTurn)} to bid", 0) //display message always
                         }
 
-                        if (bidSpeak && bidingStarted && soundStatus) speak("${playerName(bidder)} has raised bid to $bidValue", speed = 1.2f)
+                        if (bidSpeak && bidingStarted && soundStatus) speak("${playerName(bidder)} has raised bid to $bidValue", speed = 1f)
                         else if (soundStatus) soundUpdate.start()
 
                         findViewById<TextView>(R.id.textViewBidValue).text = "$emojiScore$bidValue" //.toString() //show current bid value
@@ -2064,7 +2087,7 @@ import kotlin.random.Random
         }
     }
 
-    private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1.05f) {
+    private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1f) {
         if (soundStatus) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
@@ -2112,6 +2135,7 @@ import kotlin.random.Random
             //            findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).clearAnimation()
             if (bidStatus == 0) {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
+                findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(applicationContext,R.drawable.pass)
                 if ("p$iPlayer" == from) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
             } else {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
@@ -2121,6 +2145,11 @@ import kotlin.random.Random
         }
     }
 
+    private fun finishPassOverlay(){
+        for (i in 0 until nPlayers) {
+            findViewById<ImageView>(refIDMappedImageView[i]).foreground = null
+        }
+    }
     private fun finishBackgroundAnimationBidding() {  //clear Everything on finish of biding round
         for (i in 0 until nPlayers) {
             findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
@@ -2423,7 +2452,7 @@ import kotlin.random.Random
 
     fun closeGameRoom(view: View) {
         activityExists = false
-        if (fromInt == 1) refGameData.child("OL/$from").setValue(2) // only host says offline if(fromInt == 1)  write("OL/$from",2) // only host says offline
+        if (fromInt == 1 || view.tag == "clicked") refGameData.child("OL/$from").setValue(2) // only host says offline if(fromInt == 1)  write("OL/$from",2) // only host says offline
         countDownBidding.cancel()
         countDownPlayCard.cancel()
         finish()

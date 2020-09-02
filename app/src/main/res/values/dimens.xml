@@ -33,7 +33,6 @@
 
     <dimen name="imageGapTopMiddle">@dimen/_47sdp</dimen>
     <dimen name="imageGapBetweenHorizontal">@dimen/_12sdp</dimen>
-    <dimen name="imageGapBetweenHorizontalTop">@dimen/_21sdp</dimen>
 
     <dimen name="imageGapBetween1">@dimen/_13sdp</dimen>
     <dimen name="imageGapBetweenCards">@dimen/_4sdp</dimen>
@@ -44,7 +43,6 @@
     <dimen name="tableCardImageWidth_4">@dimen/_42sdp</dimen>
     <dimen name="tableCardImageHeight_4">@dimen/_58sdp</dimen>
 
-    <dimen name="scoreTableHeight">@dimen/_26sdp</dimen>
     <dimen name="scoreTableWidth">@dimen/_64sdp</dimen>
     <dimen name="scoreTableWidthLarge">@dimen/_70sdp</dimen>
     <dimen name="widthDisplayCardLast">@dimen/_39sdp</dimen>
@@ -67,14 +65,11 @@
     Because the window insets on round devices are larger than 15dp, this padding only applies
     to square screens.
     -->
-    <dimen name="box_inset_layout_padding">0dp</dimen>
 
     <!--
     This padding applies to both square and round screens. The total padding between the buttons
     and the window insets is box_inset_layout_padding (above variable) on square screens and
     inner_frame_layout_padding (below variable) on round screens.
     -->
-    <dimen name="inner_frame_layout_padding">5dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

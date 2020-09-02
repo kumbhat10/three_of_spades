@@ -19,7 +19,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 37
-        versionName "37A"
+        versionName "37B"
         ndkVersion "21.3.6528147" //6363665"
         signingConfig signingConfigs.debug
     }
@@ -69,7 +69,7 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.8.1'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
     implementation 'com.google.android.gms:play-services-ads:19.3.0'
-    implementation 'com.google.android.gms:play-services-games:20.0.0'
+    implementation 'com.google.android.gms:play-services-games:20.0.1'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 //    implementation "androidx.gaming:gaming-frame-pacing:1.5.0-alpha01"

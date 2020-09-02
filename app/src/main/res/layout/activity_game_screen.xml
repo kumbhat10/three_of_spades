@@ -1146,6 +1146,7 @@
 
     <ImageView
         android:id="@+id/closeGameRoomIcon"
+        android:tag="clicked"
         android:layout_width="@dimen/_29sdp"
         android:layout_height="@dimen/_29sdp"
         android:layout_alignParentTop="true"

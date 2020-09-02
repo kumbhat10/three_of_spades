@@ -19,6 +19,7 @@ class CreateUser(username: String, userPhotoUrl: String) {
        "LSD" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), // last seen date
        "JD" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), // Join date
        "nDRC" to 1, // consecutive days
-       "claim" to 0
+       "claim" to 0,
+       "phone" to "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}"
    )
 }

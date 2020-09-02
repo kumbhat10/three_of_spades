@@ -188,22 +188,25 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
         Handler().postDelayed({
             soundUpdate.start()
+            speak("$p2 has joined")
             findViewById<Button>(R.id.player2Text).text = p2
             Picasso.get().load(p2h).transform(CircleTransform()).into(t2)
-        }, 600)
+        }, 300)
 
         Handler().postDelayed({
             soundUpdate.start()
+            speak("$p3 has joined")
             findViewById<Button>(R.id.player3Text).text = p3
             Picasso.get().load(p3h).transform(CircleTransform()).into(t3)
-        }, 1500)
+        }, 1700)
 
         Handler().postDelayed({
             //            soundUpdate.start()
+            speak("$p4 has joined")
             findViewById<Button>(R.id.player4Text).text = p4
             Picasso.get().load(p4h).transform(CircleTransform()).into(t4)
-            allPlayersJoined()
-        }, 2500)
+            Handler().postDelayed({allPlayersJoined()},700)
+        }, 3000)
 
     }
 
@@ -299,7 +302,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     private fun allPlayersJoined() {
         soundSuccess.start()
-        speak("All players have joined now")
+        speak("Ready to Start")
         findViewById<ProgressBar>(R.id.progressBarMain).visibility = View.GONE
         findViewById<AppCompatButton>(R.id.shareText).clearAnimation()
         findViewById<ImageView>(R.id.imageViewShareButton).clearAnimation()
@@ -377,7 +380,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
                 val result = textToSpeech.setLanguage(Locale.ENGLISH)
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     toastCenter("Missing Language data - Text to speech")
-                } else if (!offline) {
+                } else if (!offline && from != "p$nPlayers") {
                     speak("Invite your friends to join this room using the invite button")
                 }
             }
@@ -483,9 +486,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         roomID = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display
         selfName = intent.getStringExtra("selfName")!!.toString()  //Get Username
         photoURL = intent.getStringExtra("photoURL")!!.toString()  //Get Photo URL
+        totalCoins = intent.getIntExtra("totalCoins", 0)
         from = intent.getStringExtra("from")!!.toString()     //check if user has joined room or created one and display Toast
         nPlayers = intent.getIntExtra("nPlayers", 0)
-        totalCoins = intent.getIntExtra("totalCoins", 0)
         userStats = intent.getIntegerArrayListExtra("userStats")!!
         findViewById<ImageView>(R.id.imageViewShareButton).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
         findViewById<Button>(R.id.button_roomID).text = "Room ID: $roomID"   // display the room ID

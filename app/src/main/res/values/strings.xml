@@ -2,32 +2,17 @@
     <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
 
-    <string name="noti_DR_title">Have you collected your Daily Rewards ?</string>
-    <string name="noti_DR_info">Click here to collect your Daily Reward</string>
     <string name="default_notification_channel_id">ch_kkt</string>
-
-    <string name="customactivityoncrash_error_activity_error_occurred_explanation">Oopsieee !! Bugs found \nOr server is high on spirit \n\n\n( Sending Error summary to developer )</string>
-    <string name="customactivityoncrash_error_activity_restart_app">Home</string>
-    <string name="customactivityoncrash_error_activity_close_app">Close app</string>
-    <string name="customactivityoncrash_error_activity_error_details">Error details</string>
-    <string name="customactivityoncrash_error_activity_error_details_title">Error details</string>
-    <string name="customactivityoncrash_error_activity_error_details_close">Close</string>
-    <string name="customactivityoncrash_error_activity_error_details_copy">Copy to clipboard</string>
-    <string name="customactivityoncrash_error_activity_error_details_copied">Copied to clipboard</string>
-    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Error information</string>
 
     <string name="facebook_app_id">231024018145704</string>
     <string name="fb_login_protocol_scheme">fb231024018145704</string>
     <string name="twitter_consumer_key" translatable="false">3lO8Inhu76bB6LiBHegyenODQ</string>
     <string name="twitter_consumer_secret" translatable="false">gXjsRXLBFXCWT2p8RiqbAXEZ9LggL9yzt4xJ5fI9rhkHCkemd6</string>
-    <string name="sinch_api_key" translatable="false">0041a220-fc43-4bc0-814d-4051b24c18bc</string>
-    <string name="sinch_secret" translatable="false">CgpnthJTfUaYqo0VoKqC1w==</string>
     <string name="unity_game_id" translatable="false">3652147</string>
 
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
     <string name="testDeviceId">3872102D27DCB017E465C646FA620D3C</string>
 
-    <string name="bannerTest">ca-app-pub-3940256099942544/6300978111</string>
     <string name="bannerReal">ca-app-pub-2714670043901113/2653923895</string>
     <string name="banner">@string/bannerReal</string>
 
@@ -36,7 +21,6 @@
     <string name="interstitialReal">ca-app-pub-2714670043901113/6210025529</string>
     <string name="interstitial">@string/interstitialReal</string>
 
-    <string name="rewardedTest">ca-app-pub-2714670043901113/5307668082</string>
     <string name="rewardedReal">ca-app-pub-2714670043901113/5307668082</string>
     <string name="rewarded">@string/rewardedReal</string>
 
@@ -93,7 +77,6 @@
     <string name="onlyPartner">Only</string>
     <string name="anyPartner">Any</string>
     <string name="_10_pts">10 pts</string>
-    <string name="_360">360</string>
     <string name="_400">400</string>
     <string name="playeName">Player ?</string>
     <string name="room_id">Room ID</string>
@@ -104,38 +87,26 @@
 
     <string name="todo">TODO</string>
     <string name="player_stats">Player Stats</string>
-    <string name="daily_rewards">Daily Rewards</string>
     <string name="rounds_played">Rounds played :</string>
     <string name="nill">Nill</string>
     <string name="rounds_won">Rounds won :</string>
     <string name="rounds_bided">Placed bid :</string>
     <string name="sound">Sound</string>
     <string name="vibrate">Vibrate</string>
-    <string name="claim_reward">Claim \n Reward</string>
-    <string name="score_board">Score Board</string>
     <string name="start_next_game">Start next game</string>
     <string name="fetching_player">Fetching Player data....</string>
-    <string name="title_activity_how_to_play">HowToPlayActivity</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">Hello Square World!</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="creatingRoom">Creating Room…</string>
     <string name="checkJoinRoom">Finding Room…</string>
     <string name="startTrain">Start Training.…</string>
     <string name="joiningRoom">Room found \nJoining Room…</string>
     <string name="firingServer">Creating Server…</string>
     <string name="signIN">Signing in…</string>
-    <string name="title_activity_train">TrainActivity</string>
     <string name="starting_game">Starting Game...</string>
 
 </resources>
