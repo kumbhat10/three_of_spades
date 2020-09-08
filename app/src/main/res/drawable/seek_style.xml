@@ -1,0 +1,26 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape
+            android:shape="line">
+            <corners android:radius="@dimen/_8sdp" />
+
+            <stroke
+                android:color="@color/font_grey_settings"
+                android:width="@dimen/_8sdp"/>
+        </shape>
+    </item>
+
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape
+                android:shape="line">
+                <corners android:radius="@dimen/_8sdp" />
+
+                <stroke
+                    android:color="@color/progressBarPlayer4"
+                    android:width="@dimen/_8sdp"/>
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>

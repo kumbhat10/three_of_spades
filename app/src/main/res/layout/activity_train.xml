@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Black"
+    android:elevation="@dimen/_14sdp">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_57sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:layout_marginBottom="0dp"
+        app:shimmer_auto_start="true"
+        app:shimmer_colored="true"
+        app:shimmer_direction="right_to_left"
+        app:shimmer_fixed_height="@dimen/_150sdp"
+        app:shimmer_fixed_width="@dimen/_50sdp"
+        app:shimmer_highlight_alpha="1"
+        app:shimmer_highlight_color="#D0D3D1D1"
+        app:shimmer_intensity="0.1"
+        app:shimmer_repeat_delay="10000"
+        app:shimmer_repeat_mode="restart"
+        app:shimmer_shape="linear"
+        app:shimmer_tilt="60">
+
+        <ImageView
+            android:id="@+id/gifViewGameScreenborder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/game_screen_table_blue"
+            android:visibility="visible" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <ImageView
+        android:id="@+id/gifViewGameScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_57sdp"
+        android:layout_marginEnd="@dimen/_7sdp"
+        android:layout_marginBottom="0dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/game_screen_table_core"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/closeTraining"
+        android:layout_width="@dimen/_29sdp"
+        android:layout_height="@dimen/_29sdp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="closeTraining"
+        android:src= "@drawable/stop_sign" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/passbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/button_square"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="pass"
+        android:paddingStart="@dimen/_11sdp"
+        android:paddingTop="@dimen/_2sdp"
+        android:paddingEnd="@dimen/_11sdp"
+        android:paddingBottom="@dimen/_2sdp"
+        android:shadowDy="4"
+        android:tag="pass"
+        android:text="@string/passText"
+        android:textColor="@color/Black"
+        android:textSize="@dimen/_14ssp" />
+
+    <TextView
+        android:id="@+id/BidValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardsView"
+        android:layout_toEndOf="@id/bid"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:text="180"
+        android:textColor="@color/progressBarPlayer4"
+        android:textSize="@dimen/_20ssp" />
+
+    <TextView
+        android:id="@+id/bid"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/_1sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardsView"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:text="Bid Value : "
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16ssp" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/trumpSelectionHolder"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_below="@+id/bid"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:shimmer_auto_start="true"
+        app:shimmer_base_alpha="0.8"
+        app:shimmer_direction="left_to_right"
+        app:shimmer_duration="800"
+        app:shimmer_repeat_delay="300"
+        app:shimmer_repeat_mode="restart"
+        app:shimmer_shape="linear"
+        app:shimmer_tilt="45">
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:thumb="@drawable/money"
+        android:progressDrawable="@drawable/seek_style"
+        android:max="35"
+        android:progress="1" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <TextView
+        android:id="@+id/trump"
+        android:layout_marginStart="@dimen/_1sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/trumpSelectionHolder"
+        android:layout_alignStart="@+id/trumpSelectionHolder"
+        android:layout_alignEnd="@+id/trumpSelectionHolder"
+        android:gravity="center|top"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:text="Choose Trump"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp" />
+
+    <LinearLayout
+        android:id="@+id/trumpSelectionHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cardsView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@color/Black"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewTrumpHearts"
+            android:onClick="onTrumpSelectionClick"
+            android:layout_width="@dimen/trumpSelectionImageWidthTrain"
+            android:layout_height="@dimen/trumpSelectionImageHeightTrain"
+            android:background="@color/light_grey_settings"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_hearts"
+            android:tag="h" />
+
+        <ImageView
+            android:id="@+id/imageViewTrumpSpades"
+            android:onClick="onTrumpSelectionClick"
+            android:layout_width="@dimen/trumpSelectionImageWidthTrain"
+            android:layout_height="@dimen/trumpSelectionImageHeightTrain"
+            android:background="@color/light_grey_settings"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_spades"
+            android:tag="s" />
+
+        <ImageView
+            android:id="@+id/imageViewTrumpDiamonds"
+            android:onClick="onTrumpSelectionClick"
+            android:layout_width="@dimen/trumpSelectionImageWidthTrain"
+            android:layout_height="@dimen/trumpSelectionImageHeightTrain"
+            android:background="@color/light_grey_settings"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_diamonds"
+            android:tag="d" />
+
+        <ImageView
+            android:id="@+id/imageViewTrumpClubs"
+            android:onClick="onTrumpSelectionClick"
+            android:layout_width="@dimen/trumpSelectionImageWidthTrain"
+            android:layout_height="@dimen/trumpSelectionImageHeightTrain"
+            android:background="@color/light_grey_settings"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_clubs"
+            android:tag="c" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/partnerCard"
+        android:layout_marginStart="@dimen/_1sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/horScrollPartnerSelect1"
+        android:layout_alignStart="@+id/horScrollPartnerSelect1"
+        android:layout_alignEnd="@+id/horScrollPartnerSelect1"
+        android:gravity="center|bottom"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:text="Choose partner card "
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp" />
+
+    <HorizontalScrollView
+        android:id="@+id/horScrollPartnerSelect1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/_1sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_toStartOf="@+id/passbutton"
+        android:animateLayoutChanges="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollIndicators="top"
+        android:scrollbarSize="@dimen/_7sdp"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="horizontal">
+
+        <LinearLayout
+            android:id="@+id/partnerTrainGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_65sdp"
+            android:animateLayoutChanges="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:scrollIndicators="bottom"
+            android:scrollbarDefaultDelayBeforeFade="700"
+            android:scrollbarSize="@dimen/_7sdp"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="horizontal" />
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/currentState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardsView"
+        android:layout_toEndOf="@+id/BidValue"
+        android:layout_toStartOf="@+id/trumpSelectionHolder"
+        android:gravity="center|bottom"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:text="Hands State: "
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp" />
+
+    <RelativeLayout
+        android:id="@+id/cardsView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_72sdp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/closeTraining"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_20sdp">
+
+        <HorizontalScrollView
+            android:id="@+id/cardsView1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:animateLayoutChanges="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollIndicators="top"
+            android:scrollbarSize="@dimen/_7sdp"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="horizontal"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:id="@+id/cardsGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:animateLayoutChanges="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </RelativeLayout>
+</RelativeLayout>
