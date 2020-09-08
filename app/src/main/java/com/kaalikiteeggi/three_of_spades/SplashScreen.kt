@@ -17,10 +17,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
-import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.adcolony.sdk.AdColony
+import com.adcolony.sdk.AdColonyAppOptions
 import com.facebook.ads.AdSettings
-import com.facebook.ads.AudienceNetworkAds
 import com.facebook.login.LoginManager
 import com.google.ads.mediation.adcolony.AdColonyMediationAdapter
 import com.google.ads.mediation.inmobi.InMobiConsent
@@ -82,7 +81,7 @@ class SplashScreen: AppCompatActivity() {
 //                findViewById<Button>(R.id.welcomeUserNameview2).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_buttons))
                 findViewById<TextView>(R.id.welcome2).visibility = View.VISIBLE
                 findViewById<Button>(R.id.welcomeUserNameview2).text = userName
-                Picasso.get().load(photoURL).transform(CircleTransform()).into(target)
+                Picasso.get().load(photoURL).resize(350,350).transform(CircleTransform()).into(target)
             }
             sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
             premiumStatus = if (sharedPreferences.contains("premium")) {
@@ -90,7 +89,7 @@ class SplashScreen: AppCompatActivity() {
             }else{
                 true // dont show ADS when login for first time
             }
-            soundInto = MediaPlayer.create(applicationContext,R.raw.cards_shuffle)
+            soundInto = MediaPlayer.create(applicationContext,R.raw.card_shuffle)
             soundInto.start()
             MobileAds.initialize(this)
 //            AudienceNetworkAds.initialize(this)
@@ -102,11 +101,13 @@ class SplashScreen: AppCompatActivity() {
                 AdSettings.addTestDevice("ec3dd554-caf4-41cf-8747-f7a755836f05")
             }
             mInterstitialAd = InterstitialAd(this)
-        AdColony.configure(this,"app17c8dd48fb9945b9b4","vz3791ce293adf41e69e","vzfb9b1050f8c74cc5ad","vz6cded1664bb44e1cb9")
         val appOptions = AdColonyMediationAdapter.getAppOptions()
-            appOptions.gdprConsentString = "1"
-            appOptions.gdprRequired = true
-            appOptions.keepScreenOn = true
+//        appOptions.gdprConsentString = "1"
+//        appOptions.gdprRequired = true
+        appOptions.keepScreenOn = true
+        appOptions.setPrivacyFrameworkRequired(AdColonyAppOptions.GDPR, true)
+            .setPrivacyConsentString(AdColonyAppOptions.GDPR,"1")
+        AdColony.configure(this, appOptions,"app17c8dd48fb9945b9b4","vz3791ce293adf41e69e","vzfb9b1050f8c74cc5ad","vz6cded1664bb44e1cb9")
 
         val consentObject = JSONObject()
             try{
@@ -120,7 +121,6 @@ class SplashScreen: AppCompatActivity() {
 //        gdprMetaData.commit()
             UnityAds.initialize(this,getString(R.string.unity_game_id))
             mobileAds() // load mobile ads for everyone
-
 
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.BOTTOM, 0, 300)

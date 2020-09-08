@@ -99,6 +99,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private lateinit var userStats: java.util.ArrayList<Int>
     private lateinit var mAuth: FirebaseAuth
     private var uid = ""
+    private var handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,10 +121,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
         Handler().post {
             v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            soundUpdate = MediaPlayer.create(applicationContext, R.raw.player_moved)
-            soundError = MediaPlayer.create(applicationContext, R.raw.error_entry)
-            soundSuccess = MediaPlayer.create(applicationContext, R.raw.player_success_chime)
-            soundBkgd = MediaPlayer.create(applicationContext, R.raw.main_screen_bkgd)
+            soundUpdate = MediaPlayer.create(applicationContext, R.raw.update)
+            soundError = MediaPlayer.create(applicationContext, R.raw.error)
+            soundSuccess = MediaPlayer.create(applicationContext, R.raw.success)
+            soundBkgd = MediaPlayer.create(applicationContext, R.raw.music)
             soundBkgd.isLooping = true
             toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.CENTER, 0, 0)
@@ -186,21 +187,21 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         findViewById<Button>(R.id.hostName).text = p1
         Picasso.get().load(p1h).transform(CircleTransform()).into(findViewById<ImageView>(R.id.hostPhoto))
 
-        Handler().postDelayed({
+        handler.postDelayed({
             soundUpdate.start()
             speak("$p2 has joined")
             findViewById<Button>(R.id.player2Text).text = p2
             Picasso.get().load(p2h).transform(CircleTransform()).into(t2)
         }, 300)
 
-        Handler().postDelayed({
+        handler.postDelayed({
             soundUpdate.start()
             speak("$p3 has joined")
             findViewById<Button>(R.id.player3Text).text = p3
             Picasso.get().load(p3h).transform(CircleTransform()).into(t3)
         }, 1700)
 
-        Handler().postDelayed({
+        handler.postDelayed({
             //            soundUpdate.start()
             speak("$p4 has joined")
             findViewById<Button>(R.id.player4Text).text = p4
@@ -239,43 +240,43 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             p7h = dataSnapshot?.data?.get("p7h").toString()
             if (p5.isNotEmpty() && p5h.isNotEmpty() && !p5Status) {
                 findViewById<AppCompatButton>(R.id.player5Text).text = p5
-                Picasso.get().load(p5h).transform(CircleTransform()).into(t5)
+                Picasso.get().load(p5h).resize(350,350).transform(CircleTransform()).into(t5)
                 findViewById<AppCompatButton>(R.id.player5Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
                 p5Status = true
             }
             if (p6.isNotEmpty() && p6h.isNotEmpty() && !p6Status) {
                 findViewById<AppCompatButton>(R.id.player6Text).text = p6
-                Picasso.get().load(p6h).transform(CircleTransform()).into(t6)
+                Picasso.get().load(p6h).resize(350,350).transform(CircleTransform()).into(t6)
                 findViewById<AppCompatButton>(R.id.player6Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
                 p6Status = true
             }
             if (p7.isNotEmpty() && p7h.isNotEmpty() && !p7Status) {
                 findViewById<AppCompatButton>(R.id.player7Text).text = p7
-                Picasso.get().load(p7h).transform(CircleTransform()).into(t7)
+                Picasso.get().load(p7h).resize(350,350).transform(CircleTransform()).into(t7)
                 findViewById<AppCompatButton>(R.id.player7Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
                 p7Status = true
             }
         }
         if (!p1Status) {
             findViewById<Button>(R.id.hostName).text = p1
-            Picasso.get().load(p1h).transform(CircleTransform()).into(findViewById<ImageView>(R.id.hostPhoto))
+            Picasso.get().load(p1h).resize(350,350).transform(CircleTransform()).into(findViewById<ImageView>(R.id.hostPhoto))
             p1Status = true
         }
         if (p2.isNotEmpty() && p2h.isNotEmpty() && !p2Status) {
             findViewById<AppCompatButton>(R.id.player2Text).text = p2
-            Picasso.get().load(p2h).transform(CircleTransform()).into(t2)
+            Picasso.get().load(p2h).resize(350,350).transform(CircleTransform()).into(t2)
             findViewById<AppCompatButton>(R.id.player2Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
             p2Status = true
         }
         if (p3.isNotEmpty() && p3h.isNotEmpty() && !p3Status) {
             findViewById<AppCompatButton>(R.id.player3Text).text = p3
-            Picasso.get().load(p3h).transform(CircleTransform()).into(t3)
+            Picasso.get().load(p3h).resize(350,350).transform(CircleTransform()).into(t3)
             findViewById<AppCompatButton>(R.id.player3Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
             p3Status = true
         }
         if (p4.isNotEmpty() && p4h.isNotEmpty() && !p4Status) {
             findViewById<AppCompatButton>(R.id.player4Text).text = p4
-            Picasso.get().load(p4h).transform(CircleTransform()).into(t4)
+            Picasso.get().load(p4h).resize(350,350).transform(CircleTransform()).into(t4)
             findViewById<AppCompatButton>(R.id.player4Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
             p4Status = true
         }
@@ -576,6 +577,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     fun closeJoiningRoom(view: View) {
         if (!offline) registration.remove()
+        handler.removeCallbacksAndMessages(null)
         startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) })
         overridePendingTransition(R.anim.slide_right_activity, R.anim.slide_right_activity)
         finish()

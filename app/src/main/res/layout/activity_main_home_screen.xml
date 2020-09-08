@@ -10,34 +10,18 @@
     android:background="@color/Black"
     tools:context=".MainHomeScreen">
 
-<!--    <com.facebook.shimmer.ShimmerFrameLayout-->
-<!--        android:id="@+id/frameShimmer"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        app:shimmer_base_alpha="0.9"-->
-<!--        app:shimmer_clip_to_children="true"-->
-<!--        app:shimmer_colored="false"-->
-<!--        app:shimmer_direction="bottom_to_top"-->
-<!--        app:shimmer_duration="1800"-->
-<!--        app:shimmer_repeat_delay="0"-->
-<!--        app:shimmer_repeat_mode="reverse"-->
-<!--        app:shimmer_shape="radial"-->
-<!--        app:shimmer_tilt="0">-->
-
-        <ImageView
-            android:id="@+id/backgroundHomeScreen"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:onClick="joinRoomWindowExit"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/shine_yellow"
-            tools:ignore="ContentDescription" />
-
-<!--    </com.facebook.shimmer.ShimmerFrameLayout>-->
+    <ImageView
+        android:id="@+id/backgroundHomeScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:onClick="joinRoomWindowExit"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/shine_yellow"
+        tools:ignore="ContentDescription" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/removeAds"
@@ -45,7 +29,7 @@
         android:layout_height="@dimen/_47sdp"
         android:layout_below="@+id/watchVideo"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/mhsIconsGap"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -301,7 +285,7 @@
         android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/removeAds"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/mhsIconsGap"
         android:layout_marginEnd="0dp"
         android:elevation="@dimen/_22sdp"
         android:clickable="true"
@@ -314,12 +298,12 @@
         android:id="@+id/rateUs"
         android:layout_width="@dimen/_57sdp"
         android:layout_height="@dimen/_57sdp"
-        android:layout_below="@+id/howToPlay"
+        android:layout_below="@+id/ranking"
         android:layout_alignParentEnd="true"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_minus2sdp"
         android:layout_marginEnd="0dp"
         android:elevation="@dimen/_22sdp"
         android:onClick="openRatingWindow"
@@ -338,7 +322,25 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="trainingStart"
-        android:src="@drawable/brain" />
+        android:src="@drawable/brain"
+        android:visibility="gone"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ranking"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
+        android:layout_below="@+id/howToPlay"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_minus3sdp"
+        android:layout_marginEnd="0dp"
+        android:clickable="true"
+        android:elevation="@dimen/_22sdp"
+        android:focusable="true"
+        android:background="@drawable/button_pressed_score_table"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="ranking" />
 
 
     <androidx.appcompat.widget.AppCompatButton
@@ -502,6 +504,7 @@
         android:textAllCaps="true"
         android:textColor="@color/font_yellow"
         android:textSize="@dimen/mhsButtonsTextSize" />
+
     <LinearLayout
         android:id="@+id/developerandAds"
         android:layout_width="match_parent"
@@ -572,23 +575,23 @@
                 android:textSize="@dimen/_9ssp"
                 android:translationZ="@dimen/_40sdp" />
 
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/developerCreditsButton"
-                android:layout_marginBottom="@dimen/_minus7sdp"
-                app:shimmer_auto_start="true"
-                app:shimmer_duration="1800"
-                app:shimmer_highlight_alpha="1"
-                app:shimmer_highlight_color="#FFFFFF"
-                app:shimmer_repeat_mode="restart"
-                app:shimmer_shape="linear">
+<!--            <com.facebook.shimmer.ShimmerFrameLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@+id/developerCreditsButton"-->
+<!--                android:layout_marginBottom="@dimen/_minus7sdp"-->
+<!--                app:shimmer_auto_start="true"-->
+<!--                app:shimmer_duration="1800"-->
+<!--                app:shimmer_highlight_alpha="1"-->
+<!--                app:shimmer_highlight_color="#FFFFFF"-->
+<!--                app:shimmer_repeat_mode="restart"-->
+<!--                app:shimmer_shape="linear">-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_2sdp"
-                    android:src="@drawable/shine_button_black_bar" />
-            </com.facebook.shimmer.ShimmerFrameLayout>
+<!--                <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="@dimen/_2sdp"-->
+<!--                    android:src="@drawable/shine_button_black_bar" />-->
+<!--            </com.facebook.shimmer.ShimmerFrameLayout>-->
         </RelativeLayout>
         <com.google.android.gms.ads.AdView
             android:id="@+id/addViewMHS"
@@ -1307,17 +1310,17 @@
                 app:shimmer_shape="linear"
                 app:shimmer_tilt="45">
 
-            <pl.droidsonroids.gif.GifImageButton
-                android:id="@+id/createOfflineSingle"
-                android:layout_width="@dimen/deckWidth"
-                android:layout_height="@dimen/deckHeight"
-                android:background="@drawable/offline_single_deck"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:onClick="createRoomButtonClicked"
-                android:tag="0"/>
-        </com.facebook.shimmer.ShimmerFrameLayout>
+                <pl.droidsonroids.gif.GifImageButton
+                    android:id="@+id/createOfflineSingle"
+                    android:layout_width="@dimen/deckWidth"
+                    android:layout_height="@dimen/deckHeight"
+                    android:background="@drawable/offline_single_deck"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="createRoomButtonClicked"
+                    android:tag="0"/>
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -1342,17 +1345,17 @@
                 app:shimmer_shape="linear"
                 app:shimmer_tilt="45">
 
-            <pl.droidsonroids.gif.GifImageButton
-                android:id="@+id/createSingle"
-                android:layout_width="@dimen/deckWidth"
-                android:layout_height="@dimen/deckHeight"
-                android:background="@drawable/single_deck"
-                android:onClick="createRoomButtonClicked"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:tag="4"/>
-        </com.facebook.shimmer.ShimmerFrameLayout>
+                <pl.droidsonroids.gif.GifImageButton
+                    android:id="@+id/createSingle"
+                    android:layout_width="@dimen/deckWidth"
+                    android:layout_height="@dimen/deckHeight"
+                    android:background="@drawable/single_deck"
+                    android:onClick="createRoomButtonClicked"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:tag="4"/>
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/createDoubleShimmer"
@@ -1621,13 +1624,13 @@
             app:shimmer_shape="linear"
             app:shimmer_tilt="0">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_72sdp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ribbon"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_72sdp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ribbon"/>
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <GridView
@@ -1696,6 +1699,106 @@
 
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rankStats"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/developerandAds"
+        android:layout_marginBottom="@dimen/_minus57sdp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@drawable/shine_scoretable_background"
+        android:clickable="true"
+        android:elevation="@dimen/_200sdp"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/rankTitle"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.75"
+            app:shimmer_direction="left_to_right"
+            app:shimmer_duration="1800"
+            app:shimmer_fixed_width="@dimen/_50sdp"
+            app:shimmer_repeat_delay="500"
+            app:shimmer_repeat_mode="restart"
+            app:shimmer_shape="linear"
+            app:shimmer_tilt="0">
+
+            <ImageView
+                android:contentDescription="@string/todo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/top30"
+                android:gravity="center"/>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBarLoadingRank"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="@dimen/_55sdp"
+            android:layout_height="@dimen/_55sdp"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:indeterminateBehavior="cycle"
+            android:indeterminateOnly="false"
+            android:indeterminateTint="#FFE500"
+            android:progressTintMode="src_in"
+            android:rotation="360" />
+
+        <ImageView
+            android:id="@+id/closeRank"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:elevation="@dimen/_72sdp"
+            android:onClick="closeRankWindow"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/stop_sign" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:scrollbarSize="@dimen/_4sdp"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbars="vertical"
+            android:scrollIndicators="end"
+            android:layout_below="@id/rankTitle">
+
+        <LinearLayout
+            android:id="@+id/rankGallery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:orientation="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarSize="@dimen/_10sdp"/>
+    </ScrollView>
+</RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/maskAllLoading"

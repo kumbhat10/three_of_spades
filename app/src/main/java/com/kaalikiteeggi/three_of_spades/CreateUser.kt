@@ -20,6 +20,7 @@ class CreateUser(username: String, userPhotoUrl: String) {
        "JD" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), // Join date
        "nDRC" to 1, // consecutive days
        "claim" to 0,
+       "rated" to 0,
        "phone" to "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}"
    )
 }

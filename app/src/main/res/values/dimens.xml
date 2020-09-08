@@ -19,6 +19,9 @@
     <dimen name="imageHeight">@dimen/imageWidth</dimen>
     <dimen name="width_playername">@dimen/imageWidth</dimen>
 
+    <dimen name="rankImage">@dimen/_60sdp</dimen>
+
+
     <dimen name="imageWidth_4">@dimen/_64sdp</dimen>
     <dimen name="imageHeight_4">@dimen/imageWidth_4</dimen>
     <dimen name="width_playername_4">@dimen/imageWidth_4</dimen>
@@ -51,9 +54,10 @@
     <dimen name="padding_playername">@dimen/_3sdp</dimen>
     <dimen name="usernameTextSize">@dimen/_8ssp</dimen>
     <dimen name="scoreTableTextSize">@dimen/_9ssp</dimen>
-    <dimen name="mhsButtonsTextSize">@dimen/_14ssp</dimen>
+    <dimen name="mhsButtonsTextSize">@dimen/_13ssp</dimen>
+    <dimen name="mhsIconsGap">@dimen/_2sdp</dimen>
     <dimen name="mhsButtonsTextWidth">@dimen/_140sdp</dimen>
-    <dimen name="cjrButtonsTextSize">@dimen/_14ssp</dimen>
+    <dimen name="cjrButtonsTextSize">@dimen/_13ssp</dimen>
     <dimen name="shimmerWidth">@dimen/_60sdp</dimen>
     <dimen name="deckWidth">@dimen/_200sdp</dimen>
     <dimen name="deckHeight">@dimen/_80sdp</dimen>

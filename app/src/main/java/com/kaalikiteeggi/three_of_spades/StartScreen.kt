@@ -70,9 +70,9 @@ class StartScreen : AppCompatActivity() {
         setContentView(R.layout.activity_start_screen)
         findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-        soundError = MediaPlayer.create(applicationContext,R.raw.error_entry)
-        soundUpdate = MediaPlayer.create(applicationContext,R.raw.player_moved)
-        soundSuccess = MediaPlayer.create(applicationContext,R.raw.player_success_chime)
+        soundError = MediaPlayer.create(applicationContext,R.raw.error)
+        soundUpdate = MediaPlayer.create(applicationContext,R.raw.update)
+        soundSuccess = MediaPlayer.create(applicationContext,R.raw.success)
         toast = Toast.makeText(applicationContext,"",Toast.LENGTH_LONG)
         toast.setGravity(Gravity.BOTTOM,0,100)
         toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.Black))
