@@ -14,7 +14,7 @@
         android:clickable="true"
         android:focusable="true"
         android:contentDescription="@string/todo"
-        android:padding="1dp"
+        android:padding="2dp"
         android:src="@color/Red" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
@@ -40,7 +40,7 @@
             android:src="@drawable/shine_button_black_bar" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
@@ -59,13 +59,14 @@
         android:textColor="#FFFFFF"
         android:textSize="@dimen/_11ssp" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/userCoins"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:layout_alignBottom="@+id/userImage"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
+        android:layout_marginStart="@dimen/_5sdp"
         android:layout_toStartOf="@+id/userScore"
         android:layout_toEndOf="@id/userImage"
         android:clickable="true"
@@ -74,12 +75,15 @@
         android:gravity="start|top"
         android:paddingStart="@dimen/_5sdp"
         android:paddingEnd="0dp"
-        android:text="Coins"
+        android:text="$ 000,000"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_13ssp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
+        app:ticker_animationDuration="2500"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="up"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:id="@+id/userScore"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/rankImage"
@@ -94,7 +98,7 @@
         android:gravity="end|center"
         android:paddingEnd="@dimen/_10sdp"
         android:paddingStart="@dimen/_5sdp"
-        android:text="wins"
+        android:text="@string/nill"
         android:textColor="@color/font_yellow"
         android:textSize="@dimen/_12ssp" />
 </RelativeLayout>

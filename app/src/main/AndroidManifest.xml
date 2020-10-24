@@ -74,16 +74,16 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name="com.adcolony.sdk.AdColonyInterstitialActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-        <activity
-            android:name="com.adcolony.sdk.AdColonyAdViewActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:hardwareAccelerated="true"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+<!--        <activity-->
+<!--            android:name="com.adcolony.sdk.AdColonyInterstitialActivity"-->
+<!--            android:configChanges="keyboardHidden|orientation|screenSize"-->
+<!--            android:hardwareAccelerated="true"-->
+<!--            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />-->
+<!--        <activity-->
+<!--            android:name="com.adcolony.sdk.AdColonyAdViewActivity"-->
+<!--            android:configChanges="keyboardHidden|orientation|screenSize"-->
+<!--            android:hardwareAccelerated="true"-->
+<!--            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />-->
         <activity
             android:name="cat.ereza.customactivityoncrash.activity.DefaultErrorActivity"
             android:process=":error_activity"
@@ -105,13 +105,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".SplashScreen"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.App">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".DeveloperCredits" />
         <activity
             android:name=".CreateAndJoinRoomScreen"

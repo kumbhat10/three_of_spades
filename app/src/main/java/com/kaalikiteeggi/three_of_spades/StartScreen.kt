@@ -10,6 +10,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.view.Gravity
 import android.view.View
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import cat.ereza.customactivityoncrash.config.CaocConfig
+import com.bitvale.lightprogress.LightProgress
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -33,6 +35,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterLoginButton
+import kotlinx.android.synthetic.main.activity_start_screen.*
 import java.util.*
 
 
@@ -69,23 +72,24 @@ class StartScreen : AppCompatActivity() {
         Twitter.initialize(twitterConfig)
         setContentView(R.layout.activity_start_screen)
         findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
+        lightStart.on()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         soundError = MediaPlayer.create(applicationContext,R.raw.error)
-        soundUpdate = MediaPlayer.create(applicationContext,R.raw.update)
+        soundUpdate = MediaPlayer.create(applicationContext,R.raw.card_played)
         soundSuccess = MediaPlayer.create(applicationContext,R.raw.success)
         toast = Toast.makeText(applicationContext,"",Toast.LENGTH_LONG)
         toast.setGravity(Gravity.BOTTOM,0,100)
-        toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.Black))
-        toast.view.findViewById<TextView>(android.R.id.message).setTextColor(ContextCompat.getColor(applicationContext,R.color.cardsBackgroundLight))
-        toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
         soundUpdate.start()
         mAuth = FirebaseAuth.getInstance()
         //region Twitter Login
-        findViewById<TwitterLoginButton>(R.id.twitterLoginButton).setOnClickListener{
-            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.VISIBLE
-            findViewById<TextView>(R.id.loadingText3).text = getString(R.string.signIN)
+        twitterLoginButton.setOnClickListener{
+            soundUpdate.start()
+            maskButtons.visibility = View.VISIBLE
+            loadingText3.text = getString(R.string.wait)
+            lightStart.visibility = View.VISIBLE
+            lightStart.on()
         }
-        findViewById<TwitterLoginButton>(R.id.twitterLoginButton).callback = object:
+        twitterLoginButton.callback = object:
             Callback<TwitterSession>() {
             override fun success(result: Result<TwitterSession>?) {
                 if (result != null) {
@@ -104,8 +108,11 @@ class StartScreen : AppCompatActivity() {
         // region Facebook Login
         val loginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
         loginButton.setOnClickListener {
-            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.VISIBLE
-            findViewById<TextView>(R.id.loadingText3).text = getString(R.string.signIN)
+            soundUpdate.start()
+            maskButtons.visibility = View.VISIBLE
+            loadingText3.text = getString(R.string.wait)
+            lightStart.visibility = View.VISIBLE
+            lightStart.on()
         }
         callBackManager = CallbackManager.Factory.create()
         loginButton.setPermissions("email","public_profile")
@@ -119,14 +126,14 @@ class StartScreen : AppCompatActivity() {
             override fun onCancel() {
                 soundError.start()
                 toastCenter("Facebook login cancelled")
-                findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
+                maskButtons.visibility = View.GONE
             }
             override fun onError(error: FacebookException?) {
                 soundError.start()
                 if (error != null) {
                     toastCenter("Facebook login Error : ${error.message}")
                 }
-                findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
+                maskButtons.visibility = View.GONE
             }
         })
         // endregion
@@ -138,9 +145,12 @@ class StartScreen : AppCompatActivity() {
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso)
         findViewById<SignInButton>(R.id.googleSignInButton).setOnClickListener(View.OnClickListener {
+            soundUpdate.start()
             startActivityForResult(mGoogleSignInClient.signInIntent, googleCode)
-            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.VISIBLE
-            findViewById<TextView>(R.id.loadingText3).text = getString(R.string.signIN)
+            maskButtons.visibility = View.VISIBLE
+            loadingText3.text = getString(R.string.wait)
+            lightStart.visibility = View.VISIBLE
+            lightStart.on()
         })
         //endregion
         initializeSpeechEngine()
@@ -149,9 +159,9 @@ class StartScreen : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK){
-            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.VISIBLE
+            maskButtons.visibility = View.VISIBLE
         }else{
-            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
+            maskButtons.visibility = View.GONE
         }
         if(requestCode == googleCode && resultCode == Activity.RESULT_OK){
             val account = GoogleSignIn.getSignedInAccountFromIntent(data).result
@@ -160,7 +170,7 @@ class StartScreen : AppCompatActivity() {
                 signInWithCredential(credentialGoogle, "google")
             }
         }
-        findViewById<TwitterLoginButton>(R.id.twitterLoginButton).onActivityResult(requestCode, resultCode, data)
+        twitterLoginButton.onActivityResult(requestCode, resultCode, data)
         callBackManager.onActivityResult(requestCode, resultCode, data)
     }
     private fun signInWithCredential(credential: AuthCredential, provider: String){
@@ -169,11 +179,11 @@ class StartScreen : AppCompatActivity() {
                 newUser = task.result?.additionalUserInfo?.isNewUser!!
                 updateUI(provider)
             }else{
-                findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
+                maskButtons.visibility = View.GONE
             }
         }.addOnFailureListener(this) {
                 exception ->
-            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
+            maskButtons.visibility = View.GONE
             if( (exception as FirebaseAuthUserCollisionException).errorCode == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL"){
                 soundError.start()
                 toastCenter("Account already exists for email" + "\n \n${exception.email} \n \nPlease Sign in with Google or different email")
@@ -185,8 +195,8 @@ class StartScreen : AppCompatActivity() {
         }
     }
     private fun updateUI(provider: String) {
-        if(newUser) findViewById<TextView>(R.id.loadingText3).text = "Adding New User"
-        else findViewById<TextView>(R.id.loadingText3).text = getString(R.string.fetching_player)
+        if(newUser) loadingText3.text = getString(R.string.new_player)
+        else loadingText3.text = getString(R.string.fetching_player)
 
         val user = mAuth.currentUser
         if(user != null){
@@ -220,7 +230,7 @@ class StartScreen : AppCompatActivity() {
                    refUsersData.document(uid).set(setData, SetOptions.merge() )
                        .addOnSuccessListener {   startNextActivity(userGivenName)   }
                        .addOnFailureListener{exception ->
-                           findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
+                           maskButtons.visibility = View.GONE
                            toastCenter("${exception.message} \n Failed to merge with existing player data\n" +
                                    "Please try again") }
                }
@@ -228,16 +238,16 @@ class StartScreen : AppCompatActivity() {
                    refUsersData.document(uid).set(CreateUser(userGivenName.toString(), userPhotoUrl).data)
                        .addOnSuccessListener {startNextActivity(userGivenName) }
                        .addOnFailureListener{exception ->
-                           findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
+                           maskButtons.visibility = View.GONE
                            toastCenter("${exception.message} \n Failed to create new player \nPlease try again") }
                }}
            }catch (me: Exception){
-               findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
+               maskButtons.visibility = View.GONE
                toastCenter(me.message.toString())
            }
         }
         else{
-            findViewById<RelativeLayout>(R.id.maskButtons).visibility = View.GONE
+            maskButtons.visibility = View.GONE
             toastCenter("Failed to get User details \nPlease try again")
         }
     }
@@ -245,41 +255,35 @@ class StartScreen : AppCompatActivity() {
     private fun startNextActivity(userGivenName: String?){
         soundSuccess.start()
         speak("Hello  ${userGivenName.toString().split(" ")[0]}")
-        findViewById<ProgressBar>(R.id.progressBarLoading2).visibility = View.GONE
-        findViewById<TextView>(R.id.loadingText3).visibility = View.GONE
-        findViewById<AppCompatButton>(R.id.signInSuccess).visibility = View.VISIBLE
-        findViewById<AppCompatButton>(R.id.signInSuccess).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_left_activity))
-        Handler().postDelayed({ startActivity(Intent(this, MainHomeScreen::class.java).apply {putExtra("newUser",newUser)})
+        loadingText3.visibility = View.GONE
+        lightStart.visibility = View.GONE
+        signInSuccess.visibility = View.VISIBLE
+        signInSuccess.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_left_activity))
+        Handler(Looper.getMainLooper()).postDelayed({ startActivity(Intent(this, MainHomeScreen::class.java).apply {putExtra("newUser",newUser)})
             overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)},500)
 //                           toastCenter("Signed in Successfully ${String(Character.toChars(0x1F60A))}")
 
-        Handler().postDelayed({finish()},1500)
+        Handler(Looper.getMainLooper()).postDelayed({finish()},1500)
     }
-    fun developerCredits(view: View){
-//        soundUpdate.start()
-//        startActivity( Intent(this,DeveloperCredits::class.java).apply { putExtra("from",true) })
-         }
+
     private fun toastCenter(message: String){
         toast.setText(message)
         toast.show()
-
     }
     private fun speak(speechText:String, pitch:Float = 0.9f, speed:Float = 1f) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
             textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, null)
-
     }
     private fun initializeSpeechEngine(){
-        textToSpeech = TextToSpeech(applicationContext,
-            TextToSpeech.OnInitListener { status ->
-                if(status == TextToSpeech.SUCCESS) {
-                    val result = textToSpeech.setLanguage(Locale.ENGLISH)
-                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        toastCenter("Missing Language data - Text to speech")
-                    }
+        textToSpeech = TextToSpeech(applicationContext) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = textToSpeech.setLanguage(Locale.ENGLISH)
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    toastCenter("Missing Language data - Text to speech")
                 }
-            })
+            }
+        }
     }
 
     override fun onStop() {

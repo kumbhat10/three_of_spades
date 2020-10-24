@@ -12,36 +12,36 @@ class PlayersReference {
 
     val refIDTextViewScoreSheet4 = listOf(R.id.gameNumber_4,R.id.player1_4,R.id.player2_4,R.id.player3_4,R.id.player4_4)
 
-     private val refIDImageView7 = listOf<Int>(R.id.playerView1,R.id.playerView2,R.id.playerView3,
+     private val refIDImageView7 = listOf(R.id.playerView1,R.id.playerView2,R.id.playerView3,
         R.id.playerView4,R.id.playerView5,R.id.playerView6,R.id.playerView7)
 
-     private val refIDHighlightView7 = listOf<Int>(R.id.highlight1,R.id.highlight2,R.id.highlight3,
+     private val refIDHighlightView7 = listOf(R.id.highlight1,R.id.highlight2,R.id.highlight3,
         R.id.highlight4,R.id.highlight5,R.id.highlight6,R.id.highlight7)
 
-    private val refIDImageView4 = listOf<Int>(R.id.playerView1_4,R.id.playerView2_4,R.id.playerView3_4, R.id.playerView7)
-    private val refIDHighlightView4 = listOf<Int>(R.id.highlight1_4,R.id.highlight2_4,R.id.highlight3_4, R.id.highlight7)
+    private val refIDImageView4 = listOf(R.id.playerView1_4,R.id.playerView2_4,R.id.playerView3_4, R.id.playerView7)
+    private val refIDHighlightView4 = listOf(R.id.highlight1_4,R.id.highlight2_4,R.id.highlight3_4, R.id.highlight7)
 
-    private val refIDPartnerIconImageView7  = listOf<Int>(R.id.partnerIcon1,R.id.partnerIcon2,R.id.partnerIcon3,R.id.partnerIcon4,
+    private val refIDPartnerIconImageView7  = listOf(R.id.partnerIcon1,R.id.partnerIcon2,R.id.partnerIcon3,R.id.partnerIcon4,
         R.id.partnerIcon5,R.id.partnerIcon6,R.id.partnerIcon7)
 
-    private val refIDPartnerIconImageView4  = listOf<Int>(R.id.partnerIcon1_4,R.id.partnerIcon2_4,R.id.partnerIcon3_4,R.id.partnerIcon7)
+    private val refIDPartnerIconImageView4  = listOf(R.id.partnerIcon1_4,R.id.partnerIcon2_4,R.id.partnerIcon3_4,R.id.partnerIcon7)
 
-    private val refIDOnlineIconImageView7  = listOf<Int>(R.id.onlinep1,R.id.onlinep2,R.id.onlinep3,R.id.onlinep4,
+    private val refIDOnlineIconImageView7  = listOf(R.id.onlinep1,R.id.onlinep2,R.id.onlinep3,R.id.onlinep4,
         R.id.onlinep5,R.id.onlinep6,R.id.onlinep7)
 
-    private val refIDOnlineIconImageView4  = listOf<Int>(R.id.onlinep1_4,R.id.onlinep2_4,R.id.onlinep3_4, R.id.onlinep7)
+    private val refIDOnlineIconImageView4  = listOf(R.id.onlinep1_4,R.id.onlinep2_4,R.id.onlinep3_4, R.id.onlinep7)
 
-    private val refIDTableImageView7  = listOf<Int>(R.id.imageViewTable1,R.id.imageViewTable2,R.id.imageViewTable3,R.id.imageViewTable4,
+    private val refIDTableImageView7  = listOf(R.id.imageViewTable1,R.id.imageViewTable2,R.id.imageViewTable3,R.id.imageViewTable4,
         R.id.imageViewTable5,R.id.imageViewTable6,R.id.imageViewSelf)
-    private val refIDTableImageView4  = listOf<Int>(R.id.imageViewTable1_4,R.id.imageViewTable2_4,R.id.imageViewTable3_4,R.id.imageViewSelf_4)
+    private val refIDTableImageView4  = listOf(R.id.imageViewTable1_4,R.id.imageViewTable2_4,R.id.imageViewTable3_4,R.id.imageViewSelf_4)
 
-    private val refIDTableAnim7 = listOf<Int>(R.anim.anim_table_card_1,R.anim.anim_table_card_2,R.anim.anim_table_card_3
+    private val refIDTableAnim7 = listOf(R.anim.anim_table_card_1,R.anim.anim_table_card_2,R.anim.anim_table_card_3
         ,R.anim.anim_table_card_4,R.anim.anim_table_card_5,R.anim.anim_table_card_6,R.anim.anim_table_card_self)
-    private val refIDTableAnim4 = listOf<Int>(R.anim.anim_table_card_1,R.anim.anim_table_card_2_4,R.anim.anim_table_card_6,R.anim.anim_table_card_self)
+    private val refIDTableAnim4 = listOf(R.anim.anim_table_card_1,R.anim.anim_table_card_2_4,R.anim.anim_table_card_6,R.anim.anim_table_card_self)
 
-    private val refIDTableWinnerAnim7 = listOf<Int>(R.anim.anim_table_card_winner_1,R.anim.anim_table_card_winner_2,R.anim.anim_table_card_winner_3
+    private val refIDTableWinnerAnim7 = listOf(R.anim.anim_table_card_winner_1,R.anim.anim_table_card_winner_2,R.anim.anim_table_card_winner_3
         ,R.anim.anim_table_card_winner_4,R.anim.anim_table_card_winner_5,R.anim.anim_table_card_winner_6,R.anim.anim_table_card_winner_self)
-    private val refIDTableWinnerAnim4 = listOf<Int>(R.anim.anim_table_card_winner_1,R.anim.anim_table_card_winner_2_4,R.anim.anim_table_card_winner_6,R.anim.anim_table_card_winner_self)
+    private val refIDTableWinnerAnim4 = listOf(R.anim.anim_table_card_winner_1,R.anim.anim_table_card_winner_2_4,R.anim.anim_table_card_winner_6,R.anim.anim_table_card_winner_self)
 
     fun refIDMappedOnlineIconImageView(player: String, nPlayer: Int): List<Int>{
         return if(nPlayer==7) createRefID7(player, refIDOnlineIconImageView7)

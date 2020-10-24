@@ -1,6 +1,7 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.annotation.SuppressLint
+import android.os.Build
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,6 +22,7 @@ class CreateUser(username: String, userPhotoUrl: String) {
        "nDRC" to 1, // consecutive days
        "claim" to 0,
        "rated" to 0,
-       "phone" to "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}"
+       "phone" to "${Build.MANUFACTURER} ${Build.MODEL}",
+       "phAPI" to Build.VERSION.SDK_INT
    )
 }

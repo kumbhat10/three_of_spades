@@ -76,7 +76,7 @@
 
 
     <color name = "borderblueDark0o">#FF7D36</color>
-    <color name = "borderblueDark1o">#D55C1C</color>
+    <color name = "borderBlueDark1o">#D55C1C</color>
     <color name = "borderblueDark2o">#BD571F</color>
 
     <color name = "borderblueDark0y">#FFFF00</color>

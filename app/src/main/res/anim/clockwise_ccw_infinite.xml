@@ -2,6 +2,7 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <rotate
+        android:startOffset="1800"
         android:duration="1800"
         android:fromDegrees="0"
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"

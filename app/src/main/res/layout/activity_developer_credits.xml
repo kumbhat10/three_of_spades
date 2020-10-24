@@ -43,7 +43,7 @@
         android:onClick="sendEmail"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView4"
-        android:layout_marginBottom="@dimen/_minus2sdp"
+        android:layout_marginBottom="0dp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/_7sdp"
         android:fontFamily="cursive"
@@ -71,7 +71,7 @@
         android:fontFamily="@font/armata"
         android:text="@string/developer_contact"
         android:textColor="#FFD500"
-        android:textSize="@dimen/_9ssp" />
+        android:textSize="@dimen/_10ssp" />
 
     <TextView
         android:id="@+id/contactUs"
@@ -87,8 +87,8 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="sendEmail"
         android:text="@string/click_contact"
-        android:textColor="#032DFF"
-        android:textSize="@dimen/_9ssp"
+        android:textColor="#566CF6"
+        android:textSize="@dimen/_10ssp"
         android:textStyle="italic" />
 
     <TextView

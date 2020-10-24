@@ -966,14 +966,14 @@
 
     <ImageView
         android:id="@+id/playerView7"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_alignParentEnd="true"
+        android:layout_width="@dimen/imageWidth_4"
+        android:layout_height="@dimen/imageWidth_4"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="0dp"
+        android:layout_marginBottom="@dimen/_minus10sdp"
         android:layout_marginEnd="@dimen/imageGapEnd"
         android:contentDescription="@string/app_name"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/onlinep7"
@@ -1312,7 +1312,7 @@
         android:textColor="@color/progressBarPlayer4"
         android:textSize="@dimen/_18ssp" />
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textViewBidValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -1323,10 +1323,13 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:text="@string/bidValue1"
+        android:text="@string/bidValue2"
         android:textColor="@color/progressBarPlayer4"
         android:textSize="@dimen/_18ssp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:ticker_animationDuration="800"
+        app:ticker_defaultPreferredScrollingDirection="any"
+        app:ticker_defaultCharacterList="number"/>
 
     <FrameLayout
         android:id="@+id/frameAskBid"
@@ -1341,7 +1344,7 @@
         android:layout_marginEnd="@dimen/_89sdp"
         android:layout_marginBottom="0dp"
         android:elevation="@dimen/_72sdp"
-        android:background="@drawable/shine_scoretable_background"
+        android:background="@drawable/shine_score_table"
         android:fadingEdge="horizontal|vertical"
         android:visibility="gone">
 
@@ -1462,7 +1465,7 @@
         android:layout_marginEnd="@dimen/_89sdp"
         android:layout_marginBottom="0dp"
         android:elevation="@dimen/_72sdp"
-        android:background="@drawable/shine_scoretable_background"
+        android:background="@drawable/shine_score_table"
         android:visibility="gone">
 
         <TextView
@@ -1964,6 +1967,19 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/bidNowImage"
+        android:layout_width="@dimen/imageWidth_4"
+        android:layout_height="@dimen/imageWidth_4"
+        android:src="@drawable/bid"
+        android:elevation="@dimen/_82sdp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/todo"
+        android:padding="@dimen/_7sdp"
+        android:visibility="gone"/>
+
+
     <RelativeLayout
         android:id="@+id/scoreViewLayout"
         android:layout_width="wrap_content"
@@ -1974,7 +1990,7 @@
         android:layout_marginTop="0dp"
         android:layout_marginBottom="@dimen/_4sdp"
         android:animateLayoutChanges="true"
-        android:background="@drawable/shine_scoretable_background"
+        android:background="@drawable/shine_score_table"
         android:elevation="@dimen/_43sdp"
         android:clickable="true"
         android:focusable="true"

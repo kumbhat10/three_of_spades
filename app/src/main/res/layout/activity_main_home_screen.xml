@@ -100,7 +100,8 @@
         android:layout_marginTop="@dimen/_minus26sdp"
         android:layout_marginEnd="@dimen/_5sdp"
         android:background="@drawable/coin_blank"
-        android:elevation="@dimen/_72sdp"
+        android:elevation="@dimen/_76sdp"
+        android:translationZ="@dimen/_45sdp"
         android:gravity="center"
         android:onClick="showRewardedVideoAd"
         android:textColor="@color/white"
@@ -112,12 +113,12 @@
         android:id="@+id/playerStats"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/developerandAds"
+        android:layout_above="@+id/developerAndAds"
         android:layout_marginBottom="@dimen/_minus13sdp"
-        android:layout_below="@+id/userScore"
+        android:layout_below="@+id/userScoreMHS"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_minus14sdp"
+        android:layout_marginTop="@dimen/_minus12sdp"
         android:background="@drawable/shine_player_stats"
         android:clickable="true"
         android:elevation="@dimen/_29sdp"
@@ -372,7 +373,7 @@
         android:id="@+id/createRoomIcon"
         android:layout_width="@dimen/_57sdp"
         android:layout_height="@dimen/_57sdp"
-        android:layout_below="@+id/userScore"
+        android:layout_below="@+id/userScoreMHS"
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/_4sdp"
         android:focusable="true"
@@ -506,7 +507,7 @@
         android:textSize="@dimen/mhsButtonsTextSize" />
 
     <LinearLayout
-        android:id="@+id/developerandAds"
+        android:id="@+id/developerAndAds"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -533,7 +534,7 @@
                 android:elevation="@dimen/_64sdp"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="@drawable/_s_icon_3shadow"
+                android:foreground="@drawable/_s_icon_3shadowmini"
                 android:onClick="developerCredits"
                 android:soundEffectsEnabled="true"
                 tools:ignore="ContentDescription" />
@@ -1384,38 +1385,40 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/userScore"
-        android:layout_marginTop="@dimen/_15sdp"
+    <com.robinhood.ticker.TickerView
+        android:id="@+id/userScoreMHS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/coinIcon"
         android:layout_alignBottom="@+id/coinIcon"
-        android:layout_marginEnd="@dimen/_minus18sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_minus15sdp"
         android:layout_marginBottom="@dimen/_12sdp"
-        android:elevation="@dimen/_72sdp"
+        android:layout_toStartOf="@+id/coinIcon"
         android:background="@drawable/shine_button_black"
         android:clickable="true"
+        android:drawingCacheQuality="auto"
+        android:elevation="@dimen/_72sdp"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_toStartOf="@+id/coinIcon"
         android:fontFamily="@font/codystar"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
         android:onClick="openClosePlayerStats"
-        android:gravity="start|center_vertical"
-        android:paddingStart="@dimen/_14sdp"
-        android:paddingEnd="@dimen/_21sdp"
-        android:text="@string/bidValue1"
+        android:paddingStart="@dimen/_24sdp"
         android:paddingTop="0dp"
-        android:textSize="@dimen/_16ssp"
-        android:textAlignment="textStart"
+        android:paddingEnd="@dimen/_21sdp"
+        android:text="$ 00000"
         android:textAllCaps="false"
         android:textColor="@color/font_yellow"
-        android:textStyle="bold"
+        android:textSize="@dimen/_16ssp"
         android:translationZ="@dimen/_36sdp"
         app:cornerRadius="@dimen/_19sdp"
         app:rippleColor="@color/white"
         app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="@dimen/_1sdp"/>
+        app:strokeWidth="@dimen/_1sdp"
+        app:ticker_animationDuration="2000"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="up" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/coinIcon"
@@ -1427,9 +1430,10 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="openClosePlayerStats"
+        android:translationZ="@dimen/_36sdp"
         android:layout_marginEnd="@dimen/_4sdp"
         android:background="@drawable/border"
-        android:elevation="@dimen/_43sdp"
+        android:elevation="@dimen/_73sdp"
         android:src="@drawable/coins12" />
 
     <ImageView
@@ -1444,7 +1448,7 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:elevation="@dimen/_72sdp"
-        android:src="@drawable/_s_icon_3shadow"
+        android:src="@drawable/_s_icon_3shadowmini"
         android:onClick="openClosePlayerStats"
         android:soundEffectsEnabled="true" />
 
@@ -1704,13 +1708,13 @@
         android:id="@+id/rankStats"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/developerandAds"
+        android:layout_above="@+id/developerAndAds"
         android:layout_marginBottom="@dimen/_minus57sdp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_5sdp"
-        android:background="@drawable/shine_scoretable_background"
+        android:background="@drawable/shine_score_table"
         android:clickable="true"
         android:elevation="@dimen/_200sdp"
         android:focusable="true"
@@ -1744,23 +1748,19 @@
 
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <ProgressBar
-            android:id="@+id/progressBarLoadingRank"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="@dimen/_55sdp"
-            android:layout_height="@dimen/_55sdp"
+        <com.bitvale.lightprogress.LightProgress
+            android:id="@+id/rankProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:indeterminate="true"
-            android:indeterminateBehavior="cycle"
-            android:indeterminateOnly="false"
-            android:indeterminateTint="#FFE500"
-            android:progressTintMode="src_in"
-            android:rotation="360" />
-
+            android:text="Loading"
+            android:textSize="@dimen/_25ssp"
+            app:light_color="@color/white"/>
+F
         <ImageView
             android:id="@+id/closeRank"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:elevation="@dimen/_72sdp"
@@ -1814,6 +1814,15 @@
         android:focusable="true"
         android:visibility="visible">
 
+        <com.bitvale.lightprogress.LightProgress
+            android:id="@+id/lightMHS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/_25ssp"
+            app:light_color="@color/white"
+            android:text="Loading"/>
+
         <ProgressBar
             android:id="@+id/progressBarLoading3"
             style="@style/Widget.AppCompat.ProgressBar"
@@ -1825,13 +1834,14 @@
             android:indeterminateOnly="false"
             android:indeterminateTint="#FFE500"
             android:progressTintMode="src_in"
-            android:rotation="360" />
+            android:rotation="360"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/loadingText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/progressBarLoading3"
+            android:layout_below="@+id/lightMHS"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_20sdp"
             android:gravity="center"

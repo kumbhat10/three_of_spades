@@ -37,28 +37,26 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_game_screen.*
 import pl.droidsonroids.gif.GifImageView
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.round
+import kotlin.random.Random
 
-@SuppressLint("SetTextI18n", "CutPasteId") class GameScreenAutoPlay : AppCompatActivity() {
+@SuppressLint("SetTextI18n", "CutPasteId")
+class GameScreenAutoPlay : AppCompatActivity() {
     //    region Initialization
 
     private lateinit var sp: SoundPool
-//    private lateinit var soundUpdate: MediaPlayer
-//    private lateinit var soundSuccess: MediaPlayer
-//    private lateinit var soundError: MediaPlayer
-//    private lateinit var soundShuffle: MediaPlayer
-//    private lateinit var soundWon: MediaPlayer
-//    private lateinit var soundLost: MediaPlayer
-//    private lateinit var soundCardPlayed: MediaPlayer
+
     private lateinit var textToSpeech: TextToSpeech
     private var typedValue = TypedValue()
     private var rated = false
     private var reviewRequested = false
-    private var ratingRequestDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt()
+    private var ratingRequestDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
+        .toInt()
     private var requestRatingAfterDays = 2 //dummy
 
     private lateinit var sharedPreferences: SharedPreferences
@@ -99,7 +97,7 @@ import kotlin.math.round
     private var fromInt = 0
     private var nPlayers = 0
 
-    private val emoji = String(Character.toChars(0x1F4B0))
+    private val emojiMoney = String(Character.toChars(0x1F4B0))
     private val emojiScore = String(Character.toChars(0x1F3AF))
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -121,7 +119,7 @@ import kotlin.math.round
     private var nGamesWon = 0
     private var nGamesBid = 0
 
-    private lateinit var playerInfo:ArrayList<String>
+    private lateinit var playerInfo: ArrayList<String>
     private lateinit var p1: String
     private lateinit var p2: String
     private lateinit var p3: String
@@ -151,10 +149,10 @@ import kotlin.math.round
     private var counterChat = 0
 
     private var timeCountdownPlayCard = 15000L
-    private var timeAutoPlayCard = listOf<Long>(700,850,600,700,1000,600,1000)
+    private var timeAutoPlayCard = listOf<Long>(700, 850, 600, 700, 1000, 600, 1000)
     private var timeCountdownBid = 15000L
-    private var timeAutoBid = listOf<Long>(1650,1400, 1500, 1800)
-    private var timeAutoTrumpAndPartner = listOf<Long>(1700, 2000,1700)
+    private var timeAutoBid = listOf<Long>(1650, 1400, 1500, 1800)
+    private var timeAutoTrumpAndPartner = listOf<Long>(1700, 2000, 1700)
     private var maxAutoBidLimit = 205
 
     private var scoreSheetNotUpdated = true
@@ -191,9 +189,11 @@ import kotlin.math.round
     private var newGameStatus = true
 
     // endregion
-    @SuppressLint("ShowToast") override fun onCreate(savedInstanceState: Bundle?) {
+    @SuppressLint("ShowToast")
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
+        CaocConfig.Builder.create()
+            .backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
             .enabled(true) //default: true
             .showErrorDetails(true) //default: true
             .showRestartButton(true) //default: true
@@ -203,35 +203,38 @@ import kotlin.math.round
             .restartActivity(MainHomeScreen::class.java).apply()
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
-        roomID = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
-        from = intent.getStringExtra("from")!!.toString()    //check if user has joined room or created one and display Toast
+        roomID = intent.getStringExtra("roomID")!!
+            .toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
+        from = intent.getStringExtra("from")!!
+            .toString()    //check if user has joined room or created one and display Toast
         fromInt = from.split("")[2].toInt()
         selfName = intent.getStringExtra("selfName")!!.toString()
         //        playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
         val userStats = intent.getIntegerArrayListExtra("userStats")!!
         nGamesPlayed = userStats[0]
+        timeAutoPlayCard = when {
+            nGamesPlayed < 10 -> listOf(1000, 900, 1000)
+            nGamesPlayed < 20 -> listOf(700, 850, 800, 900)
+            nGamesPlayed < 25 -> listOf(700, 800, 500, 700, 600, 900)
+            else -> listOf(700, 850, 600, 700, 500, 500)
+        }
         nGamesWon = userStats[1]
         nGamesBid = userStats[2]
         nPlayers = 4 //intent.getIntExtra("nPlayers", 0)
-        //        if(nPlayers==7) nPlayers7 = true
-        //        nPlayers4 = true
         setupGame()
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
         refIDMappedImageView = PlayersReference().refIDMappedImageView(from, nPlayers)
         refIDMappedHighlightView = PlayersReference().refIDMappedHighlightView(from, nPlayers)
         refIDMappedPartnerIconImageView = PlayersReference().refIDMappedPartnerIconImageView(from, nPlayers)
-        refIDMappedOnlineIconImageView = PlayersReference().refIDMappedOnlineIconImageView(from, nPlayers)
+//        refIDMappedOnlineIconImageView = PlayersReference().refIDMappedOnlineIconImageView(from, nPlayers)
         refIDMappedTableAnim = PlayersReference().refIDMappedTableAnim(from, nPlayers)
         refIDMappedTableWinnerAnim = PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
         refIDMappedTableImageView = PlayersReference().refIDMappedTableImageView(from, nPlayers)
 
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.CENTER, 0, 20)
-        toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundDark))
-        toast.view.findViewById<TextView>(android.R.id.message).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
-        toast.view.findViewById<TextView>(android.R.id.message).textSize = 14F
         //region Other Thread tasks
-        Handler().post {
+        Handler(Looper.getMainLooper()).post {
             SoundManager.initialize(applicationContext)
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
@@ -240,15 +243,18 @@ import kotlin.math.round
             getSharedPrefs()
             // region       Countdown PlayCard
             countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 20) {
-                @SuppressLint("SetTextI18n") override fun onTick(millisUntilFinished: Long) {
+                @SuppressLint("SetTextI18n")
+                override fun onTick(millisUntilFinished: Long) {
                     //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
                     findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
-                    findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString() + "s"
+                    findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
+                        .toString() + "s"
                 }
 
                 override fun onFinish() {
                     autoPlayCard(cardsInHand, forcePlay = false)
-                    if(soundStatus)  SoundManager.getInstance().playTimerSound() //soundTimerFinish.start()
+                    if (soundStatus) SoundManager.getInstance()
+                        .playTimerSound() //soundTimerFinish.start()
                     if (vibrateStatus) vibrationStart()
                     findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
                     findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
@@ -261,15 +267,18 @@ import kotlin.math.round
             //        endregion
             // region       Countdown Biding
             countDownBidding = object : CountDownTimer(timeCountdownBid, 20) {
-                @SuppressLint("SetTextI18n") override fun onTick(millisUntilFinished: Long) {
+                @SuppressLint("SetTextI18n")
+                override fun onTick(millisUntilFinished: Long) {
                     //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
                     findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
-                    findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString() + "s"
+                    findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
+                        .toString() + "s"
                 }
 
                 override fun onFinish() {
                     if (vibrateStatus) vibrationStart()
-                    if(soundStatus) SoundManager.getInstance().playTimerSound() //soundTimerFinish.start()
+                    if (soundStatus) SoundManager.getInstance()
+                        .playTimerSound() //soundTimerFinish.start()
                     bidStatus[playerTurn.value!! - 1] = 0
                     bidingStarted = true
                     playerTurn.value = nextBidderTurn(fromInt)
@@ -303,7 +312,8 @@ import kotlin.math.round
                     }
                 }
                 if (gameState.value!! == 3) {
-                    if (soundStatus) SoundManager.getInstance().playSuccessSound()// soundSuccess.start()
+                    if (soundStatus) SoundManager.getInstance()
+                        .playSuccessSound() // soundSuccess.start()
                     roundStarted = false
                     bidingStarted = false
                     playerTurn.removeObserver(bidTurnListener)
@@ -311,20 +321,22 @@ import kotlin.math.round
                     startTrumpSelection()
                 }
                 if (gameState.value!! == 4) {
-                    if (soundStatus) SoundManager.getInstance().playSuccessSound()// soundSuccess.start()
+                    if (soundStatus) SoundManager.getInstance()
+                        .playSuccessSound() // soundSuccess.start()
                     getTrumpStartPartnerSelection()
                 }
                 if (gameState.value!! == 5) {
                     newGameStatus = true
                     if (!roundStarted) {
                         finishPassOverlay()
-                        if (soundStatus) SoundManager.getInstance().playSuccessSound()// soundSuccess.start()
+                        if (soundStatus) SoundManager.getInstance()
+                            .playSuccessSound() // soundSuccess.start()
                         updatePlayerScoreInfo(listOf(pt1, pt2, pt3, pt4))
                         displaySelfCards(animations = false) //getCardsAndDisplay(animation = false)
-                        Handler().postDelayed({ startPlayingRound() }, 3000)
+                        Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 3000)
                         if (playerTurn.value!! != fromInt) {
                             centralText("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card")
-                            speak("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card",speed = 1.1f)
+                            speak("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
                         }
                         if (playerTurn.value!! == fromInt) {
                             centralText("You will have ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card")
@@ -344,7 +356,9 @@ import kotlin.math.round
             gameState.observe(this, gameStateListener)
             // endregion
             uid = FirebaseAuth.getInstance().uid.toString()
-            refUsersData.document(uid).set(hashMapOf("LPD_bot" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt()), SetOptions.merge())
+            refUsersData.document(uid)
+                .set(hashMapOf("LPD_bot" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
+                    .toInt()), SetOptions.merge())
         }
         // endregion
         // region table card listener
@@ -353,7 +367,8 @@ import kotlin.math.round
         ct1.observe(this, androidx.lifecycle.Observer {
             tablePointsCalculator()
             if (ct1.value!! <= (cardsIndexLimit - 2)) {
-                if (soundStatus) SoundManager.getInstance().playCardPlayedSound() // soundCardPlayed.start()
+                if (soundStatus) SoundManager.getInstance()
+                    .playCardPlayedSound() // soundCardPlayed.start()
                 findViewById<ImageView>(refIDMappedTableImageView[0]).visibility = View.VISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[0]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[0]))
                 findViewById<ImageView>(refIDMappedTableImageView[0]).setImageResource(cardsDrawable[ct1.value!!])
@@ -367,7 +382,8 @@ import kotlin.math.round
         ct2.observe(this, androidx.lifecycle.Observer {
             tablePointsCalculator()
             if (ct2.value!! <= (cardsIndexLimit - 2)) {
-                if (soundStatus) SoundManager.getInstance().playCardPlayedSound() // soundCardPlayed.start()
+                if (soundStatus) SoundManager.getInstance()
+                    .playCardPlayedSound() // soundCardPlayed.start()
                 findViewById<ImageView>(refIDMappedTableImageView[1]).visibility = View.VISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[1]))
                 findViewById<ImageView>(refIDMappedTableImageView[1]).setImageResource(cardsDrawable[ct2.value!!])
@@ -381,7 +397,8 @@ import kotlin.math.round
         ct3.observe(this, androidx.lifecycle.Observer {
             tablePointsCalculator()
             if (ct3.value!! <= (cardsIndexLimit - 2)) {
-                if (soundStatus) SoundManager.getInstance().playCardPlayedSound() // soundCardPlayed.start()
+                if (soundStatus) SoundManager.getInstance()
+                    .playCardPlayedSound() // soundCardPlayed.start()
                 findViewById<ImageView>(refIDMappedTableImageView[2]).visibility = View.VISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[2]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[2]))
                 findViewById<ImageView>(refIDMappedTableImageView[2]).setImageResource(cardsDrawable[ct3.value!!])
@@ -395,7 +412,8 @@ import kotlin.math.round
         ct4.observe(this, androidx.lifecycle.Observer {
             tablePointsCalculator()
             if (ct4.value!! <= (cardsIndexLimit - 2)) {
-                if (soundStatus) SoundManager.getInstance().playCardPlayedSound() // soundCardPlayed.start()
+                if (soundStatus) SoundManager.getInstance()
+                    .playCardPlayedSound() // soundCardPlayed.start()
                 findViewById<ImageView>(refIDMappedTableImageView[3]).visibility = View.VISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[3]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[3]))
                 findViewById<ImageView>(refIDMappedTableImageView[3]).setImageResource(cardsDrawable[ct4.value!!])
@@ -485,15 +503,14 @@ import kotlin.math.round
             updateWholeScoreBoard()
             gameNumber += 1
         }
-        Handler().postDelayed({
-            if(!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 2)){  // Ask only once per game
-//                toastCenter("Review asking")
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 2)) {  // Ask only once per game
                 inAppReview()
                 reviewRequested = true
-            }
-            else if (!premiumStatus) {
+            } else if (!premiumStatus) {
                 if (mInterstitialAd.isLoaded) mInterstitialAd.show()
-                else mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD again after loading first time
+                else mInterstitialAd.loadAd(AdRequest.Builder()
+                    .build()) // load the AD again after loading first time
             }
 
             findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
@@ -502,23 +519,23 @@ import kotlin.math.round
         }, 3000)
     }
 
-    private fun inAppReview(){
+    private fun inAppReview() {
         val manager = ReviewManagerFactory.create(applicationContext)
         val request = manager.requestReviewFlow()
-        request.addOnCompleteListener{request1 ->
-            if(request1.isSuccessful){
+        request.addOnCompleteListener { request1 ->
+            if (request1.isSuccessful) {
                 val reviewInfo = request1.result
-//                toastCenter("Successful")
+                //                toastCenter("Successful")
                 val flow = manager.launchReviewFlow(this, reviewInfo)
-                flow.addOnCompleteListener{
-                    result -> if(result.isSuccessful) {
-                    rated = true
-                    editor.putBoolean("rated", rated)
-                    editor.apply()
-                    logFirebaseEvent("rate_us", 1, "rated")
-                    refUsersData.document(uid).set(hashMapOf("rated" to 1), SetOptions.merge())
-                }
-//                else toastCenter("failed")
+                flow.addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        rated = true
+                        editor.putBoolean("rated", rated)
+                        editor.apply()
+                        logFirebaseEvent("rate_us", 1, "rated_inApp")
+                        refUsersData.document(uid).set(hashMapOf("rated" to 1), SetOptions.merge())
+                    }
+                    //                else toastCenter("failed")
                 }
             }
         }
@@ -546,11 +563,12 @@ import kotlin.math.round
             nGamesWon += 1
         }
         nGamesPlayed += 1
-        refUsersData.document(uid).set(hashMapOf("sc" to playerCoins(from), "w_bot" to nGamesWon, "b_bot" to nGamesBid, "p_bot" to nGamesPlayed), SetOptions.merge())
+        refUsersData.document(uid)
+            .set(hashMapOf("sc" to playerCoins(from), "w_bot" to nGamesWon, "b_bot" to nGamesBid, "p_bot" to nGamesPlayed), SetOptions.merge())
     }
 
     private fun createScoreTableHeader(): List<String> {
-        return listOf("Player\n$emoji", p1 + "\n$emoji${String.format("%,d", p1Coins)}", p2 + "\n$emoji${String.format("%,d", p2Coins)}", p3 + "\n$emoji${String.format("%,d", p3Coins)}", p4 + "\n$emoji${String.format("%,d", p4Coins)}")
+        return listOf("Player\n$emojiMoney", p1 + "\n$emojiMoney${String.format("%,d", p1Coins)}", p2 + "\n$emojiMoney${String.format("%,d", p2Coins)}", p3 + "\n$emojiMoney${String.format("%,d", p3Coins)}", p4 + "\n$emojiMoney${String.format("%,d", p4Coins)}")
     }
 
     private fun scoreBoardTable(data: List<Any>, display: Boolean = true, upDateHeader: Boolean = false, upDateTotal: Boolean = false) {
@@ -569,13 +587,16 @@ import kotlin.math.round
         }
         for (i in 0..nPlayers) {
             viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).text = data[i].toString()
-            if (!upDateHeader) viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._12ssp))
+            if (!upDateHeader) viewTemp.findViewById<TextView>(refIDValesTextViewScore[i])
+                .setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._12ssp))
             if (i > 0 && !upDateHeader && data[i].toString().toInt() < 0) {
                 //                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
-                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.Red))
+                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i])
+                    .setTextColor(ContextCompat.getColor(applicationContext, R.color.Red))
             } else if (i > 0 && !upDateHeader) {
                 //                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
-                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.borderblueDark1g))
+                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i])
+                    .setTextColor(ContextCompat.getColor(applicationContext, R.color.borderblueDark1g))
             }
         }
         when {
@@ -610,10 +631,11 @@ import kotlin.math.round
     }
 
     private fun resetVariables() {
-        findViewById<ImageView>(R.id.trumpImage1).setImageResource(R.drawable.ic_back_side_red)
+        trumpImage1.setImageResource(R.drawable.ic_back_side_red)
         findViewById<ImageView>(R.id.trumpImage2).setImageResource(R.drawable.ic_back_side_blue)
         findViewById<GifImageView>(R.id.trumpImage).setImageResource(R.drawable.trump1)
-        findViewById<TextView>(R.id.textViewBidValue).text = "$emojiScore ${getString(R.string.bidValue1)}"
+        textViewBidValue.text = getString(R.string.bidValue2)  //$emojiScore
+        bidNowImage.visibility = View.GONE // redundant not required really
         findViewById<TextView>(R.id.textViewBider).text = getString(R.string.Bider)
         findViewById<TextView>(R.id.trumpText).text = getString(R.string.Trump)
         for (i in 0 until nPlayers) { // first reset background and animation of all partner icon
@@ -673,7 +695,8 @@ import kotlin.math.round
         findViewById<RelativeLayout>(R.id.scoreViewLayout).visibility = View.GONE
 
         val cardsShuffled = (0..51).shuffled()
-        cardsInHand = (cardsShuffled.slice(0..12).sortedBy { it }).toMutableList()  //  (mutableListOf<Int>(1,11,12,24,25,37,38,50,51, 49,23,36,5).sortedBy { it }).toMutableList()   // //
+        cardsInHand = (cardsShuffled.slice(0..12)
+            .sortedBy { it }).toMutableList()  //  (mutableListOf<Int>(1,11,12,24,25,37,38,50,51, 49,23,36,5).sortedBy { it }).toMutableList()   // //
         cardsInHand2 = (cardsShuffled.slice(13..25).sortedBy { it }).toMutableList()
         cardsInHand3 = (cardsShuffled.slice(26..38).sortedBy { it }).toMutableList()
         cardsInHand4 = (cardsShuffled.slice(39..51).sortedBy { it }).toMutableList()
@@ -705,7 +728,7 @@ import kotlin.math.round
             var tt1 = 0
             if (buFound1 == 1) tt1 = pointsList[buPlayer1 - 1]
             val bidTeamScoreFinal = pointsList[bidder - 1] + tt1 // total score of bid team
-            if (roundNumber != roundNumberLimit) Handler().postDelayed({
+            if (roundNumber != roundNumberLimit) Handler(Looper.getMainLooper()).postDelayed({
                 decideGameWinnerTeam4(bidTeamScoreFinal, totalGamePoints = pointsList.sum())
             }, 500)
             else decideGameWinnerTeam4(bidTeamScoreFinal, totalGamePoints = pointsList.sum())
@@ -722,15 +745,13 @@ import kotlin.math.round
             centralText("Game Over: Bidder team Won \n         Defender team Lost")
 
             if (fromInt == bidder && buFound1 != 1) {
-                if(soundStatus)  SoundManager.getInstance().playWonSound() //soundWon.start()
+                if (soundStatus) SoundManager.getInstance().playWonSound() //soundWon.start()
                 speak("Well done! You won")
-            }
-            else if ((fromInt == bidder || from == "p$buPlayer1") && buFound1 == 1){
-                if(soundStatus)  SoundManager.getInstance().playWonSound() //soundWon.start()
+            } else if ((fromInt == bidder || from == "p$buPlayer1") && buFound1 == 1) {
+                if (soundStatus) SoundManager.getInstance().playWonSound() //soundWon.start()
                 speak("Well done! Your team has won")
-            }
-            else {
-                if(soundStatus)  SoundManager.getInstance().playLostSound() //soundLost.start()
+            } else {
+                if (soundStatus) SoundManager.getInstance().playLostSound() //soundLost.start()
                 speak("Sorry Your team has lost")
             }
 
@@ -752,11 +773,10 @@ import kotlin.math.round
             centralText("Game Over: Defender team Won \n         Bidder team Lost")
 
             if (fromInt == bidder || fromInt == buPlayer1) {
-                if(soundStatus)  SoundManager.getInstance().playLostSound() //soundLost.start()
+                if (soundStatus) SoundManager.getInstance().playLostSound() //soundLost.start()
                 speak("Sorry Your team has lost")
-            }
-            else {
-                if(soundStatus)  SoundManager.getInstance().playWonSound() //soundWon.start()
+            } else {
+                if (soundStatus) SoundManager.getInstance().playWonSound() //soundWon.start()
                 speak("Well done! Your team has won")
             }
 
@@ -813,7 +833,7 @@ import kotlin.math.round
         if (!roundStarted) {
             playerTurn.value = bidder
             gameTurn.value = 1
-            speak("Lets Start Playing",queue = TextToSpeech.QUEUE_ADD)
+            speak("Lets Start Playing", queue = TextToSpeech.QUEUE_ADD)
         }
         roundStarted = true
         findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.VISIBLE
@@ -825,9 +845,9 @@ import kotlin.math.round
                 trumpStart = ""
             } // reset for new round
             if (gameTurn.value!! == 5) {
-                Handler().postDelayed({ declareRoundWinner() }, 600)
+                Handler(Looper.getMainLooper()).postDelayed({ declareRoundWinner() }, 600)
             } else if (gameTurn.value!! != 5 && gameTurn.value!! != 0) {
-                animatePlayerPlayingRound(playerTurn.value!!)
+                animatePlayer(playerTurn.value!!)
                 if (playerTurn.value!! == fromInt && !played) {
                     centralText("Please play your next card", 0)
                     displaySelfCards(filter = true)
@@ -835,7 +855,7 @@ import kotlin.math.round
                     if (vibrateStatus) vibrationStart()
                 } else if (playerTurn.value!! != fromInt) {
                     if (gameTurn.value!! != 1) centralText(cancel = true)
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         when (playerTurn.value!!) {
                             2 -> autoPlayCard(cardsInHand2, forcePlay = true)
                             3 -> autoPlayCard(cardsInHand3, forcePlay = true)
@@ -856,9 +876,11 @@ import kotlin.math.round
                 val cardSelected = cardsAvailable.random()
                 startNextTurn(cardSelected, forcePlay)
             } else { // play only same suit card if not 1st chance
-                var cardSelectedIndex = cardsSuit.slice(cardsAvailable as Iterable<Int>).lastIndexOf(trumpStart) // play largest card first
+                var cardSelectedIndex = cardsSuit.slice(cardsAvailable as Iterable<Int>)
+                    .lastIndexOf(trumpStart) // play largest card first
                 if (cardSelectedIndex == -1) { //not found same suit card
-                    cardSelectedIndex = cardsSuit.slice(cardsAvailable as Iterable<Int>).lastIndexOf(trump) // play trump card
+                    cardSelectedIndex = cardsSuit.slice(cardsAvailable as Iterable<Int>)
+                        .lastIndexOf(trump) // play trump card
                     if (cardSelectedIndex == -1) {
                         val cardSelected = cardsAvailable.random() // or play any random card
                         startNextTurn(cardSelected, forcePlay)
@@ -877,11 +899,12 @@ import kotlin.math.round
     private fun validateSelfPlayedCard(view: View) {
         if (gameState.value!! == 5 && playerTurn.value!! == fromInt && gameTurn.value!! != 8 && gameTurn.value!! != 0) {
             val cardSelected = view.tag.toString().toInt()
-            if (gameTurn.value!! == 1 || cardsSuit[cardSelected] == trumpStart || cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) == -1) {
+            if (gameTurn.value!! == 1 || cardsSuit[cardSelected] == trumpStart || cardsSuit.slice(cardsInHand as Iterable<Int>)
+                    .indexOf(trumpStart) == -1) {
                 countDownTimer("PlayCard", purpose = "cancel")
                 startNextTurn(cardSelected, forcePlay = false) // allow throw if first chance, or same suit as first turn or doesn't have same suit card
             } else {
-                if (soundStatus) SoundManager.getInstance().playErrorSound()// soundError.start()
+                if (soundStatus) SoundManager.getInstance().playErrorSound() // soundError.start()
                 if (vibrateStatus) vibrationStart()
                 toastCenter("${playerName(playerTurn.value!!)}, please play ${getSuitName(trumpStart)} card")
                 speak("please play a ${getSuitName(trumpStart)} card")
@@ -934,7 +957,7 @@ import kotlin.math.round
             buFound1 = 1
             findViewById<TextView>(R.id.trumpText1).text = playerName(buPlayer1)
             displayPartnerIcon()
-            if (soundStatus)  SoundManager.getInstance().playSuccessSound()//soundSuccess.start()
+            if (soundStatus) SoundManager.getInstance().playSuccessSound() //soundSuccess.start()
             if (vibrateStatus) vibrationStart()
             speak("${playerName(playerTurnInt)} .  is partner now")
         }
@@ -949,10 +972,10 @@ import kotlin.math.round
             winnerCard = compareCardsForWinner(roundCards[startTurn - 1], winnerCard)
         }
         roundWinner = roundCards.indexOf(winnerCard) + 1
-        animatePlayerPlayingRound(roundWinner)
+        animatePlayer(roundWinner)
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_big_fast))
-        Handler().postDelayed({ animateWinner() }, 550)
-        Handler().postDelayed({ // start after 1.5 seconds
+        Handler(Looper.getMainLooper()).postDelayed({ animateWinner() }, 550)
+        Handler(Looper.getMainLooper()).postDelayed({ // start after 1.5 seconds
             if (roundNumber < roundNumberLimit) {
                 startNextRound()
                 centralText("Waiting for ${playerName(roundWinner)} to play next card", 3500)
@@ -1019,7 +1042,8 @@ import kotlin.math.round
         return suit
     }
 
-    @SuppressLint("NewApi", "CutPasteId") private fun displaySelfCards(view: View = View(applicationContext), animations: Boolean = false, filter: Boolean = false, bidingRequest: Boolean = false) {
+    @SuppressLint("NewApi", "CutPasteId")
+    private fun displaySelfCards(view: View = View(applicationContext), animations: Boolean = false, filter: Boolean = false, bidingRequest: Boolean = false) {
         findViewById<LinearLayout>(R.id.imageGallery).removeAllViews()
         val gallery = findViewById<LinearLayout>(R.id.imageGallery)
         gallery.visibility = View.VISIBLE
@@ -1029,30 +1053,38 @@ import kotlin.math.round
         for (x: Int in cardsInHand) {
             val viewTemp = inflater.inflate(R.layout.cards_item_list, gallery, false)
             if (x == cardsInHand[cardsInHand.size - 1]) {
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).setPaddingRelative(0, 0, 0, 0)
+                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard)
+                    .setPaddingRelative(0, 0, 0, 0)
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
             }
-            viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).setImageResource(cardsDrawable[x])
-            if (filter && gameTurn.value!! > 1 && cardsSuit[x] != trumpStart && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1) {
+            viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard)
+                .setImageResource(cardsDrawable[x])
+            if (filter && gameTurn.value!! > 1 && cardsSuit[x] != trumpStart && cardsSuit.slice(cardsInHand as Iterable<Int>)
+                    .indexOf(trumpStart) != -1) {
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
-            } else if (filter && gameTurn.value!! > 1 && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1) {
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_active_cards))
+            } else if (filter && gameTurn.value!! > 1 && cardsSuit.slice(cardsInHand as Iterable<Int>)
+                    .indexOf(trumpStart) != -1) {
+                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard)
+                    .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_active_cards))
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
             } else viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
 
             viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).tag = x.toString() // tag the card number to the image
             if (cardsPoints.elementAt(x) != 0) {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).text = "${cardsPoints.elementAt(x)}"
-                if (animations) viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
-                if (animations) viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
+                if (animations) viewTemp.findViewById<TextView>(R.id.textViewDisplayCard)
+                    .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
+                if (animations) viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard)
+                    .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
             } else {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).visibility = View.GONE
             }
             //            viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
             viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).setOnClickListener {
-                    validateSelfPlayedCard(it)
-                    viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
-                }
+                validateSelfPlayedCard(it)
+                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard)
+                    .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
+            }
             gallery.addView(viewTemp)
         }
         if (animations) {
@@ -1061,11 +1093,6 @@ import kotlin.math.round
         if (bidingRequest && activityExists) {
             startBidding()
         }
-    }
-
-    private fun animatePlayerPlayingRound(index: Int) {
-        //        findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[bidder-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal_large))
-        findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[index - 1]).visibility = View.VISIBLE
     }
 
     private fun clearAllAnimation() {
@@ -1079,10 +1106,11 @@ import kotlin.math.round
     }
 
     private fun animateWinner() {
-        if(soundStatus) SoundManager.getInstance().playCardCollectSound() //soundCollectCards.start()
+        if (soundStatus) SoundManager.getInstance()
+            .playCardCollectSound() //soundCollectCards.start()
         findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.VISIBLE
         findViewById<ImageView>(R.id.imageViewWinnerCenter_4).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.GONE
         }, 1000)
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
@@ -1103,7 +1131,7 @@ import kotlin.math.round
         } else {  // to everyone else
             speak("Waiting for ${playerName(bidder)} to select partner card")
             centralText("Waiting for ${playerName(bidder)} \nto select 1 partner card", 0)
-            Handler().postDelayed({ autoPartnerSelect() }, timeAutoTrumpAndPartner.random())
+            Handler(Looper.getMainLooper()).postDelayed({ autoPartnerSelect() }, timeAutoTrumpAndPartner.random())
         }
     }
 
@@ -1137,22 +1165,22 @@ import kotlin.math.round
 
     private fun partnerSelectClick4(cardSelected: Int) { // assumption is cardsinHand already updated
         if (bidder == fromInt && cardsInHand.contains(cardSelected)) {
-            if (soundStatus)  SoundManager.getInstance().playErrorSound()//soundError.start()
+            if (soundStatus) SoundManager.getInstance().playErrorSound() //soundError.start()
             if (vibrateStatus) vibrationStart()
             speak("You already have same card. Please choose other card", speed = 1.1f)
         } else {
-//            speak("")
+            //            speak("")
             textToSpeech.stop()
             bu1 = cardSelected
             bu1Flag = 1 // bidder has one of card in his hand
             if (vibrateStatus) vibrationStart()
-            findViewById<ImageView>(R.id.trumpImage1).setImageResource(cardsDrawablePartner[bu1])
-            findViewById<ImageView>(R.id.trumpImage1).clearAnimation()
+            trumpImage1.setImageResource(cardsDrawablePartner[bu1])
+            trumpImage1.clearAnimation()
             findViewById<TextView>(R.id.trumpText1).clearAnimation()
             gameState.value = 5  // change game state to next playing round
             if (bidder == fromInt) { // at this point bidder is fixed and more reliable than player turn
                 findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.GONE
                     findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).clearAnimation()
                 }, 230)
@@ -1166,7 +1194,8 @@ import kotlin.math.round
         val inflater = LayoutInflater.from(applicationContext)
         for (x: Int in cardsIndexSortedPartner) {
             val viewTemp = inflater.inflate(R.layout.cards_item_list_partner, gallery, false)
-            viewTemp.findViewById<ImageView>(R.id.imageViewPartner).setImageResource(cardsDrawablePartner[x])
+            viewTemp.findViewById<ImageView>(R.id.imageViewPartner)
+                .setImageResource(cardsDrawablePartner[x])
             viewTemp.findViewById<ImageView>(R.id.imageViewPartner).tag = x.toString() //set tag to every card of its own value
             viewTemp.findViewById<TextView>(R.id.textViewPartner).text = "D"
             if (cardsPointsPartner.elementAt(x) != 0) {
@@ -1177,7 +1206,8 @@ import kotlin.math.round
             viewTemp.findViewById<ImageView>(R.id.imageViewPartner).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
             viewTemp.findViewById<ImageView>(R.id.imageViewPartner).setOnClickListener {
                 partnerSelectClick4(x)
-                viewTemp.findViewById<ImageView>(R.id.imageViewPartner).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
+                viewTemp.findViewById<ImageView>(R.id.imageViewPartner)
+                    .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
             }
             gallery.addView(viewTemp)
         }
@@ -1212,7 +1242,7 @@ import kotlin.math.round
     } // just displaying trump card
 
     private fun startTrumpSelection() {
-        findViewById<TextView>(R.id.textViewBidValue).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
+        textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4)
         findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
         if (bidder != fromInt) {     //  show to everyone except bidder
             autoTrumpSelect()
@@ -1221,7 +1251,7 @@ import kotlin.math.round
             centralText("Waiting for ${playerName(bidder)} \n to choose Trump", 0)
         } else { // show to bidder only
             centralText("Well done! ${playerName(bidder)} \n You won the bid round", 0)
-            speak("Well done!! Please choose your trump now",speed = 1.15f, queue = TextToSpeech.QUEUE_ADD)
+            speak("Well done!! Please choose your trump now", speed = 1.15f, queue = TextToSpeech.QUEUE_ADD)
             findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.VISIBLE
             findViewById<FrameLayout>(R.id.frameTrumpSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
             trumpAnimation("start")
@@ -1232,11 +1262,11 @@ import kotlin.math.round
     private fun autoTrumpSelect() {
         val tempView = View(applicationContext)
         tempView.tag = listOf("d", "h", "c", "s", "h", "d", "s", "c").random()
-        Handler().postDelayed({ onTrumpSelectionClick(tempView) }, timeAutoTrumpAndPartner.random())
+        Handler(Looper.getMainLooper()).postDelayed({ onTrumpSelectionClick(tempView) }, timeAutoTrumpAndPartner.random())
     }
 
     fun onTrumpSelectionClick(view: View) {
-        if (soundStatus) SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
+        if (soundStatus) SoundManager.getInstance().playUpdateSound() //soundUpdate.start()
         when (view.tag) {
             "h" -> {
                 trump = "H"
@@ -1258,7 +1288,7 @@ import kotlin.math.round
         gameState.value = 4
         if (bidder == fromInt) { // at this point bidder is fixed and more reliable than player turn
             findViewById<FrameLayout>(R.id.frameTrumpSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.GONE
                 findViewById<FrameLayout>(R.id.frameTrumpSelection).clearAnimation()
             }, 230)
@@ -1286,22 +1316,25 @@ import kotlin.math.round
             val bidSpeak = bidValue != bidValuePrev
             bidValuePrev = bidValue
             if (!bidingStarted) {
+                bidNowImage.visibility = View.VISIBLE
                 centralText("${playerName(playerTurn.value!!)} will start bidding", 0) //display message only first time
                 speak("You will start the bidding", speed = 1f)
             } else {
                 centralText("Waiting for ${playerName(playerTurn.value!!)} to bid", 0) //display message only first time
             }
             if (bidSpeak && bidingStarted && soundStatus) speak("${playerName(bidder)} raised to $bidValue", speed = 1f)
-//            else if (soundStatus) SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
-            findViewById<TextView>(R.id.textViewBidValue).text = "$emojiScore$bidValue" //.toString() //show current bid value
+            //            else if (soundStatus) SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
+            textViewBidValue.text = "$bidValue" //.toString() //show current bid value $emojiScore
             findViewById<TextView>(R.id.textViewBider).text = playerName(bidder)
-            findViewById<TextView>(R.id.textViewBidValue).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
+            textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.font_yellow)
             findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
             findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE //biding frame invisible
             resetBackgroundAnimationBidding() //set all background to black or red depending on status
             findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
             findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
             animatePlayer(playerTurn.value!!)  // animate current player
+            val tView:ImageView = findViewById(refIDMappedImageView[playerTurn.value!! - 1])
+            bidNowImage.animate().x(tView.x).y(tView.y).duration = 450
             if (bidStatus[playerTurn.value!! - 1] == 1) {  // highlight current player
                 findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[playerTurn.value!! - 1]).visibility = View.VISIBLE
             }
@@ -1344,7 +1377,7 @@ import kotlin.math.round
             if (maxAutoBidLimit > bidValue) tempView.tag = listOf("5", "pass", "10", "5", "pass", "10", "20").random() //check if bid value has not reached maximum allowed bid value
             else tempView.tag = "pass"
             countDownBidding.cancel() // dummy
-            Handler().postDelayed({ askToBid(tempView) }, timeAutoBid.random()) // timeDelayAutoPlay.random())
+            Handler(Looper.getMainLooper()).postDelayed({ askToBid(tempView) }, timeAutoBid.random()) // timeDelayAutoPlay.random())
         } else {
             playerTurn.value = nextBidderTurn(playerTurn.value!!)
         }
@@ -1352,7 +1385,7 @@ import kotlin.math.round
 
     fun askToBid(view: View) {
         countDownTimer("Bidding", purpose = "cancel")
-        if (soundStatus) SoundManager.getInstance().playUpdateSound()// soundUpdate.start()
+        if (soundStatus) SoundManager.getInstance().playUpdateSound() // soundUpdate.start()
         when (view.tag) {
             "pass" -> {
                 bidStatus[playerTurn.value!! - 1] = 0
@@ -1362,37 +1395,27 @@ import kotlin.math.round
             "5" -> {
                 bidValue += 5
                 bidder = playerTurn.value!!
-                //                refGameData.child("Bid/BV/").setValue((bidValue))
-                //                refGameData.child("Bid/BB").setValue(nextBidderTurn(playerTurn.value!!))
             }
             "10" -> {
                 bidValue += 10
                 bidder = playerTurn.value!!
-                //                refGameData.child("Bid/BV/").setValue((bidValue))
-                //                refGameData.child("Bid/BB").setValue(nextBidderTurn(playerTurn.value!!))
             }
             "20" -> {
                 bidValue += 20
                 bidder = playerTurn.value!!
-                //                refGameData.child("Bid/BV/").setValue((bidValue))
-                //                refGameData.child("Bid/BB").setValue(nextBidderTurn(playerTurn.value!!))
             }
             "50" -> {
                 bidValue += 50
                 bidder = playerTurn.value!!
-                //                refGameData.child("Bid/BV/").setValue((bidValue))
-                //                refGameData.child("Bid/BB").setValue(nextBidderTurn(playerTurn.value!!))
             }
         }
         if (playerTurn.value!! == fromInt) {
             findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
                 findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
             }, 230)
         }
-//        val pt = playerTurn.value!!
-        //        refGameData.child("Bid/BT").setValue(nextBidderTurn(pt))
         bidingStarted = true
         playerTurn.value = nextBidderTurn(playerTurn.value!!)
     }
@@ -1433,7 +1456,7 @@ import kotlin.math.round
     }
 
     private fun animatePlayer(index: Int) {
-        findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[playerTurn.value!! - 1]).visibility = View.VISIBLE
+        findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[index - 1]).visibility = View.VISIBLE
     }
 
     private fun resetBackgroundAnimationBidding() {
@@ -1443,7 +1466,7 @@ import kotlin.math.round
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
             if (bidStatus[i] == 0) {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
-                findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(applicationContext,R.drawable.pass)
+                findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(applicationContext, R.drawable.pass)
                 if (iPlayer == fromInt) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
             } else {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
@@ -1454,11 +1477,13 @@ import kotlin.math.round
         }
     }
 
-    private fun finishPassOverlay(){
+    private fun finishPassOverlay() {
         for (i in 0 until nPlayers) {
             findViewById<ImageView>(refIDMappedImageView[i]).foreground = null
         }
+        bidNowImage.visibility = View.GONE
     }
+
     private fun finishBackgroundAnimationBidding() {  //clear Everything on finish of biding round
         for (i in 0 until nPlayers) {
             findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
@@ -1468,7 +1493,7 @@ import kotlin.math.round
         findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
         findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[bidder - 1]).visibility = View.VISIBLE
 
-        findViewById<TextView>(R.id.textViewBidValue).clearAnimation()
+//        textViewBidValue.clearAnimation()
         findViewById<TextView>(R.id.textViewBider).clearAnimation()
         findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
         findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
@@ -1483,7 +1508,7 @@ import kotlin.math.round
             findViewById<TextView>(R.id.textViewShuffling).visibility = View.VISIBLE
             findViewById<TextView>(R.id.textViewShuffling).text = message
             findViewById<TextView>(R.id.textViewShuffling).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
-            if (displayTime != 0) Handler().postDelayed({
+            if (displayTime != 0) Handler(Looper.getMainLooper()).postDelayed({
                 findViewById<TextView>(R.id.textViewShuffling).clearAnimation()
                 findViewById<TextView>(R.id.textViewShuffling).visibility = View.GONE
             }, displayTime.toLong())
@@ -1493,13 +1518,14 @@ import kotlin.math.round
     private fun animateElements() {
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
         findViewById<TextView>(R.id.textViewBider).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
-        findViewById<TextView>(R.id.textViewBidValue).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
-        findViewById<ImageView>(R.id.trumpImage1).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
+//        textViewBidValue.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
+        trumpImage1.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
         findViewById<ImageView>(R.id.trumpImage2).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
         findViewById<GifImageView>(R.id.trumpImage).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
     }
 
-    @SuppressLint("SetTextI18n") private fun updatePlayerInfo() {
+    @SuppressLint("SetTextI18n")
+    private fun updatePlayerInfo() {
         playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
         val playerInfoCoins = intent.getStringArrayListExtra("playerInfoCoins") as ArrayList<Int>
 
@@ -1516,32 +1542,34 @@ import kotlin.math.round
         for (i in 0 until nPlayers) {
             val j = i + nPlayers
             if (playerInfo[j].isNotEmpty()) {
-                Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().error(R.drawable.s3).into(findViewById<ImageView>(refIDMappedImageView[i]))
+                Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().error(R.drawable.s3)
+                    .into(findViewById<ImageView>(refIDMappedImageView[i]))
             }
         }
     }
 
-    @SuppressLint("SetTextI18n") private fun updatePlayerNames() {
+    @SuppressLint("SetTextI18n")
+    private fun updatePlayerNames() {
         val totalCoins = listOf(p1Coins, p2Coins, p3Coins, p4Coins)
         for (i in 0 until nPlayers) {
-            findViewById<TextView>(refIDMappedTextView[i]).text = playerName(i + 1) + "\n${emoji}${String.format("%,d", totalCoins[i])}"
+            findViewById<TextView>(refIDMappedTextView[i]).text = playerName(i + 1) + "\n${emojiMoney}${String.format("%,d", totalCoins[i])}"
         }
     }
 
     private fun shufflingWindow(time: Long = 4900, fadeOffTime: Long = 700, gameStateChange: Boolean = false) {
-        if (soundStatus) Handler().postDelayed({
-            SoundManager.getInstance().playShuffleSound()// soundShuffle.start()
+        if (soundStatus) Handler(Looper.getMainLooper()).postDelayed({
+            SoundManager.getInstance().playShuffleSound() // soundShuffle.start()
         }, 400) //delayed sound play of shuffling
         displayShufflingCards() //show suits cards and animate
         centralText(getString(R.string.shufflingcards), 5200)
         speak("Please wait while i Shuffle cards")
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             findViewById<ImageView>(R.id.imageViewWinnerCenter_4).animation = null
             findViewById<ImageView>(R.id.imageViewWinnerCenter_4).clearAnimation()
             findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.GONE
             findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
             findViewById<LinearLayout>(R.id.imageGallery).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_out))
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 displaySelfCards(animations = true, bidingRequest = true)
             }, fadeOffTime)
         }, time)
@@ -1555,12 +1583,16 @@ import kotlin.math.round
         for (xx: Int in 0 until sets) {
             for (x: Int in 0..3) {
                 val viewTemp = inflater.inflate(R.layout.cards_item_list_suits, gallery, false)
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).setImageResource(PlayingCards().suitsDrawable[x])
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw))
+                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1)
+                    .setImageResource(PlayingCards().suitsDrawable[x])
+                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1)
+                    .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw))
                 if (x % 2 != 0) {
-                    viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundDark))
+                    viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1)
+                        .setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundDark))
                 } else {
-                    viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundLight))
+                    viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1)
+                        .setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundLight))
                 }
                 //                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).setOnClickListener {
                 //                    viewTemp.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.clockwise_ccw))
@@ -1615,7 +1647,7 @@ import kotlin.math.round
         if (findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility == View.VISIBLE) { //close chat display
             hideKeyboard()
             findViewById<RelativeLayout>(R.id.chatLinearLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_chat_close))
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.GONE
             }, 140)
         } else { //open chat display
@@ -1632,7 +1664,7 @@ import kotlin.math.round
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
 
             findViewById<RelativeLayout>(R.id.scoreViewLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.GONE
                 findViewById<RelativeLayout>(R.id.scoreViewLayout).visibility = View.GONE
             }, 140)
@@ -1672,7 +1704,8 @@ import kotlin.math.round
             editor.apply()
         }
         if (!sharedPreferences.contains("ratingRequestDate")) {
-            ratingRequestDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt() + requestRatingAfterDays
+            ratingRequestDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
+                .toInt() + requestRatingAfterDays
             editor.putInt("ratingRequestDate", ratingRequestDate)
             editor.apply()
         } else {
@@ -1680,7 +1713,8 @@ import kotlin.math.round
         }
     }
 
-    @SuppressLint("NewApi") private fun vibrationStart(duration: Long = 200) {
+    @SuppressLint("NewApi")
+    private fun vibrationStart(duration: Long = 200) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
@@ -1693,7 +1727,8 @@ import kotlin.math.round
             findViewById<AdView>(R.id.addViewGameScreenBanner).visibility = View.VISIBLE
             findViewById<AdView>(R.id.addViewGameScreenBanner).loadAd(AdRequest.Builder().build())
             findViewById<AdView>(R.id.addViewChatGameScreenBanner).visibility = View.VISIBLE
-            findViewById<AdView>(R.id.addViewChatGameScreenBanner).loadAd(AdRequest.Builder().build())
+            findViewById<AdView>(R.id.addViewChatGameScreenBanner).loadAd(AdRequest.Builder()
+                .build())
             mInterstitialAd = InterstitialAd(this)
             mInterstitialAd.adUnitId = resources.getString(R.string.interstitial)
             mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
@@ -1730,14 +1765,12 @@ import kotlin.math.round
         //        } catch (me: Exception) {
         ////            toastCenter(me.toString()) // dummy think to implement a good way
         //        }
-//        soundShuffle.stop()
+        //        soundShuffle.stop()
         try {
             //            playerTurn.removeObserver(bidTurnListener)
         } catch (me: Exception) {
             toastCenter(me.toString())
         }
-        //        countDownBidding.cancel()
-        //        countDownPlayCard.cancel()
         countDownTimer("PlayCard", purpose = "cancel")
         countDownTimer("Bidding", purpose = "cancel")
     }

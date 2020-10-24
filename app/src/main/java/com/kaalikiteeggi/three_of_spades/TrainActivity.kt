@@ -58,15 +58,12 @@ class TrainActivity : Activity() {
         setContentView(R.layout.activity_train)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
         bidText = findViewById(R.id.BidValue)
-        Handler().post {
+        Handler(Looper.getMainLooper()).post {
             soundUpdate = MediaPlayer.create(applicationContext,R.raw.update)
             soundError = MediaPlayer.create(applicationContext,R.raw.error)
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             toast = Toast.makeText(applicationContext,"",Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.CENTER,0,20)
-            toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext,R.color.cardsBackgroundDark))
-            toast.view.findViewById<TextView>(android.R.id.message).setTextColor(ContextCompat.getColor(applicationContext,R.color.font_yellow))
-            toast.view.findViewById<TextView>(android.R.id.message).textSize = 14F
         }
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,typedValue, true) // for click effect on self playing cards
         cardsDrawable = PlayingCards().cardsDrawable4

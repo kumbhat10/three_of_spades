@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -51,10 +52,19 @@ class DeveloperCredits : AppCompatActivity() {
     }
 
     fun sendEmail(view: View){
-        val body = "VC: $vc<br/>VN: $vn<br/> W: ${resources.configuration.screenWidthDp}<br/>H: ${resources.configuration.screenHeightDp}<br/><br/> Dear Team, I would like to ..."
-        val mailTo = "mailto:kaaliteerifun@example.com" +
+        val body = "(Auto generated info for debugging purpose) " +
+                "\nAndroid: ${Build.VERSION.RELEASE}" +
+                "\nAPI#:      ${Build.VERSION.SDK_INT}" +
+                "\nVC:         $vc " +
+                "\nVN:         $vn " +
+                "\nWidth:    ${resources.configuration.screenWidthDp} " +
+                "\nHeight:   ${resources.configuration.screenHeightDp} " +
+                "\nDevice:   ${android.os.Build.MANUFACTURER} ${Build.MODEL}" +
+                "\n\n\n Dear Team, I need support for...."
+
+        val mailTo = "mailto:kaaliteerifun@gmail.com" +
                 "?cc=" + "kumbhat10@gmail.com" +
-                "&subject=" + Uri.encode("UID: $uid") +
+                "&subject=" + Uri.encode("User ID: $uid") +
                 "&body=" + Uri.encode(body)
     val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))
         emailIntent.setDataAndType(Uri.parse(mailTo), "text/plain");

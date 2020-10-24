@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/Black"
-    android:onClick="developerCredits"
+    android:clickable="true"
     android:paddingStart="0dp"
     android:paddingEnd="0dp"
-    tools:context=".StartScreen">
+    tools:context=".StartScreen"
+    android:focusable="true">
 
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
@@ -98,32 +100,27 @@
         android:focusable="true"
         android:visibility="gone">
 
-        <ProgressBar
-            android:id="@+id/progressBarLoading2"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="@dimen/_65sdp"
-            android:layout_height="@dimen/_65sdp"
-            android:layout_above="@+id/loadingText3"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/_8sdp"
-            android:indeterminate="true"
-            android:indeterminateBehavior="cycle"
-            android:indeterminateOnly="false"
-            android:indeterminateTint="#FFE500"
-            android:progressTintMode="src_in"
-            android:rotation="360" />
-
         <TextView
             android:id="@+id/loadingText3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/lightStart"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_2sdp"
             android:gravity="center"
             android:text="@string/signIN"
             android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp" />
+            android:textSize="@dimen/_13ssp"
+            android:visibility="visible"/>
+
+        <com.bitvale.lightprogress.LightProgress
+            android:id="@+id/lightStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/signIN"
+            android:textSize="@dimen/_25ssp"
+            app:light_color="@color/white"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signInSuccess"

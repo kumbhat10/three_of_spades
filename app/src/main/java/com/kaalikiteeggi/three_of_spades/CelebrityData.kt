@@ -7,7 +7,7 @@ class CelebrityData {
         listOf("Robert" , "https://i.pinimg.com/originals/44/a7/af/44a7af686b2622d6ea812f02cca82b2f.png"), //iron man
         listOf("Chris" , "https://i.pinimg.com/564x/ea/68/75/ea68755137a9fda13b137a26e5e14eb8.jpg"), // thor
         listOf("Tom","https://i.pinimg.com/564x/99/bc/96/99bc96eb9c4c2a1b35c4fede1ff37ece.jpg"),// Tom
-        listOf("Modi","https://i.pinimg.com/564x/3c/40/ef/3c40ef1bfb5c3ab289535cc33d139b0d.jpg"),// Tom
+//        listOf("Modi","https://i.pinimg.com/564x/3c/40/ef/3c40ef1bfb5c3ab289535cc33d139b0d.jpg"),// Tom
         listOf("Leonardo","https://i.pinimg.com/564x/a6/64/49/a66449f20653bf7ec796201526eac947.jpg"),// de caprio
         listOf("Hrithik","https://i.pinimg.com/564x/3a/b5/4d/3ab54dfac30619d8e3e8794a6094138c.jpg"),//
         listOf("Ranbir","https://i.pinimg.com/564x/84/c9/3a/84c93a095f6ebabdbfa557e468f5952e.jpg"),//
@@ -23,7 +23,7 @@ class CelebrityData {
         listOf("Joe","https://i.pinimg.com/564x/39/c2/b6/39c2b6edea570b8d8da91c93efffc4e3.jpg"),//
         listOf("Obama","https://i.pinimg.com/564x/1f/ba/34/1fba3424e88e03855a8ac2e5e8e700e4.jpg"),//
         listOf("Chandler","https://i.pinimg.com/564x/ad/05/8a/ad058aba2ed1d732c18da13b71c2971c.jpg"),//
-        listOf("Modi","https://i.pinimg.com/564x/7d/6d/87/7d6d87eea33e43963783abce3ccae4be.jpg"),//
+//        listOf("Modi","https://i.pinimg.com/564x/7d/6d/87/7d6d87eea33e43963783abce3ccae4be.jpg"),//
         listOf("Morgan","https://i.pinimg.com/564x/cf/43/3e/cf433eae812ecf194ab31fcf9fd756f5.jpg"),//
         listOf("Vin","https://i.pinimg.com/564x/c6/0a/62/c60a62e2896cc73f57e8fa623731a5d1.jpg"),//
         listOf("Christian","https://i.pinimg.com/564x/2f/9d/a1/2f9da111385d0945bb44a086c6fe4546.jpg"),// bale - bruce wayne
@@ -74,8 +74,24 @@ class CelebrityData {
         listOf("Barbara","https://i.pinimg.com/564x/df/88/9a/df889ae94071df751df4fe6d285cef6c.jpg"),// pelvin
         listOf("Salma","https://i.pinimg.com/564x/4d/a0/b5/4da0b5641f3ad96c3bd37c65dc4f0429.jpg"),// Hayek
         listOf("Gigi","https://i.pinimg.com/564x/a9/75/f7/a975f78e0e8048ce874c49322ad95e58.jpg"),// hadid
+        listOf("Sara","https://i.pinimg.com/564x/bf/2f/b6/bf2fb61365fcc57e957b350206189b69.jpg"),//
+        listOf("Margot","https://i.pinimg.com/564x/ae/25/16/ae2516fbd714cef982c79a183cab9abc.jpg"),//
+        listOf("Tamanna","https://i.pinimg.com/564x/d1/37/89/d13789e26a28d89afbb6d31d59bc9971.jpg"),//
+        listOf("Irina","https://i.pinimg.com/564x/a8/02/99/a80299024dd75be9b5181f7044f14171.jpg"),//
+        listOf("Kate","https://i.pinimg.com/564x/7b/32/e1/7b32e10aa2c6f60a77457c42b5506092.jpg"),//
+        listOf("Angelina","https://i.pinimg.com/564x/5c/7c/09/5c7c09f1107ddaafbd5614336ba68aa2.jpg"),//
+        listOf("Clara","https://i.pinimg.com/564x/34/7e/7a/347e7a1383c277c4b1120512b3747729.jpg"),//
+        listOf("Elsie","https://i.pinimg.com/564x/66/ad/22/66ad22172326da764652a274910e9d30.jpg"),//
+        listOf("Shannon","https://i.pinimg.com/564x/d3/84/cf/d384cfead8324d9692925431320b7532.jpg"),//
+        listOf("Eva","https://i.pinimg.com/564x/13/13/1f/13131ffe3ef13b357a5bd070b0f7d64b.jpg"),//
+        listOf("Belleza","https://i.pinimg.com/564x/74/81/fc/7481fcd3594f2a72d31c0ce03f176a7e.jpg"),//
+        listOf("Vestidos","https://i.pinimg.com/564x/35/62/f0/3562f02ae33dda88dae64a8541821b35.jpg"),//
+        listOf("Taylor","https://i.pinimg.com/564x/52/b7/7e/52b77e78854d2d8d53b94b4cb2a6d45d.jpg"),//  taylor hill
+        listOf("Miranda","https://i.pinimg.com/564x/f6/a3/34/f6a3345c6a4abd102530ce4dfa79b3cc.jpg"),// kerr
+        listOf("Kate","https://i.pinimg.com/564x/3a/a9/80/3aa980e080c2727ee627f8753434dbb2.jpg"),// upton
 //        listOf("",""),//
-//        listOf("","")//
+//        listOf("",""),//
+//        listOf("",""),//
     )
 
 }

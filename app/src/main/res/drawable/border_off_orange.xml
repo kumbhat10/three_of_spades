@@ -3,7 +3,7 @@
     <item android:id="@+id/shape_status">
         <shape android:shape="oval">
             <gradient
-                android:centerColor="@color/borderblueDark1o"
+                android:centerColor="@color/borderBlueDark1o"
                 android:centerX="0.5"
                 android:centerY="0.5"
                 android:endColor="@color/borderblueDark0o"

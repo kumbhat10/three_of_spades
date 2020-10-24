@@ -37,6 +37,7 @@ import com.romainpiel.shimmer.Shimmer
 import com.romainpiel.shimmer.ShimmerTextView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
 import pl.droidsonroids.gif.GifImageView
 import java.io.File
 import java.io.FileOutputStream
@@ -99,11 +100,12 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private lateinit var userStats: java.util.ArrayList<Int>
     private lateinit var mAuth: FirebaseAuth
     private var uid = ""
-    private var handler = Handler()
+    private var handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
+        CaocConfig.Builder.create()
+            .backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
             .enabled(true) //default: true
             .showErrorDetails(true) //default: true
             .showRestartButton(true) //default: true
@@ -115,11 +117,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         setContentView(R.layout.activity_create_join_room_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         offline = intent.getBooleanExtra("offline", true)
-        if(offline){
-            findViewById<AppCompatButton>(R.id.shareText).visibility = View.GONE
-            findViewById<ImageView>(R.id.imageViewShareButton).visibility = View.GONE
+        if (offline) {
+            shareText.visibility = View.GONE
+            imageViewShareButton.visibility = View.GONE
         }
-        Handler().post {
+        Handler(Looper.getMainLooper()).post {
             v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             soundUpdate = MediaPlayer.create(applicationContext, R.raw.update)
             soundError = MediaPlayer.create(applicationContext, R.raw.error)
@@ -128,9 +130,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             soundBkgd.isLooping = true
             toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.CENTER, 0, 0)
-            toast.view.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.Black))
-            toast.view.findViewById<TextView>(android.R.id.message).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
-            toast.view.findViewById<TextView>(android.R.id.message).textSize = 16F
             updateUIAndAnimateElements()
             getSharedPrefs()
             createTargetPicasso()
@@ -156,10 +155,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             } else if (dataSnapshot != null && !dataSnapshot.exists()) {
                 soundError.start()
                 toastCenter("Sorry $selfName \n$p1 has left the room. \nYou can create your own room or join other")
-                Handler().postDelayed({ closeJoiningRoom(View(applicationContext)) }, 4000)
+                Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom(View(applicationContext)) }, 4000)
             } else if (error != null) {
                 toastCenter(error.localizedMessage!!.toString())
-                Handler().postDelayed({ closeJoiningRoom(View(applicationContext)) }, 4000)
+                Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom(View(applicationContext)) }, 4000)
             }
         }
     }
@@ -168,45 +167,46 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         val data = CreateRoomData(selfName, photoURL, totalCoins).dummyData4
         playerInfo = ArrayList()
         playerInfoCoins = ArrayList()
-        val  p1 = data["p1"].toString()
-        val  p2 = data["p2"].toString()
-        val  p3 = data["p3"].toString()
-        val  p4 = data["p4"].toString()
-        val  p1h = data["p1h"].toString()
-        val  p2h = data["p2h"].toString()
-        val  p3h = data["p3h"].toString()
-        val  p4h = data["p4h"].toString()
-        val  p1c = totalCoins
-        val  p2c = data["p2c"].toString().toInt()
-        val  p3c = data["p3c"].toString().toInt()
-        val  p4c = data["p4c"].toString().toInt()
+        val p1 = data["p1"].toString()
+        val p2 = data["p2"].toString()
+        val p3 = data["p3"].toString()
+        val p4 = data["p4"].toString()
+        val p1h = data["p1h"].toString()
+        val p2h = data["p2h"].toString()
+        val p3h = data["p3h"].toString()
+        val p4h = data["p4h"].toString()
+        val p1c = totalCoins
+        val p2c = data["p2c"].toString().toInt()
+        val p3c = data["p3c"].toString().toInt()
+        val p4c = data["p4c"].toString().toInt()
 
         playerInfo.addAll(listOf(p1, p2, p3, p4, p1h, p2h, p3h, p4h))
         playerInfoCoins.addAll(listOf(p1c, p2c, p3c, p4c))
 
-        findViewById<Button>(R.id.hostName).text = p1
-        Picasso.get().load(p1h).transform(CircleTransform()).into(findViewById<ImageView>(R.id.hostPhoto))
+        hostName.text = p1
+        Picasso.get().load(p1h).transform(CircleTransform())
+            .into(hostPhoto)
 
         handler.postDelayed({
             soundUpdate.start()
             speak("$p2 has joined")
-            findViewById<Button>(R.id.player2Text).text = p2
+            player2Text.text = p2
             Picasso.get().load(p2h).transform(CircleTransform()).into(t2)
         }, 300)
 
         handler.postDelayed({
             soundUpdate.start()
             speak("$p3 has joined")
-            findViewById<Button>(R.id.player3Text).text = p3
+            player3Text.text = p3
             Picasso.get().load(p3h).transform(CircleTransform()).into(t3)
         }, 1700)
 
         handler.postDelayed({
             //            soundUpdate.start()
             speak("$p4 has joined")
-            findViewById<Button>(R.id.player4Text).text = p4
+            player4Text.text = p4
             Picasso.get().load(p4h).transform(CircleTransform()).into(t4)
-            Handler().postDelayed({allPlayersJoined()},700)
+            Handler(Looper.getMainLooper()).postDelayed({ allPlayersJoined() }, 700)
         }, 3000)
 
     }
@@ -239,53 +239,54 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             p6h = dataSnapshot?.data?.get("p6h").toString()
             p7h = dataSnapshot?.data?.get("p7h").toString()
             if (p5.isNotEmpty() && p5h.isNotEmpty() && !p5Status) {
-                findViewById<AppCompatButton>(R.id.player5Text).text = p5
-                Picasso.get().load(p5h).resize(350,350).transform(CircleTransform()).into(t5)
-                findViewById<AppCompatButton>(R.id.player5Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
+                player5Text.text = p5
+                Picasso.get().load(p5h).resize(350, 350).transform(CircleTransform()).into(t5)
+                player5Text.setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
                 p5Status = true
             }
             if (p6.isNotEmpty() && p6h.isNotEmpty() && !p6Status) {
-                findViewById<AppCompatButton>(R.id.player6Text).text = p6
-                Picasso.get().load(p6h).resize(350,350).transform(CircleTransform()).into(t6)
-                findViewById<AppCompatButton>(R.id.player6Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
+                player6Text.text = p6
+                Picasso.get().load(p6h).resize(350, 350).transform(CircleTransform()).into(t6)
+                player6Text.setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
                 p6Status = true
             }
             if (p7.isNotEmpty() && p7h.isNotEmpty() && !p7Status) {
-                findViewById<AppCompatButton>(R.id.player7Text).text = p7
-                Picasso.get().load(p7h).resize(350,350).transform(CircleTransform()).into(t7)
-                findViewById<AppCompatButton>(R.id.player7Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
+                player7Text.text = p7
+                Picasso.get().load(p7h).resize(350, 350).transform(CircleTransform()).into(t7)
+                player7Text.setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
                 p7Status = true
             }
         }
         if (!p1Status) {
-            findViewById<Button>(R.id.hostName).text = p1
-            Picasso.get().load(p1h).resize(350,350).transform(CircleTransform()).into(findViewById<ImageView>(R.id.hostPhoto))
+            hostName.text = p1
+            Picasso.get().load(p1h).resize(350, 350).transform(CircleTransform())
+                .into(hostPhoto)
             p1Status = true
         }
         if (p2.isNotEmpty() && p2h.isNotEmpty() && !p2Status) {
-            findViewById<AppCompatButton>(R.id.player2Text).text = p2
-            Picasso.get().load(p2h).resize(350,350).transform(CircleTransform()).into(t2)
-            findViewById<AppCompatButton>(R.id.player2Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
+            player2Text.text = p2
+            Picasso.get().load(p2h).resize(350, 350).transform(CircleTransform()).into(t2)
+            player2Text.setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
             p2Status = true
         }
         if (p3.isNotEmpty() && p3h.isNotEmpty() && !p3Status) {
-            findViewById<AppCompatButton>(R.id.player3Text).text = p3
-            Picasso.get().load(p3h).resize(350,350).transform(CircleTransform()).into(t3)
-            findViewById<AppCompatButton>(R.id.player3Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
+            player3Text.text = p3
+            Picasso.get().load(p3h).resize(350, 350).transform(CircleTransform()).into(t3)
+            player3Text.setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
             p3Status = true
         }
         if (p4.isNotEmpty() && p4h.isNotEmpty() && !p4Status) {
-            findViewById<AppCompatButton>(R.id.player4Text).text = p4
-            Picasso.get().load(p4h).resize(350,350).transform(CircleTransform()).into(t4)
-            findViewById<AppCompatButton>(R.id.player4Text).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
+            player4Text.text = p4
+            Picasso.get().load(p4h).resize(350, 350).transform(CircleTransform()).into(t4)
+            player4Text.setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
             p4Status = true
         }
 
         if (playerJoining == nPlayers) allPlayersJoined()
 
         if (playerJoining == 10) {
-            if (from != "p1") findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.VISIBLE
-            findViewById<TextView>(R.id.loadingText1).text = getString(R.string.starting_game)
+            if (from != "p1") maskAllLoading1.visibility = View.VISIBLE
+            loadingText1.text = getString(R.string.starting_game)
 
             registration.remove()
             playerInfo = ArrayList()
@@ -304,41 +305,49 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private fun allPlayersJoined() {
         soundSuccess.start()
         speak("Ready to Start")
-        findViewById<ProgressBar>(R.id.progressBarMain).visibility = View.GONE
-        findViewById<AppCompatButton>(R.id.shareText).clearAnimation()
-        findViewById<ImageView>(R.id.imageViewShareButton).clearAnimation()
-        findViewById<AppCompatButton>(R.id.shareText).visibility = View.GONE
-        findViewById<ImageView>(R.id.imageViewShareButton).visibility = View.GONE
-        findViewById<ShimmerTextView>(R.id.waitingToJoinText).text = getString(R.string.playerJoinedConfirmation)
-        findViewById<ShimmerTextView>(R.id.waitingToJoinText).setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+        progressBarMain.visibility = View.GONE
+        shareText.clearAnimation()
+        imageViewShareButton.clearAnimation()
+        shareText.visibility = View.GONE
+        imageViewShareButton.visibility = View.GONE
+        waitingToJoinText.text = getString(R.string.playerJoinedConfirmation)
+        waitingToJoinText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         shimmer.cancel()
-        findViewById<ImageView>(R.id.startGameButton).visibility = View.VISIBLE
-        anim(findViewById(R.id.startGameButton), R.anim.blink_infinite_700ms)
-        anim(findViewById(R.id.waitingToJoinText), R.anim.blink_infinite_700ms)
+        startGameButton.visibility = View.VISIBLE
+        anim(startGameButton, R.anim.blink_infinite_700ms)
+        anim(waitingToJoinText, R.anim.blink_infinite_700ms)
     }
 
     private fun startNextActivity() {
         soundUpdate.start()
         if (!offline) {
             startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreen::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
-                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("roomID", roomID) }.putStringArrayListExtra("playerInfo", playerInfo).putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins).putIntegerArrayListExtra("userStats", userStats))
+                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }
+                .apply { putExtra("roomID", roomID) }
+                .putStringArrayListExtra("playerInfo", playerInfo)
+                .putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins)
+                .putIntegerArrayListExtra("userStats", userStats))
         } else {
             startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreenAutoPlay::class.java).apply {
                 putExtra("selfName", selfName)
             }  // AutoPlay
-                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("roomID", roomID) }.putStringArrayListExtra("playerInfo", playerInfo).putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins).putIntegerArrayListExtra("userStats", userStats))
+                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }
+                .apply { putExtra("roomID", roomID) }
+                .putStringArrayListExtra("playerInfo", playerInfo)
+                .putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins)
+                .putIntegerArrayListExtra("userStats", userStats))
         }
 
         overridePendingTransition(R.anim.slide_top_in_activity, R.anim.slide_top_in_activity)
-        Handler().postDelayed({ finish() }, 400)
+        Handler(Looper.getMainLooper()).postDelayed({ finish() }, 400)
     }
 
     fun startGame(view: View) {
         if (from == "p1") {
-            findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.VISIBLE
+            maskAllLoading1.visibility = View.VISIBLE
 
             if (!offline) {
-                findViewById<TextView>(R.id.loadingText1).text = getString(R.string.firingServer)
+                loadingText1.text = getString(R.string.firingServer)
                 val gameData = if (!BuildConfig.DEBUG) {  //(getString(R.string.testGameData).contains('n')) {
                     if (nPlayers == 7) CreateGameData(uid, selfName).gameData7
                     else CreateGameData(uid, selfName).gameData4
@@ -349,23 +358,24 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
                     }
                 }
                 myRefGameData.child(roomID).setValue(gameData).addOnSuccessListener {
-                    refRoomData.document(roomID).set(hashMapOf("PJ" to 10), SetOptions.merge()).addOnSuccessListener {
-                        findViewById<ImageView>(R.id.startGameButton).clearAnimation()
-                        findViewById<ImageView>(R.id.startGameButton).visibility = View.GONE
-                        refRoomData.document(roomID + "_chat").set(hashMapOf("M" to ""))
-                    }.addOnFailureListener { exception ->
-                        findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.GONE
-                        toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}")
-                    }
+                    refRoomData.document(roomID).set(hashMapOf("PJ" to 10), SetOptions.merge())
+                        .addOnSuccessListener {
+                            startGameButton.clearAnimation()
+                            startGameButton.visibility = View.GONE
+                            refRoomData.document(roomID + "_chat").set(hashMapOf("M" to ""))
+                        }.addOnFailureListener { exception ->
+                            maskAllLoading1.visibility = View.GONE
+                            toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}")
+                        }
                 }.addOnFailureListener { exception ->
-                    findViewById<RelativeLayout>(R.id.maskAllLoading1).visibility = View.GONE
+                    maskAllLoading1.visibility = View.GONE
                     toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}")
                 }
             } else {
-                findViewById<TextView>(R.id.loadingText1).text = getString(R.string.starting_game)
-                findViewById<ImageView>(R.id.startGameButton).clearAnimation()
-                findViewById<ImageView>(R.id.startGameButton).visibility = View.GONE
-                Handler().postDelayed({startNextActivity()},300)
+                loadingText1.text = getString(R.string.starting_game)
+                startGameButton.clearAnimation()
+                startGameButton.visibility = View.GONE
+                Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 300)
             }
 
         } else {
@@ -407,7 +417,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
-                    findViewById<GifImageView>(R.id.player2Photo).setImageDrawable(bitmap.toDrawable(resources))
+                    player2Photo.setImageDrawable(bitmap.toDrawable(resources))
                 }
             }
         }
@@ -420,7 +430,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
-                    findViewById<GifImageView>(R.id.player3Photo).setImageDrawable(bitmap.toDrawable(resources))
+                    player3Photo.setImageDrawable(bitmap.toDrawable(resources))
                 }
             }
         }
@@ -433,7 +443,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
-                    findViewById<GifImageView>(R.id.player4Photo).setImageDrawable(bitmap.toDrawable(resources))
+                    player4Photo.setImageDrawable(bitmap.toDrawable(resources))
                 }
             }
         }
@@ -446,7 +456,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
-                    findViewById<GifImageView>(R.id.player5Photo).setImageDrawable(bitmap.toDrawable(resources))
+                    player5Photo.setImageDrawable(bitmap.toDrawable(resources))
                 }
             }
         }
@@ -459,7 +469,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
-                    findViewById<GifImageView>(R.id.player6Photo).setImageDrawable(bitmap.toDrawable(resources))
+                    player6Photo.setImageDrawable(bitmap.toDrawable(resources))
                 }
             }
         }
@@ -468,7 +478,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
-                    findViewById<GifImageView>(R.id.player7Photo).setImageDrawable(bitmap.toDrawable(resources))
+                    player7Photo.setImageDrawable(bitmap.toDrawable(resources))
                 }
             }
         }
@@ -476,10 +486,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     private fun initializeAds() {
         if (!premiumStatus) {
-            findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.VISIBLE
-            findViewById<AdView>(R.id.addViewCreateJoinRoom).loadAd(AdRequest.Builder().build())
+            addViewCreateJoinRoom.visibility = View.VISIBLE
+            addViewCreateJoinRoom.loadAd(AdRequest.Builder().build())
         } else {
-            findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.GONE
+            addViewCreateJoinRoom.visibility = View.GONE
         }
     }
 
@@ -488,59 +498,59 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         selfName = intent.getStringExtra("selfName")!!.toString()  //Get Username
         photoURL = intent.getStringExtra("photoURL")!!.toString()  //Get Photo URL
         totalCoins = intent.getIntExtra("totalCoins", 0)
-        from = intent.getStringExtra("from")!!.toString()     //check if user has joined room or created one and display Toast
+        from = intent.getStringExtra("from")!!
+            .toString()     //check if user has joined room or created one and display Toast
         nPlayers = intent.getIntExtra("nPlayers", 0)
         userStats = intent.getIntegerArrayListExtra("userStats")!!
-        findViewById<ImageView>(R.id.imageViewShareButton).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
-        findViewById<Button>(R.id.button_roomID).text = "Room ID: $roomID"   // display the room ID
+        imageViewShareButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
+        button_roomID.text = "Room ID: $roomID"   // display the room ID
 
         if (from == "p1") { //  close icon only to host
-            findViewById<ImageView>(R.id.leaveJoiningRoomIcon).visibility = View.VISIBLE
-            anim(findViewById(R.id.leaveJoiningRoomIcon), R.anim.anim_scale_infinite)
+            leaveJoiningRoomIcon.visibility = View.VISIBLE
+            anim(leaveJoiningRoomIcon, R.anim.anim_scale_infinite)
         } else { // dummy
-            findViewById<ImageView>(R.id.leaveJoiningRoomIcon).visibility = View.GONE
-            findViewById<ImageView>(R.id.leaveJoiningRoomIcon).clearAnimation()
+            leaveJoiningRoomIcon.visibility = View.GONE
+            leaveJoiningRoomIcon.clearAnimation()
         }
         shimmer = Shimmer()
         shimmer.duration = 1800
-        shimmer.start(findViewById<ShimmerTextView>(R.id.waitingToJoinText))
-        anim(findViewById(R.id.roomIDIcon), R.anim.clockwise_ccw_infinite)
-        anim(findViewById(R.id.player2Text), R.anim.slide_buttons)
-        anim(findViewById(R.id.player3Text), R.anim.slide_buttons_rtl)
-        anim(findViewById(R.id.player4Text), R.anim.slide_buttons)
-        //        anim(findViewById(R.id.shareText), R.anim.slide_buttons)
-        anim(findViewById(R.id.button_roomID), R.anim.slide_buttons_rtl)
-        anim(findViewById(R.id.hostPhoto), R.anim.anim_scale_infinite)
-        anim(findViewById(R.id.player2Photo), R.anim.anim_scale_infinite)
-        anim(findViewById(R.id.player3Photo), R.anim.anim_scale_infinite)
-        anim(findViewById(R.id.player4Photo), R.anim.anim_scale_infinite)
+        shimmer.start(waitingToJoinText)
+        anim(roomIDIcon, R.anim.clockwise_ccw_infinite)
+        anim(player2Text, R.anim.slide_buttons)
+        anim(player3Text, R.anim.slide_buttons_rtl)
+        anim(player4Text, R.anim.slide_buttons)
+        anim(button_roomID, R.anim.slide_buttons_rtl)
+        anim(hostPhoto, R.anim.anim_scale_infinite)
+        anim(player2Photo, R.anim.anim_scale_infinite)
+        anim(player3Photo, R.anim.anim_scale_infinite)
+        anim(player4Photo, R.anim.anim_scale_infinite)
 
         if (nPlayers == 7) {
-            findViewById<ShimmerFrameLayout>(R.id.player7Shimmer).visibility = View.VISIBLE
-            findViewById<ShimmerFrameLayout>(R.id.player6Shimmer).visibility = View.VISIBLE
-            findViewById<ShimmerFrameLayout>(R.id.player5Shimmer).visibility = View.VISIBLE
-            findViewById<GifImageView>(R.id.player7Photo).visibility = View.VISIBLE
-            findViewById<GifImageView>(R.id.player6Photo).visibility = View.VISIBLE
-            findViewById<GifImageView>(R.id.player5Photo).visibility = View.VISIBLE
-            findViewById<AppCompatButton>(R.id.player7Text).visibility = View.VISIBLE
-            findViewById<AppCompatButton>(R.id.player6Text).visibility = View.VISIBLE
-            findViewById<AppCompatButton>(R.id.player5Text).visibility = View.VISIBLE
-            anim(findViewById(R.id.player5Photo), R.anim.anim_scale_infinite)
-            anim(findViewById(R.id.player6Photo), R.anim.anim_scale_infinite)
-            anim(findViewById(R.id.player7Photo), R.anim.anim_scale_infinite)
-            anim(findViewById(R.id.player5Text), R.anim.slide_buttons_rtl)
-            anim(findViewById(R.id.player6Text), R.anim.slide_buttons)
-            anim(findViewById(R.id.player7Text), R.anim.slide_buttons_rtl)
+            player7Shimmer.visibility = View.VISIBLE
+            player6Shimmer.visibility = View.VISIBLE
+            player5Shimmer.visibility = View.VISIBLE
+            player7Photo.visibility = View.VISIBLE
+            player6Photo.visibility = View.VISIBLE
+            player5Photo.visibility = View.VISIBLE
+            player7Text.visibility = View.VISIBLE
+            player6Text.visibility = View.VISIBLE
+            player5Text.visibility = View.VISIBLE
+            anim(player5Photo, R.anim.anim_scale_infinite)
+            anim(player6Photo, R.anim.anim_scale_infinite)
+            anim(player7Photo, R.anim.anim_scale_infinite)
+            anim(player5Text, R.anim.slide_buttons_rtl)
+            anim(player6Text, R.anim.slide_buttons)
+            anim(player7Text, R.anim.slide_buttons_rtl)
         } else {
-            findViewById<ShimmerFrameLayout>(R.id.player7Shimmer).visibility = View.GONE
-            findViewById<ShimmerFrameLayout>(R.id.player6Shimmer).visibility = View.GONE
-            findViewById<ShimmerFrameLayout>(R.id.player5Shimmer).visibility = View.GONE
-            findViewById<GifImageView>(R.id.player7Photo).visibility = View.GONE
-            findViewById<GifImageView>(R.id.player6Photo).visibility = View.GONE
-            findViewById<GifImageView>(R.id.player5Photo).visibility = View.GONE
-            findViewById<AppCompatButton>(R.id.player7Text).visibility = View.GONE
-            findViewById<AppCompatButton>(R.id.player6Text).visibility = View.GONE
-            findViewById<AppCompatButton>(R.id.player5Text).visibility = View.GONE
+            player7Shimmer.visibility = View.GONE
+            player6Shimmer.visibility = View.GONE
+            player5Shimmer.visibility = View.GONE
+            player7Photo.visibility = View.GONE
+            player6Photo.visibility = View.GONE
+            player5Photo.visibility = View.GONE
+            player7Text.visibility = View.GONE
+            player6Text.visibility = View.GONE
+            player5Text.visibility = View.GONE
         }
     }
 
@@ -552,7 +562,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
-            if (premiumStatus) findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.GONE
+            if (premiumStatus) addViewCreateJoinRoom.visibility = View.GONE
             else initializeAds()
         }
         if (sharedPreferences.contains("musicStatus")) {
@@ -567,7 +577,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
     }
 
-    @Suppress("DEPRECATION") @SuppressLint("NewApi") fun vibrationStart(duration: Long = 150) {
+    @Suppress("DEPRECATION")
+    @SuppressLint("NewApi")
+    fun vibrationStart(duration: Long = 150) {
         if (versionStatus) {
             v.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
@@ -590,6 +602,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         if (musicStatus) soundBkgd.pause()
+        try {
+            textToSpeech.stop()
+        } catch (me: java.lang.Exception) {
+        }
     }
 
     override fun onResume() {
@@ -598,6 +614,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        try {
+            textToSpeech.shutdown()
+        } catch (me: java.lang.Exception) {
+        }
         super.onDestroy()
         try {
             if (!offline) registration.remove()
@@ -632,9 +652,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     private fun takeScreenShot(view: View): Bitmap {
-        findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.INVISIBLE
+        addViewCreateJoinRoom.visibility = View.INVISIBLE
         val b = view.rootView.drawToBitmap(Bitmap.Config.ARGB_8888)
-        findViewById<AdView>(R.id.addViewCreateJoinRoom).visibility = View.VISIBLE
+        addViewCreateJoinRoom.visibility = View.VISIBLE
         return b
     }
 
