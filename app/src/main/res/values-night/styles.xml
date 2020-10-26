@@ -4,7 +4,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/borderBlueDark1o</item>
         <item name="colorPrimaryDark">@color/Black</item>
-        <item name="colorAccent">@color/borderRed2</item>
+        <item name="colorAccent">@color/icon_yellow</item>
         <item name="android:windowBackground">@drawable/splash</item>
 
     </style>

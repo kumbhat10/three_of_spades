@@ -9,14 +9,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
 import android.speech.tts.TextToSpeech
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -25,20 +22,16 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.lifecycleScope
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.android.billingclient.api.*
-import com.bitvale.lightprogress.LightProgress
 import com.facebook.login.LoginManager
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -55,12 +48,9 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_main_home_screen.*
 import kotlinx.android.synthetic.main.user_rank.view.*
 import kotlinx.coroutines.launch
-import pl.droidsonroids.gif.GifImageButton
-import pl.droidsonroids.gif.GifImageView
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -85,10 +75,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var querySnapshot: QuerySnapshot
     private lateinit var intentBuilder: CustomTabsIntent.Builder
+    private lateinit var intentInvite: Intent
     private val howtoPlayUrl = "https://sites.google.com/view/kaali-ki-teeggi/how-to-play"
     private var rewardStatus = false
     private var rewardAmount = 0
     private var createRoomStatus = false
+    private var offlineRoomCreate = true
     private var onceAdWatched = false
 
     private var backButtonPressedStatus = false
@@ -145,6 +137,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var countRewardWatch = 1
     private lateinit var rewardedAdLoadCallback: RewardedAdLoadCallback
     private var dailyRewardList = listOf(500, 1000, 1500, 2000, 2500, 4000, 5000)
+    private var coinDur = 500L
+    private var coinBurst = true
+    private var coinSpeed = 4f
+    private var coinCount = 25
     private var dailyRewardAmount = 0
     private var dailyRewardClicked = false
     private var claimedToday = false
@@ -165,12 +161,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             .apply()
 
         setContentView(R.layout.activity_main_home_screen)
+
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         lightMHS.on()
-
         newUser = intent.getBooleanExtra("newUser", true)
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
-        toast.setGravity(Gravity.BOTTOM, 0, 300)
         soundBkgd = MediaPlayer.create(applicationContext, R.raw.music)
         soundBkgd.isLooping = true
 
@@ -192,14 +187,15 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             checkIfOnlineGameAllowed()
             setupBillingClient()
             versionCode.text = "V: " + packageManager.getPackageInfo(packageName, 0).versionName.toString()
-            intentBuilder = CustomTabsIntent.Builder()
+            buildCustomTabIntent()
+            createIntentInvite()
         })
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
     }
 
     override fun onStart() {
         super.onStart()
-        if (rated && ratingWindowOpenStatus) closeRatingWindow(View(applicationContext))
+//        if (rated && ratingWindowOpenStatus) closeRatingWindow(View(applicationContext))
         if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
     }
 
@@ -209,6 +205,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         firebaseAnalytics.logEvent(event, params)
     }
 
+    fun callConfetti(){
+        createKonfetti(applicationContext, konfettiMHS, duration = coinDur, konType = KonType.Money, burst = coinBurst, speed = coinSpeed, burstCount = coinCount)
+    }
     private fun dailyRewardWindowDisplay() {
         soundSuccess.start()
         val gridView = dailyRewardGrid
@@ -225,6 +224,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun addPoints() {
+        callConfetti()
+        if (soundStatus) soundZip.start()
         dailyRewardClicked = false
         rewardAmount = dailyRewardAmount
         totalCoins += rewardAmount  // reward with daily reward amount for watching video
@@ -235,7 +236,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         anim(watchVideoCoin, R.anim.slide_500_coins)
         Handler(Looper.getMainLooper()).postDelayed({
             if (vibrateStatus) vibrationStart()
-            if (soundStatus) soundZip.start()
             userScoreMHS.setText("$ " + String.format("%,d", totalCoins), true)
             watchVideoCoin.visibility = View.INVISIBLE
             loadRewardAd()
@@ -261,18 +261,18 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     watchVideo.visibility = View.GONE
                     if (musicStatus) soundBkgd.pause()
                 }
-
                 override fun onRewardedAdClosed() {
                     if (musicStatus) soundBkgd.start()
                     dailyRewardClicked = false
                     if (rewardStatus) {
                         rewardStatus = false
+                        callConfetti()
+                        if (soundStatus) soundZip.start()
                         watchVideoCoin.text = rewardAmount.toString()
                         watchVideoCoin.visibility = View.VISIBLE
                         soundCollectCards.start()
                         anim(watchVideoCoin, R.anim.slide_500_coins)
                         Handler(Looper.getMainLooper()).postDelayed({
-                            if (soundStatus) soundZip.start()
                             userScoreMHS.setText("$ " + String.format("%,d", 78000), true)
                             watchVideoCoin.visibility = View.INVISIBLE
                             loadRewardAd()
@@ -282,7 +282,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         toastCenter("Sorry $userName, No coins added")
                     }
                 }
-
                 override fun onUserEarnedReward(@NonNull reward: RewardItem) {
                     dailyRewardClicked = false
                     rewardStatus = true
@@ -291,7 +290,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     refUsersData.document(uid)
                         .set(hashMapOf("sc" to totalCoins, "LSD" to today, "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
                 }
-
                 override fun onRewardedAdFailedToShow(errorCode: Int) {
                     dailyRewardClicked = false
                     watchVideo.clearAnimation()
@@ -356,6 +354,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 try {
                     photoURL = dataSnapshot.get("ph").toString()
                     Picasso.get().load(photoURL).resize(400, 400).transform(CircleTransform()).into(profilePic)
+                    callConfetti()
                     totalCoins = dataSnapshot.get("sc").toString().toInt()
                     if(soundStatus) soundZip.start()
                     userScoreMHS.setText("$ " + String.format("%,d", totalCoins), true)
@@ -455,7 +454,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
         editor = sharedPreferences.edit()
 
-        if (sharedPreferences.contains("themeColor")) {
+        if (!sharedPreferences.contains("defaultThemeColor1")) {
+            changeBackground("shine_bk")
+            editor.putString("themeColor", "shine_bk") // write username to preference file
+            editor.putString("defaultThemeColor1", "shine_bk") // write username to preference file
+            editor.apply()
+        }else if (sharedPreferences.contains("themeColor")) {
             changeBackground(sharedPreferences.getString("themeColor", "shine_yellow").toString())
         }
         if (sharedPreferences.contains("premium")) {
@@ -622,7 +626,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     addPoints()
                     dailyRewardClicked = false
                 } else if (createRoomStatus) {
-                    createRoom(true)
+                    createRoom()
                     createRoomStatus = false
                 }
                 if (!premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder().build())
@@ -668,6 +672,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 override fun onRewardedAdClosed() {
                     if (musicStatus) soundBkgd.start()
                     if (rewardStatus) {
+                        if (soundStatus) soundZip.start()
+                        callConfetti()
                         rewardStatus = false
                         watchVideoCoin.text = rewardAmount.toString()
                         watchVideoCoin.visibility = View.VISIBLE
@@ -676,7 +682,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         anim(watchVideoCoin, R.anim.slide_500_coins)
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (vibrateStatus) vibrationStart()
-                            if (soundStatus) soundZip.start()
                             userScoreMHS.setText("$ " + String.format("%,d", totalCoins), true)
                             watchVideoCoin.visibility = View.GONE
                             loadRewardAd()
@@ -739,58 +744,17 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         Handler(Looper.getMainLooper()).postDelayed({
             closeSettings.visibility = View.VISIBLE
         }, 220)
-        anim(settingsLayouttemp, R.anim.zoomin_center)
+        anim(settingsLayoutTemp, R.anim.zoomin_center)
     }
 
     fun closeSettingsWindow(view: View) {
         settingsWindowStatus = false
-        anim(settingsLayouttemp, R.anim.zoomout_center)
+        anim(settingsLayoutTemp, R.anim.zoomout_center)
         closeSettings.visibility = View.INVISIBLE
         Handler(Looper.getMainLooper()).postDelayed({
             settingsLayout.visibility = View.INVISIBLE
         }, 230)
         closeSettings.clearAnimation()
-    }
-
-    fun createRoomButtonClicked(view: View) {
-        if (soundStatus) soundUpdate.start()
-        createRoomStatus = true
-        nPlayers = when (view.tag.toString().toInt()) {
-            0 -> 4
-            4 -> 4
-            else -> 7
-        }
-        if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched && !newUser) {
-            mInterstitialAd.show()
-        } else {
-            if (view.tag.toString().toInt() == 0) createRoom(offline = true)
-            else createRoom()
-            createRoomStatus = false
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun createRoom(offline: Boolean = false) {
-        maskAllLoading.visibility = View.VISIBLE
-        loadingText.text = getString(R.string.creatingRoom)
-        if (offline) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity(true) }, 400)
-        else if (!onlineGameAllowed) {
-            soundError.start()
-            loadingText.text = "Try playing OFFLINE\n\n Server is under maintenance right now\n\n It will be back shortly"
-            Handler(Looper.getMainLooper()).postDelayed({
-                maskAllLoading.visibility = View.GONE
-            }, 2000)
-        } else {
-            val allowedChars = ('A'..'H') + ('J'..'N') + ('P'..'Z') + ('2'..'9')  // 1, I , O and 0 skipped
-            val roomID = (1..4).map { allowedChars.random() }.joinToString("")
-            if (nPlayers == 7) {
-                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data7)
-                else createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData7)
-            } else if (nPlayers == 4 && !offline) {
-                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data4)
-                else createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData4)
-            }
-        }
     }
 
     private fun checkIfOnlineGameAllowed() {
@@ -805,31 +769,74 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             })
     }
 
+    fun createRoomButtonClicked(view: View) {
+        if (soundStatus) soundUpdate.start()
+        createRoomStatus = true
+        offlineRoomCreate = view.tag.toString().toInt() == 0
+
+        nPlayers = when (view.tag.toString().toInt()) {
+            0 -> 4
+            4 -> 4
+            else -> 7
+        }
+        if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched && !newUser) {
+            mInterstitialAd.show()
+        } else {
+            createRoom()
+            createRoomStatus = false
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun createRoom() {
+        maskAllLoading.visibility = View.VISIBLE
+        loadingText.text = getString(R.string.creatingRoom)
+        if (offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 1300)
+        else if (!onlineGameAllowed) {
+            soundError.start()
+            if(vibrateStatus) vibrationStart()
+            loadingText.text = "Try playing OFFLINE\n\n Server is under maintenance right now\n\n It will be back shortly"
+            Handler(Looper.getMainLooper()).postDelayed({
+                maskAllLoading.visibility = View.GONE
+            }, 2000)
+        } else {
+            val allowedChars = ('A'..'H') + ('J'..'N') + ('P'..'Z') + ('2'..'9')  // 1, I , O and 0 skipped
+            val roomID = (1..4).map { allowedChars.random() }.joinToString("")
+            if (nPlayers == 7) {
+                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data7)
+                else createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData7)
+            } else if (nPlayers == 4 && !offlineRoomCreate) {
+                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data4)
+                else createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData4)
+            }
+        }
+    }
+
     private fun createRoomWithID(roomID: String, roomData: Any) {
         refRoomData.document(roomID).set(roomData).addOnFailureListener {
             maskAllLoading.visibility = View.GONE
             toastCenter("Failed to create room \nPlease try again or later")
         }.addOnSuccessListener {
-            startNextActivity(false, roomID)
+            startNextActivity(roomID)
         }
     }
 
-    private fun startNextActivity(offline: Boolean, roomID: String = "ABCD") {
+    private fun startNextActivity(roomID: String = "ABCD") {
         if (soundStatus) soundSuccess.start()
-        if (!offline) {
+        if (!offlineRoomCreate) {
             editor.putString("Room", roomID) // write room ID in storage - to delete later
             editor.apply()
             logFirebaseEvent("create_join_room_screen", nPlayers, "create")
         } else {
             logFirebaseEvent("create_join_room_screen", nPlayers, "create_offline")
         }
-        val userStats = if (!offline) ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))
+        val userStats = if (!offlineRoomCreate) ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))
         else ArrayList(listOf(nGamesPlayedBot, nGamesWonBot, nGamesBidBot))
 
         startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
             .apply { putExtra("selfName", userName) }.apply { putExtra("photoURL", photoURL) }
             .apply { putExtra("totalCoins", totalCoins) }.apply { putExtra("from", "p1") }
-            .apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("offline", offline) }
+            .apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("offline", offlineRoomCreate) }
             .putIntegerArrayListExtra("userStats", userStats))
         overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
         Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
@@ -959,14 +966,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     fun developerCredits(view: View) {
         if (soundStatus) soundUpdate.start() //Pass username and current activity alias to be able to come back with same info
-        startActivity(Intent(this, DeveloperCredits::class.java).putExtra("uid", uid))
+        startActivity(Intent(this, DeveloperCredits::class.java).putExtra("uid", uid).putExtra("soundStatus",soundStatus))
         overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
     }
 
     private fun animateElements() {
-//        anim(profilePic, R.anim.anim_scale_infinite)
-        anim((createRoomButton), R.anim.slide_buttons)
-        anim((joinRoomButton), R.anim.slide_buttons)
+
+//        anim((createRoomButton), R.anim.slide_buttons)
+//        anim((joinRoomButton), R.anim.slide_buttons)
         anim((createRoomIcon), R.anim.clockwise)
         anim((joinRoomIcon), R.anim.clockwise_ccw_infinite)
         anim((settingsIcon), R.anim.clockwise_ccw_infinite)
@@ -1160,8 +1167,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun inviteFriends(view: View) {
-
         if (soundStatus) soundUpdate.start()
+        try {
+            startActivity(Intent.createChooser(intentInvite, "Invite friends via "))
+        } catch (me: Exception) {
+        }
+    }
+
+    fun createIntentInvite(){
         val compression = 0.7
         val image = ContextCompat.getDrawable(applicationContext, R.drawable.game_screen)
             ?.toBitmap(round(compression * 997).toInt(), round(compression * 2228).toInt(), Bitmap.Config.ARGB_8888)
@@ -1173,29 +1186,29 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         fos.close()
 
         val uri = FileProvider.getUriForFile(applicationContext, applicationContext.packageName + ".provider", imagePath)
-        val message = "Hey, Let's play this cool game 3 of Spades (Kaali ki Teeggi) online. \n\nInstall from below link \nFor Android:  \n${
+        val message = "Hey, Let's play this cool game 3 of Spades (Kaali ki Tiggi) online. \n\nInstall from below link \nFor Android:  \n${
             getString(R.string.playStoreLink)
         }\n\n For iOS: Coming soon..."
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.type = "image/*"
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.putExtra(Intent.EXTRA_TITLE, "Share app")
-        intent.putExtra(Intent.EXTRA_TEXT, message)
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        try {
-            startActivity(Intent.createChooser(intent, "Invite friends via "))
-        } catch (me: Exception) {
-            //            toastCenter(me.toString())
-        }
+        intentInvite = Intent()
+        intentInvite.action = Intent.ACTION_SEND
+        intentInvite.type = "image/*"
+        intentInvite.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intentInvite.putExtra(Intent.EXTRA_TITLE, "Share app")
+        intentInvite.putExtra(Intent.EXTRA_TEXT, message)
+        intentInvite.putExtra(Intent.EXTRA_STREAM, uri)
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    fun howToPlay(view: View) {
+    fun buildCustomTabIntent(){
+        intentBuilder = CustomTabsIntent.Builder()
         intentBuilder.setStartAnimations(this, R.anim.slide_left_activity, R.anim.slide_left_activity)
         intentBuilder.setExitAnimations(this, R.anim.slide_right_activity, R.anim.slide_right_activity)
         intentBuilder.setToolbarColor(ContextCompat.getColor(applicationContext, R.color.icon_yellow))
         intentBuilder.addDefaultShareMenuItem()
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    fun howToPlay(view: View) {
+        if (soundStatus) soundUpdate.start()
         intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl))
     }
 

@@ -17,15 +17,12 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.drawToBitmap
 import cat.ereza.customactivityoncrash.config.CaocConfig
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.DocumentSnapshot
@@ -33,12 +30,9 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.romainpiel.shimmer.Shimmer
-import com.romainpiel.shimmer.ShimmerTextView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
-import pl.droidsonroids.gif.GifImageView
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -64,7 +58,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private var totalCoins = 0
     private lateinit var toast: Toast
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var shimmer: Shimmer
     private lateinit var roomData: Map<String, Any>
     private var p1Status = false
     private var p2Status = false
@@ -312,7 +305,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         imageViewShareButton.visibility = View.GONE
         waitingToJoinText.text = getString(R.string.playerJoinedConfirmation)
         waitingToJoinText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-        shimmer.cancel()
         startGameButton.visibility = View.VISIBLE
         anim(startGameButton, R.anim.blink_infinite_700ms)
         anim(waitingToJoinText, R.anim.blink_infinite_700ms)
@@ -512,9 +504,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             leaveJoiningRoomIcon.visibility = View.GONE
             leaveJoiningRoomIcon.clearAnimation()
         }
-        shimmer = Shimmer()
-        shimmer.duration = 1800
-        shimmer.start(waitingToJoinText)
         anim(roomIDIcon, R.anim.clockwise_ccw_infinite)
         anim(player2Text, R.anim.slide_buttons)
         anim(player3Text, R.anim.slide_buttons_rtl)

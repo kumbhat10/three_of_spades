@@ -54,3 +54,7 @@
 
 -dontwarn com.google.android.gms.**
 -dontwarn android.media.**
+-dontwarn java.lang.instrument.ClassFileTransformer
+-dontwarn sun.misc.SignalHandler
+-dontwarn java.lang.instrument.Instrumentation
+-dontwarn sun.misc.Signal

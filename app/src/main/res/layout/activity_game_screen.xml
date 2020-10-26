@@ -31,18 +31,15 @@
         app:shimmer_tilt="60">
 
         <ImageView
-            android:id="@+id/gifViewGameScreenborder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/app_name"
             android:onClick="closeChatScoreWindow"
             android:src="@drawable/game_screen_table_blue"
             android:visibility="visible" />
-
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <ImageView
-        android:id="@+id/gifViewGameScreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
@@ -67,7 +64,7 @@
         android:id="@+id/textViewShuffling"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/trumpText1"
+        android:layout_below="@+id/buddyText1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_30sdp"
         android:text="@string/shuffling_cards"
@@ -76,7 +73,7 @@
         android:textSize="@dimen/_13ssp"
         android:visibility="visible" />
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView1_4"
         android:layout_width="@dimen/width_playername_4"
         android:layout_height="wrap_content"
@@ -88,14 +85,17 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView1"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight1_4"
@@ -174,7 +174,7 @@
         android:src="@drawable/status_online"
         android:visibility="gone" />
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView2_4"
         android:layout_width="@dimen/width_playername_4"
         android:layout_height="wrap_content"
@@ -185,16 +185,19 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_toEndOf="@+id/trumpImage1"
+        android:layout_toEndOf="@+id/buddyImage1"
         android:background="@drawable/button_square_userinfo"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView4"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight2_4"
@@ -237,7 +240,7 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/trumpImage1"
+        android:layout_toEndOf="@+id/buddyImage1"
         android:contentDescription="@string/app_name"
         android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
@@ -274,7 +277,7 @@
         android:src="@drawable/status_online"
         android:visibility="gone" />
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView3_4"
         android:layout_width="@dimen/width_playername_4"
         android:layout_height="wrap_content"
@@ -286,14 +289,17 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:background="@drawable/button_square_userinfo"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView1"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_defaultPreferredScrollingDirection="any"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight3_4"
@@ -372,7 +378,7 @@
         android:src="@drawable/status_online"
         android:visibility="gone" />
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView1"
         android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
@@ -384,14 +390,17 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:background="@drawable/button_square_userinfo"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView1"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight1"
@@ -470,7 +479,7 @@
         android:src="@drawable/status_online"
         android:visibility="gone"/>
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView2"
         android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
@@ -482,14 +491,17 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView2"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight2"
@@ -569,7 +581,7 @@
         android:src="@drawable/status_online"
         android:visibility="gone" />
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView3"
         android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
@@ -581,14 +593,17 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView3"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight3"
@@ -668,7 +683,7 @@
         android:src="@drawable/status_online"
         android:visibility="gone"/>
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView4"
         android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
@@ -681,14 +696,17 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView4"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight4"
@@ -767,7 +785,7 @@
         android:src="@drawable/status_online"
         android:visibility="gone" />
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView5"
         android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
@@ -776,7 +794,7 @@
         android:layout_marginEnd="@dimen/imageGapBetween1"
         android:layout_toStartOf="@+id/playerView6"
         android:background="@drawable/button_square_userinfo"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:clickable="true"
@@ -786,7 +804,10 @@
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight5"
@@ -866,7 +887,7 @@
         android:src="@drawable/status_online"
         android:visibility="gone"/>
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView6"
         android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
@@ -875,7 +896,7 @@
         android:layout_marginTop="@dimen/imagePaddingTextGap"
         android:layout_marginEnd="@dimen/imageGapEnd"
         android:background="@drawable/button_square_userinfo"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:clickable="true"
@@ -885,7 +906,10 @@
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight6"
@@ -986,9 +1010,9 @@
         android:src="@drawable/status_online"
         android:visibility="gone" />
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/textView7"
-        android:layout_width="@dimen/_54sdp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/horizontalScrollView"
         android:layout_alignParentEnd="true"
@@ -998,14 +1022,19 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
+        android:paddingEnd="@dimen/_5sdp"
+        android:paddingStart="@dimen/_5sdp"
         android:text="@string/playerView1"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="visible"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultPreferredScrollingDirection="any"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight7"
@@ -1038,7 +1067,7 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/trumpImage2"
+        android:id="@+id/buddyImage2"
         android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentTop="true"
@@ -1047,18 +1076,18 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginStart="@dimen/imageGapBetweenCards"
         android:layout_marginTop="@dimen/imageGapEnd"
-        android:layout_toEndOf="@+id/trumpImage1"
+        android:layout_toEndOf="@+id/buddyImage1"
         android:contentDescription="@string/app_name"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_back_side_blue"/>
 
     <TextView
-        android:id="@+id/trumpText2"
+        android:id="@+id/buddyText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/trumpImage2"
-        android:layout_alignStart="@+id/trumpImage2"
-        android:layout_alignEnd="@id/trumpImage2"
+        android:layout_below="@+id/buddyImage2"
+        android:layout_alignStart="@+id/buddyImage2"
+        android:layout_alignEnd="@id/buddyImage2"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:clickable="true"
@@ -1076,7 +1105,7 @@
         tools:ignore="SmallSp"/>
 
     <ImageView
-        android:id="@+id/trumpImage1"
+        android:id="@+id/buddyImage1"
         android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentTop="true"
@@ -1088,24 +1117,26 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         app:srcCompat="@drawable/ic_back_side_red" />
 
-    <TextView
-        android:id="@+id/trumpText1"
+    <com.robinhood.ticker.TickerView
+        android:id="@+id/buddyText1"
         android:layout_width="@dimen/_36sdp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/trumpImage1"
+        android:layout_below="@+id/buddyImage1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_minus2sdp"
         android:background="@drawable/button_square_userinfo"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center_horizontal|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/partner1"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_defaultCharacterList="alphabet"
+        app:ticker_animationDuration="900" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/trumpImage"
@@ -1114,7 +1145,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/imageGapEnd"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
-        android:layout_toStartOf="@id/trumpImage1"
+        android:layout_toStartOf="@id/buddyImage1"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -1122,27 +1153,29 @@
         android:paddingBottom="@dimen/_minus4sdp"
         android:src="@drawable/trump1" />
 
-    <TextView
+    <com.robinhood.ticker.TickerView
         android:id="@+id/trumpText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/trumpImage"
-        android:layout_alignTop="@+id/trumpText1"
+        android:layout_alignTop="@+id/buddyText1"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_toStartOf="@+id/trumpImage1"
+        android:layout_toStartOf="@+id/buddyImage1"
         android:background="@drawable/button_square_userinfo"
-        android:gravity="center_horizontal|top"
+        android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/Trump"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        app:ticker_defaultCharacterList="alphabet"
+        app:ticker_animationDuration="900"/>
 
     <ImageView
         android:id="@+id/closeGameRoomIcon"
@@ -1979,13 +2012,18 @@
         android:padding="@dimen/_7sdp"
         android:visibility="gone"/>
 
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/konfettiGSA"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/_50sdp"/>
 
     <RelativeLayout
         android:id="@+id/scoreViewLayout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_above="@+id/startNextRoundButton"
         android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="@dimen/_4sdp"
@@ -2098,7 +2136,7 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="@dimen/_2sdp"
             android:animateLayoutChanges="true"
             android:scrollbarSize="@dimen/_10sdp"
             android:scrollbarStyle="insideOverlay"
@@ -2127,25 +2165,25 @@
 
     </RelativeLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/startNextRoundButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_5sdp"
-        android:background="@drawable/start_next_game"
+        android:layout_centerInParent="true"
+        android:background="@drawable/redsquarebutton"
         android:clickable="true"
         android:contentDescription="@string/todo"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="startNextGame"
-        android:paddingStart="@dimen/_14sdp"
-        android:paddingEnd="@dimen/_14sdp"
+        android:gravity="center"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_10sdp"
         android:text="@string/start_next_game"
-        android:textColor="@color/icon_yellow"
-        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_17ssp"
         android:visibility="gone"
+        android:elevation="@dimen/_80sdp"
         tools:ignore="RelativeOverlap" />
 
 </RelativeLayout>

@@ -11,24 +11,27 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.gms.common.util.Strings
-import com.google.protobuf.LazyStringArrayList
-import kotlinx.android.synthetic.main.activity_developer_credits.*
-import kotlinx.android.synthetic.main.activity_game_screen.*
-import java.net.URISyntaxException
-import java.util.ArrayList
-import kotlin.random.Random
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 
 class DeveloperCredits : AppCompatActivity() {
     private lateinit var text:String
     private lateinit var uid:String
     private lateinit var vn:String
     private lateinit var vc:String
+    private lateinit var soundUpdate: MediaPlayer
+    private lateinit var emailIntent: Intent
+    private var soundStatus = true
+    private val homePageKKT = "https://sites.google.com/view/kaali-ki-teeggi/"
+    private lateinit var intentBuilder: CustomTabsIntent.Builder
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_developer_credits)
@@ -36,22 +39,40 @@ class DeveloperCredits : AppCompatActivity() {
         vn = packageManager.getPackageInfo(packageName,0).versionName
         vc = packageManager.getPackageInfo(packageName,0).versionCode.toString()
         uid = intent.getStringExtra("uid")!!.toString()    //Get roomID and display
+        soundStatus = intent.getBooleanExtra("soundStatus", true)    //Get roomID and display
         text = "VC: $vc\nVN: $vn\n W: ${resources.configuration.screenWidthDp.toString()}\nH: ${resources.configuration.screenHeightDp.toString()}\nUser ID: $uid"
         findViewById<TextView>(R.id.sizeDC).text = text
+        soundUpdate = MediaPlayer.create(applicationContext, R.raw.card_played)
+        Handler(Looper.getMainLooper()).post {
+            createEmailIntent()
+            buildCustomTabIntent()
+        }
     }
     fun openWebsite(view: View){
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("https://sites.google.com/view/kaali-ki-teeggi/") }
-        startActivity(intent)
+//        val intent = Intent(Intent.ACTION_VIEW).apply {
+//            data = Uri.parse("https://sites.google.com/view/kaali-ki-teeggi/") }
+//        startActivity(intent)
+        if (soundStatus) soundUpdate.start()
+        intentBuilder.build().launchUrl(this, Uri.parse(homePageKKT))
     }
+
+    fun buildCustomTabIntent(){
+        intentBuilder = CustomTabsIntent.Builder()
+        intentBuilder.setStartAnimations(this, R.anim.slide_left_activity, R.anim.slide_left_activity)
+        intentBuilder.setExitAnimations(this, R.anim.slide_right_activity, R.anim.slide_right_activity)
+        intentBuilder.setToolbarColor(ContextCompat.getColor(applicationContext, R.color.icon_yellow))
+        intentBuilder.addDefaultShareMenuItem()
+    }
+
     fun copyToClipBoard(view: View){
+        if (soundStatus) soundUpdate.start()
         Toast.makeText(applicationContext,"Text copied to clipboard",Toast.LENGTH_SHORT).show()
         val clipBoard = applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Text copied",text)
         clipBoard.setPrimaryClip(clip)
     }
 
-    fun sendEmail(view: View){
+    private fun createEmailIntent(){
         val body = "(Auto generated info for debugging purpose) " +
                 "\nAndroid: ${Build.VERSION.RELEASE}" +
                 "\nAPI#:      ${Build.VERSION.SDK_INT}" +
@@ -66,16 +87,19 @@ class DeveloperCredits : AppCompatActivity() {
                 "?cc=" + "kumbhat10@gmail.com" +
                 "&subject=" + Uri.encode("User ID: $uid") +
                 "&body=" + Uri.encode(body)
-    val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))
+        emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))
         emailIntent.setDataAndType(Uri.parse(mailTo), "text/plain");
         emailIntent.data = Uri.parse(mailTo);
+    }
 
-        startActivity(emailIntent)
-
-
+    fun sendEmail(view: View){
+        if (soundStatus) soundUpdate.start()
+        if(this::emailIntent.isInitialized) startActivity(emailIntent)
+        else createEmailIntent()
     }
     override fun onBackPressed() {
         super.onBackPressed()
+        if (soundStatus) soundUpdate.start()
         overridePendingTransition(R.anim.slide_right_activity,R.anim.slide_right_activity)
         finish()
     }

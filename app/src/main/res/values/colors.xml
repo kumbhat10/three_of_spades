@@ -11,11 +11,11 @@
     <color name="BlackTransUserStats4">#D8222222</color>
     <color name="BlackTransUserStats5">#C4000000</color>
     <color name="transparent">#00000000</color>
-
     //orange ish
     <color name="icon_yellow">#FFE600</color>
 
     <color name="font_yellow">#FFB300</color>
+    <color name="coin_yellow">#CA9204</color>
     <color name="font_yellow_trans">#D8FFB300</color>
     <color name="font_grey_settings">#DCDCDC</color>
     <color name="light_grey_settings">#BABABA</color>
@@ -34,7 +34,6 @@
     <color name="trackSwitchOFF">#2AA3A3A3</color>
     <color name="thumbSwitchON">#B3FF00</color>
     <color name="thumbSwitchOFF">#757575</color>
-
 
     <color name="borderblue">#0B70C8</color>
 
@@ -57,9 +56,9 @@
     <color name = "shine0blackbar">#FFFFFF</color>
     <color name = "shine2blackbar">#000000</color>
 
-    <color name = "shine0bk">#6E6E6E</color>
-    <color name = "shine1bk">#353535</color>
-    <color name = "shine2bk">#191919</color>
+    <color name = "shine0bk">#082957</color>
+    <color name = "shine1bk">#171E4A</color>
+    <color name = "shine2bk">#10111B</color>
 
     <color name = "borderblueDark0g">#A5FF47</color>
     <color name = "borderblueDark1g">#63C300</color>
@@ -73,7 +72,6 @@
     <color name = "h1">#FF5652</color>
     <color name = "h2">#CF1B16</color>
     <color name = "h3">#7E1814</color>
-
 
     <color name = "borderblueDark0o">#FF7D36</color>
     <color name = "borderBlueDark1o">#D55C1C</color>
@@ -91,12 +89,9 @@
     <color name = "borderblueDark1pu">#8B3BC5</color>
     <color name = "borderblueDark2pu">#6F319C</color>
 
-
-
     <color name = "borderblueDark0dpu">#2CFFEA</color>
     <color name = "borderblueDark1dpu">#15CFBD</color>
     <color name = "borderblueDark2dpu">#12AA9B</color>
-
 
     <color name="progressBarPlayer4">#00FF0A</color>
     <color name="scoreTableText">#FFFFFF</color>

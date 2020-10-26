@@ -50,9 +50,9 @@ class CreateRoomData(username: String, userPhotoUrl: String, coins: Int) {
         "p4h" to CelebrityData().name[randomList[5]][1],
         "PJ" to 4,
         "n" to 4,
-        "p2c" to 21500,
-        "p3c" to 16800,
-        "p4c" to 13200)
+        "p2c" to 28500,
+        "p3c" to 34800,
+        "p4c" to 19200)
 
     val data7 = hashMapOf(
         "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),

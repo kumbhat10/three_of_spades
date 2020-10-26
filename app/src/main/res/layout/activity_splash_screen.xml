@@ -65,7 +65,6 @@
         android:paddingStart="35dp"
         android:text="@string/playeName"
         android:textAlignment="center"
-        android:textAllCaps="true"
         android:textColor="@color/font_yellow"
         android:textSize="@dimen/_17ssp"
         android:textStyle="bold"
@@ -98,7 +97,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/spadeIcon"
         android:layout_marginTop="@dimen/_minus30sdp"
-        android:text="Loading"
+        android:text="@string/loading"
         android:textSize="@dimen/_25ssp"
         app:light_color="@color/white"/>
 

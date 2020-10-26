@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <dimen name="loginWidth">@dimen/_190sdp</dimen>
     <dimen name="loginHeight">@dimen/_32sdp</dimen>
     <dimen name="loginHeightGoogle">@dimen/_34sdp</dimen>
@@ -21,8 +22,7 @@
 
     <dimen name="rankImage">@dimen/_60sdp</dimen>
 
-
-    <dimen name="imageWidth_4">@dimen/_64sdp</dimen>
+    <dimen name="imageWidth_4">@dimen/_68sdp</dimen>
     <dimen name="imageHeight_4">@dimen/imageWidth_4</dimen>
     <dimen name="width_playername_4">@dimen/imageWidth_4</dimen>
 

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -9,6 +10,12 @@
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:background="@color/Black"
     tools:context=".MainHomeScreen">
+
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/konfettiMHS"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/_300sdp"/>
 
     <ImageView
         android:id="@+id/backgroundHomeScreen"
@@ -20,7 +27,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/shine_yellow"
+        android:src="@drawable/shine_bk"
         tools:ignore="ContentDescription" />
 
     <pl.droidsonroids.gif.GifImageView
@@ -131,7 +138,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/_11sdp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/playerStatsTitle"
@@ -162,7 +170,8 @@
                     android:layout_height="@dimen/_1sdp"
                     android:layout_marginStart="@dimen/_14sdp"
                     android:layout_marginEnd="@dimen/_14sdp"
-                    android:src="@drawable/shine_button_black_bar" />
+                    android:src="@drawable/shine_button_black_bar"
+                    tools:ignore="ContentDescription" />
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <TableLayout
@@ -382,7 +391,8 @@
         android:elevation="@dimen/_14sdp"
         android:src="@drawable/chip_coin_trans"
         android:onClick="createRoomWindowOpen"
-        android:soundEffectsEnabled="true" />
+        android:soundEffectsEnabled="true"
+        tools:ignore="ContentDescription"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/joinRoomButton"
@@ -479,6 +489,7 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:elevation="@dimen/_22sdp"
         android:onClick="openSettingsWindow"
+        tools:ignore="ContentDescription"
         android:src="@drawable/gear" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -571,28 +582,11 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:gravity="bottom"
-                android:text="V: "
                 android:textColor="@color/white"
                 android:textSize="@dimen/_9ssp"
-                android:translationZ="@dimen/_40sdp" />
+                android:translationZ="@dimen/_40sdp"
+                tools:ignore="RelativeOverlap" />
 
-<!--            <com.facebook.shimmer.ShimmerFrameLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_below="@+id/developerCreditsButton"-->
-<!--                android:layout_marginBottom="@dimen/_minus7sdp"-->
-<!--                app:shimmer_auto_start="true"-->
-<!--                app:shimmer_duration="1800"-->
-<!--                app:shimmer_highlight_alpha="1"-->
-<!--                app:shimmer_highlight_color="#FFFFFF"-->
-<!--                app:shimmer_repeat_mode="restart"-->
-<!--                app:shimmer_shape="linear">-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="@dimen/_2sdp"-->
-<!--                    android:src="@drawable/shine_button_black_bar" />-->
-<!--            </com.facebook.shimmer.ShimmerFrameLayout>-->
         </RelativeLayout>
         <com.google.android.gms.ads.AdView
             android:id="@+id/addViewMHS"
@@ -623,6 +617,7 @@
             android:layout_marginTop="@dimen/_minus18sdp"
             android:elevation="@dimen/_72sdp"
             android:onClick="joinRoomWindowExit"
+            tools:ignore="ContentDescription"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -646,6 +641,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
+                tools:ignore="ContentDescription"
                 android:layout_height="@dimen/_2sdp"
                 android:src="@drawable/shine_button_black_bar" />
         </com.facebook.shimmer.ShimmerFrameLayout>
@@ -689,7 +685,8 @@
                 android:textAlignment="center"
                 android:textColor="@color/Black"
                 android:textSize="@dimen/_35ssp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:autofillHints="ABCD" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/joinRoomButtonMain"
@@ -725,6 +722,7 @@
                 android:layout_alignBottom="@+id/joinRoomButtonMain"
                 android:layout_marginTop="@dimen/_minus7sdp"
                 android:layout_marginEnd="@dimen/_minus7sdp"
+                tools:ignore="ContentDescription"
                 android:layout_marginBottom="@dimen/_minus7sdp"
                 android:layout_toStartOf="@+id/joinRoomButtonMain"
                 android:focusable="true"
@@ -753,7 +751,7 @@
         android:visibility="gone">
 
         <LinearLayout
-            android:id="@id/settingsLayouttemp"
+            android:id="@id/settingsLayoutTemp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_286sdp"
             android:layout_alignParentStart="true"
@@ -764,7 +762,8 @@
             android:background="@color/BlackTrans"
             android:clickable="true"
             android:elevation="@dimen/_72sdp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusable="true">
 
             <LinearLayout
                 android:id="@+id/musicSett"
@@ -775,8 +774,8 @@
                 <ImageView
                     android:id="@+id/settMusicIcon"
                     android:layout_width="@dimen/_43sdp"
+                    tools:ignore="ContentDescription"
                     android:layout_height="@dimen/_43sdp"
-                    android:layout_alignParentStart="true"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_11sdp"
                     android:layout_marginTop="@dimen/_7sdp"
@@ -795,7 +794,7 @@
                     android:gravity="center|start"
                     android:paddingStart="@dimen/_11sdp"
                     android:paddingEnd="0dp"
-                    android:text="Music"
+                    android:text="@string/music"
                     android:textColor="@color/font_grey_settings"
                     android:textSize="@dimen/_17ssp"
                     android:textStyle="bold" />
@@ -832,6 +831,7 @@
                 app:shimmer_shape="linear" >
                 <ImageView
                     android:layout_width="match_parent"
+                    tools:ignore="ContentDescription"
                     android:layout_height="@dimen/_1sdp"
                     android:src="@drawable/shine_button_black_bar"/>
             </com.facebook.shimmer.ShimmerFrameLayout>
@@ -844,6 +844,7 @@
                 <ImageView
                     android:id="@+id/settSoundIcon"
                     android:layout_width="@dimen/_43sdp"
+                    tools:ignore="ContentDescription"
                     android:layout_height="@dimen/_43sdp"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_11sdp"
@@ -920,7 +921,7 @@
                     android:layout_marginBottom="@dimen/_7sdp"
                     android:background="@drawable/border_off_orange"
                     android:elevation="@dimen/_14sdp"
-                    android:contentDescription="TODO"
+                    tools:ignore="ContentDescription"
                     android:soundEffectsEnabled="true"
                     android:onClick="vibrate"
                     android:src="@drawable/vibrateon" />
@@ -971,6 +972,7 @@
                 app:shimmer_shape="linear">
                 <ImageView
                     android:layout_width="match_parent"
+                    tools:ignore="ContentDescription"
                     android:layout_height="@dimen/_1sdp"
                     android:src="@drawable/shine_button_black_bar" />
             </com.facebook.shimmer.ShimmerFrameLayout>
@@ -997,178 +999,81 @@
                     android:scrollbarSize="@dimen/_2sdp"
                     android:scrollbarStyle="outsideInset"
                     android:scrollbarThumbHorizontal="@drawable/track_scroll_bar"
-                    android:scrollbars="horizontal">
-
+                    android:scrollbars="horizontal"
+                    tools:ignore="UselessParent">
 
                     <com.google.android.material.chip.ChipGroup
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:chipSpacingHorizontal="@dimen/_5sdp">
 
-                        <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/frameShimmer1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:shimmer_base_alpha="0.9"
-                            app:shimmer_clip_to_children="true"
-                            app:shimmer_colored="false"
-                            app:shimmer_direction="bottom_to_top"
-                            app:shimmer_duration="1800"
-                            app:shimmer_repeat_delay="0"
-                            app:shimmer_repeat_mode="reverse"
-                            app:shimmer_shape="radial"
-                            app:shimmer_tilt="0">
                             <ImageView
                                 android:layout_width="@dimen/_54sdp"
                                 android:layout_height="@dimen/_72sdp"
+                                tools:ignore="ContentDescription,TooManyViews"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_blue"
                                 android:tag="shine_blue" />
-                        </com.facebook.shimmer.ShimmerFrameLayout>
-                        <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/frameShimmer2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:shimmer_base_alpha="0.9"
-                            app:shimmer_clip_to_children="true"
-                            app:shimmer_colored="false"
-                            app:shimmer_direction="bottom_to_top"
-                            app:shimmer_duration="1800"
-                            app:shimmer_repeat_delay="0"
-                            app:shimmer_repeat_mode="reverse"
-                            app:shimmer_shape="radial"
-                            app:shimmer_tilt="0">
+
                             <ImageView
                                 android:layout_width="@dimen/_54sdp"
                                 android:layout_height="@dimen/_72sdp"
+                                tools:ignore="ContentDescription"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_orange"
                                 android:tag="shine_orange" />
-                        </com.facebook.shimmer.ShimmerFrameLayout>
-                        <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/frameShimmer3"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:shimmer_base_alpha="0.9"
-                            app:shimmer_clip_to_children="true"
-                            app:shimmer_colored="false"
-                            app:shimmer_direction="bottom_to_top"
-                            app:shimmer_duration="1800"
-                            app:shimmer_repeat_delay="0"
-                            app:shimmer_repeat_mode="reverse"
-                            app:shimmer_shape="radial"
-                            app:shimmer_tilt="0">
+
                             <ImageView
                                 android:layout_width="@dimen/_54sdp"
                                 android:layout_height="@dimen/_72sdp"
+                                tools:ignore="ContentDescription"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_purple_dark"
                                 android:tag="shine_purple_dark" />
-                        </com.facebook.shimmer.ShimmerFrameLayout>
-                        <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/frameShimmer4"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:shimmer_base_alpha="0.9"
-                            app:shimmer_clip_to_children="true"
-                            app:shimmer_colored="false"
-                            app:shimmer_direction="bottom_to_top"
-                            app:shimmer_duration="1800"
-                            app:shimmer_repeat_delay="0"
-                            app:shimmer_repeat_mode="reverse"
-                            app:shimmer_shape="radial"
-                            app:shimmer_tilt="0">
+
                             <ImageView
                                 android:layout_width="@dimen/_54sdp"
                                 android:layout_height="@dimen/_72sdp"
+                                tools:ignore="ContentDescription"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_green_radial"
                                 android:tag="shine_green_radial" />
-                        </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/frameShimmer5"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:shimmer_base_alpha="0.9"
-                            app:shimmer_clip_to_children="true"
-                            app:shimmer_colored="false"
-                            app:shimmer_direction="bottom_to_top"
-                            app:shimmer_duration="1800"
-                            app:shimmer_repeat_delay="0"
-                            app:shimmer_repeat_mode="reverse"
-                            app:shimmer_shape="radial"
-                            app:shimmer_tilt="0">
+
                             <ImageView
                                 android:layout_width="@dimen/_54sdp"
                                 android:layout_height="@dimen/_72sdp"
+                                tools:ignore="ContentDescription"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_bk"
                                 android:tag="shine_bk" />
-                        </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/frameShimmer6"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:shimmer_base_alpha="0.9"
-                            app:shimmer_clip_to_children="true"
-                            app:shimmer_colored="false"
-                            app:shimmer_direction="bottom_to_top"
-                            app:shimmer_duration="1800"
-                            app:shimmer_repeat_delay="0"
-                            app:shimmer_repeat_mode="reverse"
-                            app:shimmer_shape="radial"
-                            app:shimmer_tilt="0">
+
                             <ImageView
                                 android:layout_width="@dimen/_54sdp"
                                 android:layout_height="@dimen/_72sdp"
+                                tools:ignore="ContentDescription"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_purple"
                                 android:tag="shine_purple" />
-                        </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/frameShimmer7"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:shimmer_base_alpha="0.9"
-                            app:shimmer_clip_to_children="true"
-                            app:shimmer_colored="false"
-                            app:shimmer_direction="bottom_to_top"
-                            app:shimmer_duration="1800"
-                            app:shimmer_repeat_delay="0"
-                            app:shimmer_repeat_mode="reverse"
-                            app:shimmer_shape="radial"
-                            app:shimmer_tilt="0">
+
                             <ImageView
                                 android:layout_width="@dimen/_54sdp"
                                 android:layout_height="@dimen/_72sdp"
+                                tools:ignore="ContentDescription"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_yellow"
                                 android:tag="shine_yellow" />
-                        </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/frameShimmer8"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:shimmer_base_alpha="0.9"
-                            app:shimmer_clip_to_children="true"
-                            app:shimmer_colored="false"
-                            app:shimmer_direction="bottom_to_top"
-                            app:shimmer_duration="1800"
-                            app:shimmer_repeat_delay="0"
-                            app:shimmer_repeat_mode="reverse"
-                            app:shimmer_shape="radial"
-                            app:shimmer_tilt="0">
+
                             <ImageView
                                 android:layout_width="@dimen/_54sdp"
                                 android:layout_height="@dimen/_72sdp"
+                                tools:ignore="ContentDescription"
                                 android:onClick="changeBackgroundRequest"
                                 android:src="@drawable/shine_pink"
                                 android:tag="shine_pink" />
-                        </com.facebook.shimmer.ShimmerFrameLayout>
 
 
                     </com.google.android.material.chip.ChipGroup>
@@ -1191,6 +1096,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_2sdp"
+                    tools:ignore="ContentDescription"
                     android:src="@drawable/shine_button_black_bar" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </LinearLayout>
@@ -1199,7 +1105,7 @@
             android:id="@+id/closeSettings"
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_36sdp"
-            android:layout_below="@+id/settingsLayouttemp"
+            android:layout_below="@+id/settingsLayoutTemp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_minus18sdp"
             android:focusable="true"
@@ -1256,6 +1162,7 @@
             android:layout_below="@+id/createRoomFrameTemp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_2sdp"
+            tools:ignore="ContentDescription"
             android:clickable="true"
             android:elevation="@dimen/_72sdp"
             android:focusable="true"
@@ -1280,6 +1187,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
+                tools:ignore="ContentDescription"
                 android:layout_height="@dimen/_2sdp"
                 android:src="@drawable/shine_button_black_bar" />
         </com.facebook.shimmer.ShimmerFrameLayout>
@@ -1330,7 +1238,8 @@
                 android:gravity="center"
                 android:text="or"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_16ssp"/>
+                android:textSize="@dimen/_16ssp"
+                tools:ignore="HardcodedText" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/createSingleShimmer"
@@ -1407,7 +1316,7 @@
         android:paddingStart="@dimen/_24sdp"
         android:paddingTop="0dp"
         android:paddingEnd="@dimen/_21sdp"
-        android:text="$ 00000"
+        android:text="@string/usercoinMHS"
         android:textAllCaps="false"
         android:textColor="@color/font_yellow"
         android:textSize="@dimen/_16ssp"
@@ -1445,6 +1354,7 @@
         android:layout_marginTop="@dimen/_7sdp"
         android:background="@drawable/border"
         android:backgroundTintMode="add"
+        tools:ignore="ContentDescription"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:elevation="@dimen/_72sdp"
@@ -1499,6 +1409,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_72sdp"
                     android:clickable="true"
+                    tools:ignore="ContentDescription"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/rate_us" />
@@ -1512,7 +1423,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_minus12sdp"
                 android:fontFamily="@font/lily_script_one"
-                android:text="Enjoying the game?"
+                android:text="@string/rateMessage"
                 android:textColor="@color/font_yellow"
                 android:textSize="@dimen/_21ssp"
                 android:textStyle="normal" />
@@ -1589,7 +1500,7 @@
                 android:onClick="askLaterRating"
                 android:paddingTop="0dp"
                 android:paddingBottom="0dp"
-                android:text="  Ask me Later "
+                android:text="@string/ask_me_later"
                 android:textAllCaps="false"
                 android:textColor="@color/borderblue"
                 android:textSize="@dimen/_10ssp"/>
@@ -1632,6 +1543,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_72sdp"
                 android:clickable="true"
+                tools:ignore="ContentDescription"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ribbon"/>
@@ -1673,7 +1585,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:text="Claim Reward "
+                android:text="@string/claim_reward"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13ssp"
                 android:tint="?attr/colorControlNormal"
@@ -1694,7 +1606,7 @@
                 android:paddingTop="@dimen/_2sdp"
                 android:paddingEnd="@dimen/_9sdp"
                 android:paddingBottom="@dimen/_4sdp"
-                android:text="Cancel "
+                android:text="@string/cancel_reward"
                 android:textColor="#D3D3D3"
                 android:textSize="@dimen/_13ssp"
                 app:drawableRightCompat="@drawable/watch_video_cancel" />
@@ -1753,10 +1665,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Loading"
+            android:text="@string/loading"
             android:textSize="@dimen/_25ssp"
-            app:light_color="@color/white"/>
-F
+            app:light_color="@color/white"
+            tools:ignore="RelativeOverlap" />
+
         <ImageView
             android:id="@+id/closeRank"
             android:layout_width="@dimen/_32sdp"
@@ -1768,7 +1681,8 @@ F
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/stop_sign" />
+            app:srcCompat="@drawable/stop_sign"
+            android:contentDescription="@string/todo" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -1821,7 +1735,7 @@ F
             android:layout_centerInParent="true"
             android:textSize="@dimen/_25ssp"
             app:light_color="@color/white"
-            android:text="Loading"/>
+            android:text="@string/loading"/>
 
         <ProgressBar
             android:id="@+id/progressBarLoading3"

@@ -2,6 +2,15 @@
     <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
 
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">Oopsieee !! Bugs found \nOr server is high on spirit \n\n\n( Sending Error summary to developer )</string>
+    <string name="customactivityoncrash_error_activity_restart_app">Home</string>
+    <string name="customactivityoncrash_error_activity_close_app">Close app</string>
+    <string name="customactivityoncrash_error_activity_error_details">Error details</string>
+    <string name="customactivityoncrash_error_activity_error_details_title">Error details</string>
+    <string name="customactivityoncrash_error_activity_error_details_close">Close</string>
+    <string name="customactivityoncrash_error_activity_error_details_copy">Copy to clipboard</string>
+    <string name="customactivityoncrash_error_activity_error_details_copied">Copied to clipboard</string>
+    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Error information</string>
     <string name="default_notification_channel_id">ch_kkt</string>
 
     <string name="facebook_app_id">231024018145704</string>
@@ -94,14 +103,10 @@
     <string name="rounds_bided">Placed bid :</string>
     <string name="sound">Sound</string>
     <string name="vibrate">Vibrate</string>
-    <string name="start_next_game">Start next game</string>
+    <string name="start_next_game">Start next round</string>
     <string name="fetching_player">Fetching Player data....</string>
     <string name="new_player">Creating Profile</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <!-- Strings used for fragments for navigation -->
+    <string name="sample_string">hello \n world</string>
 
     <string name="creatingRoom">Creating Room…</string>
     <string name="checkJoinRoom">Finding Room…</string>
@@ -111,5 +116,12 @@
     <string name="signIN">Signing in</string>
     <string name="wait">Please wait…</string>
     <string name="starting_game">Starting Game…</string>
+    <string name="loading">Loading</string>
+    <string name="music">Music</string>
+    <string name="usercoinMHS">$ 00000</string>
+    <string name="rateMessage">Enjoying the game?</string>
+    <string name="ask_me_later">Ask me Later</string>
+    <string name="claim_reward">Claim Reward</string>
+    <string name="cancel_reward">Cancel</string>
 
 </resources>
