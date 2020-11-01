@@ -21,7 +21,6 @@ class ImageAdapter(var context: Context, var arrayList: ArrayList<DailyRewardIte
             view.background = ContextCompat.getDrawable(context,R.drawable.border_square_reward)
             icons.startAnimation(AnimationUtils.loadAnimation(context,R.anim.anim_scale_infinite))
             textDescription.background = ContextCompat.getDrawable(context,R.drawable.button_square)
-//            textDescription.setTypeface(Typeface.DEFAULT_BOLD, Typeface.BOLD)
             icons.setImageResource(R.drawable.coin_trans_1)
             textDescription.setTextColor(ContextCompat.getColor(context,R.color.white))
         }else{

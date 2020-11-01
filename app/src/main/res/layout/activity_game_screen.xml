@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Black"
@@ -14,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_57sdp"
+        android:layout_marginTop="@dimen/_7sdp"
         android:layout_marginEnd="@dimen/_7sdp"
         android:layout_marginBottom="0dp"
         app:shimmer_auto_start="true"
@@ -28,7 +27,8 @@
         app:shimmer_repeat_delay="10000"
         app:shimmer_repeat_mode="restart"
         app:shimmer_shape="linear"
-        app:shimmer_tilt="60">
+        app:shimmer_tilt="60"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="match_parent"
@@ -36,20 +36,18 @@
             android:contentDescription="@string/app_name"
             android:onClick="closeChatScoreWindow"
             android:src="@drawable/game_screen_table_blue"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <ImageView
+        android:id="@+id/gameBkgd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_57sdp"
-        android:layout_marginEnd="@dimen/_7sdp"
-        android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
         android:onClick="closeChatScoreWindow"
-        android:src="@drawable/game_screen_table_core"
+        android:src="@drawable/pokerblue"
+        android:scaleType="fitXY"
         android:visibility="visible" />
 
     <TextView
@@ -1232,7 +1230,6 @@
         android:visibility="gone" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/scoreSheetButton"
         android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_36sdp"
         android:layout_alignParentEnd="true"
@@ -1327,8 +1324,8 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_18ssp"
+        android:textColor="#E1E1E1"
+        android:textSize="@dimen/_20ssp"
         android:textStyle="bold" />
 
     <TextView
@@ -1382,7 +1379,6 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_49sdp"
             android:alpha="1"
@@ -1502,7 +1498,6 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/textViewTrumpSelection"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_49sdp"
             android:alpha="1"
@@ -1600,7 +1595,6 @@
             app:adUnitId="@string/banner" />
 
         <ScrollView
-            android:id="@+id/textViewChatDisplayScroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/templateGrid"
@@ -1677,7 +1671,6 @@
                 android:textSize="@dimen/_10ssp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/chatSendButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -1721,7 +1714,6 @@
             android:textSize="@dimen/_29ssp" />
 
         <HorizontalScrollView
-            android:id="@+id/horScrollPartnerSelect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_14sdp"
@@ -2016,7 +2008,8 @@
         android:id="@+id/konfettiGSA"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="@dimen/_50sdp"/>
+        android:elevation="@dimen/_50sdp"
+        android:visibility="visible"/>
 
     <RelativeLayout
         android:id="@+id/scoreViewLayout"
@@ -2051,7 +2044,6 @@
             android:src="@drawable/ribbon_scoreboard" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmerScoreTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/scoreTitle"
@@ -2170,7 +2162,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/redsquarebutton"
+        android:background="@drawable/redrectanglebutton"
         android:clickable="true"
         android:contentDescription="@string/todo"
         android:focusable="true"

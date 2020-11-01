@@ -3,26 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Black"
-    android:backgroundTintMode="src_over"
     android:clickable="false"
     android:contextClickable="true"
     android:focusable="true"
     android:onClick="openWebsite"
     tools:context=".DeveloperCredits">
 
-    <pl.droidsonroids.gif.GifImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/black_squares" />
+<!--    <pl.droidsonroids.gif.GifImageView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:src="@drawable/black_squares" />-->
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:onClick="openWebsite"
-        android:scaleX= "0.9"
-        android:scaleY="0.9"
-        android:src= "@drawable/_s_icon_spadeedit" />
+        android:src= "@drawable/spade" />
 
 
     <ImageView
@@ -30,12 +26,9 @@
         android:onClick="openWebsite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:scaleX= "0.8"
         android:scaleY="0.8"
-        android:src= "@drawable/_s_icon_3shadow" />
+        android:src= "@drawable/icon3s_shadow" />
 
     <TextView
         android:id="@+id/nameDeveloper"
@@ -74,7 +67,6 @@
         android:textSize="@dimen/_10ssp" />
 
     <TextView
-        android:id="@+id/contactUs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/nameDeveloper"

@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <dimen name="upWidth">@dimen/_75sdp</dimen>
+    <dimen name="upTop">@dimen/_10sdp</dimen>
+    <dimen name="upStart">@dimen/_10sdp</dimen>
+    <dimen name="upTextSize">@dimen/_27ssp</dimen>
+
+    <dimen name="gridWidth">@dimen/_237sdp</dimen>  <!--114 + 114 + 9 = 237-->
+    <dimen name="iconWidth">@dimen/_105sdp</dimen>
+    <dimen name="iconSpacingH">@dimen/_9sdp</dimen>
+    <dimen name="iconSpacingV">@dimen/_6sdp</dimen>
+    <dimen name="iconHeight">@dimen/_70sdp</dimen>
+    <dimen name="iconPadding">@dimen/_12sdp</dimen>
+    <dimen name="iconPaddingNeg">@dimen/_minus12sdp</dimen>
+
     <dimen name="loginWidth">@dimen/_190sdp</dimen>
     <dimen name="loginHeight">@dimen/_32sdp</dimen>
     <dimen name="loginHeightGoogle">@dimen/_34sdp</dimen>
@@ -54,9 +68,8 @@
     <dimen name="padding_playername">@dimen/_3sdp</dimen>
     <dimen name="usernameTextSize">@dimen/_8ssp</dimen>
     <dimen name="scoreTableTextSize">@dimen/_9ssp</dimen>
-    <dimen name="mhsButtonsTextSize">@dimen/_13ssp</dimen>
-    <dimen name="mhsIconsGap">@dimen/_2sdp</dimen>
-    <dimen name="mhsButtonsTextWidth">@dimen/_140sdp</dimen>
+    <dimen name="mhsIconsGap">@dimen/_10sdp</dimen>
+    <dimen name="mhsIconsMargin">0dp</dimen>
     <dimen name="cjrButtonsTextSize">@dimen/_13ssp</dimen>
     <dimen name="shimmerWidth">@dimen/_60sdp</dimen>
     <dimen name="deckWidth">@dimen/_200sdp</dimen>

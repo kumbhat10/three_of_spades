@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/shape_status">
+    <item>
         <shape android:shape="oval">
             <gradient
                 android:centerColor="@color/borderblueDark1g"

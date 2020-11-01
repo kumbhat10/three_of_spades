@@ -4,101 +4,91 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
     tools:context="com.kaalikiteeggi.three_of_spades.SplashScreen">
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
+        android:id="@+id/splashBckgd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/black_squares" />
+        android:src="@drawable/redorangeburst"
+        android:foreground="@drawable/tint_background4"
+        android:scaleType="centerCrop"
+        android:scaleX="4"
+        android:scaleY="4"
+        android:visibility="visible"/>
 
     <ImageView
-        android:id="@+id/spadeIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:id="@+id/spadeImage"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_270sdp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/spade"
+        android:contentDescription="@string/todo"
+        android:visibility="visible"/>
+
+     <ImageView
+        android:id="@+id/icon3"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_centerInParent="true"
         android:contentDescription="@null"
-        android:scaleX="0.9"
-        android:scaleY="0.9"
-        android:src="@drawable/_s_icon_spadeedit" />
-
-    <ImageView
-        android:id="@+id/icon_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:contentDescription="@null"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-        android:src="@drawable/_s_icon_3shadow" />
-
-    <ImageView
-        android:id="@+id/profilePic2"
-        android:layout_width="@dimen/_64sdp"
-        android:layout_height="@dimen/_64sdp"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_36sdp"
-        android:background="@drawable/border"
-        android:backgroundTintMode="add"
-        android:contentDescription="@null"
-        android:elevation="@dimen/_72sdp"
-        android:soundEffectsEnabled="true"
-        android:src="@drawable/_s_icon_3shadow"
-        android:visibility="gone" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/welcomeUserNameview2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profilePic2"
-        android:layout_alignBottom="@+id/profilePic2"
-        android:layout_marginStart="@dimen/_minus20sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:layout_marginBottom="@dimen/_11sdp"
-        android:layout_toEndOf="@+id/profilePic2"
-        android:elevation="@dimen/_64sdp"
-        android:fontFamily="@font/nosifer"
-        android:hapticFeedbackEnabled="true"
-        android:paddingStart="35dp"
-        android:text="@string/playeName"
-        android:textAlignment="center"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_17ssp"
-        android:textStyle="bold"
-        android:background="@drawable/border_square_reward"
-        android:paddingEnd="@dimen/_10sdp"
-        android:visibility="gone"
-        tools:ignore="RtlSymmetry" />
-
-    <TextView
-        android:id="@+id/welcome2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/welcomeUserNameview2"
-        android:layout_alignStart="@+id/welcomeUserNameview2"
-        android:layout_alignEnd="@+id/welcomeUserNameview2"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="@dimen/_minus14sdp"
-        android:layout_toEndOf="@+id/profilePic2"
-        android:gravity="bottom|center"
-        android:text="@string/welcomeBack"
-        android:textColor="#FFFFFF"
-        android:textSize="@dimen/_14ssp"
-        android:visibility="gone" />
+        android:src="@drawable/icon3s_shadow"
+        android:elevation="16dp"/>
 
     <com.bitvale.lightprogress.LightProgress
         android:id="@+id/lightSplash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/spadeIcon"
-        android:layout_marginTop="@dimen/_minus30sdp"
         android:text="@string/loading"
-        android:textSize="@dimen/_25ssp"
-        app:light_color="@color/white"/>
+        android:textSize="@dimen/_26ssp"
+        android:layout_below="@id/spadeImage"
+        android:layout_marginTop="@dimen/_minus40sdp"
+        android:layout_centerHorizontal="true" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profilePic2"
+            android:layout_width="@dimen/upWidth"
+            android:layout_height="@dimen/upWidth"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/upStart"
+            android:layout_marginTop="@dimen/upTop"
+            android:contentDescription="@null"
+            android:elevation="14dp"
+            android:soundEffectsEnabled="true"
+            android:visibility="gone"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.ProfilePic"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/userNameSplash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/profilePic2"
+        android:layout_marginStart="@dimen/_2sdp"
+        android:layout_toEndOf="@+id/profilePic2"
+        android:elevation="@dimen/_16sdp"
+        android:gravity="start|bottom"
+        android:paddingEnd="@dimen/_50sdp"
+        android:text="@string/playeName"
+        android:textSize="@dimen/upTextSize"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        tools:ignore="RtlSymmetry" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/welcome2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/userNameSplash"
+        android:layout_alignStart="@+id/userNameSplash"
+        android:layout_marginStart="@dimen/_1sdp"
+        android:layout_marginBottom="@dimen/_minus10sdp"
+        android:layout_toEndOf="@+id/profilePic2"
+        android:gravity="bottom|start"
+        android:textStyle="italic"
+        android:text="@string/welcomeBack"
+        android:textSize="@dimen/_12ssp"
+        android:visibility="gone" />
 
 </RelativeLayout>
+

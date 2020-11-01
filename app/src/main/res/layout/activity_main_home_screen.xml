@@ -1,87 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?attr/selectableItemBackgroundBorderless"
-    android:background="@color/Black"
     tools:context=".MainHomeScreen">
 
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/konfettiMHS"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="@dimen/_300sdp"/>
+        android:elevation="@dimen/_300sdp"
+        android:visibility="visible"/>
 
     <ImageView
-        android:id="@+id/backgroundHomeScreen"
+        android:id="@+id/backgroundmhs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:onClick="joinRoomWindowExit"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/shine_bk"
+        android:foreground="@drawable/tint_backgroundmhs"
+        android:scaleType="fitXY"
+        android:onClick="joinRoomWindowExit"
+        android:visibility="visible"
         tools:ignore="ContentDescription" />
+
+        <GridView
+            android:id="@+id/mainIcon"
+            android:layout_width="@dimen/gridWidth"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@id/userScoreMHS"
+            android:layout_above="@id/developerAndAds"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_centerHorizontal="true"
+            android:scrollbars="vertical"
+            android:scrollbarSize="@dimen/_4sdp"
+            android:numColumns="2"
+            android:horizontalSpacing="@dimen/iconSpacingH"
+            android:verticalSpacing="@dimen/iconSpacingV"
+            android:columnWidth="@dimen/iconWidth"
+            android:stretchMode="none"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawSelectorOnTop="true"/>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/removeAds"
         android:layout_width="@dimen/_47sdp"
         android:layout_height="@dimen/_47sdp"
         android:layout_below="@+id/watchVideo"
-        android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/mhsIconsGap"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/mhsIconsMargin"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginEnd="@dimen/_7sdp"
         android:elevation="@dimen/_22sdp"
         android:onClick="removeAdsOrPremium"
         android:src="@drawable/no_ads"
-        android:visibility="gone"/>
-
-    <TextView
-        android:id="@+id/welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/welcomeUserNameview"
-        android:layout_alignEnd="@+id/welcomeUserNameview"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="@dimen/_minus14sdp"
-        android:layout_toEndOf="@+id/profilePic"
-        android:gravity="start|bottom"
-        android:text="@string/welcome"
-        android:textColor="#FFFFFF" />
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/welcomeUserNameview"
-        android:layout_marginStart="@dimen/_29sdp"
-        android:layout_marginTop="@dimen/_minus14sdp"
-        android:layout_marginEnd="@dimen/_11sdp"
-        app:shimmer_auto_start="true"
-        app:shimmer_colored="true"
-        app:shimmer_duration="1800"
-        app:shimmer_highlight_alpha="1"
-        app:shimmer_highlight_color="#FFFFFF"
-        app:shimmer_repeat_delay="0"
-        app:shimmer_repeat_mode="restart"
-        app:shimmer_shape="linear">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/shine_button_black_bar" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
+        android:visibility="visible"/>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/watchVideo"
@@ -96,13 +81,13 @@
         android:elevation="@dimen/_22sdp"
         android:onClick="showRewardedVideoAd"
         android:src="@drawable/watch_ad_100"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/watchVideoCoin"
         android:layout_width="@dimen/_54sdp"
         android:layout_height="@dimen/_54sdp"
-        android:layout_below="@+id/welcomeUserNameview"
+        android:layout_below="@+id/usernameCardMHS"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_minus26sdp"
         android:layout_marginEnd="@dimen/_5sdp"
@@ -142,7 +127,6 @@
             tools:ignore="UselessParent">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/playerStatsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
@@ -178,12 +162,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginTop="@dimen/_7sdp">
+                android:layout_marginTop="@dimen/_7sdp"
+                android:visibility="visible">
 
                 <TableRow android:layout_marginTop="@dimen/_14sdp">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/gamesPlayedStats"
                         android:layout_width="@dimen/_165sdp"
                         android:layout_height="wrap_content"
                         android:gravity="start|center"
@@ -204,7 +188,6 @@
                 <TableRow android:layout_marginTop="@dimen/_18sdp">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/gamesWonStats"
                         android:layout_width="@dimen/_165sdp"
                         android:layout_height="wrap_content"
                         android:gravity="start|center"
@@ -225,7 +208,6 @@
                 <TableRow android:layout_marginTop="@dimen/_18sdp">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/gamesBidedStats"
                         android:layout_width="@dimen/_165sdp"
                         android:layout_height="wrap_content"
                         android:gravity="start|center"
@@ -249,39 +231,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/signoutbuttonImage"
-                    android:layout_width="@dimen/_72sdp"
-                    android:layout_height="@dimen/_72sdp"
-                    android:layout_centerVertical="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:layout_marginEnd="@dimen/_minus25sdp"
-                    android:layout_toStartOf="@+id/signoutbutton"
-                    android:contentDescription="@string/todo"
-                    android:elevation="@dimen/_14sdp"
-                    android:enabled="true"
-                    android:onClick="signOut"
-                    android:src="@drawable/power1"/>
-
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/signoutbutton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/_100sdp"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/button_pressed_shine_black"
+                    android:background="@drawable/orangesquarebutton"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:onClick="signOut"
                     android:focusable="true"
                     android:paddingStart="@dimen/_22sdp"
-                    android:soundEffectsEnabled="true"
                     android:text="@string/signout"
                     android:textAlignment="center"
-                    android:textAllCaps="true"
-                    android:textColor="@color/font_yellow"
+                    android:textColor="@color/Black"
                     android:paddingEnd="@dimen/_14sdp"
-                    android:textSize="@dimen/_16ssp"
+                    android:textSize="@dimen/_14ssp"
                     tools:ignore="RelativeOverlap" />
 
             </RelativeLayout>
@@ -290,242 +254,42 @@
     </RelativeLayout>
 
     <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/howToPlay"
         android:layout_width="@dimen/_57sdp"
         android:layout_height="@dimen/_57sdp"
         android:layout_below="@+id/removeAds"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/mhsIconsGap"
-        android:layout_marginEnd="0dp"
-        android:elevation="@dimen/_22sdp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="howToPlay"
-        android:src="@drawable/howtoplay1" />
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/rateUs"
-        android:layout_width="@dimen/_57sdp"
-        android:layout_height="@dimen/_57sdp"
-        android:layout_below="@+id/ranking"
-        android:layout_alignParentEnd="true"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginTop="@dimen/_minus2sdp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginEnd="@dimen/mhsIconsMargin"
         android:elevation="@dimen/_22sdp"
         android:onClick="openRatingWindow"
+        android:visibility="visible"
         android:src="@drawable/rateus" />
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/helpUs"
-        android:layout_width="@dimen/_57sdp"
-        android:layout_height="@dimen/_57sdp"
-        android:layout_below="@+id/rateUs"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:layout_marginEnd="0dp"
-        android:clickable="true"
-        android:elevation="@dimen/_22sdp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="trainingStart"
-        android:src="@drawable/brain"
-        android:visibility="gone"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/ranking"
-        android:layout_width="@dimen/_57sdp"
-        android:layout_height="@dimen/_57sdp"
-        android:layout_below="@+id/howToPlay"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_minus3sdp"
-        android:layout_marginEnd="0dp"
-        android:clickable="true"
-        android:elevation="@dimen/_22sdp"
-        android:focusable="true"
-        android:background="@drawable/button_pressed_score_table"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="ranking" />
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/createRoomButton"
-        android:layout_width="@dimen/mhsButtonsTextWidth"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/createRoomIcon"
-        android:layout_alignBottom="@+id/createRoomIcon"
-        android:layout_marginStart="@dimen/_minus25sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:layout_marginBottom="@dimen/_11sdp"
-        android:layout_toEndOf="@+id/createRoomIcon"
-        android:background="@drawable/shine_button_black"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:fadingEdge="horizontal|vertical"
-        android:fontFamily="sans-serif-smallcaps"
-        android:onClick="createRoomWindowOpen"
-        android:paddingStart="@dimen/_29sdp"
-        android:paddingEnd="@dimen/_11sdp"
-        android:text="@string/createRoom"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/mhsButtonsTextSize"
-        />
-    <ImageView
-        android:id="@+id/createRoomIcon"
-        android:layout_width="@dimen/_57sdp"
-        android:layout_height="@dimen/_57sdp"
-        android:layout_below="@+id/userScoreMHS"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/_4sdp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginTop="@dimen/_7sdp"
-        android:elevation="@dimen/_14sdp"
-        android:src="@drawable/chip_coin_trans"
-        android:onClick="createRoomWindowOpen"
-        android:soundEffectsEnabled="true"
-        tools:ignore="ContentDescription"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/joinRoomButton"
-        android:layout_width="@dimen/mhsButtonsTextWidth"
-        android:layout_height="@dimen/_47sdp"
-        android:layout_alignTop="@+id/joinRoomIcon"
-        android:layout_alignBottom="@+id/joinRoomIcon"
-        android:layout_marginStart="@dimen/_minus25sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:layout_marginBottom="@dimen/_11sdp"
-        android:layout_toEndOf="@+id/joinRoomIcon"
-        android:background="@drawable/shine_button_black"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:fadingEdge="horizontal|vertical"
-        android:fontFamily="sans-serif-smallcaps"
-        android:hapticFeedbackEnabled="true"
-        android:onClick="joinRoomWindowOpen"
-        android:paddingStart="@dimen/_29sdp"
-        android:paddingEnd="@dimen/_9sdp"
-        android:text="@string/joinRoom"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/mhsButtonsTextSize" />
-
-    <ImageView
-        android:id="@+id/joinRoomIcon"
-        android:layout_width="@dimen/_57sdp"
-        android:layout_height="@dimen/_57sdp"
-        android:layout_below="@+id/createRoomIcon"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/_4sdp"
-        android:layout_marginTop="0dp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="@drawable/border"
-        android:backgroundTintMode="add"
-        android:elevation="@dimen/_14sdp"
-        android:src="@drawable/joinroomicon"
-        android:onClick="joinRoomWindowOpen"
-        android:soundEffectsEnabled="true"
-        tools:ignore="ContentDescription" />
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/inviteIcon"
-        android:layout_width="@dimen/_57sdp"
-        android:layout_height="@dimen/_57sdp"
-        android:layout_below="@+id/joinRoomIcon"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/_4sdp"
-        android:layout_marginTop="0dp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="@drawable/border_blue"
-        android:backgroundTintMode="add"
-        android:elevation="@dimen/_14sdp"
-        android:onClick="inviteFriends"
-        android:soundEffectsEnabled="true"
-        android:src="@drawable/inviteshare_1800"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonInvite"
-        android:layout_width="@dimen/mhsButtonsTextWidth"
-        android:layout_height="@dimen/_47sdp"
-        android:layout_alignTop="@+id/inviteIcon"
-        android:layout_alignBottom="@+id/inviteIcon"
-        android:layout_marginStart="@dimen/_minus25sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:layout_marginBottom="@dimen/_11sdp"
-        android:layout_toEndOf="@+id/inviteIcon"
-        android:background="@drawable/shine_button_black"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:fontFamily="sans-serif-smallcaps"
-        android:onClick="inviteFriends"
-        android:paddingStart="@dimen/_29sdp"
-        android:paddingEnd="@dimen/_9sdp"
-        android:text="@string/invite"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/mhsButtonsTextSize" />
-
-    <ImageView
-        android:id="@+id/settingsIcon"
-        android:layout_width="@dimen/_57sdp"
-        android:layout_height="@dimen/_57sdp"
-        android:layout_below="@+id/inviteIcon"
-        android:layout_marginTop="0dp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:elevation="@dimen/_22sdp"
-        android:onClick="openSettingsWindow"
-        tools:ignore="ContentDescription"
-        android:src="@drawable/gear" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonSettings"
-        android:layout_width="@dimen/mhsButtonsTextWidth"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/settingsIcon"
-        android:layout_alignBottom="@+id/settingsIcon"
-        android:layout_marginStart="@dimen/_minus25sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:layout_marginBottom="@dimen/_11sdp"
-        android:layout_toEndOf="@+id/settingsIcon"
-        android:background="@drawable/shine_button_black"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:fontFamily="sans-serif-smallcaps"
-        android:onClick="openSettingsWindow"
-        android:paddingStart="@dimen/_29sdp"
-        android:paddingEnd="@dimen/_9sdp"
-        android:soundEffectsEnabled="true"
-        android:text="@string/settings"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/mhsButtonsTextSize" />
+<!--    <pl.droidsonroids.gif.GifImageView-->
+<!--        android:id="@+id/helpUs"-->
+<!--        android:layout_width="@dimen/_57sdp"-->
+<!--        android:layout_height="@dimen/_57sdp"-->
+<!--        android:layout_below="@+id/rateUs"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginTop="@dimen/_4sdp"-->
+<!--        android:layout_marginEnd="0dp"-->
+<!--        android:clickable="true"-->
+<!--        android:elevation="@dimen/_22sdp"-->
+<!--        android:focusable="true"-->
+<!--        android:foreground="?attr/selectableItemBackgroundBorderless"-->
+<!--        android:onClick="trainingStart"-->
+<!--        android:src="@drawable/brain"-->
+<!--        android:visibility="gone"/>-->
 
     <LinearLayout
         android:id="@+id/developerAndAds"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="0dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginBottom="0dp"
         android:elevation="@dimen/_72sdp"
         android:orientation="vertical">
 
@@ -540,12 +304,12 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="@dimen/_12sdp"
                 android:layout_marginBottom="0dp"
-                android:background="@drawable/border_yellow_only"
+                android:background="@drawable/blacksquarebutton"
                 android:backgroundTintMode="add"
-                android:elevation="@dimen/_64sdp"
                 android:clickable="true"
+                android:elevation="@dimen/_64sdp"
                 android:focusable="true"
-                android:foreground="@drawable/_s_icon_3shadowmini"
+                android:foreground="@drawable/icon3s_shadow"
                 android:onClick="developerCredits"
                 android:soundEffectsEnabled="true"
                 tools:ignore="ContentDescription" />
@@ -559,17 +323,16 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="@dimen/_13sdp"
                 android:layout_marginBottom="@dimen/_13sdp"
-                android:background="@drawable/shine_button_black"
+                android:background="@drawable/orangesquarebutton"
                 android:clickable="true"
+                android:fadingEdge="horizontal|vertical"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:fadingEdge="horizontal|vertical"
-                android:fontFamily="sans-serif-smallcaps"
                 android:onClick="developerCredits"
                 android:text="@string/developerCredits"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/font_yellow"
+                android:textColor="@color/Black"
                 android:textSize="@dimen/_10ssp"
                 android:translationZ="@dimen/_36sdp" />
 
@@ -577,17 +340,18 @@
                 android:id="@+id/versionCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom ="@+id/developerCreditsButton"
+                android:layout_alignBottom="@+id/developerCreditsButton"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
                 android:gravity="bottom"
-                android:textColor="@color/white"
+                android:textColor="#000000"
                 android:textSize="@dimen/_9ssp"
                 android:translationZ="@dimen/_40sdp"
                 tools:ignore="RelativeOverlap" />
 
         </RelativeLayout>
+
         <com.google.android.gms.ads.AdView
             android:id="@+id/addViewMHS"
             android:layout_width="match_parent"
@@ -596,15 +360,16 @@
             app:adSize="BANNER"
             app:adUnitId="@string/banner" />
     </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/joinRoomFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/layoutBackgroundLittle"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:elevation="@dimen/_143sdp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="joinRoomWindowExit"
         android:visibility="gone">
 
@@ -615,127 +380,79 @@
             android:layout_below="@+id/joinRoomFrameTemp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_minus18sdp"
-            android:elevation="@dimen/_72sdp"
-            android:onClick="joinRoomWindowExit"
-            tools:ignore="ContentDescription"
             android:clickable="true"
+            android:elevation="@dimen/_72sdp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/stop_sign" />
-
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/joinRoomFrameTemp"
-            android:layout_alignStart="@+id/joinRoomFrameTemp"
-            android:layout_alignEnd="@+id/joinRoomFrameTemp"
-            android:layout_marginStart="@dimen/_11sdp"
-            android:layout_marginTop="0dp"
-            app:shimmer_colored="true"
-            app:shimmer_auto_start="true"
-            app:shimmer_duration="1800"
-            app:shimmer_highlight_alpha="1"
-            app:shimmer_highlight_color="#FFFFFF"
-            app:shimmer_repeat_mode="restart"
-            app:shimmer_shape="linear">
-
-            <ImageView
-                android:layout_width="match_parent"
-                tools:ignore="ContentDescription"
-                android:layout_height="@dimen/_2sdp"
-                android:src="@drawable/shine_button_black_bar" />
-        </com.facebook.shimmer.ShimmerFrameLayout>
-
-        <RelativeLayout
-            android:id="@+id/joinRoomFrameTemp"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_214sdp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="@dimen/_22sdp"
-            android:layout_marginEnd="@dimen/_22sdp"
-            android:background="@color/BlackTrans"
-            android:elevation="@dimen/_36sdp"
-            android:foregroundTintMode="multiply"
-            android:hapticFeedbackEnabled="true"
             android:onClick="joinRoomWindowExit"
-            android:soundEffectsEnabled="true">
+            app:srcCompat="@drawable/stop_sign"
+            tools:ignore="ContentDescription" />
 
-            <EditText
-                android:id="@+id/roomIDInput"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_65sdp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="@dimen/_14sdp"
-                android:layout_marginTop="@dimen/_22sdp"
-                android:layout_marginEnd="@dimen/_14sdp"
-                android:background="@color/font_yellow_trans"
-                android:cursorVisible="true"
-                android:gravity="center_horizontal|center_vertical"
-                android:hint="@string/hinRoomID"
-                android:imeOptions="actionSend"
-                android:inputType="textCapCharacters"
-                android:shadowColor="#636161"
-                android:shadowDx="8"
-                android:shadowDy="8"
-                android:shadowRadius="5"
-                android:textAlignment="center"
-                android:textColor="@color/Black"
-                android:textSize="@dimen/_35ssp"
-                android:textStyle="bold"
-                android:autofillHints="ABCD" />
+            <RelativeLayout
+                android:id="@+id/joinRoomFrameTemp"
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/joinRoomButtonMain"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_47sdp"
-                android:layout_below="@+id/roomIDInput"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="@dimen/_minus18sdp"
-                android:layout_marginTop="@dimen/_29sdp"
-                android:layout_marginBottom="@dimen/_7sdp"
-                android:background="@drawable/border_square_reward"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:fontFamily="sans-serif-smallcaps"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_45sdp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/blacksquarebutton"
+                android:elevation="@dimen/_36sdp"
                 android:hapticFeedbackEnabled="true"
-                android:insetTop="@dimen/_4sdp"
-                android:insetBottom="@dimen/_4sdp"
-                android:onClick="joinRoomButtonClicked"
-                android:paddingStart="@dimen/_29sdp"
-                android:paddingEnd="@dimen/_15sdp"
-                android:text="@string/join"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/font_yellow"
-                android:textSize="@dimen/_25ssp"
-                android:textStyle="bold" />
+                android:onClick="joinRoomWindowExit">
 
-            <ImageView
-                android:id="@+id/joinRoomFrameIcon"
-                android:layout_width="@dimen/_57sdp"
-                android:layout_height="@dimen/_57sdp"
-                android:layout_alignBottom="@+id/joinRoomButtonMain"
-                android:layout_marginTop="@dimen/_minus7sdp"
-                android:layout_marginEnd="@dimen/_minus7sdp"
-                tools:ignore="ContentDescription"
-                android:layout_marginBottom="@dimen/_minus7sdp"
-                android:layout_toStartOf="@+id/joinRoomButtonMain"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:background="@drawable/border"
-                android:backgroundTintMode="add"
-                android:baselineAlignBottom="true"
-                android:elevation="@dimen/_14sdp"
-                android:src="@drawable/joinroomicon"
-                android:onClick="joinRoomWindowOpen"
-                android:soundEffectsEnabled="true" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/roomIDInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="@dimen/_180sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:cursorVisible="true"
+                    android:hint="@string/hinRoomID"
+                    android:imeOptions="actionSend"
+                    android:inputType="textCapCharacters"
+                    android:textAlignment="center"
+                    app:boxStrokeColor="@color/white"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="4"
+                    app:endIconMode="clear_text"
+                    app:helperText="@string/joinHelper"
+                    app:helperTextTextColor="@color/white"
+                    app:hintAnimationEnabled="true"
+                    app:startIconDrawable="@drawable/group">
 
-        </RelativeLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/roomIDInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:imeOptions="actionSend"
+                        android:inputType="textCapCharacters"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/_24ssp"
+                        android:textStyle="bold" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/roomIDInputLayout"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/orangesquarebutton"
+                    android:gravity="center"
+                    android:onClick="joinRoomButtonClicked"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:text="@string/join"
+                    android:textColor="@color/Black"
+                    android:textSize="@dimen/_20ssp" />
+
+            </RelativeLayout>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -752,21 +469,17 @@
 
         <LinearLayout
             android:id="@id/settingsLayoutTemp"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_286sdp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:layout_marginEnd="@dimen/_14sdp"
-            android:background="@color/BlackTrans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/blacksquarebutton"
+            android:padding="@dimen/_45sdp"
             android:clickable="true"
             android:elevation="@dimen/_72sdp"
             android:orientation="vertical"
             android:focusable="true">
 
             <LinearLayout
-                android:id="@+id/musicSett"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_54sdp"
                 android:orientation="horizontal">
@@ -787,7 +500,6 @@
                     android:src="@drawable/music" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/musicSettText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -817,26 +529,8 @@
                 </RelativeLayout>
 
             </LinearLayout>
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginEnd="@dimen/_11sdp"
-                app:shimmer_auto_start="true"
-                app:shimmer_duration="1800"
-                app:shimmer_highlight_alpha="1"
-                app:shimmer_highlight_color="#FFFFFF"
-                app:shimmer_repeat_delay="0"
-                app:shimmer_repeat_mode="reverse"
-                app:shimmer_shape="linear" >
-                <ImageView
-                    android:layout_width="match_parent"
-                    tools:ignore="ContentDescription"
-                    android:layout_height="@dimen/_1sdp"
-                    android:src="@drawable/shine_button_black_bar"/>
-            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <LinearLayout
-                android:id="@+id/soundSett"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_54sdp"
                 android:orientation="horizontal">
@@ -857,7 +551,6 @@
                     android:src="@drawable/sound_on_png" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/soundSettText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -887,26 +580,8 @@
                 </RelativeLayout>
 
             </LinearLayout>
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginEnd="@dimen/_11sdp"
-                app:shimmer_auto_start="true"
-                app:shimmer_duration="1800"
-                app:shimmer_highlight_alpha="1"
-                app:shimmer_highlight_color="#FFFFFF"
-                app:shimmer_repeat_delay="0"
-                app:shimmer_repeat_mode="reverse"
-                app:shimmer_shape="linear" >
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:contentDescription="@string/todo"
-                    android:src="@drawable/shine_button_black_bar" />
-            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <LinearLayout
-                android:id="@+id/vibrateSett"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_54sdp"
                 android:orientation="horizontal">
@@ -927,7 +602,6 @@
                     android:src="@drawable/vibrateon" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/vibrateSettText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -958,147 +632,6 @@
 
             </LinearLayout>
 
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginEnd="@dimen/_11sdp"
-                app:shimmer_auto_start="true"
-                app:shimmer_duration="1800"
-                app:shimmer_highlight_alpha="1"
-                app:shimmer_highlight_color="#FFFFFF"
-                app:shimmer_repeat_delay="0"
-                app:shimmer_repeat_mode="reverse"
-                app:shimmer_shape="linear">
-                <ImageView
-                    android:layout_width="match_parent"
-                    tools:ignore="ContentDescription"
-                    android:layout_height="@dimen/_1sdp"
-                    android:src="@drawable/shine_button_black_bar" />
-            </com.facebook.shimmer.ShimmerFrameLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/_7sdp"
-                    android:layout_marginEnd="@dimen/_7sdp"
-                    android:fadeScrollbars="false"
-                    android:paddingTop="@dimen/_11sdp"
-                    android:paddingBottom="@dimen/_3sdp"
-                    android:scrollIndicators="bottom"
-                    android:scrollX="@dimen/_36sdp"
-                    android:scrollY="@dimen/_14sdp"
-                    android:scrollbarAlwaysDrawHorizontalTrack="true"
-                    android:scrollbarSize="@dimen/_2sdp"
-                    android:scrollbarStyle="outsideInset"
-                    android:scrollbarThumbHorizontal="@drawable/track_scroll_bar"
-                    android:scrollbars="horizontal"
-                    tools:ignore="UselessParent">
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:chipSpacingHorizontal="@dimen/_5sdp">
-
-                            <ImageView
-                                android:layout_width="@dimen/_54sdp"
-                                android:layout_height="@dimen/_72sdp"
-                                tools:ignore="ContentDescription,TooManyViews"
-                                android:onClick="changeBackgroundRequest"
-                                android:src="@drawable/shine_blue"
-                                android:tag="shine_blue" />
-
-                            <ImageView
-                                android:layout_width="@dimen/_54sdp"
-                                android:layout_height="@dimen/_72sdp"
-                                tools:ignore="ContentDescription"
-                                android:onClick="changeBackgroundRequest"
-                                android:src="@drawable/shine_orange"
-                                android:tag="shine_orange" />
-
-                            <ImageView
-                                android:layout_width="@dimen/_54sdp"
-                                android:layout_height="@dimen/_72sdp"
-                                tools:ignore="ContentDescription"
-                                android:onClick="changeBackgroundRequest"
-                                android:src="@drawable/shine_purple_dark"
-                                android:tag="shine_purple_dark" />
-
-                            <ImageView
-                                android:layout_width="@dimen/_54sdp"
-                                android:layout_height="@dimen/_72sdp"
-                                tools:ignore="ContentDescription"
-                                android:onClick="changeBackgroundRequest"
-                                android:src="@drawable/shine_green_radial"
-                                android:tag="shine_green_radial" />
-
-
-                            <ImageView
-                                android:layout_width="@dimen/_54sdp"
-                                android:layout_height="@dimen/_72sdp"
-                                tools:ignore="ContentDescription"
-                                android:onClick="changeBackgroundRequest"
-                                android:src="@drawable/shine_bk"
-                                android:tag="shine_bk" />
-
-
-                            <ImageView
-                                android:layout_width="@dimen/_54sdp"
-                                android:layout_height="@dimen/_72sdp"
-                                tools:ignore="ContentDescription"
-                                android:onClick="changeBackgroundRequest"
-                                android:src="@drawable/shine_purple"
-                                android:tag="shine_purple" />
-
-
-                            <ImageView
-                                android:layout_width="@dimen/_54sdp"
-                                android:layout_height="@dimen/_72sdp"
-                                tools:ignore="ContentDescription"
-                                android:onClick="changeBackgroundRequest"
-                                android:src="@drawable/shine_yellow"
-                                android:tag="shine_yellow" />
-
-
-                            <ImageView
-                                android:layout_width="@dimen/_54sdp"
-                                android:layout_height="@dimen/_72sdp"
-                                tools:ignore="ContentDescription"
-                                android:onClick="changeBackgroundRequest"
-                                android:src="@drawable/shine_pink"
-                                android:tag="shine_pink" />
-
-
-                    </com.google.android.material.chip.ChipGroup>
-                </HorizontalScrollView>
-
-
-            </RelativeLayout>
-
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginEnd="@dimen/_11sdp"
-                app:shimmer_auto_start="true"
-                app:shimmer_duration="2000"
-                app:shimmer_highlight_alpha="1"
-                app:shimmer_highlight_color="#FFFFFF"
-                app:shimmer_repeat_mode="reverse"
-                app:shimmer_shape="linear">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_2sdp"
-                    tools:ignore="ContentDescription"
-                    android:src="@drawable/shine_button_black_bar" />
-            </com.facebook.shimmer.ShimmerFrameLayout>
         </LinearLayout>
 
         <ImageView
@@ -1118,38 +651,13 @@
 
     </RelativeLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/welcomeUserNameview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profilePic"
-        android:layout_alignBottom="@+id/profilePic"
-        android:layout_marginStart="@dimen/_minus20sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:layout_marginBottom="@dimen/_11sdp"
-        android:layout_toEndOf="@+id/profilePic"
-        android:elevation="@dimen/_64sdp"
-        android:fontFamily="@font/nosifer"
-        android:onClick="openClosePlayerStats"
-        android:background="@drawable/border_square_reward"
-        android:focusable="true"
-        android:paddingStart="@dimen/_25sdp"
-        android:text="@string/playeName"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_17ssp"
-        android:textStyle="bold"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:paddingEnd="@dimen/_10sdp"/>
-
     <RelativeLayout
         android:id="@+id/createRoomFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/cardsBackgroundDark"
-        android:elevation="@dimen/_143sdp"
         android:clickable="true"
+        android:elevation="@dimen/_143sdp"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="createRoomWindowExit"
@@ -1162,12 +670,12 @@
             android:layout_below="@+id/createRoomFrameTemp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_2sdp"
-            tools:ignore="ContentDescription"
             android:clickable="true"
             android:elevation="@dimen/_72sdp"
             android:focusable="true"
             android:onClick="createRoomWindowExit"
-            app:srcCompat="@drawable/stop_sign" />
+            app:srcCompat="@drawable/stop_sign"
+            tools:ignore="ContentDescription" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:layout_width="match_parent"
@@ -1187,9 +695,9 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                tools:ignore="ContentDescription"
                 android:layout_height="@dimen/_2sdp"
-                android:src="@drawable/shine_button_black_bar" />
+                android:src="@drawable/shine_button_black_bar"
+                tools:ignore="ContentDescription" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <LinearLayout
@@ -1206,7 +714,6 @@
             android:soundEffectsEnabled="true">
 
             <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/createOfflineSingleShimmer"
                 android:layout_width="@dimen/deckWidth"
                 android:layout_height="@dimen/deckHeight"
                 android:layout_margin="@dimen/_5sdp"
@@ -1220,7 +727,6 @@
                 app:shimmer_tilt="45">
 
                 <pl.droidsonroids.gif.GifImageButton
-                    android:id="@+id/createOfflineSingle"
                     android:layout_width="@dimen/deckWidth"
                     android:layout_height="@dimen/deckHeight"
                     android:background="@drawable/offline_single_deck"
@@ -1228,7 +734,7 @@
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:onClick="createRoomButtonClicked"
-                    android:tag="0"/>
+                    android:tag="0" />
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <TextView
@@ -1242,7 +748,6 @@
                 tools:ignore="HardcodedText" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/createSingleShimmer"
                 android:layout_width="@dimen/deckWidth"
                 android:layout_height="@dimen/deckHeight"
                 android:layout_margin="@dimen/_5sdp"
@@ -1260,15 +765,14 @@
                     android:layout_width="@dimen/deckWidth"
                     android:layout_height="@dimen/deckHeight"
                     android:background="@drawable/single_deck"
-                    android:onClick="createRoomButtonClicked"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:tag="4"/>
+                    android:onClick="createRoomButtonClicked"
+                    android:tag="4" />
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/createDoubleShimmer"
                 android:layout_width="@dimen/deckWidth"
                 android:layout_height="@dimen/deckHeight"
                 android:layout_margin="@dimen/_5sdp"
@@ -1280,6 +784,7 @@
                 app:shimmer_repeat_mode="restart"
                 app:shimmer_shape="linear"
                 app:shimmer_tilt="45">
+
                 <pl.droidsonroids.gif.GifImageButton
                     android:id="@+id/createDouble"
                     android:layout_width="@dimen/deckWidth"
@@ -1298,71 +803,90 @@
         android:id="@+id/userScoreMHS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/coinIcon"
-        android:layout_alignBottom="@+id/coinIcon"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_minus15sdp"
-        android:layout_marginBottom="@dimen/_12sdp"
-        android:layout_toStartOf="@+id/coinIcon"
-        android:background="@drawable/shine_button_black"
-        android:clickable="true"
-        android:drawingCacheQuality="auto"
+        android:layout_below="@+id/usernameCardMHS"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:background="@drawable/orangesquarebutton"
         android:elevation="@dimen/_72sdp"
-        android:focusable="true"
-        android:fontFamily="@font/codystar"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
         android:onClick="openClosePlayerStats"
         android:paddingStart="@dimen/_24sdp"
-        android:paddingTop="0dp"
-        android:paddingEnd="@dimen/_21sdp"
+        android:paddingTop="10dp"
+        android:paddingEnd="@dimen/_30sdp"
+        android:paddingBottom="10dp"
         android:text="@string/usercoinMHS"
-        android:textAllCaps="false"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_16ssp"
+        android:textColor="@color/Black"
+        android:textSize="@dimen/_17ssp"
         android:translationZ="@dimen/_36sdp"
-        app:cornerRadius="@dimen/_19sdp"
-        app:rippleColor="@color/white"
-        app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="@dimen/_1sdp"
         app:ticker_animationDuration="2000"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="up" />
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/coinIcon"
         android:layout_width="@dimen/_57sdp"
         android:layout_height="@dimen/_57sdp"
-        android:layout_marginTop="@dimen/_minus27sdp"
-        android:layout_below="@+id/welcomeUserNameview"
+        android:layout_below="@+id/usernameCardMHS"
+        android:layout_marginTop="@dimen/_minus20sdp"
+        android:layout_marginBottom="@dimen/mhsIconsGap"
         android:layout_alignParentEnd="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginEnd="@dimen/_4sdp"
         android:onClick="openClosePlayerStats"
         android:translationZ="@dimen/_36sdp"
-        android:layout_marginEnd="@dimen/_4sdp"
-        android:background="@drawable/border"
         android:elevation="@dimen/_73sdp"
-        android:src="@drawable/coins12" />
+        android:scaleY="1.2"
+        android:scaleX="1.2"
+        android:src="@drawable/moneybag"
+        android:contentDescription="@string/todo" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profilePic"
-        android:layout_width="@dimen/_64sdp"
-        android:layout_height="@dimen/_64sdp"
+        android:layout_width="@dimen/upWidth"
+        android:layout_height="@dimen/upWidth"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_7sdp"
-        android:background="@drawable/border"
-        android:backgroundTintMode="add"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/upStart"
+        android:layout_marginTop="@dimen/upTop"
         tools:ignore="ContentDescription"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:elevation="@dimen/_72sdp"
-        android:src="@drawable/_s_icon_3shadowmini"
+        android:src="@drawable/blacksquarebutton"
         android:onClick="openClosePlayerStats"
-        android:soundEffectsEnabled="true" />
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.ProfilePic"/>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/usernameCardMHS"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_alignTop="@+id/profilePic"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:layout_marginStart="@dimen/_minus23sdp"
+        android:layout_toEndOf="@+id/profilePic"
+        android:visibility="visible"
+        android:onClick="openClosePlayerStats"
+        app:cardForegroundColor="@color/transparent"
+        app:cardPreventCornerOverlap="false">
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/orangesquarebutton"
+            android:scaleType="fitXY"
+            android:onClick="openClosePlayerStats"
+            android:contentDescription="@string/todo"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/usernameMHS"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="openClosePlayerStats"
+            android:text="@string/playeName"
+            android:textSize="@dimen/_22ssp"
+            android:textColor="#2C2C2C"
+            android:paddingEnd="@dimen/_20sdp"
+            android:paddingStart="@dimen/_27sdp"
+            android:gravity="start|center"/>
+
+    </com.google.android.material.card.MaterialCardView>
     <RelativeLayout
         android:id="@+id/rateUsLayout"
         android:layout_width="match_parent"
@@ -1445,7 +969,6 @@
                 app:shimmer_tilt="45">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/loveIt"
                     android:tag="good"
                     android:layout_width="@dimen/rateUsWidth"
                     android:layout_height="@dimen/rateUsHeight"
@@ -1473,7 +996,6 @@
                 app:shimmer_tilt="60">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/beBetter"
                     android:tag="bad"
                     android:layout_width="@dimen/rateUsWidth"
                     android:layout_height="@dimen/rateUsHeight"
@@ -1485,7 +1007,6 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/askLater"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_16sdp"
                 android:layout_below="@+id/rateUsIcon2"
@@ -1591,7 +1112,6 @@
                 android:tint="?attr/colorControlNormal"
                 app:drawableRightCompat="@drawable/watch_video" />
             <TextView
-                android:id="@+id/claimRewardCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_36sdp"
                 android:layout_marginStart="@dimen/_14sdp"
@@ -1671,7 +1191,6 @@
             tools:ignore="RelativeOverlap" />
 
         <ImageView
-            android:id="@+id/closeRank"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
             android:layout_alignParentEnd="true"
@@ -1733,12 +1252,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:text="@string/loading"
             android:textSize="@dimen/_25ssp"
-            app:light_color="@color/white"
-            android:text="@string/loading"/>
+            app:light_color="@color/white" />
 
         <ProgressBar
-            android:id="@+id/progressBarLoading3"
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="@dimen/_65sdp"
             android:layout_height="@dimen/_65sdp"
@@ -1749,7 +1267,7 @@
             android:indeterminateTint="#FFE500"
             android:progressTintMode="src_in"
             android:rotation="360"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/loadingText"

@@ -24,7 +24,7 @@ public class SoundManager {
     }
 
     public void loadSound(Context context){
-        UPDATE_SOUND = soundPool.load(context, R.raw.update, 1);
+        UPDATE_SOUND = soundPool.load(context, R.raw.card_played, 1);
         ERROR_SOUND = soundPool.load(context, R.raw.error, 1);
         SUCCESS_SOUND = soundPool.load(context, R.raw.success, 1);
         CARD_PLAYED_SOUND = soundPool.load(context, R.raw.card_played, 1);

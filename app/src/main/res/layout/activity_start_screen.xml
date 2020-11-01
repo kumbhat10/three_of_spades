@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/Black"
     android:clickable="true"
+    android:focusable="true"
     android:paddingStart="0dp"
     android:paddingEnd="0dp"
-    tools:context=".StartScreen"
-    android:focusable="true">
-
-    <pl.droidsonroids.gif.GifImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/googleSignInButton"
-        android:src="@drawable/black_squares" />
+    tools:context=".StartScreen">
 
     <ImageView
+        android:id="@+id/startBckgd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/googleSignInButton"
-        android:contentDescription="@null"
-        android:src= "@drawable/_s_icon_spadeedit"/>
+        android:foreground="@drawable/tint_background4"
+        android:scaleType="centerCrop"
+        android:scaleX="4"
+        android:scaleY="4"
+        android:src="@drawable/redorangeburst"
+        android:visibility="visible" />
 
-
-    <ImageView
-        android:id="@+id/icon_3startscreen"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/googleSignInButton"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-        android:contentDescription="@null"
-        android:src="@drawable/_s_icon_3shadow"/>
+        android:layout_above="@+id/googleSignInButton">
+
+        <ImageView
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="@dimen/_270sdp"
+            android:layout_centerInParent="true"
+            android:contentDescription="@null"
+            android:src="@drawable/spade"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/icon_3startscreen"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:layout_centerInParent="true"
+            android:scaleY="0.5"
+            android:scaleX="0.5"
+            android:contentDescription="@null"
+            android:src="@drawable/icon3s_shadow" />
+    </RelativeLayout>
+
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/facebookLoginButton"
@@ -74,7 +84,6 @@
         android:visibility="visible" />
 
 
-
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
         android:id="@+id/twitterLoginButton"
         android:layout_width="@dimen/loginWidth"
@@ -111,7 +120,7 @@
             android:text="@string/signIN"
             android:textColor="@color/white"
             android:textSize="@dimen/_13ssp"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <com.bitvale.lightprogress.LightProgress
             android:id="@+id/lightStart"
@@ -120,7 +129,7 @@
             android:layout_centerInParent="true"
             android:text="@string/signIN"
             android:textSize="@dimen/_25ssp"
-            app:light_color="@color/white"/>
+            app:light_color="@color/white" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signInSuccess"

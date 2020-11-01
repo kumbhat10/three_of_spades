@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/spade"
+        android:gravity="center"
+        android:height="500dp"
+        android:width="420dp"/>
+    <item
+        android:drawable="@drawable/icon3s_shadow"
+        android:gravity="center" />
+    <item android:drawable="@drawable/bug"
+        android:gravity="center"/>
+</layer-list>

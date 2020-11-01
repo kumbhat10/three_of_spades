@@ -14,6 +14,7 @@ import android.os.*
 import android.speech.tts.TextToSpeech
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -104,9 +105,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             .showRestartButton(true) //default: true
             .logErrorOnRestart(false) //default: true
             .trackActivities(false) //default: false
-            .errorDrawable(R.drawable._s_icon_bug) //default: bug image
+            .errorDrawable(R.drawable.bug_icon) //default: bug image
             .apply()
-
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_create_join_room_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         offline = intent.getBooleanExtra("offline", true)
@@ -307,7 +308,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         waitingToJoinText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         startGameButton.visibility = View.VISIBLE
         anim(startGameButton, R.anim.blink_infinite_700ms)
-        anim(waitingToJoinText, R.anim.blink_infinite_700ms)
+//        anim(waitingToJoinText, R.anim.blink_infinite_700ms)
     }
 
     private fun startNextActivity() {
@@ -499,7 +500,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
         if (from == "p1") { //  close icon only to host
             leaveJoiningRoomIcon.visibility = View.VISIBLE
-            anim(leaveJoiningRoomIcon, R.anim.anim_scale_infinite)
+//            anim(leaveJoiningRoomIcon, R.anim.anim_scale_infinite)
         } else { // dummy
             leaveJoiningRoomIcon.visibility = View.GONE
             leaveJoiningRoomIcon.clearAnimation()
@@ -508,11 +509,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         anim(player2Text, R.anim.slide_buttons)
         anim(player3Text, R.anim.slide_buttons_rtl)
         anim(player4Text, R.anim.slide_buttons)
-        anim(button_roomID, R.anim.slide_buttons_rtl)
-        anim(hostPhoto, R.anim.anim_scale_infinite)
-        anim(player2Photo, R.anim.anim_scale_infinite)
-        anim(player3Photo, R.anim.anim_scale_infinite)
-        anim(player4Photo, R.anim.anim_scale_infinite)
+//        anim(button_roomID, R.anim.slide_buttons_rtl)
+//        anim(hostPhoto, R.anim.anim_scale_infinite)
+//        anim(player2Photo, R.anim.anim_scale_infinite)
+//        anim(player3Photo, R.anim.anim_scale_infinite)
+//        anim(player4Photo, R.anim.anim_scale_infinite)
 
         if (nPlayers == 7) {
             player7Shimmer.visibility = View.VISIBLE
@@ -524,9 +525,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             player7Text.visibility = View.VISIBLE
             player6Text.visibility = View.VISIBLE
             player5Text.visibility = View.VISIBLE
-            anim(player5Photo, R.anim.anim_scale_infinite)
-            anim(player6Photo, R.anim.anim_scale_infinite)
-            anim(player7Photo, R.anim.anim_scale_infinite)
+//            anim(player5Photo, R.anim.anim_scale_infinite)
+//            anim(player6Photo, R.anim.anim_scale_infinite)
+//            anim(player7Photo, R.anim.anim_scale_infinite)
             anim(player5Text, R.anim.slide_buttons_rtl)
             anim(player6Text, R.anim.slide_buttons)
             anim(player7Text, R.anim.slide_buttons_rtl)

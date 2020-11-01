@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryVariant">#484848</color>
+
+    <color name="colorSecondary">#ffc107</color>
+    <color name="colorSecondaryVariant">#DAA20B</color>
+
+    <color name="colorOnPrimary">#ffffff</color>
+    <color name="colorOnSecondary">#000000</color>
+
+
     <color name="Black">#000000</color>
     <color name="shimmerImageBackground">#FFFFFF</color>
     <color name="shimmerBackground">@color/Black</color>
@@ -8,15 +18,18 @@
     <color name="BlackTransUserStats">#FD000000</color>
     <color name="BlackTransUserStats2">#EE000000</color>
     <color name="BlackTransUserStats3">#C5C5C5</color>
-    <color name="BlackTransUserStats4">#D8222222</color>
     <color name="BlackTransUserStats5">#C4000000</color>
+
+    <color name="mhsTintBackground">#83FFFFFF</color>
+    <color name="mhsTintBackground1">#79505050</color>
+    <color name="mhsTintBackground2">#D0000000</color>
+
+
     <color name="transparent">#00000000</color>
     //orange ish
-    <color name="icon_yellow">#FFE600</color>
+    <color name="icon_yellow">#ffc107</color>
 
-    <color name="font_yellow">#FFB300</color>
-    <color name="coin_yellow">#CA9204</color>
-    <color name="font_yellow_trans">#D8FFB300</color>
+    <color name="font_yellow">#ffc107</color>
     <color name="font_grey_settings">#DCDCDC</color>
     <color name="light_grey_settings">#BABABA</color>
 
@@ -37,10 +50,6 @@
 
     <color name="borderblue">#0B70C8</color>
 
-    <color name = "borderblueDark0b">#00A6FF</color>
-    <color name = "borderblueDark1b">#008DD8</color>
-    <color name = "borderblueDark2b">#006FAA</color>
-
     <color name = "borderNblueDark0b">#3EB9D8</color>
     <color name = "borderNblueDark1b">#3499B3</color>
     <color name = "borderNblueDark2b">#266F81</color>
@@ -49,9 +58,6 @@
     <color name = "shine0black">#FFFFFF</color>
     <color name = "shine1black">#2C2C2C</color>
     <color name = "shine2black">#000000</color>
-
-    <color name = "brown0">#9E3030</color>
-    <color name = "brown1">#7C2424</color>
 
     <color name = "shine0blackbar">#FFFFFF</color>
     <color name = "shine2blackbar">#000000</color>
@@ -76,22 +82,6 @@
     <color name = "borderblueDark0o">#FF7D36</color>
     <color name = "borderBlueDark1o">#D55C1C</color>
     <color name = "borderblueDark2o">#BD571F</color>
-
-    <color name = "borderblueDark0y">#FFFF00</color>
-    <color name = "borderblueDark1y">#D5D500</color>
-    <color name = "borderblueDark2y">#B5B500</color>
-
-    <color name = "borderblueDark0pi">#FF47D1</color>
-    <color name = "borderblueDark1pi">#B82895</color>
-    <color name = "borderblueDark2pi">#A10C7D</color>
-
-    <color name = "borderblueDark0pu">#B34BFF</color>
-    <color name = "borderblueDark1pu">#8B3BC5</color>
-    <color name = "borderblueDark2pu">#6F319C</color>
-
-    <color name = "borderblueDark0dpu">#2CFFEA</color>
-    <color name = "borderblueDark1dpu">#15CFBD</color>
-    <color name = "borderblueDark2dpu">#12AA9B</color>
 
     <color name="progressBarPlayer4">#00FF0A</color>
     <color name="scoreTableText">#FFFFFF</color>

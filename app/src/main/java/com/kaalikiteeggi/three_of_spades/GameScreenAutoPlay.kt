@@ -15,6 +15,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -41,15 +42,15 @@ import kotlinx.android.synthetic.main.activity_game_screen.*
 import pl.droidsonroids.gif.GifImageView
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.round
+import kotlin.random.Random
 
 @SuppressLint("SetTextI18n", "CutPasteId")
 class GameScreenAutoPlay : AppCompatActivity() {
     //    region Initialization
 
     private lateinit var sp: SoundPool
-
+    private var h:Int = 0
     private lateinit var textToSpeech: TextToSpeech
     private var typedValue = TypedValue()
     private var rated = false
@@ -205,10 +206,20 @@ class GameScreenAutoPlay : AppCompatActivity() {
             .showRestartButton(true) //default: true
             .logErrorOnRestart(false) //default: true
             .trackActivities(false) //default: false
-            .errorDrawable(R.drawable._s_icon_bug) //default: bug image
+            .errorDrawable(R.drawable.bug_icon) //default: bug image
             .restartActivity(MainHomeScreen::class.java).apply()
+
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
+        when(Random.nextInt(0,6)) {
+            0 -> gameBkgd.setImageResource(R.drawable.poker)
+            1 -> gameBkgd.setImageResource(R.drawable.pokerblue)
+            2 -> gameBkgd.setImageResource(R.drawable.pokercyan)
+            3 -> gameBkgd.setImageResource(R.drawable.pokerred)
+            4 -> gameBkgd.setImageResource(R.drawable.pokerred1)
+            5 -> gameBkgd.setImageResource(R.drawable.poker)
+        }
         roomID = intent.getStringExtra("roomID")!!
             .toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
         from = intent.getStringExtra("from")!!
@@ -233,6 +244,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.CENTER, 0, 20)
+
         //region Other Thread tasks
         Handler(Looper.getMainLooper()).post {
             SoundManager.initialize(applicationContext)
@@ -517,10 +529,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
         if (!mInterstitialAd.isLoaded && !premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder().build())
         Handler(Looper.getMainLooper()).postDelayed({
-            if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 2)) {  // Ask only once per game
-                inAppReview()
-                reviewRequested = true
-            } else if (!premiumStatus) {
+            //            if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 2)) {  // Ask only once per game
+            //                inAppReview()
+            //                reviewRequested = true
+            //            } else
+            if (!premiumStatus) {
                 if (mInterstitialAd.isLoaded) mInterstitialAd.show()
                 else mInterstitialAd.loadAd(AdRequest.Builder()
                     .build()) // load the AD again after loading first time
@@ -555,9 +568,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private fun updateWholeScoreBoard() {
         if (scoreList[fromInt] > 0) {
-            createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Win, burst = false, speed = coinSpeed, ratePerSec = coinRate)
+            createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Win, speed = coinSpeed, ratePerSec = coinRate)
             nGamesWon += 1
-        }else createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Lost, burst = false, speed = coinSpeed, ratePerSec = coinRate)
+        }else {
+            createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Lost, speed = coinSpeed, ratePerSec = coinRate)
+        }
 
         p1Gain += scoreList[1]
         p2Gain += scoreList[2]
@@ -806,7 +821,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
             }
             scoreList = pointsListTemp
             gameState.value = 6
-
         } else if (buFound1 == 1 && (totalGamePoints - bidTeamScore) >= (scoreLimit - bidValue)) { // if opponent score has reached target value & both partners are disclosed
             gameTurn.removeObserver(roundListener)
             clearAllAnimation()
@@ -1157,7 +1171,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.GONE
         }, 1000)
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
-        for (i in 0 until nPlayers) {
+        for (i in 0 until nPlayers) { // don't GONE self card is it is primary reference view
             findViewById<ImageView>(refIDMappedTableImageView[i]).visibility = View.INVISIBLE
         }
     }
@@ -1731,7 +1745,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)
         }
         if (sharedPreferences.contains("rated")) {
-            rated = sharedPreferences.getBoolean("rated", false)
+//            rated = sharedPreferences.getBoolean("rated", false)
         } else {
             editor.putBoolean("rated", rated)
             editor.apply()

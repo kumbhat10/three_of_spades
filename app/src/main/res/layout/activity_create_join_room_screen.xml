@@ -9,7 +9,6 @@
     tools:context=".CreateAndJoinRoomScreen">
 
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/frameShimmerJoiningRoom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/addViewCreateJoinRoom"
@@ -27,7 +26,6 @@
         app:shimmer_tilt="0">
 
         <ImageView
-            android:id="@+id/backgroundJoiningRoom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
@@ -37,7 +35,6 @@
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <ImageView
-        android:id="@+id/backgroundJoiningRoomCore"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/addViewCreateJoinRoom"
@@ -105,7 +102,6 @@
         android:visibility="visible" />
 
     <TextView
-        android:id="@+id/welcome3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/hostName"
@@ -269,7 +265,6 @@
         android:visibility="visible"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/player3Shimmer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/player2Text"
@@ -336,7 +331,6 @@
         android:visibility="visible"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/player4Shimmer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/player3Text"

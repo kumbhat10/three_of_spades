@@ -9,10 +9,12 @@ package com.kaalikiteeggi.three_of_spades;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
 import com.squareup.picasso.Transformation;
 /**
  * Created by julian on 13/6/21.

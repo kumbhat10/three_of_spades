@@ -15,13 +15,13 @@ import android.speech.tts.TextToSpeech
 import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContextCompat
 import cat.ereza.customactivityoncrash.config.CaocConfig
-import com.bitvale.lightprogress.LightProgress
-import com.facebook.*
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
@@ -34,7 +34,6 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.twitter.sdk.android.core.*
-import com.twitter.sdk.android.core.identity.TwitterLoginButton
 import kotlinx.android.synthetic.main.activity_start_screen.*
 import java.util.*
 
@@ -63,7 +62,7 @@ class StartScreen : AppCompatActivity() {
             .showRestartButton(true) //default: true
             .logErrorOnRestart(false) //default: true
             .trackActivities(false) //default: false
-            .errorDrawable(R.drawable._s_icon_bug) //default: bug image
+            .errorDrawable(R.drawable.bug_icon) //default: bug image
             .apply()
         val mTwitterAuthConfig = TwitterAuthConfig(
             getString(R.string.twitter_consumer_key),
@@ -71,9 +70,17 @@ class StartScreen : AppCompatActivity() {
         val twitterConfig = TwitterConfig.Builder(applicationContext).twitterAuthConfig(mTwitterAuthConfig).build()
         Twitter.initialize(twitterConfig)
         setContentView(R.layout.activity_start_screen)
-        findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
-        lightStart.on()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+        when (intent.getIntExtra("background", 4)) {
+            0 -> startBckgd.setImageResource(R.drawable.redblackburst)
+            1 -> startBckgd.setImageResource(R.drawable.blueburst)
+            2 -> startBckgd.setImageResource(R.drawable.greenyellowburst)
+            3 -> startBckgd.setImageResource(R.drawable.navyblueburst)
+            4 -> startBckgd.setImageResource(R.drawable.redorangeburst)
+            5 -> startBckgd.setImageResource(R.drawable.yellowburst)
+        }
+        startBckgd.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
+        findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
         soundError = MediaPlayer.create(applicationContext,R.raw.error)
         soundUpdate = MediaPlayer.create(applicationContext,R.raw.card_played)
         soundSuccess = MediaPlayer.create(applicationContext,R.raw.success)

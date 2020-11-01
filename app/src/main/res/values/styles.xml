@@ -1,12 +1,40 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.App" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/borderBlueDark1o</item>
-        <item name="colorPrimaryDark">@color/Black</item>
-        <item name="colorAccent">@color/icon_yellow</item>
-        <item name="android:windowBackground">@drawable/splash</item>
 
+    <style name="Theme.App" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorSecondary</item>
+        <item name="colorPrimaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnSecondary</item>
+
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorSecondaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnPrimary</item>
+
+<!--        <item name="colorPrimarySurface">#BF1DD1</item>-->
+<!--        <item name="colorOnPrimarySurface">#4B8CD1</item>-->
+        <!--        <item name="colorOnSurface">#0087FD</item>-->
+        <!--        <item name="colorSurface">#AE6543</item>-->
+        <!--        <item name="scrimBackground">#78E807</item>-->
+        <!--        <item name="colorOnBackground">@color/colorSecondary</item>-->
+<!--        <item name="elevationOverlayColor">#6D74FF</item>-->
+    </style>
+
+    <style name="Theme.launcher" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.Card.ProfilePic" parent="">
+        <item name="cornerFamilyTopLeft">cut</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeTopRight">@dimen/_20sdp</item>
+
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerSizeBottomLeft">@dimen/_10sdp</item>
+
+        <item name="cornerFamilyBottomRight">cut</item>
+        <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
 </resources>

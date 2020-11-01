@@ -52,7 +52,7 @@ class TrainActivity : Activity() {
             .showRestartButton(true) //default: true
             .logErrorOnRestart(false) //default: true
             .trackActivities(false) //default: false
-            .errorDrawable(R.drawable._s_icon_bug) //default: bug image
+            .errorDrawable(R.drawable.bug_icon) //default: bug image
             .restartActivity(MainHomeScreen::class.java)
             .apply()
         setContentView(R.layout.activity_train)
