@@ -38,14 +38,14 @@
     <color name = "cardsBackgroundDark">#C6040E17</color>
     <color name = "cardsBackgroundLight">#DDFFFFFF</color>
     <color name = "layoutBackground">#00000000</color>
-    <color name = "layoutBackgroundLittle">#7A04061E</color>
+    <color name = "layoutBackgroundLittle">#C901040C</color>
 
     <color name = "inActiveCard">#C1323232</color>
     <color name = "highlightCard1">#9A39FF00</color>
 
     <color name="trackSwitchON">#0F56F100</color>
     <color name="trackSwitchOFF">#2AA3A3A3</color>
-    <color name="thumbSwitchON">#B3FF00</color>
+    <color name="thumbSwitchON">@color/icon_yellow</color>
     <color name="thumbSwitchOFF">#757575</color>
 
     <color name="borderblue">#0B70C8</color>
@@ -55,7 +55,7 @@
     <color name = "borderNblueDark2b">#266F81</color>
     <color name = "borderNblueDark3b">#1F434C</color>
 
-    <color name = "shine0black">#FFFFFF</color>
+    <color name = "shine0black">#BFBFBF</color>
     <color name = "shine1black">#2C2C2C</color>
     <color name = "shine2black">#000000</color>
 
@@ -84,7 +84,12 @@
     <color name = "borderblueDark2o">#BD571F</color>
 
     <color name="progressBarPlayer4">#00FF0A</color>
+    <color name="progressBarPlayer44">#00FF0A</color>
     <color name="scoreTableText">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="username">@color/white</color>
+    <color name="userScoreColor">@color/icon_yellow</color>
+
     <color name="shimmerHighlight">#66FF00</color>
 </resources>

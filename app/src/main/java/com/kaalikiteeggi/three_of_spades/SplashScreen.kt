@@ -7,6 +7,7 @@ package com.kaalikiteeggi.three_of_spades
 //import com.google.ads.mediation.inmobi.InMobiConsent
 //import com.inmobi.sdk.InMobiSdk
 //import com.unity3d.ads.UnityAds
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -51,6 +52,7 @@ class SplashScreen : AppCompatActivity() {
     else 4500
     private var background = 4
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_App)
         super.onCreate(savedInstanceState)
@@ -69,6 +71,7 @@ class SplashScreen : AppCompatActivity() {
         splashBckgd.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
         updateUI()
         findViewById<LightProgress>(R.id.lightSplash).on()
+        vcSplash.text = "Ver: " + packageManager.getPackageInfo(packageName,0).versionName
 
         mobileAds() // load mobile ads for everyone
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)

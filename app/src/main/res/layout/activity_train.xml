@@ -61,7 +61,7 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="closeTraining"
-        android:src= "@drawable/stop_sign" />
+        android:src= "@drawable/close" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/passbutton"

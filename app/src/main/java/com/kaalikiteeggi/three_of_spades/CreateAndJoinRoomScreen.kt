@@ -178,30 +178,29 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         playerInfoCoins.addAll(listOf(p1c, p2c, p3c, p4c))
 
         hostName.text = p1
-        Picasso.get().load(p1h).transform(CircleTransform())
-            .into(hostPhoto)
+        Picasso.get().load(p1h).into(hostPhoto)
 
         handler.postDelayed({
             soundUpdate.start()
-            speak("$p2 has joined")
+            speak("$p2 joined", speed = 1.1f)
             player2Text.text = p2
             Picasso.get().load(p2h).transform(CircleTransform()).into(t2)
-        }, 300)
+        }, 500)
 
         handler.postDelayed({
             soundUpdate.start()
-            speak("$p3 has joined")
+            speak("$p3 joined")
             player3Text.text = p3
             Picasso.get().load(p3h).transform(CircleTransform()).into(t3)
-        }, 1700)
+        }, 1600)
 
         handler.postDelayed({
             //            soundUpdate.start()
-            speak("$p4 has joined")
+            speak("$p4 joined", speed = 1.1f)
             player4Text.text = p4
             Picasso.get().load(p4h).transform(CircleTransform()).into(t4)
-            Handler(Looper.getMainLooper()).postDelayed({ allPlayersJoined() }, 700)
-        }, 3000)
+            Handler(Looper.getMainLooper()).postDelayed({ allPlayersJoined() }, 800)
+        }, 2700)
 
     }
 
@@ -253,8 +252,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
         if (!p1Status) {
             hostName.text = p1
-            Picasso.get().load(p1h).resize(350, 350).transform(CircleTransform())
-                .into(hostPhoto)
+            Picasso.get().load(p1h).resize(350, 350).into(hostPhoto)
             p1Status = true
         }
         if (p2.isNotEmpty() && p2h.isNotEmpty() && !p2Status) {
@@ -298,7 +296,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     private fun allPlayersJoined() {
         soundSuccess.start()
-        speak("Ready to Start")
+        speak("Ready to Start", speed = 1.1f)
         progressBarMain.visibility = View.GONE
         shareText.clearAnimation()
         imageViewShareButton.clearAnimation()
@@ -308,7 +306,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         waitingToJoinText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
         startGameButton.visibility = View.VISIBLE
         anim(startGameButton, R.anim.blink_infinite_700ms)
-//        anim(waitingToJoinText, R.anim.blink_infinite_700ms)
     }
 
     private fun startNextActivity() {
@@ -374,7 +371,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         } else {
             soundError.start()
             toastCenter("Only Host can start the game")
-            speak("Only Host can start the game", speed = 1.15f)
+            speak("Only Host can start", speed = 1.15f)
         }
     }
 
@@ -385,13 +382,13 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     toastCenter("Missing Language data - Text to speech")
                 } else if (!offline && from != "p$nPlayers") {
-                    speak("Invite your friends to join this room using the invite button")
+                    speak("Invite your friends to join this room using invite button", speed = 1.0f, pitch = 1f)
                 }
             }
         }
     }
 
-    private fun speak(speechText: String, pitch: Float = 0.7f, speed: Float = 1.05f) {
+    private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1.05f) {
         if (soundStatus && this::textToSpeech.isInitialized) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
@@ -404,10 +401,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         t2 = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
             }
-
             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             }
-
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
                     player2Photo.setImageDrawable(bitmap.toDrawable(resources))
@@ -417,10 +412,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         t3 = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
             }
-
             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             }
-
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
                     player3Photo.setImageDrawable(bitmap.toDrawable(resources))
@@ -430,10 +423,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         t4 = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
             }
-
             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             }
-
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
                     player4Photo.setImageDrawable(bitmap.toDrawable(resources))
@@ -443,10 +434,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         t5 = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
             }
-
             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             }
-
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
                     player5Photo.setImageDrawable(bitmap.toDrawable(resources))
@@ -456,10 +445,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         t6 = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
             }
-
             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
             }
-
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 if (bitmap != null) {
                     player6Photo.setImageDrawable(bitmap.toDrawable(resources))
@@ -496,7 +483,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         nPlayers = intent.getIntExtra("nPlayers", 0)
         userStats = intent.getIntegerArrayListExtra("userStats")!!
         imageViewShareButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
-        button_roomID.text = "Room ID: $roomID"   // display the room ID
+        button_roomID.text = "Room: $roomID"   // display the room ID
 
         if (from == "p1") { //  close icon only to host
             leaveJoiningRoomIcon.visibility = View.VISIBLE

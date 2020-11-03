@@ -90,5 +90,16 @@
         android:textSize="@dimen/_12ssp"
         android:visibility="gone" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vcSplash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:textColor="#D5D5D5"
+        android:textSize="@dimen/_9ssp"/>
+
 </RelativeLayout>
 

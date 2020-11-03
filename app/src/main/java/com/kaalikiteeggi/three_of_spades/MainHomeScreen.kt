@@ -359,6 +359,15 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 5-> openSettingsWindow()
             }
         }
+        // Attach Text watcher to room ID input
+        roomIDInput.doOnTextChanged { _, _, _, _ ->
+            if(roomIDInputLayout.error != null && !errorJoinRoomID) {
+                roomIDInputLayout.error = null
+                roomIDInputLayout.helperText = getString(R.string.joinHelper)
+            }else if(errorJoinRoomID) {
+                errorJoinRoomID = false
+            }
+        }
     }
 
     private fun setDataListMHS(): ArrayList<DailyRewardItem> {
@@ -379,7 +388,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         editor = sharedPreferences.edit()
         if (user != null) {
             userName = user.displayName.toString().split(" ")[0]
-            usernameMHS.text = userName
+            usernameCardMHS.text = userName
             if (intent.getBooleanExtra("newUser", false)) { //check if user has joined room or created one and display Toast
                 toastCenter("Hi $userName") // dummy - add tutorial
                 editor.putBoolean("rated", rated)
@@ -410,10 +419,13 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     nGamesWon = dataSnapshot.get("w").toString().toInt()
                     nGamesBid = dataSnapshot.get("b").toString().toInt()
 
-                    if (!dataSnapshot.contains("phone")) fireStoreRef.set(hashMapOf("phone" to "${Build.MANUFACTURER} ${Build.MODEL}"), SetOptions.merge())
-                    if (!dataSnapshot.contains("phAPI")) fireStoreRef.set(hashMapOf("phAPI" to Build.VERSION.SDK_INT), SetOptions.merge())
+//                    fireStoreRef.set(hashMapOf(
+//                        "phone" to "${Build.MANUFACTURER} ${Build.MODEL}",
+//                        "phAPI" to Build.VERSION.SDK_INT,
+//                        "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()  ),
+//                        SetOptions.merge())
                     if (!dataSnapshot.contains("rated")) {
-                        if (!rated) fireStoreRef.set(hashMapOf("rated" to 0), SetOptions.merge())
+                        if (!rated) fireStoreRef.set(hashMapOf("rated" to 0), SetOptions.merge()) // set to false 1st time - new user
                         else fireStoreRef.set(hashMapOf("rated" to 1), SetOptions.merge())
                     } else {
                         rated = dataSnapshot.get("rated").toString().toInt() == 1
@@ -450,13 +462,18 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         consecutiveDay += 1
                         claimedToday = false
                         dailyRewardAmount = dailyRewardList[min(consecutiveDay, 7) - 1]
-                        fireStoreRef.set(hashMapOf("LSD" to today, "nDRC" to consecutiveDay, "claim" to 0), SetOptions.merge())
+                        fireStoreRef.set(hashMapOf("LSD" to today, "nDRC" to consecutiveDay, "claim" to 0,
+                            "phone" to "${Build.MANUFACTURER} ${Build.MODEL}",
+                            "phAPI" to Build.VERSION.SDK_INT,
+                            "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
                     } else if (today > lastSeenDate + 1) { // if more than 1 day gap , reset counter
                         consecutiveDay = 1
                         claimedToday = false
                         dailyRewardAmount = dailyRewardList[min(consecutiveDay, 7) - 1]
-                        fireStoreRef.set(hashMapOf("LSD" to today, "nDRC" to consecutiveDay, "claim" to 0), SetOptions.merge())
-                        //                    if(!claimedToday) dailyRewardWindowDisplay() //if not claimed today
+                        fireStoreRef.set(hashMapOf("LSD" to today, "nDRC" to consecutiveDay, "claim" to 0,
+                            "phone" to "${Build.MANUFACTURER} ${Build.MODEL}",
+                            "phAPI" to Build.VERSION.SDK_INT,
+                            "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
                     }
                     if (!claimedToday) { //if not claimed today
                         Handler(Looper.getMainLooper()).postDelayed({
@@ -789,7 +806,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         closeSettings.visibility = View.GONE
         Handler(Looper.getMainLooper()).postDelayed({
             settingsLayout.visibility = View.GONE
-        }, 230)
+        }, 190)
         closeSettings.clearAnimation()
     }
 
@@ -978,7 +995,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     private fun joinRoomWindowOpen() {
-//        roomIDInput.hint = "Room ID"
         if (mInterstitialAd.isLoaded && !premiumStatus && !dailyRewardStatus && !onceAdWatched && !newUser) {
             mInterstitialAd.show()
         }
@@ -987,16 +1003,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         }, 270)
         joinRoomFrame.visibility = View.VISIBLE
         anim(joinRoomFrameTemp, R.anim.zoomin_center)
+        roomIDInputLayout.error = null
+        roomIDInputLayout.helperText = getString(R.string.joinHelper)
+        errorJoinRoomID = false
         joinRoomWindowStatus = true
-
-        roomIDInput.doOnTextChanged { _, _, _, _ ->
-            if(roomIDInputLayout.error != null && !errorJoinRoomID) {
-                roomIDInputLayout.error = null
-                roomIDInputLayout.helperText = getString(R.string.joinHelper)
-            }else if(errorJoinRoomID) {
-                errorJoinRoomID = false
-            }
-        }
     }
 
     fun joinRoomWindowExit(view: View) {
@@ -1005,7 +1015,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         joinRoomWindowStatus = false
         Handler(Looper.getMainLooper()).postDelayed({
             joinRoomFrame.visibility = View.GONE
-        }, 230)
+        }, 190)
     }
 
     fun developerCredits(view: View) {
@@ -1136,7 +1146,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 viewTemp.userName.setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
             }
             viewTemp.userName.text = "$i. " + document["n"].toString()
-            viewTemp.userName.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
+            viewTemp.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
             viewTemp.userCoins.setText("$ " + String.format("%,d", document["sc"]), true)
             viewTemp.userCoins.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
             viewTemp.userScore.text = String.format("%,d", played) + " " + emojiGamePlayed + "\n" + String.format("%,d", won) + " " + emojiTrophy + "\n" + String.format("%,d", bidGames) + " " + emojiScore
@@ -1158,7 +1168,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         Handler(Looper.getMainLooper()).postDelayed({
             rankStats.clearAnimation()
             rankStats.visibility = View.GONE
-        }, 230)
+        }, 190)
 
     }
 
@@ -1202,10 +1212,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun openRatingWindow(view: View) {
-                if (soundStatus) SoundManager.getInstance().playUpdateSound()
-        anim(rateUsLayout, R.anim.zoomin_center)
-        anim(rateUsIcon1, R.anim.anim_scale_appeal)
+        if (soundStatus) SoundManager.getInstance().playUpdateSound()
         rateUsLayout.visibility = View.VISIBLE
+        anim(rateUsLayoutFrame, R.anim.zoomin_center)
+        anim(rateUsIcon1, R.anim.anim_scale_appeal)
         ratingWindowOpenStatus = true
     }
 
@@ -1230,34 +1240,34 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     fun rateUs(view: View) { // once clicked never ask to rate again
                 if (soundStatus) SoundManager.getInstance().playUpdateSound()
         closeRatingWindow(View(applicationContext))
-        if(!rated) inAppReview()
+        if(!rated) openPlayStore() //inAppReview()  - disable inapp review for a while
         else openPlayStore()
         if (view.tag == "good") logFirebaseEvent("rate_us", 1, "rate_good")
         else if (view.tag == "bad") logFirebaseEvent("rate_us", 1, "rate_bad")
     }
 
-    private fun inAppReview() {
-        val manager = ReviewManagerFactory.create(applicationContext)
-        val request = manager.requestReviewFlow()
-        request.addOnCompleteListener { request1 ->
-            if (request1.isSuccessful) {
-                val reviewInfo = request1.result
-                val flow = manager.launchReviewFlow(this, reviewInfo)
-                flow.addOnCompleteListener { result ->
-                    if (result.isSuccessful) {
-                        rated = true
-                        editor.putBoolean("rated", rated)
-                        editor.apply()
-                        logFirebaseEvent("rate_us", 1, "rated")
-                        refUsersData.document(uid).set(hashMapOf("rated" to 1), SetOptions.merge())
-                    } else openPlayStore() //toastCenter("failed")
-                }
-            } else{
-                logFirebaseEvent("rate_us", 1, "ratedFailure")
-                openPlayStore()
-            }
-        }
-    }
+//    private fun inAppReview() {
+//        val manager = ReviewManagerFactory.create(applicationContext)
+//        val request = manager.requestReviewFlow()
+//        request.addOnCompleteListener { request1 ->
+//            if (request1.isSuccessful) {
+//                val reviewInfo = request1.result
+//                val flow = manager.launchReviewFlow(this, reviewInfo)
+//                flow.addOnCompleteListener { result ->
+//                    if (result.isSuccessful) {
+//                        rated = true
+//                        editor.putBoolean("rated", rated)
+//                        editor.apply()
+//                        logFirebaseEvent("rate_us", 1, "rated")
+//                        refUsersData.document(uid).set(hashMapOf("rated" to 1), SetOptions.merge())
+//                    } else openPlayStore() //toastCenter("failed")
+//                }
+//            } else{
+//                logFirebaseEvent("rate_us", 1, "ratedFailure")
+//                openPlayStore()
+//            }
+//        }
+//    }
 
     fun openPlayStore() {
         val intent = Intent(Intent.ACTION_VIEW).apply {
@@ -1354,12 +1364,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 }
 
-
 //    @SuppressLint("SetJavaScriptEnabled")
 //    private fun howToPlay() {
 //        intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl))
 //    }
-
 
 //    private fun checkAccessToTrain() {
 //        Firebase.firestore.collection("Train_Access").document(uid).get()
@@ -1377,6 +1385,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 //    editor.putString("themeColor", view.tag.toString()) // write username to preference file
 //    editor.apply()
 //}
+
 //private fun changeBackground(color: String) {
 //    when (color) {
 //        "shine_blue" -> {

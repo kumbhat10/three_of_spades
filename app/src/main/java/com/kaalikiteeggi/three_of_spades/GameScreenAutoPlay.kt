@@ -50,7 +50,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     //    region Initialization
 
     private lateinit var sp: SoundPool
-    private var h:Int = 0
+    private var h: Int = 0
     private lateinit var textToSpeech: TextToSpeech
     private var typedValue = TypedValue()
     private var rated = false
@@ -64,6 +64,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var editor: SharedPreferences.Editor
 
     private lateinit var refIDMappedTextView: List<Int>
+    private lateinit var refIDMappedTextViewA: List<Int>
     private lateinit var refIDMappedImageView: List<Int>
     private lateinit var refIDMappedHighlightView: List<Int>
     private lateinit var refIDMappedTableImageView: List<Int>
@@ -71,7 +72,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var refIDMappedTableWinnerAnim: List<Int>
     private lateinit var refIDValesTextViewScore: List<Int>
     private lateinit var refIDMappedPartnerIconImageView: List<Int>
-    private lateinit var refIDMappedOnlineIconImageView: List<Int>
 
     private lateinit var cardsDrawable: List<Int>
     private lateinit var cardsPoints: List<Int>
@@ -100,9 +100,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var from: String
     private var fromInt = 0
     private var nPlayers = 0
-
-    private val emojiMoney = String(Character.toChars(0x1F4B0))
-    private val emojiScore = String(Character.toChars(0x1F3AF))
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var refUsersData = Firebase.firestore.collection("Users")
@@ -212,7 +209,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
-        when(Random.nextInt(0,6)) {
+        when (Random.nextInt(0, 6)) {
             0 -> gameBkgd.setImageResource(R.drawable.poker)
             1 -> gameBkgd.setImageResource(R.drawable.pokerblue)
             2 -> gameBkgd.setImageResource(R.drawable.pokercyan)
@@ -234,10 +231,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
         nPlayers = 4 //intent.getIntExtra("nPlayers", 0)
         setupGame()
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
+        refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
         refIDMappedImageView = PlayersReference().refIDMappedImageView(from, nPlayers)
         refIDMappedHighlightView = PlayersReference().refIDMappedHighlightView(from, nPlayers)
         refIDMappedPartnerIconImageView = PlayersReference().refIDMappedPartnerIconImageView(from, nPlayers)
-//        refIDMappedOnlineIconImageView = PlayersReference().refIDMappedOnlineIconImageView(from, nPlayers)
         refIDMappedTableAnim = PlayersReference().refIDMappedTableAnim(from, nPlayers)
         refIDMappedTableWinnerAnim = PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
         refIDMappedTableImageView = PlayersReference().refIDMappedTableImageView(from, nPlayers)
@@ -302,7 +299,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     findViewById<TextView>(R.id.textViewTimer).clearAnimation()
                     findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
                     findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
-                    bidButtonsAnimation("clear")
                     centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
                     speak("Time's Up ${playerName(fromInt)}. You can't bid now", speed = 1.05f)
 
@@ -343,8 +339,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     newGameStatus = true
                     if (!roundStarted) {
                         finishPassOverlay()
-                        if (soundStatus) SoundManager.getInstance()
-                            .playSuccessSound()
+                        if (soundStatus) SoundManager.getInstance().playSuccessSound()
                         updatePlayerScoreInfo(listOf(pt1, pt2, pt3, pt4))
                         displaySelfCards(animations = false)
                         Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 3000)
@@ -478,17 +473,17 @@ class GameScreenAutoPlay : AppCompatActivity() {
         findViewById<ImageView>(R.id.playerView3_4).visibility = View.VISIBLE
     }
 
-    private fun updateTimeAutoPlay(){
+    private fun updateTimeAutoPlay() {
         timeAutoPlayCard = when {
             nGamesPlayed < 3 -> listOf(700, 900, 800)
             nGamesPlayed < 6 -> listOf(600, 650, 600, 500)
             nGamesPlayed < 12 -> listOf(500, 450, 550, 400)
-            nGamesPlayed < 15 -> listOf(400, 350, 400, 300,250)
+            nGamesPlayed < 15 -> listOf(400, 350, 400, 300, 250)
             else -> listOf(350, 250, 300, 300)
         }
         timeAutoBid = when {
             nGamesPlayed < 4 -> listOf(1400, 1500)
-            nGamesPlayed < 10 -> listOf( 1300, 1400)
+            nGamesPlayed < 10 -> listOf(1300, 1400)
             else -> listOf(1300)
         }
         speedAutoBid = when {
@@ -527,7 +522,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
             updateWholeScoreBoard()
             gameNumber += 1
         }
-        if (!mInterstitialAd.isLoaded && !premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder().build())
+        if (!mInterstitialAd.isLoaded && !premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder()
+            .build())
         Handler(Looper.getMainLooper()).postDelayed({
             //            if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 2)) {  // Ask only once per game
             //                inAppReview()
@@ -570,7 +566,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (scoreList[fromInt] > 0) {
             createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Win, speed = coinSpeed, ratePerSec = coinRate)
             nGamesWon += 1
-        }else {
+        } else {
             createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Lost, speed = coinSpeed, ratePerSec = coinRate)
         }
 
@@ -597,7 +593,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun createScoreTableHeader(): List<String> {
-        return listOf("Player\n$emojiMoney", p1 + "\n$emojiMoney${String.format("%,d", p1Coins)}", p2 + "\n$emojiMoney${String.format("%,d", p2Coins)}", p3 + "\n$emojiMoney${String.format("%,d", p3Coins)}", p4 + "\n$emojiMoney${String.format("%,d", p4Coins)}")
+        return listOf("Player\n${Emoji().money}", p1 + "\n${Emoji().money}${String.format("%,d", p1Coins)}", p2 + "\n${Emoji().money}${String.format("%,d", p2Coins)}", p3 + "\n${Emoji().money}${String.format("%,d", p3Coins)}", p4 + "\n${Emoji().money}${String.format("%,d", p4Coins)}")
     }
 
     private fun scoreBoardTable(data: List<Any>, display: Boolean = true, upDateHeader: Boolean = false, upDateTotal: Boolean = false) {
@@ -641,7 +637,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 findViewById<LinearLayout>(R.id.imageGalleryScore).addView(viewTemp)
             }
         }
-        if(display) scrollViewScore.post {
+        if (display) scrollViewScore.post {
             scrollViewScore.fullScroll(View.FOCUS_DOWN)
         }
     }
@@ -774,12 +770,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
             for (i in 0 until nPlayers) {
                 val j = i + 1
                 if (j == bidder || (j == buPlayer1 && buFound1 != 0)) {
-//                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  $bidTeamScore /$bidValue"
-                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + ": $bidTeamScore /$bidValue"
-                }
-                else {
-//                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
-                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + ": ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
+                    //                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  $bidTeamScore /$bidValue"
+                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) //+ ": $bidTeamScore /$bidValue"
+                    findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$bidTeamScore /$bidValue"
+                } else {
+                    //                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
+                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) //+ ": ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
+                    findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
                 }
             }
             var tt1 = 0
@@ -798,7 +795,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
-//            toastCenter("Game Over: Bidder team Won \n         Defender team Lost")
+            //            toastCenter("Game Over: Bidder team Won \n         Defender team Lost")
             centralText("Game Over: Bidder team Won \n         Defender team Lost")
 
             if (fromInt == bidder && buFound1 != 1) {
@@ -825,7 +822,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             gameTurn.removeObserver(roundListener)
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
-//            toastCenter("Game Over: Defender team Won \n         Bidder team Lost")
+            //            toastCenter("Game Over: Defender team Won \n         Bidder team Lost")
             centralText("Game Over: Defender team Won \n         Bidder team Lost")
 
             if (fromInt == bidder || fromInt == buPlayer1) {
@@ -845,21 +842,21 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun displayPartnerIcon() {
-//        for (i in 0 until nPlayers) { // first reset background and animation of partner icon
-//            findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).clearAnimation()
-//            findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
-//            findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).setImageResource(R.drawable.partnericon)
-//        }
-//        if (bidder != 0) { // show single person icon next to bidder
-//            findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
-//            findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
-//        }
+        //        for (i in 0 until nPlayers) { // first reset background and animation of partner icon
+        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).clearAnimation()
+        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
+        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).setImageResource(R.drawable.partnericon)
+        //        }
+        //        if (bidder != 0) { // show single person icon next to bidder
+        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
+        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
+        //        }
         if (buFound1 == 1 && buPlayer1 != 8) {
             findViewById<ImageView>(refIDMappedPartnerIconImageView[buPlayer1 - 1]).visibility = View.VISIBLE
             findViewById<ImageView>(refIDMappedPartnerIconImageView[buPlayer1 - 1]).setImageResource(R.drawable.partnericon)
             findViewById<ImageView>(refIDMappedPartnerIconImageView[buPlayer1 - 1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_big_fast))
         }
-        moveView(buddyText1, findViewById(refIDMappedTextView[buPlayer1-1]), duration = 500L)
+        moveView(buddyText1, findViewById(refIDMappedTextView[buPlayer1 - 1]), duration = 500L)
         if (gameState.value!! == 5) updatePlayerScoreInfo(listOf(pt1, pt2, pt3, pt4))
     }
 
@@ -1145,7 +1142,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             gallery.addView(viewTemp)
         }
         if (animations) {
-            findViewById<RelativeLayout>(R.id.horizontalScrollView).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
+            findViewById<RelativeLayout>(R.id.playerCards).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
         }
         if (bidingRequest && activityExists) {
             startBidding()
@@ -1231,7 +1228,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             bu1Flag = 1 // bidder has one of card in his hand
             if (vibrateStatus) vibrationStart()
             buddyImage1.setImageResource(cardsDrawablePartner[bu1])
-            moveView(buddyImage1, findViewById(refIDMappedImageView[bidder-1]))
+            moveView(buddyImage1, findViewById(refIDMappedImageView[bidder - 1]))
             buddyImage1.clearAnimation()
             findViewById<TickerView>(R.id.buddyText1).clearAnimation()
             gameState.value = 5  // change game state to next playing round
@@ -1296,23 +1293,22 @@ class GameScreenAutoPlay : AppCompatActivity() {
             }
         }
         findViewById<GifImageView>(R.id.trumpImage).clearAnimation() // main trump showing view
-        moveView(trumpImage, findViewById(refIDMappedImageView[bidder-1]))
+        moveView(trumpImage, findViewById(refIDMappedImageView[bidder - 1]))
     } // just displaying trump card
 
     private fun startTrumpSelection() {
-        textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4)
-        findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
+//        textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4)
+//        findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer44))
         if (bidder != fromInt) {     //  show to everyone except bidder
             autoTrumpSelect()
-            //            toastCenter("${playerName(bidder)} won the bid round")
             speak("${playerName(bidder)} won bid. Waiting to choose trump", speed = 1.10f)
             centralText("Waiting for ${playerName(bidder)} \n to choose Trump", 0)
         } else { // show to bidder only
+            bidNowImage.visibility = View.GONE // redundant not required really
             centralText("Well done! ${playerName(bidder)} \n You won the bid round", 0)
             speak("You won bid. Choose your trump now", speed = 1.10f, queue = TextToSpeech.QUEUE_ADD)
             findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.VISIBLE
             findViewById<FrameLayout>(R.id.frameTrumpSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
-            trumpAnimation("start")
             if (vibrateStatus) vibrationStart()
         }
     }
@@ -1350,22 +1346,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.GONE
                 findViewById<FrameLayout>(R.id.frameTrumpSelection).clearAnimation()
             }, 230)
-            trumpAnimation("clear")
-        }
-    }
-
-    private fun trumpAnimation(task: String) {
-        if (task == "start") {
-            findViewById<ImageView>(R.id.imageViewTrumpHearts).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-            findViewById<ImageView>(R.id.imageViewTrumpSpades).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-            findViewById<ImageView>(R.id.imageViewTrumpDiamonds).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-            findViewById<ImageView>(R.id.imageViewTrumpClubs).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-        } else if (task == "clear") {
-            findViewById<ImageView>(R.id.imageViewTrumpHearts).clearAnimation()
-            findViewById<ImageView>(R.id.imageViewTrumpSpades).clearAnimation()
-            findViewById<ImageView>(R.id.imageViewTrumpDiamonds).clearAnimation()
-            findViewById<ImageView>(R.id.imageViewTrumpClubs).clearAnimation()
-            findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
         }
     }
 
@@ -1383,15 +1363,15 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (bidSpeak && bidingStarted && soundStatus) speak("${playerName(bidder)} bid $bidValue", speed = 1.8f)
             //            else if (soundStatus) SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
             textViewBidValue.text = "$bidValue" //.toString() //show current bid value $emojiScore
-            findViewById<TextView>(R.id.textViewBider).text = playerName(bidder)
-            textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.font_yellow)
-            findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
+            findViewById<TextView>(R.id.textViewBider).text = "Bid: " + playerName(bidder)
+//            textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.font_yellow)
+//            findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
             findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE //biding frame invisible
             resetBackgroundAnimationBidding() //set all background to black or red depending on status
             findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
             findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
             animatePlayer(playerTurn.value!!)  // animate current player
-            val tView:ImageView = findViewById(refIDMappedImageView[playerTurn.value!! - 1])
+            val tView: ImageView = findViewById(refIDMappedImageView[playerTurn.value!! - 1])
             bidNowImage.animate().x(tView.x).y(tView.y).duration = 450
             if (bidStatus[playerTurn.value!! - 1] == 1) {  // highlight current player
                 findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[playerTurn.value!! - 1]).visibility = View.VISIBLE
@@ -1401,7 +1381,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
                     findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.VISIBLE // this path is ciritical
                     findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
-                    bidButtonsAnimation("start")
                     countDownTimer("Bidding", purpose = "start")
                     if (vibrateStatus) vibrationStart()
                 } else if (bidStatus[playerTurn.value!! - 1] == 0) {
@@ -1420,7 +1399,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         playerTurn.observe(this, bidTurnListener)
     }
 
-    fun moveView(viewToMove: View, fromView: View, duration: Long = 350){
+    fun moveView(viewToMove: View, fromView: View, duration: Long = 350) {
         val xViewToMove = viewToMove.x
         val yViewToMove = viewToMove.y
         viewToMove.x = fromView.x
@@ -1500,26 +1479,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 val result = textToSpeech.setLanguage(Locale.ENGLISH)
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     toastCenter("Missing Language data - Text to speech")
-                }else if(!shuffleOver){
+                } else if (!shuffleOver) {
                     speak("Shuffling cards Please wait", speed = 1f)
                 }
             }
-        }
-    }
-
-    private fun bidButtonsAnimation(task: String) {
-        if (task == "start") {
-            findViewById<Button>(R.id.bid05button).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-            findViewById<Button>(R.id.bid10button).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-            findViewById<Button>(R.id.bid20button).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-            findViewById<Button>(R.id.bid50button).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-            findViewById<Button>(R.id.bidpassbutton).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-        } else if (task == "clear") {
-            findViewById<Button>(R.id.bid05button).clearAnimation()
-            findViewById<Button>(R.id.bid10button).clearAnimation()
-            findViewById<Button>(R.id.bid20button).clearAnimation()
-            findViewById<Button>(R.id.bid50button).clearAnimation()
-            findViewById<Button>(R.id.bidpassbutton).clearAnimation()
         }
     }
 
@@ -1561,8 +1524,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
         findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[bidder - 1]).visibility = View.VISIBLE
 
-//        textViewBidValue.clearAnimation()
-        findViewById<TextView>(R.id.textViewBider).clearAnimation()
+        //        textViewBidValue.clearAnimation()
+//        findViewById<TextView>(R.id.textViewBider).clearAnimation()
         findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
         findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
     }
@@ -1585,10 +1548,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private fun animateElements() {
         horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
-        findViewById<TextView>(R.id.textViewBider).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
-//        textViewBidValue.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
+//        findViewById<TextView>(R.id.textViewBider).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
+        //        textViewBidValue.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
         buddyImage1.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
-        findViewById<ImageView>(R.id.buddyImage2).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
+        buddyImage2.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
         findViewById<GifImageView>(R.id.trumpImage).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
     }
 
@@ -1620,8 +1583,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun updatePlayerNames() {
         val totalCoins = listOf(p1Coins, p2Coins, p3Coins, p4Coins)
         for (i in 0 until nPlayers) {
-//            findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(i + 1) + "\n${emojiMoney}${String.format("%,d", totalCoins[i])}"
-            findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(i + 1) + " $${String.format("%,d", totalCoins[i])}"
+            //            findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(i + 1) + "\n${Emoji().money}${String.format("%,d", totalCoins[i])}"
+            findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(i + 1)// + " $${String.format("%,d", totalCoins[i])}"
+            findViewById<TickerView>(refIDMappedTextViewA[i]).text =  "$${String.format("%,d", totalCoins[i])}"
         }
     }
 
@@ -1745,7 +1709,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)
         }
         if (sharedPreferences.contains("rated")) {
-//            rated = sharedPreferences.getBoolean("rated", false)
+            //            rated = sharedPreferences.getBoolean("rated", false)
         } else {
             editor.putBoolean("rated", rated)
             editor.apply()

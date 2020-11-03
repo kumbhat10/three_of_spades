@@ -36,5 +36,10 @@
         <item name="cornerFamilyBottomRight">cut</item>
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
+    <style name="ShapeAppearanceOverlay.App.Card.AllRounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/_8sdp</item>
+
+    </style>
 
 </resources>

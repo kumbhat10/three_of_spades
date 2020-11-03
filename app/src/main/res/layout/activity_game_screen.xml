@@ -8,37 +8,6 @@
     android:elevation="@dimen/_14sdp"
     tools:context=".GameScreen">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_7sdp"
-        android:layout_marginEnd="@dimen/_7sdp"
-        android:layout_marginBottom="0dp"
-        app:shimmer_auto_start="true"
-        app:shimmer_colored="true"
-        app:shimmer_direction="right_to_left"
-        app:shimmer_fixed_height="@dimen/_150sdp"
-        app:shimmer_fixed_width="@dimen/_50sdp"
-        app:shimmer_highlight_alpha="1"
-        app:shimmer_highlight_color="#D0D3D1D1"
-        app:shimmer_intensity="0.1"
-        app:shimmer_repeat_delay="10000"
-        app:shimmer_repeat_mode="restart"
-        app:shimmer_shape="linear"
-        app:shimmer_tilt="60"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/app_name"
-            android:onClick="closeChatScoreWindow"
-            android:src="@drawable/game_screen_table_blue"
-            android:visibility="gone" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
     <ImageView
         android:id="@+id/gameBkgd"
         android:layout_width="match_parent"
@@ -79,7 +48,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/imageGapEnd_4player"
         android:layout_marginTop="@dimen/imagePaddingTextGap"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -87,13 +56,32 @@
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView1"
-        android:textColor="@color/white"
+        android:textColor="@color/username"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
         app:ticker_defaultPreferredScrollingDirection="any" />
+
+    <com.robinhood.ticker.TickerView
+        android:id="@+id/textView1_4a"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView1_4"
+        android:layout_alignEnd="@+id/textView1_4"
+        android:layout_below="@+id/textView1_4"
+        android:layout_marginTop="@dimen/userScoreGap"
+        android:textColor="@color/userScoreColor"
+        android:background="@drawable/blacksquarebutton"
+        android:text="@string/playerView1"
+        android:visibility="gone"
+        android:textSize="@dimen/userScoreTextSize"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:paddingTop="@dimen/padding_userScore"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight1_4"
@@ -184,12 +172,12 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_toEndOf="@+id/buddyImage1"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView4"
-        android:textColor="@color/white"
+        android:textColor="@color/username"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
         tools:ignore="SmallSp"
@@ -197,6 +185,26 @@
         app:ticker_defaultCharacterList="number"
         app:ticker_defaultPreferredScrollingDirection="any"/>
 
+    <com.robinhood.ticker.TickerView
+        android:id="@+id/textView2_4a"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView2_4"
+        android:layout_alignEnd="@+id/textView2_4"
+        android:layout_below="@+id/textView2_4"
+        android:layout_marginTop="@dimen/userScoreGap"
+        android:textColor="@color/userScoreColor"
+        android:background="@drawable/blacksquarebutton"
+        android:text="@string/playerView1"
+        android:textSize="@dimen/userScoreTextSize"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:paddingTop="@dimen/padding_userScore"
+        android:visibility="gone"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any"/>
+    
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight2_4"
         android:layout_width="wrap_content"
@@ -286,12 +294,12 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView1"
-        android:textColor="@color/white"
+        android:textColor="@color/username"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
         tools:ignore="SmallSp"
@@ -299,6 +307,26 @@
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"/>
 
+    <com.robinhood.ticker.TickerView
+        android:id="@+id/textView3_4a"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView3_4"
+        android:layout_alignEnd="@+id/textView3_4"
+        android:layout_below="@+id/textView3_4"
+        android:layout_marginTop="@dimen/userScoreGap"
+        android:textColor="@color/userScoreColor"
+        android:background="@drawable/blacksquarebutton"
+        android:text="@string/playerView1"
+        android:textSize="@dimen/userScoreTextSize"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:paddingTop="@dimen/padding_userScore"
+        android:visibility="gone"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any"/>
+    
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight3_4"
         android:layout_width="wrap_content"
@@ -387,7 +415,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
@@ -485,7 +513,7 @@
         android:layout_marginStart="@dimen/imageGapBetween1"
         android:layout_marginTop="@dimen/imagePaddingTextGap"
         android:layout_toEndOf="@+id/playerView1"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -587,7 +615,7 @@
         android:layout_marginStart="@dimen/imageGapBetweenHorizontal"
         android:layout_marginTop="@dimen/imagePaddingTextGap"
         android:layout_toEndOf="@+id/playerView2"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -690,7 +718,7 @@
         android:layout_marginEnd="@dimen/imageGapBetweenHorizontal"
         android:layout_marginBottom="0dp"
         android:layout_toStartOf="@+id/playerView5"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -791,7 +819,7 @@
         android:layout_marginTop="@dimen/imagePaddingTextGap"
         android:layout_marginEnd="@dimen/imageGapBetween1"
         android:layout_toStartOf="@+id/playerView6"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
@@ -893,7 +921,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/imagePaddingTextGap"
         android:layout_marginEnd="@dimen/imageGapEnd"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
@@ -1010,13 +1038,13 @@
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView7"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/width_playername_4"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/horizontalScrollView"
+        android:layout_above="@+id/playerCards"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/_83sdp"
         android:layout_marginBottom="0dp"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/redrectanlgesimple"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -1026,14 +1054,33 @@
         android:paddingEnd="@dimen/_5sdp"
         android:paddingStart="@dimen/_5sdp"
         android:text="@string/playerView1"
-        android:textColor="@color/white"
+        android:textColor="@color/username"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="visible"
         tools:ignore="SmallSp"
         app:ticker_defaultCharacterList="number"
         app:ticker_animationDuration="900"
         app:ticker_defaultPreferredScrollingDirection="any"/>
-
+    
+    <com.robinhood.ticker.TickerView
+        android:id="@+id/textView7a"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView7"
+        android:layout_alignEnd="@+id/textView7"
+        android:layout_below="@+id/textView7"
+        android:layout_marginTop="@dimen/userScoreGap"
+        android:textColor="@color/userScoreColor"
+        android:background="@drawable/blacksquarebutton"
+        android:text="@string/playerView1"
+        android:textSize="@dimen/userScoreTextSize"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:paddingTop="@dimen/padding_userScore"
+        app:ticker_animationDuration="900"
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any"/>
+    
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight7"
         android:layout_width="0dp"
@@ -1056,7 +1103,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_above="@+id/horizontalScrollView"
+        android:layout_above="@+id/playerCards"
         android:layout_marginEnd="@dimen/_minus3sdp"
         android:layout_marginBottom="@dimen/_2sdp"
         android:layout_toStartOf="@+id/textView7"
@@ -1092,7 +1139,7 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginTop="@dimen/_minus2sdp"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/blacksquarebutton"
         android:gravity="center_horizontal|top"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
@@ -1122,7 +1169,7 @@
         android:layout_below="@+id/buddyImage1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_minus2sdp"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/blacksquarebutton"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -1164,7 +1211,7 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_toStartOf="@+id/buddyImage1"
-        android:background="@drawable/button_square_userinfo"
+        android:background="@drawable/blacksquarebutton"
         android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
@@ -1178,18 +1225,35 @@
     <ImageView
         android:id="@+id/closeGameRoomIcon"
         android:tag="clicked"
-        android:layout_width="@dimen/_29sdp"
-        android:layout_height="@dimen/_29sdp"
+        android:layout_width="@dimen/_32sdp"
+        android:layout_height="@dimen/_32sdp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:layout_marginEnd="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:contentDescription="@string/todo"
         android:onClick="closeGameRoom"
-        app:srcCompat="@drawable/stop_sign" />
+        app:srcCompat="@drawable/close" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textViewTimer"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="false"
+        android:layout_centerVertical="false"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:background="@drawable/blackcirclebutton"
+        android:gravity="center"
+        android:text="@string/timerStart"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_20ssp"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressbarTimer"
@@ -1210,46 +1274,31 @@
         android:secondaryProgress="100"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/textViewTimer"
-        android:layout_width="@dimen/_57sdp"
-        android:layout_height="@dimen/_57sdp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerInParent="false"
-        android:layout_centerVertical="false"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:layout_marginEnd="@dimen/_4sdp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center"
-        android:text="@string/timerStart"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_20ssp"
-        android:visibility="gone" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="@dimen/_36sdp"
-        android:layout_height="@dimen/_36sdp"
+    <ImageView
+        android:layout_width="@dimen/_38sdp"
+        android:layout_height="@dimen/_42sdp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/_14sdp"
+        android:layout_marginEnd="2dp"
         android:elevation="@dimen/_36sdp"
         android:onClick="openCloseScoreSheet"
-        android:background="@drawable/button_pressed_score_table"
+        android:background="@color/Black"
+        android:src="@drawable/button_pressed_score_table"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         tools:ignore="ContentDescription" />
 
     <RelativeLayout
-        android:id="@+id/horizontalScrollView"
+        android:id="@+id/playerCards"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_64sdp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:elevation="@dimen/_40sdp"
         android:layout_marginStart="@dimen/_50sdp"
         android:layout_marginEnd="@dimen/_39sdp"
         android:layout_marginBottom="0dp">
@@ -1292,6 +1341,7 @@
         android:layout_marginBottom="@dimen/_14sdp"
         android:onClick="openCloseChatWindow"
         android:src="@drawable/chat2"
+        android:background="@drawable/blacksquarebutton"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -1311,52 +1361,36 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/textViewBid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/imageGapEnd"
-        android:maxWidth="@dimen/_72sdp"
-        android:text="@string/bidValue"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:textColor="#E1E1E1"
-        android:textSize="@dimen/_20ssp"
-        android:textStyle="bold" />
-
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textViewBider"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_28sdp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="@dimen/_2sdp"
-        android:layout_marginTop="@dimen/imageGapEnd"
-        android:layout_marginEnd="@dimen/_22sdp"
-        android:layout_toStartOf="@+id/trumpImage"
-        android:layout_toEndOf="@+id/textViewBid"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/redrectanlgesimple"
+        android:gravity="start|center"
+        android:paddingStart="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_10sdp"
         android:text="@string/Bider"
-        android:textColor="@color/progressBarPlayer4"
-        android:textSize="@dimen/_18ssp" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/_18ssp"
+        tools:ignore="RelativeOverlap,RtlSymmetry" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textViewBidValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewBid"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_28sdp"
+        android:layout_below="@+id/textViewBider"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_minus4sdp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="@dimen/_minus2sdp"
+        android:gravity="center"
         android:text="@string/bidValue2"
-        android:textColor="@color/progressBarPlayer4"
-        android:textSize="@dimen/_18ssp"
-        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_19ssp"
+        android:background="@drawable/redrectanlgesimple"
         app:ticker_animationDuration="800"
         app:ticker_defaultPreferredScrollingDirection="any"
         app:ticker_defaultCharacterList="number"/>
@@ -1364,35 +1398,36 @@
     <FrameLayout
         android:id="@+id/frameAskBid"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_172sdp"
-        android:layout_above="@+id/horizontalScrollView"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/playerCards"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/_89sdp"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_36sdp"
+        android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginEnd="@dimen/_89sdp"
         android:layout_marginBottom="0dp"
-        android:elevation="@dimen/_72sdp"
-        android:background="@drawable/shine_score_table"
+        android:elevation="@dimen/_45sdp"
+        android:background="@drawable/blacksquarebutton"
         android:fadingEdge="horizontal|vertical"
         android:visibility="gone">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_49sdp"
-            android:alpha="1"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:background="@drawable/orangesquarebutton"
             android:gravity="center|center_horizontal"
             android:text="@string/raise_bid_or_pass"
-            android:textColor="@color/font_yellow"
+            android:textColor="@color/Black"
             android:textSize="@dimen/_25ssp" />
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipBid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:animateLayoutChanges="true"
-            app:chipSpacingHorizontal="@dimen/_7sdp"
+            android:layout_gravity="center"
+            app:chipSpacingHorizontal="@dimen/_5sdp"
             app:singleSelection="true">
 
             <androidx.appcompat.widget.AppCompatButton
@@ -1400,14 +1435,14 @@
                 android:layout_width="@dimen/_72sdp"
                 android:layout_height="@dimen/_43sdp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_square"
+                android:background="@drawable/greenroundedbutton"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:onClick="askToBid"
                 android:tag="5"
                 android:text="@string/bid05button"
-                android:textColor="@color/Black"
+                android:textColor="#303030"
                 android:textSize="@dimen/_22ssp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -1415,7 +1450,7 @@
                 android:layout_width="@dimen/_72sdp"
                 android:layout_height="@dimen/_43sdp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_square"
+                android:background="@drawable/greenroundedbutton"
                 android:onClick="askToBid"
                 android:shadowDy="4"
                 android:clickable="true"
@@ -1423,7 +1458,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:tag="10"
                 android:text="@string/bid10button"
-                android:textColor="@color/Black"
+                android:textColor="#303030"
                 android:textSize="@dimen/_22ssp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -1431,7 +1466,7 @@
                 android:layout_width="@dimen/_72sdp"
                 android:layout_height="@dimen/_43sdp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_square"
+                android:background="@drawable/greenroundedbutton"
                 android:onClick="askToBid"
                 android:clickable="true"
                 android:focusable="true"
@@ -1439,7 +1474,7 @@
                 android:shadowDy="4"
                 android:tag="20"
                 android:text="@string/bid20button"
-                android:textColor="@color/Black"
+                android:textColor="#303030"
                 android:textSize="@dimen/_22ssp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -1447,7 +1482,7 @@
                 android:layout_width="@dimen/_72sdp"
                 android:layout_height="@dimen/_43sdp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_square"
+                android:background="@drawable/greenroundedbutton"
                 android:onClick="askToBid"
                 android:clickable="true"
                 android:focusable="true"
@@ -1455,56 +1490,49 @@
                 android:shadowDy="4"
                 android:tag="50"
                 android:text="@string/bid50button"
-                android:textColor="@color/Black"
+                android:textColor="#303030"
                 android:textSize="@dimen/_22ssp" />
         </com.google.android.material.chip.ChipGroup>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bidpassbutton"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_100sdp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
-            android:layout_marginBottom="@dimen/_7sdp"
-            android:background="@drawable/button_square_red"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:background="@drawable/redrectanglebutton"
             android:onClick="askToBid"
-            android:paddingStart="@dimen/_11sdp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:paddingTop="@dimen/_2sdp"
-            android:paddingEnd="@dimen/_11sdp"
-            android:paddingBottom="@dimen/_2sdp"
-            android:shadowDy="4"
             android:tag="pass"
             android:text="@string/passTextGS"
             android:textColor="#D3D3D3"
-            android:textSize="@dimen/_25ssp" />
+            android:textSize="@dimen/_20ssp" />
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/frameTrumpSelection"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_159sdp"
-        android:layout_above="@+id/horizontalScrollView"
-        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/playerCards"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="@dimen/_89sdp"
-        android:layout_marginTop="@dimen/_56sdp"
-        android:layout_marginEnd="@dimen/_89sdp"
+        android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="0dp"
         android:elevation="@dimen/_72sdp"
-        android:background="@drawable/shine_score_table"
+        android:background="@drawable/blacksquarebutton"
         android:visibility="gone">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_49sdp"
-            android:alpha="1"
-            android:gravity="center|center_horizontal"
+            android:gravity="center"
+            android:background="@drawable/orangesquarebutton"
+            android:layout_marginTop="@dimen/_25sdp"
             android:text="@string/chooseTrump"
-            android:textColor="@color/font_yellow"
-            android:textSize="@dimen/_29ssp" />
+            android:textColor="@color/Black"
+            android:textSize="@dimen/_24ssp" />
 
         <LinearLayout
             android:id="@+id/trumpSelectionHolder"
@@ -1519,7 +1547,7 @@
                 android:id="@+id/imageViewTrumpHearts"
                 android:layout_width="@dimen/trumpSelectionImageWidth"
                 android:layout_height="@dimen/trumpSelectionImageHeight"
-                android:background="@drawable/button_score_total"
+                android:background="@drawable/cyanrectanglebutton"
                 android:contentDescription="@string/app_name"
                 android:onClick="onTrumpSelectionClick"
                 android:clickable="true"
@@ -1532,7 +1560,7 @@
                 android:id="@+id/imageViewTrumpSpades"
                 android:layout_width="@dimen/trumpSelectionImageWidth"
                 android:layout_height="@dimen/trumpSelectionImageHeight"
-                android:background="#DDFFFFFF"
+                android:background="@drawable/cyanrectanglebutton"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -1548,7 +1576,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:background="@drawable/button_score_total"
+                android:background="@drawable/cyanrectanglebutton"
                 android:contentDescription="@string/app_name"
                 android:onClick="onTrumpSelectionClick"
                 android:tag="d"
@@ -1558,7 +1586,7 @@
                 android:id="@+id/imageViewTrumpClubs"
                 android:layout_width="@dimen/trumpSelectionImageWidth"
                 android:layout_height="@dimen/trumpSelectionImageHeight"
-                android:background="#DDFFFFFF"
+                android:background="@drawable/cyanrectanglebutton"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -1573,108 +1601,97 @@
         android:id="@+id/chatLinearLayout"
         android:layout_width="@dimen/_250sdp"
         android:layout_height="match_parent"
-        android:layout_above="@+id/horizontalScrollView"
+        android:layout_above="@+id/playerCards"
+        android:layout_marginBottom="-20dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
+        android:clickable="true"
+        android:focusable="true"
         android:background="@drawable/shine_chat_background"
-        android:elevation="@dimen/_72sdp"
-        android:orientation="vertical"
+        android:elevation="@dimen/_60sdp"
         android:visibility="gone">
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/addViewChatGameScreenBanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_1sdp"
             app:adSize="BANNER"
             app:adUnitId="@string/banner" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/templateGrid"
-            android:layout_below="@+id/addViewChatGameScreenBanner"
-            android:elevation="@dimen/_72sdp"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarSize="@dimen/_7sdp"
-            android:scrollbars="vertical">
-
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textViewChatDisplay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:elevation="@dimen/_72sdp"
-                android:gravity="bottom|start"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:layout_below="@+id/addViewChatGameScreenBanner"
+                android:layout_above="@+id/emojiGrid"
+                android:gravity="top|start"
                 android:hint="@string/chatWindowDisplay"
                 android:paddingStart="@dimen/_3sdp"
                 android:paddingEnd="@dimen/_2sdp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:paddingBottom="@dimen/_4sdp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#666666"
-                android:textSize="@dimen/_10ssp" />
-        </ScrollView>
+                android:textColorHint="#777777"
+                android:textSize="@dimen/_11ssp"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbars="vertical"
+                android:scrollbarSize="@dimen/_7sdp" />
 
-        <GridView
-            android:id="@+id/templateGrid"
+        <HorizontalScrollView
+            android:id="@+id/emojiGrid"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_32sdp"
             android:layout_above="@+id/chatInput"
-            android:layout_marginStart="@dimen/_1sdp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="@dimen/_1sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
-            android:columnWidth="@dimen/_60sdp"
-            android:elevation="@dimen/_143sdp"
-            android:gravity="center|top"
-            android:horizontalSpacing="@dimen/_1sdp"
-            android:numColumns="auto_fit"
-            android:verticalSpacing="@dimen/_4sdp" />
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="horizontal">
+
+            <LinearLayout
+                android:id="@+id/emojiGrid1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_32sdp"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
 
         <LinearLayout
             android:id="@+id/chatInput"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_29sdp"
-            android:layout_alignParentBottom="true"
+            android:layout_height="@dimen/_35sdp"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="0dp"
-            android:elevation="@dimen/_72sdp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="2dp"
+            android:layout_marginBottom="3dp"
             android:gravity="fill"
             android:orientation="horizontal"
             app:singleLine="true">
 
-            <EditText
-                android:id="@+id/editTextChatInput"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editTextChatInput1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="@dimen/_193sdp"
-                android:layout_height="match_parent"
-                android:background="@drawable/shine_chat_background"
+                android:layout_height="@dimen/_35sdp"
                 android:elevation="@dimen/_72sdp"
                 android:hint="@string/chatInputHint"
-                android:clickable="true"
-                android:importantForAutofill="no"
+                app:hintAnimationEnabled="true"
                 android:inputType="textPersonName"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:imeOptions="actionSend"
-                android:paddingStart="@dimen/_6sdp"
-                android:paddingEnd="@dimen/_2sdp"
                 android:textColor="@color/white"
-                android:textColorHint="#A6A6A6"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_10ssp" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextChatInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionSend" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_square"
+                android:background="@drawable/greenroundedbutton"
                 android:elevation="@dimen/_72sdp"
                 android:gravity="center"
                 android:onClick="sendChat"
@@ -1682,7 +1699,7 @@
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:text="@string/sendChatButton"
-                android:textColor="@color/white"
+                android:textColor="#2C2C2C"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
     </RelativeLayout>
@@ -1691,7 +1708,7 @@
         android:id="@+id/linearLayoutPartnerSelection"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/horizontalScrollView"
+        android:layout_above="@+id/playerCards"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -1699,19 +1716,21 @@
         android:layout_marginTop="@dimen/_29sdp"
         android:layout_marginEnd="@dimen/_43sdp"
         android:layout_marginBottom="0dp"
-        android:background="@drawable/shine_chat_background"
+        android:background="@drawable/blacksquarebutton"
         android:elevation="@dimen/_143sdp"
         android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textViewPartnerSelect"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_49sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/orangesquarebutton"
             android:gravity="center|center_horizontal"
             android:text="@string/partnerSelection1"
-            android:textColor="@color/font_yellow"
-            android:textSize="@dimen/_29ssp" />
+            android:textColor="@color/Black"
+            android:textSize="@dimen/_22ssp" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -1747,7 +1766,7 @@
         android:id="@+id/relativeLayoutTableCards"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/horizontalScrollView"
+        android:layout_above="@+id/playerCards"
         android:layout_marginBottom="0dp"
         android:visibility="gone">
 
@@ -1992,16 +2011,16 @@
 
     </RelativeLayout>
 
-    <ImageView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/bidNowImage"
         android:layout_width="@dimen/imageWidth_4"
         android:layout_height="@dimen/imageWidth_4"
-        android:src="@drawable/bid"
-        android:elevation="@dimen/_82sdp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:contentDescription="@string/todo"
-        android:padding="@dimen/_7sdp"
+        android:background="@drawable/purplesquarebutton"
+        android:elevation="@dimen/_30sdp"
+        android:text="@string/bidNow"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="@dimen/_18ssp"
         android:visibility="gone"/>
 
     <nl.dionsegijn.konfetti.KonfettiView
@@ -2009,7 +2028,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="@dimen/_50sdp"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/scoreViewLayout"

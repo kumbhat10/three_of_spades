@@ -1,104 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_3sdp"
+    android:background="@drawable/blackglassglossy"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    android:theme="@style/Theme.App">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userImage"
         android:layout_width="@dimen/rankImage"
         android:layout_height="@dimen/rankImage"
-        android:layout_marginStart="@dimen/_1sdp"
         android:layout_alignParentStart="true"
-        android:background="@color/scoreTableText"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         android:contentDescription="@string/todo"
-        android:padding="2dp"
-        android:src="@color/Red" />
+        android:src="@color/white"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.AllRounded" />
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/userImage"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/_11sdp"
-        android:layout_marginTop="0dp"
-        app:shimmer_colored="true"
-        app:shimmer_auto_start="true"
-        app:shimmer_duration="1800"
-        app:shimmer_highlight_alpha="1"
-        app:shimmer_highlight_color="#FFFFFF"
-        app:shimmer_repeat_mode="restart"
-        app:shimmer_shape="linear">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:src="@drawable/shine_button_black_bar" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:layout_alignTop="@id/userImage"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_toEndOf="@id/userImage"
         android:layout_toStartOf="@+id/userScore"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_toEndOf="@id/userImage"
         android:fontFamily="sans-serif-light"
         android:gravity="start|center"
         android:paddingStart="@dimen/_5sdp"
         android:paddingEnd="0dp"
         android:text="@string/playeName"
-        android:textColor="#FFFFFF"
-        android:textSize="@dimen/_11ssp" />
+        android:textColor="#B5B5B5"
+        android:textSize="@dimen/_12ssp" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/userCoins"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:layout_alignBottom="@+id/userImage"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_toStartOf="@+id/userScore"
         android:layout_toEndOf="@id/userImage"
-        android:clickable="true"
-        android:focusable="true"
         android:fontFamily="sans-serif-light"
         android:gravity="start|top"
         android:paddingStart="@dimen/_5sdp"
         android:paddingEnd="0dp"
         android:text="$ 000,000"
-        android:textColor="@color/font_yellow"
+        android:textColor="#D19D00"
         android:textSize="@dimen/_14ssp"
-        android:textStyle="bold"
         app:ticker_animationDuration="2500"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="up"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/userScore"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/rankImage"
         android:layout_alignTop="@id/userImage"
         android:clickable="true"
         android:focusable="true"
+        android:background="@drawable/blackglassglossy"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="@dimen/_1sdp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="@dimen/_9sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         android:fontFamily="sans-serif-light"
         android:gravity="end|center"
+        android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
-        android:paddingStart="@dimen/_5sdp"
         android:text="@string/nill"
-        android:textColor="@color/font_yellow"
+        android:textColor="#D5D5D5"
         android:textSize="@dimen/_12ssp" />
 </RelativeLayout>
+

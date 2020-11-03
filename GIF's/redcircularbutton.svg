@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:cc="http://creativecommons.org/ns#"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns:ns1="http://sozi.baierouge.fr"
+    id="svg6232"
+    viewBox="0 0 486.78 535.74"
+    version="1.1"
+  >
+  <defs
+      id="defs3"
+    >
+    <linearGradient
+        id="linearGradient5218"
+      >
+      <stop
+          id="stop5220"
+          style="stop-color:#d40000"
+          offset="0"
+      />
+      <stop
+          id="stop5222"
+          style="stop-color:#d40000;stop-opacity:0"
+          offset="1"
+      />
+    </linearGradient
+    >
+    <clipPath
+        id="clipPath5167"
+      >
+      <path
+          id="path5169"
+          style="opacity:0.66;fill:#2b0000"
+          d="m-110.41-359.75a82.102 82.102 0 1 1 -164.2 0 82.102 82.102 0 1 1 164.2 0z"
+          transform="matrix(1.0766 0 0 1.0639 -355.88 452.85)"
+      />
+    </clipPath
+    >
+    <clipPath
+        id="clipPath5171"
+      >
+      <path
+          id="path5173"
+          style="opacity:0.66;fill:#2b0000"
+          d="m-110.41-359.75a82.102 82.102 0 1 1 -164.2 0 82.102 82.102 0 1 1 164.2 0z"
+      />
+    </clipPath
+    >
+    <clipPath
+        id="clipPath5179"
+      >
+      <path
+          id="path5181"
+          style="opacity:0.66;fill:#2b0000"
+          d="m-110.41-359.75a82.102 82.102 0 1 1 -164.2 0 82.102 82.102 0 1 1 164.2 0z"
+      />
+    </clipPath
+    >
+    <filter
+        id="filter5879"
+        height="1.4249"
+        width="1.4221"
+        color-interpolation-filters="sRGB"
+        y="-.21244"
+        x="-.21103"
+      >
+      <feGaussianBlur
+          id="feGaussianBlur5881"
+          stdDeviation="14.815782"
+      />
+    </filter
+    >
+    <radialGradient
+        id="radialGradient7741"
+        xlink:href="#linearGradient5218"
+        gradientUnits="userSpaceOnUse"
+        cy="-334.83"
+        cx="-185.49"
+        gradientTransform="matrix(.12493 -.83765 .90637 .13518 139.8 -440.61)"
+        r="82.102"
+    />
+    <linearGradient
+        id="linearGradient7745"
+        y2="-290.86"
+        gradientUnits="userSpaceOnUse"
+        x2="-184.02"
+        gradientTransform="matrix(.96217 0 0 1 -68.729 -25.48)"
+        y1="-470.16"
+        x1="-197.23"
+      >
+      <stop
+          id="stop5117"
+          style="stop-color:#ffffff"
+          offset="0"
+      />
+      <stop
+          id="stop5119"
+          style="stop-color:#ffffff;stop-opacity:0"
+          offset="1"
+      />
+    </linearGradient
+    >
+    <linearGradient
+        id="linearGradient7747"
+        y2="87.092"
+        gradientUnits="userSpaceOnUse"
+        x2="-586.04"
+        gradientTransform="matrix(0.871 0 0 .97197 232.03 -457.52)"
+        y1="244.69"
+        x1="-685.6"
+      >
+      <stop
+          id="stop3677"
+          style="stop-color:#ffffff"
+          offset="0"
+      />
+      <stop
+          id="stop3679"
+          style="stop-color:#ffffff;stop-opacity:0"
+          offset="1"
+      />
+    </linearGradient
+    >
+  </defs
+  >
+  <g
+      id="g7731"
+      transform="matrix(1.8153 0 0 1.8153 4008.1 2328.4)"
+    >
+    <g
+        id="g6228"
+        transform="matrix(1.577 0 0 1.577 -1672.4 -543.4)"
+      >
+      <path
+          id="path5068"
+          style="filter:url(#filter5879);fill:#000000"
+          d="m-106.81-357.52c0 46.219-37.72 83.687-84.25 83.687s-84.25-37.468-84.25-83.687 37.72-83.687 84.25-83.687 84.25 37.468 84.25 83.687z"
+          transform="matrix(.61115 0 0 .25035 -139.25 -221.96)"
+      />
+      <path
+          id="path5057"
+          style="fill:#550000"
+          clip-path="url(#clipPath5171)"
+          d="m-106.81-357.52c0 46.219-37.72 83.687-84.25 83.687s-84.25-37.468-84.25-83.687 37.72-83.687 84.25-83.687 84.25 37.468 84.25 83.687z"
+          transform="translate(-61.34 -23.592)"
+      />
+      <path
+          id="path5215"
+          style="fill:url(#radialGradient7741)"
+          clip-path="url(#clipPath5179)"
+          d="m-106.81-357.52c0 46.219-37.72 83.687-84.25 83.687s-84.25-37.468-84.25-83.687 37.72-83.687 84.25-83.687 84.25 37.468 84.25 83.687z"
+          transform="translate(-59.453 -21.705)"
+      />
+      <path
+          id="path5226"
+          style="fill:url(#radialGradient7741)"
+          clip-path="url(#clipPath5179)"
+          d="m-106.81-357.52c0 46.219-37.72 83.687-84.25 83.687s-84.25-37.468-84.25-83.687 37.72-83.687 84.25-83.687 84.25 37.468 84.25 83.687z"
+          transform="translate(-59.453 -21.705)"
+      />
+      <path
+          id="path5137"
+          style="fill:#2b0000"
+          clip-path="url(#clipPath5167)"
+          d="m-560.91-16.344c-48.255-1.0264-92.042 43.762-88.812 92.156 1.1954 44.242 39.476 84.38 84.125 85.531 40.001 2.5512 80.516-23.981 91.125-63.094 10.79-35.256-2.3933-76.957-33.219-97.594-15.367-11.016-34.184-17.481-53.219-17zm-0.75 9.1875c44.215-1.6209 84.847 38.693 82.594 83.031-0.68792 41.671-37.316 79.328-79.444 79.017-37.391 1.229-74.536-25.94-81.705-63.219-7.6053-33.226 7.6836-70.66 37.796-87.199 12.323-7.3356 26.383-11.39 40.758-11.631z"
+          transform="matrix(.95038 0 0 .95081 281.33 -449.07)"
+      />
+      <path
+          id="path5109"
+          style="fill:url(#linearGradient7745)"
+          d="m-253.91-452.22c-26.959 0.38545-52.515 18.105-62.969 42.844 23.833 36.575 84.891 37.479 110.66 2.4062 9.0262-6.6941 9.4696-22.866-1.1515-28.136-12.69-11.105-29.516-17.644-46.536-17.114z"
+      />
+      <path
+          id="path5270"
+          style="fill:url(#linearGradient7747)"
+          d="m-319.5-370.04c-6.8513-3.7801-9.5048-0.31156-11.731-0.12451 7.6871 37.415 38.835 65.396 76.104 65.396 19.666 0 37.622-7.7934 51.335-20.654-17.143 9.2948-30.323 13.297-39.672 12.17-16.344-1.9699-32.705-1.5895-48.512-19.72-14.77-16.94-17.744-31.671-27.524-37.067z"
+      />
+    </g
+    >
+  </g
+  >
+  <metadata
+    >
+    <rdf:RDF
+      >
+      <cc:Work
+        >
+        <dc:format
+          >image/svg+xml</dc:format
+        >
+        <dc:type
+            rdf:resource="http://purl.org/dc/dcmitype/StillImage"
+        />
+        <cc:license
+            rdf:resource="http://creativecommons.org/licenses/publicdomain/"
+        />
+        <dc:publisher
+          >
+          <cc:Agent
+              rdf:about="http://openclipart.org/"
+            >
+            <dc:title
+              >Openclipart</dc:title
+            >
+          </cc:Agent
+          >
+        </dc:publisher
+        >
+        <dc:title
+          >Red Glossy Orb</dc:title
+        >
+        <dc:date
+          >2010-08-05T19:28:28</dc:date
+        >
+        <dc:description
+          >Reg glossy Orb</dc:description
+        >
+        <dc:source
+          >https://openclipart.org/detail/77767/red-glossy-orb-by-inky2010</dc:source
+        >
+        <dc:creator
+          >
+          <cc:Agent
+            >
+            <dc:title
+              >inky2010</dc:title
+            >
+          </cc:Agent
+          >
+        </dc:creator
+        >
+        <dc:subject
+          >
+          <rdf:Bag
+            >
+            <rdf:li
+              >Orb</rdf:li
+            >
+            <rdf:li
+              >ball</rdf:li
+            >
+            <rdf:li
+              >globe</rdf:li
+            >
+            <rdf:li
+              >gloss</rdf:li
+            >
+            <rdf:li
+              >glossy</rdf:li
+            >
+            <rdf:li
+              >glow</rdf:li
+            >
+            <rdf:li
+              >icon</rdf:li
+            >
+            <rdf:li
+              >inky2010</rdf:li
+            >
+          </rdf:Bag
+          >
+        </dc:subject
+        >
+      </cc:Work
+      >
+      <cc:License
+          rdf:about="http://creativecommons.org/licenses/publicdomain/"
+        >
+        <cc:permits
+            rdf:resource="http://creativecommons.org/ns#Reproduction"
+        />
+        <cc:permits
+            rdf:resource="http://creativecommons.org/ns#Distribution"
+        />
+        <cc:permits
+            rdf:resource="http://creativecommons.org/ns#DerivativeWorks"
+        />
+      </cc:License
+      >
+    </rdf:RDF
+    >
+  </metadata
+  >
+</svg
+>

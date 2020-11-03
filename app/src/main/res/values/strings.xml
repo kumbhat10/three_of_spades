@@ -2,8 +2,18 @@
     <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
 
-    <string name="default_notification_channel_id">ch_kkt</string>
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">Oops !! Bugs found \nor Server is high on spirit \n\n\n(Sending error report to developer)</string>
+    <string name="customactivityoncrash_error_activity_restart_app">Home</string>
+    <string name="customactivityoncrash_error_activity_close_app">Close app</string>
+    <string name="customactivityoncrash_error_activity_error_details">Error Report</string>
+    <string name="customactivityoncrash_error_activity_error_details_title">Error Report</string>
+    <string name="customactivityoncrash_error_activity_error_details_close">Close</string>
+    <string name="customactivityoncrash_error_activity_error_details_copy">Copy to clipboard</string>
+    <string name="customactivityoncrash_error_activity_error_details_copied">Copied to clipboard</string>
+    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">Error information</string>
 
+    <string name="default_notification_channel_id">ch_kkt</string>
+    <string name="com_facebook_loginview_log_in_button_long">Your custom text</string>
     <string name="facebook_app_id">231024018145704</string>
     <string name="fb_login_protocol_scheme">fb231024018145704</string>
     <string name="twitter_consumer_key" translatable="false">3lO8Inhu76bB6LiBHegyenODQ</string>
@@ -57,23 +67,24 @@
     <string name="partner">Partner</string>
     <string name="partner1">Buddy 1</string>
     <string name="partner2">Buddy 2</string>
-    <string name="bidValue">Bid: </string>
+    <string name="bidValue">   Bid: </string>
     <string name="bidValue1">NIL</string>
     <string name="bidValue2">000</string>
     <string name="bid05button"> +5</string>
     <string name="bid10button">+10</string>
     <string name="bid20button">+20</string>
     <string name="bid50button">+50</string>
-    <string name="raise_bid_or_pass">Raise Bid or Pass</string>
+    <string name="raise_bid_or_pass">Select Bid</string>
     <string name="chooseTrump">Select Trump</string>
 
     <string name="passText">Next</string>
     <string name="passTextGS">Pass</string>
     <string name="chatWindowDisplay">No Messages yet. Send first message</string>
     <string name="sendChatButton">Send</string>
-    <string name="chatInputHint">Type your message here......</string>
+    <string name="chatInputHint">Type here…</string>
     <string name="noOfChat">0</string>
-    <string name="Bider">Player</string>
+    <string name="Bider">Bid: Player</string>
+    <string name="bidNow">Bidder</string>
     <string name="timerStart">10s</string>
     <string name="partnerSelection1">Choose your 1st partner card</string>
     <string name="partnerSelection1_4">Choose your partner card</string>
@@ -85,7 +96,7 @@
     <string name="_10_pts">10 pts</string>
     <string name="_400">400</string>
     <string name="playeName">Player ?</string>
-    <string name="room_id">Room ID</string>
+    <string name="room_id">Room: </string>
     <string name="share"> Invite </string>
     <string name="host">Host</string>
     <string name="welcomeBack">Welcome back</string>

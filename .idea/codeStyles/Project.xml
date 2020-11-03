@@ -148,6 +148,10 @@
       <option name="METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE" value="false" />
       <option name="EXTENDS_LIST_WRAP" value="0" />
       <option name="ASSIGNMENT_WRAP" value="0" />
+      <indentOptions>
+        <option name="USE_TAB_CHARACTER" value="true" />
+        <option name="SMART_TABS" value="true" />
+      </indentOptions>
     </codeStyleSettings>
   </code_scheme>
 </component>

@@ -15,10 +15,10 @@
     <dimen name="iconPadding">@dimen/_12sdp</dimen>
     <dimen name="iconPaddingNeg">@dimen/_minus12sdp</dimen>
 
-    <dimen name="loginWidth">@dimen/_190sdp</dimen>
+    <dimen name="loginWidth">@dimen/_140sdp</dimen>
     <dimen name="loginHeight">@dimen/_32sdp</dimen>
-    <dimen name="loginHeightGoogle">@dimen/_34sdp</dimen>
-    <dimen name="loginWidthGoogle">@dimen/_198sdp</dimen>
+    <dimen name="loginHeightGoogle">@dimen/_35sdp</dimen>
+    <dimen name="loginWidthGoogle">@dimen/_146sdp</dimen>
 
     <dimen name="tableInner1">@dimen/_9sdp</dimen>
     <dimen name="tableInner2">@dimen/_10sdp</dimen>
@@ -65,9 +65,16 @@
     <dimen name="widthDisplayCardLast">@dimen/_39sdp</dimen>
     <dimen name="widthDisplayCardLastTrain">@dimen/_42sdp</dimen>
     <dimen name="status_online">@dimen/_12sdp</dimen>
+
+
     <dimen name="padding_playername">@dimen/_3sdp</dimen>
-    <dimen name="usernameTextSize">@dimen/_8ssp</dimen>
+    <dimen name="padding_userScore">@dimen/_3sdp</dimen>
+    <dimen name="usernameTextSize">@dimen/_10ssp</dimen>
+    <dimen name="userScoreTextSize">@dimen/_9ssp</dimen>
+    <dimen name="userScoreGap">@dimen/_minus2sdp</dimen>
     <dimen name="scoreTableTextSize">@dimen/_9ssp</dimen>
+
+
     <dimen name="mhsIconsGap">@dimen/_10sdp</dimen>
     <dimen name="mhsIconsMargin">0dp</dimen>
     <dimen name="cjrButtonsTextSize">@dimen/_13ssp</dimen>

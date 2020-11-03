@@ -30,7 +30,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/game_screen_table_blue" />
+            android:src="@drawable/game_screen_table_blue"
+            android:contentDescription="@null" />
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -55,51 +56,41 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:focusable="true"
         android:onClick="closeJoiningRoom"
-        app:srcCompat="@drawable/stop_sign"/>
+        app:srcCompat="@drawable/close"/>
 
-    <ImageView
+
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/hostPhoto"
-        android:layout_width="@dimen/_72sdp"
-        android:layout_height="@dimen/_72sdp"
+        android:layout_width="@dimen/upWidth"
+        android:layout_height="@dimen/upWidth"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:background="@drawable/border"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:backgroundTintMode="add"
-        android:contentDescription="@string/todo"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/upStart"
+        android:layout_marginTop="@dimen/upTop"
+        tools:ignore="ContentDescription"
         android:elevation="@dimen/_72sdp"
-        android:soundEffectsEnabled="true"
-        android:src="@drawable/_s_icon_3shadow"
-        android:visibility="visible"/>
+        android:src="@drawable/blacksquarebutton"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.ProfilePic"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/hostName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_43sdp"
         android:layout_alignTop="@+id/hostPhoto"
-        android:layout_alignBottom="@+id/hostPhoto"
-        android:layout_marginStart="@dimen/_minus20sdp"
         android:layout_marginTop="@dimen/_13sdp"
-        android:layout_marginBottom="@dimen/_13sdp"
-        android:background="@drawable/border_square_reward"
-        android:focusable="true"
+        android:layout_marginStart="@dimen/_minus23sdp"
         android:layout_toEndOf="@+id/hostPhoto"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:elevation="@dimen/_64sdp"
-        android:fontFamily="@font/nosifer"
-        android:paddingStart="@dimen/_25sdp"
-        android:paddingEnd="@dimen/_9sdp"
+        android:background="@drawable/orangesquarebutton"
+        tools:ignore="RelativeOverlap"
         android:text="@string/playeName"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_19ssp"
-        android:textStyle="bold"
-        android:translationZ="@dimen/_36sdp"
-        android:visibility="visible" />
+        android:textSize="@dimen/_22ssp"
+        android:textColor="#2C2C2C"
+        android:paddingEnd="@dimen/_20sdp"
+        android:paddingStart="@dimen/_27sdp"
+        android:gravity="start|center">
+    </com.google.android.material.textview.MaterialTextView>
+
 
     <TextView
         android:layout_width="match_parent"
@@ -109,7 +100,7 @@
         android:layout_alignEnd="@+id/hostName"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="@dimen/_minus18sdp"
+        android:layout_marginBottom="@dimen/_minus15sdp"
         android:layout_toEndOf="@+id/hostPhoto"
         android:text="@string/host"
         android:textAlignment = "center"
@@ -122,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/hostName"
         android:layout_marginStart="@dimen/_36sdp"
-        android:layout_marginTop="@dimen/_minus17sdp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="@dimen/_29sdp"
         app:shimmer_auto_start="true"
         app:shimmer_colored="true"
@@ -148,44 +139,37 @@
         android:onClick="shareRoomInfo"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_minus25sdp"
+        android:layout_marginTop="@dimen/_minus10sdp"
         android:layout_marginEnd="@dimen/_7sdp"
         android:background="@drawable/border"
         android:contentDescription="@string/todo"
         android:elevation="@dimen/_43sdp"
         android:src="@drawable/joinroomicon"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/button_roomID"
         android:onClick="shareRoomInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="match_parent"
         android:layout_alignTop="@+id/roomIDIcon"
         android:layout_alignBottom="@+id/roomIDIcon"
         android:layout_marginTop="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_minus18sdp"
         android:layout_marginBottom="@dimen/_12sdp"
         android:layout_toStartOf="@+id/roomIDIcon"
-        android:background="@drawable/shine_button_black"
+        android:background="@drawable/orangesquarebutton"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:elevation="@dimen/_72sdp"
-        android:fontFamily="@font/codystar"
         android:gravity="start|center_vertical"
         android:paddingStart="@dimen/_11sdp"
         android:paddingEnd="@dimen/_23sdp"
         android:text="@string/room_id"
         android:textAlignment="textStart"
-        android:textColor="@color/font_yellow"
+        android:textColor="@color/Black"
         android:textSize="@dimen/_14ssp"
-        android:textStyle="bold"
-        app:cornerRadius="@dimen/_19sdp"
-        app:rippleColor="@color/white"
-        app:strokeColor="@color/progressBarPlayer4"
-        app:strokeWidth="@dimen/_1sdp" />
+        app:cornerRadius="@dimen/_19sdp" />
 
 
     <TextView
@@ -630,12 +614,10 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/shareText"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_36sdp"
             android:layout_centerInParent="true"
-            android:background="@drawable/shine_button_black"
-            android:fontFamily="@font/codystar"
-            android:hapticFeedbackEnabled="true"
+            android:background="@drawable/orangesquarebutton"
             android:onClick="shareRoomInfo"
             android:paddingStart="@dimen/_27sdp"
             android:paddingEnd="@dimen/_10sdp"
@@ -644,15 +626,11 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:textAllCaps="true"
-            android:textColor="@color/font_yellow"
+            android:textColor="@color/Black"
             android:textSize="@dimen/_15ssp"
-            android:textStyle="bold"
             android:visibility="visible"
             app:cornerRadius="@dimen/_14sdp"
-            app:rippleColor="@color/white"
-            app:strokeColor="@color/progressBarPlayer4"
-            app:strokeWidth="@dimen/_1sdp" />
+            tools:ignore="RelativeOverlap" />
 
     <ImageView
         android:id="@+id/imageViewShareButton"
@@ -665,14 +643,10 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_toStartOf="@+id/shareText"
-        android:background="@drawable/border"
-        android:backgroundTintMode="add"
         android:contentDescription="@string/todo"
-        android:elevation="@dimen/_22sdp"
         android:onClick="shareRoomInfo"
-        android:soundEffectsEnabled="true"
-        android:src="@drawable/share_green1"
-        android:visibility="visible" />
+        android:elevation="@dimen/_2sdp"
+        android:src="@drawable/invite" />
 
     <ImageView
         android:id="@+id/startGameButton"

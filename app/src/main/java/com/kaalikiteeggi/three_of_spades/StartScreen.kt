@@ -34,6 +34,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.twitter.sdk.android.core.*
+import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.android.synthetic.main.activity_start_screen.*
 import java.util.*
 
@@ -64,11 +65,11 @@ class StartScreen : AppCompatActivity() {
             .trackActivities(false) //default: false
             .errorDrawable(R.drawable.bug_icon) //default: bug image
             .apply()
-        val mTwitterAuthConfig = TwitterAuthConfig(
-            getString(R.string.twitter_consumer_key),
-            getString(R.string.twitter_consumer_secret))
-        val twitterConfig = TwitterConfig.Builder(applicationContext).twitterAuthConfig(mTwitterAuthConfig).build()
-        Twitter.initialize(twitterConfig)
+//        val mTwitterAuthConfig = TwitterAuthConfig(
+//            getString(R.string.twitter_consumer_key),
+//            getString(R.string.twitter_consumer_secret))
+//        val twitterConfig = TwitterConfig.Builder(applicationContext).twitterAuthConfig(mTwitterAuthConfig).build()
+//        Twitter.initialize(twitterConfig)
         setContentView(R.layout.activity_start_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         when (intent.getIntExtra("background", 4)) {
@@ -81,6 +82,7 @@ class StartScreen : AppCompatActivity() {
         }
         startBckgd.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
         findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
+        vcStart.text = "Ver: " + packageManager.getPackageInfo(packageName,0).versionName
         soundError = MediaPlayer.create(applicationContext,R.raw.error)
         soundUpdate = MediaPlayer.create(applicationContext,R.raw.card_played)
         soundSuccess = MediaPlayer.create(applicationContext,R.raw.success)
@@ -89,28 +91,28 @@ class StartScreen : AppCompatActivity() {
         soundUpdate.start()
         mAuth = FirebaseAuth.getInstance()
         //region Twitter Login
-        twitterLoginButton.setOnClickListener{
-            soundUpdate.start()
-            maskButtons.visibility = View.VISIBLE
-            loadingText3.text = getString(R.string.wait)
-            lightStart.visibility = View.VISIBLE
-            lightStart.on()
-        }
-        twitterLoginButton.callback = object:
-            Callback<TwitterSession>() {
-            override fun success(result: Result<TwitterSession>?) {
-                if (result != null) {
-                    val credentialTwitter = TwitterAuthProvider.getCredential(result.data.authToken.token, result.data.authToken.secret)
-                    signInWithCredential(credentialTwitter,"twitter")
-                }
-            }
-            override fun failure(exception: TwitterException?) {
-                if (exception != null) {
-                    soundError.start()
-                    toastCenter("Twitter login failed \n ${exception.message}")
-                }
-            }
-        }
+//        twitterLoginButton.setOnClickListener{
+//            soundUpdate.start()
+//            maskButtons.visibility = View.VISIBLE
+//            loadingText3.text = getString(R.string.wait)
+//            lightStart.visibility = View.VISIBLE
+//            lightStart.on()
+//        }
+//        twitterLoginButton.callback = object:
+//            Callback<TwitterSession>() {
+//            override fun success(result: Result<TwitterSession>?) {
+//                if (result != null) {
+//                    val credentialTwitter = TwitterAuthProvider.getCredential(result.data.authToken.token, result.data.authToken.secret)
+//                    signInWithCredential(credentialTwitter,"twitter")
+//                }
+//            }
+//            override fun failure(exception: TwitterException?) {
+//                if (exception != null) {
+//                    soundError.start()
+//                    toastCenter("Twitter login failed \n ${exception.message}")
+//                }
+//            }
+//        }
         // endregion
         // region Facebook Login
         val loginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
@@ -177,7 +179,7 @@ class StartScreen : AppCompatActivity() {
                 signInWithCredential(credentialGoogle, "google")
             }
         }
-        twitterLoginButton.onActivityResult(requestCode, resultCode, data)
+//        twitterLoginButton.onActivityResult(requestCode, resultCode, data)
         callBackManager.onActivityResult(requestCode, resultCode, data)
     }
     private fun signInWithCredential(credential: AuthCredential, provider: String){

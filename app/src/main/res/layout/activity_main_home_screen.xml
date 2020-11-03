@@ -336,7 +336,7 @@
                 android:textSize="@dimen/_10ssp"
                 android:translationZ="@dimen/_36sdp" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/versionCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -369,7 +369,6 @@
         android:clickable="true"
         android:elevation="@dimen/_143sdp"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="joinRoomWindowExit"
         android:visibility="gone">
 
@@ -385,7 +384,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:onClick="joinRoomWindowExit"
-            app:srcCompat="@drawable/stop_sign"
+            app:srcCompat="@drawable/close"
             tools:ignore="ContentDescription" />
 
             <RelativeLayout
@@ -461,7 +460,6 @@
         android:layout_height="match_parent"
         android:background="@color/layoutBackgroundLittle"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:elevation="@dimen/_143sdp"
         android:onClick="closeSettingsWindow"
@@ -646,7 +644,7 @@
             android:clickable="true"
             android:elevation="@dimen/_72sdp"
             android:onClick="closeSettingsWindow"
-            app:srcCompat="@drawable/stop_sign"
+            app:srcCompat="@drawable/close"
             tools:ignore="ContentDescription" />
 
     </RelativeLayout>
@@ -655,11 +653,10 @@
         android:id="@+id/createRoomFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/cardsBackgroundDark"
+        android:background="@color/layoutBackgroundLittle"
         android:clickable="true"
         android:elevation="@dimen/_143sdp"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="createRoomWindowExit"
         android:visibility="gone">
 
@@ -674,7 +671,7 @@
             android:elevation="@dimen/_72sdp"
             android:focusable="true"
             android:onClick="createRoomWindowExit"
-            app:srcCompat="@drawable/stop_sign"
+            app:srcCompat="@drawable/close"
             tools:ignore="ContentDescription" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
@@ -853,7 +850,7 @@
         android:onClick="openClosePlayerStats"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.ProfilePic"/>
 
-    <com.google.android.material.card.MaterialCardView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/usernameCardMHS"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_43sdp"
@@ -863,30 +860,14 @@
         android:layout_toEndOf="@+id/profilePic"
         android:visibility="visible"
         android:onClick="openClosePlayerStats"
-        app:cardForegroundColor="@color/transparent"
-        app:cardPreventCornerOverlap="false">
+        android:background="@drawable/orangesquarebutton"
+        android:text="@string/playeName"
+        android:textSize="@dimen/_22ssp"
+        android:textColor="#2C2C2C"
+        android:paddingEnd="@dimen/_20sdp"
+        android:paddingStart="@dimen/_27sdp"
+        android:gravity="start|center"/>
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/orangesquarebutton"
-            android:scaleType="fitXY"
-            android:onClick="openClosePlayerStats"
-            android:contentDescription="@string/todo"/>
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/usernameMHS"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:onClick="openClosePlayerStats"
-            android:text="@string/playeName"
-            android:textSize="@dimen/_22ssp"
-            android:textColor="#2C2C2C"
-            android:paddingEnd="@dimen/_20sdp"
-            android:paddingStart="@dimen/_27sdp"
-            android:gravity="start|center"/>
-
-    </com.google.android.material.card.MaterialCardView>
     <RelativeLayout
         android:id="@+id/rateUsLayout"
         android:layout_width="match_parent"
@@ -895,18 +876,18 @@
         android:clickable="true"
         android:elevation="200dp"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="closeRatingWindow"
         android:visibility="gone">
 
         <RelativeLayout
+            android:id="@+id/rateUsLayoutFrame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:background="@drawable/button_daily_reward"
             android:clickable="true"
             android:elevation="@dimen/_143sdp"
@@ -1024,7 +1005,7 @@
                 android:text="@string/ask_me_later"
                 android:textAllCaps="false"
                 android:textColor="@color/borderblue"
-                android:textSize="@dimen/_10ssp"/>
+                android:textSize="@dimen/_12ssp"/>
 
         </RelativeLayout>
     </RelativeLayout>
@@ -1146,9 +1127,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_5sdp"
-        android:background="@drawable/shine_score_table"
+        android:background="#C9060810"
         android:clickable="true"
-        android:elevation="@dimen/_200sdp"
+        android:elevation="@dimen/_110sdp"
         android:focusable="true"
         android:visibility="gone">
 
@@ -1176,8 +1157,8 @@
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/top30"
+                android:background="@drawable/blackglassglossy"
                 android:gravity="center"/>
-
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <com.bitvale.lightprogress.LightProgress
@@ -1200,7 +1181,7 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/stop_sign"
+            app:srcCompat="@drawable/close"
             android:contentDescription="@string/todo" />
 
         <ScrollView
@@ -1213,7 +1194,6 @@
             android:layout_alignParentEnd="true"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:scrollbarSize="@dimen/_4sdp"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbars="vertical"
@@ -1226,7 +1206,6 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:orientation="vertical"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarSize="@dimen/_10sdp"/>
@@ -1255,19 +1234,6 @@
             android:text="@string/loading"
             android:textSize="@dimen/_25ssp"
             app:light_color="@color/white" />
-
-        <ProgressBar
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="@dimen/_65sdp"
-            android:layout_height="@dimen/_65sdp"
-            android:layout_centerInParent="true"
-            android:indeterminate="true"
-            android:indeterminateBehavior="cycle"
-            android:indeterminateOnly="false"
-            android:indeterminateTint="#FFE500"
-            android:progressTintMode="src_in"
-            android:rotation="360"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/loadingText"

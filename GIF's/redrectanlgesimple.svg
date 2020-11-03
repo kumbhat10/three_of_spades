@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 604 234" width="604" height="234">
+	<defs>
+		<linearGradient id="grd1" gradientUnits="userSpaceOnUse"  x1="600.037" y1="230.1" x2="45.547" y2="15.6">
+			<stop offset="0" stop-color="#ffffff"  />
+			<stop offset="0.617" stop-color="#dadada"  />
+			<stop offset="0.927" stop-color="#656565"  />
+			<stop offset="1" stop-color="#989898"  />
+		</linearGradient>
+		<radialGradient id="grd2" gradientUnits="userSpaceOnUse"  cx="131.998" cy="11.998" r="279.996">
+			<stop offset="0" stop-color="#ffffff"  />
+			<stop offset="0.617" stop-color="#dadada"  />
+			<stop offset="0.927" stop-color="#656565"  />
+			<stop offset="1" stop-color="#989898"  />
+		</radialGradient>
+		<linearGradient id="grd3" gradientUnits="userSpaceOnUse"  x1="152" y1="192" x2="152" y2="222">
+			<stop offset="0" stop-color="#ff0000"  />
+			<stop offset="1" stop-color="#a70000"  />
+		</linearGradient>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: url(#grd1) } 
+		.shp1 { fill: url(#grd2) } 
+		.shp2 { fill: url(#grd3) } 
+		.shp3 { opacity: 0.498;fill: #ffffff } 
+	</style>
+	<g id="layer1">
+		<path id="rect3853" fill-rule="evenodd" class="shp0" d="M63.82 0L540.18 0C575.54 0 604 28.46 604 63.82L604 170.18C604 205.53 575.54 234 540.18 234L63.82 234C28.46 234 0 205.54 0 170.18L0 63.82C0 28.46 28.46 0 63.82 0L63.82 0Z" />
+		<path id="rect2985" fill-rule="evenodd" class="shp1" d="M64.73 2L539.28 2C574.03 2 602.01 29.98 602.01 64.73L602.01 169.28C602.01 204.03 574.03 232 539.28 232L64.73 232C29.98 231.99 2 204.02 2 169.26L2 64.71C2 29.96 29.98 1.99 64.73 1.99L64.73 2Z" />
+		<path id="rect2991" fill-rule="evenodd" class="shp2" d="M69.27 12L534.72 12C566.45 12 591.99 37.54 591.99 69.27L591.99 164.73C591.99 196.46 566.45 222 534.72 222L69.27 222C37.54 222.01 12 196.47 12 164.74L12 69.29C12 37.56 37.54 12.01 69.27 12.01L69.27 12Z" />
+		<path id="rect3793" fill-rule="evenodd" class="shp3" d="M95 16L509 16C527.28 16 542 30.72 542 49C542 67.28 527.28 82 509 82L95 82C76.72 82 62 67.28 62 49C62 30.72 76.72 16 95 16Z" />
+	</g>
+</svg>

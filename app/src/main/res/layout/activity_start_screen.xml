@@ -22,10 +22,7 @@
         android:src="@drawable/redorangeburst"
         android:visibility="visible" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/googleSignInButton">
+
 
         <ImageView
             android:layout_width="@dimen/_250sdp"
@@ -44,7 +41,6 @@
             android:scaleX="0.5"
             android:contentDescription="@null"
             android:src="@drawable/icon3s_shadow" />
-    </RelativeLayout>
 
 
     <com.facebook.login.widget.LoginButton
@@ -53,10 +49,12 @@
         android:layout_height="80dp"
         android:layout_above="@+id/orOption"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_1sdp"
-        android:paddingTop="@dimen/_7sdp"
+        android:layout_marginBottom="@dimen/_3sdp"
+        android:paddingTop="@dimen/_8sdp"
         android:paddingBottom="@dimen/_7sdp"
-        android:textSize="@dimen/_11ssp" />
+        android:textSize="@dimen/_12ssp"
+        xmlns:facebook="http://schemas.android.com/apk/res-auto"
+        facebook:com_facebook_login_text="       Sign in"/>
 
     <TextView
         android:id="@+id/orOption"
@@ -64,35 +62,36 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/googleSignInButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_1sdp"
+        android:layout_marginBottom="@dimen/_3sdp"
         android:gravity="center"
         android:text="or"
-        android:textColor="#CFCCCC"
-        android:textSize="@dimen/_11ssp"
+        android:textColor="#ECECEC"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
         tools:ignore="HardcodedText" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleSignInButton"
         android:layout_width="@dimen/loginWidthGoogle"
         android:layout_height="@dimen/loginHeightGoogle"
-        android:layout_above="@+id/twitterLoginButton"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_4sdp"
+        android:layout_marginBottom="@dimen/_50sdp"
         android:insetBottom="0dp"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
         android:visibility="visible" />
 
-
-    <com.twitter.sdk.android.core.identity.TwitterLoginButton
-        android:id="@+id/twitterLoginButton"
-        android:layout_width="@dimen/loginWidth"
-        android:layout_height="@dimen/loginHeight"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:backgroundTint="#338BCD"
-        android:textColor="#FFFFFF" />
+<!--    <com.twitter.sdk.android.core.identity.TwitterLoginButton-->
+<!--        android:id="@+id/twitterLoginButton"-->
+<!--        android:layout_width="@dimen/loginWidth"-->
+<!--        android:layout_height="@dimen/loginHeight"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginBottom="@dimen/_10sdp"-->
+<!--        android:backgroundTint="#338BCD"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:visibility="gone"/>-->
 
     <RelativeLayout
         android:id="@+id/maskButtons"
@@ -148,5 +147,14 @@
             android:visibility="gone" />
 
     </RelativeLayout>
-
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vcStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:textColor="#D5D5D5"
+        android:textSize="@dimen/_9ssp"/>
 </RelativeLayout>

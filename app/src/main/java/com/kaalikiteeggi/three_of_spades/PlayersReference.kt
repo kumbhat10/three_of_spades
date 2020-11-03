@@ -6,6 +6,7 @@ class PlayersReference {
         R.id.textView4,R.id.textView5,R.id.textView6,R.id.textView7)
 
     private val refIDTextView4 = listOf(R.id.textView1_4,R.id.textView2_4,R.id.textView3_4,R.id.textView7)
+    private val refIDTextView4a = listOf(R.id.textView1_4a,R.id.textView2_4a,R.id.textView3_4a,R.id.textView7a)
 
     val refIDTextViewScoreSheet7 = listOf(R.id.gameNumber,R.id.player1,R.id.player2,R.id.player3,R.id.player4, // size 8 - sheet of score
         R.id.player5,R.id.player6,R.id.player7)
@@ -59,6 +60,10 @@ class PlayersReference {
     fun refIDMappedTextView(player: String, nPlayer: Int): List<Int>{
         return if(nPlayer==7) createRefID7(player, refIDTextView7)
         else createRefID4(player, refIDTextView4)
+    }
+    fun refIDMappedTextViewA(player: String, nPlayer: Int): List<Int>{
+        return if(nPlayer==7) createRefID7(player, refIDTextView7)
+        else createRefID4(player, refIDTextView4a)
     }
     fun refIDMappedImageView(player: String, nPlayer: Int): List<Int>{
         return if(nPlayer==7) createRefID7(player, refIDImageView7)
