@@ -126,8 +126,8 @@
     <string name="usercoinMHS">$ 00000</string>
     <string name="rateMessage">Enjoying the game?</string>
     <string name="ask_me_later">Ask me Later</string>
-    <string name="claim_reward">Claim Reward</string>
-    <string name="cancel_reward">Cancel</string>
+    <string name="claim_reward">Claim Reward  </string>
+    <string name="cancel_reward">Cancel </string>
     <string name="joinHelper">Enter 4 digit Room ID</string>
 
 </resources>

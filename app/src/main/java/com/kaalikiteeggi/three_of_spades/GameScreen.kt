@@ -70,6 +70,7 @@ class GameScreen : AppCompatActivity() {
     private lateinit var editor: SharedPreferences.Editor
 
     private lateinit var refIDMappedTextView: List<Int>
+    private lateinit var refIDMappedTextViewA: List<Int>
     private lateinit var refIDMappedImageView: List<Int>
     private lateinit var refIDMappedHighlightView: List<Int>
     private lateinit var refIDMappedTableImageView: List<Int>
@@ -252,14 +253,7 @@ class GameScreen : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
-        when(Random.nextInt(0,6)) {
-            0 -> gameBkgd.setImageResource(R.drawable.poker)
-            1 -> gameBkgd.setImageResource(R.drawable.pokerblue)
-            2 -> gameBkgd.setImageResource(R.drawable.pokercyan)
-            3 -> gameBkgd.setImageResource(R.drawable.pokerred)
-            4 -> gameBkgd.setImageResource(R.drawable.pokerred1)
-            5 -> gameBkgd.setImageResource(R.drawable.poker)
-        }
+        //        changeBackground() // always start with default
         roomID = intent.getStringExtra("roomID")!!
             .toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
         from = intent.getStringExtra("from")!!
@@ -278,6 +272,7 @@ class GameScreen : AppCompatActivity() {
         setupGame4or7()
 
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
+        refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
         refIDMappedImageView = PlayersReference().refIDMappedImageView(from, nPlayers)
         refIDMappedHighlightView = PlayersReference().refIDMappedHighlightView(from, nPlayers)
         refIDMappedPartnerIconImageView = PlayersReference().refIDMappedPartnerIconImageView(from, nPlayers)
@@ -312,6 +307,17 @@ class GameScreen : AppCompatActivity() {
         val params = Bundle()
         params.putInt(key, int)
         firebaseAnalytics.logEvent(event, params)
+    }
+
+    private fun changeBackground(){
+        when (Random.nextInt(0, 6)){
+            0 -> gameBkgd.setImageResource(R.drawable.poker)
+            1 -> gameBkgd.setImageResource(R.drawable.pokerblue)
+            2 -> gameBkgd.setImageResource(R.drawable.pokercyan)
+            3 -> gameBkgd.setImageResource(R.drawable.pokerred)
+            4 -> gameBkgd.setImageResource(R.drawable.pokerred1)
+            5 -> gameBkgd.setImageResource(R.drawable.poker)
+        }
     }
 
     private fun inflateEmoji(){
@@ -400,12 +406,15 @@ class GameScreen : AppCompatActivity() {
             ptAll = listOf(pt1, pt2, pt3, pt4)
 
             findViewById<TickerView>(R.id.textView1_4).visibility = View.VISIBLE
+            findViewById<TickerView>(R.id.textView1_4a).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.onlinep1_4).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.playerView1_4).visibility = View.VISIBLE
             findViewById<TickerView>(R.id.textView2_4).visibility = View.VISIBLE
+            findViewById<TickerView>(R.id.textView2_4a).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.onlinep2_4).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.playerView2_4).visibility = View.VISIBLE
             findViewById<TickerView>(R.id.textView3_4).visibility = View.VISIBLE
+            findViewById<TickerView>(R.id.textView3_4a).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.onlinep3_4).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.playerView3_4).visibility = View.VISIBLE
         }
@@ -1082,7 +1091,7 @@ class GameScreen : AppCompatActivity() {
                         Handler(Looper.getMainLooper()).postDelayed({
                             findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
                             findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
-                        }, 220)
+                        }, 180)
                         centralText("    Time's Up !!  \nYou cannot bid anymore", 2500)
                         speak("Time's Up ${playerName(fromInt)}. You can't bid now", speed = 1.05f)
                     }
@@ -1271,7 +1280,11 @@ class GameScreen : AppCompatActivity() {
                 findViewById<LinearLayout>(R.id.imageGalleryScoreTotal).removeAllViews()
                 findViewById<LinearLayout>(R.id.imageGalleryScoreTotal).addView(viewTemp)
             }
-            else -> findViewById<LinearLayout>(R.id.imageGalleryScore).addView(viewTemp)
+            else -> {
+                viewTemp.layoutParams.height = resources.getDimensionPixelSize(R.dimen._22sdp)
+                viewTemp.background = ContextCompat.getDrawable(this, R.drawable.blackrectangle)
+                findViewById<LinearLayout>(R.id.imageGalleryScore).addView(viewTemp)
+            }
         }
         if(display) scrollViewScore.post {
             scrollViewScore.fullScroll(View.FOCUS_DOWN)
@@ -1327,6 +1340,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun resetVariables() {
+        if(gameNumber > 1) changeBackground()
         buddyImage1.setImageResource(R.drawable.ic_back_side_red)
         findViewById<ImageView>(R.id.buddyImage2).setImageResource(R.drawable.ic_back_side_blue)
         findViewById<GifImageView>(R.id.trumpImage).setImageResource(R.drawable.trump1)
@@ -1456,11 +1470,13 @@ class GameScreen : AppCompatActivity() {
             for (i in 0 until nPlayers) {
                 val j = i + 1
                 if (j == bidder || (j == buPlayer1 && buFound1 != 0) || (j == buPlayer2 && buFound2 != 0)){
-                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + " $bidTeamScore /$bidValue"
+                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j)// + " $bidTeamScore /$bidValue"
+                    findViewById<TickerView>(refIDMappedTextViewA[i]).text =  "$bidTeamScore /$bidValue"
 //                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  $bidTeamScore /$bidValue"
                 }
                 else {
-                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + " ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
+                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j)// + " ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
+                    findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
 //                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
                 }
             }
@@ -1535,14 +1551,11 @@ class GameScreen : AppCompatActivity() {
             centralText("Game Over: Bidder team Won \n         Defender team Lost")
 
             if (fromInt == bidder && buFound1 != 1) {
-                if (soundStatus) SoundManager.getInstance().playWonSound() //soundWon.start()
-//                speak("Well done!! You did it")
+                speak("Well done!! You did it")
             } else if ((fromInt == bidder || from == "p$buPlayer1") && buFound1 == 1) {
-                if (soundStatus) SoundManager.getInstance().playWonSound() //soundWon.start()
-//                speak("Well done!! Your team did it")
+                speak("Well done!! Your team did it")
             } else {
-                if (soundStatus) SoundManager.getInstance().playLostSound() //soundWon.start()
-//                speak("Sorry Your team lost")
+                speak("Sorry Your team lost")
             }
 
             if (fromInt == bidder) { // bidder will change game state to 6
@@ -1564,14 +1577,12 @@ class GameScreen : AppCompatActivity() {
             centralText("Game Over: Defender team Won \n         Bidder team Lost")
 
             if (from == "p$bidder" || from == "p$buPlayer1") {
-                if (soundStatus) SoundManager.getInstance().playLostSound() //soundWon.start()
                 speak("Sorry Your team lost")
             } else {
-                if (soundStatus) SoundManager.getInstance().playWonSound() //soundWon.start()
                 speak("Well done!! Your team did it")
             }
 
-            if ("p$bidder" == from) { // winner will change game state to 6
+            if ("p$bidder" == from) { // bidder will change game state to 6
                 val pointsListTemp = mutableListOf(gameNumber, bidValue, bidValue, bidValue, bidValue)
                 pointsListTemp[bidder] = -1 * bidValue * 2
                 pointsListTemp[buPlayer1] = -bidValue
@@ -2011,7 +2022,7 @@ class GameScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.GONE
                 findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).clearAnimation()
-            }, 240)
+            }, 180)
         }
     }
 
@@ -2064,7 +2075,7 @@ class GameScreen : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).postDelayed({
                         findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.GONE
                         findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).clearAnimation()
-                    }, 240)
+                    }, 180)
                 } else {
                     if (soundStatus) SoundManager.getInstance().playErrorSound() //
                     if (vibrateStatus) vibrationStart()
@@ -2145,8 +2156,8 @@ class GameScreen : AppCompatActivity() {
     } // just displaying trump card
 
     private fun startTrumpSelection() {
-        textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4)
-        findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer44))
+//        textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4)
+//        findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer44))
         if (bidder != fromInt) {     //  show to everyone except bidder
             toastCenter("${playerName(bidder)} won the bid round")
             speak("${playerName(bidder)} won bid. Waiting to choose trump")
@@ -2174,7 +2185,7 @@ class GameScreen : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.GONE
             findViewById<FrameLayout>(R.id.frameTrumpSelection).clearAnimation()
-        }, 230)
+        }, 180)
     }
 
     fun nextBidderTurn(currentTurn: Int, bidStatus:List<Int>): Int {
@@ -2227,8 +2238,8 @@ class GameScreen : AppCompatActivity() {
 
                         textViewBidValue.text = bidValue.toString() //.toString() //show current bid value
                         findViewById<TextView>(R.id.textViewBider).text = "Bid: "+ playerName(bidder)
-                        textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.font_yellow)
-                        findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
+//                        textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.font_yellow)
+//                        findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
                         findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE //biding frame invisible
                         resetBackgroundAnimationBidding(dataLoad) //set all background to black or red depending on status
                         if (bidder > 0) {
@@ -2304,7 +2315,7 @@ class GameScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
                 findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
-            }, 230)
+            }, 180)
         }
     }
 
@@ -2437,7 +2448,8 @@ class GameScreen : AppCompatActivity() {
         val totalCoins = if (nPlayers7) listOf(p1Coins, p2Coins, p3Coins, p4Coins, p5Coins, p6Coins, p7Coins)
         else listOf(p1Coins, p2Coins, p3Coins, p4Coins)
         for (i in 0 until nPlayers) {
-            findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(i + 1) + " $${String.format("%,d", totalCoins[i])}"
+            findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(i + 1)// + " $${String.format("%,d", totalCoins[i])}"
+            findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$${String.format("%,d", totalCoins[i])}"
         }
     }
 

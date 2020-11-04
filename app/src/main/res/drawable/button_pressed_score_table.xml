@@ -7,9 +7,9 @@
     <item android:state_pressed="true" >
         <inset
             android:drawable="@drawable/ranking"
-            android:insetLeft="@dimen/_3sdp"
-            android:insetTop="@dimen/_3sdp"
-            android:insetRight="@dimen/_3sdp"
-            android:insetBottom="@dimen/_3sdp"/>
+            android:insetLeft="@dimen/_5sdp"
+            android:insetTop="@dimen/_5sdp"
+            android:insetRight="@dimen/_5sdp"
+            android:insetBottom="@dimen/_5sdp"/>
     </item>
 </selector>

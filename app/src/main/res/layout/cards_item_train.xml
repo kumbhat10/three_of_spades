@@ -15,7 +15,7 @@
         android:layout_marginStart="@dimen/_2sdp"
         android:layout_marginEnd="@dimen/_2sdp"
         android:layout_marginBottom="@dimen/_minus1sdp"
-        android:background="@drawable/button_square_cardpoints"
+        android:background="@drawable/greenrectanglesimple"
         android:fontFamily="sans-serif"
         android:gravity="top|center_horizontal"
         android:text="@string/_10_pts"

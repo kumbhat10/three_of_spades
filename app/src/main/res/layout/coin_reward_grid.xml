@@ -5,6 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/_11sdp"
+    android:background="@drawable/blackglassglossy"
     app:cardElevation="@dimen/_36sdp">
 
 
@@ -22,14 +23,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/coinRewardIcon"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/button_square"
+        android:background="@drawable/greenrectanglesimple"
         android:gravity="center"
         android:paddingStart="@dimen/_7sdp"
         android:paddingTop="@dimen/_2sdp"
         android:paddingEnd="@dimen/_7sdp"
         android:paddingBottom="@dimen/_3sdp"
         android:text="Day 1 \n1000 coins"
-        android:textColor="#676767"
+        android:textColor="#ACACAC"
         android:textSize="@dimen/_9ssp"
         tools:ignore="HardcodedText" />
 

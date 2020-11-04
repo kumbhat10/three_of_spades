@@ -84,6 +84,7 @@
     <color name = "borderblueDark2o">#BD571F</color>
 
     <color name="progressBarPlayer4">#00FF0A</color>
+    <color name="colorongreen">#393939</color>
     <color name="progressBarPlayer44">#00FF0A</color>
     <color name="scoreTableText">#FFFFFF</color>
     <color name="white">#FFFFFF</color>

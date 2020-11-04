@@ -20,12 +20,12 @@ class ImageAdapter(var context: Context, var arrayList: ArrayList<DailyRewardIte
         if(position==highlightPosition-1){
             view.background = ContextCompat.getDrawable(context,R.drawable.border_square_reward)
             icons.startAnimation(AnimationUtils.loadAnimation(context,R.anim.anim_scale_infinite))
-            textDescription.background = ContextCompat.getDrawable(context,R.drawable.button_square)
+//            textDescription.background = ContextCompat.getDrawable(context,R.drawable.button_square)
             icons.setImageResource(R.drawable.coin_trans_1)
-            textDescription.setTextColor(ContextCompat.getColor(context,R.color.white))
+            textDescription.setTextColor(ContextCompat.getColor(context, R.color.colorongreen))
         }else{
             icons.setImageResource(R.drawable.coin_trans_1blurr)
-            textDescription.background = ContextCompat.getDrawable(context,R.drawable.button_square_grey)
+            textDescription.background = ContextCompat.getDrawable(context,R.drawable.blacksquarebutton)
         }
         return view
     }

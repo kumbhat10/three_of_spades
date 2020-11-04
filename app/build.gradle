@@ -20,7 +20,7 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 30
         versionCode 49
-        versionName "49A"
+        versionName "49B"
         ndkVersion "21.3.6528147" //6363665"
         signingConfig signingConfigs.debug
     }

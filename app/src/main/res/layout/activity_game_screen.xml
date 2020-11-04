@@ -16,6 +16,7 @@
         android:contentDescription="@string/app_name"
         android:onClick="closeChatScoreWindow"
         android:src="@drawable/pokerblue"
+        android:foreground="@drawable/tint_backgroundgame"
         android:scaleType="fitXY"
         android:visibility="visible" />
 
@@ -1064,12 +1065,11 @@
     
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView7a"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/width_playername_4"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView7"
-        android:layout_alignEnd="@+id/textView7"
-        android:layout_below="@+id/textView7"
-        android:layout_marginTop="@dimen/userScoreGap"
+        android:layout_toStartOf="@+id/textView7"
+        android:layout_marginEnd="@dimen/_minus3sdp"
+        android:layout_above="@+id/playerCards"
         android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
         android:text="@string/playerView1"
@@ -1104,9 +1104,9 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_above="@+id/playerCards"
-        android:layout_marginEnd="@dimen/_minus3sdp"
+        android:layout_marginEnd="@dimen/_minus25sdp"
         android:layout_marginBottom="@dimen/_2sdp"
-        android:layout_toStartOf="@+id/textView7"
+        android:layout_alignEnd="@+id/textView7"
         android:contentDescription="@string/app_name"
         android:src="@drawable/partnericon"
         android:visibility="gone" />
@@ -1276,15 +1276,15 @@
 
 
     <ImageView
-        android:layout_width="@dimen/_38sdp"
-        android:layout_height="@dimen/_42sdp"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/_14sdp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:elevation="@dimen/_36sdp"
         android:onClick="openCloseScoreSheet"
-        android:background="@color/Black"
+        android:background="@drawable/blacksquarebutton"
         android:src="@drawable/button_pressed_score_table"
         android:clickable="true"
         android:focusable="true"
@@ -1300,7 +1300,7 @@
         android:layout_alignParentBottom="true"
         android:elevation="@dimen/_40sdp"
         android:layout_marginStart="@dimen/_50sdp"
-        android:layout_marginEnd="@dimen/_39sdp"
+        android:layout_marginEnd="@dimen/_55sdp"
         android:layout_marginBottom="0dp">
 
         <HorizontalScrollView
@@ -1626,7 +1626,7 @@
                 android:layout_marginBottom="3dp"
                 android:layout_below="@+id/addViewChatGameScreenBanner"
                 android:layout_above="@+id/emojiGrid"
-                android:gravity="top|start"
+                android:gravity="bottom|start"
                 android:hint="@string/chatWindowDisplay"
                 android:paddingStart="@dimen/_3sdp"
                 android:paddingEnd="@dimen/_2sdp"
@@ -1713,7 +1713,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="@dimen/_43sdp"
-        android:layout_marginTop="@dimen/_29sdp"
+        android:layout_marginTop="@dimen/_25sdp"
         android:layout_marginEnd="@dimen/_43sdp"
         android:layout_marginBottom="0dp"
         android:background="@drawable/blacksquarebutton"
@@ -1724,8 +1724,8 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textViewPartnerSelect"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_49sdp"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_marginTop="@dimen/_25sdp"
             android:background="@drawable/orangesquarebutton"
             android:gravity="center|center_horizontal"
             android:text="@string/partnerSelection1"
@@ -1737,13 +1737,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_14sdp"
             android:layout_marginEnd="@dimen/_14sdp"
-            android:layout_marginBottom="@dimen/_14sdp"
-            android:animateLayoutChanges="true"
+            android:layout_marginBottom="@dimen/_25sdp"
             android:focusable="true"
-            android:focusableInTouchMode="true"
             android:scrollIndicators="top"
-            android:scrollbarSize="@dimen/_7sdp"
-            android:scrollbarStyle="insideOverlay"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            android:scrollbarSize="@dimen/_9sdp"
+            android:scrollbarStyle="outsideInset"
             android:scrollbars="horizontal">
 
             <LinearLayout
@@ -2016,7 +2015,6 @@
         android:layout_width="@dimen/imageWidth_4"
         android:layout_height="@dimen/imageWidth_4"
         android:background="@drawable/purplesquarebutton"
-        android:elevation="@dimen/_30sdp"
         android:text="@string/bidNow"
         android:textColor="@color/white"
         android:gravity="center"
@@ -2027,8 +2025,7 @@
         android:id="@+id/konfettiGSA"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="@dimen/_50sdp"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <RelativeLayout
         android:id="@+id/scoreViewLayout"
@@ -2041,7 +2038,7 @@
         android:layout_marginBottom="@dimen/_4sdp"
         android:animateLayoutChanges="true"
         android:background="@drawable/shine_score_table"
-        android:elevation="@dimen/_43sdp"
+        android:elevation="@dimen/_45sdp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -2055,6 +2052,7 @@
             android:layout_centerHorizontal="true"
             android:clickable="true"
             android:focusable="true"
+            android:background="@drawable/blacksquarebutton"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_marginTop="@dimen/_1sdp"
             android:layout_marginBottom="@dimen/_4sdp"
@@ -2094,19 +2092,19 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:background="@drawable/button_square_header"
+            android:background="@drawable/redrectanlgesimple"
             android:orientation="vertical"
             android:paddingBottom="@dimen/_2sdp" />
 
         <LinearLayout
             android:id="@+id/imageGalleryScoreTotal"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_21sdp"
+            android:layout_height="@dimen/_23sdp"
             android:layout_below="@+id/imageGalleryScoreName"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginTop="0dp"
-            android:background="@drawable/button_score_total"
+            android:background="@drawable/blacksquarebutton"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"

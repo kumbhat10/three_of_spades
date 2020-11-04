@@ -54,7 +54,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var textToSpeech: TextToSpeech
     private var typedValue = TypedValue()
     private var rated = false
-    private var reviewRequested = false
     private var shuffleOver = false
     private var ratingRequestDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
         .toInt()
@@ -209,14 +208,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
-        when (Random.nextInt(0, 6)) {
-            0 -> gameBkgd.setImageResource(R.drawable.poker)
-            1 -> gameBkgd.setImageResource(R.drawable.pokerblue)
-            2 -> gameBkgd.setImageResource(R.drawable.pokercyan)
-            3 -> gameBkgd.setImageResource(R.drawable.pokerred)
-            4 -> gameBkgd.setImageResource(R.drawable.pokerred1)
-            5 -> gameBkgd.setImageResource(R.drawable.poker)
-        }
+//        changeBackground()
         roomID = intent.getStringExtra("roomID")!!
             .toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
         from = intent.getStringExtra("from")!!
@@ -443,6 +435,17 @@ class GameScreenAutoPlay : AppCompatActivity() {
         startNextGame(View(applicationContext))
     }
 
+    private fun changeBackground(){
+        when (Random.nextInt(0, 6)){
+            0 -> gameBkgd.setImageResource(R.drawable.poker)
+            1 -> gameBkgd.setImageResource(R.drawable.pokerblue)
+            2 -> gameBkgd.setImageResource(R.drawable.pokercyan)
+            3 -> gameBkgd.setImageResource(R.drawable.pokerred)
+            4 -> gameBkgd.setImageResource(R.drawable.pokerred1)
+            5 -> gameBkgd.setImageResource(R.drawable.poker)
+        }
+    }
+
     private fun logFirebaseEvent(event: String, int: Int, key: String) {
         val params = Bundle()
         params.putInt(key, int)
@@ -463,12 +466,15 @@ class GameScreenAutoPlay : AppCompatActivity() {
         scoreList = listOf(pt1, pt2, pt3, pt4)
         findViewById<GifImageView>(R.id.imageViewChat).visibility = View.GONE
         textView1_4.visibility = View.VISIBLE
+        textView1_4a.visibility = View.VISIBLE
         findViewById<ImageView>(R.id.onlinep1_4).visibility = View.VISIBLE
         findViewById<ImageView>(R.id.playerView1_4).visibility = View.VISIBLE
         textView2_4.visibility = View.VISIBLE
+        textView2_4a.visibility = View.VISIBLE
         findViewById<ImageView>(R.id.onlinep2_4).visibility = View.VISIBLE
         findViewById<ImageView>(R.id.playerView2_4).visibility = View.VISIBLE
         textView3_4.visibility = View.VISIBLE
+        textView3_4a.visibility = View.VISIBLE
         findViewById<ImageView>(R.id.onlinep3_4).visibility = View.VISIBLE
         findViewById<ImageView>(R.id.playerView3_4).visibility = View.VISIBLE
     }
@@ -491,7 +497,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
             nGamesPlayed < 10 -> 1.5f
             else -> 1.7f
         }
-
     }
 
     override fun onStart() {
@@ -540,28 +545,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }, delayWaitGameMode6)
     }
 
-    private fun inAppReview() {
-        val manager = ReviewManagerFactory.create(applicationContext)
-        val request = manager.requestReviewFlow()
-        request.addOnCompleteListener { request1 ->
-            if (request1.isSuccessful) {
-                val reviewInfo = request1.result
-                //                toastCenter("Successful")
-                val flow = manager.launchReviewFlow(this, reviewInfo)
-                flow.addOnCompleteListener { result ->
-                    if (result.isSuccessful) {
-                        rated = true
-                        editor.putBoolean("rated", rated)
-                        editor.apply()
-                        logFirebaseEvent("rate_us", 1, "rated_inApp")
-                        refUsersData.document(uid).set(hashMapOf("rated" to 1), SetOptions.merge())
-                    }
-                    //                else toastCenter("failed")
-                }
-            }
-        }
-    }
-
     private fun updateWholeScoreBoard() {
         if (scoreList[fromInt] > 0) {
             createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Win, speed = coinSpeed, ratePerSec = coinRate)
@@ -569,7 +552,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         } else {
             createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Lost, speed = coinSpeed, ratePerSec = coinRate)
         }
-
         p1Gain += scoreList[1]
         p2Gain += scoreList[2]
         p3Gain += scoreList[3]
@@ -634,6 +616,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 findViewById<LinearLayout>(R.id.imageGalleryScoreTotal).addView(viewTemp)
             }
             else -> {
+                viewTemp.layoutParams.height = resources.getDimensionPixelSize(R.dimen._22sdp)
+                viewTemp.background = ContextCompat.getDrawable(this, R.drawable.blackrectangle)
                 findViewById<LinearLayout>(R.id.imageGalleryScore).addView(viewTemp)
             }
         }
@@ -687,6 +671,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun resetVariables() {
+        if(gameNumber > 1) changeBackground() // change background only from 2nd game
         buddyImage1.setImageResource(R.drawable.ic_back_side_red)
         findViewById<ImageView>(R.id.buddyImage2).setImageResource(R.drawable.ic_back_side_blue)
         findViewById<GifImageView>(R.id.trumpImage).setImageResource(R.drawable.trump1)
@@ -1237,7 +1222,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.GONE
                     findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).clearAnimation()
-                }, 230)
+                }, 180)
             }
         }
     }
@@ -1345,7 +1330,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.GONE
                 findViewById<FrameLayout>(R.id.frameTrumpSelection).clearAnimation()
-            }, 230)
+            }, 170)
         }
     }
 
@@ -1459,7 +1444,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
                 findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
-            }, 230)
+            }, 180)
         }
         bidingStarted = true
         playerTurn.value = nextBidderTurn(playerTurn.value!!)
