@@ -31,6 +31,7 @@
 
     <color name="font_yellow">#ffc107</color>
     <color name="font_grey_settings">#DCDCDC</color>
+    <color name="tickerCoin">#FFBF00</color>
     <color name="light_grey_settings">#BABABA</color>
 
     <color name="progressBarPlayer2">#CA0000</color>
@@ -38,7 +39,7 @@
     <color name = "cardsBackgroundDark">#C6040E17</color>
     <color name = "cardsBackgroundLight">#DDFFFFFF</color>
     <color name = "layoutBackground">#00000000</color>
-    <color name = "layoutBackgroundLittle">#C901040C</color>
+    <color name = "layoutBackgroundLittle">#D501030B</color>
 
     <color name = "inActiveCard">#C1323232</color>
     <color name = "highlightCard1">#9A39FF00</color>
@@ -46,13 +47,13 @@
     <color name="trackSwitchON">#0F56F100</color>
     <color name="trackSwitchOFF">#2AA3A3A3</color>
     <color name="thumbSwitchON">@color/icon_yellow</color>
-    <color name="thumbSwitchOFF">#757575</color>
+    <color name="thumbSwitchOFF">#9C9C9C</color>
 
     <color name="borderblue">#0B70C8</color>
 
-    <color name = "borderNblueDark0b">#3EB9D8</color>
-    <color name = "borderNblueDark1b">#3499B3</color>
-    <color name = "borderNblueDark2b">#266F81</color>
+    <color name = "borderNblueDark0b">#E42A2A</color>
+    <color name = "borderNblueDark1b">#B11F1F</color>
+    <color name = "borderNblueDark2b">#701B1B</color>
     <color name = "borderNblueDark3b">#1F434C</color>
 
     <color name = "shine0black">#BFBFBF</color>
@@ -84,7 +85,7 @@
     <color name = "borderblueDark2o">#BD571F</color>
 
     <color name="progressBarPlayer4">#00FF0A</color>
-    <color name="colorongreen">#393939</color>
+    <color name="colorongreen">#1B1B1B</color>
     <color name="progressBarPlayer44">#00FF0A</color>
     <color name="scoreTableText">#FFFFFF</color>
     <color name="white">#FFFFFF</color>

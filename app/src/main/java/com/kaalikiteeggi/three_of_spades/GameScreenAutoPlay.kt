@@ -99,6 +99,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var from: String
     private var fromInt = 0
     private var nPlayers = 0
+    private var totalDailyCoins = 0
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var refUsersData = Firebase.firestore.collection("Users")
@@ -118,6 +119,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var nGamesPlayed = 0
     private var nGamesWon = 0
     private var nGamesBid = 0
+
+    private var nGamesPlayedDaily = 0
+    private var nGamesWonDaily = 0
+    private var nGamesBidDaily = 0
 
     private lateinit var playerInfo: ArrayList<String>
     private lateinit var p1: String
@@ -209,17 +214,20 @@ class GameScreenAutoPlay : AppCompatActivity() {
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
 //        changeBackground()
-        roomID = intent.getStringExtra("roomID")!!
-            .toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
-        from = intent.getStringExtra("from")!!
-            .toString()    //check if user has joined room or created one and display Toast
+        roomID = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
+        from = intent.getStringExtra("from")!!.toString()    //check if user has joined room or created one and display Toast
         fromInt = from.split("")[2].toInt()
         selfName = intent.getStringExtra("selfName")!!.toString()
+        totalDailyCoins = intent.getIntExtra("totalDailyCoins", 0)
         val userStats = intent.getIntegerArrayListExtra("userStats")!!
+        val userStatsDaily = intent.getIntegerArrayListExtra("userStatsDaily")!!
         nGamesPlayed = userStats[0]
-        updateTimeAutoPlay()
         nGamesWon = userStats[1]
         nGamesBid = userStats[2]
+        nGamesPlayedDaily = userStatsDaily[0]
+        nGamesWonDaily = userStatsDaily[1]
+        nGamesBidDaily = userStatsDaily[2]
+        updateTimeAutoPlay()
         nPlayers = 4 //intent.getIntExtra("nPlayers", 0)
         setupGame()
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
@@ -549,6 +557,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (scoreList[fromInt] > 0) {
             createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Win, speed = coinSpeed, ratePerSec = coinRate)
             nGamesWon += 1
+            nGamesWonDaily += 1
         } else {
             createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Lost, speed = coinSpeed, ratePerSec = coinRate)
         }
@@ -557,6 +566,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         p3Gain += scoreList[3]
         p4Gain += scoreList[4]
 
+
+        totalDailyCoins += scoreList[1]
         p1Coins += scoreList[1]
         p2Coins += scoreList[2]
         p3Coins += scoreList[3]
@@ -566,12 +577,19 @@ class GameScreenAutoPlay : AppCompatActivity() {
         scoreBoardTable(display = false, data = listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain), upDateTotal = true)   // createScoreTableTotal
         scoreBoardTable(data = scoreList)
 
-        if (bidder == fromInt) nGamesBid += 1
+        if (bidder == fromInt) {
+            nGamesBid += 1
+            nGamesBidDaily += 1
+        }
 
         nGamesPlayed += 1
+        nGamesPlayedDaily += 1
         updateTimeAutoPlay()
         refUsersData.document(uid)
-            .set(hashMapOf("sc" to playerCoins(from), "w_bot" to nGamesWon, "b_bot" to nGamesBid, "p_bot" to nGamesPlayed), SetOptions.merge())
+            .set(hashMapOf("sc" to playerCoins(from),"scd" to totalDailyCoins,
+                "w_bot" to nGamesWon, "w_daily" to nGamesWonDaily,
+                "b_bot" to nGamesBid,"b_daily" to nGamesBidDaily,
+                "p_bot" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
     }
 
     private fun createScoreTableHeader(): List<String> {

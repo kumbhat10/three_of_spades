@@ -33,7 +33,7 @@
     <string name="rewardedReal">ca-app-pub-2714670043901113/5307668082</string>
     <string name="rewarded">@string/rewardedReal</string>
 
-    <string name="app_name">Kaali ki Tiggi</string>
+    <string name="app_name">3 of Spades</string>
     <string name="developer">Dushyant Kumbhat</string>
     <string name="developer_contact">kaaliteerifun@gmail.com</string>
     <string name="click_contact">Click below to contact us</string>
@@ -96,6 +96,7 @@
     <string name="_10_pts">10 pts</string>
     <string name="_400">400</string>
     <string name="playeName">Player ?</string>
+    <string name="playerRank">1st</string>
     <string name="room_id">Room: </string>
     <string name="share"> Invite </string>
     <string name="host">Host</string>
@@ -129,5 +130,14 @@
     <string name="claim_reward">Claim Reward  </string>
     <string name="cancel_reward">Cancel </string>
     <string name="joinHelper">Enter 4 digit Room ID</string>
+    <string name="yes_love_it">Love it</string>
+    <string name="could_be_better">Could be better</string>
+    <string name="all_time">  All Time  </string>
+    <string name="total_all_time">(All time score)</string>
+    <string name="today">   Today  </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="top_players">Top Players</string>
+    <string name="userscore">$ 000,000</string>
 
 </resources>

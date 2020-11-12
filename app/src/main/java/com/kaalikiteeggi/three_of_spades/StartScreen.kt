@@ -117,6 +117,7 @@ class StartScreen : AppCompatActivity() {
         // region Facebook Login
         val loginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
         loginButton.setOnClickListener {
+            it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
             soundUpdate.start()
             maskButtons.visibility = View.VISIBLE
             loadingText3.text = getString(R.string.wait)
@@ -154,6 +155,7 @@ class StartScreen : AppCompatActivity() {
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso)
         findViewById<SignInButton>(R.id.googleSignInButton).setOnClickListener(View.OnClickListener {
+            it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
             soundUpdate.start()
             startActivityForResult(mGoogleSignInClient.signInIntent, googleCode)
             maskButtons.visibility = View.VISIBLE
@@ -269,7 +271,7 @@ class StartScreen : AppCompatActivity() {
         signInSuccess.visibility = View.VISIBLE
         signInSuccess.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_left_activity))
         Handler(Looper.getMainLooper()).postDelayed({ startActivity(Intent(this, MainHomeScreen::class.java).apply {putExtra("newUser",newUser)})
-            overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)},500)
+            overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)},1000)
 //                           toastCenter("Signed in Successfully ${String(Character.toChars(0x1F60A))}")
 
         Handler(Looper.getMainLooper()).postDelayed({finish()},1500)

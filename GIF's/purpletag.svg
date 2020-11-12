@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="33.991mm" height="66.739mm" clip-rule="evenodd" fill-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" version="1.0" viewBox="0 0 1129 2217" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style type="text/css">.str0 {stroke:#FEFEFE;stroke-width:33.2118;stroke-dasharray:33.211786 33.211786} .fil3 {fill:none} .fil0 {fill:#2B2A29} .fil4 {fill:#342B64} .fil1 {fill:#393185} .fil2 {fill:#9D9E9E}</style>
+  <mask id="d">
+   <linearGradient id="c" x1="1096.3" x2="1126.4" y1="-.036533" y2="2166.5" gradientUnits="userSpaceOnUse" spreadMethod="reflect">
+    <stop stop-color="#fff" offset="0"/>
+    <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+   </linearGradient>
+   <rect x="1094" width="35.291" height="2166.7" fill="url(#c)"/>
+  </mask>
+  <mask id="b">
+   <linearGradient id="a" x1="517.1" x2="60.083" y1="1752.1" y2="2201.7" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fff" offset="0"/>
+    <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+   </linearGradient>
+   <rect x="1" y="1737" width="574" height="479" fill="url(#a)"/>
+  </mask>
+ </defs>
+ <path class="fil0" d="m1094 0l35 2166c0 1-14-36-35-91v-2075z" mask="url(#d)"/>
+ <path class="fil1" d="m0 13h1094v2148l-547-424-547 424v-2148z"/>
+ <path class="fil2" d="m576 1760l-543 457-32-57 546-423 29 23z" mask="url(#b)"/>
+ <path class="fil3 str0" d="m88 2003c-1-643-1-1285-2-1928h954c-4 17-7 35-9 51-2 17-2 32-2 344v1530l-456-369c-162 124-323 248-485 372z"/>
+ <rect class="fil4" y="13" width="1096" height="169"/>
+</svg>

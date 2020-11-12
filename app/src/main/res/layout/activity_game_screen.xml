@@ -1400,12 +1400,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_above="@+id/playerCards"
-        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="@dimen/_89sdp"
-        android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_30sdp"
-        android:layout_marginEnd="@dimen/_89sdp"
         android:layout_marginBottom="0dp"
         android:elevation="@dimen/_45sdp"
         android:background="@drawable/blacksquarebutton"
@@ -1413,14 +1410,15 @@
         android:visibility="gone">
 
         <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_49sdp"
+            android:layout_width="@dimen/_280sdp"
+            android:layout_height="@dimen/_42sdp"
             android:layout_marginTop="@dimen/_25sdp"
+            android:layout_gravity="center|top"
             android:background="@drawable/orangesquarebutton"
-            android:gravity="center|center_horizontal"
+            android:gravity="center"
             android:text="@string/raise_bid_or_pass"
             android:textColor="@color/Black"
-            android:textSize="@dimen/_25ssp" />
+            android:textSize="@dimen/_21ssp" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipBid"
@@ -1430,11 +1428,11 @@
             app:chipSpacingHorizontal="@dimen/_5sdp"
             app:singleSelection="true">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/bid05button"
-                android:layout_width="@dimen/_72sdp"
-                android:layout_height="@dimen/_43sdp"
-                android:layout_gravity="center"
+                android:layout_width="@dimen/_65sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:gravity="center"
                 android:background="@drawable/greenroundedbutton"
                 android:clickable="true"
                 android:focusable="true"
@@ -1443,13 +1441,13 @@
                 android:tag="5"
                 android:text="@string/bid05button"
                 android:textColor="#303030"
-                android:textSize="@dimen/_22ssp" />
+                android:textSize="@dimen/_20ssp" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/bid10button"
-                android:layout_width="@dimen/_72sdp"
-                android:layout_height="@dimen/_43sdp"
-                android:layout_gravity="center"
+                android:layout_width="@dimen/_65sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:gravity="center"
                 android:background="@drawable/greenroundedbutton"
                 android:onClick="askToBid"
                 android:shadowDy="4"
@@ -1459,13 +1457,13 @@
                 android:tag="10"
                 android:text="@string/bid10button"
                 android:textColor="#303030"
-                android:textSize="@dimen/_22ssp" />
+                android:textSize="@dimen/_20ssp" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/bid20button"
-                android:layout_width="@dimen/_72sdp"
-                android:layout_height="@dimen/_43sdp"
-                android:layout_gravity="center"
+                android:layout_width="@dimen/_65sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:gravity="center"
                 android:background="@drawable/greenroundedbutton"
                 android:onClick="askToBid"
                 android:clickable="true"
@@ -1475,13 +1473,13 @@
                 android:tag="20"
                 android:text="@string/bid20button"
                 android:textColor="#303030"
-                android:textSize="@dimen/_22ssp" />
+                android:textSize="@dimen/_20ssp" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/bid50button"
-                android:layout_width="@dimen/_72sdp"
-                android:layout_height="@dimen/_43sdp"
-                android:layout_gravity="center"
+                android:layout_width="@dimen/_65sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:gravity="center"
                 android:background="@drawable/greenroundedbutton"
                 android:onClick="askToBid"
                 android:clickable="true"
@@ -1491,13 +1489,14 @@
                 android:tag="50"
                 android:text="@string/bid50button"
                 android:textColor="#303030"
-                android:textSize="@dimen/_22ssp" />
+                android:textSize="@dimen/_20ssp" />
         </com.google.android.material.chip.ChipGroup>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/bidpassbutton"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_74sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:gravity="center"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="@dimen/_20sdp"
             android:background="@drawable/redrectanglebutton"

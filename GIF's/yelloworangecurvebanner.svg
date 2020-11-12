@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:svg="http://www.w3.org/2000/svg" id="svg4423" viewBox="0 0 911.23 307.82" version="1.1">
+  <defs id="defs3">
+    <filter id="filter3946-7" color-interpolation-filters="sRGB">
+      <feGaussianBlur id="feGaussianBlur3948-1" stdDeviation="6.3057345"/>
+    </filter>
+    <linearGradient id="linearGradient4403" y2="478.12" gradientUnits="userSpaceOnUse" x2="353.67" gradientTransform="translate(0 -50.706)" y1="301.92" x1="354.94">
+      <stop id="stop4157" stop-color="#ff0" offset="0"/>
+      <stop id="stop4159" stop-color="#ff0" stop-opacity="0" offset="1"/>
+    </linearGradient>
+    <linearGradient id="linearGradient4405" y2="352.62" xlink:href="#linearGradient4185" gradientUnits="userSpaceOnUse" x2="234.51" y1="332.34" x1="-49.438"/>
+    <linearGradient id="linearGradient4185">
+      <stop id="stop4187" stop-color="#fff" offset="0"/>
+      <stop id="stop4189" stop-color="#fff" stop-opacity="0" offset="1"/>
+    </linearGradient>
+    <linearGradient id="linearGradient4407" y2="352.62" xlink:href="#linearGradient4185" gradientUnits="userSpaceOnUse" x2="234.51" gradientTransform="matrix(-1 0 0 1 759.07 -.0000015644)" y1="332.34" x1="-49.438"/>
+    <linearGradient id="linearGradient4409" y2="390.65" gradientUnits="userSpaceOnUse" x2="321.98" y1="222.06" x1="328.32">
+      <stop id="stop4216" stop-color="#fff" offset="0"/>
+      <stop id="stop4218" stop-color="#fff" stop-opacity="0" offset="1"/>
+    </linearGradient>
+    <linearGradient id="linearGradient4573" y2="299.38" gradientUnits="userSpaceOnUse" x2="347.33" gradientTransform="matrix(.99439 0 0 .97293 4.0291 6.9424)" y1="588.41" x1="346.07">
+      <stop id="stop4326" stop-color="#f60" offset="0"/>
+      <stop id="stop4328" stop-color="#f60" stop-opacity="0" offset="1"/>
+    </linearGradient>
+  </defs>
+  <g id="layer1" transform="translate(98.473 -153.24)">
+    <g id="g4375" transform="matrix(1.258 0 0 1.258 -120.42 -156.81)">
+      <path id="path4131" opacity=".55" filter="url(#filter3946-7)" d="m59.554 218.28c238.16-29.156 380.82-27.888 640.2 0v-185.13c-260.56-16.479-402.05-25.353-640.2 0v185.13z" transform="matrix(1 0 0 .88446 0 278.55)"/>
+      <path id="path4133" fill="#520" d="m35.469 437.58c233.25 18.971 461.86 14.719 688.38 0v-185.12c-209.17 13.128-422.72 23.421-688.38 0v185.12z"/>
+      <path id="path4135" fill="#d45500" d="m704.59 258.68c-219.21 14.589-439.8 19.43-658.87-0.31365-8.6211-3.2794-3.9974 7.7727-5.1312 12.595v162c225.55 17.934 452.49 14.402 678.12-0.125v-175c-4.7083 0.28125-9.4167 0.5625-14.125 0.84375z"/>
+      <path id="path4139" fill="url(#linearGradient4403)" d="m54.473 257.41c219.21 14.589 439.8 19.43 658.87-0.31365 8.6211-3.2794 3.9974 7.7727 5.1312 12.595v162c-225.55 17.934-452.49 14.402-678.12-0.125v-175c4.7083 0.28125 9.4167 0.5625 14.125 0.84375z"/>
+      <path id="path4137" fill="url(#linearGradient4405)" d="m704.59 257.41c-219.21 14.589-439.8 19.43-658.87-0.31365-8.6211-3.2794-3.9974 7.7727-5.1312 12.595v162c225.55 17.934 452.49 14.402 678.12-0.125v-175c-4.7083 0.28125-9.4167 0.5625-14.125 0.84375z"/>
+      <path id="path4193" fill="url(#linearGradient4407)" d="m708.09 261.09c-181.19 16.693-363.62 15.395-545.25 6.5-39.598-1.9612-79.091-4.362-118.66-7v167.41c223.08 14.182 447.42 17.596 670.44 0.21875 0.0361-55.927-0.0867-111.85 0.0937-167.78-2.2083 0.21875-4.4167 0.4375-6.625 0.65625z"/>
+      <path id="path4209" fill="url(#linearGradient4409)" d="m692.88 271.28c-196.46 27.11-392.64 32.805-612.28 1.1562-10.906 2.1761-9.252 20.714 1.5625 21.812 84.91 43.561 179.56 73.382 275.91 69.209 114.4-5.0187 226.54-31.166 337.81-56.533 6.2311-1.0898 9.9772-7.0353 11.25-19.595 2.2535-8.7854-4.1589-15.942-14.245-16.05z"/>
+      <path id="path4322" fill="url(#linearGradient4573)" d="m704.67 257.39c-217.98 14.194-437.34 18.904-655.18-0.30516-8.5727-3.1907-3.975 7.5623-5.1024 12.254v157.62c224.29 17.449 449.96 14.012 674.32-0.12162v-170.26c-4.6819 0.27364-9.3639 0.54727-14.046 0.82091z"/>
+    </g>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Bended Banner 2</dc:title>
+        <dc:date>2010-08-13T14:27:24</dc:date>
+        <dc:description>Bended glossy banner 2</dc:description>
+        <dc:source>http://openclipart.org/detail/79975/bended-banner-2-by-inky2010</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>inky2010</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>3D</rdf:li>
+            <rdf:li>Banner</rdf:li>
+            <rdf:li>bended</rdf:li>
+            <rdf:li>border</rdf:li>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>frame</rdf:li>
+            <rdf:li>gloss</rdf:li>
+            <rdf:li>glossy</rdf:li>
+            <rdf:li>inky2010</rdf:li>
+            <rdf:li>internet</rdf:li>
+            <rdf:li>shaded</rdf:li>
+            <rdf:li>vector</rdf:li>
+            <rdf:li>web</rdf:li>
+            <rdf:li>web page</rdf:li>
+            <rdf:li>website</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

@@ -22,8 +22,6 @@
         android:src="@drawable/redorangeburst"
         android:visibility="visible" />
 
-
-
         <ImageView
             android:layout_width="@dimen/_250sdp"
             android:layout_height="@dimen/_270sdp"
@@ -135,14 +133,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/shine_button_black"
+            android:background="@drawable/blacksquarebutton"
             android:fadingEdge="horizontal|vertical"
             android:fontFamily="sans-serif-condensed"
-            android:paddingStart="@dimen/_22sdp"
-            android:paddingEnd="@dimen/_22sdp"
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingEnd="@dimen/_15sdp"
             android:text="@string/signinsuccess"
             android:textAlignment="center"
-            android:textColor="@color/progressBarPlayer4"
+            android:textColor="@color/icon_yellow"
             android:textSize="@dimen/_16ssp"
             android:visibility="gone" />
 

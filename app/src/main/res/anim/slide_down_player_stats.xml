@@ -2,7 +2,7 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <scale
-        android:duration="220"
+        android:duration="420"
         android:fromXScale="1"
         android:fromYScale="0"
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"

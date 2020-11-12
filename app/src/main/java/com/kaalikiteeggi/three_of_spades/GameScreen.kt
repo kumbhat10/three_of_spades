@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
-import android.content.res.Resources
 import android.graphics.drawable.ColorDrawable
 import android.os.*
 import android.speech.tts.TextToSpeech
@@ -32,7 +31,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.material.textview.MaterialTextView
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -107,6 +105,7 @@ class GameScreen : AppCompatActivity() {
     private lateinit var from: String
     private var fromInt = 0
     private var nPlayers = 0
+    private var totalDailyCoins = 0
     private var nPlayers7 = false
     private var nPlayers4 = false
     private val emojiGuard = String(Character.toChars(0x1F482))
@@ -154,7 +153,10 @@ class GameScreen : AppCompatActivity() {
     private lateinit var playerInfoCoins: ArrayList<Int>
     private var nGamesPlayed = 0
     private var nGamesWon = 0
-    private var nGamesBided = 0
+    private var nGamesBid = 0
+    private var nGamesPlayedDaily = 0
+    private var nGamesWonDaily = 0
+    private var nGamesBidDaily = 0
 
     private lateinit var p1: String
     private lateinit var p2: String
@@ -254,17 +256,21 @@ class GameScreen : AppCompatActivity() {
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
         //        changeBackground() // always start with default
-        roomID = intent.getStringExtra("roomID")!!
-            .toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
-        from = intent.getStringExtra("from")!!
-            .toString()    //check if user has joined room or created one and display Toast
+        roomID = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
+        from = intent.getStringExtra("from")!!.toString()    //check if user has joined room or created one and display Toast
         fromInt = from.split("")[2].toInt()
         selfName = intent.getStringExtra("selfName")!!.toString()
+        totalDailyCoins = intent.getIntExtra("totalDailyCoins", 0)
+
         playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
         val userStats = intent.getIntegerArrayListExtra("userStats")!!
+        val userStatsDaily = intent.getIntegerArrayListExtra("userStatsDaily")!!
         nGamesPlayed = userStats[0]
         nGamesWon = userStats[1]
-        nGamesBided = userStats[2]
+        nGamesBid = userStats[2]
+        nGamesPlayedDaily = userStatsDaily[0]
+        nGamesWonDaily = userStatsDaily[1]
+        nGamesBidDaily = userStatsDaily[2]
         playerInfoCoins = intent.getStringArrayListExtra("playerInfoCoins") as ArrayList<Int>
         nPlayers = intent.getIntExtra("nPlayers", 0)
         if (nPlayers == 7) nPlayers7 = true
@@ -1168,34 +1174,13 @@ class GameScreen : AppCompatActivity() {
         }, delayGameOver)
     }
 
-    private fun inAppReview() {
-        val manager = ReviewManagerFactory.create(applicationContext)
-        val request = manager.requestReviewFlow()
-        request.addOnCompleteListener { request1 ->
-            if (request1.isSuccessful) {
-                val reviewInfo = request1.result
-                val flow = manager.launchReviewFlow(this, reviewInfo)
-                flow.addOnCompleteListener { result ->
-                    if (result.isSuccessful) {
-                        speak("Thanks $selfName for the review", speed = 1.05f)
-                        rated = true
-                        editor = sharedPreferences.edit()
-                        editor.putBoolean("rated", rated)
-                        editor.apply()
-                        logFirebaseEvent("rate_us", 1, "rated")
-                        refUsersData.document(uid).set(hashMapOf("rated" to 1), SetOptions.merge())
-                    }
-                }
-            }
-        }
-    }
-
     private fun updateWholeScoreBoard() {
         p1Gain += scoreList[1].toString().toInt()
         p2Gain += scoreList[2].toString().toInt()
         p3Gain += scoreList[3].toString().toInt()
         p4Gain += scoreList[4].toString().toInt()
 
+        totalDailyCoins += scoreList[fromInt].toString().toInt()
         p1Coins += scoreList[1].toString().toInt()
         p2Coins += scoreList[2].toString().toInt()
         p3Coins += scoreList[3].toString().toInt()
@@ -1215,13 +1200,15 @@ class GameScreen : AppCompatActivity() {
         scoreBoardTable(data = scoreList)
 
         if (bidder == fromInt) {
-            nGamesBided += 1
+            nGamesBid += 1
+            nGamesBidDaily += 1
         }
         if (scoreList[fromInt] > 0) {
             if (soundStatus) SoundManager.getInstance().playWonSound()
             speak("Congratulations! Your team won", speed = 1.1f)
             createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Win, burst = false, speed = coinSpeed, ratePerSec = coinRate)
             nGamesWon += 1
+            nGamesWonDaily += 1
         }else{
             if (soundStatus) SoundManager.getInstance().playLostSound()
             speak("Sorry! Your team lost", speed = 1.1f)
@@ -1229,8 +1216,12 @@ class GameScreen : AppCompatActivity() {
         }
 
         nGamesPlayed += 1
+        nGamesPlayedDaily += 1
         refUsersData.document(uid)
-            .set(hashMapOf("sc" to playerCoins(from), "w" to nGamesWon, "b" to nGamesBided, "p" to nGamesPlayed), SetOptions.merge())
+            .set(hashMapOf("sc" to playerCoins(from),"scd" to totalDailyCoins,
+                "w_bot" to nGamesWon, "w_daily" to nGamesWonDaily,
+                "b_bot" to nGamesBid,"b_daily" to nGamesBidDaily,
+                "p_bot" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
     }
 
     private fun createScoreTableHeader(): List<String> {

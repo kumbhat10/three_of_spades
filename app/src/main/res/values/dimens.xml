@@ -34,7 +34,7 @@
     <dimen name="imageHeight">@dimen/imageWidth</dimen>
     <dimen name="width_playername">@dimen/imageWidth</dimen>
 
-    <dimen name="rankImage">@dimen/_60sdp</dimen>
+    <dimen name="rankImage">@dimen/_68sdp</dimen>
 
     <dimen name="imageWidth_4">@dimen/_68sdp</dimen>
     <dimen name="imageHeight_4">@dimen/imageWidth_4</dimen>
@@ -75,6 +75,7 @@
     <dimen name="scoreTableTextSize">@dimen/_9ssp</dimen>
 
 
+    <dimen name="mhsIconsSize">@dimen/_50sdp</dimen>
     <dimen name="mhsIconsGap">@dimen/_10sdp</dimen>
     <dimen name="mhsIconsMargin">0dp</dimen>
     <dimen name="cjrButtonsTextSize">@dimen/_13ssp</dimen>

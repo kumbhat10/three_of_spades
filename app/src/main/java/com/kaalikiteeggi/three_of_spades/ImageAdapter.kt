@@ -22,7 +22,9 @@ class ImageAdapter(var context: Context, var arrayList: ArrayList<DailyRewardIte
             icons.startAnimation(AnimationUtils.loadAnimation(context,R.anim.anim_scale_infinite))
 //            textDescription.background = ContextCompat.getDrawable(context,R.drawable.button_square)
             icons.setImageResource(R.drawable.coin_trans_1)
-            textDescription.setTextColor(ContextCompat.getColor(context, R.color.colorongreen))
+            textDescription.setTextColor(ContextCompat.getColor(context, R.color.shine2black))
+            textDescription.background = ContextCompat.getDrawable(context,R.drawable.greensquarebutton1)
+
         }else{
             icons.setImageResource(R.drawable.coin_trans_1blurr)
             textDescription.background = ContextCompat.getDrawable(context,R.drawable.blacksquarebutton)

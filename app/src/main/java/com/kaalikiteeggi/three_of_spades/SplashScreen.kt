@@ -9,7 +9,6 @@ package com.kaalikiteeggi.three_of_spades
 //import com.unity3d.ads.UnityAds
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.media.MediaPlayer
@@ -36,21 +35,16 @@ import kotlin.random.Random
 
 class SplashScreen : AppCompatActivity() {
         private lateinit var soundInto: MediaPlayer
-    //    private lateinit var mAuth: FirebaseAuth
-    private lateinit var mInterstitialAd: InterstitialAd
     private var user: FirebaseUser? = null
-//    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var appUpdateManager: AppUpdateManager
     private lateinit var toast: Toast
-    private var premiumStatus = true
     private var handler = Handler(Looper.getMainLooper())
-
     private var isAppLatest = true
     private var isTimerOver = false
     private var isNextActivityStarted = false
+    private var background = 4
     private val timer = if (!BuildConfig.DEBUG) 4500
     else 4500
-    private var background = 4
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,26 +67,15 @@ class SplashScreen : AppCompatActivity() {
         findViewById<LightProgress>(R.id.lightSplash).on()
         vcSplash.text = "Ver: " + packageManager.getPackageInfo(packageName,0).versionName
 
-        mobileAds() // load mobile ads for everyone
+//        mobileAds() // load mobile ads for everyone
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         checkAppUpdate()
-        val sp =  getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
-        premiumStatus = if (sp.contains("premium")) sp.getBoolean("premium", false)
-        else true // don't show ADS when login for first time
         soundInto = MediaPlayer.create(applicationContext, R.raw.card_shuffle)
         soundInto.start()
-        //        soundInto.start()
 
         handler.postDelayed({
             isTimerOver = true
-            when {
-                (premiumStatus && isAppLatest) -> nextActivity()
-                (!premiumStatus && mInterstitialAd.isLoaded) -> {
-                    if (!BuildConfig.DEBUG) mInterstitialAd.show() // dummy
-                    else nextActivity() // dummy
-                }
-                isAppLatest -> nextActivity()
-            }
+            if (isAppLatest) nextActivity()
         }, timer.toLong()) // dummy 3500
     }
 
@@ -106,12 +89,11 @@ class SplashScreen : AppCompatActivity() {
             userNameSplash.visibility = View.VISIBLE
             welcome2.visibility = View.VISIBLE
             profilePic2.visibility = View.VISIBLE
-            //            welcomeUserNameview2.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_buttons))
             Picasso.get().load(photoURL).resize(300, 300).into(profilePic2)
         }
     }
 
-    fun nextActivity() {
+    private fun nextActivity() {
         if (user != null && !isNextActivityStarted) {
             isNextActivityStarted = true
             handler.removeCallbacksAndMessages(null)
@@ -129,22 +111,15 @@ class SplashScreen : AppCompatActivity() {
 
     private fun mobileAds() {
         MobileAds.initialize(this)
-        if (getString(R.string.useTestDevice).contains('y')) {
-            val testDeviceIds = Arrays.asList(getString(R.string.testDeviceId))
-            val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds)
-                .build()
-            MobileAds.setRequestConfiguration(configuration)
-        }
+        val testDeviceIds = Arrays.asList(getString(R.string.testDeviceId))
+        val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
+        MobileAds.setRequestConfiguration(configuration)
 
-        mInterstitialAd = InterstitialAd(this)
+        val mInterstitialAd = InterstitialAd(this)
         if (!BuildConfig.DEBUG) mInterstitialAd.adUnitId = getString(R.string.interstitial)  // real ADS ID
         else mInterstitialAd.adUnitId = getString(R.string.interstitialTestVideo)   // test ADs id
         mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
-        mInterstitialAd.adListener = object : AdListener() {
-            override fun onAdClosed() {
-                if (isAppLatest) nextActivity()
-            }
-        }
+
     }
 
     private fun checkAppUpdate() {

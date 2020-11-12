@@ -13,8 +13,9 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
 import android.speech.tts.TextToSpeech
-import android.util.TypedValue
-import android.view.LayoutInflater
+import android.text.Html
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -26,19 +27,24 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.text.HtmlCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.android.billingclient.api.*
 import com.facebook.login.LoginManager
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
-import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.play.core.tasks.OnFailureListener
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -48,11 +54,13 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.squareup.picasso.Cache
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main_home_screen.*
-import kotlinx.android.synthetic.main.activity_splash_screen.*
-import kotlinx.android.synthetic.main.user_rank.view.*
+import kotlinx.android.synthetic.main.fragment_test.view.*
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.TestOnly
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -77,7 +85,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private lateinit var soundZip: MediaPlayer
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-    private lateinit var querySnapshot: QuerySnapshot
     private lateinit var intentBuilder: CustomTabsIntent.Builder
     private lateinit var intentInvite: Intent
     private val howtoPlayUrl = "https://sites.google.com/view/kaali-ki-teeggi/how-to-play"
@@ -93,9 +100,27 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var ratingWindowOpenStatus = false
     private var createRoomWindowStatus = false
     private var rankWindowStatus = false
-    private var rankFetchedStatus = false
+    private var rankAllTimeSetupDone = false
+    private var rankDailySetupDone = false
+    private val limitFetchOnce = 10L
+    private var maxItemsFetchAT = 70
+    private var maxItemsFetchDaily = 50
+    private var isScrollingAllTime = false
+    private var isScrollingDaily = false
+    private lateinit var querySnapAT: QuerySnapshot
+    private lateinit var querySnapDaily: QuerySnapshot
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ListViewAdapter
+    private lateinit var layoutManager: LinearLayoutManager
+    private var userArrayList = ArrayList<UserBasicInfo>()
+
+    private lateinit var recyclerView1: RecyclerView
+    private lateinit var adapter1: ListViewAdapter
+    private lateinit var layoutManager1: LinearLayoutManager
+    private var userArrayList1 = ArrayList<UserBasicInfo>()
+
     private var settingsWindowStatus = false
-    private var playerStatsWindowStatus = false
+    private var playerStatsWindowStatus = true
     private var trainAccess = false
     private var onlineGameAllowed = false
 
@@ -118,12 +143,17 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var newUser = true
     private var rated = false
     private val today = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()
+    private val todayClass = GetFormattedDate(dateInput = today)
     private var consecutiveDay = 1
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
 
     private lateinit var vibrator: Vibrator
     private var totalCoins = 0
+    private var totalDailyCoins = 0
+    private var nGamesPlayedDaily = 0
+    private var nGamesWonDaily = 0
+    private var nGamesBidDaily = 0
     private var nGamesPlayed = 0
     private var nGamesWon = 0
     private var nGamesBid = 0
@@ -132,16 +162,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var nGamesBidBot = 0
     private var nPlayers = 0
 
-    private val emojiCoins = String(Character.toChars(0x1F4B0))
     private val emojiGamePlayed = String(Character.toChars(0x1F3AE))
     private val emojiTrophy = String(Character.toChars(0x1F3C6))
     private val emojiScore = String(Character.toChars(0x1F3AF))
-    private val emojiMoney = String(Character.toChars(0x1F4B0))
 
     private var loadRewardedAdTry = 0
     private var countRewardWatch = 2
     private lateinit var rewardedAdLoadCallback: RewardedAdLoadCallback
-    private var dailyRewardList = listOf(500, 1000, 1500, 2000, 2500, 4000, 5000)
+    private var dailyRewardList = listOf(500, 1000, 2000, 3000, 4000, 5000, 5000)
     private var coinDur = 900L
     private var coinBurst = true
     private var coinSpeed = 4f
@@ -170,13 +198,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         lightMHS.on()
         background = Random.nextInt(0,6)
         when (background) {
-            0 -> backgroundmhs.setImageResource(R.drawable.redblackburst)
-            1 -> backgroundmhs.setImageResource(R.drawable.blueburst)
-            2 -> backgroundmhs.setImageResource(R.drawable.greenyellowburst)
-            3 -> backgroundmhs.setImageResource(R.drawable.navyblueburst)
-            4 -> backgroundmhs.setImageResource(R.drawable.redorangeburst)
-            5 -> backgroundmhs.setImageResource(R.drawable.yellowburst)
+            0 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.redblackburst)
+            1 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.blueburst)
+            2 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.greenyellowburst)
+            3 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.navyblueburst)
+            4 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.redorangeburst)
+            5 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.yellowburst)
         }
+        Picasso.Builder(this).memoryCache(Cache.NONE)
         mainIconGridDisplay()
         newUser = intent.getBooleanExtra("newUser", true)
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
@@ -187,6 +216,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         uid = mAuth.uid.toString()
         getSharedPrefs()
         fireStoreRef = Firebase.firestore.collection("Users").document(uid)
+        initTabLayoutAdapter()
         Handler(Looper.getMainLooper()).post(Runnable {
             soundUpdate = MediaPlayer.create(applicationContext, R.raw.card_played)
             soundError = MediaPlayer.create(applicationContext, R.raw.error)
@@ -196,7 +226,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             SoundManager.initialize(applicationContext)
             getUserData()
-//            animateElements()
             initializeAds()
             enterText() // press enter to join room
             checkIfOnlineGameAllowed()
@@ -204,9 +233,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             versionCode.text = "V: " + packageManager.getPackageInfo(packageName, 0).versionName.toString()
             buildCustomTabIntent()
             createIntentInvite()
+            anim(coinIcon, R.anim.anim_scale_appeal)
         })
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-
     }
 
     override fun onStart() {
@@ -235,8 +264,21 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         anim(dailyRewardGridLayout, R.anim.zoomin_center)
     }
 
+    private fun setDataListDR(): ArrayList<DailyRewardItem> {
+        val arrayList = ArrayList<DailyRewardItem>()
+        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 1 \n${dailyRewardList[0]} coins"))
+        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 2 \n${dailyRewardList[1]} coins"))
+        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 3 \n${dailyRewardList[2]} coins"))
+        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 4 \n${dailyRewardList[3]} coins"))
+        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 5 \n${dailyRewardList[4]} coins"))
+        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 5+ \n${dailyRewardList[5]} coins"))
+//        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 6+ \n${dailyRewardList[6]} coins"))
+        return arrayList
+    }
+
     fun closeDailyRewardWindowDisplay(view: View) {
-                if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        if (soundStatus) SoundManager.getInstance().playUpdateSound()
         dailyRewardGridLayout.visibility = View.GONE
     }
 
@@ -262,8 +304,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun claimDailyReward(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (vibrateStatus) vibrationStart()
-                if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        if (soundStatus) SoundManager.getInstance().playUpdateSound()
         dailyRewardClicked = true
         dailyRewardStatus = true
         if (premiumStatus) {
@@ -331,18 +374,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         }
     }
 
-    private fun setDataListDR(): ArrayList<DailyRewardItem> {
-        val arrayList = ArrayList<DailyRewardItem>()
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 1 \n${dailyRewardList[0]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 2 \n${dailyRewardList[1]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 3 \n${dailyRewardList[2]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 4 \n${dailyRewardList[3]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 5 \n${dailyRewardList[4]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 6 \n${dailyRewardList[5]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 6+ \n${dailyRewardList[6]} coins"))
-        return arrayList
-    }
-
     private fun mainIconGridDisplay() {
 //        dailyRewardWindowDisplay()
         val gridView = mainIcon
@@ -350,6 +381,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         gridView.visibility = View.VISIBLE
         gridView.setOnItemClickListener { parent, view, position, id ->
             if (soundStatus) SoundManager.getInstance().playUpdateSound()
+            view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
             when(position){
                 0-> createRoomWindowOpen()
                 1-> joinRoomWindowOpen()
@@ -359,7 +391,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 5-> openSettingsWindow()
             }
         }
-        // Attach Text watcher to room ID input
+        // Attach Text watcher to room ID input - For resetting error hint on re-entering roomID
         roomIDInput.doOnTextChanged { _, _, _, _ ->
             if(roomIDInputLayout.error != null && !errorJoinRoomID) {
                 roomIDInputLayout.error = null
@@ -394,14 +426,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 editor.putBoolean("rated", rated)
                 editor.putInt("joinDate", SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
                     .toInt())
-                editor.putInt("ratingRequestDate", SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-                    .toInt() + requestRatingAfterDays)
+                editor.putInt("ratingRequestDate", getChangedDate(SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
+                    .toInt() , requestRatingAfterDays))
                 editor.putBoolean("premium", false) // make premium false
                 editor.apply()
             } // check if new user
         } else {
             mAuth.signOut()
-            startActivity(Intent(applicationContext, StartScreen::class.java).apply { putExtra("background", background) })
+            startActivity(Intent(applicationContext, StartScreen::class.java).apply { putExtra("background", background) } )
             finish()
         }
         refUsersData.document(uid).get().addOnSuccessListener { dataSnapshot ->
@@ -411,6 +443,17 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     Picasso.get().load(photoURL).resize(400, 400).into(profilePic)
 //                    callConfetti() // dont call confetti here - call only when coins are earned
                     totalCoins = dataSnapshot.get("sc").toString().toInt()
+
+                    if (dataSnapshot.contains("scd") && dataSnapshot.contains("p_daily")){
+                        totalDailyCoins =   dataSnapshot.get("scd").toString().toInt()
+                        nGamesPlayedDaily = dataSnapshot.get("p_daily").toString().toInt()
+                        nGamesWonDaily = dataSnapshot.get("w_daily").toString().toInt()
+                        nGamesBidDaily = dataSnapshot.get("b_daily").toString().toInt()
+                    } else{
+                        totalDailyCoins = 0
+                        fireStoreRef.set(hashMapOf("scd" to 0,"p_daily" to 0,"w_daily" to 0,"b_daily" to 0), SetOptions.merge())
+                    }
+
                     if(soundStatus) soundZip.start()
                     userScoreMHS.setText("$ " + String.format("%,d", totalCoins), true)
                     maskAllLoading.visibility = View.GONE
@@ -419,11 +462,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     nGamesWon = dataSnapshot.get("w").toString().toInt()
                     nGamesBid = dataSnapshot.get("b").toString().toInt()
 
-//                    fireStoreRef.set(hashMapOf(
-//                        "phone" to "${Build.MANUFACTURER} ${Build.MODEL}",
-//                        "phAPI" to Build.VERSION.SDK_INT,
-//                        "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()  ),
-//                        SetOptions.merge())
+                    if(!dataSnapshot.contains("zFCM_token")){
+                        createTokenFC()
+                    }else{
+                        createTokenFC(check = true, oldToken = dataSnapshot.get("zFCM_token").toString())
+                    }
                     if (!dataSnapshot.contains("rated")) {
                         if (!rated) fireStoreRef.set(hashMapOf("rated" to 0), SetOptions.merge()) // set to false 1st time - new user
                         else fireStoreRef.set(hashMapOf("rated" to 1), SetOptions.merge())
@@ -453,24 +496,32 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                        removeAds.visibility = View.VISIBLE
                        addViewMHS.visibility = View.VISIBLE
                     }
-
+                    fireStoreRef.set(hashMapOf("VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
                     val lastSeenDate = dataSnapshot.get("LSD").toString().toInt()
                     consecutiveDay = dataSnapshot.get("nDRC").toString().toInt()
                     dailyRewardAmount = dailyRewardList[min(consecutiveDay, 7) - 1]
                     claimedToday = dataSnapshot.get("claim").toString().toInt() == 1
-                    if (today == lastSeenDate + 1) { // if consecutive day login
+                    if (today == getChangedDate(lastSeenDate, 1) ) { // if consecutive day login
                         consecutiveDay += 1
                         claimedToday = false
                         dailyRewardAmount = dailyRewardList[min(consecutiveDay, 7) - 1]
-                        fireStoreRef.set(hashMapOf("LSD" to today, "nDRC" to consecutiveDay, "claim" to 0,
+                        nGamesBidDaily = 0
+                        nGamesPlayedDaily = 0
+                        nGamesWonDaily = 0
+                        totalDailyCoins = 0
+                        fireStoreRef.set(hashMapOf("LSD" to today, "scd" to 0, "p_daily" to 0,"w_daily" to 0,"b_daily" to 0, "nDRC" to consecutiveDay, "claim" to 0,
                             "phone" to "${Build.MANUFACTURER} ${Build.MODEL}",
                             "phAPI" to Build.VERSION.SDK_INT,
                             "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
-                    } else if (today > lastSeenDate + 1) { // if more than 1 day gap , reset counter
+                    } else if (today > getChangedDate(lastSeenDate, 1)) { // if more than 1 day gap , reset counter
                         consecutiveDay = 1
                         claimedToday = false
                         dailyRewardAmount = dailyRewardList[min(consecutiveDay, 7) - 1]
-                        fireStoreRef.set(hashMapOf("LSD" to today, "nDRC" to consecutiveDay, "claim" to 0,
+                        nGamesBidDaily = 0
+                        nGamesPlayedDaily = 0
+                        nGamesWonDaily = 0
+                        totalDailyCoins = 0
+                        fireStoreRef.set(hashMapOf("LSD" to today, "scd" to 0, "p_daily" to 0,"w_daily" to 0,"b_daily" to 0, "nDRC" to consecutiveDay, "claim" to 0,
                             "phone" to "${Build.MANUFACTURER} ${Build.MODEL}",
                             "phAPI" to Build.VERSION.SDK_INT,
                             "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
@@ -480,7 +531,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                             dailyRewardWindowDisplay()
                         }, 1000)
                     }
-
                     editor.putString("photoURL", photoURL) // write username to preference file
                     editor.apply()
                     editor.putBoolean("premium", premiumStatus) // write username to preference file
@@ -501,6 +551,25 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             startActivity(Intent(applicationContext, StartScreen::class.java).apply { putExtra("background", background) })
             finish()
         }
+    }
+
+    private fun createTokenFC(check:Boolean = false, oldToken:String = "") {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }else{
+                val token = task.result // Get new FCM registration token
+                if(!check){
+//                    Toast.makeText(baseContext, "token created to firebase", Toast.LENGTH_SHORT).show()
+                    fireStoreRef.set(hashMapOf("zFCM_token" to token.toString()), SetOptions.merge())
+                }else if(oldToken == token.toString()){
+//                    Toast.makeText(baseContext, "token matched- nothing to do", Toast.LENGTH_SHORT).show()
+                }else{
+//                    Toast.makeText(baseContext, "token changed ", Toast.LENGTH_SHORT).show()
+                    fireStoreRef.set(hashMapOf("zFCM_token" to token.toString()), SetOptions.merge())
+                }
+            }
+        })
     }
 
     private fun getSharedPrefs() {
@@ -529,8 +598,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             editor.apply()
         }
         if (!sharedPreferences.contains("ratingRequestDate")) {
-            ratingRequestDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-                .toInt() + requestRatingAfterDays
+            ratingRequestDate = getChangedDate(SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
+                .toInt() , requestRatingAfterDays)
             editor.putInt("ratingRequestDate", ratingRequestDate)
             editor.apply()
         }
@@ -584,7 +653,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun removeAdsOrPremium(view: View) {
-                if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        if (soundStatus) SoundManager.getInstance().playUpdateSound()
         if (premiumStatus) openClosePlayerStats(View(applicationContext))
         else {
             querySkuDetailsRequest()
@@ -669,7 +739,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     private fun initializeAds() {
-       addViewMHS.loadAd(AdRequest.Builder().build()) // banner add load
+        addViewMHS.loadAd(AdRequest.Builder().build()) // banner add load
         mInterstitialAd = InterstitialAd(this)
         if (!BuildConfig.DEBUG) mInterstitialAd.adUnitId = getString(R.string.interstitialReal) // real interstitial ad
         else mInterstitialAd.adUnitId = getString(R.string.interstitialTest) // test interstitial ad
@@ -697,9 +767,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     else -> watchVideo.setImageResource(R.drawable.watch_ad_500)
                 }
                 watchVideo.visibility = View.VISIBLE
-                anim(watchVideo, R.anim.anim_scale_infinite)
+                anim(watchVideo, R.anim.watch_video_reward)
             }
-
             override fun onRewardedAdFailedToLoad(errorCode: Int) {
                 if (loadRewardedAdTry <= 10) loadRewardAd()
             }
@@ -714,7 +783,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun showRewardedVideoAd(view: View) {
-                if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        if (soundStatus) SoundManager.getInstance().playUpdateSound()
         if (rewardedAd.isLoaded) {
             val activityContext: Activity = this
             val adCallback = object : RewardedAdCallback() {
@@ -776,18 +845,15 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun openClosePlayerStats(view: View) {
-        playerStatsWindowStatus = !playerStatsWindowStatus
+        if(view.id != R.id.backgroundmhs) view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        playerStatsWindowStatus = !playerStatsWindowStatus   // flip always - change the status on click
         if (playerStatsWindowStatus) {
                     if (soundStatus) SoundManager.getInstance().playUpdateSound()
             playerStats.visibility = View.VISIBLE
             anim(playerStats, R.anim.slide_down_player_stats)
-//            anim(signoutbutton, R.anim.slide_buttons)
-//            anim(signoutbuttonImage, R.anim.anim_scale_infinite)
         } else {
             anim(playerStats, R.anim.slide_up_player_stats)
             playerStats.visibility = View.GONE
-//            signoutbutton.clearAnimation()
-//            signoutbuttonImage.clearAnimation()
         }
     }
 
@@ -823,7 +889,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun createRoomButtonClicked(view: View) {
-                if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        if (soundStatus) SoundManager.getInstance().playUpdateSound()
         createRoomStatus = true
         offlineRoomCreate = view.tag.toString().toInt() == 0
 
@@ -883,16 +950,24 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         } else {
             logFirebaseEvent("create_join_room_screen", nPlayers, "create_offline")
         }
+        val userStatsDaily = ArrayList(listOf(nGamesPlayedDaily, nGamesWonDaily, nGamesBidDaily))
         val userStats = if (!offlineRoomCreate) ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))
         else ArrayList(listOf(nGamesPlayedBot, nGamesWonBot, nGamesBidBot))
 
         startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
-            .apply { putExtra("selfName", userName) }.apply { putExtra("photoURL", photoURL) }
-            .apply { putExtra("totalCoins", totalCoins) }.apply { putExtra("from", "p1") }
-            .apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("offline", offlineRoomCreate) }
-            .putIntegerArrayListExtra("userStats", userStats))
+            .apply { putExtra("selfName", userName) }
+            .apply { putExtra("photoURL", photoURL) }
+            .apply { putExtra("totalCoins", totalCoins) }
+            .apply { putExtra("totalDailyCoins", totalDailyCoins) }
+            .apply { putExtra("from", "p1") }
+            .apply { putExtra("nPlayers", nPlayers) }
+            .apply { putExtra("offline", offlineRoomCreate) }
+            .putIntegerArrayListExtra("userStats", userStats)
+            .putIntegerArrayListExtra("userStatsDaily", userStatsDaily))
         overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
-        Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
+        Handler(Looper.getMainLooper()).postDelayed({
+            finish()
+        }, 500)
     }
 
     private fun createRoomWindowOpen() {
@@ -910,7 +985,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         createSingle.clearAnimation()
         createDouble.clearAnimation()
         closeCreateRoom.visibility = View.GONE
-        anim(createRoomFrameTemp, R.anim.zoomout)
+        anim(createRoomFrameTemp, R.anim.zoomout_center)
         createRoomWindowStatus = false
         Handler(Looper.getMainLooper()).postDelayed({
             createRoomFrame.visibility = View.GONE
@@ -918,6 +993,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun joinRoomButtonClicked(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (soundStatus) SoundManager.getInstance().playUpdateSound()
         if (vibrateStatus) vibrationStart()
         val roomID = roomIDInput.text.toString() //read text field
@@ -955,6 +1031,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                                     .apply { putExtra("nPlayers", nPlayers) }
                                     .apply { putExtra("photoURL", photoURL) }
                                     .apply { putExtra("totalCoins", totalCoins) }
+                                    .apply { putExtra("totalDailyCoins", totalDailyCoins) }
                                     .apply { putExtra("offline", false) }
                                     .putIntegerArrayListExtra("userStats", ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))))
 
@@ -1019,6 +1096,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun developerCredits(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (soundStatus) SoundManager.getInstance().playUpdateSound()  //Pass username and current activity alias to be able to come back with same info
         startActivity(Intent(this, DeveloperCredits::class.java).putExtra("uid", uid).putExtra("soundStatus",soundStatus))
         overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
@@ -1089,6 +1167,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun trainingStart(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (trainAccess) {
             maskAllLoading.visibility = View.VISIBLE
             loadingText.text = getString(R.string.startTrain)
@@ -1103,73 +1182,186 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     private fun ranking() {
         rankStats.visibility = View.VISIBLE
-        rankProgress.on()
-        anim(rankStats, R.anim.zoomin_center)
+        anim(rankStats, R.anim.slide_left_activity)
         rankWindowStatus = true
-        if (!rankFetchedStatus) {
-            val top = 30
-            refUsersData.orderBy("sc", Query.Direction.DESCENDING).limit(top.toLong()).get()
-                .addOnSuccessListener { querySnapshot1 ->
-                    rankFetchedStatus = true
-                    querySnapshot = querySnapshot1
-                    mapRankingStats()
-                    logFirebaseEvent("Ranking", 1, "Fetched")
-                }
-        } else mapRankingStats()
-        logFirebaseEvent("Ranking", 1, "Requested")
     }
 
-    @SuppressLint("SetTextI18n")
-    fun mapRankingStats() {
-        rankGallery.removeAllViewsInLayout()
-        val gallery = rankGallery
-        gallery.removeAllViews()
-        val inflater = LayoutInflater.from(applicationContext)
-        val typedValue = TypedValue()
-        applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true)
-        var i = 1
-        for (document in querySnapshot) {
-            val won = if (document.contains("w_bot")) document["w_bot"].toString()
+    private fun createUserArrayFromSnapshot(querySnapshot: QuerySnapshot): ArrayList<UserBasicInfo>{
+        val tempArray = ArrayList<UserBasicInfo>()
+        for(document in querySnapshot){
+            val won = document["w_bot"].toString()
                 .toInt() + document["w"].toString().toInt()
-            else document["w"].toString().toInt()
-            val played = if (document.contains("p_bot")) document["p_bot"].toString()
+//            else document["w"].toString().toInt()
+            val played = document["p_bot"].toString()
                 .toInt() + document["p"].toString().toInt()
-            else document["p"].toString().toInt()
-            val bidGames = if (document.contains("b_bot")) document["b_bot"].toString()
+//            else document["p"].toString().toInt()
+            val bid = document["b_bot"].toString()
                 .toInt() + document["b"].toString().toInt()
-            else document["b"].toString().toInt()
+//            else document["b"].toString().toInt()
 
-            val viewTemp = inflater.inflate(R.layout.user_rank, gallery, false)
-            if (document.id == uid) {
-                viewTemp.userImage.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
-                //                viewTemp.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-                viewTemp.userName.setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4))
-            }
-            viewTemp.userName.text = "$i. " + document["n"].toString()
-            viewTemp.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            viewTemp.userCoins.setText("$ " + String.format("%,d", document["sc"]), true)
-            viewTemp.userCoins.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            viewTemp.userScore.text = String.format("%,d", played) + " " + emojiGamePlayed + "\n" + String.format("%,d", won) + " " + emojiTrophy + "\n" + String.format("%,d", bidGames) + " " + emojiScore
-            viewTemp.userScore.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            Picasso.get().load(document["ph"].toString()).resize(200, 200).into(viewTemp.userImage)
-            viewTemp.userImage.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            gallery.addView(viewTemp)
-            i += 1
+            val name = document["n"].toString()
+            val score = document["sc"].toString().toInt()
+            val scoreDaily = if(document.contains("scd")) document["scd"].toString().toInt() else 0
+            val playedDaily = if(document.contains("p_daily")) document["p_daily"].toString().toInt() else 0
+            val wonDaily = if(document.contains("w_daily")) document["w_daily"].toString().toInt() else 0
+            val bidDaily = if(document.contains("b_daily")) document["b_daily"].toString().toInt() else 0
+            val photoURL = document["ph"].toString()
+            val lastSeen = document["LSD"].toString().toInt()
+
+            tempArray.add(UserBasicInfo(name = name, score = score,scoreDaily = scoreDaily, photoURL=photoURL, played = played, playedDaily = playedDaily,
+                lastSeen = lastSeen, won =  won, wonDaily = wonDaily, bid = bid, bidDaily = bidDaily))
         }
-        rankProgress.off()
-        rankProgress.visibility = View.GONE
-        anim(gallery, R.anim.slide_down_in)
-        if (soundStatus) soundZip.start()
+        return tempArray
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    @SuppressLint("SimpleDateFormat")
+    private fun initTabLayoutAdapter(){
+        viewPager2.adapter = RankStateAdapter(this, tabs = 2)  // attach adapter to viewpager2 view
+        viewPager2.offscreenPageLimit = 2  // set limit of pages to keep in memory 2
+        TabLayoutMediator(tabRank, viewPager2){ tab: TabLayout.Tab, i: Int ->
+            when(i){
+                1->{
+                    tab.text = "All Time"
+                    tab.icon = ContextCompat.getDrawable(this, R.drawable.alltime)
+                }
+                0 -> {
+                    tab.text = "Today ${todayClass.dateMonth}"
+                    tab.icon = ContextCompat.getDrawable(this, R.drawable.daily24)
+                }
+                else->{
+                    tab.text = "Weekly"
+                    tab.icon = ContextCompat.getDrawable(this, R.drawable.weekly)
+                }
+            }
+        }.attach()
+        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                when (position) {
+                    0 -> {
+                        handleDailyView()
+                    }
+                    1 -> {
+                        handleAllTimeView()
+                    }
+                    else -> toastCenter("3")
+                }
+            }
+        })
+    }
+
+    private fun handleAllTimeView(){
+        if (!rankAllTimeSetupDone) {
+            logFirebaseEvent("Ranking", 1, "Requested")
+            rankAllTimeSetupDone = true
+            rankProgress.visibility = View.VISIBLE
+            rankProgress.on()
+            loadingProgressBar.visibility = View.VISIBLE
+            recyclerView = (supportFragmentManager.findFragmentByTag("f1")?.view as View).rankGallery
+            layoutManager = LinearLayoutManager(this)
+            recyclerView.layoutManager = layoutManager
+            adapter = ListViewAdapter(this, userArrayList)
+            recyclerView.adapter = adapter
+
+            refUsersData.whereGreaterThanOrEqualTo("sc",5000).orderBy("sc", Query.Direction.DESCENDING).limit(limitFetchOnce).get()
+                .addOnSuccessListener { querySnapshot ->
+                    if(querySnapshot.isEmpty) maxItemsFetchAT = -1
+                    rankProgress.off()
+                    querySnapAT = querySnapshot
+                    rankProgress.visibility = View.GONE
+                    userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT))
+                    adapter.notifyDataSetChanged()
+                    loadingProgressBar.visibility = View.GONE
+                    anim(recyclerView, R.anim.slide_down_in)
+                    recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                            super.onScrollStateChanged(recyclerView, newState)
+                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) isScrollingAllTime = true
+                        }
+                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                            super.onScrolled(recyclerView, dx, dy)
+                            val itemCount = layoutManager.itemCount
+                            if (itemCount < maxItemsFetchAT && isScrollingAllTime && layoutManager.findLastCompletelyVisibleItemPosition() == itemCount - 1) {
+                                isScrollingAllTime = false
+                                loadingProgressBar.visibility = View.VISIBLE
+                                refUsersData.whereGreaterThanOrEqualTo("sc",5000).orderBy("sc", Query.Direction.DESCENDING).limit(limitFetchOnce)
+                                    .startAfter(userArrayList.last().score).get()
+                                    .addOnSuccessListener { querySnapshot ->
+                                        if(querySnapshot.isEmpty) maxItemsFetchAT = -1
+                                        querySnapAT = querySnapshot
+                                        userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT))
+                                        adapter.notifyDataSetChanged()
+                                        loadingProgressBar.visibility = View.GONE
+                                    }
+                            }
+                        }
+                    })
+                }
+        }
+
+    }
+
+    private fun handleDailyView() {
+        if (!rankDailySetupDone) {
+            loadingProgressBar.visibility = View.VISIBLE
+            logFirebaseEvent("Ranking", 1, "Requested")
+            rankDailySetupDone = true
+            rankProgress.on()
+            recyclerView1 = (supportFragmentManager.findFragmentByTag("f0")?.view as View).rankGallery
+            layoutManager1 = LinearLayoutManager(this)
+            recyclerView1.layoutManager = layoutManager1
+            adapter1 = ListViewAdapter(this, userArrayList1, type = 0)
+            recyclerView1.adapter = adapter1
+
+            refUsersData.whereEqualTo("LSD", today).orderBy("scd", Query.Direction.DESCENDING).limit(limitFetchOnce).get()
+                .addOnSuccessListener { querySnapshot ->
+                    if(querySnapshot.isEmpty) maxItemsFetchDaily = -1
+                    rankProgress.off()
+                    loadingProgressBar.visibility = View.GONE
+                    rankProgress.visibility = View.GONE
+                    querySnapDaily = querySnapshot
+                    userArrayList1.addAll(createUserArrayFromSnapshot(querySnapDaily))
+                    adapter1.notifyDataSetChanged()
+                    anim(recyclerView1, R.anim.slide_down_in)
+                    recyclerView1.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                            super.onScrollStateChanged(recyclerView, newState)
+                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) isScrollingDaily = true
+                        }
+                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                            super.onScrolled(recyclerView, dx, dy)
+                            val itemCount = layoutManager1.itemCount
+                            if (itemCount < maxItemsFetchDaily && isScrollingDaily && layoutManager1.findLastCompletelyVisibleItemPosition() == itemCount - 1) {
+                                isScrollingDaily = false
+                                loadingProgressBar.visibility = View.VISIBLE
+                                refUsersData.whereEqualTo("LSD", today).orderBy("scd", Query.Direction.DESCENDING).limit(limitFetchOnce)
+                                    .startAfter(querySnapDaily.last()).get()
+                                    .addOnSuccessListener { querySnapshot ->
+                                        if(querySnapshot.isEmpty) {
+                                            maxItemsFetchDaily = -1
+                                        }
+                                        querySnapDaily = querySnapshot
+                                        userArrayList1.addAll(createUserArrayFromSnapshot(querySnapDaily))
+                                        adapter1.notifyDataSetChanged()
+                                        loadingProgressBar.visibility = View.GONE
+                                    }
+                            }
+                        }
+                    })
+                }
+
+        }
     }
 
     fun closeRankWindow(view: View) {
+//        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         rankWindowStatus = false
-        anim(rankStats, R.anim.zoomout_center)
+        anim(rankStats, R.anim.slide_right_activity)
         Handler(Looper.getMainLooper()).postDelayed({
             rankStats.clearAnimation()
             rankStats.visibility = View.GONE
         }, 190)
-
     }
 
     private fun inviteFriends() {
@@ -1212,7 +1404,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun openRatingWindow(view: View) {
-        if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        if(view.tag == "rate") {
+            view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+            if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        }
         rateUsLayout.visibility = View.VISIBLE
         anim(rateUsLayoutFrame, R.anim.zoomin_center)
         anim(rateUsIcon1, R.anim.anim_scale_appeal)
@@ -1220,17 +1415,19 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun closeRatingWindow(view: View) {
+//        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         rateUsIcon1.clearAnimation()
         rateUsLayout.visibility = View.GONE
         ratingWindowOpenStatus = false
     }
 
     fun askLaterRating(view: View) { // request for rating after x days from today if choose ask later
-                if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        if (soundStatus) SoundManager.getInstance().playUpdateSound()
         logFirebaseEvent("rate_us", 1, "rate_later")
         closeRatingWindow(View(applicationContext))
-        ratingRequestDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-            .toInt() + requestRatingAfterDays
+        ratingRequestDate = getChangedDate(SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
+            .toInt() , requestRatingAfterDays)
         editor.putInt("ratingRequestDate", ratingRequestDate)
         editor.apply()
         if (backButtonPressedStatus) moveTaskToBack(true)
@@ -1238,36 +1435,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun rateUs(view: View) { // once clicked never ask to rate again
-                if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        if (soundStatus) SoundManager.getInstance().playUpdateSound()
         closeRatingWindow(View(applicationContext))
         if(!rated) openPlayStore() //inAppReview()  - disable inapp review for a while
         else openPlayStore()
         if (view.tag == "good") logFirebaseEvent("rate_us", 1, "rate_good")
         else if (view.tag == "bad") logFirebaseEvent("rate_us", 1, "rate_bad")
     }
-
-//    private fun inAppReview() {
-//        val manager = ReviewManagerFactory.create(applicationContext)
-//        val request = manager.requestReviewFlow()
-//        request.addOnCompleteListener { request1 ->
-//            if (request1.isSuccessful) {
-//                val reviewInfo = request1.result
-//                val flow = manager.launchReviewFlow(this, reviewInfo)
-//                flow.addOnCompleteListener { result ->
-//                    if (result.isSuccessful) {
-//                        rated = true
-//                        editor.putBoolean("rated", rated)
-//                        editor.apply()
-//                        logFirebaseEvent("rate_us", 1, "rated")
-//                        refUsersData.document(uid).set(hashMapOf("rated" to 1), SetOptions.merge())
-//                    } else openPlayStore() //toastCenter("failed")
-//                }
-//            } else{
-//                logFirebaseEvent("rate_us", 1, "ratedFailure")
-//                openPlayStore()
-//            }
-//        }
-//    }
 
     fun openPlayStore() {
         val intent = Intent(Intent.ACTION_VIEW).apply {
@@ -1278,12 +1453,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     private fun checkRatingRequest(): Boolean {
-        return !rated && (SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-            .toInt() >= ratingRequestDate)
+        return !rated && (SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt() >= ratingRequestDate)
     }
 
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
-                if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        if (soundStatus) SoundManager.getInstance().playUpdateSound()
         if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || playerStatsWindowStatus || createRoomWindowStatus) && ratingWindowOpenStatus && backButtonPressedStatus) {
             moveTaskToBack(true)
             closeRatingWindow(View(applicationContext))
@@ -1306,10 +1480,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun signOut(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (vibrateStatus) vibrationStart()
         mAuth.signOut()
         LoginManager.getInstance().logOut()
-        startActivity(Intent(applicationContext, StartScreen::class.java).apply { putExtra("background", background) })
+        startActivity(Intent(applicationContext, StartScreen::class.java).apply { putExtra("background", background) }
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
         overridePendingTransition(R.anim.slide_right_activity, R.anim.slide_right_activity)
         finish()
     }
@@ -1363,6 +1539,30 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         }
     }
 }
+
+//    private fun inAppReview() {
+//        val manager = ReviewManagerFactory.create(applicationContext)
+//        val request = manager.requestReviewFlow()
+//        request.addOnCompleteListener { request1 ->
+//            if (request1.isSuccessful) {
+//                val reviewInfo = request1.result
+//                val flow = manager.launchReviewFlow(this, reviewInfo)
+//                flow.addOnCompleteListener { result ->
+//                    if (result.isSuccessful) {
+//                        rated = true
+//                        editor.putBoolean("rated", rated)
+//                        editor.apply()
+//                        logFirebaseEvent("rate_us", 1, "rated")
+//                        refUsersData.document(uid).set(hashMapOf("rated" to 1), SetOptions.merge())
+//                    } else openPlayStore() //toastCenter("failed")
+//                }
+//            } else{
+//                logFirebaseEvent("rate_us", 1, "ratedFailure")
+//                openPlayStore()
+//            }
+//        }
+//    }
+
 
 //    @SuppressLint("SetJavaScriptEnabled")
 //    private fun howToPlay() {

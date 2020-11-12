@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768" width="768" height="768">
+	<defs>
+		<filter x="-50%" y="-50%" width="200%" height="200%" id="flt1"> <feGaussianBlur stdDeviation="17.92" /> </filter>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="M128.5 128.5L639.5 128.5L639.5 639.5L128.5 639.5L128.5 128.5Z" />
+		</clipPath>
+		<linearGradient id="grd1" gradientUnits="userSpaceOnUse"  x1="397.8" y1="135.794" x2="398.267" y2="346.225">
+			<stop offset="0" stop-color="#dbe3db"  />
+			<stop offset="1" stop-color="#dbe3db" stop-opacity="0" />
+		</linearGradient>
+		<linearGradient id="grd2" gradientUnits="userSpaceOnUse"  x1="304.744" y1="713.284" x2="323.13" y2="473.184">
+			<stop offset="0" stop-color="#dbe3db"  />
+			<stop offset="1" stop-color="#dbe3db" stop-opacity="0" />
+		</linearGradient>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp2">
+			<path d="M128 128L640 128L640 640L128 640L128 128Z" />
+		</clipPath>
+		<filter x="-50%" y="-50%" width="200%" height="200%" id="flt2"> <feGaussianBlur stdDeviation="5.12" /> </filter>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { filter: url(#flt1);fill: #000000;stroke: #a8a8a8;stroke-width: 5 } 
+		.shp1 { fill: #0000ff } 
+		.shp2 { fill: #e80000 } 
+		.shp3 { fill: #ffffff } 
+		.shp4 { fill: #00006f } 
+		.shp5 { fill: url(#grd1) } 
+		.shp6 { fill: url(#grd2) } 
+		.shp7 { filter: url(#flt2);fill: none;stroke: #000000;stroke-width: 20 } 
+	</style>
+	<g id="template-button">
+		<g id="00">
+			<path id="shadow" class="shp0" d="M128 146L640 146L640 658L128 658L128 146Z" />
+		</g>
+		<g id="Clip-Path: 01" clip-path="url(#cp1)">
+			<g id="01">
+				<path id="mask" class="shp1" d="M128 128L640 128L640 640L128 640L128 128Z" />
+				<g id="flag">
+					<path id="rect149" class="shp2" d="M54 128L822.01 128L822.01 640L54 640L54 128Z" />
+					<path id="rect280" class="shp3" d="M54 128L822.01 128L822.01 384L54 384L54 128Z" />
+					<path id="path279" fill-rule="evenodd" class="shp4" d="M54 128L436.73 383.67L54 639.02L54 128Z" />
+				</g>
+			</g>
+		</g>
+		<g id="02">
+			<path id="path3862-8" class="shp5" d="M214.21 149.21C168.97 149.4 145.49 156.94 150.12 232.76L152.94 279.11C200.42 284.62 209.61 297.55 257.3 301.02C325.37 305.97 325.24 306.44 387.86 286.64C450.49 266.83 393.69 221.39 595.18 228.82C599.78 228.99 612.5 225.77 622.64 216.67C628.22 170.14 619.86 147.52 555.71 147.79L214.21 149.21Z" />
+			<path id="path3079-9" class="shp6" d="M531.03 533.17C499.42 552.19 503.43 564.43 493.12 565.74C398.41 577.8 347.14 565.02 327.32 553.68C267.73 519.6 258.85 540.67 227.1 537.11C206.98 534.85 167.85 550.09 153.71 581.45C157.18 609.06 171.82 613.55 197.99 613.44L554.05 611.91C623.74 611.61 610.38 603.42 619.59 555.87C604.82 534.2 606.44 564.98 575.37 525.16L531.03 533.17Z" />
+			<g id="Clip-Path: rect5734" clip-path="url(#cp2)">
+				<path id="rect5734" class="shp7" d="M128 128L640 128L640 640L128 640L128 128Z" />
+			</g>
+		</g>
+	</g>
+</svg>

@@ -1,67 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?><!--<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    android:id="@+id/iconCard"-->
-<!--    android:layout_width="@dimen/iconWidth"-->
-<!--    android:layout_height="wrap_content"-->
-<!--    android:clipChildren="true"-->
-<!--    android:clipToPadding="true"-->
-<!--    android:descendantFocusability="blocksDescendants"-->
-<!--    android:theme="@style/Theme.App"-->
-<!--    app:cardBackgroundColor="@color/transparent"-->
-<!--    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.iconMHS">-->
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/iconWidth"
     android:layout_height="wrap_content"
-    android:elevation="10dp">
+    android:paddingTop="@dimen/_10sdp"
+    android:background="@drawable/blacksquarebutton">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/iconText"
-        android:layout_marginBottom="@dimen/iconPaddingNeg"
-        android:layout_alignParentTop="true"
-        app:shimmer_base_alpha="0.9"
-        app:shimmer_duration="1800"
-        app:shimmer_highlight_alpha="1"
-        app:shimmer_highlight_color="@color/white"
-        app:shimmer_intensity="1"
-        app:shimmer_repeat_delay="500"
-        app:shimmer_shape="linear" >
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/blacksquarebutton"
-            android:scaleType="fitXY"
-            android:scaleX="1.08"
-            android:scaleY="1.06"/>
-    </com.facebook.shimmer.ShimmerFrameLayout>
     <ImageView
         android:id="@+id/iconImage1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/iconHeight"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/iconPadding"
         android:layout_centerHorizontal="true"
+        android:contentDescription="@null"
         android:src="@drawable/settings"
-        android:contentDescription="@null" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/iconText"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_25sdp"
-        android:layout_below="@id/iconImage1"
         android:layout_gravity="bottom"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginBottom="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginStart="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_3sdp"
         android:background="@drawable/blackglassglossy"
         android:gravity="center"
         android:text="@string/createRoom"
+        android:textColor="@color/BlackTransUserStats3"
         android:textSize="@dimen/_13ssp"
-        android:textColor="@color/white"
-        android:theme="@style/Theme.App" />
-</RelativeLayout>
-
-
-    <!--</com.google.android.material.card.MaterialCardView>-->
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iconImage1" />
+</androidx.constraintlayout.widget.ConstraintLayout>

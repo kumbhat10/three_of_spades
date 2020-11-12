@@ -21,6 +21,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.activity_developer_credits.*
+import kotlinx.android.synthetic.main.activity_main_home_screen.*
+import kotlinx.android.synthetic.main.activity_main_home_screen.backgroundmhs
+import kotlin.random.Random
 
 class DeveloperCredits : AppCompatActivity() {
     private lateinit var text:String
@@ -50,6 +54,7 @@ class DeveloperCredits : AppCompatActivity() {
             buildCustomTabIntent()
         }
     }
+
     fun openWebsite(view: View){
 //        val intent = Intent(Intent.ACTION_VIEW).apply {
 //            data = Uri.parse("https://sites.google.com/view/kaali-ki-teeggi/") }

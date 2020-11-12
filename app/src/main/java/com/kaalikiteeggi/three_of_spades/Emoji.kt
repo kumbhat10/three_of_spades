@@ -1,6 +1,11 @@
 package com.kaalikiteeggi.three_of_spades
 
 class Emoji {
+	val gamePlayed = String(Character.toChars(0x1F3AE))
+	val trophy = String(Character.toChars(0x1F3C6))
+	val calculator = String(Character.toChars(0x1F5A9))
+	val doc = String(Character.toChars(0x1F5BA))
+
 	val money = String(Character.toChars(0x1F4B0))
 	val score = String(Character.toChars(0x1F3AF))
 	val message = String(Character.toChars(0x1F4AC))

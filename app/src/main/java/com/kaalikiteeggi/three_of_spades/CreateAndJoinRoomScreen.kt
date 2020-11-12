@@ -57,6 +57,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private lateinit var from: String
     private var nPlayers = 0
     private var totalCoins = 0
+    private var totalDailyCoins = 0
     private lateinit var toast: Toast
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var roomData: Map<String, Any>
@@ -92,6 +93,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private lateinit var p6h: String
     private lateinit var p7h: String
     private lateinit var userStats: java.util.ArrayList<Int>
+    private lateinit var userStatsDaily: java.util.ArrayList<Int>
     private lateinit var mAuth: FirebaseAuth
     private var uid = ""
     private var handler = Handler(Looper.getMainLooper())
@@ -311,21 +313,27 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private fun startNextActivity() {
         soundUpdate.start()
         if (!offline) {
-            startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreen::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
-                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }
+            startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreen::class.java)
+                .apply { putExtra("selfName", selfName) }  // AutoPlay
+                .apply { putExtra("from", from) }
+                .apply { putExtra("nPlayers", nPlayers) }
+                .apply { putExtra("totalDailyCoins", totalDailyCoins) }
                 .apply { putExtra("roomID", roomID) }
                 .putStringArrayListExtra("playerInfo", playerInfo)
                 .putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins)
-                .putIntegerArrayListExtra("userStats", userStats))
+                .putIntegerArrayListExtra("userStats", userStats)
+                .putIntegerArrayListExtra("userStatsDaily", userStatsDaily))
         } else {
-            startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreenAutoPlay::class.java).apply {
-                putExtra("selfName", selfName)
-            }  // AutoPlay
-                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }
+            startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreenAutoPlay::class.java)
+                .apply { putExtra("selfName", selfName) }  // AutoPlay
+                .apply { putExtra("from", from) }
+                .apply { putExtra("nPlayers", nPlayers) }
+                .apply { putExtra("totalDailyCoins", totalDailyCoins) }
                 .apply { putExtra("roomID", roomID) }
                 .putStringArrayListExtra("playerInfo", playerInfo)
                 .putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins)
-                .putIntegerArrayListExtra("userStats", userStats))
+                .putIntegerArrayListExtra("userStats", userStats)
+                .putIntegerArrayListExtra("userStatsDaily", userStatsDaily))
         }
 
         overridePendingTransition(R.anim.slide_top_in_activity, R.anim.slide_top_in_activity)
@@ -333,6 +341,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     fun startGame(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (from == "p1") {
             maskAllLoading1.visibility = View.VISIBLE
 
@@ -478,10 +487,12 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         selfName = intent.getStringExtra("selfName")!!.toString()  //Get Username
         photoURL = intent.getStringExtra("photoURL")!!.toString()  //Get Photo URL
         totalCoins = intent.getIntExtra("totalCoins", 0)
+        totalDailyCoins = intent.getIntExtra("totalDailyCoins", 0)
         from = intent.getStringExtra("from")!!
             .toString()     //check if user has joined room or created one and display Toast
         nPlayers = intent.getIntExtra("nPlayers", 0)
         userStats = intent.getIntegerArrayListExtra("userStats")!!
+        userStatsDaily = intent.getIntegerArrayListExtra("userStatsDaily")!!
         imageViewShareButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
         button_roomID.text = "Room: $roomID"   // display the room ID
 
@@ -496,11 +507,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         anim(player2Text, R.anim.slide_buttons)
         anim(player3Text, R.anim.slide_buttons_rtl)
         anim(player4Text, R.anim.slide_buttons)
-//        anim(button_roomID, R.anim.slide_buttons_rtl)
-//        anim(hostPhoto, R.anim.anim_scale_infinite)
-//        anim(player2Photo, R.anim.anim_scale_infinite)
-//        anim(player3Photo, R.anim.anim_scale_infinite)
-//        anim(player4Photo, R.anim.anim_scale_infinite)
 
         if (nPlayers == 7) {
             player7Shimmer.visibility = View.VISIBLE
@@ -512,9 +518,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             player7Text.visibility = View.VISIBLE
             player6Text.visibility = View.VISIBLE
             player5Text.visibility = View.VISIBLE
-//            anim(player5Photo, R.anim.anim_scale_infinite)
-//            anim(player6Photo, R.anim.anim_scale_infinite)
-//            anim(player7Photo, R.anim.anim_scale_infinite)
             anim(player5Text, R.anim.slide_buttons_rtl)
             anim(player6Text, R.anim.slide_buttons)
             anim(player7Text, R.anim.slide_buttons_rtl)
@@ -565,6 +568,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     fun closeJoiningRoom(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (!offline) registration.remove()
         handler.removeCallbacksAndMessages(null)
         startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) })
@@ -629,9 +633,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     private fun takeScreenShot(view: View): Bitmap {
-        addViewCreateJoinRoom.visibility = View.INVISIBLE
+        if (!premiumStatus) addViewCreateJoinRoom.visibility = View.INVISIBLE
         val b = view.rootView.drawToBitmap(Bitmap.Config.ARGB_8888)
-        addViewCreateJoinRoom.visibility = View.VISIBLE
+        if (!premiumStatus) addViewCreateJoinRoom.visibility = View.VISIBLE
         return b
     }
 
