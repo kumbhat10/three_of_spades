@@ -30,7 +30,7 @@
     <dimen name="imagePadding">@dimen/_4sdp</dimen>
     <dimen name="imagePaddingTextGap">@dimen/_minus2sdp</dimen>
 
-    <dimen name="imageWidth">@dimen/_57sdp</dimen>
+    <dimen name="imageWidth">@dimen/_62sdp</dimen>
     <dimen name="imageHeight">@dimen/imageWidth</dimen>
     <dimen name="width_playername">@dimen/imageWidth</dimen>
 

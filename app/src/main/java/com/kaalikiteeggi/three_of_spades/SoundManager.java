@@ -18,12 +18,14 @@ public class SoundManager {
     int WON_SOUND;
     int LOST_SOUND;
     int TIMER_SOUND;
+    int ZIP_SOUND;
 
     public SoundManager(){
-        soundPool = (new SoundPool.Builder()).setMaxStreams(14).build();
+        soundPool = (new SoundPool.Builder()).setMaxStreams(18).build();
     }
 
     public void loadSound(Context context){
+        ZIP_SOUND = soundPool.load(context, R.raw.zip, 1);
         UPDATE_SOUND = soundPool.load(context, R.raw.card_played, 1);
         ERROR_SOUND = soundPool.load(context, R.raw.error, 1);
         SUCCESS_SOUND = soundPool.load(context, R.raw.success, 1);
@@ -67,6 +69,9 @@ public class SoundManager {
     }
     public void playTimerSound(){
         soundPool.play(TIMER_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
+    }
+    public void playZipSound(){
+        soundPool.play(ZIP_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
     }
 
     public static void initialize(Context context){

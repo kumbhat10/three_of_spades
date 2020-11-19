@@ -2,8 +2,12 @@ package com.kaalikiteeggi.three_of_spades
 
 class PlayersReference {
 
-      private val refIDTextView7 = listOf(R.id.textView1,R.id.textView2,R.id.textView3,
+
+    private val refIDTextView7 = listOf(R.id.textView1,R.id.textView2,R.id.textView3,
         R.id.textView4,R.id.textView5,R.id.textView6,R.id.textView7)
+
+    private val refIDTextView7a = listOf(R.id.textView1a,R.id.textView2a,R.id.textView3a,
+        R.id.textView4a,R.id.textView5a,R.id.textView6a,R.id.textView7a)
 
     private val refIDTextView4 = listOf(R.id.textView1_4,R.id.textView2_4,R.id.textView3_4,R.id.textView7)
     private val refIDTextView4a = listOf(R.id.textView1_4a,R.id.textView2_4a,R.id.textView3_4a,R.id.textView7a)
@@ -62,7 +66,7 @@ class PlayersReference {
         else createRefID4(player, refIDTextView4)
     }
     fun refIDMappedTextViewA(player: String, nPlayer: Int): List<Int>{
-        return if(nPlayer==7) createRefID7(player, refIDTextView7)
+        return if(nPlayer==7) createRefID7(player, refIDTextView7a)
         else createRefID4(player, refIDTextView4a)
     }
     fun refIDMappedImageView(player: String, nPlayer: Int): List<Int>{

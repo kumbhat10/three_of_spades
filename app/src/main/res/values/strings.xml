@@ -1,6 +1,7 @@
 <resources>
     <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
+    <string name="pathRoom">Room</string>
 
     <string name="customactivityoncrash_error_activity_error_occurred_explanation">Oops !! Bugs found \nor Server is high on spirit \n\n\n(Sending error report to developer)</string>
     <string name="customactivityoncrash_error_activity_restart_app">Home</string>
@@ -54,7 +55,7 @@
 
     <string name="hinRoomID">Room ID</string>
     <string name="developerCredits">Contact Us</string>
-    <string name="waitingToJoin">Waiting for players to join</string>
+    <string name="waitingToJoin">Invite players to join</string>
     <string name="playerJoinedConfirmation">Ready to Start</string>
     <string name="shuffling_cards">Shuffling Cards</string>
     <string name="playerView6">Player</string>
@@ -139,5 +140,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="top_players">Top Players</string>
     <string name="userscore">$ 000,000</string>
+    <string name="playersjoined">All players have joined</string>
 
 </resources>

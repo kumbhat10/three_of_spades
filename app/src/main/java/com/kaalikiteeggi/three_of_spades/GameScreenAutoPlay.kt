@@ -30,6 +30,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
@@ -186,6 +187,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var bidValuePrev: Int = 0
     private var bidingStarted = false   /// biding happened before
     private var roundStarted = false
+    private var partnerCardSelected = false
+    private var trumpSelected = false
+    private var bidDone = true
     private var counterPartnerSelection = 0
     private var bu1 = 0
     private var bu1Flag = 0
@@ -214,6 +218,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         setContentView(R.layout.activity_game_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
 //        changeBackground()
+        SoundManager.initialize(applicationContext)
         roomID = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
         from = intent.getStringExtra("from")!!.toString()    //check if user has joined room or created one and display Toast
         fromInt = from.split("")[2].toInt()
@@ -244,7 +249,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
         //region Other Thread tasks
         Handler(Looper.getMainLooper()).post {
-            SoundManager.initialize(applicationContext)
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
             updatePlayerInfo()
@@ -729,10 +733,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
         pt4 = 0
         scoreList = listOf(pt1, pt2, pt3, pt4)
         ptAll = listOf(pt1, pt2, pt3, pt4)
+        partnerCardSelected = false
         roundStarted = false
         roundNumber = 1
         roundWinner = 0
         tablePoints = 0
+        trumpSelected = false
+        bidDone = false
         findViewById<TickerView>(R.id.buddyText1).text = getString(R.string.partner)
         startNextRoundButton.clearAnimation()
         startNextRoundButton.visibility = View.GONE
@@ -1182,11 +1189,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
             findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).visibility = View.VISIBLE // make selection frame visible
             findViewById<LinearLayout>(R.id.linearLayoutPartnerSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
             findViewById<TextView>(R.id.textViewPartnerSelect).text = getString(R.string.partnerSelection1_4)
-            speak("Choose partner card")
+            speak("Choose a partner card")
             //choose 1st buddy text
             displayAllCardsForPartnerSelection()  // display all the cards to choose from
         } else {  // to everyone else
-            speak("Waiting to select partner card")
+            speak("Waiting to select partner card", speed = 1.05f)
             centralText("Waiting for ${playerName(bidder)} \nto select 1 partner card", 0)
             Handler(Looper.getMainLooper()).postDelayed({ autoPartnerSelect() }, timeAutoTrumpAndPartner.random()) // auto select for robot bidder
         }
@@ -1221,11 +1228,12 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun partnerSelectClick4(cardSelected: Int) { // assumption is cardsinHand already updated
-        if (bidder == fromInt && cardsInHand.contains(cardSelected)) {
+        if (!partnerCardSelected && bidder == fromInt && cardsInHand.contains(cardSelected)) {
             if (soundStatus) SoundManager.getInstance().playErrorSound() //soundError.start()
             if (vibrateStatus) vibrationStart()
             speak("Choose any other card", speed = 1.05f)
-        } else {
+        } else if(!partnerCardSelected) {
+            partnerCardSelected = true
             textToSpeech.stop()
             bu1 = cardSelected
             bu1Flag = 1 // bidder has one of card in his hand
@@ -1323,32 +1331,35 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     fun onTrumpSelectionClick(view: View) {
-        if (soundStatus) SoundManager.getInstance().playUpdateSound() //soundUpdate.start()
-        when (view.tag) {
-            "h" -> {
-                trump = "H"
-                trumpInt = 2
+        if(!trumpSelected){
+            trumpSelected = true
+            if (soundStatus) SoundManager.getInstance().playUpdateSound() //soundUpdate.start()
+            when (view.tag) {
+                "h" -> {
+                    trump = "H"
+                    trumpInt = 2
+                }
+                "s" -> {
+                    trump = "S"
+                    trumpInt = 1
+                }
+                "d" -> {
+                    trump = "D"
+                    trumpInt = 4
+                }
+                "c" -> {
+                    trump = "C"
+                    trumpInt = 3
+                }
             }
-            "s" -> {
-                trump = "S"
-                trumpInt = 1
+            gameState.value = 4
+            if (bidder == fromInt) { // at this point bidder is fixed and more reliable than player turn
+                findViewById<FrameLayout>(R.id.frameTrumpSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
+                Handler(Looper.getMainLooper()).postDelayed({
+                    findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.GONE
+                    findViewById<FrameLayout>(R.id.frameTrumpSelection).clearAnimation()
+                }, 170)
             }
-            "d" -> {
-                trump = "D"
-                trumpInt = 4
-            }
-            "c" -> {
-                trump = "C"
-                trumpInt = 3
-            }
-        }
-        gameState.value = 4
-        if (bidder == fromInt) { // at this point bidder is fixed and more reliable than player turn
-            findViewById<FrameLayout>(R.id.frameTrumpSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
-            Handler(Looper.getMainLooper()).postDelayed({
-                findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.GONE
-                findViewById<FrameLayout>(R.id.frameTrumpSelection).clearAnimation()
-            }, 170)
         }
     }
 
@@ -1381,6 +1392,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             }
             if (playerTurn.value!! == fromInt && (bidder != playerTurn.value!! || !bidingStarted)) {
                 if (bidStatus[playerTurn.value!! - 1] == 1) { // show bid frame and ask to bid or pass
+                    bidDone = false
                     findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
                     findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.VISIBLE // this path is ciritical
                     findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
@@ -1425,7 +1437,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (maxAutoBidLimit > bidValue) tempView.tag = listOf("5", "pass", "10", "5", "pass", "10", "20").random() //check if bid value has not reached maximum allowed bid value
             else tempView.tag = "pass"
             countDownBidding.cancel() // dummy
-            Handler(Looper.getMainLooper()).postDelayed({ askToBid(tempView) }, timeAutoBid.random()) // timeDelayAutoPlay.random())
+            Handler(Looper.getMainLooper()).postDelayed({
+                bidDone = false
+                askToBid(tempView) }, timeAutoBid.random()) // timeDelayAutoPlay.random())
         } else {
             playerTurn.value = nextBidderTurn(playerTurn.value!!)
         }
@@ -1433,39 +1447,42 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     fun askToBid(view: View) {
         countDownTimer("Bidding", purpose = "cancel")
-        if (soundStatus) SoundManager.getInstance().playUpdateSound() // soundUpdate.start()
-        when (view.tag) {
-            "pass" -> {
-                bidStatus[playerTurn.value!! - 1] = 0
-                speak("${playerName(playerTurn.value!!)} passed", speed = 1.15f)
-                if (playerTurn.value!! == fromInt) centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
+        if(!bidDone) {
+            bidDone = true
+            if (soundStatus) SoundManager.getInstance().playUpdateSound() // soundUpdate.start()
+            when (view.tag) {
+                "pass" -> {
+                    bidStatus[playerTurn.value!! - 1] = 0
+                    speak("${playerName(playerTurn.value!!)} passed", speed = 1.15f)
+                    if (playerTurn.value!! == fromInt) centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
+                }
+                "5" -> {
+                    bidValue += 5
+                    bidder = playerTurn.value!!
+                }
+                "10" -> {
+                    bidValue += 10
+                    bidder = playerTurn.value!!
+                }
+                "20" -> {
+                    bidValue += 20
+                    bidder = playerTurn.value!!
+                }
+                "50" -> {
+                    bidValue += 50
+                    bidder = playerTurn.value!!
+                }
             }
-            "5" -> {
-                bidValue += 5
-                bidder = playerTurn.value!!
+            if (playerTurn.value!! == fromInt) {
+                findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
+                Handler(Looper.getMainLooper()).postDelayed({
+                    findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
+                    findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
+                }, 180)
             }
-            "10" -> {
-                bidValue += 10
-                bidder = playerTurn.value!!
-            }
-            "20" -> {
-                bidValue += 20
-                bidder = playerTurn.value!!
-            }
-            "50" -> {
-                bidValue += 50
-                bidder = playerTurn.value!!
-            }
+            bidingStarted = true
+            playerTurn.value = nextBidderTurn(playerTurn.value!!)
         }
-        if (playerTurn.value!! == fromInt) {
-            findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
-            Handler(Looper.getMainLooper()).postDelayed({
-                findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
-                findViewById<FrameLayout>(R.id.frameAskBid).clearAnimation()
-            }, 180)
-        }
-        bidingStarted = true
-        playerTurn.value = nextBidderTurn(playerTurn.value!!)
     }
 
     private fun speak(speechText: String, speed: Float = 1f, queue: Int = TextToSpeech.QUEUE_FLUSH) {
@@ -1658,8 +1675,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun toastCenter(message: String) {
-        toast.setText(message)
-        toast.show()
+        Snackbar.make(findViewById(R.id.gameScreen1), message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+
+//        toast.setText(message)
+//        toast.show()
     }
 
     private fun playerName(index: Int): String {

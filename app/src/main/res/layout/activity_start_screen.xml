@@ -126,6 +126,7 @@
             android:layout_centerInParent="true"
             android:text="@string/signIN"
             android:textSize="@dimen/_25ssp"
+            android:background="@color/Black"
             app:light_color="@color/white" />
 
         <androidx.appcompat.widget.AppCompatButton

@@ -42,6 +42,7 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.play.core.tasks.OnFailureListener
@@ -77,12 +78,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         .toInt()
 
     private var background = 4
-    private lateinit var soundUpdate: MediaPlayer
-    private lateinit var soundSuccess: MediaPlayer
-    private lateinit var soundError: MediaPlayer
     private lateinit var soundBkgd: MediaPlayer
-    private lateinit var soundCollectCards: MediaPlayer
-    private lateinit var soundZip: MediaPlayer
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var intentBuilder: CustomTabsIntent.Builder
@@ -92,7 +88,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var rewardAmount = 0
     private var createRoomStatus = false
     private var offlineRoomCreate = true
-    private var onceAdWatched = false
+    private var onceAdWatched = true
 
     private var errorJoinRoomID = false
     private var backButtonPressedStatus = false
@@ -123,19 +119,23 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var playerStatsWindowStatus = true
     private var trainAccess = false
     private var onlineGameAllowed = false
+    private var onlineGameAllowedM = ""
+    private var offlineGameAllowed = false
+    private var offlineGameAllowedM = ""
 
     private lateinit var toast: Toast
     private var refUsersData = Firebase.firestore.collection("Users")
-    private var refRoomData = Firebase.firestore.collection("Rooms")
+    private lateinit var refRoomData: CollectionReference
+    private lateinit var fireStoreRef: DocumentReference
 
     private lateinit var mInterstitialAd: InterstitialAd
     private lateinit var rewardedAd: RewardedAd
     private lateinit var billingClient: BillingClient
     private lateinit var mAuth: FirebaseAuth
     private var uid = ""
-    private lateinit var fireStoreRef: DocumentReference
     private lateinit var userName: String
     private lateinit var photoURL: String
+    private var userBasicInfo = UserBasicInfo()
     private var musicStatus = false
     private var soundStatus = true
     private var vibrateStatus = true
@@ -192,7 +192,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             .trackActivities(false) //default: false
             .errorDrawable(R.drawable.bug_icon) //default: bug image
             .apply()
-
         setContentView(R.layout.activity_main_home_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         lightMHS.on()
@@ -205,26 +204,21 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             4 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.redorangeburst)
             5 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.yellowburst)
         }
-        Picasso.Builder(this).memoryCache(Cache.NONE)
         mainIconGridDisplay()
         newUser = intent.getBooleanExtra("newUser", true)
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         soundBkgd = MediaPlayer.create(applicationContext, R.raw.music)
         soundBkgd.isLooping = true
 
+        refRoomData = Firebase.firestore.collection(getString(R.string.pathRoom))
         mAuth = FirebaseAuth.getInstance()
         uid = mAuth.uid.toString()
         getSharedPrefs()
         fireStoreRef = Firebase.firestore.collection("Users").document(uid)
-        initTabLayoutAdapter()
+        SoundManager.initialize(applicationContext)
         Handler(Looper.getMainLooper()).post(Runnable {
-            soundUpdate = MediaPlayer.create(applicationContext, R.raw.card_played)
-            soundError = MediaPlayer.create(applicationContext, R.raw.error)
-            soundSuccess = MediaPlayer.create(applicationContext, R.raw.success)
-            soundCollectCards = MediaPlayer.create(applicationContext, R.raw.card_collect)
-            soundZip = MediaPlayer.create(applicationContext, R.raw.zip)
+            initTabLayoutAdapter()
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            SoundManager.initialize(applicationContext)
             getUserData()
             initializeAds()
             enterText() // press enter to join room
@@ -256,7 +250,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     private fun dailyRewardWindowDisplay() {
-        soundSuccess.start()
+        if (soundStatus) SoundManager.getInstance().playSuccessSound()
         val gridView = dailyRewardGrid
         val imageAdapter = ImageAdapter(applicationContext, setDataListDR(), min(7, consecutiveDay))
         gridView.adapter = imageAdapter
@@ -284,14 +278,15 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     fun addPoints() {
         callConfetti()
-        if (soundStatus) soundZip.start()
+        if (soundStatus) SoundManager.getInstance().playZipSound()
         dailyRewardClicked = false
         rewardAmount = dailyRewardAmount
         totalCoins += rewardAmount  // reward with daily reward amount for watching video
+        userBasicInfo.score = totalCoins  // reward with daily reward amount for watching video
         logFirebaseEvent("daily_rewards", rewardAmount, "coins")
         watchVideoCoin.text = rewardAmount.toString()
         watchVideoCoin.visibility = View.VISIBLE
-        soundCollectCards.start()
+        if (soundStatus) SoundManager.getInstance().playCardCollectSound()
         anim(watchVideoCoin, R.anim.slide_500_coins)
         Handler(Looper.getMainLooper()).postDelayed({
             if (vibrateStatus) vibrationStart()
@@ -327,10 +322,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     if (rewardStatus) {
                         rewardStatus = false
                         callConfetti()
-                        if (soundStatus) soundZip.start()
+                        if (soundStatus) SoundManager.getInstance().playZipSound()
                         watchVideoCoin.text = rewardAmount.toString()
                         watchVideoCoin.visibility = View.VISIBLE
-                        soundCollectCards.start()
+                        if (soundStatus) SoundManager.getInstance().playCardCollectSound()
                         anim(watchVideoCoin, R.anim.slide_500_coins)
                         Handler(Looper.getMainLooper()).postDelayed({
                             userScoreMHS.setText("$ " + String.format("%,d", 78000), true)
@@ -347,6 +342,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     rewardStatus = true
                     rewardAmount = dailyRewardAmount
                     totalCoins += rewardAmount  // reward with daily reward amount for watching video
+                    userBasicInfo.score = totalCoins
                     refUsersData.document(uid)
                         .set(hashMapOf("sc" to totalCoins, "LSD" to today, "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
                 }
@@ -443,7 +439,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     Picasso.get().load(photoURL).resize(400, 400).into(profilePic)
 //                    callConfetti() // dont call confetti here - call only when coins are earned
                     totalCoins = dataSnapshot.get("sc").toString().toInt()
-
                     if (dataSnapshot.contains("scd") && dataSnapshot.contains("p_daily")){
                         totalDailyCoins =   dataSnapshot.get("scd").toString().toInt()
                         nGamesPlayedDaily = dataSnapshot.get("p_daily").toString().toInt()
@@ -453,11 +448,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         totalDailyCoins = 0
                         fireStoreRef.set(hashMapOf("scd" to 0,"p_daily" to 0,"w_daily" to 0,"b_daily" to 0), SetOptions.merge())
                     }
-
-                    if(soundStatus) soundZip.start()
+                    if (soundStatus) SoundManager.getInstance().playZipSound()
                     userScoreMHS.setText("$ " + String.format("%,d", totalCoins), true)
                     maskAllLoading.visibility = View.GONE
-
                     nGamesPlayed = dataSnapshot.get("p").toString().toInt()
                     nGamesWon = dataSnapshot.get("w").toString().toInt()
                     nGamesBid = dataSnapshot.get("b").toString().toInt()
@@ -535,6 +528,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     editor.apply()
                     editor.putBoolean("premium", premiumStatus) // write username to preference file
                     editor.apply()
+                    userBasicInfo = extractUserData(dataSnapshot)
 //                    checkAccessToTrain()
                 } catch (exception: java.lang.Exception) {
                     mAuth.signOut()
@@ -717,7 +711,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         billingClient.acknowledgePurchase(params) {}
         if (purchase.sku == "remove_ads") {
             premiumStatus = true
-            soundSuccess.start()
+            if (soundStatus) SoundManager.getInstance().playSuccessSound()
             toastCenter("Congratulations!! Your Payment is approved \n You won't see Ads now")
             refUsersData.document(uid).set(hashMapOf("pr" to 1), SetOptions.merge())
             Firebase.firestore.collection("PremiumUser").document(uid)
@@ -796,13 +790,13 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 override fun onRewardedAdClosed() {
                     if (musicStatus) soundBkgd.start()
                     if (rewardStatus) {
-                        if (soundStatus) soundZip.start()
+                        if (soundStatus) SoundManager.getInstance().playZipSound()
                         callConfetti()
                         rewardStatus = false
                         watchVideoCoin.text = rewardAmount.toString()
                         watchVideoCoin.visibility = View.VISIBLE
                         logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, rewardAmount, "coins")
-                        soundCollectCards.start()
+                        if (soundStatus) SoundManager.getInstance().playCardCollectSound()
                         anim(watchVideoCoin, R.anim.slide_500_coins)
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (vibrateStatus) vibrationStart()
@@ -826,6 +820,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     }
                     countRewardWatch += 1
                     totalCoins += rewardAmount  // reward with 500 coins for watching video
+                    userBasicInfo.score = totalCoins
                     refUsersData.document(uid)
                         .set(hashMapOf("sc" to totalCoins), SetOptions.merge())
                 }
@@ -877,12 +872,19 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     private fun checkIfOnlineGameAllowed() {
-        Firebase.database.reference.child("OnlineGame")
+        Firebase.database.reference.child("Check")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(errorDataLoad: DatabaseError) {}
                 override fun onDataChange(data: DataSnapshot) {
                     if (data.exists()) {
-                        onlineGameAllowed = data.value.toString().toInt() == 1
+                        onlineGameAllowed = data.child("OnlineGame").value.toString().toInt() == 1
+                        onlineGameAllowedM = data.child("OnlineGameM").value.toString()
+                        offlineGameAllowed = data.child("OfflineGame").value.toString().toInt() == 1
+                        offlineGameAllowedM = data.child("OfflineGameM").value.toString()
+                        if(!onlineGameAllowed or !offlineGameAllowed) {
+                            toastCenter(onlineGameAllowedM + "\n" + offlineGameAllowedM)
+                        }
+
                     }
                 }
             })
@@ -911,23 +913,32 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private fun createRoom() {
         maskAllLoading.visibility = View.VISIBLE
         loadingText.text = getString(R.string.creatingRoom)
-        if (offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 1300)
-        else if (!onlineGameAllowed) {
-            soundError.start()
+        if(!offlineGameAllowed && offlineRoomCreate) {
+            toastCenter(offlineGameAllowedM)
+            if (soundStatus) SoundManager.getInstance().playErrorSound()
             if(vibrateStatus) vibrationStart()
-            loadingText.text = "Try playing OFFLINE\n\n Server is under maintenance right now\n\n It will be back shortly"
+            loadingText.text = offlineGameAllowedM
             Handler(Looper.getMainLooper()).postDelayed({
                 maskAllLoading.visibility = View.GONE
-            }, 2000)
+            }, 3500)
+        }
+        else if (offlineGameAllowed && offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 1300)
+        else if (!onlineGameAllowed) {
+            if (soundStatus) SoundManager.getInstance().playErrorSound()
+            if(vibrateStatus) vibrationStart()
+            loadingText.text = onlineGameAllowedM
+            Handler(Looper.getMainLooper()).postDelayed({
+                maskAllLoading.visibility = View.GONE
+            }, 3500)
         } else {
             val allowedChars = ('A'..'H') + ('J'..'N') + ('P'..'Z') + ('2'..'9')  // 1, I , O and 0 skipped
             val roomID = (1..4).map { allowedChars.random() }.joinToString("")
             if (nPlayers == 7) {
-                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data7)
-                else createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData7)
+                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data7)
+                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData7)
             } else if (nPlayers == 4 && !offlineRoomCreate) {
-                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).data4)
-                else createRoomWithID(roomID, CreateRoomData(userName, photoURL, totalCoins).dummyData4)
+                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data4)
+                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData4)
             }
         }
     }
@@ -942,15 +953,16 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     private fun startNextActivity(roomID: String = "ABCD") {
-        if (soundStatus) soundSuccess.start()
+        if (soundStatus) SoundManager.getInstance().playSuccessSound()
         if (!offlineRoomCreate) {
             editor.putString("Room", roomID) // write room ID in storage - to delete later
             editor.apply()
-            logFirebaseEvent("create_join_room_screen", nPlayers, "create")
+            logFirebaseEvent("create_join_room_screen", 1, "create_$nPlayers")
         } else {
-            logFirebaseEvent("create_join_room_screen", nPlayers, "create_offline")
+            logFirebaseEvent("create_join_room_screen", 1, "create_offline_$nPlayers")
         }
         val userStatsDaily = ArrayList(listOf(nGamesPlayedDaily, nGamesWonDaily, nGamesBidDaily))
+        val userStatsTotal = ArrayList(listOf(nGamesPlayed+nGamesPlayedBot, nGamesWon+nGamesWonBot, nGamesBid+nGamesBidBot))
         val userStats = if (!offlineRoomCreate) ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))
         else ArrayList(listOf(nGamesPlayedBot, nGamesWonBot, nGamesBidBot))
 
@@ -963,6 +975,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             .apply { putExtra("nPlayers", nPlayers) }
             .apply { putExtra("offline", offlineRoomCreate) }
             .putIntegerArrayListExtra("userStats", userStats)
+            .putIntegerArrayListExtra("userStatsTotal", userStatsTotal)
             .putIntegerArrayListExtra("userStatsDaily", userStatsDaily))
         overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
         Handler(Looper.getMainLooper()).postDelayed({
@@ -998,62 +1011,71 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if (vibrateStatus) vibrationStart()
         val roomID = roomIDInput.text.toString() //read text field
         if (roomID.isNotEmpty()) {
-            hideKeyboard()
-            maskAllLoading.visibility = View.VISIBLE
-            loadingText.text = getString(R.string.checkJoinRoom)
+            if(!onlineGameAllowed) {
+                toastCenter(onlineGameAllowedM)
+            }
+            else{
+                hideKeyboard()
+                maskAllLoading.visibility = View.VISIBLE
+                loadingText.text = getString(R.string.checkJoinRoom)
 
-            refRoomData.document(roomID).get().addOnSuccessListener { dataSnapshot ->
-                if (dataSnapshot.data != null) {
-                    val playersJoined = dataSnapshot.get("PJ").toString().toInt()
-                    val nPlayers = dataSnapshot.get("n").toString().toInt()
-                    if (playersJoined >= nPlayers) {
-                        soundError.start()
+                refRoomData.document(roomID).get().addOnSuccessListener { dataSnapshot ->
+                    if (dataSnapshot.data != null) {
+                        val playersJoined = dataSnapshot.get("PJ").toString().toInt()
+                        val nPlayers = dataSnapshot.get("n").toString().toInt()
+                        if (playersJoined >= nPlayers) {
+                            SoundManager.getInstance().playErrorSound()
+                            if (vibrateStatus) vibrationStart()
+                            maskAllLoading.visibility = View.GONE
+                            roomIDInputLayout.helperText = null
+                            errorJoinRoomID = true
+                            roomIDInputLayout.error = "Room is Full"
+                            roomIDInput.text?.clear()
+                        } else {
+                            if (vibrateStatus) vibrationStart()
+                            if (soundStatus) SoundManager.getInstance().playSuccessSound()
+                            maskAllLoading.visibility = View.VISIBLE
+                            loadingText.text = getString(R.string.joiningRoom)
+                            logFirebaseEvent("create_join_room_screen", 1, "join_$nPlayers")
+                            val playerJoining = playersJoined + 1
+                            refRoomData.document(roomID)
+                                .set(hashMapOf("p$playerJoining" to userName, "PJ" to playerJoining, "p${playerJoining}h" to uid, "p${playerJoining}c" to totalCoins), SetOptions.merge())
+                                .addOnSuccessListener {
+                                    val userStatsDaily = ArrayList(listOf(nGamesPlayedDaily, nGamesWonDaily, nGamesBidDaily))
+                                    val userStatsTotal = ArrayList(listOf(nGamesPlayed + nGamesPlayedBot, nGamesWon + nGamesWonBot, nGamesBid + nGamesBidBot))
+
+                                    startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
+                                        .apply { putExtra("selfName", userName) }
+                                        .apply { putExtra("from", "p$playerJoining") }
+                                        .apply { putExtra("nPlayers", nPlayers) }
+                                        .apply { putExtra("photoURL", photoURL) }
+                                        .apply { putExtra("totalCoins", totalCoins) }
+                                        .apply { putExtra("totalDailyCoins", totalDailyCoins) }
+                                        .apply { putExtra("offline", false) }
+                                        .putIntegerArrayListExtra("userStats", ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid)))
+                                        .putIntegerArrayListExtra("userStatsTotal", userStatsTotal)
+                                        .putIntegerArrayListExtra("userStatsDaily", userStatsDaily))
+
+                                    overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
+                                    Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
+                                }
+                        }
+                    } else {
+                        SoundManager.getInstance().playErrorSound()
                         if (vibrateStatus) vibrationStart()
                         maskAllLoading.visibility = View.GONE
-//                        roomIDInput.hint = "Room is Full"
                         roomIDInputLayout.helperText = null
                         errorJoinRoomID = true
-                        roomIDInputLayout.error = "Room is Full"
+                        roomIDInputLayout.error = "No Room found"
                         roomIDInput.text?.clear()
-                    } else {
-                        if (vibrateStatus) vibrationStart()
-                        if (soundStatus) soundSuccess.start()
-                        maskAllLoading.visibility = View.VISIBLE
-                        loadingText.text = getString(R.string.joiningRoom)
-                        logFirebaseEvent("create_join_room_screen", nPlayers, "join")
-                        val playerJoining = playersJoined + 1
-                        refRoomData.document(roomID)
-                            .set(hashMapOf("p$playerJoining" to userName, "PJ" to playerJoining, "p${playerJoining}h" to photoURL, "p${playerJoining}c" to totalCoins), SetOptions.merge())
-                            .addOnSuccessListener {
-                                startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
-                                    .apply { putExtra("selfName", userName) }
-                                    .apply { putExtra("from", "p$playerJoining") }
-                                    .apply { putExtra("nPlayers", nPlayers) }
-                                    .apply { putExtra("photoURL", photoURL) }
-                                    .apply { putExtra("totalCoins", totalCoins) }
-                                    .apply { putExtra("totalDailyCoins", totalDailyCoins) }
-                                    .apply { putExtra("offline", false) }
-                                    .putIntegerArrayListExtra("userStats", ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))))
-
-                                overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
-                                Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
-                            }
                     }
-                } else {
-                    soundError.start()
-                    if (vibrateStatus) vibrationStart()
+                }.addOnFailureListener { exception ->
                     maskAllLoading.visibility = View.GONE
-                    roomIDInputLayout.helperText = null
-                    errorJoinRoomID = true
-                    roomIDInputLayout.error = "No Room found"
-                    roomIDInput.text?.clear()
+                    toastCenter("Failed to create room \nPlease try again or later \n${exception.localizedMessage!!}")
                 }
-            }.addOnFailureListener { exception ->
-                maskAllLoading.visibility = View.GONE
-                toastCenter("Failed to create room \nPlease try again or later \n${exception.localizedMessage!!}")
             }
         } else {
-            soundError.start()
+            SoundManager.getInstance().playErrorSound()
             vibrationStart()
             errorJoinRoomID = false
             roomIDInputLayout.error = null
@@ -1122,7 +1144,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     fun sound(view: View) {
         soundStatus = soundSwitch.isChecked
         if (soundStatus) {
-            soundUpdate.start()
+            SoundManager.getInstance().playUpdateSound()
             settSoundIcon.setImageResource(R.drawable.sound_on_png)
         } else settSoundIcon.setImageResource(R.drawable.sound_off_png)
         editor.putBoolean("soundStatus", soundStatus) // write username to preference file
@@ -1162,8 +1184,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     }
 
     fun toastCenter(message: String) {
-        toast.setText(message)
-        toast.show()
+//        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+        Snackbar.make(konfettiMHS, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+//        toast.setText(message)
+//        toast.show()
     }
 
     fun trainingStart(view: View) {
@@ -1184,34 +1208,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         rankStats.visibility = View.VISIBLE
         anim(rankStats, R.anim.slide_left_activity)
         rankWindowStatus = true
-    }
-
-    private fun createUserArrayFromSnapshot(querySnapshot: QuerySnapshot): ArrayList<UserBasicInfo>{
-        val tempArray = ArrayList<UserBasicInfo>()
-        for(document in querySnapshot){
-            val won = document["w_bot"].toString()
-                .toInt() + document["w"].toString().toInt()
-//            else document["w"].toString().toInt()
-            val played = document["p_bot"].toString()
-                .toInt() + document["p"].toString().toInt()
-//            else document["p"].toString().toInt()
-            val bid = document["b_bot"].toString()
-                .toInt() + document["b"].toString().toInt()
-//            else document["b"].toString().toInt()
-
-            val name = document["n"].toString()
-            val score = document["sc"].toString().toInt()
-            val scoreDaily = if(document.contains("scd")) document["scd"].toString().toInt() else 0
-            val playedDaily = if(document.contains("p_daily")) document["p_daily"].toString().toInt() else 0
-            val wonDaily = if(document.contains("w_daily")) document["w_daily"].toString().toInt() else 0
-            val bidDaily = if(document.contains("b_daily")) document["b_daily"].toString().toInt() else 0
-            val photoURL = document["ph"].toString()
-            val lastSeen = document["LSD"].toString().toInt()
-
-            tempArray.add(UserBasicInfo(name = name, score = score,scoreDaily = scoreDaily, photoURL=photoURL, played = played, playedDaily = playedDaily,
-                lastSeen = lastSeen, won =  won, wonDaily = wonDaily, bid = bid, bidDaily = bidDaily))
-        }
-        return tempArray
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -1528,13 +1524,13 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                 }
             }
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-            soundError.start()
+            SoundManager.getInstance().playErrorSound()
             toastCenter("Payment Cancelled")
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
-            soundError.start()
+            SoundManager.getInstance().playErrorSound()
             toastCenter("Already processing pending item")
         } else {
-            soundError.start()
+            SoundManager.getInstance().playErrorSound()
             toastCenter("Payment Failed. Try again \n ${billingResult.responseCode}")
         }
     }

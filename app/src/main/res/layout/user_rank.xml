@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/_3sdp"
     android:background="@drawable/blackglassglossy"
     android:clickable="true"
     android:focusable="true"
@@ -12,7 +11,6 @@
     android:paddingStart="@dimen/_6sdp"
     android:paddingEnd="@dimen/_6sdp"
     android:paddingBottom="@dimen/_10sdp"
-    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:theme="@style/Theme.App">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -68,7 +66,7 @@
         android:paddingEnd="0dp"
         android:text="@string/playeName"
         android:textColor="#B5AAA1"
-        android:textSize="@dimen/_15ssp"
+        android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/userScore"
         app:layout_constraintStart_toEndOf="@+id/userRank"

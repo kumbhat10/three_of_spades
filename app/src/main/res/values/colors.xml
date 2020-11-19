@@ -51,9 +51,9 @@
 
     <color name="borderblue">#0B70C8</color>
 
-    <color name = "borderNblueDark0b">#E42A2A</color>
-    <color name = "borderNblueDark1b">#B11F1F</color>
-    <color name = "borderNblueDark2b">#701B1B</color>
+    <color name = "borderNblueDark0b">#03A0E8</color>
+    <color name = "borderNblueDark1b">#19759E</color>
+    <color name = "borderNblueDark2b">#2B576C</color>
     <color name = "borderNblueDark3b">#1F434C</color>
 
     <color name = "shine0black">#BFBFBF</color>

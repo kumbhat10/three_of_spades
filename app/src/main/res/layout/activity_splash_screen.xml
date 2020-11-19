@@ -47,6 +47,7 @@
         android:text="@string/loading"
         android:textSize="@dimen/_26ssp"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/Black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/spadeImage" />
 

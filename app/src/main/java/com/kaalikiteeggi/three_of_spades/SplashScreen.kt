@@ -67,7 +67,7 @@ class SplashScreen : AppCompatActivity() {
         findViewById<LightProgress>(R.id.lightSplash).on()
         vcSplash.text = "Ver: " + packageManager.getPackageInfo(packageName,0).versionName
 
-//        mobileAds() // load mobile ads for everyone
+        mobileAds() // load mobile ads for everyone
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
         checkAppUpdate()
         soundInto = MediaPlayer.create(applicationContext, R.raw.card_shuffle)
