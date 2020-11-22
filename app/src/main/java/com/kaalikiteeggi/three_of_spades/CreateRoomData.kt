@@ -1,10 +1,7 @@
 package com.kaalikiteeggi.three_of_spades
 
-import android.annotation.SuppressLint
-import com.google.firebase.firestore.auth.User
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.round
 import kotlin.random.Random
 
@@ -25,9 +22,7 @@ class CreateRoomData(private val userBasicInfo:UserBasicInfo) {
     private fun randomUser(index:Int=0):UserBasicInfo{
         val randPercentage = randPercentage()
         val rand = Random.nextInt(0, CelebrityData().name.size)
-        return UserBasicInfo(empty = false,index= index, name = CelebrityData().name[randomList[rand]][0], photoURL = CelebrityData().name[randomList[rand]][1],
-        score =  nearestTen(deriveValue(userBasicInfo.score, randPercentage)), played =  nearestTen(deriveValue(userBasicInfo.played, randPercentage)),
-        won =  deriveValue(userBasicInfo.won, randPercentage), bid =  deriveValue(userBasicInfo.bid, randPercentage))
+        return UserBasicInfo(empty = false, index= index, name = CelebrityData().name[randomList[rand]][0], score =  nearestTen(deriveValue(userBasicInfo.score, randPercentage)), photoURL = CelebrityData().name[randomList[rand]][1], played =  nearestTen(deriveValue(userBasicInfo.played, randPercentage)), won =  deriveValue(userBasicInfo.won, randPercentage), bid =  deriveValue(userBasicInfo.bid, randPercentage))
     }
     val offlineData = arrayListOf<UserBasicInfo>(userBasicInfo, randomUser(index = 1), randomUser(index = 2), randomUser(index = 3))
 

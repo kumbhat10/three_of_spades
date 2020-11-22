@@ -19,8 +19,8 @@ android {
         minSdkVersion 24
         //noinspection OldTargetApi
         targetSdkVersion 30
-        versionCode 53
-        versionName "53B"
+        versionCode 54
+        versionName "54B"
         ndkVersion "21.3.6528147" //6363665"
         signingConfig signingConfigs.debug
     }
@@ -74,6 +74,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-perf'

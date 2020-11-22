@@ -20,7 +20,13 @@
     <string name="twitter_consumer_key" translatable="false">3lO8Inhu76bB6LiBHegyenODQ</string>
     <string name="twitter_consumer_secret" translatable="false">gXjsRXLBFXCWT2p8RiqbAXEZ9LggL9yzt4xJ5fI9rhkHCkemd6</string>
 
+    <string name="scheme">http</string>
+    <string name="scheme1">https</string>
+    <string name="hostJoinRoom">jo.in</string>
+    <string name="hostFirebaseDL">kaaliteeri.page.link</string>
+    <string name="packageName">com.kaalikiteeggi.three_of_spades</string>
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
+    <string name="websiteLink">https://sites.google.com/view/kaali-ki-teeggi/</string>
     <string name="testDeviceId">3872102D27DCB017E465C646FA620D3C</string>
 
     <string name="bannerReal">ca-app-pub-2714670043901113/2653923895</string>
@@ -55,7 +61,7 @@
 
     <string name="hinRoomID">Room ID</string>
     <string name="developerCredits">Contact Us</string>
-    <string name="waitingToJoin">Invite players to join</string>
+    <string name="waitingToJoin">Invite\nPlayers</string>
     <string name="playerJoinedConfirmation">Ready to Start</string>
     <string name="shuffling_cards">Shuffling Cards</string>
     <string name="playerView6">Player</string>
@@ -98,6 +104,7 @@
     <string name="_400">400</string>
     <string name="playeName">Player ?</string>
     <string name="playerRank">1st</string>
+    <string name="newplayer">New\nPlayer</string>
     <string name="room_id">Room: </string>
     <string name="share"> Invite </string>
     <string name="host">Host</string>

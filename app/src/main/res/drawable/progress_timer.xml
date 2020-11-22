@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@android:id/secondaryProgress">
-        <shape
-            android:innerRadiusRatio="2.7"
-            android:shape="ring"
-            android:thicknessRatio="10.0"
-            android:useLevel="true">
-            <gradient
-                android:endColor="#000000"
-                android:centerColor="#000000"
-                android:startColor="#000000"
-                android:type="sweep" />
-        </shape>
-    </item>
+<!--    <item android:id="@android:id/secondaryProgress">-->
+<!--        <shape-->
+<!--            android:innerRadiusRatio="2.7"-->
+<!--            android:shape="ring"-->
+<!--            android:thicknessRatio="10.0"-->
+<!--            android:useLevel="true">-->
+<!--            <gradient-->
+<!--                android:endColor="#000000"-->
+<!--                android:centerColor="#000000"-->
+<!--                android:startColor="#000000"-->
+<!--                android:type="sweep" />-->
+<!--        </shape>-->
+<!--    </item>-->
 
     <item android:id="@android:id/progress">
         <rotate
@@ -21,9 +21,9 @@
             android:pivotY="50%"
             android:toDegrees="270">
             <shape
-                android:innerRadiusRatio="2.7"
+                android:innerRadiusRatio="2.6"
                 android:shape="ring"
-                android:thicknessRatio="10.0"
+                android:thicknessRatio="12.0"
                 android:useLevel="true">
                 <rotate
                     android:fromDegrees="0"

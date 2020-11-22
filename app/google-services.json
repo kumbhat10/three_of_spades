@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "3216414081-vbu1n9d1o7p07a84j5712q1p0a5otq88.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kaalikiteeggi.three_of_spades",
+            "certificate_hash": "681504c2a0596da07729305b03d089d62fa92d16"
+          }
+        },
+        {
+          "client_id": "3216414081-l36014hlie7geg77hjliji7234hrnr3n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kaalikiteeggi.three_of_spades",
+            "certificate_hash": "cb20290a8a23e3083b204852c2b37a88191b084b"
+          }
+        },
+        {
           "client_id": "3216414081-lg3fgsgirmclngtppqs4iak93vsu3js9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -49,7 +65,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-2714670043901113~8731907775"
     }
   ],
   "configuration_version": "1"

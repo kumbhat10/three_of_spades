@@ -97,7 +97,7 @@ class SplashScreen : AppCompatActivity() {
         if (user != null && !isNextActivityStarted) {
             isNextActivityStarted = true
             handler.removeCallbacksAndMessages(null)
-            startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) })
+            startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser123", false) })
             overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
             Handler(Looper.getMainLooper()).postDelayed({ finish() }, 1000)
         } else if (!isNextActivityStarted) {
@@ -118,8 +118,7 @@ class SplashScreen : AppCompatActivity() {
         val mInterstitialAd = InterstitialAd(this)
         if (!BuildConfig.DEBUG) mInterstitialAd.adUnitId = getString(R.string.interstitial)  // real ADS ID
         else mInterstitialAd.adUnitId = getString(R.string.interstitialTestVideo)   // test ADs id
-        mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
-
+//        mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
     }
 
     private fun checkAppUpdate() {

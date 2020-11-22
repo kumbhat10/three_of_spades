@@ -124,9 +124,27 @@
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
         <activity
             android:name=".MainHomeScreen"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:theme="@style/Theme.launcher">
+            <intent-filter android:autoVerify="true">
+                <data android:scheme="@string/scheme1" android:host="@string/hostFirebaseDL" />
+                <data android:scheme="@string/scheme" android:host="@string/hostFirebaseDL" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+
+            <intent-filter>
+                <data android:scheme="@string/scheme" android:host="@string/hostJoinRoom" />
+                <data android:scheme="@string/scheme1" android:host="@string/hostJoinRoom" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".StartScreen"
             android:launchMode="singleTop" />
 

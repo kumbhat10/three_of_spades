@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.user_rank.view.*
 
 class ListViewAdapter(private val context: Context, private val userArrayList: ArrayList<UserBasicInfo>, private val type: Int = 1) // default type = 1 for all time
-	: RecyclerView.Adapter<ListViewAdapter.ViewHolder>() {
+	: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 	private var mExpandedPosition = 0
 	private var mPrevExpandedPosition = 0
@@ -30,12 +30,14 @@ class ListViewAdapter(private val context: Context, private val userArrayList: A
 	}
 
 	@SuppressLint("SetTextI18n")
-	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		holder.itemView.userRank.text = Html.fromHtml("${position + 1}<sup>${rankExtFromInt(position + 1)}</sup>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 		holder.itemView.userName.text = userArrayList[position].name
 		holder.itemView.userInfo.text = userArrayList[position].userInfo
 		Picasso.get().load(userArrayList[position].photoURL).resize(200, 200)
 			.into(holder.itemView.userImage)
+		if(userArrayList[position].newUser) holder.itemView.userNewText.visibility = View.VISIBLE
+		else holder.itemView.userNewText.visibility = View.GONE
 		if (type == 1) { // changes for All time window
 			holder.itemView.userCoins.setText(userArrayList[position].userCoins, true)
 			holder.itemView.userScore.text = userArrayList[position].userScore

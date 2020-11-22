@@ -8,8 +8,9 @@ import android.os.Build
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CreateUser(username: String, userPhotoUrl: String) {
-   @SuppressLint("SimpleDateFormat")
+class CreateUser(username: String="", userPhotoUrl: String="") {
+    @SuppressLint("SimpleDateFormat")
+    val todayDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt()
    val data = hashMapOf("n" to username, //username
        "ph" to userPhotoUrl, // photo URL
        "sc" to 4500, //start coins
@@ -24,8 +25,8 @@ class CreateUser(username: String, userPhotoUrl: String) {
        "p_daily" to 0, // total played games Daily
        "p_bot" to 0, // total played games against bot
        "pr" to 0,  // premium or not
-       "LSD" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), // last seen date
-       "JD" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), // Join date
+       "LSD" to todayDate, // last seen date
+       "JD" to todayDate, // Join date
        "nDRC" to 1, // consecutive days
        "claim" to 0,
        "rated" to 0,

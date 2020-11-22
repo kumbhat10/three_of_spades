@@ -195,14 +195,20 @@ class StartScreen : AppCompatActivity() {
         }.addOnFailureListener(this) {
                 exception ->
             maskButtons.visibility = View.GONE
-            if( (exception as FirebaseAuthUserCollisionException).errorCode == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL"){
+            try{
+                if( (exception as FirebaseAuthUserCollisionException).errorCode == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL"){
+                    soundError.start()
+                    toastCenter("Account already exists for email" + "\n \n${exception.email} \n \nPlease Sign in with Google or different email")
+                    LoginManager.getInstance().logOut()
+                }else{
+                    soundError.start()
+                    toastCenter("${exception.message} \n PLease try again or use other method")
+                }
+            }catch(error: Exception){
                 soundError.start()
-                toastCenter("Account already exists for email" + "\n \n${exception.email} \n \nPlease Sign in with Google or different email")
-                LoginManager.getInstance().logOut()
-            }else{
-                soundError.start()
-                toastCenter("${exception.message} \n \n PLease try again or use other method")
+                toastCenter("${exception.message} \n PLease try again or use other method")
             }
+
         }
     }
     private fun updateUI(provider: String) {
@@ -235,8 +241,8 @@ class StartScreen : AppCompatActivity() {
            try{
                refUsersData.document(uid).get().addOnSuccessListener {
                        documentSnapshot -> if(documentSnapshot.data != null) {
-                   val setData = if(documentSnapshot.contains("p_bot")) hashMapOf("n" to userGivenName, "ph" to userPhotoUrl)
-                   else hashMapOf("n" to userGivenName, "ph" to userPhotoUrl, "b_bot" to 0,"p_bot" to 0,"w_bot" to 0)
+                   val setData = hashMapOf("n" to userGivenName, "ph" to userPhotoUrl)
+//                   else hashMapOf("n" to userGivenName, "ph" to userPhotoUrl, "b_bot" to 0,"p_bot" to 0,"w_bot" to 0)
 
                    refUsersData.document(uid).set(setData, SetOptions.merge() )
                        .addOnSuccessListener {   startNextActivity(userGivenName)   }
@@ -272,8 +278,6 @@ class StartScreen : AppCompatActivity() {
         signInSuccess.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.slide_left_activity))
         Handler(Looper.getMainLooper()).postDelayed({ startActivity(Intent(this, MainHomeScreen::class.java).apply {putExtra("newUser",newUser)})
             overridePendingTransition(R.anim.slide_left_activity,R.anim.slide_left_activity)},1000)
-//                           toastCenter("Signed in Successfully ${String(Character.toChars(0x1F60A))}")
-
         Handler(Looper.getMainLooper()).postDelayed({finish()},1500)
     }
 

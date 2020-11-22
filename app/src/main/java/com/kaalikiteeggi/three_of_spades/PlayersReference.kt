@@ -78,7 +78,6 @@ class PlayersReference {
         else createRefID4(player, refIDHighlightView4)
     }
 
-
     fun refIDMappedTableImageView(player: String, nPlayer: Int): List<Int>{
         return if(nPlayer==7) createRefID7(player, refIDTableImageView7)
         else createRefID4(player, refIDTableImageView4)

@@ -13,6 +13,15 @@
     android:paddingBottom="@dimen/_10sdp"
     android:theme="@style/Theme.App">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="#604C3D"
+        app:layout_constraintEnd_toStartOf="@id/userScore"
+        app:layout_constraintStart_toEndOf="@id/userImage"
+        app:layout_constraintTop_toBottomOf="@id/userImage" />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userImage"
         android:layout_width="@dimen/rankImage"
@@ -56,19 +65,41 @@
         app:layout_constraintStart_toStartOf="@+id/space5"
         app:layout_constraintTop_toTopOf="@id/userImage" />
 
+    <Space
+        android:id="@+id/space7"
+        android:layout_width="@dimen/_10sdp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/userScore"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/userNewText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@drawable/greencartoonbanner"
+        android:gravity="center"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_13sdp"
+        android:text="@string/newplayer"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/_10ssp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/space7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/userScore"/>
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/userName"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/_30sdp"
         android:fontFamily="@font/almendra"
         android:gravity="start|bottom"
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
         android:text="@string/playeName"
-        android:textColor="#B5AAA1"
+        android:textColor="#BDB8B3"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/userScore"
         app:layout_constraintStart_toEndOf="@+id/userRank"
         app:layout_constraintTop_toTopOf="@id/userImage" />
 
@@ -162,14 +193,6 @@
         app:ticker_defaultCharacterList="number"
         app:ticker_defaultPreferredScrollingDirection="any"
         tools:ignore="RtlSymmetry" />
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/_4sdp"
-        app:layout_constraintTop_toBottomOf="@id/userImage"
-        app:layout_constraintStart_toEndOf="@id/userImage"
-        app:layout_constraintEnd_toStartOf="@id/userScore"
-        android:background="#604C3D"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

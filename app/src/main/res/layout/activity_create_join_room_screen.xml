@@ -11,13 +11,13 @@
         android:id="@+id/backgroundJR"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/addViewCreateJoinRoom"
         android:layout_above="@+id/addViewCreateJoinRoom"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
         android:src="@drawable/game_screen_table_blue"
-        android:scaleType="fitXY"/>
+        app:layout_constraintBottom_toTopOf="@+id/addViewCreateJoinRoom"
+        app:layout_constraintTop_toTopOf="parent" />
     <ImageView
         android:id="@+id/leaveJoiningRoomIcon"
         android:layout_width="@dimen/_36sdp"
@@ -35,7 +35,7 @@
         app:srcCompat="@drawable/close"/>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/button_roomID"
+        android:id="@+id/roomIDTitle"
         android:onClick="shareRoomInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,93 +62,102 @@
         android:layout_width="@dimen/_20sdp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/button_roomID" />
-
-    <ImageView
-        android:id="@+id/imageViewShareButton"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_width="@dimen/_50sdp"
-        android:clickable="true"
-        android:contentDescription="@string/todo"
-        android:focusable="true"
-        android:visibility="gone"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="shareRoomInfo"
-        android:src="@drawable/share_green1"
-        app:layout_constraintBottom_toBottomOf="@id/button_roomID"
-        app:layout_constraintEnd_toEndOf="@+id/space6"
-        app:layout_constraintTop_toTopOf="@id/button_roomID" />
-
+        app:layout_constraintStart_toStartOf="@+id/roomIDTitle" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/waitingToJoinText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/waitingToJoin"
-        android:textSize="@dimen/_16ssp"
         android:textColor="@color/white"
-        android:visibility="visible"
-        android:layout_marginTop="@dimen/_8sdp"
-        app:layout_constraintTop_toBottomOf="@id/button_roomID"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:gravity="center"
+        android:textSize="@dimen/_14ssp"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintBottom_toTopOf="@+id/addViewCreateJoinRoom"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewShareButton2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageViewShareButton2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playersJoin"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:layoutAnimation="@anim/layout_animation_fall_down"
-        app:layout_constraintVertical_bias="0"
+        android:layout_marginEnd="@dimen/_8sdp"
         android:clickable="true"
         android:focusable="true"
+        android:layoutAnimation="@anim/layout_animation_fall_down"
         android:orientation="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbarSize="@dimen/_10sdp"
-        app:layout_constraintBottom_toTopOf="@id/startGameButton"
+        android:layout_marginBottom="@dimen/_95sdp"
+        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/waitingToJoinText" />
+        app:layout_constraintTop_toBottomOf="@+id/roomIDTitle"
+        app:layout_constraintVertical_bias="0" />
 
     <ProgressBar
-        android:id="@+id/progressBarWait"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="@dimen/_55sdp"
-        android:layout_height="@dimen/_55sdp"
-        android:layout_marginBottom="@dimen/_15ssp"
+        android:id="@+id/offlineProgressbar"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_marginBottom="@dimen/_10ssp"
         app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:indeterminate="true"
-        android:visibility="visible"
+        android:visibility="gone"
+        android:indeterminateDuration="1000"
         android:indeterminateBehavior="cycle"
-        android:indeterminateOnly="false"
-        android:indeterminateTint="#FFFFFF"
-        android:progressTintMode="src_in"
-        android:rotation="360" />
+        android:indeterminateTint="@color/white"/>
+
+    <ImageView
+        android:id="@+id/imageViewShareButton2"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_marginBottom="@dimen/_10ssp"
+        android:onClick="shareRoomInfo"
+        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        android:background="@drawable/blackcirclebutton"/>
+
+    <ImageView
+        android:id="@+id/imageViewShareButton1"
+        android:onClick="shareRoomInfo"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_marginBottom="@dimen/_10ssp"
+        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/add"
+        android:visibility="gone"
+        android:scaleY="0.6"
+        android:scaleX="0.6"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/startGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/redrectanlgesimple"
+        android:gravity="center"
+        android:onClick="startGame"
         android:padding="@dimen/_6sdp"
         android:paddingStart="@dimen/_20sdp"
         android:paddingEnd="@dimen/_20sdp"
-        android:background="@drawable/redrectanlgesimple"
-        android:text = "Start"
+        android:text="Start"
         android:textColor="@color/white"
         android:textSize="@dimen/_22ssp"
-        android:gravity="center"
-        android:onClick="startGame"
-        app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="@+id/progressBarWait"
+        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/progressBarWait"
-        android:layout_marginBottom="@dimen/_10sdp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playersJoin"
+        app:layout_constraintVertical_bias="0.5" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/addViewCreateJoinRoom"
