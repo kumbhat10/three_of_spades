@@ -283,8 +283,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 @SuppressLint("SetTextI18n")
                 override fun onTick(millisUntilFinished: Long) {
                     //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-                    findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
-                    findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
+                    progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
+                    textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
                         .toString() + "s"
                 }
 
@@ -852,15 +852,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun displayPartnerIcon() {
-        //        for (i in 0 until nPlayers) { // first reset background and animation of partner icon
-        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).clearAnimation()
-        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
-        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).setImageResource(R.drawable.partnericon)
-        //        }
-        //        if (bidder != 0) { // show single person icon next to bidder
-        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
-        //            findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
-        //        }
         if (buFound1 == 1 && buPlayer1 != 8) {
             findViewById<ImageView>(refIDMappedPartnerIconImageView[buPlayer1 - 1]).visibility = View.VISIBLE
             findViewById<ImageView>(refIDMappedPartnerIconImageView[buPlayer1 - 1]).setImageResource(R.drawable.partnericon)
@@ -1326,7 +1317,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private fun autoTrumpSelect() {
         val tempView = View(applicationContext)
-        tempView.tag = listOf("d", "h", "c", "s", "h", "d", "s", "c").random()
+        tempView.tag = listOf("d", "h", "c", "s").random()
         Handler(Looper.getMainLooper()).postDelayed({ onTrumpSelectionClick(tempView) }, timeAutoTrumpAndPartner.random())
     }
 

@@ -3,17 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/Black"
-    android:elevation="@dimen/_14sdp">
+    android:layout_height="match_parent">
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_57sdp"
-        android:layout_marginEnd="@dimen/_7sdp"
         android:layout_marginBottom="0dp"
         app:shimmer_auto_start="true"
         app:shimmer_colored="true"
@@ -40,9 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/_7sdp"
-        android:layout_marginTop="@dimen/_57sdp"
-        android:layout_marginEnd="@dimen/_7sdp"
         android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/game_screen_table_core"
@@ -222,6 +214,21 @@
             android:tag="c" />
     </LinearLayout>
 
+
+    <TextView
+        android:id="@+id/infoExtra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/horScrollPartnerSelect1"
+        android:layout_alignStart="@+id/horScrollPartnerSelect1"
+        android:gravity="start|center"
+        android:clickable="true"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_11ssp" />
 
     <TextView
         android:layout_marginStart="@dimen/_1sdp"

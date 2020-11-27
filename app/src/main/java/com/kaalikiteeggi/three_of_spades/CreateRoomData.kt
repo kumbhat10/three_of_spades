@@ -15,9 +15,6 @@ class CreateRoomData(private val userBasicInfo:UserBasicInfo) {
     private fun deriveValue(value:Int, randPercentage:Int): Int {
         return round((value/100*randPercentage).toDouble()).toInt()
     }
-    private fun nearestTen(value:Any):Int{
-        return (round(value.toString().toDouble()/10)*10).toInt()
-    }
 
     private fun randomUser(index:Int=0):UserBasicInfo{
         val randPercentage = randPercentage()
@@ -92,5 +89,7 @@ class CreateRoomData(private val userBasicInfo:UserBasicInfo) {
         "PJ" to 7,
         "n" to 7)
 
-
+}
+fun nearestTen(value:Any):Int{
+    return (round(value.toString().toDouble()/10)*10).toInt()
 }

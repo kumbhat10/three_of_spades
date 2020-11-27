@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/blackglassglossy"
+    android:background="@drawable/shine_user_rank_bkgd"
+    android:layout_marginBottom="@dimen/_2sdp"
     android:clickable="true"
     android:focusable="true"
     android:paddingTop="@dimen/_10sdp"
-    android:paddingStart="@dimen/_6sdp"
-    android:paddingEnd="@dimen/_6sdp"
+    android:paddingStart="@dimen/_3sdp"
+    android:paddingEnd="1dp"
     android:paddingBottom="@dimen/_10sdp"
     android:theme="@style/Theme.App">
 

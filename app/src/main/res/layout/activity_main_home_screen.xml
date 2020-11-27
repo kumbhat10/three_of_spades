@@ -85,20 +85,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/removeAds" />
 
-    <!--    <pl.droidsonroids.gif.GifImageView-->
-    <!--        android:id="@+id/helpUs"-->
-    <!--        android:layout_width="@dimen/_57sdp"-->
-    <!--        android:layout_height="@dimen/_57sdp"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/rateUs"-->
-    <!--        android:layout_alignParentEnd="true"-->
-    <!--        android:layout_marginTop="@dimen/_4sdp"-->
-    <!--        android:layout_marginEnd="0dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:foreground="?attr/selectableItemBackgroundBorderless"-->
-    <!--        android:onClick="trainingStart"-->
-    <!--        android:src="@drawable/brain"-->
-    <!--        android:visibility="gone"/>-->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/helpUs"
+            android:layout_width="@dimen/_57sdp"
+            android:layout_height="@dimen/_57sdp"
+            app:layout_constraintTop_toBottomOf="@+id/rateUsIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/mhsIconsGap"
+            android:layout_marginEnd="@dimen/mhsIconsMargin"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:onClick="trainingStart"
+            android:text="Train"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
+            android:gravity="center"
+            android:background="@drawable/blackcirclebutton"
+            android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/playerStats"
@@ -917,7 +921,6 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ContentDescription" />
 
-
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/versionCode"
         android:layout_width="wrap_content"
@@ -931,12 +934,11 @@
         app:layout_constraintBottom_toBottomOf="@id/developerCreditsButton"
         app:layout_constraintEnd_toEndOf="@id/developerCreditsButton"/>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rankStats"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#000000"
+        android:background="@drawable/game_screen_table_blue"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
@@ -948,13 +950,13 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/rankTitle"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:background="@drawable/blacksquarebutton"
+            android:layout_height="@dimen/_43sdp"
+            android:background="@drawable/yellow_curve_banner"
             android:fontFamily="@font/almendra_display"
             android:gravity="center"
             android:src="@drawable/top30"
             android:text="@string/top_players"
-            android:textColor="@color/icon_yellow"
+            android:textColor="@color/Black"
             android:textSize="@dimen/_24ssp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -987,11 +989,12 @@
             android:id="@+id/tabRank"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/blackglassglossy"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/space4"
+            android:background="@drawable/shine_chat_background"
             app:tabGravity="fill"
+            app:tabIndicatorHeight="@dimen/_4sdp"
             app:tabPaddingBottom="@dimen/_3sdp"
             app:tabPaddingTop="@dimen/_3sdp"
             app:tabSelectedTextColor="@color/icon_yellow"
@@ -1001,7 +1004,7 @@
             android:id="@+id/viewPager2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginTop="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

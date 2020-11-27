@@ -2,6 +2,7 @@
 
 package com.kaalikiteeggi.three_of_spades
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -15,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.google.firebase.database.ktx.database
@@ -22,7 +24,7 @@ import com.google.firebase.ktx.Firebase
 import kotlin.math.pow
 
 @Suppress("DEPRECATION")
-class TrainActivity : Activity() {
+class TrainActivity : AppCompatActivity() {
     private lateinit var soundUpdate: MediaPlayer
     private lateinit var soundError: MediaPlayer
     private lateinit var vibrator:Vibrator
@@ -58,12 +60,13 @@ class TrainActivity : Activity() {
         setContentView(R.layout.activity_train)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
         bidText = findViewById(R.id.BidValue)
+        toast = Toast.makeText(applicationContext,"",Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER,0,20)
         Handler(Looper.getMainLooper()).post {
             soundUpdate = MediaPlayer.create(applicationContext,R.raw.update)
             soundError = MediaPlayer.create(applicationContext,R.raw.error)
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            toast = Toast.makeText(applicationContext,"",Toast.LENGTH_SHORT)
-            toast.setGravity(Gravity.CENTER,0,20)
+
         }
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,typedValue, true) // for click effect on self playing cards
         cardsDrawable = PlayingCards().cardsDrawable4
@@ -97,6 +100,7 @@ class TrainActivity : Activity() {
         }
     })
 }
+    @SuppressLint("SetTextI18n")
     private fun nextCardsSet(){
         if(currentCardsSet == 4 || currentCardsSet == 0){
             cardsShuffled =  (0..51).shuffled()
@@ -104,6 +108,9 @@ class TrainActivity : Activity() {
         }
         currentCardsSet += 1
         cardsInHand = (cardsShuffled.slice((13*(currentCardsSet-1)) until 13*currentCardsSet).sortedBy{it}).toMutableList()
+        val cardsInHandStats = CardsInHandStats(cardsInHand)
+        findViewById<TextView>(R.id.infoExtra).text = cardsInHandStats.vEachSuits.toString() + "\n" + cardsInHandStats.trumpChoosen + "\n" + cardsInHandStats.otherSuitPoints.toString()+ "\n" + cardsInHandStats.bidChoosen.toString()
+        bidText.text = cardsInHandStats.bidChoosen.toString()
         findViewById<TextView>(R.id.currentState).text = "Hands State: $currentCardsSet"
         displaySelfCards()
 }
@@ -114,7 +121,7 @@ class TrainActivity : Activity() {
         }else selectTrump("x")
     }
 
-    fun selectTrump(trumpSelection: String){
+    private fun selectTrump(trumpSelection: String){
         trump = trumpSelection
         findViewById<ImageView>(R.id.imageViewTrumpHearts).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_grey_settings))
         findViewById<ImageView>(R.id.imageViewTrumpSpades).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_grey_settings))
@@ -135,8 +142,9 @@ class TrainActivity : Activity() {
             )
         }
     }
+    @Suppress("ConstantConditionIf")
     fun pass(view: View){
-        if(partnerCard == -1 || trump == "x" ) {
+        if(false){ //(partnerCard == -1 || trump == "x" ) {
             vibrationStart()
             soundError.start()
             toast.setText("Partner Card or trump not choosen")
@@ -144,7 +152,7 @@ class TrainActivity : Activity() {
         }
         else {
             val data = "${cardsInHandToHex()};$bidValue;$trump;$partnerCard"
-            myRefTrainingData.push().setValue(data)
+//            myRefTrainingData.push().setValue(data)
             nextCardsSet()
             if (partnerCard >= 0) findViewById<ImageView>(partnerCard).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
             partnerCard = -1

@@ -83,6 +83,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var createRoomStatus = false
     private var offlineRoomCreate = true
     private var onceAdWatched = true
+    private val today = CreateUser().todayDate
+    private val todayClass = GetFormattedDate(dateInput = today)
 
     private var errorJoinRoomID = false
     private var backButtonPressedStatus = false
@@ -92,9 +94,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var rankWindowStatus = false
     private var rankAllTimeSetupDone = false
     private var rankDailySetupDone = false
+    private val limitFetchOnceAT = 15L
     private val limitFetchOnce = 10L
-    private var maxItemsFetchAT = 70
-    private var maxItemsFetchDaily = 50
+    private var lastSeenLimitAT = getChangedDate(today, -7)
+    private var maxItemsFetchAT = 50
+    private var maxItemsFetchDaily = 80
     private var isScrollingAllTime = false
     private var isScrollingDaily = false
     private lateinit var querySnapAT: QuerySnapshot
@@ -111,7 +115,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     private var settingsWindowStatus = false
     private var playerStatsWindowStatus = true
-    private var trainAccess = false
+    private var trainAccess = true
     private var onlineGameAllowed = false
     private var onlineGameAllowedM = "Cannot reach server\nCheck your network"
     private var offlineGameAllowed = true
@@ -136,8 +140,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var premiumStatus = false
     private var newUser = true
     private var rated = false
-    private val today = CreateUser().todayDate
-    private val todayClass = GetFormattedDate(dateInput = today)
     private var consecutiveDay = 1
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
@@ -226,6 +228,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             buildCustomTabIntent()
             createIntentInvite()
             setupBillingClient()
+            if (BuildConfig.DEBUG) helpUs.visibility = View.VISIBLE
             anim(coinIcon, R.anim.anim_scale_appeal)
         })
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
@@ -1251,19 +1254,19 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 //        toast.show()
     }
 
-//    fun trainingStart(view: View) {
-//        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-//        if (trainAccess) {
-//            maskAllLoading.visibility = View.VISIBLE
-//            loadingText.text = getString(R.string.startTrain)
-//                    if (soundStatus) SoundManager.getInstance().playUpdateSound() //Pass username and current activity alias to be able to come back with same info
-//            startActivity(Intent(applicationContext, TrainActivity::class.java))
-//            overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
-//            Handler(Looper.getMainLooper()).postDelayed({ finish() }, 1000)
-//        } else {
-//            toastCenter("Sorry You don't have access")
-//        }
-//    }
+    fun trainingStart(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        if (trainAccess) {
+            maskAllLoading.visibility = View.VISIBLE
+            loadingText.text = getString(R.string.startTrain)
+                    if (soundStatus) SoundManager.getInstance().playUpdateSound() //Pass username and current activity alias to be able to come back with same info
+            startActivity(Intent(applicationContext, TrainActivity::class.java))
+            overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
+            Handler(Looper.getMainLooper()).postDelayed({ finish() }, 1000)
+        } else {
+            toastCenter("Sorry You don't have access")
+        }
+    }
 
     private fun ranking() {
         rankStats.visibility = View.VISIBLE
@@ -1321,13 +1324,13 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             adapter = ListViewAdapter(this, userArrayList)
             recyclerView.adapter = adapter
 
-            refUsersData.whereGreaterThanOrEqualTo("sc",5000).orderBy("sc", Query.Direction.DESCENDING).limit(limitFetchOnce).get()
+            refUsersData.whereGreaterThanOrEqualTo("sc",5000).orderBy("sc", Query.Direction.DESCENDING).limit(limitFetchOnceAT).get()
                 .addOnSuccessListener { querySnapshot ->
                     if(querySnapshot.isEmpty) maxItemsFetchAT = -1
                     rankProgress.off()
                     querySnapAT = querySnapshot
                     rankProgress.visibility = View.GONE
-                    userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT))
+                    userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT))
                     adapter.notifyDataSetChanged()
                     loadingProgressBar.visibility = View.GONE
                     anim(recyclerView, R.anim.slide_down_in)
@@ -1342,12 +1345,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                             if (itemCount < maxItemsFetchAT && isScrollingAllTime && layoutManager.findLastCompletelyVisibleItemPosition() == itemCount - 1) {
                                 isScrollingAllTime = false
                                 loadingProgressBar.visibility = View.VISIBLE
-                                refUsersData.whereGreaterThanOrEqualTo("sc",5000).orderBy("sc", Query.Direction.DESCENDING).limit(limitFetchOnce)
-                                    .startAfter(userArrayList.last().score).get()
+                                refUsersData.whereGreaterThanOrEqualTo("sc",5000).orderBy("sc", Query.Direction.DESCENDING).limit(limitFetchOnceAT)
+                                    .startAfter(querySnapAT.last()).get()
                                     .addOnSuccessListener { querySnapshot ->
                                         if(querySnapshot.isEmpty) maxItemsFetchAT = -1
                                         querySnapAT = querySnapshot
-                                        userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT))
+                                        userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT))
                                         adapter.notifyDataSetChanged()
                                         loadingProgressBar.visibility = View.GONE
                                     }
@@ -1356,7 +1359,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     })
                 }
         }
-
     }
 
     private fun handleDailyView() {
@@ -1364,6 +1366,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             loadingProgressBar.visibility = View.VISIBLE
             logFirebaseEvent("Ranking", 1, "Requested")
             rankDailySetupDone = true
+            rankProgress.visibility = View.VISIBLE
             rankProgress.on()
             recyclerView1 = (supportFragmentManager.findFragmentByTag("f0")?.view as View).rankGallery
             layoutManager1 = LinearLayoutManager(this)

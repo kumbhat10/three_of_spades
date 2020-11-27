@@ -52,10 +52,10 @@ fun extractUserData(document: DocumentSnapshot, index:Int=0): UserBasicInfo {
 	return UserBasicInfo(empty = false,index= index,uid = uid, name = name, score = score, scoreDaily = scoreDaily, photoURL = photoURL, played = played, playedDaily = playedDaily, lastSeen = lastSeen, joinDate= joinDate, won = won, wonDaily = wonDaily, bid = bid, bidDaily = bidDaily)
 }
 
-fun createUserArrayFromSnapshot(querySnapshot: QuerySnapshot): ArrayList<UserBasicInfo> {
+fun createUserArrayFromSnapshot(querySnapshot: QuerySnapshot, filterLastSeen:Boolean = false, lsdLimit:Int = 0): ArrayList<UserBasicInfo> {
 	val tempArray = ArrayList<UserBasicInfo>()
 	for (document in querySnapshot) {
-		tempArray.add(extractUserData(document))
+		if(!(filterLastSeen && document["LSD"].toString().toInt() < lsdLimit)) tempArray.add(extractUserData(document))
 	}
 	return tempArray
 }
