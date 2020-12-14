@@ -12,7 +12,7 @@ if (!project.hasProperty("disable-performance-plugin")) {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
     defaultConfig {
         ext.alwaysUpdateBuildId = false
         applicationId "com.kaalikiteeggi.three_of_spades"
@@ -89,15 +89,15 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.google.guava:guava:29.0-android' // dont user 29.0-jre as it clashes with firebase SDK and not supported for android 6
-    implementation 'com.google.android.play:core:1.8.3'
+    implementation 'com.google.android.play:core:1.9.0'
     implementation 'com.google.android.play:core-ktx:1.8.1'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.android.gms:play-services-ads:19.5.0'
+    implementation 'com.google.android.gms:play-services-ads:19.6.0'
     implementation 'com.google.android.gms:play-services-games:21.0.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
 
-    implementation 'androidx.browser:browser:1.2.0'
+    implementation 'androidx.browser:browser:1.3.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-beta01"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'

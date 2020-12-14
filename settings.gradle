@@ -1,3 +1,2 @@
 include ':app'
 rootProject.name = "three_of_spades"
-include ':sinch-android-rtc-3.17.4'

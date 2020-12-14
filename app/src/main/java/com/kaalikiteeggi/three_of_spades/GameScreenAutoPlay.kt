@@ -156,9 +156,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private var delayWaitGameMode6 = 3500L
     private var delayDeclareWinner = 1000L
-    private var timeCountdownPlayCard = 15000L
+    private var timeCountdownPlayCard = 20000L
     private var timeAutoPlayCard = listOf<Long>(700, 850, 600, 700, 1000, 600, 1000)
-    private var timeCountdownBid = 15000L
+    private var timeCountdownBid = 20000L
     private var timeAutoBid = listOf<Long>(1650, 1400, 1500, 1800)
     private var speedAutoBid = 1.1f
     private var timeAutoTrumpAndPartner = listOf<Long>(1700, 2000, 1700)
@@ -349,11 +349,12 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 3000)
                         if (playerTurn.value!! != fromInt) {
                             centralText("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card")
-                            speak("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
+                            if(nGamesPlayed < 5) speak("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
+                            else speak("${playerName(bidder)} will play first ", speed = 1f)
                         }
                         if (playerTurn.value!! == fromInt) {
                             centralText("You will have ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card")
-                            speak("You will have ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
+                            speak("You will get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1f)
                         }
                     } else {
                         displaySelfCards(animations = false)
@@ -493,19 +494,19 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private fun updateTimeAutoPlay() {
         timeAutoPlayCard = when {
-            nGamesPlayed < 3 -> listOf(700, 900, 800)
-            nGamesPlayed < 6 -> listOf(600, 650, 600, 500)
-            nGamesPlayed < 12 -> listOf(500, 450, 550, 400)
-            nGamesPlayed < 15 -> listOf(400, 350, 400, 300, 250)
-            else -> listOf(350, 250, 300, 300)
+            nGamesPlayed < 5 -> listOf(1000, 900, 1100, 1200, 800)
+            nGamesPlayed < 10 -> listOf(600, 900, 650, 800, 700, 900 )
+            nGamesPlayed < 15 -> listOf(500, 550, 600, 700, 800)
+            nGamesPlayed < 30 -> listOf(400, 350, 400, 300)
+            else -> listOf(350, 250, 300, 300, 200)
         }
         timeAutoBid = when {
-            nGamesPlayed < 4 -> listOf(1400, 1500)
-            nGamesPlayed < 10 -> listOf(1300, 1400)
-            else -> listOf(1300)
+            nGamesPlayed < 10 -> listOf(1600, 1700, 1800)
+            nGamesPlayed < 20 -> listOf(1600, 1400, 1500)
+            else -> listOf(1400)
         }
         speedAutoBid = when {
-            nGamesPlayed < 4 -> 1.1f
+            nGamesPlayed < 4 -> 1.05f
             nGamesPlayed < 10 -> 1.5f
             else -> 1.7f
         }
@@ -616,8 +617,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
         for (i in 0..nPlayers) {
             viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).text = data[i].toString()
-            if (!upDateHeader) viewTemp.findViewById<TextView>(refIDValesTextViewScore[i])
-                .setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._12ssp))
+            if (!upDateHeader) viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._12ssp))
+//            else viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._13ssp))
             if (i > 0 && !upDateHeader && data[i].toString().toInt() < 0) {
                 //                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
                 viewTemp.findViewById<TextView>(refIDValesTextViewScore[i])
@@ -871,16 +872,16 @@ class GameScreenAutoPlay : AppCompatActivity() {
             findViewById<TextView>(R.id.textViewTimer).text = "10s"
             //            findViewById<ProgressBar>(R.id.progressbarTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
             //            findViewById<TextView>(R.id.textViewTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-            if (task == "Bidding") countDownBidding.start()
-            if (task == "PlayCard") countDownPlayCard.start()
+            if (task == "Bidding" && this::countDownBidding.isInitialized) countDownBidding.start()
+            if (task == "PlayCard" && this::countDownPlayCard.isInitialized) countDownPlayCard.start()
         } else if (purpose == "cancel") {
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
             findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
             findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
             findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
             findViewById<TextView>(R.id.textViewTimer).clearAnimation()
-            if (task == "Bidding") countDownBidding.cancel()
-            if (task == "PlayCard") countDownPlayCard.cancel()
+            if (task == "Bidding" && this::countDownBidding.isInitialized) countDownBidding.cancel()
+            if (task == "PlayCard" && this::countDownPlayCard.isInitialized) countDownPlayCard.cancel()
         }
     }
 
@@ -1129,8 +1130,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).text = "${cardsPoints.elementAt(x)}"
                 if (animations) viewTemp.findViewById<TextView>(R.id.textViewDisplayCard)
                     .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
-                if (animations) viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard)
-                    .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
+//                if (animations) viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
             } else {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).visibility = View.GONE
             }

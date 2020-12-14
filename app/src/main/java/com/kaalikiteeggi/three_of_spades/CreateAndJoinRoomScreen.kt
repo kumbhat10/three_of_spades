@@ -8,14 +8,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.*
 import android.speech.tts.TextToSpeech
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import cat.ereza.customactivityoncrash.config.CaocConfig
@@ -30,7 +29,6 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
-import kotlinx.android.synthetic.main.activity_splash_screen.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -171,10 +169,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
 	}
 
-	private fun createDynamicLink(){
-		shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" +
-				"&apn=${getString(R.string.packageName)}&amv=54" //&ofl=${getString(R.string.websiteLink)}"
-	}
+
 
 	private fun updateRoomInfoOffline() {
 		userArrayList.add(0, UserBasicInfo(empty = false, index = 0, name = selfName, score = totalCoins, photoURL = photoURL, played = userStatsTotal[0], won = userStatsTotal[1], bid = userStatsTotal[2]))
@@ -516,15 +511,23 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		}
 	} // remove snapshot listener
 
+	private fun createDynamicLink(){
+		shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" +
+				"&apn=${getString(R.string.packageName)}" +
+				"&amv=54" +
+				//				"&st=3%20of%20Spades" +
+				"&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID +
+				"&si=https://tinyurl.com/3ofspade" //https://i.pinimg.com/564x/f9/fd/d9/f9fdd9bf6fbb9f00d945e1b22b293aea.jpg"
+	}
+
 	fun shareRoomInfo(view: View) {
 		if(!offline) {
 			imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.click_press))
 			soundUpdate.start()
-			val message = "${Emoji().gamePlayed}${Emoji().trophy}    Click to join my Room => $roomID    ${Emoji().score}${Emoji().money}" + "\n\n$shareLink"
+			val message = "${Emoji().gamePlayed}${Emoji().trophy} Click below => $roomID ${Emoji().score}${Emoji().money}" + "\n\n$shareLink"
 			val intent = Intent()
 			intent.action = Intent.ACTION_SEND
 			intent.type = "text/plain"
-			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 			intent.putExtra(Intent.EXTRA_TITLE, "Click to join my Room => $roomID")
 			intent.putExtra(Intent.EXTRA_TEXT, message)
 			try {

@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <GridView
-        android:id="@+id/mainIcon"
+        android:id="@+id/mainIconGridView"
         android:layout_width="@dimen/gridWidth"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_20sdp"

@@ -23,9 +23,11 @@
     <string name="scheme">http</string>
     <string name="scheme1">https</string>
     <string name="hostJoinRoom">jo.in</string>
+    <string name="inviteHost">invite.in</string>
     <string name="hostFirebaseDL">kaaliteeri.page.link</string>
     <string name="packageName">com.kaalikiteeggi.three_of_spades</string>
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
+    <string name="inviteLink">https://kaaliteeri.page.link/invite</string>
     <string name="websiteLink">https://sites.google.com/view/kaali-ki-teeggi/</string>
     <string name="testDeviceId">3872102D27DCB017E465C646FA620D3C</string>
 

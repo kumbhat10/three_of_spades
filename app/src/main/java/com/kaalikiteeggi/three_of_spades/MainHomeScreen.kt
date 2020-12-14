@@ -13,6 +13,8 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
 import android.speech.tts.TextToSpeech
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -47,7 +49,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -65,7 +66,7 @@ import kotlin.math.min
 import kotlin.math.round
 import kotlin.random.Random
 
-class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
+class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTouchListener {
     //    region Initialization
     private var requestRatingAfterDays = 1 //dummy
     private var ratingRequestDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
@@ -85,7 +86,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
     private var onceAdWatched = true
     private val today = CreateUser().todayDate
     private val todayClass = GetFormattedDate(dateInput = today)
-
+    private lateinit var swipeListener: GestureDetector
     private var errorJoinRoomID = false
     private var backButtonPressedStatus = false
     private var joinRoomWindowStatus = false
@@ -205,6 +206,26 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             5 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.yellowburst)
         }
         checkJoinRoom(intent)
+        swipeListener = GestureDetector(this, object: OnSwipeListener(){
+            override fun onSwipe(direction: Direction?): Boolean {
+                when(direction){
+                    Direction.Up -> {
+                        if(playerStatsWindowStatus){
+                            playerStatsWindowStatus = false
+                            openClosePlayerStatsTask("close")
+                        }
+                    }
+                    Direction.Down -> {
+                        if(!playerStatsWindowStatus){
+                            if (soundStatus) SoundManager.getInstance().playUpdateSound()
+                            playerStatsWindowStatus = true
+                            openClosePlayerStatsTask("open")
+                        }
+                    }
+                }
+                return true
+            }
+        })
         mainIconGridDisplay()
         newUser = intent.getBooleanExtra("newUser", true)
         toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
@@ -226,12 +247,56 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             enterText() // press enter to join room
             versionCode.text = "V: " + packageManager.getPackageInfo(packageName, 0).versionName.toString()
             buildCustomTabIntent()
-            createIntentInvite()
+//            createIntentInvite()
             setupBillingClient()
             if (BuildConfig.DEBUG) helpUs.visibility = View.VISIBLE
             anim(coinIcon, R.anim.anim_scale_appeal)
         })
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        swipeListener.onTouchEvent(event)
+        return super.onTouchEvent(event)
+    }
+
+    private fun mainIconGridDisplay() {
+        mainIconGridView.adapter = IconAdapter(applicationContext, setDataListMHS())
+        mainIconGridView.visibility = View.VISIBLE
+        mainIconGridView.setOnItemClickListener { parent, view, position, id ->
+            if (soundStatus) SoundManager.getInstance().playUpdateSound()
+            view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+            when(position){
+                0-> createRoomWindowOpen()
+                1-> joinRoomWindowOpen()
+                2-> ranking()
+                3-> intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl)) // howToPlay()
+                4-> inviteFriends()
+                5-> openSettingsWindow()
+            }
+        }
+
+        mainIconGridView.setOnTouchListener(this)
+        // Attach Text watcher to room ID input - For resetting error hint on re-entering roomID
+        roomIDInput.doOnTextChanged { _, _, _, _ ->
+            if(roomIDInputLayout.error != null && !errorJoinRoomID) {
+                roomIDInputLayout.error = null
+                roomIDInputLayout.helperText = getString(R.string.joinHelper)
+            }else if(errorJoinRoomID) {
+                errorJoinRoomID = false
+            }
+        }
+    }
+
+    private fun setDataListMHS(): ArrayList<DailyRewardItem> {
+        val arrayList = ArrayList<DailyRewardItem>()
+        arrayList.add(DailyRewardItem(R.drawable.joystick, getString(R.string.play)))
+        arrayList.add(DailyRewardItem(R.drawable.joinroom, getString(R.string.joinRoom)))
+        arrayList.add(DailyRewardItem(R.drawable.ranking, getString(R.string.ranking)))
+        arrayList.add(DailyRewardItem(R.drawable.howtoplay, getString(R.string.howtoplay)))
+        arrayList.add(DailyRewardItem(R.drawable.invite, getString(R.string.invite)))
+        arrayList.add(DailyRewardItem(R.drawable.settings, getString(R.string.settings)))
+        return arrayList
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -241,17 +306,15 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
 
     private fun checkJoinRoom(intent: Intent?) {
         if (intent != null) {
-            if (intent.data?.host == getString(R.string.hostFirebaseDL)) {
+            if (intent.data?.host == getString(R.string.hostFirebaseDL)) { //opened directly in app
                 if (intent.data?.query?.contains("link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/")!!) {
                     roomID = intent.data?.query?.split("link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/")?.get(1)?.split("&")?.get(0).toString()
-//                    toastCenter("Opened directly $roomID")
                     joinRoomPending = true
                     if(userDataFetched) autoJoinRoom()
                 }
             }
-            if (intent.data?.host == getString(R.string.hostJoinRoom)) {
+            if (intent.data?.host == getString(R.string.hostJoinRoom)) { // re-routed from browser/chrome
                 roomID = intent.data?.lastPathSegment.toString()
-//                toastCenter("Opened through chrome server $roomID")
                 joinRoomPending = true
                 if(userDataFetched) autoJoinRoom()
             }
@@ -405,45 +468,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             loadRewardAd()
             if (premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder().build())
         }
-    }
-
-    private fun mainIconGridDisplay() {
-//        dailyRewardWindowDisplay()
-        val gridView = mainIcon
-        gridView.adapter = IconAdapter(applicationContext, setDataListMHS())
-        gridView.visibility = View.VISIBLE
-        gridView.setOnItemClickListener { parent, view, position, id ->
-            if (soundStatus) SoundManager.getInstance().playUpdateSound()
-            view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-            when(position){
-                0-> createRoomWindowOpen()
-                1-> joinRoomWindowOpen()
-                2-> ranking()
-                3-> intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl)) // howToPlay()
-                4-> inviteFriends()
-                5-> openSettingsWindow()
-            }
-        }
-        // Attach Text watcher to room ID input - For resetting error hint on re-entering roomID
-        roomIDInput.doOnTextChanged { _, _, _, _ ->
-            if(roomIDInputLayout.error != null && !errorJoinRoomID) {
-                roomIDInputLayout.error = null
-                roomIDInputLayout.helperText = getString(R.string.joinHelper)
-            }else if(errorJoinRoomID) {
-                errorJoinRoomID = false
-            }
-        }
-    }
-
-    private fun setDataListMHS(): ArrayList<DailyRewardItem> {
-        val arrayList = ArrayList<DailyRewardItem>()
-        arrayList.add(DailyRewardItem(R.drawable.joystick, getString(R.string.play)))
-        arrayList.add(DailyRewardItem(R.drawable.joinroom, getString(R.string.joinRoom)))
-        arrayList.add(DailyRewardItem(R.drawable.ranking, getString(R.string.ranking)))
-        arrayList.add(DailyRewardItem(R.drawable.howtoplay, getString(R.string.howtoplay)))
-        arrayList.add(DailyRewardItem(R.drawable.invite, getString(R.string.invite)))
-        arrayList.add(DailyRewardItem(R.drawable.settings, getString(R.string.settings)))
-        return arrayList
     }
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
@@ -701,7 +725,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 checkPendingPurchases()
             }
-
             override fun onBillingServiceDisconnected() {
                 //                toastCenter("Billing Service was disconnected")
                 setupBillingClient()
@@ -800,7 +823,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                     0 -> watchVideo.setImageResource(R.drawable.watch_ad_100)
                     1 -> watchVideo.setImageResource(R.drawable.watch_ad_250)
                     2 -> watchVideo.setImageResource(R.drawable.watch_ad_500)
-                    else -> watchVideo.setImageResource(R.drawable.watch_ad_500)
+                    3 -> watchVideo.setImageResource(R.drawable.watch_ad_1000)
+                    else -> watchVideo.setImageResource(R.drawable.watch_ad_1000)
                 }
                 watchVideo.visibility = View.VISIBLE
                 anim(watchVideo, R.anim.watch_video_reward)
@@ -858,7 +882,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
                         0 -> 100
                         1 -> 250
                         2 -> 500
-                        else -> 500
+                        3 -> 1000
+                        else -> 1000
                     }
                     countRewardWatch += 1
                     totalCoins += rewardAmount  // reward with 500 coins for watching video
@@ -885,10 +910,15 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         if(view.id != R.id.backgroundmhs) view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         playerStatsWindowStatus = !playerStatsWindowStatus   // flip always - change the status on click
         if (playerStatsWindowStatus) {
-                    if (soundStatus) SoundManager.getInstance().playUpdateSound()
+            if (soundStatus) SoundManager.getInstance().playUpdateSound()
+            openClosePlayerStatsTask("open")
+        } else openClosePlayerStatsTask("close")
+    }
+    fun openClosePlayerStatsTask(task:String) {
+        if (task=="open") {
             playerStats.visibility = View.VISIBLE
             anim(playerStats, R.anim.slide_down_player_stats)
-        } else {
+        } else if(task=="close") {
             anim(playerStats, R.anim.slide_up_player_stats)
             playerStats.visibility = View.GONE
         }
@@ -1424,35 +1454,50 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener {
         }, 190)
     }
 
+    private fun createDynamicLink(){
+        val shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.inviteHost)}" +
+                "&apn=${getString(R.string.packageName)}" //&ofl=${getString(R.string.websiteLink)}"
+    }
+
     private fun inviteFriends() {
         try {
+            val message = "Hey, Let's play 3 of Spades (Kaali ki Teeggi) online. \n\nClick below \n${
+                //            getString(R.string.playStoreLink)
+                getString(R.string.inviteLink)
+            }\n"
+            val intentInvite = Intent()
+            intentInvite.action = Intent.ACTION_SEND
+            intentInvite.type = "text/plain"
+            intentInvite.putExtra(Intent.EXTRA_TITLE, "Invite friends")
+            intentInvite.putExtra(Intent.EXTRA_TEXT, message)
             startActivity(Intent.createChooser(intentInvite, "Invite friends via "))
         } catch (me: Exception) {
         }
     }
 
     private fun createIntentInvite(){
-        val compression = 0.7
-        val image = ContextCompat.getDrawable(applicationContext, R.drawable.game_screen)
-            ?.toBitmap(round(compression * 997).toInt(), round(compression * 2228).toInt(), Bitmap.Config.ARGB_8888)
-        val imagePath = File(applicationContext.getExternalFilesDir(null)
-            .toString() + "/gamescreen.jpg")
-        val fos = FileOutputStream(imagePath)
-        image?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-        fos.flush()
-        fos.close()
+//        val compression = 0.7
+//        val image = ContextCompat.getDrawable(applicationContext, R.drawable.game_screen)
+//            ?.toBitmap(round(compression * 997).toInt(), round(compression * 2228).toInt(), Bitmap.Config.ARGB_8888)
+//        val imagePath = File(applicationContext.getExternalFilesDir(null)
+//            .toString() + "/gamescreen.jpg")
+//        val fos = FileOutputStream(imagePath)
+//        image?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+//        fos.flush()
+//        fos.close()
 
-        val uri = FileProvider.getUriForFile(applicationContext, applicationContext.packageName + ".provider", imagePath)
-        val message = "Hey, Let's play this cool game 3 of Spades (Kaali ki Tiggi) online. \n\nInstall from below link \nFor Android:  \n${
-            getString(R.string.playStoreLink)
-        }\n\n For iOS: Coming soon..."
+//        val uri = FileProvider.getUriForFile(applicationContext, applicationContext.packageName + ".provider", imagePath)
+//        val shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.inviteHost)}" +
+//                "&apn=${getString(R.string.packageName)}" //&ofl=${getString(R.string.websiteLink)}"
+        val message = "Hey, Let's play 3 of Spades (Kaali ki Teeggi) online. \n\nClick below \n${
+//            getString(R.string.playStoreLink)
+            getString(R.string.inviteLink)
+        }\n"
         intentInvite = Intent()
         intentInvite.action = Intent.ACTION_SEND
-        intentInvite.type = "image/*"
-        intentInvite.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intentInvite.putExtra(Intent.EXTRA_TITLE, "Share app")
+        intentInvite.type = "text/plain"
+        intentInvite.putExtra(Intent.EXTRA_TITLE, "Invite friends")
         intentInvite.putExtra(Intent.EXTRA_TEXT, message)
-        intentInvite.putExtra(Intent.EXTRA_STREAM, uri)
     }
 
     fun buildCustomTabIntent(){

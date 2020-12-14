@@ -22,7 +22,7 @@ class CardsInHandStats (var cards:MutableList<Int>, var trump:String="S"){
 
 	private fun suitsSummary(cards:MutableList<Int>): List<List<Int>> {
 		var nSpade = 0;		var nHeart = 0;		var nClub = 0;		var nDiamond = 0
-		var nSpade0 = 0;		var nHeart0 = 0;		var nClub0 = 0;		var nDiamond0 = 0
+		var nSpade0 = 0;	var nHeart0 = 0;	var nClub0 = 0;		var nDiamond0 = 0
 		var pSpade = 0;		var pHeart = 0;		var pClub = 0;		var pDiamond = 0
 		var vSpade = 0;		var vHeart = 0;		var vClub = 0;		var vDiamond = 0
 		for(iCard in cards){

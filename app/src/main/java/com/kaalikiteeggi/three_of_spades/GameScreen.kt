@@ -1895,8 +1895,7 @@ class GameScreen : AppCompatActivity() {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).text = "${cardsPoints.elementAt(x.toInt())}"
                 if (animations) viewTemp.findViewById<TextView>(R.id.textViewDisplayCard)
                     .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
-                if (animations) imageViewDisplayCard
-                    .startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
+//                if (animations) imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
             } else {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).visibility = View.GONE
             }
