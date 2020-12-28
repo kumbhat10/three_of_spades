@@ -47,6 +47,7 @@ import com.google.firebase.ktx.Firebase
 import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_game_screen.*
+import kotlinx.android.synthetic.main.cards_item_list_partner.view.*
 import pl.droidsonroids.gif.GifImageView
 import java.text.SimpleDateFormat
 import java.util.*
@@ -1232,7 +1233,10 @@ class GameScreen : AppCompatActivity() {
         nGamesPlayed += 1
         nGamesPlayedDaily += 1
         refUsersData.document(uid)
-            .set(hashMapOf("sc" to playerCoins(from), "scd" to totalDailyCoins, "w_bot" to nGamesWon, "w_daily" to nGamesWonDaily, "b_bot" to nGamesBid, "b_daily" to nGamesBidDaily, "p_bot" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
+            .set(hashMapOf("sc" to playerCoins(from), "scd" to totalDailyCoins,
+                "w" to nGamesWon, "w_daily" to nGamesWonDaily,
+                "b" to nGamesBid, "b_daily" to nGamesBidDaily,
+                "p" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
     }
 
     private fun createScoreTableHeader(): List<String> {
@@ -1467,7 +1471,7 @@ class GameScreen : AppCompatActivity() {
             var t2 = 0
             if (buFound1 != 0) t1 = pointsList[buPlayer1 - 1]
             if (nPlayers7 && buFound2 != 0 && buPlayer1 != buPlayer2) t2 = pointsList[buPlayer2 - 1] // if not same partners then only add other points
-            bidTeamScore = pointsList[bidder - 1] + t1 + t2
+            if(bidder>0) bidTeamScore = pointsList[bidder - 1] + t1 + t2
 
             for (i in 0 until nPlayers) {
                 val j = i + 1
@@ -1486,7 +1490,7 @@ class GameScreen : AppCompatActivity() {
             var tt2 = 0
             if (buFound1 == 1) tt1 = pointsList[buPlayer1 - 1]
             if (nPlayers7 && buFound2 == 1 && buPlayer1 != buPlayer2) tt2 = pointsList[buPlayer2 - 1] // if not same partners then only add other player points
-            val bidTeamScoreFinal = pointsList[bidder - 1] + tt1 + tt2 // total score of bid team
+            val bidTeamScoreFinal = if(bidder>0) pointsList[bidder - 1] + tt1 + tt2 else tt1 + tt2 // total score of bid team
             if (nPlayers4) decideGameWinnerTeam4(bidTeamScoreFinal, totalGamePoints = pointsList.sum())
             else decideGameWinnerTeam7(bidTeamScoreFinal, totalGamePoints = pointsList.sum())
         }
@@ -1578,13 +1582,13 @@ class GameScreen : AppCompatActivity() {
 //            toastCenter("Game Over: Defender team Won \n         Bidder team Lost")
             centralText("Game Over: Defender team Won \n         Bidder team Lost")
 
-            if (from == "p$bidder" || from == "p$buPlayer1") {
+            if (fromInt == bidder || fromInt == buPlayer1) {
                 speak("Sorry Your team lost")
             } else {
                 speak("Well done!! Your team did it")
             }
 
-            if ("p$bidder" == from) { // bidder will change game state to 6
+            if (bidder == fromInt) { // bidder will change game state to 6
                 val pointsListTemp = mutableListOf(gameNumber, bidValue, bidValue, bidValue, bidValue)
                 pointsListTemp[bidder] = -1 * bidValue * 2
                 pointsListTemp[buPlayer1] = -bidValue
@@ -1619,7 +1623,7 @@ class GameScreen : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedPartnerIconImageView[buPlayer2 - 1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_big_fast))
             }
         }
-        if (gameState == 5) updatePlayerScoreInfo(ptAll)
+        if (gameState == 5 && bidder != 0) updatePlayerScoreInfo(ptAll)
     }
 
     private fun countDownTimer(task: String, purpose: String = "start") {
@@ -1735,7 +1739,7 @@ class GameScreen : AppCompatActivity() {
             refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener {
                 if (gameTurn == 1) write("RO", mutableMapOf("T" to gameTurn + 1, "P" to nextTurn(fromInt), "R" to cardsSuit[cardSelected.toString()
                     .toInt()]))
-                else write("RO", mutableMapOf("T" to gameTurn + 1, "P" to nextTurn(playerTurn), "R" to trumpStart))
+                else write("RO", mutableMapOf("T" to gameTurn + 1, "P" to nextTurn(fromInt), "R" to trumpStart))
             }
             //                .addOnFailureListener{ // try again  - dummy - check if any other way could be done
             //                refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener{
@@ -1791,10 +1795,12 @@ class GameScreen : AppCompatActivity() {
         val roundCards = if (nPlayers7) listOf(ct1, ct2, ct3, ct4, ct5, ct6, ct7)
         else listOf(ct1, ct2, ct3, ct4)
         var winnerCard = roundCards[playerTurn - 1]
+        var currentCard: Int
         var startTurn = playerTurn
         for (i in 1 until nPlayers) {
             startTurn = nextTurn(startTurn)
-            if (roundCards[startTurn - 1] != 53 && winnerCard != 53) winnerCard = compareCardsForWinner(roundCards[startTurn - 1], winnerCard) // dummy check whats causes to declare round winner earlier
+            currentCard = roundCards[startTurn - 1]
+            if (currentCard != 53 && currentCard != 99 && winnerCard != 53) winnerCard = compareCardsForWinner(currentCard, winnerCard) // dummy check whats causes to declare round winner earlier
         }
         roundWinner = roundCards.indexOf(winnerCard) + 1
         animatePlayer(roundWinner)
@@ -1929,13 +1935,13 @@ class GameScreen : AppCompatActivity() {
         if (soundStatus) SoundManager.getInstance()
             .playCardCollectSound() //        soundCollectCards.start()
         if (nPlayers7) {
-            findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.VISIBLE
-            if (roundWinner > 0) findViewById<ImageView>(R.id.imageViewWinnerCenter).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
-            Handler(Looper.getMainLooper()).postDelayed({ findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.GONE }, 1000)
+            imageViewWinnerCenter.visibility = View.VISIBLE
+            if (roundWinner > 0) imageViewWinnerCenter.startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
+            Handler(Looper.getMainLooper()).postDelayed({ imageViewWinnerCenter.visibility = View.GONE }, 1000)
         } else if (nPlayers4) {
-            findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.VISIBLE
-            if (roundWinner > 0) findViewById<ImageView>(R.id.imageViewWinnerCenter_4).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
-            Handler(Looper.getMainLooper()).postDelayed({ findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.GONE }, 1000)
+            imageViewWinnerCenter_4.visibility = View.VISIBLE
+            if (roundWinner > 0) imageViewWinnerCenter_4.startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
+            Handler(Looper.getMainLooper()).postDelayed({ imageViewWinnerCenter_4.visibility = View.GONE }, 1000)
         }
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
         for (i in 0 until nPlayers) {
@@ -1956,12 +1962,12 @@ class GameScreen : AppCompatActivity() {
                 if (vibrateStatus) vibrationStart()
                 buddyImage1.setImageResource(cardsDrawablePartner[bu1])
                 buddyImage1.clearAnimation()
-                GameScreenAutoPlay().moveView(buddyImage1, findViewById(refIDMappedImageView[bidder - 1]))
+                if(bidder!=0) GameScreenAutoPlay().moveView(buddyImage1, findViewById(refIDMappedImageView[bidder - 1]))
                 findViewById<TickerView>(R.id.buddyText1).clearAnimation()
                 if (nPlayers7) {
                     findViewById<ImageView>(R.id.buddyImage2).setImageResource(cardsDrawablePartner[bu2])
                     findViewById<ImageView>(R.id.buddyImage2).clearAnimation()
-                    GameScreenAutoPlay().moveView(buddyImage2, findViewById(refIDMappedImageView[bidder - 1]))
+                    if(bidder!=0) GameScreenAutoPlay().moveView(buddyImage2, findViewById(refIDMappedImageView[bidder - 1]))
                     findViewById<TickerView>(R.id.buddyText2).clearAnimation()
                 }
                 if (nPlayers7 && bu1 == bu2) {
@@ -1999,9 +2005,9 @@ class GameScreen : AppCompatActivity() {
                 } else {  // to everyone else
                     speak("Waiting for ${playerName(bidder)} to choose partner card", speed = 1.1f)
                     if (nPlayers7) {
-                        centralText("Waiting for ${playerName(bidder)} \nto choose partners card", 0)
+                        if(bidder!=0) centralText("Waiting for ${playerName(bidder)} \nto choose partners card", 0)
                     } else {
-                        centralText("Waiting for ${playerName(bidder)} \nto choose partner card", 0)
+                        if(bidder!=0) centralText("Waiting for ${playerName(bidder)} \nto choose partner card", 0)
                     }
                 }
             }
@@ -2105,14 +2111,13 @@ class GameScreen : AppCompatActivity() {
         val inflater = LayoutInflater.from(applicationContext)
         for (x: Int in cardsIndexSortedPartner) {
             val viewTemp = inflater.inflate(R.layout.cards_item_list_partner, gallery, false)
-            viewTemp.findViewById<ImageView>(R.id.imageViewPartner)
-                .setImageResource(cardsDrawablePartner[x])
-            viewTemp.findViewById<ImageView>(R.id.imageViewPartner).tag = x.toString() //set tag to every card of its own value
-            viewTemp.findViewById<TextView>(R.id.textViewPartner).text = "D"
+            viewTemp.imageViewPartner.setImageResource(cardsDrawablePartner[x])
+            viewTemp.imageViewPartner.tag = x.toString() //set tag to every card of its own value
+            viewTemp.textViewPartner.text = "D"
             if (cardsPointsPartner.elementAt(x) != 0) {
-                viewTemp.findViewById<TextView>(R.id.textViewPartner).text = "${cardsPointsPartner.elementAt(x)} pts"
+                viewTemp.textViewPartner.text = "${cardsPointsPartner.elementAt(x)} pts"
             } else {
-                viewTemp.findViewById<TextView>(R.id.textViewPartner).visibility = View.GONE
+                viewTemp.textViewPartner.visibility = View.GONE
             } // make it invisible
             viewTemp.findViewById<ImageView>(R.id.imageViewPartner).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
             viewTemp.findViewById<ImageView>(R.id.imageViewPartner).setOnClickListener {
@@ -2151,20 +2156,20 @@ class GameScreen : AppCompatActivity() {
             }
         }
         findViewById<GifImageView>(R.id.trumpImage).clearAnimation() // main trump showing view
-        GameScreenAutoPlay().moveView(trumpImage, findViewById(refIDMappedImageView[bidder - 1]))
+        if(bidder!=0) GameScreenAutoPlay().moveView(trumpImage, findViewById(refIDMappedImageView[bidder - 1]))
 
     } // just displaying trump card
 
     private fun startTrumpSelection() {
 //        textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4)
 //        findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer44))
-        if (bidder != fromInt) {     //  show to everyone except bidder
+        if (bidder != fromInt && bidder!=0 ) {     //  show to everyone except bidder
             toastCenter("${playerName(bidder)} won the bid round")
             speak("${playerName(bidder)} won bid. Waiting to choose trump")
             centralText("Waiting for ${playerName(bidder)} \n to choose Trump", 0)
         } else { // show to bidder only
             bidNowImage.visibility = View.GONE // redundant not required really
-            centralText("Well done! ${playerName(bidder)} \n You won the bid round", 0)
+            if(bidder!=0) centralText("Well done! ${playerName(bidder)} \n You won the bid round", 0)
             speak("Well done!! Choose trump now", speed = 1.05f, queue = TextToSpeech.QUEUE_ADD)
             findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.VISIBLE
             findViewById<FrameLayout>(R.id.frameTrumpSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
@@ -2254,10 +2259,10 @@ class GameScreen : AppCompatActivity() {
                         if (bidStatus == 1 && playerTurn > 0) {  // highlight current player
                             if (playerTurn > 0) findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[playerTurn - 1]).visibility = View.VISIBLE
                         }
-                        if ("p$playerTurn" == from && (bidder != playerTurn || !bidingStarted)) {
+                        if (playerTurn == fromInt && (bidder != playerTurn || !bidingStarted)) {
                             if (bidStatus == 1) { // show bid frame and ask to bid or pass
                                 findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
-                                findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.VISIBLE // this path is ciritical
+                                findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.VISIBLE // this path is critical
                                 findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
                                 bidded = false
                                 countDownTimer("Bidding", purpose = "start")
@@ -2268,7 +2273,7 @@ class GameScreen : AppCompatActivity() {
                                 write("Bid/BT", nextTurn(fromInt))
                             }
                         }
-                        if ("p$playerTurn" == from && bidder == playerTurn && bidingStarted) { // finish bid and move to next game state
+                        if (playerTurn == fromInt && bidder == playerTurn && bidingStarted) { // finish bid and move to next game state
                             write("RO/P", bidder)  // write player turn to bidder
                             write("GS", 3) // change game state to 3 as biding is finished
                             centralText("Well done! ${playerName(bidder)} \n You won the bid round", 0)
@@ -2383,7 +2388,7 @@ class GameScreen : AppCompatActivity() {
         //        findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[bidder-1]).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_appeal_large))
 
 //        textViewBidValue.clearAnimation()
-//        findViewById<TextView>(R.id.textViewBider).clearAnimation()
+//        findViewById<TextView>(R.id.textViewBidder).clearAnimation()
         if (bidder > 0) {
             findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
             findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
@@ -2408,7 +2413,7 @@ class GameScreen : AppCompatActivity() {
 
     private fun animateElements() {
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
-//        findViewById<TextView>(R.id.textViewBider).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
+//        findViewById<TextView>(R.id.textViewBidder).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_infinite_700ms))
         buddyImage1.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
         if(nPlayers7) findViewById<ImageView>(R.id.buddyImage2).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
         findViewById<GifImageView>(R.id.trumpImage).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_hanging))
@@ -2463,13 +2468,13 @@ class GameScreen : AppCompatActivity() {
         speak("Shuffling cards Please wait", speed = 1.1f)
         Handler(Looper.getMainLooper()).postDelayed({
             if (nPlayers4) {
-                findViewById<ImageView>(R.id.imageViewWinnerCenter_4).animation = null
-                findViewById<ImageView>(R.id.imageViewWinnerCenter_4).clearAnimation()
-                findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.GONE
+                imageViewWinnerCenter_4.animation = null
+                imageViewWinnerCenter_4.clearAnimation()
+                imageViewWinnerCenter_4.visibility = View.GONE
             } else if (nPlayers7) {
-                findViewById<ImageView>(R.id.imageViewWinnerCenter).animation = null
-                findViewById<ImageView>(R.id.imageViewWinnerCenter).clearAnimation()
-                findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.GONE
+                imageViewWinnerCenter.animation = null
+                imageViewWinnerCenter.clearAnimation()
+                imageViewWinnerCenter.visibility = View.GONE
             }
             findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
             findViewById<LinearLayout>(R.id.imageGallery).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_out))
@@ -2511,29 +2516,29 @@ class GameScreen : AppCompatActivity() {
     private fun shufflingDistribute() {
         findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.VISIBLE
         if (nPlayers7) {
-            findViewById<ImageView>(R.id.imageViewWinnerCenter).visibility = View.VISIBLE
+            imageViewWinnerCenter.visibility = View.VISIBLE
             val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.anim_shuffle_7)
             anim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationRepeat(animation: Animation?) {}
                 override fun onAnimationEnd(animation: Animation?) {
-                    findViewById<ImageView>(R.id.imageViewWinnerCenter).startAnimation(anim)
+                    imageViewWinnerCenter.startAnimation(anim)
                 }
 
                 override fun onAnimationStart(animation: Animation?) {}
             })
-            findViewById<ImageView>(R.id.imageViewWinnerCenter).startAnimation(anim)
+            imageViewWinnerCenter.startAnimation(anim)
         } else if (nPlayers4) {
-            findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.VISIBLE
+            imageViewWinnerCenter_4.visibility = View.VISIBLE
             val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.anim_shuffle_4)
             anim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationRepeat(animation: Animation?) {}
                 override fun onAnimationEnd(animation: Animation?) {
-                    findViewById<ImageView>(R.id.imageViewWinnerCenter_4).startAnimation(anim)
+                    imageViewWinnerCenter_4.startAnimation(anim)
                 }
 
                 override fun onAnimationStart(animation: Animation?) {}
             })
-            findViewById<ImageView>(R.id.imageViewWinnerCenter_4).startAnimation(anim)
+            imageViewWinnerCenter_4.startAnimation(anim)
         }
     }
 

@@ -11,10 +11,10 @@ class CardsInHandStats (var cards:MutableList<Int>, var trump:String="S"){
 	var nEachSuits = suitsSummary(cards)[0]
 	var pEachSuits = suitsSummary(cards)[1]
 	var vEachSuits = suitsSummary(cards)[2]
-	private val trumpChoosenIndex = vEachSuits.indexOf(vEachSuits.maxOrNull())   // index of return the first max element found - better for spades suit if value score is same
-	val trumpChoosen = trumpList[trumpChoosenIndex]   // index of return the first max element found - better for spades suit if value score is same
-	val otherSuitPoints = pEachSuits.filterIndexed { index, _ -> index != trumpChoosenIndex  }.sum()
-	val bidChoosen = vEachSuits.maxOrNull()?.plus(otherSuitPoints)?.times(1.75)?.let { round(it) }?.let { nearestTen(it) }
+	private val trumpChosenIndex = vEachSuits.indexOf(vEachSuits.maxOrNull())   // index of return the first max element found - better for spades suit if value score is same
+	val trumpChosen = trumpList[trumpChosenIndex]   // index of return the first max element found - better for spades suit if value score is same
+	val otherSuitPoints = pEachSuits.filterIndexed { index, _ -> index != trumpChosenIndex  }.sum()
+	val bidChosen = vEachSuits.maxOrNull()?.plus(otherSuitPoints)?.times(1.75)?.let { round(it) }?.let { nearestTen(it) }
 
 	var playRandomCard = cards.random()
 	var cardSelectedIndex = PlayingCards().cardSuit4.slice(cards as Iterable<Int>).lastIndexOf(trump)

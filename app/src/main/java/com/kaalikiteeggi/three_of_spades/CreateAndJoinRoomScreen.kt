@@ -33,9 +33,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class CreateAndJoinRoomScreen : AppCompatActivity() {
-	private lateinit var soundUpdate: MediaPlayer
-	private lateinit var soundError: MediaPlayer
-	private lateinit var soundSuccess: MediaPlayer
 	private lateinit var soundBkgd: MediaPlayer
 
 	private lateinit var v: Vibrator
@@ -119,9 +116,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		playersJoin.adapter = adapter
 		Handler(Looper.getMainLooper()).post {
 			v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-			soundUpdate = MediaPlayer.create(applicationContext, R.raw.card_played)
-			soundError = MediaPlayer.create(applicationContext, R.raw.error)
-			soundSuccess = MediaPlayer.create(applicationContext, R.raw.success)
 			soundBkgd = MediaPlayer.create(applicationContext, R.raw.music)
 			soundBkgd.isLooping = true
 			toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
@@ -169,8 +163,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
 	}
 
-
-
 	private fun updateRoomInfoOffline() {
 		userArrayList.add(0, UserBasicInfo(empty = false, index = 0, name = selfName, score = totalCoins, photoURL = photoURL, played = userStatsTotal[0], won = userStatsTotal[1], bid = userStatsTotal[2]))
 		adapter.notifyDataSetChanged()
@@ -195,19 +187,20 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		playerInfoCoins.addAll(listOf(p1c, p2c, p3c, p4c))
 
 		handler.postDelayed({
-			soundUpdate.start()
+			if (soundStatus) SoundManager.getInstance().playUpdateSound()
+
 			speak("$p2 joined", speed = 1.1f)
 			userArrayList.add(1, data[1])
 			adapter.notifyItemInserted(1)
 		}, 800)
 		handler.postDelayed({
-			soundUpdate.start()
+			if (soundStatus) SoundManager.getInstance().playUpdateSound()
 			speak("$p3 joined")
 			userArrayList.add(2, data[2])
 			adapter.notifyItemInserted(2)
 		}, 1900)
 		handler.postDelayed({
-			soundUpdate.start()
+			if (soundStatus) SoundManager.getInstance().playUpdateSound()
 			speak("$p4 joined", speed = 1.1f)
 			userArrayList.add(3, data[3])
 			adapter.notifyItemInserted(3)
@@ -221,7 +214,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				roomData = dataSnapshot.data as Map<String, Any>
 				updateRoomInfoOnline(dataSnapshot)
 			} else if (dataSnapshot != null && !dataSnapshot.exists()) {
-				soundError.start()
+//				soundError.start()
+				SoundManager.getInstance().playErrorSound()
 				toastCenter("Sorry $selfName \n$p1 has left the room. \nYou can create your own room or join other")
 				speak("$p1 has left. You can create your own room or join another room")
 
@@ -237,7 +231,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
 		val playerJoining = dataSnapshot?.data?.get("PJ").toString().toInt()
 		if (vibrateStatus) vibrationStart()
-		if (playerJoining in 2..6 && playerJoining != fromInt && soundStatus) soundUpdate.start()
+		if (playerJoining in 2..6 && playerJoining != fromInt && soundStatus) SoundManager.getInstance().playUpdateSound()
 		p1 = dataSnapshot?.data?.get("p1").toString()
 		val p1h = dataSnapshot?.data?.get("p1h").toString()
 		val p2 = dataSnapshot?.data?.get("p2").toString()
@@ -274,17 +268,17 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 			val p6h = dataSnapshot?.data?.get("p6h").toString()
 			val p7h = dataSnapshot?.data?.get("p7h").toString()
 
-			if (p5.isNotEmpty() && !p5Status) {
+			if (p5h.isNotEmpty() && !p5Status) {
 				getDataNUpdateAdapter(p5h, 4)
 				if(fromInt < 5) speak("$p5 has joined", speed = 1f)
 				p5Status = true
 			}
-			if (p6.isNotEmpty() && !p6Status) {
+			if (p6h.isNotEmpty() && !p6Status) {
 				getDataNUpdateAdapter(p6h, 5)
 				if(fromInt < 6) speak("$p6 has joined", speed = 1f)
 				p6Status = true
 			}
-			if (p7.isNotEmpty() && !p7Status) {
+			if (p7h.isNotEmpty() && !p7Status) {
 				getDataNUpdateAdapter(p7h, 6)
 				if(fromInt < 7) speak("$p7 has joined", speed = 1f)
 				p7Status = true
@@ -317,8 +311,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
 	private fun getDataNUpdateAdapter(uid: String, index: Int = 0) {
 		refUsersData.document(uid).get().addOnSuccessListener { dataSnapshot ->
-			userArrayList[index] = extractUserData(dataSnapshot, index = index)
-			adapter.notifyDataSetChanged()
+			if(dataSnapshot.exists()) {
+				userArrayList[index] = extractUserData(dataSnapshot, index = index)
+				adapter.notifyDataSetChanged()
+			}
 		}
 	}
 
@@ -337,6 +333,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
 	fun startGame(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+		if (soundStatus) SoundManager.getInstance().playUpdateSound()
 		if (fromInt == 1) {
 			maskAllLoading1.visibility = View.VISIBLE
 			progressBarLoading4.visibility = View.VISIBLE
@@ -377,15 +374,17 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 300)
 			}
 		} else {
-			soundError.start()
+//			soundError.start()
+			SoundManager.getInstance().playUpdateSound()
 			toastCenter("Only Host can start the game")
 			speak("Only Host can start", speed = 1.15f)
 		}
 	}
 
 	private fun startNextActivity() {
-		soundUpdate.start()
+
 		if (!offline) {
+			if (soundStatus) SoundManager.getInstance().playUpdateSound()
 			startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreen::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
 				.apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }
 				.apply { putExtra("totalDailyCoins", totalDailyCoins) }
@@ -414,7 +413,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				val result = textToSpeech.setLanguage(Locale.ENGLISH)
 				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
 					toastCenter("Missing Language data - Text to speech")
-				} else if (!offline && from != "p$nPlayers") {
+				} else if (!offline && fromInt != 1) {
 					speak("Invite your friends to join this room", speed = 1.1f)
 				}
 			}
@@ -523,7 +522,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	fun shareRoomInfo(view: View) {
 		if(!offline) {
 			imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.click_press))
-			soundUpdate.start()
+			if (soundStatus) SoundManager.getInstance().playUpdateSound()
 			val message = "${Emoji().gamePlayed}${Emoji().trophy} Click below => $roomID ${Emoji().score}${Emoji().money}" + "\n\n$shareLink"
 			val intent = Intent()
 			intent.action = Intent.ACTION_SEND

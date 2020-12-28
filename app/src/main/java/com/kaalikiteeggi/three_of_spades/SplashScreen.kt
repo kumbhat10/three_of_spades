@@ -111,7 +111,7 @@ class SplashScreen : AppCompatActivity() {
 
     private fun mobileAds() {
         MobileAds.initialize(this)
-        val testDeviceIds = Arrays.asList(getString(R.string.testDeviceId))
+        val testDeviceIds = Arrays.asList(getString(R.string.testDeviceId2), getString(R.string.testDeviceId))
         val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
         MobileAds.setRequestConfiguration(configuration)
 

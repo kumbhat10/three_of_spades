@@ -14,7 +14,7 @@ class CreateUser(username: String="", userPhotoUrl: String="") {
    val data = hashMapOf("n" to username, //username
        "ph" to userPhotoUrl, // photo URL
        "sc" to 4500, //start coins
-       "scD" to 0, //start coins
+       "scd" to 0, //start coins
        "w" to 0,  // total won games
        "w_daily" to 0,  // total won games Daily
        "w_bot" to 0,  // total won games against bot

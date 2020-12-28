@@ -30,6 +30,7 @@
     <string name="inviteLink">https://kaaliteeri.page.link/invite</string>
     <string name="websiteLink">https://sites.google.com/view/kaali-ki-teeggi/</string>
     <string name="testDeviceId">3872102D27DCB017E465C646FA620D3C</string>
+    <string name="testDeviceId2">"26414C818914F190ED8DA40B90135D52"</string>
 
     <string name="bannerReal">ca-app-pub-2714670043901113/2653923895</string>
     <string name="banner">@string/bannerReal</string>
@@ -107,7 +108,7 @@
     <string name="playeName">Player ?</string>
     <string name="playerRank">1st</string>
     <string name="newplayer">New\nPlayer</string>
-    <string name="room_id">Room: </string>
+    <string name="room_id">Room ID:</string>
     <string name="share"> Invite </string>
     <string name="host">Host</string>
     <string name="welcomeBack">Welcome back</string>

@@ -3,7 +3,6 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -109,8 +108,8 @@ class TrainActivity : AppCompatActivity() {
         currentCardsSet += 1
         cardsInHand = (cardsShuffled.slice((13*(currentCardsSet-1)) until 13*currentCardsSet).sortedBy{it}).toMutableList()
         val cardsInHandStats = CardsInHandStats(cardsInHand)
-        findViewById<TextView>(R.id.infoExtra).text = cardsInHandStats.vEachSuits.toString() + "\n" + cardsInHandStats.trumpChoosen + "\n" + cardsInHandStats.otherSuitPoints.toString()+ "\n" + cardsInHandStats.bidChoosen.toString()
-        bidText.text = cardsInHandStats.bidChoosen.toString()
+        findViewById<TextView>(R.id.infoExtra).text = cardsInHandStats.vEachSuits.toString() + "\n" + cardsInHandStats.trumpChosen + "\n" + cardsInHandStats.otherSuitPoints.toString()+ "\n" + cardsInHandStats.bidChosen.toString()
+        bidText.text = cardsInHandStats.bidChosen.toString()
         findViewById<TextView>(R.id.currentState).text = "Hands State: $currentCardsSet"
         displaySelfCards()
 }
@@ -151,7 +150,7 @@ class TrainActivity : AppCompatActivity() {
             toast.show()
         }
         else {
-            val data = "${cardsInHandToHex()};$bidValue;$trump;$partnerCard"
+//            val data = "${cardsInHandToHex()};$bidValue;$trump;$partnerCard"
 //            myRefTrainingData.push().setValue(data)
             nextCardsSet()
             if (partnerCard >= 0) findViewById<ImageView>(partnerCard).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))

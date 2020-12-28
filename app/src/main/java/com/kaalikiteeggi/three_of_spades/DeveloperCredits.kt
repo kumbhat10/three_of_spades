@@ -34,7 +34,7 @@ class DeveloperCredits : AppCompatActivity() {
     private lateinit var soundUpdate: MediaPlayer
     private lateinit var emailIntent: Intent
     private var soundStatus = true
-    private val homePageKKT = "https://sites.google.com/view/kaali-ki-teeggi/"
+    private val homePageKKT = "http://sites.google.com/view/kaali-ki-teeggi/"
     private lateinit var intentBuilder: CustomTabsIntent.Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {

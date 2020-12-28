@@ -5,6 +5,7 @@ package com.kaalikiteeggi.three_of_spades
 import android.annotation.SuppressLint
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.round
@@ -19,8 +20,9 @@ class UserBasicInfo(val empty: Boolean = true, val index: Int = 0, val uid: Stri
 	val userScoreFill: String = "Play " + Emoji().gamePlayed + "\n" + "Win " + Emoji().trophy + "\n" + "Bid " + Emoji().score
 
 	val lastSeenDate: String = SimpleDateFormat("d-MMM").format(SimpleDateFormat("yyyyMMdd").parse(lastSeen.toString()))
+	private val joinDateString: String = if(joinDate ==0 ) "No record" else SimpleDateFormat("d-MMM").format(SimpleDateFormat("yyyyMMdd").parse(joinDate.toString()))
 
-	val userInfo: String = "Last seen " + lastSeenDate + "\n\n" + "Win rate " + (if (played > 0) round((100 * won / played).toDouble()).toInt() else 0).toString() + "% " + Emoji().trophy + "\n" + "Bid rate " + (if (played > 0) round((100 * bid / played).toDouble()).toInt() else 0).toString() + "% " + Emoji().score
+	val userInfo: String = "Last seen " + lastSeenDate + "\nJoined      " + joinDateString + "\n\n" + "Win rate " + (if (played > 0) round((100 * won / played).toDouble()).toInt() else 0).toString() + "% " + Emoji().trophy + "\n" + "Bid rate " + (if (played > 0) round((100 * bid / played).toDouble()).toInt() else 0).toString() + "% " + Emoji().score
 	val newUser:Boolean = joinDate >= getChangedDate(CreateUser().todayDate)
 	val userCoins: String = "$ " + String.format("%,d", score)
 	val userCoinsDaily: String = "$ " + String.format("%,d", scoreDaily)
@@ -55,7 +57,10 @@ fun extractUserData(document: DocumentSnapshot, index:Int=0): UserBasicInfo {
 fun createUserArrayFromSnapshot(querySnapshot: QuerySnapshot, filterLastSeen:Boolean = false, lsdLimit:Int = 0): ArrayList<UserBasicInfo> {
 	val tempArray = ArrayList<UserBasicInfo>()
 	for (document in querySnapshot) {
-		if(!(filterLastSeen && document["LSD"].toString().toInt() < lsdLimit)) tempArray.add(extractUserData(document))
+		try {
+			if (!(filterLastSeen && document["LSD"].toString()
+					.toInt() < lsdLimit)) tempArray.add(extractUserData(document))
+		}catch (me:Exception) {		}
 	}
 	return tempArray
 }

@@ -24,8 +24,6 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -78,7 +76,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var intentBuilder: CustomTabsIntent.Builder
     private lateinit var intentInvite: Intent
-    private val howtoPlayUrl = "https://sites.google.com/view/kaali-ki-teeggi/how-to-play"
+    private val howtoPlayUrl = "http://sites.google.com/view/kaali-ki-teeggi/how-to-play"
     private var rewardStatus = false
     private var rewardAmount = 0
     private var createRoomStatus = false
@@ -222,6 +220,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                             openClosePlayerStatsTask("open")
                         }
                     }
+                    else -> {}
                 }
                 return true
             }
@@ -306,11 +305,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
 
     private fun checkJoinRoom(intent: Intent?) {
         if (intent != null) {
-            if (intent.data?.host == getString(R.string.hostFirebaseDL)) { //opened directly in app
+            if (intent.data?.host == getString(R.string.hostFirebaseDL) && !intent.data?.query.isNullOrEmpty()) { //opened directly in app
                 if (intent.data?.query?.contains("link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/")!!) {
-                    roomID = intent.data?.query?.split("link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/")?.get(1)?.split("&")?.get(0).toString()
+                    roomID = intent.data?.query?.split("link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/")
+                        ?.get(1)?.split("&")?.get(0).toString()
                     joinRoomPending = true
-                    if(userDataFetched) autoJoinRoom()
+                    if (userDataFetched) autoJoinRoom()
                 }
             }
             if (intent.data?.host == getString(R.string.hostJoinRoom)) { // re-routed from browser/chrome
@@ -914,6 +914,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
             openClosePlayerStatsTask("open")
         } else openClosePlayerStatsTask("close")
     }
+
     fun openClosePlayerStatsTask(task:String) {
         if (task=="open") {
             playerStats.visibility = View.VISIBLE
@@ -993,9 +994,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
             loadingText.text = offlineGameAllowedM
             Handler(Looper.getMainLooper()).postDelayed({
                 maskAllLoading.visibility = View.GONE
-            }, 3500)
+            }, 4000)
         }
-        else if (offlineGameAllowed && offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 1300)
+        else if (offlineGameAllowed && offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 1200)
         else if (!onlineGameAllowed) {
             if (soundStatus) SoundManager.getInstance().playErrorSound()
             if(vibrateStatus) vibrationStart()
@@ -1039,7 +1040,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
         val userStats = if (!offlineRoomCreate) ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))
         else ArrayList(listOf(nGamesPlayedBot, nGamesWonBot, nGamesBidBot))
 
-        startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
+        startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java)
+            .apply { putExtra("roomID", roomID) }
             .apply { putExtra("selfName", userName) }
             .apply { putExtra("photoURL", photoURL) }
             .apply { putExtra("totalCoins", totalCoins) }
@@ -1095,9 +1097,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                     if (dataSnapshot.data != null) {
                         val playersJoined = dataSnapshot.get("PJ").toString().toInt()
                         val nPlayers = dataSnapshot.get("n").toString().toInt()
-                        if (playersJoined >= nPlayers) {
+                        val queTemp = checkPlayerJoiningQue(dataSnapshot)
+                        val que = if(queTemp !=0) queTemp else playersJoined+1
+
+                        if (que > nPlayers) {
                             SoundManager.getInstance().playErrorSound()
-                            speak("Room is full")
+                            speak("Sorry. Room is full")
                             if (vibrateStatus) vibrationStart()
                             maskAllLoading.visibility = View.GONE
                             roomIDInputLayout.helperText = null
@@ -1110,28 +1115,15 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                             maskAllLoading.visibility = View.VISIBLE
                             loadingText.text = getString(R.string.joiningRoom)
                             logFirebaseEvent("create_join_room_screen", 1, "join_$nPlayers")
-                            val playerJoining = playersJoined + 1
-                            refRoomData.document(roomID)
-                                .set(hashMapOf("p$playerJoining" to userName, "PJ" to playerJoining, "p${playerJoining}h" to uid), SetOptions.merge())
+                            if(queTemp==0) refRoomData.document(roomID)  // new player joined - not previously joined
+                                .set(hashMapOf("p$que" to userName, "PJ" to que, "p${que}h" to uid), SetOptions.merge())
                                 .addOnSuccessListener {
-                                    val userStatsDaily = ArrayList(listOf(nGamesPlayedDaily, nGamesWonDaily, nGamesBidDaily))
-                                    val userStatsTotal = ArrayList(listOf(nGamesPlayed + nGamesPlayedBot, nGamesWon + nGamesWonBot, nGamesBid + nGamesBidBot))
-
-                                    startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }
-                                        .apply { putExtra("selfName", userName) }
-                                        .apply { putExtra("from", "p$playerJoining") }
-                                        .apply { putExtra("nPlayers", nPlayers) }
-                                        .apply { putExtra("photoURL", photoURL) }
-                                        .apply { putExtra("totalCoins", totalCoins) }
-                                        .apply { putExtra("totalDailyCoins", totalDailyCoins) }
-                                        .apply { putExtra("offline", false) }
-                                        .putIntegerArrayListExtra("userStats", ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid)))
-                                        .putIntegerArrayListExtra("userStatsTotal", userStatsTotal)
-                                        .putIntegerArrayListExtra("userStatsDaily", userStatsDaily))
-
-                                    overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
-                                    Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
+                                    startCJRS(roomID= roomID, playerJoining= que, nPlayers= nPlayers)
                                 }
+                            else {
+                                speak("Room is already joined",speed = 1.07f)
+                                startCJRS(roomID= roomID, playerJoining= que, nPlayers= nPlayers)
+                            }
                         }
                     } else {
                         SoundManager.getInstance().playErrorSound()
@@ -1155,6 +1147,49 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
             errorJoinRoomID = false
             roomIDInputLayout.error = null
             roomIDInputLayout.helperText = getString(R.string.joinHelper)
+        }
+    }
+
+    private fun startCJRS(roomID: String, playerJoining: Int, nPlayers: Int){
+        val userStatsDaily = ArrayList(listOf(nGamesPlayedDaily, nGamesWonDaily, nGamesBidDaily))
+        val userStatsTotal = ArrayList(listOf(nGamesPlayed + nGamesPlayedBot, nGamesWon + nGamesWonBot, nGamesBid + nGamesBidBot))
+
+        startActivity(Intent(applicationContext, CreateAndJoinRoomScreen::class.java)
+            .apply { putExtra("roomID", roomID) }
+            .apply { putExtra("selfName", userName) }
+            .apply { putExtra("from", "p$playerJoining") }
+            .apply { putExtra("nPlayers", nPlayers) }
+            .apply { putExtra("photoURL", photoURL) }
+            .apply { putExtra("totalCoins", totalCoins) }
+            .apply { putExtra("totalDailyCoins", totalDailyCoins) }
+            .apply { putExtra("offline", false) }
+            .putIntegerArrayListExtra("userStats", ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid)))
+            .putIntegerArrayListExtra("userStatsTotal", userStatsTotal)
+            .putIntegerArrayListExtra("userStatsDaily", userStatsDaily))
+        overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
+        Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
+
+    }
+
+    private fun checkPlayerJoiningQue(dataSnapshot: DocumentSnapshot?): Int{
+//        val playersJoined = dataSnapshot?.get("PJ").toString().toInt()
+        val nPlayers = dataSnapshot?.get("n").toString().toInt()
+        val p1 = dataSnapshot?.data?.get("p1h").toString()
+        val p2 = dataSnapshot?.data?.get("p2h").toString()
+        val p3 = dataSnapshot?.data?.get("p3h").toString()
+        val p4 = dataSnapshot?.data?.get("p4h").toString()
+        val p5 = if(nPlayers == 7) dataSnapshot?.data?.get("p5h").toString() else ""
+        val p6 = if(nPlayers == 7) dataSnapshot?.data?.get("p6h").toString() else ""
+        val p7 = if(nPlayers == 7) dataSnapshot?.data?.get("p7h").toString() else ""
+        return when(uid){
+            p1 -> 1
+            p2 -> 2
+            p3 -> 3
+            p4 -> 4
+            p5 -> 5
+            p6 -> 6
+            p7 -> 7
+            else -> 0
         }
     }
 
@@ -1369,20 +1404,24 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                             super.onScrollStateChanged(recyclerView, newState)
                             if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) isScrollingAllTime = true
                         }
+
                         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                             super.onScrolled(recyclerView, dx, dy)
                             val itemCount = layoutManager.itemCount
                             if (itemCount < maxItemsFetchAT && isScrollingAllTime && layoutManager.findLastCompletelyVisibleItemPosition() == itemCount - 1) {
                                 isScrollingAllTime = false
                                 loadingProgressBar.visibility = View.VISIBLE
-                                refUsersData.whereGreaterThanOrEqualTo("sc",5000).orderBy("sc", Query.Direction.DESCENDING).limit(limitFetchOnceAT)
-                                    .startAfter(querySnapAT.last()).get()
+                                refUsersData.whereGreaterThanOrEqualTo("sc", 5000)
+                                    .orderBy("sc", Query.Direction.DESCENDING)
+                                    .limit(limitFetchOnceAT).startAfter(querySnapAT.last()).get()
                                     .addOnSuccessListener { querySnapshot ->
-                                        if(querySnapshot.isEmpty) maxItemsFetchAT = -1
-                                        querySnapAT = querySnapshot
-                                        userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT))
-                                        adapter.notifyDataSetChanged()
-                                        loadingProgressBar.visibility = View.GONE
+                                        if (querySnapshot.isEmpty) maxItemsFetchAT = -1
+                                        else {
+                                            querySnapAT = querySnapshot
+                                            userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT))
+                                            adapter.notifyDataSetChanged()
+                                            loadingProgressBar.visibility = View.GONE
+                                        }
                                     }
                             }
                         }
@@ -1430,13 +1469,14 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                                     .addOnSuccessListener { querySnapshot ->
                                         if(querySnapshot.isEmpty) {
                                             maxItemsFetchDaily = -1
+                                        }else {
+                                            querySnapDaily = querySnapshot
+                                            userArrayList1.addAll(createUserArrayFromSnapshot(querySnapDaily))
+                                            adapter1.notifyDataSetChanged()
+                                            loadingProgressBar.visibility = View.GONE
                                         }
-                                        querySnapDaily = querySnapshot
-                                        userArrayList1.addAll(createUserArrayFromSnapshot(querySnapDaily))
-                                        adapter1.notifyDataSetChanged()
-                                        loadingProgressBar.visibility = View.GONE
                                     }
-                            }
+                            }else loadingProgressBar.visibility = View.GONE
                         }
                     })
                 }
@@ -1454,10 +1494,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
         }, 190)
     }
 
-    private fun createDynamicLink(){
-        val shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.inviteHost)}" +
-                "&apn=${getString(R.string.packageName)}" //&ofl=${getString(R.string.websiteLink)}"
-    }
+//    private fun createDynamicLink(){
+//        val shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.inviteHost)}" +
+//                "&apn=${getString(R.string.packageName)}" //&ofl=${getString(R.string.websiteLink)}"
+//    }
 
     private fun inviteFriends() {
         try {
@@ -1475,30 +1515,30 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
         }
     }
 
-    private fun createIntentInvite(){
-//        val compression = 0.7
-//        val image = ContextCompat.getDrawable(applicationContext, R.drawable.game_screen)
-//            ?.toBitmap(round(compression * 997).toInt(), round(compression * 2228).toInt(), Bitmap.Config.ARGB_8888)
-//        val imagePath = File(applicationContext.getExternalFilesDir(null)
-//            .toString() + "/gamescreen.jpg")
-//        val fos = FileOutputStream(imagePath)
-//        image?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-//        fos.flush()
-//        fos.close()
-
-//        val uri = FileProvider.getUriForFile(applicationContext, applicationContext.packageName + ".provider", imagePath)
-//        val shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.inviteHost)}" +
-//                "&apn=${getString(R.string.packageName)}" //&ofl=${getString(R.string.websiteLink)}"
-        val message = "Hey, Let's play 3 of Spades (Kaali ki Teeggi) online. \n\nClick below \n${
-//            getString(R.string.playStoreLink)
-            getString(R.string.inviteLink)
-        }\n"
-        intentInvite = Intent()
-        intentInvite.action = Intent.ACTION_SEND
-        intentInvite.type = "text/plain"
-        intentInvite.putExtra(Intent.EXTRA_TITLE, "Invite friends")
-        intentInvite.putExtra(Intent.EXTRA_TEXT, message)
-    }
+//    private fun createIntentInvite(){
+////        val compression = 0.7
+////        val image = ContextCompat.getDrawable(applicationContext, R.drawable.game_screen)
+////            ?.toBitmap(round(compression * 997).toInt(), round(compression * 2228).toInt(), Bitmap.Config.ARGB_8888)
+////        val imagePath = File(applicationContext.getExternalFilesDir(null)
+////            .toString() + "/gamescreen.jpg")
+////        val fos = FileOutputStream(imagePath)
+////        image?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+////        fos.flush()
+////        fos.close()
+//
+////        val uri = FileProvider.getUriForFile(applicationContext, applicationContext.packageName + ".provider", imagePath)
+////        val shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.inviteHost)}" +
+////                "&apn=${getString(R.string.packageName)}" //&ofl=${getString(R.string.websiteLink)}"
+//        val message = "Hey, Let's play 3 of Spades (Kaali ki Teeggi) online. \n\nClick below \n${
+////            getString(R.string.playStoreLink)
+//            getString(R.string.inviteLink)
+//        }\n"
+//        intentInvite = Intent()
+//        intentInvite.action = Intent.ACTION_SEND
+//        intentInvite.type = "text/plain"
+//        intentInvite.putExtra(Intent.EXTRA_TITLE, "Invite friends")
+//        intentInvite.putExtra(Intent.EXTRA_TEXT, message)
+//    }
 
     fun buildCustomTabIntent(){
         intentBuilder = CustomTabsIntent.Builder()
