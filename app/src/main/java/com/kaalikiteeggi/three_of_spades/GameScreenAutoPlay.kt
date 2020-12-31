@@ -650,7 +650,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     fun closeChatScoreWindow(view: View) {
-        findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.GONE
+//        changeBackground()
+//        findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.GONE
         scrollViewScore.visibility = View.GONE
         scoreViewLayout.visibility = View.GONE
         findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
@@ -1368,7 +1369,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (bidSpeak && bidingStarted && soundStatus) speak("${playerName(bidder)} bid $bidValue", speed = 1.8f)
             //            else if (soundStatus) SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
             textViewBidValue.text = "$bidValue" //.toString() //show current bid value $emojiScore
-            findViewById<TextView>(R.id.textViewBider).text = "Bid: " + playerName(bidder)
+            findViewById<TextView>(R.id.textViewBider).text = getString(R.string.Bider) + playerName(bidder)
 //            textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.font_yellow)
 //            findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
             findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE //biding frame invisible

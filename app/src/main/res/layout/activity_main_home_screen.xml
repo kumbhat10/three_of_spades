@@ -122,7 +122,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_65sdp"
-            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_25sdp"
             android:background="@drawable/yelloworangecurvebanner"
             android:gravity="center"
             android:padding="@dimen/_10sdp"
@@ -135,67 +135,72 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="visible">
-
             <TableRow android:layout_marginTop="@dimen/_6sdp">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="@dimen/_125sdp"
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="start|center"
+                    android:gravity="end|center"
                     android:text="@string/rounds_played"
                     android:textColor="#FBF3DA"
                     android:textSize="@dimen/_15ssp" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/ngamesPlayedStats"
+                <com.robinhood.ticker.TickerView
+                    android:id="@+id/nGamesPlayedStats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|center"
+                    android:text="@string/gamesplayedstats"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_16ssp"
+                    app:ticker_animationDuration="1800"
+                    app:ticker_defaultCharacterList="number"
+                    app:ticker_defaultPreferredScrollingDirection="any"/>
+            </TableRow>
+            <TableRow android:layout_marginTop="@dimen/_14sdp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center"
+                    android:text="@string/rounds_won"
+                    android:textColor="#FBF3DA"
+                    android:textSize="@dimen/_15ssp" />
+
+                <com.robinhood.ticker.TickerView
+                    android:id="@+id/ngamesWonStats"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start|center"
                     android:text="@string/nill"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_16ssp" />
+                    android:textSize="@dimen/_16ssp"
+                    app:ticker_animationDuration="1800"
+                    app:ticker_defaultCharacterList="number"
+                    app:ticker_defaultPreferredScrollingDirection="any"/>
             </TableRow>
-
             <TableRow android:layout_marginTop="@dimen/_14sdp">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="@dimen/_125sdp"
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="start|center"
-                    android:text="@string/rounds_won"
-                    android:textColor="#FBF3DA"
-                    android:textSize="@dimen/_15ssp" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/ngamesWonStats"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start|center"
-                    android:text="@string/nill"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16ssp" />
-            </TableRow>
-
-            <TableRow android:layout_marginTop="@dimen/_14sdp">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="@dimen/_125sdp"
-                    android:layout_height="wrap_content"
-                    android:gravity="start|center"
+                    android:gravity="end|center"
                     android:text="@string/rounds_bided"
                     android:textColor="#FBF3DA"
                     android:textSize="@dimen/_15ssp" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <com.robinhood.ticker.TickerView
                     android:id="@+id/ngamesBidedStats"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start|center"
                     android:text="@string/nill"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_16ssp" />
+                    android:textSize="@dimen/_16ssp"
+                    app:ticker_animationDuration="1800"
+                    app:ticker_defaultCharacterList="number"
+                    app:ticker_defaultPreferredScrollingDirection="any"/>
             </TableRow>
-
         </TableLayout>
 
         <com.google.android.material.textview.MaterialTextView
@@ -519,15 +524,17 @@
 
         <RelativeLayout
             android:id="@+id/joinRoomFrameTemp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"            android:background="@drawable/blacksquarebutton"
+            android:background="@drawable/blackcirclebutton"
             android:hapticFeedbackEnabled="true"
             android:onClick="joinRoomWindowExit"
-            android:padding="@dimen/_45sdp">
+            android:paddingTop="@dimen/_85sdp"
+            android:paddingBottom="@dimen/_85sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/roomIDInputLayout"
@@ -542,9 +549,14 @@
                 android:imeOptions="actionSend"
                 android:inputType="textCapCharacters"
                 android:textAlignment="center"
+                app:boxBackgroundColor="#1E1E1E"
                 app:boxStrokeColor="@color/white"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeErrorColor="@color/Red"
                 app:counterEnabled="true"
                 app:counterMaxLength="4"
+                app:boxCornerRadiusBottomStart="@dimen/_20sdp"
+                app:boxCornerRadiusBottomEnd="@dimen/_20sdp"
                 app:endIconMode="clear_text"
                 app:helperText="@string/joinHelper"
                 app:helperTextTextColor="@color/icon_yellow"
@@ -567,11 +579,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/joinRoomButton"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/roomIDInputLayout"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:background="@drawable/orangesquarebutton"
                 android:clickable="true"
                 android:focusable="true"
@@ -580,7 +592,7 @@
                 android:onClick="joinRoomButtonClicked"
                 android:text="@string/join"
                 android:textColor="@color/Black"
-                android:textSize="@dimen/_20ssp" />
+                android:textSize="@dimen/_16ssp" />
 
         </RelativeLayout>
 

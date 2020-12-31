@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
-import android.graphics.Bitmap
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
@@ -55,13 +54,10 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main_home_screen.*
 import kotlinx.android.synthetic.main.fragment_test.view.*
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.min
-import kotlin.math.round
 import kotlin.random.Random
 
 class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTouchListener {
@@ -390,7 +386,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
         anim(watchVideoCoin, R.anim.slide_500_coins)
         Handler(Looper.getMainLooper()).postDelayed({
             if (vibrateStatus) vibrationStart()
-            userScoreMHS.setText("$ " + String.format("%,d", totalCoins), true)
+            userScoreMHS.setText(  String.format("%,d", totalCoins), true)
             watchVideoCoin.visibility = View.GONE
             loadRewardAd()
         }, 1250)
@@ -428,7 +424,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                         if (soundStatus) SoundManager.getInstance().playCardCollectSound()
                         anim(watchVideoCoin, R.anim.slide_500_coins)
                         Handler(Looper.getMainLooper()).postDelayed({
-                            userScoreMHS.setText("$ " + String.format("%,d", 78000), true)
+                            userScoreMHS.setText(  String.format("%,d", 78000), true)
                             watchVideoCoin.visibility = View.GONE
                             loadRewardAd()
                         }, 1250)
@@ -498,7 +494,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                 try {
                     photoURL = dataSnapshot.get("ph").toString()
                     Picasso.get().load(photoURL).resize(400, 400).into(profilePic)
-//                    callConfetti() // dont call confetti here - call only when coins are earned
+//                    callConfetti() // don't call confetti here - call only when coins are earned
                     totalCoins = dataSnapshot.get("sc").toString().toInt()
                     if (dataSnapshot.contains("scd") && dataSnapshot.contains("p_daily")){
                         totalDailyCoins =   dataSnapshot.get("scd").toString().toInt()
@@ -510,7 +506,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                         fireStoreRef.set(hashMapOf("scd" to 0,"p_daily" to 0,"w_daily" to 0,"b_daily" to 0), SetOptions.merge())
                     }
                     if (soundStatus) SoundManager.getInstance().playZipSound()
-                    userScoreMHS.setText("$ " + String.format("%,d", totalCoins), true)
+                    userScoreMHS.setText( String.format("%,d", totalCoins), true)
                     maskAllLoading.visibility = View.GONE
                     nGamesPlayed = dataSnapshot.get("p").toString().toInt()
                     nGamesWon = dataSnapshot.get("w").toString().toInt()
@@ -536,9 +532,9 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                         }
                         else -> fireStoreRef.set(hashMapOf("b_bot" to 0, "p_bot" to 0, "w_bot" to 0), SetOptions.merge())
                     }
-                    ngamesPlayedStats.text = (nGamesPlayed + nGamesPlayedBot).toString() + " " + emojiGamePlayed
-                    ngamesBidedStats.text = (nGamesBid + nGamesBidBot).toString() + " " + emojiScore
-                    ngamesWonStats.text = (nGamesWon + nGamesWonBot).toString() + " " + emojiTrophy
+                    nGamesPlayedStats.setText((nGamesPlayed + nGamesPlayedBot).toString(), true) //+ " " + emojiGamePlayed
+                    ngamesBidedStats.setText ( (nGamesBid + nGamesBidBot).toString(), true )//+ " " + emojiScore
+                    ngamesWonStats.setText((nGamesWon + nGamesWonBot).toString(), true )//+ " " + emojiTrophy
 
                     premiumStatus = dataSnapshot.get("pr").toString().toInt() == 1
                     if (premiumStatus) {
@@ -866,7 +862,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                         anim(watchVideoCoin, R.anim.slide_500_coins)
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (vibrateStatus) vibrationStart()
-                            userScoreMHS.setText("$ " + String.format("%,d", totalCoins), true)
+                            userScoreMHS.setText( String.format("%,d", totalCoins), true)
                             watchVideoCoin.visibility = View.GONE
                             loadRewardAd()
                         }, 1250)
