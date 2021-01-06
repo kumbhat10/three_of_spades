@@ -437,7 +437,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         })
         // endregion
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-        logFirebaseEvent("game_screen", nPlayers, "start_offline")
+        logFirebaseEvent("game_screen", 1, "start_offline$nPlayers")
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true) // for click effect on self playing cards
         gameState = MutableLiveData()
         gameState.value = 1
@@ -1759,6 +1759,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
             mInterstitialAd.adListener = object : AdListener() {
                 override fun onAdClosed() { // dummy - check if at some other places ads is shown-conflict with ads closed  - no start next game button needs to be added here
+                    logFirebaseEvent("game_screen", 1, "watched_ad")
                     if (gameState.value!! == 6) {
                         horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
                         startNextRoundButton.visibility = View.VISIBLE

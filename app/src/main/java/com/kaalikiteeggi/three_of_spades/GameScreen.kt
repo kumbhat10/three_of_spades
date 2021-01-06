@@ -300,7 +300,7 @@ class GameScreen : AppCompatActivity() {
             initializeSpeechEngine()
             getSharedPrefs()
             firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-            logFirebaseEvent("game_screen", nPlayers, "start")
+            logFirebaseEvent("game_screen", 1, "start$nPlayers")
             uid = FirebaseAuth.getInstance().uid.toString()
             refUsersData.document(uid)
                 .set(hashMapOf("LPD" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
@@ -1152,7 +1152,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun gameMode6() {
-        if (fromInt == 1) logFirebaseEvent("game_screen", nPlayers, "played")
+        if (fromInt == 1) logFirebaseEvent("game_screen", 1, "played$nPlayers")
         findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
         countDownTimer("PlayCard", purpose = "cancel")
         if (vibrateStatus) vibrationStart()

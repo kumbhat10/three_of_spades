@@ -86,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/removeAds" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/helpUs"
+            android:id="@+id/trainingButton"
             android:layout_width="@dimen/_57sdp"
             android:layout_height="@dimen/_57sdp"
             app:layout_constraintTop_toBottomOf="@+id/rateUsIcon"
@@ -153,7 +153,7 @@
                     android:text="@string/gamesplayedstats"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16ssp"
-                    app:ticker_animationDuration="1800"
+                    app:ticker_animationDuration="1200"
                     app:ticker_defaultCharacterList="number"
                     app:ticker_defaultPreferredScrollingDirection="any"/>
             </TableRow>
@@ -175,7 +175,7 @@
                     android:text="@string/nill"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16ssp"
-                    app:ticker_animationDuration="1800"
+                    app:ticker_animationDuration="1200"
                     app:ticker_defaultCharacterList="number"
                     app:ticker_defaultPreferredScrollingDirection="any"/>
             </TableRow>
@@ -197,7 +197,7 @@
                     android:text="@string/nill"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16ssp"
-                    app:ticker_animationDuration="1800"
+                    app:ticker_animationDuration="1200"
                     app:ticker_defaultCharacterList="number"
                     app:ticker_defaultPreferredScrollingDirection="any"/>
             </TableRow>

@@ -17,7 +17,8 @@
         android:scaleType="fitXY"
         android:src="@drawable/game_screen_table_blue"
         app:layout_constraintBottom_toTopOf="@+id/addViewCreateJoinRoom"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/todo" />
     <ImageView
         android:id="@+id/leaveJoiningRoomIcon"
         android:layout_width="@dimen/_36sdp"

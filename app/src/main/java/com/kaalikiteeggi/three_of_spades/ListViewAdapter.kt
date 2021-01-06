@@ -6,6 +6,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -14,8 +15,8 @@ import kotlinx.android.synthetic.main.user_rank.view.*
 class ListViewAdapter(private val context: Context, private val userArrayList: ArrayList<UserBasicInfo>, private val type: Int = 1) // default type = 1 for all time
 	: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-	private var mExpandedPosition = 0
-	private var mPrevExpandedPosition = 0
+	private var mExpandedPosition = -1
+	private var mPrevExpandedPosition = -1
 
 	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 		///to do something with views here later
@@ -32,7 +33,16 @@ class ListViewAdapter(private val context: Context, private val userArrayList: A
 	@SuppressLint("SetTextI18n")
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		holder.itemView.userRank.text = Html.fromHtml("${position + 1}<sup>${rankExtFromInt(position + 1)}</sup>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+		if(position<3) {
+			holder.itemView.userRank.setBackgroundResource(R.drawable.trophy)
+			holder.itemView.userRank.setTextColor(ContextCompat.getColor(context, R.color.Black))
+		}
+		else {
+			holder.itemView.userRank.setBackgroundResource(R.drawable.redcartoonbanner)
+			holder.itemView.userRank.setTextColor(ContextCompat.getColor(context, R.color.white))
+		}
 		holder.itemView.userName.text = userArrayList[position].name
+
 		holder.itemView.userInfo.text = userArrayList[position].userInfo
 		Picasso.get().load(userArrayList[position].photoURL).resize(200, 200)
 			.into(holder.itemView.userImage)

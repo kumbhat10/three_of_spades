@@ -40,6 +40,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.testing.FakeReviewManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -48,10 +50,12 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.inappmessaging.FirebaseInAppMessaging
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main_home_screen.*
+import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.android.synthetic.main.fragment_test.view.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -244,10 +248,11 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
             buildCustomTabIntent()
 //            createIntentInvite()
             setupBillingClient()
-            if (BuildConfig.DEBUG) helpUs.visibility = View.VISIBLE
-            anim(coinIcon, R.anim.anim_scale_appeal)
+            if (BuildConfig.DEBUG) trainingButton.visibility = View.VISIBLE
+//            anim(coinIcon, R.anim.anim_scale_appeal)
         })
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
+        logFirebaseEvent("MainHomeScreen",1,"open")
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -265,7 +270,10 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                 0-> createRoomWindowOpen()
                 1-> joinRoomWindowOpen()
                 2-> ranking()
-                3-> intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl)) // howToPlay()
+                3-> {
+                    intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl))
+                    logFirebaseEvent("HowToPlay",1,"open")
+                }// howToPlay()
                 4-> inviteFriends()
                 5-> openSettingsWindow()
             }
@@ -379,7 +387,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
         rewardAmount = dailyRewardAmount
         totalCoins += rewardAmount  // reward with daily reward amount for watching video
         userBasicInfo.score = totalCoins  // reward with daily reward amount for watching video
-        logFirebaseEvent("daily_rewards", rewardAmount, "coins")
+        logFirebaseEvent("daily_rewards", 1, "coins$rewardAmount")
         watchVideoCoin.text = rewardAmount.toString()
         watchVideoCoin.visibility = View.VISIBLE
         if (soundStatus) SoundManager.getInstance().playCardCollectSound()
@@ -433,6 +441,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                         toastCenter("Sorry $userName, No coins added")
                     }
                 }
+                @SuppressLint("SimpleDateFormat")
                 override fun onUserEarnedReward(@NonNull reward: RewardItem) {
                     dailyRewardClicked = false
                     rewardStatus = true
@@ -440,7 +449,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                     totalCoins += rewardAmount  // reward with daily reward amount for watching video
                     userBasicInfo.score = totalCoins
                     refUsersData.document(uid)
-                        .set(hashMapOf("sc" to totalCoins, "LSD" to today, "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
+                        .set(hashMapOf("sc" to totalCoins, "LSD" to today, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()),"nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
                 }
                 override fun onRewardedAdFailedToShow(errorCode: Int) {
                     dailyRewardClicked = false
@@ -545,7 +554,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                        removeAds.visibility = View.VISIBLE
                        addViewMHS.visibility = View.VISIBLE
                     }
-                    fireStoreRef.set(hashMapOf("VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
+                    fireStoreRef.set(hashMapOf( "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
                     val lastSeenDate = dataSnapshot.get("LSD").toString().toInt()
                     consecutiveDay = dataSnapshot.get("nDRC").toString().toInt()
                     dailyRewardAmount = dailyRewardList[min(consecutiveDay, 7) - 1]
@@ -857,7 +866,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                         rewardStatus = false
                         watchVideoCoin.text = rewardAmount.toString()
                         watchVideoCoin.visibility = View.VISIBLE
-                        logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, rewardAmount, "coins")
+                        logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, 1, "coins$rewardAmount")
                         if (soundStatus) SoundManager.getInstance().playCardCollectSound()
                         anim(watchVideoCoin, R.anim.slide_500_coins)
                         Handler(Looper.getMainLooper()).postDelayed({
@@ -1317,6 +1326,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
 
     fun trainingStart(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        trainAccess = false
+        FirebaseInAppMessaging.getInstance().triggerEvent("on_foreground")
         if (trainAccess) {
             maskAllLoading.visibility = View.VISIBLE
             loadingText.text = getString(R.string.startTrain)
@@ -1330,12 +1341,12 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
     }
 
     private fun ranking() {
+        toastCenter("Click on player to see more details")
         rankStats.visibility = View.VISIBLE
         anim(rankStats, R.anim.slide_left_activity)
         rankWindowStatus = true
     }
 
-    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     @SuppressLint("SimpleDateFormat")
     private fun initTabLayoutAdapter(){
         viewPager2.adapter = RankStateAdapter(this, tabs = 2)  // attach adapter to viewpager2 view
@@ -1507,6 +1518,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
             intentInvite.putExtra(Intent.EXTRA_TITLE, "Invite friends")
             intentInvite.putExtra(Intent.EXTRA_TEXT, message)
             startActivity(Intent.createChooser(intentInvite, "Invite friends via "))
+            logFirebaseEvent(FirebaseAnalytics.Event.SHARE,1,"invite")
         } catch (me: Exception) {
         }
     }
@@ -1579,7 +1591,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (soundStatus) SoundManager.getInstance().playUpdateSound()
         closeRatingWindow(View(applicationContext))
-        if(!rated) openPlayStore() //inAppReview()  - disable inapp review for a while
+        if(!rated) inAppReview()  //openPlayStore() //- disable in app review for a while
         else openPlayStore()
         if (view.tag == "good") logFirebaseEvent("rate_us", 1, "rate_good")
         else if (view.tag == "bad") logFirebaseEvent("rate_us", 1, "rate_bad")
@@ -1594,7 +1606,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
     }
 
     private fun checkRatingRequest(): Boolean {
-        return !rated && (SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt() >= ratingRequestDate)
+        return !rated && ((nGamesPlayed + nGamesPlayedBot)>4 || SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt() >= ratingRequestDate)
     }
 
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
@@ -1683,6 +1695,32 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
             toastCenter("Payment Failed. Try again \n ${billingResult.responseCode}")
         }
     }
+
+    private fun inAppReview() {
+        val manager = ReviewManagerFactory.create(applicationContext) // FakeReviewManager(applicationContext)//
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { request1 ->
+            if (request1.isSuccessful) {
+                val reviewInfo = request1.result
+                val flow = manager.launchReviewFlow(this, reviewInfo)
+                flow.addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        rated = true
+                        editor.putBoolean("rated", rated)
+                        editor.apply()
+                        logFirebaseEvent("rate_us", 1, "rated")
+                        refUsersData.document(uid).set(hashMapOf("rated" to 1, "ratedD" to today), SetOptions.merge())
+                    } else {
+                        openPlayStore()
+                    }
+                }
+            } else{
+                logFirebaseEvent("rate_us", 1, "ratedFailure")
+                openPlayStore()
+            }
+        }
+    }
+
 }
 
 //        if (intent != null) {
@@ -1696,35 +1734,6 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
 //            }
 //        }
 
-//    private fun inAppReview() {
-//        val manager = ReviewManagerFactory.create(applicationContext)
-//        val request = manager.requestReviewFlow()
-//        request.addOnCompleteListener { request1 ->
-//            if (request1.isSuccessful) {
-//                val reviewInfo = request1.result
-//                val flow = manager.launchReviewFlow(this, reviewInfo)
-//                flow.addOnCompleteListener { result ->
-//                    if (result.isSuccessful) {
-//                        rated = true
-//                        editor.putBoolean("rated", rated)
-//                        editor.apply()
-//                        logFirebaseEvent("rate_us", 1, "rated")
-//                        refUsersData.document(uid).set(hashMapOf("rated" to 1), SetOptions.merge())
-//                    } else openPlayStore() //toastCenter("failed")
-//                }
-//            } else{
-//                logFirebaseEvent("rate_us", 1, "ratedFailure")
-//                openPlayStore()
-//            }
-//        }
-//    }
-
-
-//    @SuppressLint("SetJavaScriptEnabled")
-//    private fun howToPlay() {
-//        intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl))
-//    }
-
 //    private fun checkAccessToTrain() {
 //        Firebase.firestore.collection("Train_Access").document(uid).get()
 //            .addOnSuccessListener { dataSnapshot ->
@@ -1733,34 +1742,3 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
 ////                else helpUs.visibility = View.VISIBLE
 //            }
 //    }
-
-//fun changeBackgroundRequest(view: View) {
-//    if (soundStatus) SoundManager.getInstance().playUpdateSound()
-//    changeBackground(view.tag.toString())
-//    closeSettingsWindow(View(applicationContext))
-//    editor.putString("themeColor", view.tag.toString()) // write username to preference file
-//    editor.apply()
-//}
-
-//private fun changeBackground(color: String) {
-//    when (color) {
-//        "shine_blue" -> {
-//            backgroundmhs.setImageResource(R.drawable.blueburst)
-//        }
-//        "shine_bk" -> {
-//            backgroundmhs.setImageResource(R.drawable.greenyellowburst)
-//        }
-//        "shine_orange" -> {
-//            backgroundmhs.setImageResource(R.drawable.navyblueburst)
-//        }
-//        "shine_pink" -> {
-//            backgroundmhs.setImageResource(R.drawable.redorangeburst)
-//        }
-//        "shine_purple" -> {
-//            backgroundmhs.setImageResource(R.drawable.redblackburst)
-//        }
-//        "shine_yellow" -> {
-//            backgroundmhs.setImageResource(R.drawable.yellowburst)
-//        }
-//    }
-//}

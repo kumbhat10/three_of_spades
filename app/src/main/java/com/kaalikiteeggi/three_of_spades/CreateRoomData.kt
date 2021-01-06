@@ -1,9 +1,11 @@
 package com.kaalikiteeggi.three_of_spades
 
+import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.round
 import kotlin.random.Random
+@SuppressLint("SimpleDateFormat")
 
 class CreateRoomData(private val userBasicInfo:UserBasicInfo) {
 
