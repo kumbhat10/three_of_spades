@@ -3,7 +3,9 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -16,6 +18,7 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.google.android.gms.ads.AdRequest
@@ -29,8 +32,10 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private lateinit var soundBkgd: MediaPlayer
@@ -41,6 +46,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private var refUsersData = Firebase.firestore.collection("Users")
 
 	private lateinit var registration: ListenerRegistration
+	private lateinit var alertDialog: AlertDialog
 
 	private lateinit var roomID: String
 	private lateinit var selfName: String
@@ -219,10 +225,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				toastCenter("Sorry $selfName \n$p1 has left the room. \nYou can create your own room or join other")
 				speak("$p1 has left. You can create your own room or join another room")
 
-				Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom(View(applicationContext)) }, 4000)
+				Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, 4000)
 			} else if (error != null) {
 				toastCenter(error.localizedMessage!!.toString())
-				Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom(View(applicationContext)) }, 4000)
+				Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, 4000)
 			}
 		}
 	}
@@ -331,6 +337,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 //		anim(startGameButton, R.anim.anim_scale_appeal)
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	fun startGame(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 		if (soundStatus) SoundManager.getInstance().playUpdateSound()
@@ -354,7 +361,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 						.addOnSuccessListener {
 							startGameButton.clearAnimation()
 							startGameButton.visibility = View.GONE
-							refRoomData.document(roomID + "_chat").set(hashMapOf("M" to ""))
+							refRoomData.document(roomID + "_chat")
+								.set(hashMapOf("M" to "", "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+									"dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),))
 						}.addOnFailureListener { exception ->
 							maskAllLoading1.visibility = View.GONE
 							progressBarLoading4.visibility = View.GONE
@@ -420,11 +429,13 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		}
 	}
 
-	private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1.05f) {
+	private fun speak(speechText: String, pitch: Float = 1f, speed: Float = 1.05f) {
 		if (soundStatus && this::textToSpeech.isInitialized) {
 			textToSpeech.setPitch(pitch)
 			textToSpeech.setSpeechRate(speed)
-			textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, null)
+			val params = Bundle()
+			params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.1f)
+			textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
 		}
 	}
 
@@ -470,13 +481,32 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		}
 	}
 
-	fun closeJoiningRoom(view: View) {
-		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+	private fun closeJoiningRoom() {
 		if (!offline) registration.remove()
 		handler.removeCallbacksAndMessages(null)
 		startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) })
 		overridePendingTransition(R.anim.slide_right_activity, R.anim.slide_right_activity)
 		finish()
+	}
+
+	fun showDialogue(view: View){
+		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+		speak("Are you sure want to leave the room", speed = 1f)
+		if (!this::alertDialog.isInitialized) {
+			val builder = AlertDialog.Builder(this)
+			builder.setTitle("Leave Room")
+			builder.setMessage("Are you sure want to leave the room ?")
+			builder.setPositiveButton("Yes", DialogInterface.OnClickListener() { _: DialogInterface, _: Int ->
+				toastCenter("Leaving room.....")
+				speak("Leaving room ")
+				Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, 1000)
+			})
+			builder.setNegativeButton("No", DialogInterface.OnClickListener() { _: DialogInterface, _: Int ->
+				speak("Glad to hear that")
+			})
+			alertDialog = builder.create()
+		}
+		alertDialog.show()
 	}
 
 	override fun onBackPressed() { //minimize the app and avoid destroying the activity

@@ -3,7 +3,9 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -22,6 +24,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import cat.ereza.customactivityoncrash.config.CaocConfig
@@ -62,6 +65,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
+    private lateinit var alertDialog: AlertDialog
+    private lateinit var snackbar: Snackbar
 
     private lateinit var refIDMappedTextView: List<Int>
     private lateinit var refIDMappedTextViewA: List<Int>
@@ -258,7 +263,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 20) {
                 @SuppressLint("SetTextI18n")
                 override fun onTick(millisUntilFinished: Long) {
-                    //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
+
                     findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
                     findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
                         .toString() + "s"
@@ -811,10 +816,16 @@ class GameScreenAutoPlay : AppCompatActivity() {
             centralText("Game Over: Bidder team Won \n         Defender team Lost")
 
             if (fromInt == bidder && buFound1 != 1) {
-                if (soundStatus) SoundManager.getInstance().playWonSound()
+                if (soundStatus) {
+                    SoundManager.getInstance().playWonSound()
+                    SoundManager.getInstance().playDholSound()
+                }
                 speak("Well done! You won")
             } else if ((fromInt == bidder || from == "p$buPlayer1") && buFound1 == 1) {
-                if (soundStatus) SoundManager.getInstance().playWonSound()
+                if (soundStatus) {
+                    SoundManager.getInstance().playDholSound()
+                    SoundManager.getInstance().playWonSound()
+                }
                 speak("Well done! Your team won")
             } else {
                 if (soundStatus) SoundManager.getInstance().playLostSound() //soundLost.start()
@@ -841,7 +852,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 if (soundStatus) SoundManager.getInstance().playLostSound()
                 speak("Sorry Your team lost")
             } else {
-                if (soundStatus) SoundManager.getInstance().playWonSound()
+                if (soundStatus) {
+                    SoundManager.getInstance().playDholSound()
+                    SoundManager.getInstance().playWonSound()
+                }
                 speak("Well done! Your team won")
             }
 
@@ -1224,6 +1238,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (soundStatus) SoundManager.getInstance().playErrorSound() //soundError.start()
             if (vibrateStatus) vibrationStart()
             speak("Choose any other card", speed = 1.05f)
+            toastCenter("You already have same card. Choose other card")
         } else if(!partnerCardSelected) {
             partnerCardSelected = true
             textToSpeech.stop()
@@ -1481,7 +1496,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (soundStatus && this::textToSpeech.isInitialized) {
             textToSpeech.setPitch(1f)
             textToSpeech.setSpeechRate(speed)
-            textToSpeech.speak(speechText, queue, null, null)
+            textToSpeech.speak(speechText, queue, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
         }
     }
 
@@ -1667,8 +1682,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun toastCenter(message: String) {
-        Snackbar.make(findViewById(R.id.gameScreen1), message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
-
+        if(!this::snackbar.isInitialized) {
+            snackbar = Snackbar.make(findViewById(R.id.gameScreen1), message, Snackbar.LENGTH_LONG)
+                .setAction("Dismiss") { snackbar.dismiss() }
+            snackbar.setActionTextColor(getColor(R.color.borderblue))
+            snackbar.view.setOnClickListener{snackbar.dismiss()}
+        }else snackbar.setText(message)
+        snackbar.show()
 //        toast.setText(message)
 //        toast.show()
     }
@@ -1774,7 +1794,26 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
-    fun closeGameRoom(view: View) {
+    fun showDialogue(view: View){
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        speak("Are you sure want to leave the game", speed = 0.95f)
+        if (!this::alertDialog.isInitialized) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Exit Game")
+            builder.setMessage("Are you sure want to leave the game ?")
+            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                toastCenter("Leaving game now")
+                speak("Leaving game now")
+                Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom() }, 1300)
+            }
+            builder.setNegativeButton("No") { _: DialogInterface, _: Int ->
+            }
+            alertDialog = builder.create()
+        }
+        alertDialog.show()
+    }
+
+    private fun closeGameRoom() {
         activityExists = false
         countDownBidding.cancel()
         countDownPlayCard.cancel()

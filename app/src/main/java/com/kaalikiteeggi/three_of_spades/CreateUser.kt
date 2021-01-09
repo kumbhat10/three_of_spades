@@ -5,11 +5,12 @@ package com.kaalikiteeggi.three_of_spades
 import android.annotation.SuppressLint
 import android.icu.util.Calendar
 import android.os.Build
+import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
 import java.util.*
+@SuppressLint("SimpleDateFormat")
 
 class CreateUser(username: String="", userPhotoUrl: String="") {
-    @SuppressLint("SimpleDateFormat")
     val todayDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt()
    val data = hashMapOf("n" to username, //username
        "ph" to userPhotoUrl, // photo URL
@@ -27,6 +28,7 @@ class CreateUser(username: String="", userPhotoUrl: String="") {
        "pr" to 0,  // premium or not
        "LSD" to todayDate, // last seen date
        "JD" to todayDate, // Join date
+       "JDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), // Join date
        "nDRC" to 1, // consecutive days
        "claim" to 0,
        "rated" to 0,

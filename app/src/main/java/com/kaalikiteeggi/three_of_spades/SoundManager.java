@@ -16,6 +16,7 @@ public class SoundManager {
     int SHUFFLE_SOUND;
     int CHAT_SOUND;
     int WON_SOUND;
+    int DHOL_SOUND;
     int LOST_SOUND;
     int TIMER_SOUND;
     int ZIP_SOUND;
@@ -34,6 +35,7 @@ public class SoundManager {
         SHUFFLE_SOUND = soundPool.load(context, R.raw.card_shuffle, 1);
         CHAT_SOUND = soundPool.load(context, R.raw.chat, 1);
         WON_SOUND = soundPool.load(context, R.raw.game_win, 1);
+        DHOL_SOUND = soundPool.load(context, R.raw.dhol, 1);
         LOST_SOUND = soundPool.load(context, R.raw.game_lose, 1);
         TIMER_SOUND = soundPool.load(context, R.raw.timer_over, 1);
 
@@ -44,23 +46,22 @@ public class SoundManager {
         soundPool.play(UPDATE_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
     }
     public void playErrorSound(){
-        soundPool.play(ERROR_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
+        soundPool.play(ERROR_SOUND, 0.1F, 0.1F, 0, 0, 1.0F);
     }
-    public void playSuccessSound(){
-        soundPool.play(SUCCESS_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
-    }
+    public void playSuccessSound(){ soundPool.play(SUCCESS_SOUND, 0.2F, 0.2F, 0, 0, 1.0F); }
     public void playCardPlayedSound(){
         soundPool.play(CARD_PLAYED_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
     }
     public void playCardCollectSound(){
-        soundPool.play(CARD_COLLECT_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
+        soundPool.play(CARD_COLLECT_SOUND, 0.3F, 0.3F, 0, 0, 1.0F);
     }
     public void playShuffleSound(){
-        soundPool.play(SHUFFLE_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
+        soundPool.play(SHUFFLE_SOUND, 0.5F, 0.5F, 0, 0, 1.0F);
     }
     public void playWonSound(){
         soundPool.play(WON_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
     }
+    public void playDholSound(){ soundPool.play(DHOL_SOUND, 1.0F, 1.0F, 0, 0, 1.0F); }
     public void playChatSound(){
         soundPool.play(CHAT_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
     }
@@ -71,7 +72,7 @@ public class SoundManager {
         soundPool.play(TIMER_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
     }
     public void playZipSound(){
-        soundPool.play(ZIP_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
+        soundPool.play(ZIP_SOUND, 0.6F, 0.6F, 0, 0, 1.0F);
     }
 
     public static void initialize(Context context){

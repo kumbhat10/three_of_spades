@@ -21,10 +21,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_developer_credits.*
-import kotlinx.android.synthetic.main.activity_main_home_screen.*
-import kotlinx.android.synthetic.main.activity_main_home_screen.backgroundmhs
-import kotlin.random.Random
 
 class DeveloperCredits : AppCompatActivity() {
     private lateinit var text:String
@@ -46,7 +44,7 @@ class DeveloperCredits : AppCompatActivity() {
         vc = packageManager.getPackageInfo(packageName,0).versionCode.toString()
         uid = intent.getStringExtra("uid")!!.toString()    //Get roomID and display
         soundStatus = intent.getBooleanExtra("soundStatus", true)    //Get roomID and display
-        text = "VC: $vc\nVN: $vn\n W: ${resources.configuration.screenWidthDp.toString()}\nH: ${resources.configuration.screenHeightDp.toString()}\nUser ID: $uid"
+        text = "VC: $vc\nVN: $vn\n W: ${resources.configuration.screenWidthDp}\nH: ${resources.configuration.screenHeightDp}\nUser ID: $uid"
         findViewById<TextView>(R.id.sizeDC).text = text
         soundUpdate = MediaPlayer.create(applicationContext, R.raw.card_played)
         Handler(Looper.getMainLooper()).post {
@@ -56,11 +54,23 @@ class DeveloperCredits : AppCompatActivity() {
     }
 
     fun openWebsite(view: View){
-//        val intent = Intent(Intent.ACTION_VIEW).apply {
-//            data = Uri.parse("https://sites.google.com/view/kaali-ki-teeggi/") }
-//        startActivity(intent)
         if (soundStatus) soundUpdate.start()
-        intentBuilder.build().launchUrl(this, Uri.parse(homePageKKT))
+        try{
+            intentBuilder.build().launchUrl(this, Uri.parse(homePageKKT))
+        }catch (me:Exception){
+            Snackbar.make(backgdDC, "No browser installed to open website", Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+            shareLink()
+        }
+    }
+
+    private fun shareLink() {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(homePageKKT)
+            }
+            startActivity(intent)
+        } catch (me: Exception) {
+        }
     }
 
     fun buildCustomTabIntent(){
@@ -87,7 +97,7 @@ class DeveloperCredits : AppCompatActivity() {
                 "\nVN:         $vn " +
                 "\nWidth:    ${resources.configuration.screenWidthDp} " +
                 "\nHeight:   ${resources.configuration.screenHeightDp} " +
-                "\nDevice:   ${android.os.Build.MANUFACTURER} ${Build.MODEL}" +
+                "\nDevice:   ${Build.MANUFACTURER} ${Build.MODEL}" +
                 "\n\n\n Dear Team, I need support for...."
 
         val mailTo = "mailto:kaaliteerifun@gmail.com" +
@@ -95,13 +105,13 @@ class DeveloperCredits : AppCompatActivity() {
                 "&subject=" + Uri.encode("User ID: $uid") +
                 "&body=" + Uri.encode(body)
         emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))
-        emailIntent.setDataAndType(Uri.parse(mailTo), "text/plain");
-        emailIntent.data = Uri.parse(mailTo);
+        emailIntent.setDataAndType(Uri.parse(mailTo), "text/plain")
+        emailIntent.data = Uri.parse(mailTo)
     }
 
     fun sendEmail(view: View){
         if (soundStatus) soundUpdate.start()
-        if(this::emailIntent.isInitialized) startActivity(emailIntent)
+        if(this::emailIntent.isInitialized) startActivity(Intent.createChooser( emailIntent, "Contact us : ") )
         else createEmailIntent()
     }
     override fun onBackPressed() {

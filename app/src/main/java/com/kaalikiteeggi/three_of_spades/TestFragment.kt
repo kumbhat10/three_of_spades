@@ -9,13 +9,7 @@ import android.view.ViewGroup
  * Use the [TestFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TestFragment(index:Int = 0) : Fragment() {
-
-//	private var ind:Int = index
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-//		ind = arguments?.getInt("index", 0)!!
-	}
+class TestFragment : Fragment() {
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		// Inflate the layout for this fragment
@@ -24,7 +18,7 @@ class TestFragment(index:Int = 0) : Fragment() {
 
 	companion object {
 		@JvmStatic
-		fun newInstance(index: Int = 0) = TestFragment(index).apply {
+		fun newInstance(index: Int = 0) = TestFragment().apply {
 			arguments = Bundle().apply {
 				putInt("index", index)
 			}

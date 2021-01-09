@@ -11,6 +11,8 @@ class Emoji {
 	val message = String(Character.toChars(0x1F4AC))
 	val guard = String(Character.toChars(0x1F482))
 
+//	val highTalli = String(Character.toChars(0x1F974)) // hex - 129396
+//	val smileNormal = String(Character.toChars(0x1F60A)) // hex -
 	val smileHard = String(Character.toChars(0x1F606))
 	val smileTongue = String(Character.toChars(0x1F61D))
 	val surprised = String(Character.toChars(0x1F632))

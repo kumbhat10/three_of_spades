@@ -38,6 +38,7 @@ class LVAdapterJoinRoom(private val context: Context, private val userArrayList:
 			holder.itemView.userRank.text = if(index==0) "Host" else "P${index+1}"
 			holder.itemView.userName.text = userArrayList[position].name
 			holder.itemView.userInfo.text = userArrayList[position].userInfo
+			holder.itemView.versionInfo.text = context.getString(R.string.versionInfo) + userArrayList[position].appVersion
 			Picasso.get().load(userArrayList[position].photoURL).resize(200, 200).centerCrop()
 				.into(holder.itemView.userImage)
 			if (type == 1) { // changes for All time window
@@ -56,6 +57,7 @@ class LVAdapterJoinRoom(private val context: Context, private val userArrayList:
 			if (isExpanded) {
 				holder.itemView.userInfo.visibility = View.VISIBLE
 				holder.itemView.userScore2.visibility = View.VISIBLE
+				holder.itemView.versionInfo.visibility = View.VISIBLE
 				if (type != 1) {
 					holder.itemView.userInfo2.visibility = View.VISIBLE
 					holder.itemView.userCoins2.visibility = View.VISIBLE
@@ -65,6 +67,7 @@ class LVAdapterJoinRoom(private val context: Context, private val userArrayList:
 				holder.itemView.userInfo2.visibility = View.GONE
 				holder.itemView.userScore2.visibility = View.GONE
 				holder.itemView.userCoins2.visibility = View.GONE
+				holder.itemView.versionInfo.visibility = View.GONE
 			}
 			holder.itemView.setOnClickListener {
 				mExpandedPosition = if (isExpanded) -1 else position  //by pass minimize function

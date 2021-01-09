@@ -3,7 +3,9 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -24,6 +26,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.AdListener
@@ -62,13 +65,15 @@ class GameScreen : AppCompatActivity() {
     private lateinit var textToSpeech: TextToSpeech
     private var typedValue = TypedValue()
     private var rated = false
-    private var reviewRequested = false
+//    private var reviewRequested = false
     private var shuffleOver = false
     private var ratingRequestDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
         .toInt()
     private var requestRatingAfterDays = 2 //dummy
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
+    private lateinit var alertDialog: AlertDialog
+    private lateinit var snackbar: Snackbar
 
     private lateinit var refIDMappedTextView: List<Int>
     private lateinit var refIDMappedTextViewA: List<Int>
@@ -300,7 +305,7 @@ class GameScreen : AppCompatActivity() {
             initializeSpeechEngine()
             getSharedPrefs()
             firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-            logFirebaseEvent("game_screen", 1, "start$nPlayers")
+            logFirebaseEvent(key= "start$nPlayers")
             uid = FirebaseAuth.getInstance().uid.toString()
             refUsersData.document(uid)
                 .set(hashMapOf("LPD" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
@@ -310,7 +315,7 @@ class GameScreen : AppCompatActivity() {
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true)
     }
 
-    private fun logFirebaseEvent(event: String, int: Int, key: String) {
+    private fun logFirebaseEvent(event: String = "game_screen", int: Int = 1, key: String) {
         val params = Bundle()
         params.putInt(key, int)
         firebaseAnalytics.logEvent(event, params)
@@ -349,7 +354,7 @@ class GameScreen : AppCompatActivity() {
 
     private fun sendEmoji(view: View){
         refRoomFirestore.document(roomID + "_chat")
-            .set(hashMapOf("M" to "$selfName : ${Emoji().emojiChatArray[view.id]}"))
+            .set(hashMapOf("M" to "$selfName : ${Emoji().emojiChatArray[view.id]}"), SetOptions.merge())
     }
 
     private fun setupGame4or7() {
@@ -589,13 +594,13 @@ class GameScreen : AppCompatActivity() {
                     if (data.isNotEmpty() && lastChat != data) { // if chat is not empty
                         if (soundStatus) SoundManager.getInstance()
                             .playChatSound() // soundChat.start()
-                        findViewById<TextView>(R.id.textViewChatDisplay).text = findViewById<TextView>(R.id.textViewChatDisplay).text.toString() + "\n${Emoji().guard} " + data
+                        textViewChatDisplay.text = textViewChatDisplay.text.toString() + "\n${Emoji().guard} " + data
                         findViewById<TextView>(R.id.textViewChatDisplay).requestLayout()
                         lastChat = data
                         if (chatLinearLayout.visibility != View.VISIBLE) {
                             counterChat += 1 // increase counter by 1 is chat display is off
-                            findViewById<TextView>(R.id.textViewChatNo).visibility = View.VISIBLE
-                            findViewById<TextView>(R.id.textViewChatNo).text = "$counterChat ${Emoji().message}"
+                            textViewChatNo.visibility = View.VISIBLE
+                            textViewChatNo.text = "$counterChat ${Emoji().message}"
                             //                            findViewById<TextView>(R.id.textViewChatNo).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
                         }
                     }
@@ -868,8 +873,8 @@ class GameScreen : AppCompatActivity() {
 
                     if (pt1 != p0.value.toString().toInt()) {
                         pt1 = p0.value.toString().toInt()
-                        if (nPlayers4) ptAll = listOf(pt1, pt2, pt3, pt4)
-                        else ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                        ptAll = if (nPlayers4) listOf(pt1, pt2, pt3, pt4)
+                        else listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
                         if (gameState == 5) updatePlayerScoreInfo(ptAll)
                     }
                 }
@@ -881,8 +886,8 @@ class GameScreen : AppCompatActivity() {
                 if (p0.value != null && activityExists) {
                     if (pt2 != p0.value.toString().toInt()) {
                         pt2 = p0.value.toString().toInt()
-                        if (nPlayers4) ptAll = listOf(pt1, pt2, pt3, pt4)
-                        else ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                        ptAll = if (nPlayers4) listOf(pt1, pt2, pt3, pt4)
+                        else listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
                         if (gameState == 5) updatePlayerScoreInfo(ptAll)
                     }
                 }
@@ -894,8 +899,8 @@ class GameScreen : AppCompatActivity() {
                 if (p0.value != null && activityExists) {
                     if (pt3 != p0.value.toString().toInt()) {
                         pt3 = p0.value.toString().toInt()
-                        if (nPlayers4) ptAll = listOf(pt1, pt2, pt3, pt4)
-                        else ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                        ptAll = if (nPlayers4) listOf(pt1, pt2, pt3, pt4)
+                        else listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
                         if (gameState == 5) updatePlayerScoreInfo(ptAll)
                     }
                 }
@@ -907,8 +912,8 @@ class GameScreen : AppCompatActivity() {
                 if (p0.value != null && activityExists) {
                     if (pt4 != p0.value.toString().toInt()) {
                         pt4 = p0.value.toString().toInt()
-                        if (nPlayers4) ptAll = listOf(pt1, pt2, pt3, pt4)
-                        else ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                        ptAll = if (nPlayers4) listOf(pt1, pt2, pt3, pt4)
+                        else listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
                         if (gameState == 5) updatePlayerScoreInfo(ptAll)
                     }
                 }
@@ -921,8 +926,8 @@ class GameScreen : AppCompatActivity() {
                     if (p0.value != null && activityExists) {
                         if (pt5 != p0.value.toString().toInt()) {
                             pt5 = p0.value.toString().toInt()
-                            if (nPlayers4) ptAll = listOf(pt1, pt2, pt3, pt4)
-                            else ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                            ptAll = if (nPlayers4) listOf(pt1, pt2, pt3, pt4)
+                            else listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
                             if (gameState == 5) updatePlayerScoreInfo(ptAll)
                         }
                     }
@@ -934,8 +939,8 @@ class GameScreen : AppCompatActivity() {
                     if (p0.value != null && activityExists) {
                         if (pt6 != p0.value.toString().toInt()) {
                             pt6 = p0.value.toString().toInt()
-                            if (nPlayers4) ptAll = listOf(pt1, pt2, pt3, pt4)
-                            else ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                            ptAll = if (nPlayers4) listOf(pt1, pt2, pt3, pt4)
+                            else listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
                             if (gameState == 5) updatePlayerScoreInfo(ptAll)
                         }
                     }
@@ -947,8 +952,8 @@ class GameScreen : AppCompatActivity() {
                     if (p0.value != null && activityExists) {
                         if (pt7 != p0.value.toString().toInt()) {
                             pt7 = p0.value.toString().toInt()
-                            if (nPlayers4) ptAll = listOf(pt1, pt2, pt3, pt4)
-                            else ptAll = listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
+                            ptAll = if (nPlayers4) listOf(pt1, pt2, pt3, pt4)
+                            else listOf(pt1, pt2, pt3, pt4, pt5, pt6, pt7)
                             if (gameState == 5) updatePlayerScoreInfo(ptAll)
                         }
                     }
@@ -1063,9 +1068,9 @@ class GameScreen : AppCompatActivity() {
                 @SuppressLint("SetTextI18n")
                 override fun onTick(millisUntilFinished: Long) {
                     //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-                    findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
-                    findViewById<ProgressBar>(R.id.progressbarTimer).secondaryProgress = ((timeCountdownPlayCard - millisUntilFinished) * 10000 / timeCountdownPlayCard).toInt()
-                    findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
+                    progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
+                    progressbarTimer.secondaryProgress = ((timeCountdownPlayCard - millisUntilFinished) * 10000 / timeCountdownPlayCard).toInt()
+                    textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
                         .toString() + "s"
                 }
 
@@ -1074,12 +1079,12 @@ class GameScreen : AppCompatActivity() {
                     if (soundStatus) SoundManager.getInstance()
                         .playTimerSound() //soundTimerFinish.start()
                     if (vibrateStatus) vibrationStart()
-                    findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
+                    progressbarTimer.progress = 0
                     findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
-                    findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
-                    findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
-                    findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
-                    findViewById<TextView>(R.id.textViewTimer).clearAnimation()
+                    progressbarTimer.visibility = View.GONE
+                    textViewTimer.visibility = View.GONE
+                    progressbarTimer.clearAnimation()
+                    textViewTimer.clearAnimation()
                 }
             }
             //        endregion
@@ -1088,8 +1093,8 @@ class GameScreen : AppCompatActivity() {
                 @SuppressLint("SetTextI18n")
                 override fun onTick(millisUntilFinished: Long) {
                     //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-                    findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
-                    findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
+                    progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
+                    textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
                         .toString() + "s"
                 }
 
@@ -1101,12 +1106,12 @@ class GameScreen : AppCompatActivity() {
                             .playTimerSound() //soundTimerFinish.start()
                         write("Bid/BS/p$fromInt", 0) // pass the bid if times up
                         write("Bid/BT", nextTurn(fromInt))
-                        findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
+                        progressbarTimer.progress = 0
                         findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
-                        findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
-                        findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
-                        findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
-                        findViewById<TextView>(R.id.textViewTimer).clearAnimation()
+                        progressbarTimer.visibility = View.GONE
+                        textViewTimer.visibility = View.GONE
+                        progressbarTimer.clearAnimation()
+                        textViewTimer.clearAnimation()
                         findViewById<FrameLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
                         Handler(Looper.getMainLooper()).postDelayed({
                             findViewById<FrameLayout>(R.id.frameAskBid).visibility = View.GONE
@@ -1152,7 +1157,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun gameMode6() {
-        if (fromInt == 1) logFirebaseEvent("game_screen", 1, "played$nPlayers")
+        if (fromInt == 1) logFirebaseEvent( key="played$nPlayers")
         findViewById<RelativeLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
         countDownTimer("PlayCard", purpose = "cancel")
         if (vibrateStatus) vibrationStart()
@@ -1165,7 +1170,7 @@ class GameScreen : AppCompatActivity() {
         refGameData.child("S").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(p0: DataSnapshot) {
-                if (scoreList != p0.value as List<Int> || newGameStatus) { // dummy - newGameStatus not needed as Scorelist has game index which is unique
+                if (scoreList != p0.value as List<Int> || newGameStatus) { // dummy - newGameStatus not needed as ScoreList has game index which is unique
                     newGameStatus = false
                     scoreList = p0.value as List<Int>
                     updateWholeScoreBoard()
@@ -1498,7 +1503,7 @@ class GameScreen : AppCompatActivity() {
 
     private fun decideGameWinnerTeam7(bidTeamScoreFinal: Int, totalGamePoints: Int) {
         if (bidTeamScoreFinal >= bidValue) { // bidder team won case
-            refGameData.child("RO").removeEventListener(roundListener)
+            if(this::roundListener.isInitialized) refGameData.child("RO").removeEventListener(roundListener)
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
 //            toastCenter("Game Over: Bidder team Won \n         Defender team Lost")
@@ -1526,14 +1531,14 @@ class GameScreen : AppCompatActivity() {
                 write("GS", 6) // dummy - check if need success listener from above write to handle sync issues
             }
         } else if (buFound1 == 1 && buFound2 == 1 && (totalGamePoints - bidTeamScore) >= (scoreLimit - bidValue)) { // if opponent score has reached target value & both partners are disclosed
-            refGameData.child("RO").removeEventListener(roundListener)
+            if(this::roundListener.isInitialized) refGameData.child("RO").removeEventListener(roundListener)
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
 //            toastCenter("Game Over: Defender team Won \n         Bidder team Lost")
             centralText("Game Over: Defender team Won \n         Bidder team Lost")
             speak("Game Over  Defender team won")
             if (fromInt == bidder) { // winner will change game state to 6
-                val pointsListTemp = mutableListOf<Int>(gameNumber, bidValue, bidValue, bidValue, bidValue, bidValue, bidValue, bidValue)
+                val pointsListTemp = mutableListOf(gameNumber, bidValue, bidValue, bidValue, bidValue, bidValue, bidValue, bidValue)
                 if (buPlayer1 == buPlayer2) { // either both partners are same person
                     pointsListTemp[bidder] = -1 * bidValue * 2
                     pointsListTemp[buPlayer1] = -bidValue
@@ -1550,7 +1555,7 @@ class GameScreen : AppCompatActivity() {
 
     private fun decideGameWinnerTeam4(bidTeamScoreFinal: Int, totalGamePoints: Int) {
         if (bidTeamScoreFinal >= bidValue) { // bidder team won case
-            refGameData.child("RO").removeEventListener(roundListener)
+            if(this::roundListener.isInitialized) refGameData.child("RO").removeEventListener(roundListener)
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
 //            toastCenter("Game Over: Bidder team Won \n         Defender team Lost")
@@ -1576,7 +1581,7 @@ class GameScreen : AppCompatActivity() {
                 write("GS", 6) // dummy - check if need success listener from above write to handle sync issues
             }
         } else if (buFound1 == 1 && (totalGamePoints - bidTeamScore) >= (scoreLimit - bidValue)) { // if opponent score has reached target value & both partners are disclosed
-            refGameData.child("RO").removeEventListener(roundListener)
+            if(this::roundListener.isInitialized) refGameData.child("RO").removeEventListener(roundListener)
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
 //            toastCenter("Game Over: Defender team Won \n         Bidder team Lost")
@@ -1630,21 +1635,21 @@ class GameScreen : AppCompatActivity() {
         if (purpose == "start") {
             //            timeCountdown = time
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-            findViewById<ProgressBar>(R.id.progressbarTimer).progress = 100
+            progressbarTimer.progress = 100
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-            findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.VISIBLE
-            findViewById<TextView>(R.id.textViewTimer).visibility = View.VISIBLE
-            findViewById<TextView>(R.id.textViewTimer).text = "10s"
-            //            findViewById<ProgressBar>(R.id.progressbarTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
-            //            findViewById<TextView>(R.id.textViewTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
+            progressbarTimer.visibility = View.VISIBLE
+            textViewTimer.visibility = View.VISIBLE
+            textViewTimer.text = "10s"
+            //            progressbarTimer.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
+            //            textViewTimer.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
             if (task == "Bidding") countDownBidding.start()
             if (task == "PlayCard") countDownPlayCard.start()
         } else if (purpose == "cancel") {
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
-            findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
-            findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
-            findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
-            findViewById<TextView>(R.id.textViewTimer).clearAnimation()
+            progressbarTimer.visibility = View.GONE
+            textViewTimer.visibility = View.GONE
+            progressbarTimer.clearAnimation()
+            textViewTimer.clearAnimation()
             if (task == "Bidding") countDownBidding.cancel()
             if (task == "PlayCard") countDownPlayCard.cancel()
         }
@@ -1814,11 +1819,11 @@ class GameScreen : AppCompatActivity() {
                     centralText("Waiting for ${playerName(roundWinner)} to play next card", 3500)
                 }
             } else if (roundNumber == roundNumberLimit) {
-                try {
-                    refGameData.child("RO").removeEventListener(roundListener)
-                } finally {
+
+                    if(this::roundListener.isInitialized) refGameData.child("RO").removeEventListener(roundListener)
+
                     clearAllAnimation()
-                }
+
                 if ("p$roundWinner" == from) { // winner will change game state to 6
                     //                        write("GS",6)
                     endGameRound() // update points of last round to server by winner
@@ -1869,6 +1874,7 @@ class GameScreen : AppCompatActivity() {
         return suit
     }
 
+    @SuppressLint("CutPasteId")
     private fun displaySelfCards(view: View = View(applicationContext), animations: Boolean = false, filter: Boolean = false, bidingRequest: Boolean = false) {
         findViewById<LinearLayout>(R.id.imageGallery).removeAllViews()
         val gallery = findViewById<LinearLayout>(R.id.imageGallery)
@@ -1907,10 +1913,10 @@ class GameScreen : AppCompatActivity() {
             }
             //            imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext,typedValue.resourceId)
             imageViewDisplayCard
-                .setOnClickListener(View.OnClickListener {
+                .setOnClickListener {
                     validateSelfPlayedCard(it)
                     imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
-                })
+                }
             gallery.addView(viewTemp)
         }
         if (animations) {
@@ -2014,7 +2020,7 @@ class GameScreen : AppCompatActivity() {
         })
     }
 
-    private fun partnerSelectClick4(cardSelected: Int) { // assumption is cardsinHand already updated
+    private fun partnerSelectClick4(cardSelected: Int) { // assumption is cardsInHand already updated
         if ((cardsInHand as List<*>).contains((cardSelected).toLong())) {
             if (soundStatus) SoundManager.getInstance().playErrorSound() //
             if (vibrateStatus) vibrationStart()
@@ -2032,14 +2038,14 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    private fun partnerSelectClick7(cardSelected: Int) { // assumption is cardsinHand already updated
+    private fun partnerSelectClick7(cardSelected: Int) { // assumption is cardsInHand already updated
         if (counterPartnerSelection == 0) {
             when {
                 (cardsInHand as List<*>).contains((cardSelected * 2).toLong()) and (cardsInHand as List<*>).contains((cardSelected * 2 + 1).toLong()) -> {
                     if (soundStatus) SoundManager.getInstance()
                         .playErrorSound() // soundCardPlayed.start()
                     if (vibrateStatus) vibrationStart()
-                    toastCenter("$selfName, You already have both of these cards ")
+                    toastCenter("$selfName, You already have both of selected cards ")
                 }
                 (cardsInHand as List<*>).contains((cardSelected * 2).toLong()) or (cardsInHand as List<*>).contains((cardSelected * 2 + 1).toLong()) -> {
                     if (soundStatus) SoundManager.getInstance()
@@ -2085,7 +2091,7 @@ class GameScreen : AppCompatActivity() {
                 } else {
                     if (soundStatus) SoundManager.getInstance().playErrorSound() //
                     if (vibrateStatus) vibrationStart()
-                    toastCenter("You already have and choosen same card")
+                    toastCenter("You already have and chosen same card")
                     speak("Already selected. Choose any other card")
                 }
             } else {
@@ -2328,12 +2334,12 @@ class GameScreen : AppCompatActivity() {
         if (soundStatus) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
-            textToSpeech.speak(speechText, queue, null, null)
+            textToSpeech.speak(speechText, queue, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
         }
     }
 
     private fun initializeSpeechEngine() {
-        textToSpeech = TextToSpeech(applicationContext, TextToSpeech.OnInitListener { status ->
+        textToSpeech = TextToSpeech(applicationContext) { status ->
             if (status == TextToSpeech.SUCCESS) {
                 val result = textToSpeech.setLanguage(Locale.ENGLISH)
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -2342,7 +2348,7 @@ class GameScreen : AppCompatActivity() {
                     speak("Shuffling cards Please wait", speed = 1.1f)
                 }
             }
-        })
+        }
     }
 
     private fun animatePlayer(index: Int) {
@@ -2560,9 +2566,13 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun toastCenter(message: String) {
-//        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-        Snackbar.make(findViewById(R.id.gameScreen1), message, Snackbar.LENGTH_SHORT).show()
-
+        if(!this::snackbar.isInitialized) {
+            snackbar = Snackbar.make(findViewById(R.id.gameScreen1), message, Snackbar.LENGTH_LONG)
+                .setAction("Dismiss") { snackbar.dismiss() }
+            snackbar.setActionTextColor(getColor(R.color.borderblue))
+            snackbar.view.setOnClickListener{snackbar.dismiss()}
+        }else snackbar.setText(message)
+        snackbar.show()
         //        toast.setText(message)
 //        toast.show()
     }
@@ -2612,7 +2622,7 @@ class GameScreen : AppCompatActivity() {
         if (findViewById<EditText>(R.id.editTextChatInput).text.toString().isNotEmpty()) {
 //            findViewById<EditText>(R.id.editTextChatInput).text
             refRoomFirestore.document(roomID + "_chat")
-                .set(hashMapOf("M" to "$selfName : ${findViewById<EditText>(R.id.editTextChatInput).text}"))
+                .set(hashMapOf("M" to "$selfName : ${findViewById<EditText>(R.id.editTextChatInput).text}"), SetOptions.merge())
             findViewById<EditText>(R.id.editTextChatInput).setText("")
         }
     }
@@ -2668,7 +2678,7 @@ class GameScreen : AppCompatActivity() {
             mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
             mInterstitialAd.adListener = object : AdListener() {
                 override fun onAdClosed() { // dummy - check if at some other places ads is shown-conflict with ads closed  - no start next game button needs to be added here
-                    logFirebaseEvent("game_screen", 1, "watched_ad")
+                    logFirebaseEvent(key= "watched_ad")
                     mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the ad again
                     if (fromInt == 1 &&  gameState == 6) {
                         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
@@ -2682,6 +2692,25 @@ class GameScreen : AppCompatActivity() {
             findViewById<AdView>(R.id.addViewGameScreenBanner).visibility = View.GONE
             findViewById<AdView>(R.id.addViewChatGameScreenBanner).visibility = View.GONE
         }
+    }
+
+    fun showDialogue(view: View){
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        speak("Are you sure want to leave the game", speed = 0.95f)
+        if (!this::alertDialog.isInitialized) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Exit Game")
+            builder.setMessage("Are you sure want to leave the game ?")
+            builder.setPositiveButton("Yes", DialogInterface.OnClickListener() { _: DialogInterface, _: Int ->
+                toastCenter("Leaving game now")
+                speak("Leaving game now")
+                Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(View(applicationContext)) }, 1300)
+            })
+            builder.setNegativeButton("No", DialogInterface.OnClickListener() { _: DialogInterface, _: Int ->
+            })
+            alertDialog = builder.create()
+        }
+        alertDialog.show()
     }
 
     fun closeGameRoom(view: View) {
@@ -2698,11 +2727,11 @@ class GameScreen : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         refGameData.child("GS").removeEventListener(gameStateListener)
-        try {
-            refGameData.child("RO").removeEventListener(roundListener)
-        } catch (me: Exception) {
+//        try {
+            if(this::roundListener.isInitialized) refGameData.child("RO").removeEventListener(roundListener)
+//        } catch (me: Exception) {
             //            toastCenter(me.toString()) // dummy think to implement a good way
-        }
+//        }
         try {
             refGameData.child("Bid").removeEventListener(bidingTurnListener)
         } catch (me: Exception) {
@@ -2769,7 +2798,7 @@ class GameScreen : AppCompatActivity() {
         }
         super.onDestroy()
         //        toastCenter("Destroyed")
-        //        deleteAllRoomdata()
+        //        deleteAllRoomData()
     } // has left the room
 }
 

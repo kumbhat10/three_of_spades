@@ -5,6 +5,7 @@ package com.kaalikiteeggi.three_of_spades
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -76,6 +77,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var intentBuilder: CustomTabsIntent.Builder
     private lateinit var intentInvite: Intent
+    private lateinit var snackbar: Snackbar
     private val howtoPlayUrl = "http://sites.google.com/view/kaali-ki-teeggi/how-to-play"
     private var rewardStatus = false
     private var rewardAmount = 0
@@ -85,6 +87,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
     private val today = CreateUser().todayDate
     private val todayClass = GetFormattedDate(dateInput = today)
     private lateinit var swipeListener: GestureDetector
+    private lateinit var alertDialog: AlertDialog
     private var errorJoinRoomID = false
     private var backButtonPressedStatus = false
     private var joinRoomWindowStatus = false
@@ -270,10 +273,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                 0-> createRoomWindowOpen()
                 1-> joinRoomWindowOpen()
                 2-> ranking()
-                3-> {
-                    intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl))
-                    logFirebaseEvent("HowToPlay",1,"open")
-                }// howToPlay()
+                3-> howToPlay()
                 4-> inviteFriends()
                 5-> openSettingsWindow()
             }
@@ -554,7 +554,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                        removeAds.visibility = View.VISIBLE
                        addViewMHS.visibility = View.VISIBLE
                     }
-                    fireStoreRef.set(hashMapOf( "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
+                    fireStoreRef.set(hashMapOf( "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()),
+                       "lang" to applicationContext.resources.configuration.locale.displayLanguage, "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
                     val lastSeenDate = dataSnapshot.get("LSD").toString().toInt()
                     consecutiveDay = dataSnapshot.get("nDRC").toString().toInt()
                     dailyRewardAmount = dailyRewardList[min(consecutiveDay, 7) - 1]
@@ -1078,6 +1079,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
         createSingle.clearAnimation()
         createDouble.clearAnimation()
         closeCreateRoom.visibility = View.GONE
+        maskAllLoading.visibility = View.GONE
         anim(createRoomFrameTemp, R.anim.zoomout_center)
         createRoomWindowStatus = false
         Handler(Looper.getMainLooper()).postDelayed({
@@ -1319,7 +1321,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
 
     fun toastCenter(message: String) {
 //        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-        Snackbar.make(konfettiMHS, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+        Snackbar.make(konfettiMHS, message, Snackbar.LENGTH_LONG).setAction("Dismiss"){}.setActionTextColor(getColor(R.color.borderblue)).show()
 //        toast.setText(message)
 //        toast.show()
     }
@@ -1327,7 +1329,8 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
     fun trainingStart(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         trainAccess = false
-        FirebaseInAppMessaging.getInstance().triggerEvent("on_foreground")
+        showDialogue()
+//        FirebaseInAppMessaging.getInstance().triggerEvent("on_foreground")
         if (trainAccess) {
             maskAllLoading.visibility = View.VISIBLE
             loadingText.text = getString(R.string.startTrain)
@@ -1340,8 +1343,29 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
         }
     }
 
+    private fun showDialogue(){
+        if (!this::alertDialog.isInitialized) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Notifications")
+            builder.setMessage("Would you like to claim your reward")
+            builder.setPositiveButton("Yes") { _: DialogInterface, i: Int ->
+                if (i == DialogInterface.BUTTON_POSITIVE) toastCenter("Claimed the reward")
+                //        dialogInterface.cancel()
+            }
+            builder.setNegativeButton("Not now") { _: DialogInterface, i: Int ->
+                if (i == DialogInterface.BUTTON_NEGATIVE) toastCenter("Cancelled the reward")
+                //        dialogInterface.cancel()
+            }
+            alertDialog = builder.create()
+        }
+        alertDialog.show()
+    }
+
     private fun ranking() {
-        toastCenter("Click on player to see more details")
+        snackbar = Snackbar.make(konfettiMHS, "Click on player to see more details", Snackbar.LENGTH_INDEFINITE).setAction("Dismiss"){} //toastCenter("Click on player to see more details")
+        snackbar.setActionTextColor(getColor(R.color.borderblue))
+        snackbar.show()
+        snackbar.view.setOnClickListener{snackbar.dismiss()}
         rankStats.visibility = View.VISIBLE
         anim(rankStats, R.anim.slide_left_activity)
         rankWindowStatus = true
@@ -1377,7 +1401,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
                     1 -> {
                         handleAllTimeView()
                     }
-                    else -> toastCenter("3")
+                    else -> {}//toastCenter("3")
                 }
             }
         })
@@ -1493,6 +1517,7 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
 
     fun closeRankWindow(view: View) {
 //        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        if(this::snackbar.isInitialized) snackbar.dismiss()
         rankWindowStatus = false
         anim(rankStats, R.anim.slide_right_activity)
         Handler(Looper.getMainLooper()).postDelayed({
@@ -1547,6 +1572,21 @@ class MainHomeScreen : AppCompatActivity(), PurchasesUpdatedListener, View.OnTou
 //        intentInvite.putExtra(Intent.EXTRA_TITLE, "Invite friends")
 //        intentInvite.putExtra(Intent.EXTRA_TEXT, message)
 //    }
+
+    private fun howToPlay() {
+        try {
+            intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl))
+            logFirebaseEvent("HowToPlay", 1, "open")
+        } catch(me:Exception) {
+            try {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(howtoPlayUrl)
+                }
+                startActivity(intent)
+            } catch (me: Exception) {
+            }
+        }
+    }
 
     fun buildCustomTabIntent(){
         intentBuilder = CustomTabsIntent.Builder()

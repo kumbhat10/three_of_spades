@@ -100,7 +100,7 @@
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
         android:text="@string/playeName"
-        android:textColor="#BDB8B3"
+        android:textColor="#CDCFDA"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/userRank"
@@ -133,7 +133,7 @@
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="0dp"
         android:text="@string/loading"
-        android:textColor="#DACCC2"
+        android:textColor="#BABABA"
         android:textSize="@dimen/_11ssp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
@@ -146,10 +146,23 @@
         android:layout_marginEnd="@dimen/_5sdp"
         android:gravity="end|bottom"
         android:text="@string/total_all_time"
-        android:textColor="#B6A394"
+        android:textColor="#B3B3B3"
         android:textSize="@dimen/_9ssp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/userCoins2"
+        app:layout_constraintEnd_toStartOf="@id/userScore2" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/versionInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:gravity="end|bottom"
+        android:text="@string/versionInfo"
+        android:textColor="#B3B3B3"
+        android:textSize="@dimen/_9ssp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/userScore2"
         app:layout_constraintEnd_toStartOf="@id/userScore2" />
 
     <Space

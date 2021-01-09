@@ -32,7 +32,7 @@
         android:visibility="gone"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:focusable="true"
-        android:onClick="closeJoiningRoom"
+        android:onClick="showDialogue"
         app:srcCompat="@drawable/close"/>
 
     <com.google.android.material.textview.MaterialTextView

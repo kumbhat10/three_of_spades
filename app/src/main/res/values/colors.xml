@@ -32,7 +32,7 @@
 
     <color name="font_yellow">#ffc107</color>
     <color name="font_grey_settings">#DCDCDC</color>
-    <color name="tickerCoin">#FFBF00</color>
+    <color name="tickerCoin">#FFC800</color>
     <color name="light_grey_settings">#BABABA</color>
 
     <color name="progressBarPlayer2">#CA0000</color>
