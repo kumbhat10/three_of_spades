@@ -17,8 +17,8 @@
         android:layout_height="match_parent"
         android:foreground="@drawable/tint_background4"
         android:scaleType="centerCrop"
-        android:scaleX="4"
-        android:scaleY="4"
+        android:scaleX="2.5"
+        android:scaleY="2.5"
         android:src="@drawable/redorangeburst"
         android:visibility="visible" />
 
@@ -72,24 +72,25 @@
         android:id="@+id/googleSignInButton"
         android:layout_width="@dimen/loginWidthGoogle"
         android:layout_height="@dimen/loginHeightGoogle"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/privacyPolicy"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_50sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:insetBottom="0dp"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
         android:visibility="visible" />
 
-<!--    <com.twitter.sdk.android.core.identity.TwitterLoginButton-->
-<!--        android:id="@+id/twitterLoginButton"-->
-<!--        android:layout_width="@dimen/loginWidth"-->
-<!--        android:layout_height="@dimen/loginHeight"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_marginBottom="@dimen/_10sdp"-->
-<!--        android:backgroundTint="#338BCD"-->
-<!--        android:textColor="#FFFFFF"-->
-<!--        android:visibility="gone"/>-->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/privacyPolicy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/_9sdp"
+        android:onClick="openPrivacyPolicy"
+        android:text="@string/privacy_policy"
+        android:textColor="#2C89FB"
+        android:textSize="@dimen/_10ssp" />
 
     <RelativeLayout
         android:id="@+id/maskButtons"

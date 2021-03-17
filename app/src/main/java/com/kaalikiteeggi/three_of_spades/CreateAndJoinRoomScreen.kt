@@ -18,11 +18,14 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import cat.ereza.customactivityoncrash.config.CaocConfig
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.CollectionReference
@@ -32,17 +35,18 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
+import kotlinx.android.synthetic.main.activity_main_home_screen.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class CreateAndJoinRoomScreen : AppCompatActivity() {
+	// region Initialization
 	private lateinit var soundBkgd: MediaPlayer
 
 	private lateinit var v: Vibrator
 	private val myRefGameData = Firebase.database.getReference("GameData") // initialize database reference
-	private lateinit var refRoomData:CollectionReference
+	private lateinit var refRoomData: CollectionReference
 	private var refUsersData = Firebase.firestore.collection("Users")
 
 	private lateinit var registration: ListenerRegistration
@@ -74,6 +78,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private lateinit var p1: String
 	private var versionStatus = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 	private lateinit var textToSpeech: TextToSpeech
+	private var closeRoom: Boolean = false
 
 	private lateinit var playerInfo: ArrayList<String>
 	private lateinit var playerInfoCoins: ArrayList<Int>
@@ -90,7 +95,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private var handler = Handler(Looper.getMainLooper())
 	private var userArrayList = mutableListOf<UserBasicInfo>()
 	private lateinit var adapter: LVAdapterJoinRoom
+	private lateinit var firebaseAnalytics: FirebaseAnalytics
 
+	// endregion
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		CaocConfig.Builder.create()
@@ -110,7 +117,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		nPlayers = intent.getIntExtra("nPlayers", 0)
 		offline = intent.getBooleanExtra("offline", true)
 
-		if(!offline){
+		if (!offline) {
 			val emptyUser = UserBasicInfo()
 			for (iUser in 0 until nPlayers) {
 				userArrayList.add(emptyUser)
@@ -124,6 +131,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 			v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 			soundBkgd = MediaPlayer.create(applicationContext, R.raw.music)
 			soundBkgd.isLooping = true
+			soundBkgd.setVolume(0.05F, 0.05F)
 			toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
 			toast.setGravity(Gravity.CENTER, 0, 0)
 			updateUIAndAnimateElements()
@@ -134,6 +142,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		}
 		mAuth = FirebaseAuth.getInstance()
 		uid = mAuth.uid.toString()
+		firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
+
 	}
 
 	private fun updateUIAndAnimateElements() {
@@ -153,7 +163,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 			imageViewShareButton2.visibility = View.VISIBLE
 			waitingToJoinText.visibility = View.VISIBLE
 			imageViewShareButton1.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
-		}else{
+		} else {
 			offlineProgressbar.visibility = View.VISIBLE
 			offlineProgressbar.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
 		}
@@ -195,19 +205,19 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		handler.postDelayed({
 			if (soundStatus) SoundManager.getInstance().playUpdateSound()
 
-			speak("$p2 joined", speed = 1.1f)
+			speak("$p2 joined", speed = 1f, forceSpeak = false)
 			userArrayList.add(1, data[1])
 			adapter.notifyItemInserted(1)
 		}, 800)
 		handler.postDelayed({
 			if (soundStatus) SoundManager.getInstance().playUpdateSound()
-			speak("$p3 joined")
+			speak("$p3 joined", speed = 1.1f, forceSpeak = false)
 			userArrayList.add(2, data[2])
 			adapter.notifyItemInserted(2)
 		}, 1900)
 		handler.postDelayed({
 			if (soundStatus) SoundManager.getInstance().playUpdateSound()
-			speak("$p4 joined", speed = 1.1f)
+			speak("$p4 joined", speed = 1.1f, forceSpeak = false)
 			userArrayList.add(3, data[3])
 			adapter.notifyItemInserted(3)
 			Handler(Looper.getMainLooper()).postDelayed({ allPlayersJoined() }, 800)
@@ -220,10 +230,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				roomData = dataSnapshot.data as Map<String, Any>
 				updateRoomInfoOnline(dataSnapshot)
 			} else if (dataSnapshot != null && !dataSnapshot.exists()) {
-//				soundError.start()
+				//				soundError.start()
 				SoundManager.getInstance().playErrorSound()
 				toastCenter("Sorry $selfName \n$p1 has left the room. \nYou can create your own room or join other")
-				speak("$p1 has left. You can create your own room or join another room")
+				speak("$p1 has left. You can create your own room or join another room", forceSpeak = false)
 
 				Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, 4000)
 			} else if (error != null) {
@@ -237,7 +247,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
 		val playerJoining = dataSnapshot?.data?.get("PJ").toString().toInt()
 		if (vibrateStatus) vibrationStart()
-		if (playerJoining in 2..6 && playerJoining != fromInt && soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (playerJoining in 2..6 && playerJoining != fromInt && soundStatus) SoundManager.getInstance()
+			.playUpdateSound()
 		p1 = dataSnapshot?.data?.get("p1").toString()
 		val p1h = dataSnapshot?.data?.get("p1h").toString()
 		val p2 = dataSnapshot?.data?.get("p2").toString()
@@ -253,17 +264,17 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		}
 		if (p2h.isNotEmpty() && !p2Status) {
 			getDataNUpdateAdapter(p2h, 1)
-			if(fromInt < 2) speak("$p2 has joined", speed = 1f)
+			if (fromInt < 2) speak("$p2 has joined", speed = 1f, forceSpeak = false)
 			p2Status = true
 		}
 		if (p3h.isNotEmpty() && !p3Status) {
 			getDataNUpdateAdapter(p3h, 2)
-			if(fromInt < 3) speak("$p3 has joined", speed = 1f)
+			if (fromInt < 3) speak("$p3 has joined", speed = 1f, forceSpeak = false)
 			p3Status = true
 		}
 		if (p4h.isNotEmpty() && !p4Status) {
 			getDataNUpdateAdapter(p4h, 3)
-			if(fromInt < 4) speak("$p4 has joined", speed = 1f)
+			if (fromInt < 4) speak("$p4 has joined", speed = 1f, forceSpeak = false)
 			p4Status = true
 		}
 		if (nPlayers == 7) {
@@ -276,17 +287,17 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
 			if (p5h.isNotEmpty() && !p5Status) {
 				getDataNUpdateAdapter(p5h, 4)
-				if(fromInt < 5) speak("$p5 has joined", speed = 1f)
+				if (fromInt < 5) speak("$p5 has joined", speed = 1f, forceSpeak = false)
 				p5Status = true
 			}
 			if (p6h.isNotEmpty() && !p6Status) {
 				getDataNUpdateAdapter(p6h, 5)
-				if(fromInt < 6) speak("$p6 has joined", speed = 1f)
+				if (fromInt < 6) speak("$p6 has joined", speed = 1f, forceSpeak = false)
 				p6Status = true
 			}
 			if (p7h.isNotEmpty() && !p7Status) {
 				getDataNUpdateAdapter(p7h, 6)
-				if(fromInt < 7) speak("$p7 has joined", speed = 1f)
+				if (fromInt < 7) speak("$p7 has joined", speed = 1f, forceSpeak = false)
 				p7Status = true
 			}
 		}
@@ -303,10 +314,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 			playerInfo = ArrayList()
 			playerInfoCoins = ArrayList()
 			if (nPlayers == 7) {
-				playerInfo.addAll(listOf(p1, p2, p3, p4, p5, p6, p7, userArrayList[0].photoURL, userArrayList[1].photoURL, userArrayList[2].photoURL, userArrayList[3].photoURL
-						,userArrayList[4].photoURL, userArrayList[5].photoURL, userArrayList[6].photoURL))
-				playerInfoCoins.addAll(listOf(userArrayList[0].score, userArrayList[1].score, userArrayList[2].score, userArrayList[3].score,
-					userArrayList[4].score, userArrayList[5].score, userArrayList[6].score))
+				playerInfo.addAll(listOf(p1, p2, p3, p4, p5, p6, p7, userArrayList[0].photoURL, userArrayList[1].photoURL, userArrayList[2].photoURL, userArrayList[3].photoURL, userArrayList[4].photoURL, userArrayList[5].photoURL, userArrayList[6].photoURL))
+				playerInfoCoins.addAll(listOf(userArrayList[0].score, userArrayList[1].score, userArrayList[2].score, userArrayList[3].score, userArrayList[4].score, userArrayList[5].score, userArrayList[6].score))
 			} else if (nPlayers == 4) {
 				playerInfo.addAll(listOf(p1, p2, p3, p4, userArrayList[0].photoURL, userArrayList[1].photoURL, userArrayList[2].photoURL, userArrayList[3].photoURL))
 				playerInfoCoins.addAll(listOf(userArrayList[0].score, userArrayList[1].score, userArrayList[2].score, userArrayList[3].score))
@@ -317,7 +326,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
 	private fun getDataNUpdateAdapter(uid: String, index: Int = 0) {
 		refUsersData.document(uid).get().addOnSuccessListener { dataSnapshot ->
-			if(dataSnapshot.exists()) {
+			if (dataSnapshot.exists()) {
 				userArrayList[index] = extractUserData(dataSnapshot, index = index)
 				adapter.notifyDataSetChanged()
 			}
@@ -326,15 +335,15 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
 	private fun allPlayersJoined() {
 		if (soundStatus) SoundManager.getInstance().playSuccessSound()
-		speak("Ready to Start", speed = 1.06f)
+		speak("Ready to Start", speed = 1.06f, forceSpeak = false)
 		imageViewShareButton1.clearAnimation()
 		imageViewShareButton2.clearAnimation()
 		imageViewShareButton1.visibility = View.GONE
 		imageViewShareButton2.visibility = View.GONE
 		offlineProgressbar.visibility = View.GONE
 		waitingToJoinText.visibility = View.GONE
-		Handler(Looper.getMainLooper()).postDelayed({startGameButton.visibility = View.VISIBLE}, 600)
-//		anim(startGameButton, R.anim.anim_scale_appeal)
+		Handler(Looper.getMainLooper()).postDelayed({ startGameButton.visibility = View.VISIBLE }, 600)
+		//		anim(startGameButton, R.anim.anim_scale_appeal)
 	}
 
 	@SuppressLint("SimpleDateFormat")
@@ -361,9 +370,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 						.addOnSuccessListener {
 							startGameButton.clearAnimation()
 							startGameButton.visibility = View.GONE
-							refRoomData.document(roomID + "_chat")
-								.set(hashMapOf("M" to "", "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
-									"dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),))
+							refRoomData.document(roomID + "_chat").set(hashMapOf(
+								"M" to "",
+								"d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+								"dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),
+							))
 						}.addOnFailureListener { exception ->
 							maskAllLoading1.visibility = View.GONE
 							progressBarLoading4.visibility = View.GONE
@@ -383,10 +394,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 300)
 			}
 		} else {
-//			soundError.start()
+			//			soundError.start()
 			SoundManager.getInstance().playUpdateSound()
 			toastCenter("Only Host can start the game")
-			speak("Only Host can start", speed = 1.15f)
+			speak("Only Host can start", speed = 1.15f, forceSpeak = false)
 		}
 	}
 
@@ -423,26 +434,38 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
 					toastCenter("Missing Language data - Text to speech")
 				} else if (!offline && fromInt != 1) {
-					speak("Invite your friends to join this room", speed = 1.1f)
+					speak("Invite your friends to join this room", speed = 1.1f, forceSpeak = false)
 				}
 			}
 		}
 	}
 
-	private fun speak(speechText: String, pitch: Float = 1f, speed: Float = 1.05f) {
-		if (soundStatus && this::textToSpeech.isInitialized) {
+	private fun speak(speechText: String, pitch: Float = 1f, speed: Float = 1.05f, que: Int = TextToSpeech.QUEUE_FLUSH, forceSpeak: Boolean = false) {
+		if (soundStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
 			textToSpeech.setPitch(pitch)
 			textToSpeech.setSpeechRate(speed)
 			val params = Bundle()
 			params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.1f)
-			textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
+			textToSpeech.speak(speechText, que, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
 		}
+	}
+
+	private fun logFirebaseEvent(event: String, int: Int, key: String) {
+		val params = Bundle()
+		params.putInt(key, int)
+		firebaseAnalytics.logEvent(event, params)
 	}
 
 	private fun initializeAds() {
 		if (!premiumStatus) {
 			addViewCreateJoinRoom.visibility = View.VISIBLE
 			addViewCreateJoinRoom.loadAd(AdRequest.Builder().build())
+			addViewCreateJoinRoom.adListener = object : AdListener() {
+				override fun onAdClosed() {
+					super.onAdClosed()
+					logFirebaseEvent(FirebaseAnalytics.Event.AD_IMPRESSION, 1, "banner_close")
+				}
+			}
 		} else {
 			addViewCreateJoinRoom.visibility = View.GONE
 		}
@@ -489,22 +512,28 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		finish()
 	}
 
-	fun showDialogue(view: View){
+	fun showDialogue(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-		speak("Are you sure want to leave the room", speed = 1f)
+		closeRoom = true
+		speak("Are you sure want to leave the room", speed = 1f, forceSpeak = true)
 		if (!this::alertDialog.isInitialized) {
 			val builder = AlertDialog.Builder(this)
 			builder.setTitle("Leave Room")
 			builder.setMessage("Are you sure want to leave the room ?")
-			builder.setPositiveButton("Yes", DialogInterface.OnClickListener() { _: DialogInterface, _: Int ->
+			builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
 				toastCenter("Leaving room.....")
-				speak("Leaving room ")
-				Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, 1000)
-			})
-			builder.setNegativeButton("No", DialogInterface.OnClickListener() { _: DialogInterface, _: Int ->
-				speak("Glad to hear that")
-			})
+				speak("Leaving room ", forceSpeak = true)
+				Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, 700)
+			}
+			builder.setNegativeButton("No") { _: DialogInterface, _: Int ->
+				closeRoom = false
+				speak("Glad to hear that", forceSpeak = true)
+			}
+			builder.setOnDismissListener {
+				closeRoom = false
+			}
 			alertDialog = builder.create()
+			alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.shine_score_table))
 		}
 		alertDialog.show()
 	}
@@ -540,17 +569,14 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		}
 	} // remove snapshot listener
 
-	private fun createDynamicLink(){
-		shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" +
-				"&apn=${getString(R.string.packageName)}" +
-				"&amv=54" +
+	private fun createDynamicLink() {
+		shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=54" +
 				//				"&st=3%20of%20Spades" +
-				"&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID +
-				"&si=https://tinyurl.com/3ofspade" //https://i.pinimg.com/564x/f9/fd/d9/f9fdd9bf6fbb9f00d945e1b22b293aea.jpg"
+				"&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID + "&si=https://tinyurl.com/3ofspade" //https://i.pinimg.com/564x/f9/fd/d9/f9fdd9bf6fbb9f00d945e1b22b293aea.jpg"
 	}
 
 	fun shareRoomInfo(view: View) {
-		if(!offline) {
+		if (!offline) {
 			imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.click_press))
 			if (soundStatus) SoundManager.getInstance().playUpdateSound()
 			val message = "${Emoji().gamePlayed}${Emoji().trophy} Click below => $roomID ${Emoji().score}${Emoji().money}" + "\n\n$shareLink"
@@ -568,11 +594,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	}
 
 	private fun toastCenter(message: String) {
-//		Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+		//		Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 		Snackbar.make(findViewById(R.id.backgroundJR), message, Snackbar.LENGTH_SHORT).show()
 
-//		toast.setText(message)
-//		toast.show()
+		//		toast.setText(message)
+		//		toast.show()
 	}
 }
 

@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -18,6 +17,9 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -33,16 +35,11 @@ import com.google.firebase.auth.*
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.twitter.sdk.android.core.*
-import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.android.synthetic.main.activity_start_screen.*
 import java.util.*
 
 
 class StartScreen : AppCompatActivity() {
-    private lateinit var soundUpdate: MediaPlayer
-    private lateinit var soundError: MediaPlayer
-    private lateinit var soundSuccess: MediaPlayer
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var toast: Toast
     private lateinit var callBackManager: CallbackManager
@@ -53,8 +50,10 @@ class StartScreen : AppCompatActivity() {
     private var newUser:Boolean = false
     private lateinit var userPhotoUrl:String
     private var update = false
+    private lateinit var intentBuilder: CustomTabsIntent.Builder
+    private val privacyPolicyUrl = "https://sites.google.com/view/kaali-ki-teeggi/privacy-policy"
 
-    @SuppressLint("ShowToast")
+    @SuppressLint("ShowToast", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
@@ -65,14 +64,10 @@ class StartScreen : AppCompatActivity() {
             .trackActivities(false) //default: false
             .errorDrawable(R.drawable.bug_icon) //default: bug image
             .apply()
-//        val mTwitterAuthConfig = TwitterAuthConfig(
-//            getString(R.string.twitter_consumer_key),
-//            getString(R.string.twitter_consumer_secret))
-//        val twitterConfig = TwitterConfig.Builder(applicationContext).twitterAuthConfig(mTwitterAuthConfig).build()
-//        Twitter.initialize(twitterConfig)
+
         setContentView(R.layout.activity_start_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-        when (intent.getIntExtra("background", 4)) {
+        when (intent.getIntExtra("background", 1)) {
             0 -> startBckgd.setImageResource(R.drawable.redblackburst)
             1 -> startBckgd.setImageResource(R.drawable.blueburst)
             2 -> startBckgd.setImageResource(R.drawable.greenyellowburst)
@@ -83,42 +78,18 @@ class StartScreen : AppCompatActivity() {
         startBckgd.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
         findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
         vcStart.text = "Ver: " + packageManager.getPackageInfo(packageName,0).versionName
-        soundError = MediaPlayer.create(applicationContext,R.raw.error)
-        soundUpdate = MediaPlayer.create(applicationContext,R.raw.card_played)
-        soundSuccess = MediaPlayer.create(applicationContext,R.raw.success)
         toast = Toast.makeText(applicationContext,"",Toast.LENGTH_LONG)
         toast.setGravity(Gravity.BOTTOM,0,100)
-        soundUpdate.start()
+        SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
         mAuth = FirebaseAuth.getInstance()
-        //region Twitter Login
-//        twitterLoginButton.setOnClickListener{
-//            soundUpdate.start()
-//            maskButtons.visibility = View.VISIBLE
-//            loadingText3.text = getString(R.string.wait)
-//            lightStart.visibility = View.VISIBLE
-//            lightStart.on()
-//        }
-//        twitterLoginButton.callback = object:
-//            Callback<TwitterSession>() {
-//            override fun success(result: Result<TwitterSession>?) {
-//                if (result != null) {
-//                    val credentialTwitter = TwitterAuthProvider.getCredential(result.data.authToken.token, result.data.authToken.secret)
-//                    signInWithCredential(credentialTwitter,"twitter")
-//                }
-//            }
-//            override fun failure(exception: TwitterException?) {
-//                if (exception != null) {
-//                    soundError.start()
-//                    toastCenter("Twitter login failed \n ${exception.message}")
-//                }
-//            }
-//        }
         // endregion
+        SoundManager.initialize(applicationContext)
+
         // region Facebook Login
         val loginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
         loginButton.setOnClickListener {
             it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-            soundUpdate.start()
+            SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
             maskButtons.visibility = View.VISIBLE
             loadingText3.text = getString(R.string.wait)
             lightStart.visibility = View.VISIBLE
@@ -134,12 +105,12 @@ class StartScreen : AppCompatActivity() {
                 }
             }
             override fun onCancel() {
-                soundError.start()
+                SoundManager.getInstance().playErrorSound()//soundError.start()
                 toastCenter("Facebook login cancelled")
                 maskButtons.visibility = View.GONE
             }
             override fun onError(error: FacebookException?) {
-                soundError.start()
+                SoundManager.getInstance().playErrorSound()//soundError.start()
                 if (error != null) {
                     toastCenter("Facebook login Error : ${error.message}")
                 }
@@ -156,7 +127,7 @@ class StartScreen : AppCompatActivity() {
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso)
         findViewById<SignInButton>(R.id.googleSignInButton).setOnClickListener(View.OnClickListener {
             it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-            soundUpdate.start()
+            SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
             startActivityForResult(mGoogleSignInClient.signInIntent, googleCode)
             maskButtons.visibility = View.VISIBLE
             loadingText3.text = getString(R.string.wait)
@@ -181,7 +152,6 @@ class StartScreen : AppCompatActivity() {
                 signInWithCredential(credentialGoogle, "google")
             }
         }
-//        twitterLoginButton.onActivityResult(requestCode, resultCode, data)
         callBackManager.onActivityResult(requestCode, resultCode, data)
     }
     private fun signInWithCredential(credential: AuthCredential, provider: String){
@@ -197,15 +167,15 @@ class StartScreen : AppCompatActivity() {
             maskButtons.visibility = View.GONE
             try{
                 if( (exception as FirebaseAuthUserCollisionException).errorCode == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL"){
-                    soundError.start()
+                    SoundManager.getInstance().playErrorSound()//soundError.start()
                     toastCenter("Account already exists for email" + "\n \n${exception.email} \n \nPlease Sign in with Google or different email")
                     LoginManager.getInstance().logOut()
                 }else{
-                    soundError.start()
+                    SoundManager.getInstance().playErrorSound()//soundError.start()
                     toastCenter("${exception.message} \n PLease try again or use other method")
                 }
             }catch(error: Exception){
-                soundError.start()
+                SoundManager.getInstance().playErrorSound()//soundError.start()
                 toastCenter("${exception.message} \n PLease try again or use other method")
             }
 
@@ -270,7 +240,7 @@ class StartScreen : AppCompatActivity() {
     }
 
     private fun startNextActivity(userGivenName: String?){
-        soundSuccess.start()
+        SoundManager.getInstance().playSuccessSound()//soundSuccess.start()
         speak("Hello  ${userGivenName.toString().split(" ")[0]}")
         loadingText3.visibility = View.GONE
         lightStart.visibility = View.GONE
@@ -288,7 +258,7 @@ class StartScreen : AppCompatActivity() {
     private fun speak(speechText:String, pitch:Float = 0.9f, speed:Float = 1f) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
-            textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, null, null)
+            textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH,  bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
     }
     private fun initializeSpeechEngine(){
         textToSpeech = TextToSpeech(applicationContext) { status ->
@@ -300,7 +270,24 @@ class StartScreen : AppCompatActivity() {
             }
         }
     }
-
+    fun openPrivacyPolicy(view: View) {
+        try {
+            intentBuilder = CustomTabsIntent.Builder()
+            intentBuilder.setStartAnimations(this, R.anim.slide_left_activity, R.anim.slide_left_activity)
+            intentBuilder.setExitAnimations(this, R.anim.slide_right_activity, R.anim.slide_right_activity)
+            intentBuilder.setToolbarColor(ContextCompat.getColor(applicationContext, R.color.icon_yellow))
+            intentBuilder.addDefaultShareMenuItem()
+            intentBuilder.build().launchUrl(this, Uri.parse(privacyPolicyUrl))
+        } catch (me: Exception) {
+            try {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(privacyPolicyUrl)
+                }
+                startActivity(intent)
+            } catch (me: Exception) {
+            }
+        }
+    }
     override fun onStop() {
         toast.cancel()
         super.onStop()

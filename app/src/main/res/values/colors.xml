@@ -20,6 +20,13 @@
     <color name="BlackTransUserStats3">#C5C5C5</color>
     <color name="BlackTransUserStats5">#C4000000</color>
     <color name="BlackTransUserStats6">#BC000000</color>
+    <color name="chat1">#E8000000</color>
+    <color name="chat2">#D3092022</color>
+    <color name="score1">#000000</color>
+    <color name="score2">#E6091922</color>
+    <color name="userRank1">#F2000000</color>
+    <color name="userRank2">#EE091013</color>
+    <color name="userRank3">#DD10081C</color>
 
     <color name="mhsTintBackground">#83FFFFFF</color>
     <color name="mhsTintBackground1">#79505050</color>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.user_rank.view.*
@@ -32,7 +33,9 @@ class LVAdapterJoinRoom(private val context: Context, private val userArrayList:
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		if (!userArrayList[position].empty) {
 			holder.itemView.visibility = View.VISIBLE
-			holder.itemView.layoutParams = RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+			val layoutParams = RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+			layoutParams.bottomMargin = 7
+			holder.itemView.layoutParams = layoutParams
 			val index = userArrayList[position].index
 //			if(index!=0) holder.itemView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.slide_down_in))
 			holder.itemView.userRank.text = if(index==0) "Host" else "P${index+1}"

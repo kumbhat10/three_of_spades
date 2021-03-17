@@ -33,6 +33,8 @@ class DeveloperCredits : AppCompatActivity() {
     private lateinit var emailIntent: Intent
     private var soundStatus = true
     private val homePageKKT = "http://sites.google.com/view/kaali-ki-teeggi/"
+    private val whatsapp1 = "https://wa.me/919582648284"
+    private val whatsapp2 = "https://wa.me/447496393966"
     private lateinit var intentBuilder: CustomTabsIntent.Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +42,8 @@ class DeveloperCredits : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_developer_credits)
         findViewById<ImageView>(R.id.icon_3developer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
+        devBckgd.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
+
         vn = packageManager.getPackageInfo(packageName,0).versionName
         vc = packageManager.getPackageInfo(packageName,0).versionCode.toString()
         uid = intent.getStringExtra("uid")!!.toString()    //Get roomID and display

@@ -14,10 +14,7 @@ import android.media.SoundPool
 import android.os.*
 import android.speech.tts.TextToSpeech
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -29,12 +26,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
@@ -56,6 +51,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var sp: SoundPool
     private var h: Int = 0
     private lateinit var textToSpeech: TextToSpeech
+    private var closeRoom: Boolean = false
     private var typedValue = TypedValue()
     private var rated = false
     private var shuffleOver = false
@@ -99,6 +95,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var scoreOpenStatus = false
     private var activityExists = true
     private lateinit var mInterstitialAd: InterstitialAd
+    private var mInterstitialAdLoaded = false
 
     private lateinit var roomID: String
     private lateinit var selfName: String
@@ -167,7 +164,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var timeAutoBid = listOf<Long>(1650, 1400, 1500, 1800)
     private var speedAutoBid = 1.1f
     private var timeAutoTrumpAndPartner = listOf<Long>(1700, 2000, 1700)
-    private var maxAutoBidLimit = 205
+    private var maxAutoBidLimit = listOf(210, 215, 220, 230, 215)
 
     private var scoreSheetNotUpdated = true
     private var played = false
@@ -442,7 +439,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         })
         // endregion
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-        logFirebaseEvent("game_screen", 1, "start_offline$nPlayers")
+        logFirebaseEvent(key =  "start_offline$nPlayers")
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true) // for click effect on self playing cards
         gameState = MutableLiveData()
         gameState.value = 1
@@ -464,7 +461,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
-    private fun logFirebaseEvent(event: String, int: Int, key: String) {
+    private fun logFirebaseEvent(event: String = "game_screen", int: Int = 1, key: String) {
         val params = Bundle()
         params.putInt(key, int)
         firebaseAnalytics.logEvent(event, params)
@@ -482,7 +479,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         roundNumberLimit = 13
         scoreLimit = 355
         scoreList = listOf(pt1, pt2, pt3, pt4)
-        findViewById<GifImageView>(R.id.imageViewChat).visibility = View.GONE
+//        findViewById<GifImageView>(R.id.imageViewChat).visibility = View.GONE
         textView1_4.visibility = View.VISIBLE
         textView1_4a.visibility = View.VISIBLE
         findViewById<ImageView>(R.id.onlinep1_4).visibility = View.VISIBLE
@@ -534,6 +531,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun gameMode6() {
+        logFirebaseEvent( key="played_offline")
         relativeLayoutTableCards.visibility = View.GONE
         countDownTimer("PlayCard", purpose = "cancel")
         if (vibrateStatus) vibrationStart()
@@ -545,17 +543,15 @@ class GameScreenAutoPlay : AppCompatActivity() {
             updateWholeScoreBoard()
             gameNumber += 1
         }
-        if (!mInterstitialAd.isLoaded && !premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder()
-            .build())
+        if (!mInterstitialAdLoaded && !premiumStatus) loadInterstitialAd()
         Handler(Looper.getMainLooper()).postDelayed({
             //            if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 2)) {  // Ask only once per game
             //                inAppReview()
             //                reviewRequested = true
             //            } else
             if (!premiumStatus) {
-                if (mInterstitialAd.isLoaded) mInterstitialAd.show()
-                else mInterstitialAd.loadAd(AdRequest.Builder()
-                    .build()) // load the AD again after loading first time
+                if (mInterstitialAdLoaded) mInterstitialAd.show(this@GameScreenAutoPlay)
+                else loadInterstitialAd() // load the AD again after loading first time
             }
             horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
             startNextRoundButton.visibility = View.VISIBLE
@@ -1381,7 +1377,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
             } else {
                 centralText("Waiting for ${playerName(playerTurn.value!!)} to bid", 0) //display message only first time
             }
-            if (bidSpeak && bidingStarted && soundStatus) speak("${playerName(bidder)} bid $bidValue", speed = 1.8f)
+            if (bidSpeak && bidingStarted && soundStatus) {
+                speak("${playerName(bidder)} bid $bidValue", speed = 1.8f)
+                GameScreenAutoPlay().moveView(bidCoin, findViewById(refIDMappedImageView[bidder - 1]))
+            }
             //            else if (soundStatus) SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
             textViewBidValue.text = "$bidValue" //.toString() //show current bid value $emojiScore
             findViewById<TextView>(R.id.textViewBider).text = getString(R.string.Bider) + playerName(bidder)
@@ -1441,7 +1440,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun autoBid() {
         val tempView = View(applicationContext)
         if (bidStatus[playerTurn.value!! - 1] == 1) {
-            if (maxAutoBidLimit > bidValue) tempView.tag = listOf("5", "pass", "10", "5", "pass", "10", "20").random() //check if bid value has not reached maximum allowed bid value
+            if (maxAutoBidLimit.random() > bidValue) tempView.tag = listOf("5", "pass", "10", "20", "pass", "10", "20").random() //check if bid value has not reached maximum allowed bid value
             else tempView.tag = "pass"
             countDownBidding.cancel() // dummy
             Handler(Looper.getMainLooper()).postDelayed({
@@ -1492,8 +1491,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
-    private fun speak(speechText: String, speed: Float = 1f, queue: Int = TextToSpeech.QUEUE_FLUSH) {
-        if (soundStatus && this::textToSpeech.isInitialized) {
+    private fun speak(speechText: String, speed: Float = 1f, queue: Int = TextToSpeech.QUEUE_FLUSH, forceSpeak:Boolean = false) {
+        if (soundStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
             textToSpeech.setPitch(1f)
             textToSpeech.setSpeechRate(speed)
             textToSpeech.speak(speechText, queue, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
@@ -1712,22 +1711,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         return next
     }
 
-    fun openCloseChatWindow(view: View) {
-        if (findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility == View.VISIBLE) { //close chat display
-            hideKeyboard()
-            findViewById<RelativeLayout>(R.id.chatLinearLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_chat_close))
-            Handler(Looper.getMainLooper()).postDelayed({
-                findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.GONE
-            }, 140)
-        } else { //open chat display
-            counterChat = 0 // reset chat counter to 0
-            findViewById<TextView>(R.id.textViewChatNo).visibility = View.GONE // make counter invisible
-            findViewById<TextView>(R.id.textViewChatNo).clearAnimation() // clear counter animation
-            findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.VISIBLE
-            findViewById<RelativeLayout>(R.id.chatLinearLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_chat_open))
-        }
-    }
-
     private fun getSharedPrefs() {
         sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
         editor = sharedPreferences.edit()
@@ -1768,47 +1751,78 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun initializeAds() {
-        mInterstitialAd = InterstitialAd(this)
         if (!premiumStatus) {
             findViewById<AdView>(R.id.addViewGameScreenBanner).visibility = View.VISIBLE
             findViewById<AdView>(R.id.addViewGameScreenBanner).loadAd(AdRequest.Builder().build())
-            findViewById<AdView>(R.id.addViewChatGameScreenBanner).visibility = View.VISIBLE
-            findViewById<AdView>(R.id.addViewChatGameScreenBanner).loadAd(AdRequest.Builder()
-                .build())
-            mInterstitialAd.adUnitId = resources.getString(R.string.interstitial)
-            mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
-            mInterstitialAd.adListener = object : AdListener() {
-                override fun onAdClosed() { // dummy - check if at some other places ads is shown-conflict with ads closed  - no start next game button needs to be added here
-                    logFirebaseEvent("game_screen", 1, "watched_ad")
-                    if (gameState.value!! == 6) {
-                        horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
-                        startNextRoundButton.visibility = View.VISIBLE
-                        startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-                    }
-                    mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD again after loading first time
-                }
-            }
+            findViewById<AdView>(R.id.addViewChatGameScreenBanner).visibility = View.GONE
+//            findViewById<AdView>(R.id.addViewChatGameScreenBanner).loadAd(AdRequest.Builder().build()) // no chat screen in auto play
+
         } else {
             findViewById<AdView>(R.id.addViewGameScreenBanner).visibility = View.GONE
             findViewById<AdView>(R.id.addViewChatGameScreenBanner).visibility = View.GONE
         }
+        loadInterstitialAd()
+    }
+
+    private fun loadInterstitialAd(showAd:Boolean = false){
+        val adUnitID = if (!BuildConfig.DEBUG)getString(R.string.interstitialReal) // real interstitial ad id
+        else getString(R.string.interstitialReal) // test interstitial ad
+
+        InterstitialAd.load(applicationContext, adUnitID, AdRequest.Builder().build(), object: InterstitialAdLoadCallback(){
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                mInterstitialAdLoaded = false
+            }
+            override fun onAdLoaded(interstitialAd: com.google.android.gms.ads.interstitial.InterstitialAd) {
+                mInterstitialAdLoaded = true
+                mInterstitialAd = interstitialAd
+                mInterstitialAd.fullScreenContentCallback = object: FullScreenContentCallback(){
+                    override fun onAdDismissedFullScreenContent() {
+                        toastCenter("Ad was dismissed")
+                        mInterstitialAdLoaded = false
+                        logFirebaseEvent( key = "watched_ad")
+                        if (gameState.value!! == 6) {
+                            horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
+                            startNextRoundButton.visibility = View.VISIBLE
+                            startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
+                        }
+                        super.onAdDismissedFullScreenContent()
+                    }
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError?) {
+                        toastCenter("Ad failed to show")
+                        mInterstitialAdLoaded = false
+                        super.onAdFailedToShowFullScreenContent(p0)
+                    }
+                    override fun onAdShowedFullScreenContent() {
+                        mInterstitialAdLoaded = false
+                        loadInterstitialAd()
+                        super.onAdShowedFullScreenContent()
+                    }
+                }
+                if(showAd) mInterstitialAd.show(this@GameScreenAutoPlay)
+            }
+        })
     }
 
     fun showDialogue(view: View){
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        speak("Are you sure want to leave the game", speed = 0.95f)
+        closeRoom = true
+        speak("Are you sure want to leave the game", speed = 0.95f, forceSpeak = true)
         if (!this::alertDialog.isInitialized) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Exit Game")
             builder.setMessage("Are you sure want to leave the game ?")
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                 toastCenter("Leaving game now")
-                speak("Leaving game now")
-                Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom() }, 1300)
+                speak("Leaving game", forceSpeak = true)
+                Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom() }, 250)
             }
             builder.setNegativeButton("No") { _: DialogInterface, _: Int ->
+                closeRoom = false
             }
+            builder.setOnDismissListener {
+                closeRoom = false }
             alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.shine_score_table))
         }
         alertDialog.show()
     }

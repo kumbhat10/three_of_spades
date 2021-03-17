@@ -123,10 +123,12 @@
             android:name=".GameScreenAutoPlay"
             android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
+        <!--android:resizeableActivity="true" -->
         <activity
             android:name=".MainHomeScreen"
+            android:supportsPictureInPicture="true"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden"
             android:windowSoftInputMode="adjustNothing"
             android:theme="@style/Theme.launcher">
             <intent-filter android:autoVerify="true">

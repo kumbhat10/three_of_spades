@@ -38,12 +38,11 @@ public class SoundManager {
         DHOL_SOUND = soundPool.load(context, R.raw.dhol, 1);
         LOST_SOUND = soundPool.load(context, R.raw.game_lose, 1);
         TIMER_SOUND = soundPool.load(context, R.raw.timer_over, 1);
-
         // load other sound if you like
     }
 
     public void playUpdateSound(){
-        soundPool.play(UPDATE_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
+        soundPool.play(UPDATE_SOUND, 0.5F, 0.5F, 0, 0, 1.0F);
     }
     public void playErrorSound(){
         soundPool.play(ERROR_SOUND, 0.1F, 0.1F, 0, 0, 1.0F);
@@ -59,7 +58,7 @@ public class SoundManager {
         soundPool.play(SHUFFLE_SOUND, 0.5F, 0.5F, 0, 0, 1.0F);
     }
     public void playWonSound(){
-        soundPool.play(WON_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
+        soundPool.play(WON_SOUND, 0.3F, 0.3F, 0, 0, 1.0F);
     }
     public void playDholSound(){ soundPool.play(DHOL_SOUND, 1.0F, 1.0F, 0, 0, 1.0F); }
     public void playChatSound(){
@@ -68,9 +67,7 @@ public class SoundManager {
     public void playLostSound(){
         soundPool.play(LOST_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
     }
-    public void playTimerSound(){
-        soundPool.play(TIMER_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);
-    }
+    public void playTimerSound(){ soundPool.play(TIMER_SOUND, 1.0F, 1.0F, 0, 0, 1.0F);}
     public void playZipSound(){
         soundPool.play(ZIP_SOUND, 0.6F, 0.6F, 0, 0, 1.0F);
     }

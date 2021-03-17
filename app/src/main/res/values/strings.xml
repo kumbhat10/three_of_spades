@@ -30,8 +30,7 @@
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
     <string name="inviteLink">https://kaaliteeri.page.link/invite</string>
     <string name="websiteLink">https://sites.google.com/view/kaali-ki-teeggi/</string>
-    <string name="testDeviceId">3872102D27DCB017E465C646FA620D3C</string>
-    <string name="testDeviceId2">"26414C818914F190ED8DA40B90135D52"</string>
+    <string name="testDeviceId">DC0D07E34CC20346D00D6C0B21C0DAA5</string>
 
     <string name="bannerReal">ca-app-pub-2714670043901113/2653923895</string>
     <string name="banner">@string/bannerReal</string>
@@ -153,5 +152,7 @@
     <string name="userscore">$ 000,000</string>
     <string name="playersjoined">All players have joined</string>
     <string name="gamesplayedstats">Null</string>
+    <string name="train">Train</string>
+    <string name="privacy_policy"><u>Privacy Policy</u></string>
 
 </resources>

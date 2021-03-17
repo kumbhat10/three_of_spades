@@ -1446,18 +1446,16 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/imageViewChat"
-        android:layout_width="@dimen/_47sdp"
-        android:layout_height="@dimen/_47sdp"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/_4sdp"
-        android:layout_marginBottom="@dimen/_14sdp"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_6sdp"
         android:onClick="openCloseChatWindow"
         android:src="@drawable/chat2"
-        android:background="@drawable/blacksquarebutton"
         android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:visibility="gone"
         tools:ignore="TooManyViews" />
 
     <TextView
@@ -1466,22 +1464,18 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/imageViewChat"
         android:layout_alignStart="@+id/imageViewChat"
-        android:layout_marginStart="@dimen/_18sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_45sdp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:text="@string/noOfChat"
         android:textColor="#FFFFFF"
-        android:textSize="@dimen/_18ssp"
-        android:textStyle="bold"
+        android:textSize="@dimen/_12ssp"
         android:visibility="gone" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textViewBider"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_28sdp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
         android:background="@drawable/redrectanlgesimple"
         android:gravity="start|center"
         android:paddingStart="@dimen/_5sdp"
@@ -1490,6 +1484,16 @@
         android:textColor="@color/white"
         android:textSize="@dimen/_18ssp"
         tools:ignore="RelativeOverlap,RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/bidCoin"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_28sdp"
+        android:layout_below="@+id/textViewBider"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="@dimen/_minus2sdp"
+        android:background="@drawable/yellowbutton"/>
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textViewBidValue"
@@ -1507,6 +1511,8 @@
         app:ticker_animationDuration="800"
         app:ticker_defaultPreferredScrollingDirection="any"
         app:ticker_defaultCharacterList="number"/>
+
+
 
     <FrameLayout
         android:id="@+id/frameAskBid"
@@ -1711,7 +1717,7 @@
 
     <RelativeLayout
         android:id="@+id/chatLinearLayout"
-        android:layout_width="@dimen/_250sdp"
+        android:layout_width="@dimen/_260sdp"
         android:layout_height="match_parent"
         android:layout_above="@+id/playerCards"
         android:layout_marginBottom="-20dp"
@@ -1743,7 +1749,7 @@
                 android:paddingStart="@dimen/_3sdp"
                 android:paddingEnd="@dimen/_2sdp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#777777"
+                android:textColorHint="#CFA965"
                 android:textSize="@dimen/_11ssp"
                 android:scrollbarAlwaysDrawVerticalTrack="true"
                 android:scrollbars="vertical"
@@ -1752,16 +1758,14 @@
         <HorizontalScrollView
             android:id="@+id/emojiGrid"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_32sdp"
+            android:layout_height="wrap_content"
             android:layout_above="@+id/chatInput"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:scrollbarStyle="outsideOverlay"
-            android:scrollbars="horizontal">
+            android:scrollbarAlwaysDrawHorizontalTrack="false">
 
             <LinearLayout
                 android:id="@+id/emojiGrid1"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_32sdp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal" />
         </HorizontalScrollView>
 
@@ -2153,7 +2157,6 @@
         android:elevation="@dimen/_45sdp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:visibility="gone">
 
         <ImageView

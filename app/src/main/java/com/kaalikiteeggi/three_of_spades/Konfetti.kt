@@ -11,16 +11,10 @@ enum class KonType{
     Money, Win, Lost
 }
 
-fun createKonfetti(context: Context, view: KonfettiView, duration:Long = 2000L, size:Int = 50,
-    konType:KonType = KonType.Win, burst:Boolean = false, speed:Float = 3f, ratePerSec:Int = 200, burstCount:Int = 100){
-//    val ca = when(konType){
-//        KonType.Money -> listOf(ContextCompat.getColor(context, R.color.coin_yellow))
-//        KonType.Spade-> listOf(Color.DKGRAY)
-//        else-> listOf( Color.RED, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW, Color.MAGENTA, Color.GREEN)
-//    }
+fun createKonfetti(context: Context, view: KonfettiView, duration: Long = 2000L, konType: KonType = KonType.Win, burst: Boolean = false, speed: Float = 3f, ratePerSec: Int = 200, burstCount: Int = 100){
+
 
     val moneyD = Shape.DrawableShape(ContextCompat.getDrawable(context, R.drawable.moneykon)!!, false)
-//    val spadeD = Shape.DrawableShape(ContextCompat.getDrawable(context, R.drawable.spadekon)!!, true)
     val coinD = Shape.DrawableShape(ContextCompat.getDrawable(context, R.drawable.coinkon)!!, false)
     val sadD = Shape.DrawableShape(ContextCompat.getDrawable(context, R.drawable.sadcry)!!, false)
     val sad2D = Shape.DrawableShape(ContextCompat.getDrawable(context, R.drawable.sad)!!, false)

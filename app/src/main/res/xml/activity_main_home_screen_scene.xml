@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/left">
+
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/right">
+        <Constraint
+            android:layout_width="@dimen/_65sdp"
+            android:layout_height="@dimen/_65sdp"
+            app:layout_constraintBottom_toTopOf="@id/addViewMHS"
+            android:id="@+id/developerIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/_30sdp" />
+        <Constraint
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_4sdp"
+            app:layout_constraintBottom_toBottomOf="@id/developerCreditsButton"
+            android:layout_width="wrap_content"
+            android:id="@+id/versionCode"
+            android:layout_marginStart="@dimen/_30sdp"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/right"
+        app:constraintSetStart="@+id/left">
+        <OnSwipe
+            app:touchAnchorSide="middle"
+            app:touchAnchorId="@+id/developerIcon"
+            app:dragDirection="dragRight"
+            app:touchRegionId="@id/developerIcon"/>
+        <OnClick />
+
+    </Transition>
+</MotionScene>

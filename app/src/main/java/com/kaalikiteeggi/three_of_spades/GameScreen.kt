@@ -3,6 +3,7 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -29,10 +30,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -51,6 +50,7 @@ import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_game_screen.*
 import kotlinx.android.synthetic.main.cards_item_list_partner.view.*
+import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,6 +63,7 @@ class GameScreen : AppCompatActivity() {
     //    region Initialization
 
     private lateinit var textToSpeech: TextToSpeech
+    private var closeRoom: Boolean = false
     private var typedValue = TypedValue()
     private var rated = false
 //    private var reviewRequested = false
@@ -106,7 +107,8 @@ class GameScreen : AppCompatActivity() {
     private var premiumStatus = false
     private var scoreOpenStatus = false
     private var activityExists = true
-    private lateinit var mInterstitialAd: InterstitialAd
+    private lateinit var mInterstitialAd: com.google.android.gms.ads.interstitial.InterstitialAd
+    private var mInterstitialAdLoaded = false
 
     private lateinit var roomID: String
     private lateinit var selfName: String
@@ -310,7 +312,7 @@ class GameScreen : AppCompatActivity() {
             refUsersData.document(uid)
                 .set(hashMapOf("LPD" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
                     .toInt()), SetOptions.merge())
-            inflateEmoji()
+            inflateEmoji()  // for chat screen
         } // endregion
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true)
     }
@@ -344,10 +346,14 @@ class GameScreen : AppCompatActivity() {
             textView.isFocusable = true
             textView.isClickable = true
             textView.id = i
-            textView.background = ContextCompat.getDrawable(this, R.drawable.blacksquarebutton)
-            textView.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            textView.width = 10
-            textView.setOnClickListener { view-> sendEmoji(view)}
+            val params = LinearLayout.LayoutParams(100, LinearLayout.LayoutParams.MATCH_PARENT)
+            params.marginEnd = 5
+            textView.layoutParams = params
+//            textView.background = ContextCompat.getDrawable(this, R.drawable.blacksquarebutton)
+            textView.foreground = ContextCompat.getDrawable(this, typedValue.resourceId)
+            textView.setOnClickListener { view->
+                view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+                sendEmoji(view)}
             emojiGrid1.addView(textView)
         }
     }
@@ -358,6 +364,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun setupGame4or7() {
+        findViewById<GifImageView>(R.id.imageViewChat).visibility = View.VISIBLE
         if (nPlayers7) {
             findViewById<TickerView>(R.id.textView1).visibility = View.VISIBLE
             findViewById<TickerView>(R.id.textView1a).visibility = View.VISIBLE
@@ -395,9 +402,6 @@ class GameScreen : AppCompatActivity() {
 
             findViewById<TickerView>(R.id.buddyText2).visibility = View.VISIBLE
             findViewById<ImageView>(R.id.buddyImage2).visibility = View.VISIBLE
-
-//            val dimensionInDp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dimensionInPixel, resources.displayMetrics)
-//                .toInt()
 
             bidNowImage.layoutParams.width = resources.getDimensionPixelSize(R.dimen.imageWidth)
             bidNowImage.layoutParams.height = resources.getDimensionPixelSize(R.dimen.imageHeight)
@@ -447,6 +451,8 @@ class GameScreen : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if (fromInt != 1) checkRoomExists() // don't check this for host
+        else write("OL/$from", 1) // Turn Host online
+
         getCardsAndDisplay(display = false)
 
         // region table card listener
@@ -592,16 +598,15 @@ class GameScreen : AppCompatActivity() {
                 if (dataSnapshot != null && dataSnapshot.exists() && error == null) {
                     val data = (dataSnapshot.data as Map<String, String>)["M"].toString()
                     if (data.isNotEmpty() && lastChat != data) { // if chat is not empty
-                        if (soundStatus) SoundManager.getInstance()
-                            .playChatSound() // soundChat.start()
+                        if (soundStatus) SoundManager.getInstance().playChatSound() // soundChat.start()
                         textViewChatDisplay.text = textViewChatDisplay.text.toString() + "\n${Emoji().guard} " + data
                         findViewById<TextView>(R.id.textViewChatDisplay).requestLayout()
                         lastChat = data
                         if (chatLinearLayout.visibility != View.VISIBLE) {
+                            (imageViewChat.drawable as GifDrawable).start()
                             counterChat += 1 // increase counter by 1 is chat display is off
                             textViewChatNo.visibility = View.VISIBLE
-                            textViewChatNo.text = "$counterChat ${Emoji().message}"
-                            //                            findViewById<TextView>(R.id.textViewChatNo).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
+                            textViewChatNo.text = "$counterChat New ${Emoji().message}"
                         }
                     }
                 } else if (dataSnapshot != null && !dataSnapshot.exists()) { // dummy
@@ -615,9 +620,7 @@ class GameScreen : AppCompatActivity() {
         //region Online Status Listener
         onlineStatusListener1 = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
-                toastCenter("empty host")
             }
-
             override fun onDataChange(data: DataSnapshot) {
                 if (data.value != null && activityExists) {
                     if (onlineP1 != data.value.toString().toInt()) {
@@ -859,8 +862,7 @@ class GameScreen : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.value != null && activityExists) {
                     roundNumber = p0.value.toString().toInt()
-                    if (roundNumber > 10 && !premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder()
-                        .build()) // load the ad again
+                    if (roundNumber > 10 && !premiumStatus) loadInterstitialAd() // load the ad again
                 }
             }
         }
@@ -1069,7 +1071,6 @@ class GameScreen : AppCompatActivity() {
                 override fun onTick(millisUntilFinished: Long) {
                     //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
                     progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
-                    progressbarTimer.secondaryProgress = ((timeCountdownPlayCard - millisUntilFinished) * 10000 / timeCountdownPlayCard).toInt()
                     textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
                         .toString() + "s"
                 }
@@ -1135,8 +1136,8 @@ class GameScreen : AppCompatActivity() {
                     write("OL/$from", 1)
                 } else {
                     activityExists = false
-                    toastCenter("Ooppps ! ${playerName(1)} has closed the room")
-                    speak("${playerName(1)} has left. lets leave", speed = 1.05f)
+                    toastCenter("Ooppps ! ${playerName(1)} has closed this room")
+                    speak("${playerName(1)} has closed this room.", speed = 1.05f)
                     findViewById<ImageView>(refIDMappedOnlineIconImageView[0]).setImageResource(R.drawable.status_offline)
                     val view = View(applicationContext)
                     view.tag = "notClicked"
@@ -1164,8 +1165,7 @@ class GameScreen : AppCompatActivity() {
         if (soundStatus) SoundManager.getInstance().playShuffleSound() //
         displayShufflingCards(distribute = false)
         scoreOpenStatus = true
-        if (!mInterstitialAd.isLoaded && !premiumStatus) mInterstitialAd.loadAd(AdRequest.Builder()
-            .build())
+        if (!mInterstitialAdLoaded && !premiumStatus) loadInterstitialAd()
 
         refGameData.child("S").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {}
@@ -1183,8 +1183,7 @@ class GameScreen : AppCompatActivity() {
             //                inAppReview()
             //                reviewRequested = true
             //            }else
-            if (!premiumStatus && mInterstitialAd.isLoaded) mInterstitialAd.show()
-            //            else if (!mInterstitialAd.isLoaded) mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD again after loading first time
+            if (!premiumStatus && mInterstitialAdLoaded) mInterstitialAd.show(this@GameScreen)
 
             if (fromInt == 1) {
                 findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
@@ -1671,7 +1670,7 @@ class GameScreen : AppCompatActivity() {
                         trumpStart = p0.child("R").value.toString() // trump of start game
                         clearAllAnimation()
                         if (gameTurn == 1) played = false // reset for new round
-                        if ((nPlayers7 && gameTurn == 8) || (nPlayers4 && gameTurn == 5)) {
+                        if (this@GameScreen::trump.isInitialized &&  ((nPlayers7 && gameTurn == 8) || (nPlayers4 && gameTurn == 5))) {
                             Handler(Looper.getMainLooper()).postDelayed({ declareRoundWinner() }, 600)
                         } else if (gameTurn != 8 && gameTurn != 0) {
                             animatePlayer(playerTurn)
@@ -2176,7 +2175,7 @@ class GameScreen : AppCompatActivity() {
         } else { // show to bidder only
             bidNowImage.visibility = View.GONE // redundant not required really
             if(bidder!=0) centralText("Well done! ${playerName(bidder)} \n You won the bid round", 0)
-            speak("Well done!! Choose trump now", speed = 1.05f, queue = TextToSpeech.QUEUE_ADD)
+            speak("Well done!! Choose trump now", speed = 1f, queue = TextToSpeech.QUEUE_ADD)
             findViewById<FrameLayout>(R.id.frameTrumpSelection).visibility = View.VISIBLE
             findViewById<FrameLayout>(R.id.frameTrumpSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
             if (vibrateStatus) vibrationStart()
@@ -2243,7 +2242,10 @@ class GameScreen : AppCompatActivity() {
                             centralText("Waiting for ${playerName(playerTurn)} to bid", 0) //display message always
                         }
 
-                        if (bidSpeak && bidingStarted && soundStatus) speak("${playerName(bidder)} bid $bidValue", speed = 1f)
+                        if (bidSpeak && bidingStarted && soundStatus) {
+                            speak("${playerName(bidder)} bid $bidValue", speed = 1f)
+                            GameScreenAutoPlay().moveView(bidCoin, findViewById(refIDMappedImageView[bidder - 1]))
+                        }
                         else if (!bidSpeak && bidingStarted && soundStatus) speak("${playerName(prevPlayerTurn)} passed", speed = 1f)
 //                        else if (soundStatus) SoundManager.getInstance().playUpdateSound() //
 
@@ -2330,8 +2332,8 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1f, queue: Int = TextToSpeech.QUEUE_FLUSH) {
-        if (soundStatus) {
+    private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1f, queue: Int = TextToSpeech.QUEUE_FLUSH, forceSpeak:Boolean = false) {
+        if (soundStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
             textToSpeech.speak(speechText, queue, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
@@ -2600,18 +2602,23 @@ class GameScreen : AppCompatActivity() {
     }
 
     fun openCloseChatWindow(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (chatLinearLayout.visibility == View.VISIBLE) { //close chat display
             hideKeyboard()
             chatLinearLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_chat_close))
             Handler(Looper.getMainLooper()).postDelayed({
                 chatLinearLayout.visibility = View.GONE
             }, 140)
+//            (imageViewChat.drawable as GifDrawable).start()
+
         } else { //open chat display
             counterChat = 0 // reset chat counter to 0
             findViewById<TextView>(R.id.textViewChatNo).visibility = View.GONE // make counter invisible
             findViewById<TextView>(R.id.textViewChatNo).clearAnimation() // clear counter animation
             chatLinearLayout.visibility = View.VISIBLE
             chatLinearLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_chat_open))
+            (imageViewChat.drawable as GifDrawable).stop()
+
         }
     }
 
@@ -2667,48 +2674,76 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun initializeAds() {
-        mInterstitialAd = InterstitialAd(this)
         if (!premiumStatus) {
             findViewById<AdView>(R.id.addViewGameScreenBanner).visibility = View.VISIBLE
             findViewById<AdView>(R.id.addViewGameScreenBanner).loadAd(AdRequest.Builder().build())
             findViewById<AdView>(R.id.addViewChatGameScreenBanner).visibility = View.VISIBLE
-            findViewById<AdView>(R.id.addViewChatGameScreenBanner).loadAd(AdRequest.Builder()
-                .build())
-            mInterstitialAd.adUnitId = resources.getString(R.string.interstitial)
-            mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD manually for the first time
-            mInterstitialAd.adListener = object : AdListener() {
-                override fun onAdClosed() { // dummy - check if at some other places ads is shown-conflict with ads closed  - no start next game button needs to be added here
-                    logFirebaseEvent(key= "watched_ad")
-                    mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the ad again
-                    if (fromInt == 1 &&  gameState == 6) {
-                        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
-                        findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.VISIBLE
-                        findViewById<AppCompatTextView>(R.id.startNextRoundButton).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-                    }
-                    mInterstitialAd.loadAd(AdRequest.Builder().build()) // load the AD again after loading first time
-                }
-            }
+            findViewById<AdView>(R.id.addViewChatGameScreenBanner).loadAd(AdRequest.Builder().build())
         } else {
             findViewById<AdView>(R.id.addViewGameScreenBanner).visibility = View.GONE
             findViewById<AdView>(R.id.addViewChatGameScreenBanner).visibility = View.GONE
         }
     }
 
+    private fun loadInterstitialAd(showAd:Boolean = false){
+        val adUnitID = if (!BuildConfig.DEBUG)getString(R.string.interstitialReal) // real interstitial ad id
+        else getString(R.string.interstitialReal) // test interstitial ad
+
+        com.google.android.gms.ads.interstitial.InterstitialAd.load(applicationContext, adUnitID, AdRequest.Builder().build(), object: InterstitialAdLoadCallback(){
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                mInterstitialAdLoaded = false
+            }
+            override fun onAdLoaded(interstitialAd: com.google.android.gms.ads.interstitial.InterstitialAd) {
+                mInterstitialAdLoaded = true
+                mInterstitialAd = interstitialAd
+                mInterstitialAd.fullScreenContentCallback = object: FullScreenContentCallback(){
+                    override fun onAdDismissedFullScreenContent() {
+                        mInterstitialAdLoaded = false
+                        logFirebaseEvent(key= "watched_ad")
+                        if (fromInt == 1 &&  gameState == 6) {
+                            findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
+                            findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.VISIBLE
+                            findViewById<AppCompatTextView>(R.id.startNextRoundButton).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
+                        }
+                        if(fromInt!=1) checkRoomExists()
+                        else write("OL/$from", 1)
+                        super.onAdDismissedFullScreenContent()
+                    }
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError?) {
+                        mInterstitialAdLoaded = false
+                        super.onAdFailedToShowFullScreenContent(p0)
+                    }
+                    override fun onAdShowedFullScreenContent() {
+                        mInterstitialAdLoaded = false
+                        loadInterstitialAd()
+                        super.onAdShowedFullScreenContent()
+                    }
+                }
+                if(showAd) mInterstitialAd.show(this@GameScreen)
+            }
+        })
+    }
+
     fun showDialogue(view: View){
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        speak("Are you sure want to leave the game", speed = 0.95f)
+        closeRoom = true
+        speak("Are you sure want to leave the game", speed = 0.95f, forceSpeak = true)
         if (!this::alertDialog.isInitialized) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Exit Game")
             builder.setMessage("Are you sure want to leave the game ?")
-            builder.setPositiveButton("Yes", DialogInterface.OnClickListener() { _: DialogInterface, _: Int ->
+            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                 toastCenter("Leaving game now")
-                speak("Leaving game now")
-                Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(View(applicationContext)) }, 1300)
-            })
-            builder.setNegativeButton("No", DialogInterface.OnClickListener() { _: DialogInterface, _: Int ->
-            })
+                speak("Leaving game ", forceSpeak = true)
+                Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(View(applicationContext)) }, 300)
+            }
+            builder.setNegativeButton("No") { _: DialogInterface, _: Int ->
+                closeRoom = false
+            }
+            builder.setOnDismissListener {
+                closeRoom = false }
             alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.shine_score_table))
         }
         alertDialog.show()
     }

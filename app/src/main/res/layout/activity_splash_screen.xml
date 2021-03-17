@@ -10,12 +10,13 @@
         android:id="@+id/splashBckgd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/redorangeburst"
+        android:src="@drawable/blueburst"
         android:foreground="@drawable/tint_background4"
         android:scaleType="centerCrop"
-        android:scaleX="4"
-        android:scaleY="4"
-        android:visibility="visible"/>
+        android:scaleX="2.5"
+        android:scaleY="2.5"
+        android:visibility="visible"
+        android:contentDescription="@string/todo" />
 
     <ImageView
         android:id="@+id/spadeImage"
@@ -40,16 +41,29 @@
          app:layout_constraintStart_toStartOf="parent"
          app:layout_constraintTop_toTopOf="parent" />
 
-    <com.bitvale.lightprogress.LightProgress
+    <TextView
         android:id="@+id/lightSplash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/loading"
-        android:textSize="@dimen/_26ssp"
+        android:textSize="@dimen/_20ssp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/Black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/spadeImage" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnim"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/spadeImage"
+        android:layout_marginTop="@dimen/_220sdp"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/l_progress_bar"
+        app:lottie_speed="0.6" />
+
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profilePic2"

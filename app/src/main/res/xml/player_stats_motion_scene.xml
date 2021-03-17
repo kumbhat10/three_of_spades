@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/open">
+
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/close">
+        <Constraint
+            android:id="@+id/playerStats"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/bannershield"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:transitionEasing="linear" />
+
+
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/close"
+        app:constraintSetStart="@+id/open"
+        app:duration="450"
+        app:motionInterpolator="easeOut">
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorId="@+id/playerStats"
+            app:touchAnchorSide="middle"/>
+
+        <KeyFrameSet >
+            <KeyAttribute
+                app:motionTarget="@+id/playerStats"
+                app:framePosition="99"
+                android:alpha="1" />
+            <KeyAttribute
+                app:motionTarget="@+id/playerStats"
+                app:framePosition="100"
+                android:alpha="0" />
+        </KeyFrameSet>
+
+    </Transition>
+</MotionScene>

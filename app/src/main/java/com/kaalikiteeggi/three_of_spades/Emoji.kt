@@ -24,6 +24,6 @@ class Emoji {
 	val rofl = String(Character.toChars(0x1F923))
 	val sad = String(Character.toChars(0x1F61E))
 
-	val emojiChatArray = listOf(smileHard, angry, rofl, sad, abuse, cry, surprised, heroGlass, smileTongue, happyHeart )
+	val emojiChatArray = listOf(smileHard, sad, abuse, cry, happyHeart, angry, smileTongue, rofl, surprised, heroGlass   )
 
 }

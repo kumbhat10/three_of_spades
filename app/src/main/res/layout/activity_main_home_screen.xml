@@ -13,216 +13,161 @@
         android:id="@+id/konfettiMHS"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:foreground="@drawable/tint_backgroundmhs"
         android:visibility="visible"
-        android:foreground = "@drawable/tint_backgroundmhs"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <GridView
-        android:id="@+id/mainIconGridView"
-        android:layout_width="@dimen/gridWidth"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:clickable="true"
-        android:columnWidth="@dimen/iconWidth"
-        android:drawSelectorOnTop="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:horizontalSpacing="@dimen/iconSpacingH"
-        android:numColumns="2"
-        android:scrollbarSize="@dimen/_4sdp"
-        android:scrollbars="vertical"
-        android:stretchMode="none"
-        android:verticalSpacing="@dimen/iconSpacingV"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/developerCreditsButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameCardMHS"
-        app:layout_constraintVertical_bias="0" />
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/watchVideo"
-        android:layout_width="@dimen/_64sdp"
-        android:layout_height="@dimen/mhsIconsSize"
-        android:layout_marginTop="@dimen/mhsIconsGap"
-        android:layout_marginEnd="0dp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="showRewardedVideoAd"
-        android:src="@drawable/watch_ad_500"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinIcon" />
-
-    <ImageView
-        android:id="@+id/removeAds"
-        android:layout_width="@dimen/mhsIconsSize"
-        android:layout_height="@dimen/mhsIconsSize"
-        android:layout_marginTop="@dimen/mhsIconsGap"
-        android:layout_marginEnd="@dimen/mhsIconsMargin"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="removeAdsOrPremium"
-        android:src="@drawable/no_ads"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/watchVideo" />
-
-    <ImageView
-        android:id="@+id/rateUsIcon"
-        android:tag="rate"
-        android:layout_width="@dimen/mhsIconsSize"
-        android:layout_height="@dimen/mhsIconsSize"
-        android:layout_marginTop="@dimen/mhsIconsGap"
-        android:layout_marginEnd="@dimen/mhsIconsMargin"
-        android:onClick="openRatingWindow"
-        android:src="@drawable/rateus"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/removeAds" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/trainingButton"
-            android:layout_width="@dimen/_57sdp"
-            android:layout_height="@dimen/_57sdp"
-            app:layout_constraintTop_toBottomOf="@+id/rateUsIcon"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/mhsIconsGap"
-            android:layout_marginEnd="@dimen/mhsIconsMargin"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:onClick="trainingStart"
-            android:text="Train"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12ssp"
-            android:gravity="center"
-            android:background="@drawable/blackcirclebutton"
-            android:visibility="gone"/>
-
-    <LinearLayout
-        android:id="@+id/playerStats"
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/playerStatsML"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:background="@drawable/bannershield"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="openClosePlayerStats"
-        android:orientation="vertical"
-        android:visibility="visible"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/usernameCardMHS"
+        app:layout_constraintBottom_toTopOf="@+id/developerCreditsML"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/usernameCardMHS">
+        app:layout_constraintVertical_bias="0"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:onClick="openClosePlayerStats"
+        app:motionProgress="1"
+        app:layoutDescription="@xml/player_stats_motion_scene">
 
-        <com.google.android.material.textview.MaterialTextView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mainIconGridView"
+            android:layout_width="@dimen/gridWidth"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:columnWidth="@dimen/iconWidth"
+            android:drawSelectorOnTop="false"
+            android:gravity="center"
+            android:horizontalSpacing="@dimen/iconSpacingH"
+            android:verticalSpacing="@dimen/iconSpacingV"
+            android:numColumns="2"
+            android:stretchMode="none"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0" />
+
+        <LinearLayout
+            android:id="@+id/playerStats"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_65sdp"
-            android:layout_marginTop="@dimen/_25sdp"
-            android:background="@drawable/yelloworangecurvebanner"
-            android:gravity="center"
-            android:padding="@dimen/_10sdp"
-            android:text="@string/player_stats"
-            android:textColor="@color/Black"
-            android:textSize="@dimen/_20ssp" />
-
-        <TableLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="visible">
-            <TableRow android:layout_marginTop="@dimen/_6sdp">
+            android:background="@drawable/bannershield"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_30sdp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end|center"
-                    android:text="@string/rounds_played"
-                    android:textColor="#FBF3DA"
-                    android:textSize="@dimen/_15ssp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_58sdp"
+                android:layout_marginTop="@dimen/_29sdp"
+                android:background="@drawable/yelloworangecurvebanner"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/player_stats"
+                android:textColor="@color/Black"
+                android:textSize="@dimen/_20ssp" />
 
-                <com.robinhood.ticker.TickerView
-                    android:id="@+id/nGamesPlayedStats"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start|center"
-                    android:text="@string/gamesplayedstats"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16ssp"
-                    app:ticker_animationDuration="1200"
-                    app:ticker_defaultCharacterList="number"
-                    app:ticker_defaultPreferredScrollingDirection="any"/>
-            </TableRow>
-            <TableRow android:layout_marginTop="@dimen/_14sdp">
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end|center"
-                    android:text="@string/rounds_won"
-                    android:textColor="#FBF3DA"
-                    android:textSize="@dimen/_15ssp" />
+                <TableRow android:layout_marginTop="@dimen/_6sdp">
 
-                <com.robinhood.ticker.TickerView
-                    android:id="@+id/ngamesWonStats"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start|center"
-                    android:text="@string/nill"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16ssp"
-                    app:ticker_animationDuration="1200"
-                    app:ticker_defaultCharacterList="number"
-                    app:ticker_defaultPreferredScrollingDirection="any"/>
-            </TableRow>
-            <TableRow android:layout_marginTop="@dimen/_14sdp">
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end|center"
+                        android:text="@string/rounds_played"
+                        android:textColor="#FBF3DA"
+                        android:textSize="@dimen/_15ssp" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end|center"
-                    android:text="@string/rounds_bided"
-                    android:textColor="#FBF3DA"
-                    android:textSize="@dimen/_15ssp" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/nGamesPlayedStats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        android:text="@string/gamesplayedstats"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_16ssp" />
+                </TableRow>
 
-                <com.robinhood.ticker.TickerView
-                    android:id="@+id/ngamesBidedStats"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start|center"
-                    android:text="@string/nill"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_16ssp"
-                    app:ticker_animationDuration="1200"
-                    app:ticker_defaultCharacterList="number"
-                    app:ticker_defaultPreferredScrollingDirection="any"/>
-            </TableRow>
-        </TableLayout>
+                <TableRow android:layout_marginTop="@dimen/_14sdp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_25sdp"
-            android:layout_marginBottom="@dimen/_70ssp"
-            android:background="@drawable/yelloworangecurvebanner"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:onClick="signOut"
-            android:padding="@dimen/_14sdp"
-            android:paddingStart="@dimen/_15sdp"
-            android:paddingEnd="@dimen/_15sdp"
-            android:text="@string/signout"
-            android:textColor="@color/Black"
-            android:textSize="@dimen/_15ssp"
-            tools:ignore="RelativeOverlap" />
-    </LinearLayout>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end|center"
+                        android:text="@string/rounds_won"
+                        android:textColor="#FBF3DA"
+                        android:textSize="@dimen/_15ssp" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/ngamesWonStats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        android:text="@string/nill"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_16ssp"/>
+                </TableRow>
+
+                <TableRow android:layout_marginTop="@dimen/_14sdp">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end|center"
+                        android:text="@string/rounds_bided"
+                        android:textColor="#FBF3DA"
+                        android:textSize="@dimen/_15ssp" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/ngamesBidedStats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        android:text="@string/nill"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_16ssp"/>
+                </TableRow>
+            </TableLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:layout_marginBottom="@dimen/_45ssp"
+                android:background="@drawable/yelloworangecurvebanner"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:onClick="signOut"
+                android:padding="@dimen/_14sdp"
+                android:paddingStart="@dimen/_15sdp"
+                android:paddingEnd="@dimen/_15sdp"
+                android:text="@string/signout"
+                android:textColor="@color/Black"
+                android:textSize="@dimen/_15ssp"
+                tools:ignore="RelativeOverlap" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/usernameCardMHS"
@@ -239,7 +184,7 @@
         android:textSize="@dimen/_20ssp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/profilePic"
-        app:layout_constraintStart_toStartOf="@+id/space"/>
+        app:layout_constraintStart_toStartOf="@+id/space" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profilePic"
@@ -268,8 +213,8 @@
         android:text="@string/usercoinMHS"
         android:textColor="@color/icon_yellow"
         android:textSize="@dimen/_17ssp"
-        app:layout_constraintEnd_toEndOf="@+id/space2"
         app:layout_constraintBottom_toTopOf="@+id/usernameCardMHS"
+        app:layout_constraintEnd_toEndOf="@+id/space2"
         app:ticker_animationDuration="1000"
         app:ticker_defaultCharacterList="number"
         app:ticker_defaultPreferredScrollingDirection="any" />
@@ -287,6 +232,68 @@
         app:layout_constraintBottom_toBottomOf="@id/userScoreMHS"
         app:layout_constraintStart_toEndOf="@id/usernameCardMHS"
         app:layout_constraintTop_toTopOf="@id/userScoreMHS" />
+
+    <ImageView
+        android:id="@+id/removeAds"
+        android:layout_width="@dimen/mhsIconsSize"
+        android:layout_height="@dimen/mhsIconsSize"
+        android:layout_marginTop="@dimen/mhsIconsGap"
+        android:layout_marginEnd="@dimen/mhsIconsMargin"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="removeAdsOrPremium"
+        android:src="@drawable/no_ads"
+        android:background="@drawable/yellowbutton"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/watchVideo"
+        tools:ignore="ContentDescription" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/watchVideo"
+        android:layout_width="@dimen/_64sdp"
+        android:layout_height="@dimen/mhsIconsSize"
+        android:layout_marginTop="@dimen/mhsIconsGap"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="showRewardedVideoAd"
+        android:src="@drawable/watch_ad_500"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coinIcon" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/trainingButton"
+        android:layout_width="@dimen/_57sdp"
+        android:layout_height="@dimen/_57sdp"
+        android:layout_marginTop="@dimen/mhsIconsGap"
+        android:layout_marginEnd="@dimen/mhsIconsMargin"
+        android:background="@drawable/blackcirclebutton"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
+        android:onClick="trainingStart"
+        android:text="@string/train"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rateUsIcon" />
+
+    <ImageView
+        android:id="@+id/rateUsIcon"
+        android:layout_width="@dimen/mhsIconsSize"
+        android:layout_height="@dimen/mhsIconsSize"
+        android:layout_marginTop="@dimen/mhsIconsGap"
+        android:layout_marginEnd="@dimen/mhsIconsMargin"
+        android:onClick="openRatingWindow"
+        android:src="@drawable/rateus"
+        android:tag="rate"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/removeAds" />
 
     <TextView
         android:id="@+id/watchVideoCoin"
@@ -333,18 +340,18 @@
             android:id="@id/settingsLayoutTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/blackcirclebutton"
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical"
             android:paddingStart="@dimen/_40sdp"
-            android:paddingEnd="@dimen/_40sdp"
             android:paddingTop="@dimen/_55sdp"
-            android:paddingBottom="@dimen/_55sdp">
+            android:paddingEnd="@dimen/_40sdp"
+            android:paddingBottom="@dimen/_55sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -500,13 +507,13 @@
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_36sdp"
             android:layout_below="@+id/settingsLayoutTemp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/settingsLayoutTemp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:onClick="closeSettingsWindow"
+            app:layout_constraintBottom_toBottomOf="@id/settingsLayoutTemp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/close"
             tools:ignore="ContentDescription" />
 
@@ -545,22 +552,22 @@
                 android:layout_centerHorizontal="true"
                 android:cursorVisible="true"
                 android:hint="@string/hinRoomID"
-                app:hintTextColor="@color/icon_yellow"
                 android:imeOptions="actionSend"
                 android:inputType="textCapCharacters"
                 android:textAlignment="center"
                 app:boxBackgroundColor="#1E1E1E"
-                app:boxStrokeColor="@color/white"
                 app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="@dimen/_20sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_20sdp"
+                app:boxStrokeColor="@color/white"
                 app:boxStrokeErrorColor="@color/Red"
                 app:counterEnabled="true"
                 app:counterMaxLength="4"
-                app:boxCornerRadiusBottomStart="@dimen/_20sdp"
-                app:boxCornerRadiusBottomEnd="@dimen/_20sdp"
                 app:endIconMode="clear_text"
                 app:helperText="@string/joinHelper"
                 app:helperTextTextColor="@color/icon_yellow"
                 app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/icon_yellow"
                 app:startIconDrawable="@drawable/group">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -604,11 +611,11 @@
             android:layout_centerHorizontal="true"
             android:clickable="true"
             android:focusable="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/joinRoomFrameTemp"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:onClick="joinRoomWindowExit"
+            app:layout_constraintBottom_toBottomOf="@id/joinRoomFrameTemp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/close"
             tools:ignore="ContentDescription" />
 
@@ -796,12 +803,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_65sdp"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:src="@drawable/ribbon"
-                tools:ignore="ContentDescription" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_65sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:src="@drawable/ribbon"
+            tools:ignore="ContentDescription" />
 
         <GridView
             android:id="@+id/dailyRewardGrid"
@@ -813,7 +820,7 @@
             android:layout_marginBottom="@dimen/_4sdp"
             android:columnWidth="@dimen/_60sdp"
             android:gravity="center"
-            android:numColumns="3"/>
+            android:numColumns="3" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -902,49 +909,56 @@
 
     </RelativeLayout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/developerCreditsButton"
+
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/developerCreditsML"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_38sdp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/blacksquarebutton"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center"
-        android:onClick="developerCredits"
-        android:text="@string/developerCredits"
-        android:textColor="@color/icon_yellow"
-        android:textSize="@dimen/_12ssp"
-        app:layout_constraintBottom_toTopOf="@id/addViewMHS"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <ImageView
-        android:id="@+id/developerIcon"
-        android:layout_width="@dimen/_65sdp"
-        android:layout_height="@dimen/_65sdp"
-        android:layout_marginStart="@dimen/_25sdp"
-        android:background="@drawable/blacksquarebutton"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="@drawable/icon3s_shadow"
-        android:onClick="developerCredits"
-        app:layout_constraintBottom_toTopOf="@id/addViewMHS"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="ContentDescription" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/versionCode"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_30sdp"
-        android:layout_marginBottom="@dimen/_4sdp"
-        android:gravity="bottom"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_9ssp"
-        tools:ignore="RelativeOverlap"
-        app:layout_constraintBottom_toBottomOf="@id/developerCreditsButton"
-        app:layout_constraintEnd_toEndOf="@id/developerCreditsButton"/>
+        app:layoutDescription="@xml/activity_main_home_screen_scene"
+        app:layout_constraintBottom_toTopOf="@id/addViewMHS"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/developerCreditsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blacksquarebutton"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="developerCredits"
+            android:text="@string/developerCredits"
+            android:textColor="@color/icon_yellow"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/developerIcon"
+            android:layout_width="@dimen/_65sdp"
+            android:layout_height="@dimen/_65sdp"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:background="@drawable/blacksquarebutton"
+            android:foreground="@drawable/icon3s_shadow"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/versionCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_30sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:gravity="bottom"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_9ssp"
+            app:layout_constraintBottom_toBottomOf="@id/developerCreditsButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="RelativeOverlap" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rankStats"
@@ -1001,10 +1015,10 @@
             android:id="@+id/tabRank"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/shine_chat_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/space4"
-            android:background="@drawable/shine_chat_background"
             app:tabGravity="fill"
             app:tabIndicatorHeight="@dimen/_4sdp"
             app:tabPaddingBottom="@dimen/_3sdp"
@@ -1059,7 +1073,7 @@
         app:adSize="BANNER"
         app:adUnitId="@string/banner"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ class ListViewAdapter(private val context: Context, private val userArrayList: A
 
 	@SuppressLint("SetTextI18n")
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+		val position = holder.adapterPosition
 		holder.itemView.userRank.text = Html.fromHtml("${position + 1}<sup>${rankExtFromInt(position + 1)}</sup>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 		if(position<3) {
 			holder.itemView.userRank.setBackgroundResource(R.drawable.trophy)
@@ -67,6 +69,8 @@ class ListViewAdapter(private val context: Context, private val userArrayList: A
 			holder.itemView.userInfo.visibility = View.VISIBLE
 			holder.itemView.userScore2.visibility = View.VISIBLE
 			holder.itemView.versionInfo.visibility = View.VISIBLE
+			holder.itemView.lineBreak.visibility = View.VISIBLE
+
 			if (type != 1) {
 				holder.itemView.userInfo2.visibility = View.VISIBLE
 				holder.itemView.userCoins2.visibility = View.VISIBLE
@@ -77,8 +81,10 @@ class ListViewAdapter(private val context: Context, private val userArrayList: A
 			holder.itemView.userScore2.visibility = View.GONE
 			holder.itemView.userCoins2.visibility = View.GONE
 			holder.itemView.versionInfo.visibility = View.GONE
+			holder.itemView.lineBreak.visibility = View.GONE
 		}
-		holder.itemView.setOnClickListener {
+		holder.itemView.setOnClickListener {view->
+			view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.click_press))
 			mExpandedPosition = if (isExpanded) -1 else position  //by pass minimize function
 			if (position != mPrevExpandedPosition) notifyItemChanged(mPrevExpandedPosition)
 			notifyItemChanged(position)

@@ -5,7 +5,6 @@
         <item name="colorPrimary">@color/colorSecondary</item>
         <item name="colorPrimaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorOnPrimary">@color/colorOnSecondary</item>
-
         <item name="colorSecondary">@color/colorPrimary</item>
         <item name="colorSecondaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnSecondary">@color/colorOnPrimary</item>
@@ -41,6 +40,13 @@
         <item name="cornerSize">@dimen/_4sdp</item>
 
     </style>
+
+<!--    <style name="AlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">-->
+<!--        <item name="android:windowIsTranslucent">true</item>-->
+<!--        <item name="android:background">#990B1B2B</item>-->
+<!--        <item name="android:textColor">#f3f3f3</item>-->
+<!--        <item name="android:textColorPrimary">#f3f3f3</item>-->
+<!--    </style>-->
 
 <!--    <style name="customTabLayout" parent="Widget.Design.TabLayout">-->
 <!--        <item name="tabTextAppearance">@style/TabTextAppearance</item>-->

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/shine_user_rank_bkgd.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_main_home_screen.xml" value="0.6666666666666666" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

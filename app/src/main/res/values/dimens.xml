@@ -7,9 +7,9 @@
     <dimen name="upStart">@dimen/_10sdp</dimen>
     <dimen name="upTextSize">@dimen/_27ssp</dimen>
 
-    <dimen name="gridWidth">@dimen/_237sdp</dimen>  <!--114 + 114 + 9 = 237-->
+    <dimen name="gridWidth">@dimen/_217sdp</dimen>  <!--114 + 114 + 9 = 237-->
     <dimen name="iconWidth">@dimen/_105sdp</dimen>
-    <dimen name="iconSpacingH">@dimen/_9sdp</dimen>
+    <dimen name="iconSpacingH">@dimen/_1sdp</dimen>
     <dimen name="iconSpacingV">@dimen/_6sdp</dimen>
     <dimen name="iconHeight">@dimen/_70sdp</dimen>
     <dimen name="iconPadding">@dimen/_12sdp</dimen>
@@ -76,7 +76,7 @@
 
 
     <dimen name="mhsIconsSize">@dimen/_50sdp</dimen>
-    <dimen name="mhsIconsGap">@dimen/_10sdp</dimen>
+    <dimen name="mhsIconsGap">@dimen/_13sdp</dimen>
     <dimen name="mhsIconsMargin">0dp</dimen>
     <dimen name="cjrButtonsTextSize">@dimen/_13ssp</dimen>
     <dimen name="shimmerWidth">@dimen/_60sdp</dimen>
