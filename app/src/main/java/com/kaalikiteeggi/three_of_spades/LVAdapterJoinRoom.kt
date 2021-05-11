@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -30,8 +31,9 @@ class LVAdapterJoinRoom(private val context: Context, private val userArrayList:
 	}
 
 	@SuppressLint("SetTextI18n")
-	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+	override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
 		if (!userArrayList[position].empty) {
+			holder.itemView.userRankRoot.background = ContextCompat.getDrawable(context, R.drawable.shine_player_stats)
 			holder.itemView.visibility = View.VISIBLE
 			val layoutParams = RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 			layoutParams.bottomMargin = 7

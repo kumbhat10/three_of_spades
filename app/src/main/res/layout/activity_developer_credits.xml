@@ -8,8 +8,6 @@
     android:clickable="false"
     android:contextClickable="true"
     android:focusable="true"
-    android:onClick="openWebsite"
-    android:background="@drawable/blacksquarebutton"
     tools:context=".DeveloperCredits">
 
     <ImageView
@@ -17,13 +15,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:foreground="@drawable/tint_background4"
-        android:scaleType="centerCrop"
-        android:scaleX="2.5"
-        android:scaleY="2.5"
-        android:src="@drawable/redorangeburst"
-        android:visibility="visible"
         android:onClick="openWebsite"
-        tools:ignore="ContentDescription" />
+        android:scaleType="centerCrop"
+        android:scaleX="1.8"
+        android:scaleY="1.8"
+        android:visibility="visible"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+    <ImageView
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:src="@drawable/close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="@dimen/_12sdp"
+        android:onClick="closeDC"/>
 
     <ImageView
         android:layout_width="@dimen/_250sdp"
@@ -51,12 +57,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/nameDeveloper"-->
+<!--        android:clickable="true"-->
+<!--        android:focusable="true"-->
+<!--        android:fontFamily="@font/armata"-->
+<!--        android:foreground="?attr/selectableItemBackgroundBorderless"-->
+<!--        android:onClick="sendEmail"-->
+<!--        android:text="@string/click_contact"-->
+<!--        android:textColor="#566CF6"-->
+<!--        android:textSize="@dimen/_10ssp"-->
+<!--        android:textStyle="italic"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent" />-->
     <TextView
         android:id="@+id/nameDeveloper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView4"
-        android:layout_alignParentStart="true"
+        app:layout_constraintBottom_toTopOf="@id/emailID"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="cursive"
@@ -71,37 +91,60 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/emailID"
         android:onClick="sendEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/_10sdp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginBottom="@dimen/_14sdp"
+        app:layout_constraintBottom_toTopOf="@id/lottieWhatsapp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="@dimen/_5sdp"
         android:fontFamily="@font/armata"
         android:text="@string/developer_contact"
         android:textColor="#FFD500"
         android:textSize="@dimen/_10ssp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/nameDeveloper"
-        android:layout_alignParentStart="true"
-        android:clickable="true"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieWhatsapp"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:focusable="true"
-        android:fontFamily="@font/armata"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="sendWhatsapp"
+        android:clickable="true"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/whatsapp"
+        app:lottie_repeatMode="restart"
+        app:lottie_loop="true"
+        app:lottie_speed="0.6"
+        android:scaleY="1.3"
+        android:scaleX="1.3"
+        />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieEmail"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        app:layout_constraintTop_toTopOf="@id/lottieWhatsapp"
+        android:layout_marginStart="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="@id/lottieWhatsapp"
+        app:layout_constraintStart_toEndOf="@id/lottieWhatsapp"
+        android:focusable="true"
+        android:clickable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="sendEmail"
-        android:text="@string/click_contact"
-        android:textColor="#566CF6"
-        android:textSize="@dimen/_10ssp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/email"
+        app:lottie_repeatMode="restart"
+        app:lottie_loop="true"
+        app:lottie_speed="0.7" />
 
     <TextView
         android:id="@+id/sizeDC"
@@ -111,7 +154,8 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="end"
         android:onClick="copyToClipBoard"
         android:textAlignment="viewEnd"

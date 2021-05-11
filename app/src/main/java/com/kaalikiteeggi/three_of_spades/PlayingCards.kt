@@ -74,7 +74,7 @@ class PlayingCards {
 		var cardSuitDoubleDeck = listOf<String>()
 		for (i in cardSuit7) {
 			cardSuitDoubleDeck = cardSuitDoubleDeck + i + i
-		};
+		}
 		return cardSuitDoubleDeck
 	}
 

@@ -20,39 +20,64 @@
         android:scaleX="2.5"
         android:scaleY="2.5"
         android:src="@drawable/redorangeburst"
+        android:visibility="visible"
+        tools:ignore="ContentDescription" />
+
+    <ProgressBar
+        android:id="@+id/loadingStartScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignStart="@id/icon_3startscreen"
+        android:layout_alignTop="@id/icon_3startscreen"
+        android:layout_alignEnd="@id/icon_3startscreen"
+        android:layout_alignBottom="@id/icon_3startscreen"
+        android:progress="100"
+        android:layout_margin="@dimen/_25sdp"
+        android:indeterminate="false"
+        android:progressDrawable="@drawable/progress_splash"
+        android:indeterminateOnly="false"
         android:visibility="visible" />
 
-        <ImageView
-            android:layout_width="@dimen/_250sdp"
-            android:layout_height="@dimen/_270sdp"
-            android:layout_centerInParent="true"
-            android:contentDescription="@null"
-            android:src="@drawable/spade"
-            android:visibility="visible" />
+<!--        <ImageView-->
+<!--            android:layout_width="@dimen/_250sdp"-->
+<!--            android:layout_height="@dimen/_270sdp"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:contentDescription="@null"-->
+<!--            android:src="@drawable/spade"-->
+<!--            android:visibility="gone" />-->
 
-        <ImageView
-            android:id="@+id/icon_3startscreen"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
-            android:layout_centerInParent="true"
-            android:scaleY="0.5"
-            android:scaleX="0.5"
-            android:contentDescription="@null"
-            android:src="@drawable/icon3s_shadow" />
+    <ImageView
+        android:id="@+id/icon_3startscreen"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_centerInParent="true"
+        android:contentDescription="@null"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:src="@drawable/icon3s_shadow" />
 
+    <TextView
+        android:id="@+id/signUpText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/facebookLoginButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:text="@string/register"
+        android:textColor="#ECECEC"
+        android:textSize="@dimen/_10ssp" />
 
-    <com.facebook.login.widget.LoginButton
+    <com.facebook.login.widget.LoginButton xmlns:facebook="http://schemas.android.com/apk/res-auto"
         android:id="@+id/facebookLoginButton"
         android:layout_width="@dimen/loginWidth"
         android:layout_height="80dp"
         android:layout_above="@+id/orOption"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_3sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:paddingTop="@dimen/_8sdp"
         android:paddingBottom="@dimen/_7sdp"
         android:textSize="@dimen/_12ssp"
-        xmlns:facebook="http://schemas.android.com/apk/res-auto"
-        facebook:com_facebook_login_text="       Sign in"/>
+        facebook:com_facebook_login_text="       Sign in" />
 
     <TextView
         android:id="@+id/orOption"
@@ -60,12 +85,11 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/googleSignInButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_3sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:gravity="center"
         android:text="or"
         android:textColor="#ECECEC"
-        android:textSize="@dimen/_14ssp"
-        android:textStyle="bold"
+        android:textSize="@dimen/_11ssp"
         tools:ignore="HardcodedText" />
 
     <com.google.android.gms.common.SignInButton
@@ -92,16 +116,16 @@
         android:textColor="#2C89FB"
         android:textSize="@dimen/_10ssp" />
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/maskButtons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignTop="@+id/facebookLoginButton"
+        android:layout_alignTop="@+id/signUpText"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/_minus2sdp"
-        android:background="@color/BlackTransDark"
+        android:background="@drawable/shine_player_stats"
         android:clickable="true"
         android:elevation="@dimen/_64sdp"
         android:focusable="true"
@@ -111,31 +135,36 @@
             android:id="@+id/loadingText3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lightStart"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_2sdp"
             android:gravity="center"
             android:text="@string/signIN"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp"
-            android:visibility="visible" />
+            android:textColor="@color/font_grey_settings"
+            android:textSize="@dimen/_10ssp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/loadingTextSC" />
 
-        <com.bitvale.lightprogress.LightProgress
-            android:id="@+id/lightStart"
+        <TextView
+            android:id="@+id/loadingTextSC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/signIN"
-            android:textSize="@dimen/_25ssp"
-            android:background="@color/Black"
-            app:light_color="@color/white" />
+            android:textColor="@color/font_grey_settings"
+            android:textSize="@dimen/_17ssp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signInSuccess"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/blacksquarebutton"
+            android:background="@drawable/shine_player_stats"
             android:fadingEdge="horizontal|vertical"
             android:fontFamily="sans-serif-condensed"
             android:paddingStart="@dimen/_15sdp"
@@ -144,9 +173,14 @@
             android:textAlignment="center"
             android:textColor="@color/icon_yellow"
             android:textSize="@dimen/_16ssp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/vcStart"
         android:layout_width="wrap_content"
@@ -156,5 +190,6 @@
         android:layout_marginEnd="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:textColor="#D5D5D5"
-        android:textSize="@dimen/_9ssp"/>
+        android:textSize="@dimen/_9ssp"
+        tools:ignore="RelativeOverlap" />
 </RelativeLayout>

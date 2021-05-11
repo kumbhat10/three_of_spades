@@ -16,13 +16,17 @@ class TestFragment : Fragment() {
 		return inflater.inflate(R.layout.fragment_test, container, false)
 	}
 
-	companion object {
-		@JvmStatic
-		fun newInstance(index: Int = 0) = TestFragment().apply {
-			arguments = Bundle().apply {
-				putInt("index", index)
-			}
+//	companion object {
+//		@JvmStatic
+//		fun newInstance(index: Int = 0) = TestFragment().apply {
+//			arguments = Bundle().apply {
+//				putInt("index", index)
 //			}
-		}
-	}
+////			}
+//		}
+//	}
+
+//	override fun onDestroyView() {
+//		super.onDestroyView()
+//	}
 }

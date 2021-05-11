@@ -37,7 +37,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/game_screen_table_core"
+        android:src="@drawable/game_screen_table_blue"
         android:visibility="visible" />
 
     <ImageView

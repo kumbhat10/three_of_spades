@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/_11sdp"
-    android:background="@drawable/blackglassglossy"
-    app:cardElevation="@dimen/_36sdp">
-
+    app:cardCornerRadius="@dimen/_1sdp"
+    android:background="@drawable/shine_score_table">
 
     <ImageView
         android:id="@+id/coinRewardIcon"
         android:layout_width="@dimen/_61sdp"
         android:layout_height="@dimen/_72sdp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/coin_trans_1"
-        tools:ignore="ContentDescription" />
+        android:src="@drawable/coin_trans_1blurr"
+        tools:ignore="ContentDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/coinRewardText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/coinRewardIcon"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/greenrectanglesimple"
+        android:background="@drawable/blacksquarebutton"
         android:gravity="center"
         android:paddingStart="@dimen/_7sdp"
         android:paddingTop="@dimen/_2sdp"
@@ -32,7 +30,10 @@
         android:text="Day 1 \n1000 coins"
         android:textColor="#ACACAC"
         android:textSize="@dimen/_9ssp"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/coinRewardIcon"/>
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

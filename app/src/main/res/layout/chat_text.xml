@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chatText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_7sdp"
+    android:textColor="@color/white"
+    android:textSize="@dimen/_11ssp"/>
+
+    <!--        <com.google.android.material.textview.MaterialTextView-->
+    <!--            android:id="@+id/textViewChatDisplay"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="0dp"-->
+    <!--            android:layout_below="@+id/addViewChatGameScreenBanner"-->
+    <!--            android:layout_marginBottom="3dp"-->
+    <!--            android:gravity="bottom|start"-->
+    <!--            android:hint="@string/chatWindowDisplay"-->
+    <!--            android:paddingStart="@dimen/_3sdp"-->
+    <!--            android:paddingEnd="@dimen/_2sdp"-->
+    <!--            android:scrollbarAlwaysDrawVerticalTrack="true"-->
+    <!--            android:scrollbarSize="@dimen/_7sdp"-->
+    <!--            android:scrollbars="vertical"-->
+    <!--            android:textColor="#FFFFFF"-->
+    <!--            android:textColorHint="#CFA965"-->
+    <!--            android:textSize="@dimen/_11ssp"-->
+    <!--            app:flow_verticalBias="1"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintBottom_toTopOf="@id/emojiGrid"-->
+    <!--            app:layout_constraintTop_toBottomOf="@id/addViewChatGameScreenBanner"/>-->

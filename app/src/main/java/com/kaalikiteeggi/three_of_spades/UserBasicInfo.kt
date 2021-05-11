@@ -19,14 +19,13 @@ class UserBasicInfo(val empty: Boolean = true, val index: Int = 0, val uid: Stri
 	val userScoreDaily: String = String.format("%,d", playedDaily) + " " + Emoji().gamePlayed + "\n" + String.format("%,d", wonDaily) + " " + Emoji().trophy + "\n" + String.format("%,d", bidDaily) + " " + Emoji().score
 	val userScoreFill: String = "Play " + Emoji().gamePlayed + "\n" + "Win " + Emoji().trophy + "\n" + "Bid " + Emoji().score
 
-	val lastSeenDate: String = SimpleDateFormat("d-MMM").format(SimpleDateFormat("yyyyMMdd").parse(lastSeen.toString()))
-	private val joinDateString: String = if(joinDate ==0 ) "No record" else SimpleDateFormat("d-MMM").format(SimpleDateFormat("yyyyMMdd").parse(joinDate.toString()))
+	private val lastSeenDate: String = SimpleDateFormat("d MMM-yy").format(SimpleDateFormat("yyyyMMdd").parse(lastSeen.toString()))
+	private val joinDateString: String = if(joinDate ==0 ) "No record" else SimpleDateFormat("d MMM-yy").format(SimpleDateFormat("yyyyMMdd").parse(joinDate.toString()))
 
 	val userInfo: String = "Last seen " + lastSeenDate + "\nJoined      " + joinDateString + "\n\n" + "Win rate " + (if (played > 0) round((100 * won / played).toDouble()).toInt() else 0).toString() + "% " + Emoji().trophy + "\n" + "Bid rate " + (if (played > 0) round((100 * bid / played).toDouble()).toInt() else 0).toString() + "% " + Emoji().score
 	val newUser:Boolean = joinDate >= getChangedDate(CreateUser().todayDate)
 	val userCoins: String = "$ " + String.format("%,d", score)
 	val userCoinsDaily: String = "$ " + String.format("%,d", scoreDaily)
-
 }
 
 fun extractUserData(document: DocumentSnapshot, index:Int=0): UserBasicInfo {

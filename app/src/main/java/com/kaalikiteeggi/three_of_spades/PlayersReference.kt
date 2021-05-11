@@ -4,7 +4,7 @@ class PlayersReference {
 
 
     private val refIDTextView7 = listOf(R.id.textView1,R.id.textView2,R.id.textView3,
-        R.id.textView4,R.id.textView5,R.id.textView6,R.id.textView7)
+        R.id.emailID,R.id.textView5,R.id.textView6,R.id.textView7)
 
     private val refIDTextView7a = listOf(R.id.textView1a,R.id.textView2a,R.id.textView3a,
         R.id.textView4a,R.id.textView5a,R.id.textView6a,R.id.textView7a)

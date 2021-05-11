@@ -33,7 +33,7 @@ class ListViewAdapter(private val context: Context, private val userArrayList: A
 
 	@SuppressLint("SetTextI18n")
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-		val position = holder.adapterPosition
+		val position = holder.bindingAdapterPosition
 		holder.itemView.userRank.text = Html.fromHtml("${position + 1}<sup>${rankExtFromInt(position + 1)}</sup>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 		if(position<3) {
 			holder.itemView.userRank.setBackgroundResource(R.drawable.trophy)
@@ -49,8 +49,14 @@ class ListViewAdapter(private val context: Context, private val userArrayList: A
 
 		Picasso.get().load(userArrayList[position].photoURL).resize(200, 200)
 			.into(holder.itemView.userImage)
-		if(userArrayList[position].newUser) holder.itemView.userNewText.visibility = View.VISIBLE
-		else holder.itemView.userNewText.visibility = View.GONE
+		if(userArrayList[position].newUser) {
+			holder.itemView.userNewText.visibility = View.VISIBLE
+			holder.itemView.space7.visibility = View.VISIBLE
+		}
+		else {
+			holder.itemView.userNewText.visibility = View.GONE
+			holder.itemView.space7.visibility = View.GONE
+		}
 
 		if (type == 1) { // changes for All time window
 			holder.itemView.userCoins.setText(userArrayList[position].userCoins, true)

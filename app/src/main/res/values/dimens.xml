@@ -40,7 +40,6 @@
     <dimen name="imageHeight_4">@dimen/imageWidth_4</dimen>
     <dimen name="width_playername_4">@dimen/imageWidth_4</dimen>
 
-
     <dimen name="trumpSelectionImageWidth">@dimen/_72sdp</dimen>
     <dimen name="trumpSelectionImageHeight">@dimen/_72sdp</dimen>
    <dimen name="trumpSelectionImageWidthTrain">@dimen/_64sdp</dimen>
@@ -66,7 +65,6 @@
     <dimen name="widthDisplayCardLastTrain">@dimen/_42sdp</dimen>
     <dimen name="status_online">@dimen/_12sdp</dimen>
 
-
     <dimen name="padding_playername">@dimen/_3sdp</dimen>
     <dimen name="padding_userScore">@dimen/_3sdp</dimen>
     <dimen name="usernameTextSize">@dimen/_11ssp</dimen>
@@ -74,9 +72,8 @@
     <dimen name="userScoreGap">@dimen/_minus2sdp</dimen>
     <dimen name="scoreTableTextSize">@dimen/_9ssp</dimen>
 
-
     <dimen name="mhsIconsSize">@dimen/_50sdp</dimen>
-    <dimen name="mhsIconsGap">@dimen/_13sdp</dimen>
+    <dimen name="mhsIconsGap">@dimen/_10sdp</dimen>
     <dimen name="mhsIconsMargin">0dp</dimen>
     <dimen name="cjrButtonsTextSize">@dimen/_13ssp</dimen>
     <dimen name="shimmerWidth">@dimen/_60sdp</dimen>
@@ -84,6 +81,10 @@
     <dimen name="deckHeight">@dimen/_80sdp</dimen>
     <dimen name="rateUsWidth">@dimen/_170sdp</dimen>
     <dimen name="rateUsHeight">@dimen/_52sdp</dimen>
+    <dimen name="crjsgap">@dimen/_70sdp</dimen>
+
+
+    <dimen name="player_stats">@dimen/_13ssp</dimen>
 
 
     <!--

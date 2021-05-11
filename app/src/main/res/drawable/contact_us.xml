@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/blackcirclebutton"
+        android:width="@dimen/_50sdp"
+        android:height="@dimen/_50sdp"
+        android:gravity="center"/>
+    <item
+        android:drawable="@drawable/phone"
+        android:width="@dimen/_35sdp"
+        android:height="@dimen/_35sdp"
+        android:gravity="center"/>
+
+</layer-list>

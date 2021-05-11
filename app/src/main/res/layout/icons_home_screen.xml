@@ -5,7 +5,7 @@
     android:layout_width="@dimen/iconWidth"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/_10sdp"
-    android:background="@drawable/blacksquarebutton">
+    android:background="@drawable/shine_player_stats">
 
     <ImageView
         android:id="@+id/iconImage1"
@@ -31,8 +31,10 @@
         android:gravity="center"
         android:text="@string/createRoom"
         android:textColor="@color/BlackTransUserStats3"
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_11ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iconImage1" />
+        app:layout_constraintTop_toBottomOf="@id/iconImage1"
+        android:layout_marginBottom="@dimen/_3sdp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

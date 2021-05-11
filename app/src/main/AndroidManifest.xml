@@ -65,6 +65,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -97,40 +98,62 @@
             </intent-filter>
         </activity>
 
+        <!-- MoPub's consent dialog -->
+        <activity android:name="com.mopub.common.privacy.ConsentDialogActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <!-- All ad formats -->
+        <activity android:name="com.mopub.common.MoPubBrowser" android:configChanges="keyboardHidden|orientation|screenSize"/>
+
         <activity android:name=".SplashScreen"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.launcher">
+            android:theme="@style/Theme.launcher"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".DeveloperCredits" />
+        <activity android:name=".DeveloperCredits"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".CreateAndJoinRoomScreen"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
         <activity
             android:name=".TrainActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"/>
         <activity
             android:name=".GameScreen"
             android:launchMode="singleTop"
+            android:screenOrientation="sensorLandscape"
+            tools:ignore="LockedOrientationActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
         <activity
             android:name=".GameScreenAutoPlay"
             android:launchMode="singleTop"
+            android:screenOrientation="sensorLandscape"
+            tools:ignore="LockedOrientationActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
         <!--android:resizeableActivity="true" -->
         <activity
             android:name=".MainHomeScreen"
             android:supportsPictureInPicture="true"
-            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden"
             android:windowSoftInputMode="adjustNothing"
-            android:theme="@style/Theme.launcher">
+            android:theme="@style/Theme.launcher"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <data android:scheme="@string/scheme1" android:host="@string/hostFirebaseDL" />
                 <data android:scheme="@string/scheme" android:host="@string/hostFirebaseDL" />
@@ -149,6 +172,8 @@
         </activity>
 
         <activity android:name=".StartScreen"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
             android:launchMode="singleTop" />
 
         <meta-data

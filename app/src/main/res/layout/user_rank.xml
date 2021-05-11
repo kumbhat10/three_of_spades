@@ -13,7 +13,8 @@
     android:paddingStart="@dimen/_3sdp"
     android:paddingEnd="1dp"
     android:paddingBottom="@dimen/_10sdp"
-    android:theme="@style/Theme.App">
+    android:theme="@style/Theme.App"
+    android:id="@+id/userRankRoot">
 
     <View
         android:id="@+id/lineBreak"
@@ -75,6 +76,7 @@
         android:id="@+id/space7"
         android:layout_width="@dimen/_10sdp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/userScore"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,7 +106,7 @@
         android:paddingEnd="0dp"
         android:text="@string/playeName"
         android:textColor="#CDCFDA"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_13ssp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/userNewText"
         app:layout_constraintHorizontal_bias="0"
@@ -134,12 +136,12 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/rankImage"
         android:layout_marginTop="@dimen/_6sdp"
-        android:gravity="start|top"
+        android:gravity="start|center"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="0dp"
         android:text="@string/loading"
         android:textColor="#BABABA"
-        android:textSize="@dimen/_11ssp"
+        android:textSize="@dimen/_10ssp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userImage" />

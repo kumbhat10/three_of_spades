@@ -13,12 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-2dp"
         android:contentDescription="@string/app_name"
-        android:onClick="closeChatScoreWindow"
-        android:src="@drawable/pokerblue"
         android:foreground="@drawable/tint_backgroundgame"
+        android:onClick="closeChatScoreWindow"
         android:scaleType="fitXY"
-        android:visibility="visible" />
+        android:src="@drawable/pokerred1"
+        android:visibility="visible"
+        tools:ignore="DuplicateSpeakableTextCheck,DuplicateSpeakableTextCheck" />
 
     <TextView
         android:id="@+id/centerPoint"
@@ -26,7 +28,7 @@
         android:layout_height="1dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/textViewShuffling"
@@ -35,8 +37,8 @@
         android:layout_below="@+id/buddyText1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_30sdp"
-        android:text="@string/shuffling_cards"
         android:gravity="top|center_horizontal"
+        android:text="@string/shuffling_cards"
         android:textColor="@color/white"
         android:textSize="@dimen/_13ssp"
         android:visibility="visible" />
@@ -68,21 +70,21 @@
         android:id="@+id/textView1_4a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1_4"
         android:layout_alignStart="@+id/textView1_4"
         android:layout_alignEnd="@+id/textView1_4"
-        android:layout_below="@+id/textView1_4"
         android:layout_marginTop="@dimen/userScoreGap"
-        android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:visibility="gone"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
+        android:visibility="gone"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight1_4"
@@ -123,12 +125,26 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/imageGapEnd_4player"
         android:layout_marginTop="@dimen/_minus52sdp"
-        android:contentDescription="@string/app_name"
-        android:padding="@dimen/imagePadding"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep1_4"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView1_4"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@id/textView1_4"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/status_online"
         android:visibility="gone" />
 
     <ImageView
@@ -137,28 +153,13 @@
         android:layout_height="@dimen/imageWidthCoin"
         android:layout_above="@+id/onlinep1_4"
         android:layout_marginStart="@dimen/_minus6sdp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginBottom="@dimen/_minus4sdp"
         android:layout_toEndOf="@id/playerView1_4"
-        android:contentDescription="@string/app_name"
-        android:elevation="@dimen/_36sdp"
-        android:src="@drawable/partnericon"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/onlinep1_4"
-        android:layout_width="@dimen/status_online"
-        android:layout_height="@dimen/status_online"
-        android:layout_alignBottom="@+id/textView1_4"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginStart="0dp"
-        android:layout_toEndOf="@id/textView1_4"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/status_online"
+        android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <com.robinhood.ticker.TickerView
@@ -169,11 +170,11 @@
         android:layout_marginStart="@dimen/imageGapNew_4player"
         android:layout_marginTop="@dimen/imagePaddingTextGap"
         android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/buddyImage1"
+        android:background="@drawable/redrectanlgesimple"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_toEndOf="@+id/buddyImage1"
-        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
@@ -181,30 +182,30 @@
         android:textColor="@color/username"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any"
+        tools:ignore="SmallSp" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView2_4a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2_4"
         android:layout_alignStart="@+id/textView2_4"
         android:layout_alignEnd="@+id/textView2_4"
-        android:layout_below="@+id/textView2_4"
         android:layout_marginTop="@dimen/userScoreGap"
-        android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight2_4"
@@ -243,16 +244,30 @@
         android:layout_height="@dimen/imageHeight_4"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/imageGapNew_4player"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/buddyImage1"
+        android:clickable="true"
         android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
         android:visibility="gone" />
 
+
+    <ImageView
+        android:id="@+id/onlinep2_4"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView2_4"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_toEndOf="@id/textView2_4"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/status_online"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/partnerIcon2_4"
@@ -260,28 +275,13 @@
         android:layout_height="@dimen/imageWidthCoin"
         android:layout_above="@+id/onlinep2_4"
         android:layout_marginStart="@dimen/_minus6sdp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginBottom="@dimen/_minus4sdp"
         android:layout_toEndOf="@id/playerView2_4"
-        android:contentDescription="@string/app_name"
-        android:elevation="@dimen/_36sdp"
-        android:src="@drawable/partnericon"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/onlinep2_4"
-        android:layout_width="@dimen/status_online"
-        android:layout_height="@dimen/status_online"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_alignBottom="@+id/textView2_4"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_toEndOf="@id/textView2_4"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/status_online"
+        android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <com.robinhood.ticker.TickerView
@@ -292,10 +292,10 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/imagePaddingTextGap"
         android:layout_marginEnd="@dimen/imageGapEnd_4player"
+        android:background="@drawable/redrectanlgesimple"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
@@ -303,30 +303,30 @@
         android:textColor="@color/username"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp"
-        app:ticker_defaultPreferredScrollingDirection="any"
         app:ticker_animationDuration="900"
-        app:ticker_defaultCharacterList="number"/>
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any"
+        tools:ignore="SmallSp" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView3_4a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3_4"
         android:layout_alignStart="@+id/textView3_4"
         android:layout_alignEnd="@+id/textView3_4"
-        android:layout_below="@+id/textView3_4"
         android:layout_marginTop="@dimen/userScoreGap"
-        android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight3_4"
@@ -366,29 +366,13 @@
         android:layout_below="@+id/centerPoint"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_minus52sdp"
+        android:layout_marginEnd="@dimen/imageGapEnd_4player"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginEnd="@dimen/imageGapEnd_4player"
-        android:contentDescription="@string/app_name"
         android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/partnerIcon3_4"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/onlinep3_4"
-        android:layout_marginEnd="@dimen/_minus6sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:layout_toStartOf="@id/playerView3_4"
-        android:contentDescription="@string/app_name"
-        android:elevation="@dimen/_36sdp"
-        android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <ImageView
@@ -397,12 +381,27 @@
         android:layout_height="@dimen/status_online"
         android:layout_alignBottom="@+id/textView3_4"
         android:layout_marginEnd="0dp"
+        android:layout_toStartOf="@id/textView3_4"
         android:clickable="true"
+        android:contentDescription="@string/todo"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_toStartOf="@id/textView3_4"
-        android:contentDescription="@string/todo"
         android:src="@drawable/status_online"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/partnerIcon3_4"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep3_4"
+        android:layout_marginEnd="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_toStartOf="@id/playerView3_4"
+        android:clickable="true"
+        android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <com.robinhood.ticker.TickerView
@@ -413,10 +412,10 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/imageGapEnd"
         android:layout_marginTop="@dimen/imagePaddingTextGap"
+        android:background="@drawable/redrectanlgesimple"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
         android:paddingTop="@dimen/padding_playername"
         android:paddingBottom="@dimen/padding_playername"
@@ -424,30 +423,30 @@
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any" />
+        app:ticker_defaultPreferredScrollingDirection="any"
+        tools:ignore="SmallSp" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView1a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
         android:layout_alignStart="@+id/textView1"
         android:layout_alignEnd="@+id/textView1"
-        android:layout_below="@+id/textView1"
         android:layout_marginTop="@dimen/userScoreGap"
-        android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight1"
@@ -488,28 +487,12 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/imageGapEnd"
         android:layout_marginTop="@dimen/_minus14sdp"
+        android:clickable="true"
         android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/partnerIcon1"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/onlinep1"
-        android:layout_marginStart="@dimen/_minus6sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:elevation="@dimen/_36sdp"
-        android:layout_toEndOf="@id/playerView1"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <ImageView
@@ -517,14 +500,29 @@
         android:layout_width="@dimen/status_online"
         android:layout_height="@dimen/status_online"
         android:layout_alignBottom="@+id/textView1"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/textView1"
+        android:clickable="true"
         android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/status_online"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/partnerIcon1"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep1"
+        android:layout_marginStart="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_toEndOf="@id/playerView1"
+        android:clickable="true"
+        android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView2"
@@ -545,30 +543,30 @@
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any" />
+        app:ticker_defaultPreferredScrollingDirection="any"
+        tools:ignore="SmallSp" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView2a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
         android:layout_alignStart="@+id/textView2"
         android:layout_alignEnd="@+id/textView2"
-        android:layout_below="@+id/textView2"
         android:layout_marginTop="@dimen/userScoreGap"
-        android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight2"
@@ -609,28 +607,12 @@
         android:layout_marginStart="@dimen/imageGapBetween1"
         android:layout_marginTop="@dimen/imageGapTopMiddle"
         android:layout_toEndOf="@+id/playerView1"
+        android:clickable="true"
         android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/partnerIcon2"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/onlinep2"
-        android:layout_marginStart="@dimen/_minus6sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:elevation="@dimen/_36sdp"
-        android:layout_toEndOf="@id/playerView2"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <ImageView
@@ -640,12 +622,27 @@
         android:layout_alignBottom="@+id/textView2"
         android:layout_marginStart="0dp"
         android:layout_marginTop="@dimen/_2sdp"
+        android:layout_toEndOf="@id/textView2"
         android:clickable="true"
+        android:contentDescription="@string/todo"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_toEndOf="@id/textView2"
-        android:contentDescription="@string/todo"
         android:src="@drawable/status_online"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/partnerIcon2"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep2"
+        android:layout_marginStart="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_toEndOf="@id/playerView2"
+        android:clickable="true"
+        android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <com.robinhood.ticker.TickerView
@@ -667,30 +664,30 @@
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any" />
+        app:ticker_defaultPreferredScrollingDirection="any"
+        tools:ignore="SmallSp" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView3a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
         android:layout_alignStart="@+id/textView3"
         android:layout_alignEnd="@+id/textView3"
-        android:layout_below="@+id/textView3"
         android:layout_marginTop="@dimen/userScoreGap"
-        android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight3"
@@ -729,14 +726,29 @@
         android:layout_height="@dimen/imageHeight"
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/imageGapBetweenHorizontal"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/playerView2"
+        android:clickable="true"
         android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep3"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_toEndOf="@id/textView3"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/status_online"
         android:visibility="gone" />
 
     <ImageView
@@ -745,33 +757,17 @@
         android:layout_height="@dimen/imageWidthCoin"
         android:layout_above="@+id/onlinep3"
         android:layout_marginStart="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_toEndOf="@id/playerView3"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:elevation="@dimen/_36sdp"
-        android:layout_toEndOf="@id/playerView3"
-        android:contentDescription="@string/app_name"
         android:src="@drawable/partnericon"
         android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/onlinep3"
-        android:layout_width="@dimen/status_online"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:layout_height="@dimen/status_online"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_toEndOf="@id/textView3"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/status_online"
-        android:visibility="gone"/>
-
     <com.robinhood.ticker.TickerView
-        android:id="@+id/textView4"
+        android:id="@+id/emailID"
         android:layout_width="@dimen/width_playername"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerView4"
@@ -790,30 +786,30 @@
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any" />
+        app:ticker_defaultPreferredScrollingDirection="any"
+        tools:ignore="SmallSp" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView4a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView4"
-        android:layout_alignEnd="@+id/textView4"
-        android:layout_below="@+id/textView4"
+        android:layout_below="@+id/emailID"
+        android:layout_alignStart="@+id/emailID"
+        android:layout_alignEnd="@+id/emailID"
         android:layout_marginTop="@dimen/userScoreGap"
-        android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight4"
@@ -854,12 +850,26 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="@dimen/imageGapBetweenHorizontal"
         android:layout_toStartOf="@+id/playerView5"
-        android:contentDescription="@string/app_name"
-        android:padding="@dimen/imagePadding"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/onlinep4"
+        android:layout_width="@dimen/status_online"
+        android:layout_height="@dimen/status_online"
+        android:layout_alignBottom="@+id/emailID"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_toStartOf="@id/emailID"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/status_online"
         android:visibility="gone" />
 
     <ImageView
@@ -869,27 +879,12 @@
         android:layout_above="@+id/onlinep4"
         android:layout_marginEnd="@dimen/_minus6sdp"
         android:layout_marginBottom="@dimen/_minus4sdp"
-        android:elevation="@dimen/_36sdp"
         android:layout_toStartOf="@id/playerView4"
-        android:contentDescription="@string/app_name"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/partnericon"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/onlinep4"
-        android:layout_width="@dimen/status_online"
-        android:layout_height="@dimen/status_online"
-        android:layout_alignBottom="@+id/textView4"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_toStartOf="@id/textView4"
-        android:contentDescription="@string/todo"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/status_online"
         android:visibility="gone" />
 
     <com.robinhood.ticker.TickerView
@@ -901,40 +896,40 @@
         android:layout_marginEnd="@dimen/imageGapBetween1"
         android:layout_toStartOf="@+id/playerView6"
         android:background="@drawable/redrectanlgesimple"
-        android:gravity="center"
-        android:paddingTop="@dimen/padding_playername"
-        android:paddingBottom="@dimen/padding_playername"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView5"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any" />
+        app:ticker_defaultPreferredScrollingDirection="any"
+        tools:ignore="SmallSp" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView5a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView5"
         android:layout_alignStart="@+id/textView5"
         android:layout_alignEnd="@+id/textView5"
-        android:layout_below="@+id/textView5"
         android:layout_marginTop="@dimen/userScoreGap"
-        android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight5"
@@ -971,33 +966,17 @@
         android:id="@+id/playerView5"
         android:layout_width="@dimen/imageWidth"
         android:layout_height="@dimen/imageHeight"
-        android:padding="@dimen/imagePadding"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/imageGapTopMiddle"
         android:layout_marginEnd="@dimen/imageGapBetween1"
         android:layout_marginBottom="0dp"
         android:layout_toStartOf="@+id/playerView6"
-        android:contentDescription="@string/app_name"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/partnerIcon5"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/onlinep5"
-        android:layout_marginEnd="@dimen/_minus6sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:elevation="@dimen/_36sdp"
-        android:layout_toStartOf="@id/playerView5"
-        android:contentDescription="@string/app_name"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <ImageView
@@ -1007,12 +986,27 @@
         android:layout_alignBottom="@+id/textView5"
         android:layout_marginTop="@dimen/_2sdp"
         android:layout_toStartOf="@id/textView5"
-        android:contentDescription="@string/todo"
         android:clickable="true"
+        android:contentDescription="@string/todo"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/status_online"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/partnerIcon5"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep5"
+        android:layout_marginEnd="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_toStartOf="@id/playerView5"
+        android:clickable="true"
+        android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView6"
@@ -1023,40 +1017,40 @@
         android:layout_marginTop="@dimen/imagePaddingTextGap"
         android:layout_marginEnd="@dimen/imageGapEnd"
         android:background="@drawable/redrectanlgesimple"
-        android:gravity="center"
-        android:paddingTop="@dimen/padding_playername"
-        android:paddingBottom="@dimen/padding_playername"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView6"
         android:textColor="@color/white"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="gone"
-        tools:ignore="SmallSp"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any" />
+        app:ticker_defaultPreferredScrollingDirection="any"
+        tools:ignore="SmallSp" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView6a"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView6"
         android:layout_alignStart="@+id/textView6"
         android:layout_alignEnd="@+id/textView6"
-        android:layout_below="@+id/textView6"
         android:layout_marginTop="@dimen/userScoreGap"
-        android:textColor="@color/userScoreColor"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight6"
@@ -1093,32 +1087,16 @@
         android:id="@+id/playerView6"
         android:layout_width="@dimen/imageWidth"
         android:layout_height="@dimen/imageHeight"
-        android:padding="@dimen/imagePadding"
         android:layout_below="@+id/playerView5"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_minus14sdp"
         android:layout_marginEnd="@dimen/imageGapEnd"
-        android:contentDescription="@string/app_name"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/imagePadding"
         android:src="@drawable/s3"
-        android:visibility="gone"/>
-
-    <ImageView
-        android:id="@+id/partnerIcon6"
-        android:layout_width="@dimen/imageWidthCoin"
-        android:layout_height="@dimen/imageWidthCoin"
-        android:layout_above="@+id/onlinep6"
-        android:layout_marginEnd="@dimen/_minus6sdp"
-        android:layout_marginBottom="@dimen/_minus4sdp"
-        android:elevation="@dimen/_36sdp"
-        android:layout_toStartOf="@id/playerView6"
-        android:contentDescription="@string/app_name"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/partnericon"
         android:visibility="gone" />
 
     <ImageView
@@ -1128,21 +1106,36 @@
         android:layout_alignBottom="@+id/textView6"
         android:layout_marginTop="@dimen/_2sdp"
         android:layout_toStartOf="@id/textView6"
-        android:contentDescription="@string/todo"
         android:clickable="true"
+        android:contentDescription="@string/todo"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/status_online"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/partnerIcon6"
+        android:layout_width="@dimen/imageWidthCoin"
+        android:layout_height="@dimen/imageWidthCoin"
+        android:layout_above="@+id/onlinep6"
+        android:layout_marginEnd="@dimen/_minus6sdp"
+        android:layout_marginBottom="@dimen/_minus4sdp"
+        android:layout_toStartOf="@id/playerView6"
+        android:clickable="true"
+        android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/partnericon"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/playerView7"
         android:layout_width="@dimen/imageWidth_4"
         android:layout_height="@dimen/imageWidth_4"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/_minus10sdp"
+        android:layout_centerHorizontal="true"
         android:layout_marginEnd="@dimen/imageGapEnd"
+        android:layout_marginBottom="@dimen/_minus10sdp"
         android:contentDescription="@string/app_name"
         android:visibility="invisible" />
 
@@ -1170,36 +1163,36 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
-        android:paddingTop="@dimen/padding_playername"
-        android:paddingBottom="@dimen/padding_playername"
-        android:paddingEnd="@dimen/_5sdp"
         android:paddingStart="@dimen/_5sdp"
+        android:paddingTop="@dimen/padding_playername"
+        android:paddingEnd="@dimen/_5sdp"
+        android:paddingBottom="@dimen/padding_playername"
         android:text="@string/playerView1"
         android:textColor="@color/username"
         android:textSize="@dimen/usernameTextSize"
         android:visibility="visible"
-        tools:ignore="SmallSp"
-        app:ticker_defaultCharacterList="number"
         app:ticker_animationDuration="900"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any"
+        tools:ignore="SmallSp,DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView7a"
         android:layout_width="@dimen/width_playername_4"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/textView7"
-        android:layout_marginEnd="@dimen/_minus3sdp"
         android:layout_above="@+id/playerCards"
-        android:textColor="@color/userScoreColor"
+        android:layout_marginEnd="@dimen/_minus3sdp"
+        android:layout_toStartOf="@+id/textView7"
         android:background="@drawable/blacksquarebutton"
-        android:text="@string/playerView1"
-        android:textSize="@dimen/userScoreTextSize"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_userScore"
         android:paddingTop="@dimen/padding_userScore"
+        android:paddingBottom="@dimen/padding_userScore"
+        android:text="@string/playerView1"
+        android:textColor="@color/userScoreColor"
+        android:textSize="@dimen/userScoreTextSize"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
-        app:ticker_defaultPreferredScrollingDirection="any"/>
+        app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/highlight7"
@@ -1220,14 +1213,14 @@
         android:id="@+id/partnerIcon7"
         android:layout_width="@dimen/imageWidthCoin"
         android:layout_height="@dimen/imageWidthCoin"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_above="@+id/playerCards"
+        android:layout_alignEnd="@+id/textView7"
         android:layout_marginEnd="@dimen/_minus25sdp"
         android:layout_marginBottom="@dimen/_2sdp"
-        android:layout_alignEnd="@+id/textView7"
+        android:clickable="true"
         android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/partnericon"
         android:visibility="gone" />
 
@@ -1236,15 +1229,16 @@
         android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentTop="true"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_marginStart="@dimen/imageGapBetweenCards"
         android:layout_marginTop="@dimen/imageGapEnd"
         android:layout_toEndOf="@+id/buddyImage1"
+        android:clickable="true"
         android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitXY"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_back_side_blue"/>
+        app:srcCompat="@drawable/ic_back_side_blue" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/buddyText2"
@@ -1252,19 +1246,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/buddyImage2"
         android:layout_alignStart="@+id/buddyImage2"
-        android:layout_marginTop="@dimen/_minus2sdp"
-        android:background="@drawable/redrectanlgesimple"
-        android:gravity="center_horizontal|top"
-        android:padding="@dimen/_2sdp"
-        android:paddingTop="@dimen/padding_playername"
-        android:paddingBottom="@dimen/padding_playername"
+        android:layout_alignEnd="@+id/buddyImage2"
+        android:gravity="center"
         android:text="@string/partner2"
-        android:textColor="@color/white"
-        android:textSize="@dimen/usernameTextSize"
+        android:textColor="@color/font_grey_settings"
+        android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
-        app:ticker_defaultCharacterList="alphabet"
         app:ticker_animationDuration="900"
-        tools:ignore="SmallSp"/>
+        app:ticker_defaultCharacterList="alphabet"
+        tools:ignore="SmallSp" />
 
     <ImageView
         android:id="@+id/buddyImage1"
@@ -1273,83 +1263,81 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/imageGapEnd"
-        android:contentDescription="@string/app_name"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        app:srcCompat="@drawable/ic_back_side_red" />
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/ic_back_side_blue"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/buddyText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buddyImage1"
-        android:layout_alignStart="@+id/buddyImage1"
-        android:layout_marginTop="@dimen/_minus2sdp"
-        android:layout_marginStart="@dimen/_minus3sdp"
-        android:background="@drawable/redrectanlgesimple"
+        android:layout_centerHorizontal="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
-        android:padding="@dimen/_2sdp"
-        android:paddingTop="@dimen/padding_playername"
-        android:paddingBottom="@dimen/padding_playername"
         android:text="@string/partner1"
-        android:textColor="@color/white"
-        android:textSize="@dimen/usernameTextSize"
-        tools:ignore="SmallSp"
+        android:textColor="@color/font_grey_settings"
+        android:textSize="@dimen/userScoreTextSize"
+        app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="alphabet"
-        app:ticker_animationDuration="900" />
+        tools:ignore="SmallSp" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/trumpImage"
-        android:layout_width="@dimen/_42sdp"
+        android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/imageGapEnd"
         android:layout_marginEnd="@dimen/imageGapBetweenCards"
         android:layout_toStartOf="@id/buddyImage1"
+        android:background="#FFFFFF"
         android:clickable="true"
+        android:contentDescription="@string/todo"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="#FFFFFF"
         android:paddingBottom="@dimen/_minus4sdp"
-        android:src="@drawable/trump1" />
+        android:src="@drawable/trump"
+        tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/trumpText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/trumpImage"
         android:layout_alignTop="@+id/buddyText1"
+        android:layout_alignEnd="@+id/trumpImage"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
-        android:padding="@dimen/_3sdp"
         android:text="@string/Trump"
-        android:textColor="@color/white"
-        android:textSize="@dimen/usernameTextSize"
-        tools:ignore="SmallSp"
+        android:textColor="@color/font_grey_settings"
+        android:textSize="@dimen/userScoreTextSize"
+        app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="alphabet"
-        app:ticker_animationDuration="900"/>
+        tools:ignore="SmallSp,TooManyViews,TouchTargetSizeCheck" />
 
     <ImageView
         android:id="@+id/closeGameRoomIcon"
-        android:tag="clicked"
         android:layout_width="@dimen/_32sdp"
         android:layout_height="@dimen/_32sdp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_6sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="showDialogue"
-        app:srcCompat="@drawable/close" />
+        android:tag="clicked"
+        app:srcCompat="@drawable/close"
+        tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textViewTimer"
@@ -1380,9 +1368,6 @@
         android:indeterminate="false"
         android:max="10000"
         android:progress="100"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:progressDrawable="@drawable/progress_timer"
         android:secondaryProgress="100"
         android:visibility="gone" />
@@ -1393,56 +1378,15 @@
         android:layout_height="@dimen/_45sdp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
-        android:elevation="@dimen/_36sdp"
-        android:onClick="openCloseScoreSheet"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/blacksquarebutton"
-        android:src="@drawable/button_pressed_score_table"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        tools:ignore="ContentDescription" />
-
-    <RelativeLayout
-        android:id="@+id/playerCards"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_64sdp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:elevation="@dimen/_40sdp"
-        android:layout_marginStart="@dimen/_50sdp"
-        android:layout_marginEnd="@dimen/_55sdp"
-        android:layout_marginBottom="0dp">
-
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:animateLayoutChanges="true"
-            android:layout_centerHorizontal="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:scrollIndicators="top"
-            android:scrollbarSize="@dimen/_7sdp"
-            android:scrollbarStyle="insideOverlay"
-            android:scrollbars="horizontal"
-            tools:ignore="UselessParent">
-
-            <LinearLayout
-                android:id="@+id/imageGallery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:animateLayoutChanges="true"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
-    </RelativeLayout>
+        android:onClick="openCloseScoreSheet"
+        android:src="@drawable/button_pressed_score_table"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/imageViewChat"
@@ -1452,9 +1396,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/_6sdp"
         android:layout_marginBottom="@dimen/_6sdp"
+        android:clickable="true"
+        android:focusable="true"
         android:onClick="openCloseChatWindow"
         android:src="@drawable/chat2"
-        android:clickable="true"
         android:visibility="gone"
         tools:ignore="TooManyViews" />
 
@@ -1465,8 +1410,8 @@
         android:layout_above="@+id/imageViewChat"
         android:layout_alignStart="@+id/imageViewChat"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/_45sdp"
         android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_45sdp"
         android:text="@string/noOfChat"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/_12ssp"
@@ -1493,7 +1438,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="@dimen/_minus2sdp"
-        android:background="@drawable/yellowbutton"/>
+        android:background="@drawable/coin_trans_1" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textViewBidValue"
@@ -1503,27 +1448,178 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="@dimen/_minus2sdp"
+        android:background="@drawable/redrectanlgesimple"
         android:gravity="center"
         android:text="@string/bidValue2"
         android:textColor="@color/white"
         android:textSize="@dimen/_19ssp"
-        android:background="@drawable/redrectanlgesimple"
         app:ticker_animationDuration="800"
-        app:ticker_defaultPreferredScrollingDirection="any"
-        app:ticker_defaultCharacterList="number"/>
+        app:ticker_defaultCharacterList="number"
+        app:ticker_defaultPreferredScrollingDirection="any" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/bidNowImage"
+        android:layout_width="@dimen/imageWidth_4"
+        android:layout_height="@dimen/imageWidth_4"
+        android:background="@drawable/purplesquarebutton"
+        android:gravity="center"
+        android:text="@string/bidNow"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_18ssp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/playerCards"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_64sdp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_50sdp"
+        android:layout_marginEnd="@dimen/_55sdp"
+        android:layout_marginBottom="0dp">
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:animateLayoutChanges="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollIndicators="top"
+            android:scrollbarSize="@dimen/_7sdp"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="horizontal"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:id="@+id/imageGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:animateLayoutChanges="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chatLinearLayout"
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/playerCards"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="-20dp"
+        android:background="@drawable/shine_chat_background"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.mopub.mobileads.MoPubView
+            android:id="@+id/addViewChatGameScreenBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:scrollbarSize="@dimen/_5sdp"
+            android:scrollbarStyle="insideInset"
+            android:scrollbarThumbVertical="@drawable/scrollbar"
+            android:scrollbarTrackVertical="@drawable/scrollbar_track"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="left"
+            app:layout_constraintBottom_toTopOf="@id/emojiGrid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addViewChatGameScreenBanner" />
+
+        <HorizontalScrollView
+            android:id="@+id/emojiGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarAlwaysDrawHorizontalTrack="false"
+            app:layout_constraintBottom_toTopOf="@id/editTextChatInput1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:id="@+id/emojiGrid1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editTextChatInput1"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="2dp"
+            android:layout_marginBottom="3dp"
+            android:hint="@string/chatInputHint"
+            android:imeOptions="actionSend"
+            android:inputType="textPersonName"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp"
+            app:hintAnimationEnabled="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/sendChat"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextChatInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSend"
+                tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/sendChat"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:background="@drawable/shine_player_stats"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="sendChat"
+            android:text="@string/sendChatButton"
+            android:textColor="@color/font_grey_settings"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintBottom_toBottomOf="@id/editTextChatInput1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/editTextChatInput1"
+            app:layout_constraintTop_toTopOf="@+id/editTextChatInput1"
+            tools:ignore="TouchTargetSizeCheck" />
 
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:id="@+id/frameAskBid"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_above="@+id/playerCards"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="0dp"
-        android:elevation="@dimen/_45sdp"
         android:background="@drawable/blacksquarebutton"
         android:fadingEdge="horizontal|vertical"
         android:visibility="gone">
@@ -1531,8 +1627,8 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="@dimen/_280sdp"
             android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_25sdp"
             android:layout_gravity="center|top"
+            android:layout_marginTop="@dimen/_25sdp"
             android:background="@drawable/orangesquarebutton"
             android:gravity="center"
             android:text="@string/raise_bid_or_pass"
@@ -1551,11 +1647,11 @@
                 android:id="@+id/bid05button"
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="@dimen/_45sdp"
-                android:gravity="center"
                 android:background="@drawable/greenroundedbutton"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
                 android:onClick="askToBid"
                 android:tag="5"
                 android:text="@string/bid05button"
@@ -1566,13 +1662,13 @@
                 android:id="@+id/bid10button"
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="@dimen/_45sdp"
-                android:gravity="center"
                 android:background="@drawable/greenroundedbutton"
-                android:onClick="askToBid"
-                android:shadowDy="4"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:onClick="askToBid"
+                android:shadowDy="4"
                 android:tag="10"
                 android:text="@string/bid10button"
                 android:textColor="#303030"
@@ -1582,12 +1678,12 @@
                 android:id="@+id/bid20button"
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="@dimen/_45sdp"
-                android:gravity="center"
                 android:background="@drawable/greenroundedbutton"
-                android:onClick="askToBid"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:onClick="askToBid"
                 android:shadowDy="4"
                 android:tag="20"
                 android:text="@string/bid20button"
@@ -1598,12 +1694,12 @@
                 android:id="@+id/bid50button"
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="@dimen/_45sdp"
-                android:gravity="center"
                 android:background="@drawable/greenroundedbutton"
-                android:onClick="askToBid"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:onClick="askToBid"
                 android:shadowDy="4"
                 android:tag="50"
                 android:text="@string/bid50button"
@@ -1615,14 +1711,14 @@
             android:id="@+id/bidpassbutton"
             android:layout_width="@dimen/_74sdp"
             android:layout_height="@dimen/_42sdp"
-            android:gravity="center"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="@dimen/_20sdp"
             android:background="@drawable/redrectanglebutton"
-            android:onClick="askToBid"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="askToBid"
             android:tag="pass"
             android:text="@string/passTextGS"
             android:textColor="#E1E1E1"
@@ -1634,20 +1730,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/playerCards"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="0dp"
-        android:elevation="@dimen/_72sdp"
         android:background="@drawable/blacksquarebutton"
         android:visibility="gone">
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_49sdp"
-            android:gravity="center"
-            android:background="@drawable/orangesquarebutton"
             android:layout_marginTop="@dimen/_25sdp"
+            android:background="@drawable/orangesquarebutton"
+            android:gravity="center"
             android:text="@string/chooseTrump"
             android:textColor="@color/Black"
             android:textSize="@dimen/_24ssp" />
@@ -1666,11 +1761,11 @@
                 android:layout_width="@dimen/trumpSelectionImageWidth"
                 android:layout_height="@dimen/trumpSelectionImageHeight"
                 android:background="@drawable/cyanrectanglebutton"
-                android:contentDescription="@string/app_name"
-                android:onClick="onTrumpSelectionClick"
                 android:clickable="true"
+                android:contentDescription="@string/app_name"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:onClick="onTrumpSelectionClick"
                 android:tag="h"
                 app:srcCompat="@drawable/ic_hearts" />
 
@@ -1680,9 +1775,9 @@
                 android:layout_height="@dimen/trumpSelectionImageHeight"
                 android:background="@drawable/cyanrectanglebutton"
                 android:clickable="true"
+                android:contentDescription="@string/app_name"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/app_name"
                 android:onClick="onTrumpSelectionClick"
                 android:tag="s"
                 app:srcCompat="@drawable/ic_spades" />
@@ -1691,11 +1786,11 @@
                 android:id="@+id/imageViewTrumpDiamonds"
                 android:layout_width="@dimen/trumpSelectionImageWidth"
                 android:layout_height="@dimen/trumpSelectionImageHeight"
+                android:background="@drawable/cyanrectanglebutton"
                 android:clickable="true"
+                android:contentDescription="@string/app_name"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:background="@drawable/cyanrectanglebutton"
-                android:contentDescription="@string/app_name"
                 android:onClick="onTrumpSelectionClick"
                 android:tag="d"
                 app:srcCompat="@drawable/ic_diamonds" />
@@ -1706,119 +1801,14 @@
                 android:layout_height="@dimen/trumpSelectionImageHeight"
                 android:background="@drawable/cyanrectanglebutton"
                 android:clickable="true"
+                android:contentDescription="@string/app_name"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/app_name"
                 android:onClick="onTrumpSelectionClick"
                 android:tag="c"
                 app:srcCompat="@drawable/ic_clubs" />
         </LinearLayout>
     </FrameLayout>
-
-    <RelativeLayout
-        android:id="@+id/chatLinearLayout"
-        android:layout_width="@dimen/_260sdp"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/playerCards"
-        android:layout_marginBottom="-20dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/shine_chat_background"
-        android:elevation="@dimen/_60sdp"
-        android:visibility="gone">
-
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/addViewChatGameScreenBanner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:adSize="BANNER"
-            app:adUnitId="@string/banner" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textViewChatDisplay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="3dp"
-                android:layout_below="@+id/addViewChatGameScreenBanner"
-                android:layout_above="@+id/emojiGrid"
-                android:gravity="bottom|start"
-                android:hint="@string/chatWindowDisplay"
-                android:paddingStart="@dimen/_3sdp"
-                android:paddingEnd="@dimen/_2sdp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#CFA965"
-                android:textSize="@dimen/_11ssp"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:scrollbars="vertical"
-                android:scrollbarSize="@dimen/_7sdp" />
-
-        <HorizontalScrollView
-            android:id="@+id/emojiGrid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/chatInput"
-            android:scrollbarAlwaysDrawHorizontalTrack="false">
-
-            <LinearLayout
-                android:id="@+id/emojiGrid1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
-
-
-        <LinearLayout
-            android:id="@+id/chatInput"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_gravity="bottom"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="2dp"
-            android:layout_marginBottom="3dp"
-            android:gravity="fill"
-            android:orientation="horizontal"
-            app:singleLine="true">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editTextChatInput1"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="@dimen/_193sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:elevation="@dimen/_72sdp"
-                android:hint="@string/chatInputHint"
-                app:hintAnimationEnabled="true"
-                android:inputType="textPersonName"
-                android:imeOptions="actionSend"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_10ssp" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextChatInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionSend" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_gravity="center"
-                android:background="@drawable/greenroundedbutton"
-                android:elevation="@dimen/_72sdp"
-                android:gravity="center"
-                android:onClick="sendChat"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:text="@string/sendChatButton"
-                android:textColor="#2C2C2C"
-                android:textSize="@dimen/_12ssp" />
-        </LinearLayout>
-    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearLayoutPartnerSelection"
@@ -1833,7 +1823,6 @@
         android:layout_marginEnd="@dimen/_43sdp"
         android:layout_marginBottom="0dp"
         android:background="@drawable/blacksquarebutton"
-        android:elevation="@dimen/_143sdp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -1892,13 +1881,13 @@
             android:layout_above="@+id/imageViewSelf"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/_8sdp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:shadowColor="#3E3E3E"
             android:shadowDx="3"
             android:shadowDy="3"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:shadowRadius="3"
             android:text="@string/_400"
             android:textColor="#FFFFFF"
@@ -1913,11 +1902,11 @@
             android:layout_above="@+id/imageViewSelf_4"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/_2sdp"
-            android:gravity="center"
-            android:shadowColor="#3E3E3E"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:shadowColor="#3E3E3E"
             android:shadowDx="3"
             android:shadowDy="3"
             android:shadowRadius="3"
@@ -1935,9 +1924,9 @@
             android:layout_marginBottom="@dimen/_minus32sdp"
             android:layout_toStartOf="@+id/imageViewSelf"
             android:clickable="true"
+            android:contentDescription="@string/app_name"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/app_name"
             android:rotation="55"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
@@ -1947,13 +1936,13 @@
             android:layout_width="@dimen/tableCardImageWidth"
             android:layout_height="@dimen/tableCardImageHeight"
             android:layout_above="@+id/imageViewTable1"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_marginEnd="@dimen/_7sdp"
             android:layout_marginBottom="@dimen/_minus14sdp"
             android:layout_toStartOf="@+id/imageViewSelf"
+            android:clickable="true"
             android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="-80"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
@@ -1964,12 +1953,12 @@
             android:layout_height="@dimen/tableCardImageHeight"
             android:layout_above="@+id/imageViewTable2"
             android:layout_marginEnd="@dimen/_minus14sdp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_marginBottom="@dimen/_minus22sdp"
             android:layout_toStartOf="@+id/imageViewSelf"
+            android:clickable="true"
             android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="-20"
             android:visibility="gone"
             app:srcCompat="@drawable/c10"
@@ -1982,12 +1971,12 @@
             android:layout_above="@+id/imageViewTable5"
             android:layout_marginStart="@dimen/_minus14sdp"
             android:layout_marginEnd="@dimen/_minus32sdp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_marginBottom="@dimen/_minus22sdp"
             android:layout_toEndOf="@id/imageViewSelf"
+            android:clickable="true"
             android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="20"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
@@ -1998,12 +1987,12 @@
             android:layout_height="@dimen/tableCardImageHeight"
             android:layout_above="@+id/imageViewTable6"
             android:layout_marginStart="@dimen/_7sdp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_marginBottom="@dimen/_minus14sdp"
             android:layout_toEndOf="@+id/imageViewSelf"
+            android:clickable="true"
             android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="80"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
@@ -2014,12 +2003,12 @@
             android:layout_height="@dimen/tableCardImageHeight"
             android:layout_above="@+id/imageViewSelf"
             android:layout_marginStart="0dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_marginBottom="@dimen/_minus32sdp"
             android:layout_toEndOf="@+id/imageViewSelf"
+            android:clickable="true"
             android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="-55"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
@@ -2030,11 +2019,11 @@
             android:layout_height="@dimen/tableCardImageHeight"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/_3sdp"
             android:clickable="true"
+            android:contentDescription="@string/app_name"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:layout_marginBottom="@dimen/_3sdp"
-            android:contentDescription="@string/app_name"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
 
@@ -2043,14 +2032,14 @@
             android:layout_width="@dimen/tableCardImageWidth_4"
             android:layout_height="@dimen/tableCardImageHeight_4"
             android:layout_alignParentBottom="true"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/_9sdp"
+            android:clickable="true"
             android:contentDescription="@string/app_name"
-            android:visibility="gone"
-            android:src="@drawable/c10" />
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/c10"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imageViewTable3_4"
@@ -2058,12 +2047,12 @@
             android:layout_height="@dimen/tableCardImageHeight_4"
             android:layout_above="@+id/imageViewSelf_4"
             android:layout_marginStart="@dimen/_8sdp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_marginBottom="@dimen/_minus24sdp"
             android:layout_toEndOf="@+id/imageViewSelf_4"
+            android:clickable="true"
             android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="90"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
@@ -2072,13 +2061,13 @@
             android:id="@+id/imageViewTable2_4"
             android:layout_width="@dimen/tableCardImageWidth_4"
             android:layout_height="@dimen/tableCardImageHeight_4"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_above="@id/imageViewTable1_4"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/_minus13sdp"
+            android:clickable="true"
             android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
 
@@ -2091,9 +2080,9 @@
             android:layout_marginBottom="@dimen/_minus24sdp"
             android:layout_toStartOf="@+id/imageViewSelf_4"
             android:clickable="true"
+            android:contentDescription="@string/app_name"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/app_name"
             android:rotation="-90"
             android:visibility="gone"
             app:srcCompat="@drawable/c10" />
@@ -2102,12 +2091,12 @@
             android:id="@+id/imageViewWinnerCenter"
             android:layout_width="@dimen/tableCardImageWidth"
             android:layout_height="@dimen/tableCardImageHeight"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_above="@+id/imageViewSelf"
             android:layout_centerHorizontal="true"
+            android:clickable="true"
             android:contentDescription="@string/app_name"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:visibility="gone"
             app:srcCompat="@drawable/ic_back_side_blue" />
 
@@ -2116,32 +2105,21 @@
             android:layout_width="@dimen/tableCardImageWidth_4"
             android:layout_height="@dimen/tableCardImageHeight_4"
             android:layout_above="@+id/imageViewSelf_4"
+            android:layout_centerHorizontal="true"
             android:clickable="true"
+            android:contentDescription="@string/app_name"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:layout_centerHorizontal="true"
-            android:contentDescription="@string/app_name"
             android:visibility="gone"
             app:srcCompat="@drawable/ic_back_side_blue" />
 
     </RelativeLayout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/bidNowImage"
-        android:layout_width="@dimen/imageWidth_4"
-        android:layout_height="@dimen/imageWidth_4"
-        android:background="@drawable/purplesquarebutton"
-        android:text="@string/bidNow"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="@dimen/_18ssp"
-        android:visibility="gone"/>
-
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/konfettiGSA"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <RelativeLayout
         android:id="@+id/scoreViewLayout"
@@ -2154,7 +2132,6 @@
         android:layout_marginBottom="@dimen/_4sdp"
         android:animateLayoutChanges="true"
         android:background="@drawable/shine_score_table"
-        android:elevation="@dimen/_45sdp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone">
@@ -2165,16 +2142,17 @@
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone"
-            android:background="@drawable/blacksquarebutton"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_marginTop="@dimen/_1sdp"
             android:layout_marginBottom="@dimen/_4sdp"
             android:adjustViewBounds="true"
+            android:background="@drawable/blacksquarebutton"
+            android:clickable="true"
+            android:contentDescription="@string/todo"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:scaleType="fitCenter"
-            android:src="@drawable/ribbon_scoreboard" />
+            android:src="@drawable/ribbon_scoreboard"
+            android:visibility="gone" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:layout_width="match_parent"
@@ -2183,15 +2161,16 @@
             android:layout_alignStart="@+id/imageGalleryScoreName"
             android:layout_alignEnd="@+id/imageGalleryScoreName"
             android:layout_marginTop="@dimen/_minus8sdp"
+            android:visibility="gone"
             app:shimmer_auto_start="true"
             app:shimmer_colored="true"
             app:shimmer_duration="1500"
-            android:visibility="gone"
             app:shimmer_highlight_alpha="1"
             app:shimmer_highlight_color="#FFFFFF"
             app:shimmer_repeat_delay="0"
             app:shimmer_repeat_mode="restart"
             app:shimmer_shape="linear">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
@@ -2206,10 +2185,10 @@
             android:layout_below="@+id/scoreTitle"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="0dp"
+            android:background="@drawable/redrectanlgesimple"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:background="@drawable/redrectanlgesimple"
             android:orientation="vertical"
             android:paddingBottom="@dimen/_2sdp" />
 
@@ -2255,15 +2234,15 @@
             android:id="@+id/scrollViewScore"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_below="@+id/shimmerScore"
             android:layout_above="@id/addViewGameScreenBanner"
-            android:layout_marginTop="@dimen/_minus1sdp"
+            android:layout_below="@+id/shimmerScore"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_minus1sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:animateLayoutChanges="true"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:layout_marginBottom="@dimen/_2sdp"
-            android:animateLayoutChanges="true"
             android:scrollbarSize="@dimen/_10sdp"
             android:scrollbarStyle="insideOverlay"
             android:visibility="visible">
@@ -2272,44 +2251,43 @@
                 android:id="@+id/imageGalleryScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:layout_gravity="center_horizontal"
                 android:orientation="vertical" />
         </ScrollView>
 
-        <com.google.android.gms.ads.AdView
+        <com.mopub.mobileads.MoPubView
             android:id="@+id/addViewGameScreenBanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="0dp"
-            app:adSize="BANNER"
-            app:adUnitId="@string/banner" />
+            android:layout_marginBottom="0dp" />
 
     </RelativeLayout>
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:id="@+id/startNextRoundButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/redrectanglebutton"
+        android:background="@drawable/shine_player_stats"
         android:clickable="true"
         android:contentDescription="@string/todo"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="startNextGame"
         android:gravity="center"
+        android:onClick="startNextGame"
+        android:paddingStart="@dimen/_13sdp"
         android:paddingTop="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_13sdp"
         android:paddingBottom="@dimen/_10sdp"
         android:text="@string/start_next_game"
         android:textColor="@color/white"
         android:textSize="@dimen/_17ssp"
         android:visibility="gone"
-        android:elevation="@dimen/_80sdp"
         tools:ignore="RelativeOverlap" />
 
 </RelativeLayout>

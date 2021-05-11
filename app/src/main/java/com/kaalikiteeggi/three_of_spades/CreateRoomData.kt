@@ -86,9 +86,9 @@ class CreateRoomData(private val userBasicInfo:UserBasicInfo) {
         "p5h" to "8nAir6bIi5ToGocuyF24ptUIlOz2",
         "p6" to "Tamanna",
         "p6h" to "8WUKdjBK8kTFI7HGYO92mjPuOG43",
-        "p7" to "",//"Prinsi",
-        "p7h" to "",//"Mpa3032PKXUOXZiIzS6l7Pw7jM02",
-        "PJ" to 6,
+        "p7" to "Prinsi",
+        "p7h" to "Mpa3032PKXUOXZiIzS6l7Pw7jM02",
+        "PJ" to 7,
         "n" to 7)
 
 }

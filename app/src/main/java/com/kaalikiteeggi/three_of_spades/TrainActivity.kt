@@ -233,7 +233,8 @@ class TrainActivity : AppCompatActivity() {
     fun closeTraining(view: View){
         startActivity(
             Intent(this, MainHomeScreen::class.java)
-                .apply {putExtra("newUser",false)})
+                .apply {putExtra("newUser",false)}
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         finish()
         overridePendingTransition(R.anim.slide_right_activity,R.anim.slide_right_activity)
     }

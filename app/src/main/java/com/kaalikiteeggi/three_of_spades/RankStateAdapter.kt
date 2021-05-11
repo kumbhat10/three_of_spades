@@ -11,8 +11,8 @@ class RankStateAdapter(fragmentActivity: FragmentActivity, val tabs:Int):
 		return tabs//fragments.size
 	}
 
-	override fun createFragment(position: Int): Fragment {
-		return TestFragment.newInstance(position)
+	override fun createFragment(positiosn: Int): Fragment {
+		return TestFragment() //.newInstance(position)
 	}
 
 }

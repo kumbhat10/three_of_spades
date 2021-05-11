@@ -4,31 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/splashRoot"
     tools:context="com.kaalikiteeggi.three_of_spades.SplashScreen">
 
     <ImageView
         android:id="@+id/splashBckgd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/blueburst"
-        android:foreground="@drawable/tint_background4"
-        android:scaleType="centerCrop"
-        android:scaleX="2.5"
-        android:scaleY="2.5"
+        android:foreground="@drawable/tint_backgroundmhs"
+        android:scaleType="fitXY"
         android:visibility="visible"
         android:contentDescription="@string/todo" />
 
-    <ImageView
-        android:id="@+id/spadeImage"
-        android:layout_width="@dimen/_250sdp"
-        android:layout_height="@dimen/_270sdp"
-        android:src="@drawable/spade"
-        android:contentDescription="@string/todo"
+    <ProgressBar
+        android:id="@+id/loading"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="@dimen/_15sdp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:max="10000"
+        android:indeterminate="false"
+        android:progressDrawable="@drawable/progress_splash"
+        android:indeterminateOnly="false"
+        app:layout_constraintBottom_toBottomOf="@id/icon3"
+        app:layout_constraintEnd_toEndOf="@id/icon3"
+        app:layout_constraintStart_toStartOf="@id/icon3"
+        app:layout_constraintTop_toTopOf="@id/icon3" />
 
      <ImageView
         android:id="@+id/icon3"
@@ -42,47 +43,37 @@
          app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/lightSplash"
+        android:id="@+id/loadingSplash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_45sdp"
+        android:fontFamily="@font/almendra_display"
         android:text="@string/loading"
-        android:textSize="@dimen/_20ssp"
-        android:textColor="@color/white"
+        android:textColor="@color/font_yellow"
+        android:textSize="@dimen/_21ssp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/icon3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profilePic2"
+        android:layout_width="@dimen/upWidth"
+        android:layout_height="@dimen/upWidth"
+        android:layout_marginStart="@dimen/upStart"
+        android:layout_marginTop="@dimen/upTop"
+        android:contentDescription="@null"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/spadeImage" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnim"
-        android:layout_width="@dimen/_200sdp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/spadeImage"
-        android:layout_marginTop="@dimen/_220sdp"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/l_progress_bar"
-        app:lottie_speed="0.6" />
-
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/profilePic2"
-            android:layout_width="@dimen/upWidth"
-            android:layout_height="@dimen/upWidth"
-            android:layout_marginStart="@dimen/upStart"
-            android:layout_marginTop="@dimen/upTop"
-            android:contentDescription="@null"
-            android:visibility="gone"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.ProfilePic"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.ProfilePic" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/userNameSplash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_2sdp"
-        android:gravity="start|bottom"
+        android:gravity="start|top"
         android:paddingEnd="@dimen/_50sdp"
         android:text="@string/playeName"
         android:textSize="@dimen/upTextSize"
@@ -97,33 +88,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_1sdp"
-        android:fontFamily="@font/calligraffitti"
         android:gravity="bottom|start"
         android:text="@string/welcomeBack"
         android:textColor="@color/icon_yellow"
-        android:textSize="@dimen/_17ssp"
+        android:textSize="@dimen/_21ssp"
         android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/space3"
+        app:layout_constraintBottom_toTopOf="@+id/userNameSplash"
         app:layout_constraintStart_toEndOf="@+id/profilePic2" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/vcSplash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_5sdp"
-        android:layout_marginBottom="@dimen/_5sdp"
-        android:textColor="#D5D5D5"
-        android:textSize="@dimen/_10ssp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Space
-        android:id="@+id/space3"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/_10sdp"
-        app:layout_constraintStart_toEndOf="@+id/welcome2"
-        app:layout_constraintTop_toTopOf="@+id/userNameSplash" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

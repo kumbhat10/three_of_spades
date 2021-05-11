@@ -8,6 +8,10 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:scrollbarAlwaysDrawVerticalTrack="true"
-    android:scrollbarSize="@dimen/_10sdp" />
+    android:scrollbarSize="@dimen/_4sdp"
+    android:scrollbarStyle="insideInset"
+    android:scrollbarThumbVertical="@drawable/scrollbar"
+    android:scrollbarTrackVertical="@drawable/scrollbar_track"
+    android:scrollbars="vertical"
+    android:verticalScrollbarPosition="right" />
 

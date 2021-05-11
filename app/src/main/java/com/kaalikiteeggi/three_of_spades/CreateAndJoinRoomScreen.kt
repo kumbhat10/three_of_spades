@@ -8,11 +8,9 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.media.MediaPlayer
 import android.os.*
 import android.speech.tts.TextToSpeech
-import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
@@ -22,10 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import cat.ereza.customactivityoncrash.config.CaocConfig
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.CollectionReference
@@ -34,6 +29,10 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.mopub.common.MoPub
+import com.mopub.common.SdkConfiguration
+import com.mopub.common.logging.MoPubLog
+import com.mopub.mobileads.MoPubView
 import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
 import kotlinx.android.synthetic.main.activity_main_home_screen.*
 import java.text.SimpleDateFormat
@@ -61,7 +60,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private var fromInt = 0
 	private var totalCoins = 0
 	private var totalDailyCoins = 0
-	private lateinit var toast: Toast
 	private lateinit var sharedPreferences: SharedPreferences
 	private lateinit var roomData: Map<String, Any>
 	private var p1Status = false
@@ -75,16 +73,16 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private var soundStatus = true
 	private var vibrateStatus = true
 	private var premiumStatus = false
-	private lateinit var p1: String
+	private var p1 = ""
 	private var versionStatus = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 	private lateinit var textToSpeech: TextToSpeech
 	private var closeRoom: Boolean = false
 
 	private lateinit var playerInfo: ArrayList<String>
 	private lateinit var playerInfoCoins: ArrayList<Int>
-	private lateinit var p5: String
-	private lateinit var p6: String
-	private lateinit var p7: String
+	private var p5 = ""
+	private var p6 = ""
+	private var p7 = ""
 
 	private lateinit var userStats: java.util.ArrayList<Int>
 	private lateinit var userStatsTotal: java.util.ArrayList<Int>
@@ -95,7 +93,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private var handler = Handler(Looper.getMainLooper())
 	private var userArrayList = mutableListOf<UserBasicInfo>()
 	private lateinit var adapter: LVAdapterJoinRoom
-	private lateinit var firebaseAnalytics: FirebaseAnalytics
 
 	// endregion
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,9 +107,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 			.errorDrawable(R.drawable.bug_icon) //default: bug image
 			.apply()
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-		setContentView(R.layout.activity_create_join_room_screen)
-		requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-		SoundManager.initialize(applicationContext)
+		setContentView(R.layout.activity_create_join_room_screen) //		SoundManager.initialize(this)
 		refRoomData = Firebase.firestore.collection(getString(R.string.pathRoom))
 		nPlayers = intent.getIntExtra("nPlayers", 0)
 		offline = intent.getBooleanExtra("offline", true)
@@ -123,27 +118,23 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				userArrayList.add(emptyUser)
 			}
 		}
-
 		playersJoin.layoutManager = LinearLayoutManager(this)
 		adapter = LVAdapterJoinRoom(this, userArrayList)
 		playersJoin.adapter = adapter
+
 		Handler(Looper.getMainLooper()).post {
 			v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-			soundBkgd = MediaPlayer.create(applicationContext, R.raw.music)
+			soundBkgd = MediaPlayer.create(this, R.raw.music)
 			soundBkgd.isLooping = true
 			soundBkgd.setVolume(0.05F, 0.05F)
-			toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT)
-			toast.setGravity(Gravity.CENTER, 0, 0)
-			updateUIAndAnimateElements()
 			getSharedPrefs()
+			updateUIAndAnimateElements()
 			initializeSpeechEngine()
 			if (!offline) getRoomLiveUpdates()  // keep updating the screen as the users join
 			else updateRoomInfoOffline()
 		}
 		mAuth = FirebaseAuth.getInstance()
 		uid = mAuth.uid.toString()
-		firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-
 	}
 
 	private fun updateUIAndAnimateElements() {
@@ -159,15 +150,13 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		userStatsTotal = intent.getIntegerArrayListExtra("userStatsTotal")!!
 		userStatsDaily = intent.getIntegerArrayListExtra("userStatsDaily")!!
 		if (!offline) {
-			imageViewShareButton1.visibility = View.VISIBLE
 			imageViewShareButton2.visibility = View.VISIBLE
 			waitingToJoinText.visibility = View.VISIBLE
-			imageViewShareButton1.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite))
+			imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_scale_infinite))
+			roomIDTitle.text = "Room ID: $roomID"   // display the room ID
 		} else {
 			offlineProgressbar.visibility = View.VISIBLE
-			offlineProgressbar.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
 		}
-		roomIDTitle.text = "Room ID: $roomID"   // display the room ID
 		if (fromInt == 1) { //  close icon only to host
 			leaveJoiningRoomIcon.visibility = View.VISIBLE
 		}
@@ -229,8 +218,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 			if (dataSnapshot != null && dataSnapshot.exists() && error == null) {
 				roomData = dataSnapshot.data as Map<String, Any>
 				updateRoomInfoOnline(dataSnapshot)
-			} else if (dataSnapshot != null && !dataSnapshot.exists()) {
-				//				soundError.start()
+			} else if (dataSnapshot != null && !dataSnapshot.exists()) {                //				soundError.start()
 				SoundManager.getInstance().playErrorSound()
 				toastCenter("Sorry $selfName \n$p1 has left the room. \nYou can create your own room or join other")
 				speak("$p1 has left. You can create your own room or join another room", forceSpeak = false)
@@ -336,14 +324,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private fun allPlayersJoined() {
 		if (soundStatus) SoundManager.getInstance().playSuccessSound()
 		speak("Ready to Start", speed = 1.06f, forceSpeak = false)
-		imageViewShareButton1.clearAnimation()
 		imageViewShareButton2.clearAnimation()
-		imageViewShareButton1.visibility = View.GONE
 		imageViewShareButton2.visibility = View.GONE
 		offlineProgressbar.visibility = View.GONE
 		waitingToJoinText.visibility = View.GONE
-		Handler(Looper.getMainLooper()).postDelayed({ startGameButton.visibility = View.VISIBLE }, 600)
-		//		anim(startGameButton, R.anim.anim_scale_appeal)
+		Handler(Looper.getMainLooper()).postDelayed({ startGameButton.visibility = View.VISIBLE }, 600)        //		anim(startGameButton, R.anim.anim_scale_appeal)
 	}
 
 	@SuppressLint("SimpleDateFormat")
@@ -391,10 +376,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				loadingText1.text = getString(R.string.starting_game)
 				startGameButton.clearAnimation()
 				startGameButton.visibility = View.GONE
-				Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 300)
+				startNextActivity() //				Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 300)
 			}
-		} else {
-			//			soundError.start()
+		} else {            //			soundError.start()
 			SoundManager.getInstance().playUpdateSound()
 			toastCenter("Only Host can start the game")
 			speak("Only Host can start", speed = 1.15f, forceSpeak = false)
@@ -412,7 +396,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				.putStringArrayListExtra("playerInfo", playerInfo)
 				.putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins)
 				.putIntegerArrayListExtra("userStats", userStats)
-				.putIntegerArrayListExtra("userStatsDaily", userStatsDaily))
+				.putIntegerArrayListExtra("userStatsDaily", userStatsDaily)
+				.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
 		} else {
 			startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreenAutoPlay::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
 				.apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }
@@ -421,10 +406,12 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				.putStringArrayListExtra("playerInfo", playerInfo)
 				.putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins)
 				.putIntegerArrayListExtra("userStats", userStats)
-				.putIntegerArrayListExtra("userStatsDaily", userStatsDaily))
+				.putIntegerArrayListExtra("userStatsDaily", userStatsDaily)
+				.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
 		}
-		overridePendingTransition(R.anim.slide_top_in_activity, R.anim.slide_top_in_activity)
-		Handler(Looper.getMainLooper()).postDelayed({ finish() }, 400)
+		overridePendingTransition(R.anim.slide_top_in_activity, R.anim.slide_top_in_activity) //		finishAfterTransition()
+		finishAndRemoveTask()
+
 	}
 
 	private fun initializeSpeechEngine() {
@@ -433,7 +420,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				val result = textToSpeech.setLanguage(Locale.ENGLISH)
 				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
 					toastCenter("Missing Language data - Text to speech")
-				} else if (!offline && fromInt != 1) {
+				} else if (!offline && fromInt != 1 && fromInt < nPlayers) { //don't speak for host and last player
 					speak("Invite your friends to join this room", speed = 1.1f, forceSpeak = false)
 				}
 			}
@@ -450,29 +437,26 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		}
 	}
 
-	private fun logFirebaseEvent(event: String, int: Int, key: String) {
-		val params = Bundle()
-		params.putInt(key, int)
-		firebaseAnalytics.logEvent(event, params)
-	}
-
 	private fun initializeAds() {
 		if (!premiumStatus) {
-			addViewCreateJoinRoom.visibility = View.VISIBLE
-			addViewCreateJoinRoom.loadAd(AdRequest.Builder().build())
-			addViewCreateJoinRoom.adListener = object : AdListener() {
-				override fun onAdClosed() {
-					super.onAdClosed()
-					logFirebaseEvent(FirebaseAnalytics.Event.AD_IMPRESSION, 1, "banner_close")
-				}
+			val configBuilder = if (BuildConfig.DEBUG)	SdkConfiguration.Builder(getString(R.string.bannerTest_MP)).withLogLevel(MoPubLog.LogLevel.DEBUG)
+			else SdkConfiguration.Builder(getString(R.string.bannerReal_MP)).withLogLevel(MoPubLog.LogLevel.NONE)
+			MoPub.initializeSdk(this, configBuilder.build()) {
+				val adUnitID = if (BuildConfig.DEBUG) getString(R.string.bannerTest_MP)
+				else getString(R.string.bannerReal_MP)
+				addViewCreateJoinRoom.visibility = View.VISIBLE
+				addViewCreateJoinRoom.setAdUnitId(adUnitID)
+				addViewCreateJoinRoom.adSize = MoPubView.MoPubAdSize.HEIGHT_280
+				addViewCreateJoinRoom.loadAd()
 			}
+
 		} else {
 			addViewCreateJoinRoom.visibility = View.GONE
 		}
 	}
 
 	fun anim(view: View, anim: Int) {
-		view.startAnimation(AnimationUtils.loadAnimation(applicationContext, anim))
+		view.startAnimation(AnimationUtils.loadAnimation(this, anim))
 	}
 
 	private fun getSharedPrefs() {
@@ -509,10 +493,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		handler.removeCallbacksAndMessages(null)
 		startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) })
 		overridePendingTransition(R.anim.slide_right_activity, R.anim.slide_right_activity)
-		finish()
+		finishAfterTransition()
 	}
 
-	fun showDialogue(view: View) {
+	fun showDialogueCR(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 		closeRoom = true
 		speak("Are you sure want to leave the room", speed = 1f, forceSpeak = true)
@@ -533,7 +517,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 				closeRoom = false
 			}
 			alertDialog = builder.create()
-			alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.shine_score_table))
+			alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_player_stats))
 		}
 		alertDialog.show()
 	}
@@ -546,7 +530,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		super.onPause()
 		if (musicStatus) soundBkgd.pause()
 		try {
-			textToSpeech.stop()
+			if (this::textToSpeech.isInitialized) textToSpeech.stop()
 		} catch (me: java.lang.Exception) {
 		}
 	}
@@ -557,33 +541,39 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	}
 
 	override fun onDestroy() {
+		addViewCreateJoinRoom.destroy() // destroy MoPub banner add view
+		if (this::soundBkgd.isInitialized) soundBkgd.release() //		adapter = null
+		playersJoin.adapter = null
 		try {
-			textToSpeech.shutdown()
+			if (this::textToSpeech.isInitialized) {
+				textToSpeech.stop()
+				textToSpeech.shutdown()
+			}
 		} catch (me: java.lang.Exception) {
 		}
-		super.onDestroy()
 		try {
 			if (!offline) registration.remove()
 		} catch (error: Exception) {
 			toastCenter(error.localizedMessage)
 		}
-	} // remove snapshot listener
+		MoPub.onDestroy(this)
+		super.onDestroy()
+	}
 
 	private fun createDynamicLink() {
-		shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=54" +
-				//				"&st=3%20of%20Spades" +
+		shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=54" +                //				"&st=3%20of%20Spades" +
 				"&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID + "&si=https://tinyurl.com/3ofspade" //https://i.pinimg.com/564x/f9/fd/d9/f9fdd9bf6fbb9f00d945e1b22b293aea.jpg"
 	}
 
 	fun shareRoomInfo(view: View) {
 		if (!offline) {
-			imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.click_press))
+			imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 			if (soundStatus) SoundManager.getInstance().playUpdateSound()
-			val message = "${Emoji().gamePlayed}${Emoji().trophy} Click below => $roomID ${Emoji().score}${Emoji().money}" + "\n\n$shareLink"
+			val message = "${Emoji().gamePlayed}${Emoji().trophy} Join my room => $roomID ${Emoji().score}${Emoji().money}" + "\n\n$shareLink"
 			val intent = Intent()
 			intent.action = Intent.ACTION_SEND
 			intent.type = "text/plain"
-			intent.putExtra(Intent.EXTRA_TITLE, "Click to join my Room => $roomID")
+			intent.putExtra(Intent.EXTRA_TITLE, "Join my room => $roomID")
 			intent.putExtra(Intent.EXTRA_TEXT, message)
 			try {
 				startActivity(Intent.createChooser(intent, "Share Room ID $roomID via :"))
@@ -594,12 +584,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	}
 
 	private fun toastCenter(message: String) {
-		//		Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 		Snackbar.make(findViewById(R.id.backgroundJR), message, Snackbar.LENGTH_SHORT).show()
 
-		//		toast.setText(message)
-		//		toast.show()
 	}
+
 }
 
 
