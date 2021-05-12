@@ -53,7 +53,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 		val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
 
 		val channelId = getString(R.string.default_notification_channel_id1)
-		val defaultSoundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.notification);
+		val defaultSoundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.notification)
 
 		val notificationBuilder = NotificationCompat.Builder(this, channelId)
 			.setSmallIcon(R.drawable.ic_stat_name)

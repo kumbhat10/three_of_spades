@@ -25,6 +25,7 @@ public class SoundManager {
         soundPool = (new SoundPool.Builder()).setMaxStreams(18).build();
     }
 
+
     public void loadSound(Context context){
         ZIP_SOUND = soundPool.load(context, R.raw.zip, 1);
         UPDATE_SOUND = soundPool.load(context, R.raw.card_played, 1);

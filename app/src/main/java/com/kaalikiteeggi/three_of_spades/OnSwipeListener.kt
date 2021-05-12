@@ -5,7 +5,7 @@ import android.view.MotionEvent
 import kotlin.math.atan2
 
 
-open class OnSwipeListener() : SimpleOnGestureListener() {
+open class OnSwipeListener : SimpleOnGestureListener() {
 	override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
 
 		// Grab two events located on the plane at e1=(x1, y1) and e2=(x2, y2)

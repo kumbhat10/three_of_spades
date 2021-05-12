@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.player_stats_grid.view.*
 
-class PlayerStatsItem(var parameterIcon: Int, var parameter: String, var parameterValue: String) {
-}
+class PlayerStatsItem(var parameterIcon: Int, var parameter: String, var parameterValue: String)
 
 class PlayerStatsGridAdapter(var arrayList: ArrayList<PlayerStatsItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
 

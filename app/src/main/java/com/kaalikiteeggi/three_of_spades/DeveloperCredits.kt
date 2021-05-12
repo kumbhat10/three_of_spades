@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import com.android.billingclient.api.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.android.synthetic.main.activity_developer_credits.*
 import kotlinx.android.synthetic.main.activity_main_home_screen.*
 import kotlin.random.Random
@@ -58,6 +59,7 @@ class DeveloperCredits : AppCompatActivity() {
         vn = packageManager.getPackageInfo(packageName,0).versionName
         vc = packageManager.getPackageInfo(packageName,0).versionCode.toString()
         uid = intent.getStringExtra("uid")!!.toString()    //Get roomID and display
+        FirebaseCrashlytics.getInstance().setUserId(uid)
         soundStatus = intent.getBooleanExtra("soundStatus", true)    //Get roomID and display
         text = "VC: $vc\nVN: $vn\n W: ${resources.configuration.screenWidthDp}\nH: ${resources.configuration.screenHeightDp}\nUser ID: $uid"
         findViewById<TextView>(R.id.sizeDC).text = text

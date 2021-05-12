@@ -273,7 +273,7 @@ class StartScreen : AppCompatActivity() {
 			intentBuilder = CustomTabsIntent.Builder()
 			intentBuilder.setStartAnimations(this, R.anim.slide_left_activity, R.anim.slide_left_activity)
 			intentBuilder.setExitAnimations(this, R.anim.slide_right_activity, R.anim.slide_right_activity)
-			intentBuilder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, params);
+			intentBuilder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, params)
 			intentBuilder.setShareState(CustomTabsIntent.SHARE_STATE_ON)
 			intentBuilder.build().launchUrl(this, Uri.parse(privacyPolicyUrl))
 		} catch (me: Exception) {

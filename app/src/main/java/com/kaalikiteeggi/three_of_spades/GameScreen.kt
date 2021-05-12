@@ -292,7 +292,7 @@ class GameScreen : AppCompatActivity() {
         if (nPlayers == 7) nPlayers7 = true
         if (nPlayers == 4) nPlayers4 = true
         setupGame4or7()
-
+        SoundManager.initialize(applicationContext)
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
         refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
         refIDMappedImageView = PlayersReference().refIDMappedImageView(from, nPlayers)
@@ -309,7 +309,6 @@ class GameScreen : AppCompatActivity() {
         uid = FirebaseAuth.getInstance().uid.toString()
         FirebaseCrashlytics.getInstance().setUserId(uid)
         Handler(Looper.getMainLooper()).post {
-            SoundManager.initialize(applicationContext)
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             updatePlayerInfo()
             initializeSpeechEngine()
@@ -819,8 +818,6 @@ class GameScreen : AppCompatActivity() {
                             shufflingWindow(gameStateChange = true) // gameStateChange = change game state to 2 after shuffling
                         } else if (activityExists) startBidding()
                     }
-                    //                    if (gameState == 2) { // bidding moved to state 1 after shuffling and displaying own cards
-                    //                    }
                     if (gameState == 3) {
                         if (soundStatus) SoundManager.getInstance()
                             .playSuccessSound() //soundSuccess.start()
@@ -2498,6 +2495,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun displayShufflingCards(view: View = View(this), sets: Int = 5, distribute: Boolean = true) {
+        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
         if (distribute) shufflingDistribute()
         val gallery = findViewById<LinearLayout>(R.id.imageGallery)
         gallery.removeAllViews()
@@ -2532,7 +2530,6 @@ class GameScreen : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation?) {
                     imageViewWinnerCenter.startAnimation(anim)
                 }
-
                 override fun onAnimationStart(animation: Animation?) {}
             })
             imageViewWinnerCenter.startAnimation(anim)
@@ -2544,7 +2541,6 @@ class GameScreen : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation?) {
                     imageViewWinnerCenter_4.startAnimation(anim)
                 }
-
                 override fun onAnimationStart(animation: Animation?) {}
             })
             imageViewWinnerCenter_4.startAnimation(anim)
@@ -2754,7 +2750,7 @@ class GameScreen : AppCompatActivity() {
                     startNextRoundButton.visibility = View.VISIBLE
                     startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
                 }
-                if(fromInt==1) write("OL/$from", 1)
+                if(fromInt==1) write("OL/$from", 1) // for others except host, onStart will take care to update activity
 //                if(fromInt!=1) checkRoomExists()
 //                else write("OL/$from", 1)
             }

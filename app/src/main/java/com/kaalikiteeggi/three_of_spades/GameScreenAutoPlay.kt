@@ -1585,6 +1585,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 	}
 
 	private fun displayShufflingCards(view: View = View(applicationContext), sets: Int = 5, distribute: Boolean = true) {
+		findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
 		if (distribute) shufflingDistribute()
 		val gallery = findViewById<LinearLayout>(R.id.imageGallery)
 		gallery.removeAllViews()
