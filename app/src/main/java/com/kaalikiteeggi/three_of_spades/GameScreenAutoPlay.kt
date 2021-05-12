@@ -1609,6 +1609,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 				gallery.addView(viewTemp)
 			}
 		}
+		findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
 		gallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
 	}
 

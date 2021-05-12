@@ -14,7 +14,6 @@ import android.speech.tts.TextToSpeech
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -61,7 +60,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private var totalCoins = 0
 	private var totalDailyCoins = 0
 	private lateinit var sharedPreferences: SharedPreferences
-	private lateinit var roomData: Map<String, Any>
 	private var p1Status = false
 	private var p2Status = false
 	private var p3Status = false
@@ -193,7 +191,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
 		handler.postDelayed({
 			if (soundStatus) SoundManager.getInstance().playUpdateSound()
-
 			speak("$p2 joined", speed = 1f, forceSpeak = false)
 			userArrayList.add(1, data[1])
 			adapter.notifyItemInserted(1)
@@ -216,7 +213,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	private fun getRoomLiveUpdates() {
 		registration = refRoomData.document(roomID).addSnapshotListener { dataSnapshot, error ->
 			if (dataSnapshot != null && dataSnapshot.exists() && error == null) {
-				roomData = dataSnapshot.data as Map<String, Any>
 				updateRoomInfoOnline(dataSnapshot)
 			} else if (dataSnapshot != null && !dataSnapshot.exists()) {                //				soundError.start()
 				SoundManager.getInstance().playErrorSound()
@@ -232,7 +228,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 	}
 
 	private fun updateRoomInfoOnline(dataSnapshot: DocumentSnapshot?) {
-
 		val playerJoining = dataSnapshot?.data?.get("PJ").toString().toInt()
 		if (vibrateStatus) vibrationStart()
 		if (playerJoining in 2..6 && playerJoining != fromInt && soundStatus) SoundManager.getInstance()

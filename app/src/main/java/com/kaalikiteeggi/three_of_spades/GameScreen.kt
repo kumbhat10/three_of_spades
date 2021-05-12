@@ -805,9 +805,9 @@ class GameScreen : AppCompatActivity() {
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(GameState: DataSnapshot) {
                 if (GameState.value != null && activityExists) {
-
                     gameState = (GameState.value as Long).toInt()
                     if (gameState == 1) {
+                        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
                         getCardsAndDisplay(display = false)
                         if (!bidingStarted) {
                             findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
@@ -1371,7 +1371,7 @@ class GameScreen : AppCompatActivity() {
         bidTeamScore = 0
         bidder = 0
         nextValidBidder = 0
-        bidingStarted = false   /// biding happened before
+       // bidingStarted = false   /// biding happened before check if it is required here
         counterPartnerSelection = 0
         ct1 = cardsIndexLimit
         ct2 = cardsIndexLimit
@@ -2517,6 +2517,7 @@ class GameScreen : AppCompatActivity() {
                 gallery.addView(viewTemp)
             }
         }
+        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
         gallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
     }
 

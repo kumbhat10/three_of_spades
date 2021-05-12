@@ -1069,51 +1069,71 @@ class MainHomeScreen : AppCompatActivity() {
 				hideKeyboard()
 				maskAllLoading.visibility = View.VISIBLE
 				loadingText.text = getString(R.string.checkJoinRoom)
-				refRoomData.document(roomID).get().addOnSuccessListener { dataSnapshot ->
-					if (dataSnapshot.data != null) {
-						val playersJoined = dataSnapshot.get("PJ").toString().toInt()
-						val nPlayers = dataSnapshot.get("n").toString().toInt()
-						val queTemp = checkPlayerJoiningQue(dataSnapshot)
-						val que = if (queTemp != 0) queTemp else playersJoined + 1
+				try {
+					refRoomData.document(roomID).get().addOnSuccessListener { dataSnapshot ->
+						try {
+							if (dataSnapshot.data != null) {
+								val playersJoined = dataSnapshot.get("PJ").toString().toInt()
+								val nPlayers = dataSnapshot.get("n").toString().toInt()
+								val queTemp = checkPlayerJoiningQue(dataSnapshot)
+								val que = if (queTemp != 0) queTemp else playersJoined + 1
 
-						if (que > nPlayers) {
-							SoundManager.getInstance().playErrorSound()
-							speak("Sorry. Room is full")
+								if (que > nPlayers) {
+									SoundManager.getInstance().playErrorSound()
+									speak("Sorry. Room is full")
+									if (vibrateStatus) vibrationStart()
+									maskAllLoading.visibility = View.GONE
+									roomIDInputLayout.helperText = null
+									errorJoinRoomID = true
+									roomIDInputLayout.error = "Room is Full"
+									roomIDInput.text?.clear()
+								} else {
+									if (vibrateStatus) vibrationStart()
+									if (soundStatus) SoundManager.getInstance().playSuccessSound()
+									maskAllLoading.visibility = View.VISIBLE
+									loadingText.text = getString(R.string.joiningRoom)
+									logFirebaseEvent("create_join_room_screen", 1, "join_$nPlayers")
+									if (queTemp == 0) refRoomData.document(roomID)  // new player joined - not previously joined
+										.set(hashMapOf("p$que" to userName, "PJ" to que, "p${que}h" to uid), SetOptions.merge())
+										.addOnSuccessListener {
+											startCJRS(roomID = roomID, playerJoining = que, nPlayers = nPlayers)
+										}
+									else {
+										speak("Room is already joined", speed = 1.07f)
+										startCJRS(roomID = roomID, playerJoining = que, nPlayers = nPlayers)
+									}
+								}
+							} else {
+								SoundManager.getInstance().playErrorSound()
+								speak("Sorry,No room found. Please check room ID", speed = 1.0f)
+								if (vibrateStatus) vibrationStart()
+								maskAllLoading.visibility = View.GONE
+								roomIDInputLayout.helperText = null
+								errorJoinRoomID = true
+								roomIDInputLayout.error = "No Room found"
+								roomIDInput.text?.clear()
+							}
+						}catch(successError:java.lang.Exception){
+							toastCenter("Failed to join room. Try again")
 							if (vibrateStatus) vibrationStart()
 							maskAllLoading.visibility = View.GONE
 							roomIDInputLayout.helperText = null
 							errorJoinRoomID = true
-							roomIDInputLayout.error = "Room is Full"
+							roomIDInputLayout.error = "Failed to join room. Try again"
 							roomIDInput.text?.clear()
-						} else {
-							if (vibrateStatus) vibrationStart()
-							if (soundStatus) SoundManager.getInstance().playSuccessSound()
-							maskAllLoading.visibility = View.VISIBLE
-							loadingText.text = getString(R.string.joiningRoom)
-							logFirebaseEvent("create_join_room_screen", 1, "join_$nPlayers")
-							if (queTemp == 0) refRoomData.document(roomID)  // new player joined - not previously joined
-								.set(hashMapOf("p$que" to userName, "PJ" to que, "p${que}h" to uid), SetOptions.merge())
-								.addOnSuccessListener {
-									startCJRS(roomID = roomID, playerJoining = que, nPlayers = nPlayers)
-								}
-							else {
-								speak("Room is already joined", speed = 1.07f)
-								startCJRS(roomID = roomID, playerJoining = que, nPlayers = nPlayers)
-							}
 						}
-					} else {
-						SoundManager.getInstance().playErrorSound()
-						speak("Sorry,No room found. Please check room ID", speed = 1.0f)
-						if (vibrateStatus) vibrationStart()
+					}.addOnFailureListener {
 						maskAllLoading.visibility = View.GONE
-						roomIDInputLayout.helperText = null
-						errorJoinRoomID = true
-						roomIDInputLayout.error = "No Room found"
-						roomIDInput.text?.clear()
+						toastCenter("Failed to join room. Try again")
 					}
-				}.addOnFailureListener { exception ->
+				}catch(e:Exception){
+					toastCenter("Failed to join room. Try again")
+					if (vibrateStatus) vibrationStart()
 					maskAllLoading.visibility = View.GONE
-					toastCenter("Failed to create room \nPlease try again or later \n${exception.localizedMessage!!}")
+					roomIDInputLayout.helperText = null
+					errorJoinRoomID = true
+					roomIDInputLayout.error = "Failed to join room. Try again"
+					roomIDInput.text?.clear()
 				}
 			}
 		} else {

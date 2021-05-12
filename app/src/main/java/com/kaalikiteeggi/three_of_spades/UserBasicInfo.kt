@@ -30,12 +30,21 @@ class UserBasicInfo(val empty: Boolean = true, val index: Int = 0, val uid: Stri
 
 fun extractUserData(document: DocumentSnapshot, index:Int=0): UserBasicInfo {
 	val uid = document.id
-	val won = if (document.contains("w_bot")) document["w_bot"].toString().toInt() + document["w"].toString().toInt()
-	else document["w"].toString().toInt()
-	val played = if (document.contains("p_bot")) document["p_bot"].toString().toInt() + document["p"].toString().toInt()
-	else document["p"].toString().toInt()
-	val bid = if (document.contains("b_bot")) document["b_bot"].toString().toInt() + document["b"].toString().toInt()
-	else document["b"].toString().toInt()
+	val won = when {
+		document.contains("w_bot") -> document["w_bot"].toString().toInt() + document["w"].toString().toInt()
+		document.contains("w") -> document["w"].toString().toInt()
+		else -> 0
+	}
+	val played = when {
+		document.contains("p_bot") -> document["p_bot"].toString().toInt() + document["p"].toString().toInt()
+		document.contains("p") -> document["p"].toString().toInt()
+		else -> 0
+	}
+	val bid = when {
+		document.contains("b_bot") -> document["b_bot"].toString().toInt() + document["b"].toString().toInt()
+		document.contains("b") -> document["b"].toString().toInt()
+		else -> 0
+	}
 
 	val appVersion = if(document.contains(("VC"))) document["VC"].toString() else "--"
 	val name = if (document.contains("n")) document["n"].toString() else ""
