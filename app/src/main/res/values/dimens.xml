@@ -12,11 +12,8 @@
     <dimen name="iconSpacingH">@dimen/_1sdp</dimen>
     <dimen name="iconSpacingV">@dimen/_6sdp</dimen>
     <dimen name="iconHeight">@dimen/_70sdp</dimen>
-    <dimen name="iconPadding">@dimen/_12sdp</dimen>
-    <dimen name="iconPaddingNeg">@dimen/_minus12sdp</dimen>
 
     <dimen name="loginWidth">@dimen/_140sdp</dimen>
-    <dimen name="loginHeight">@dimen/_32sdp</dimen>
     <dimen name="loginHeightGoogle">@dimen/_35sdp</dimen>
     <dimen name="loginWidthGoogle">@dimen/_146sdp</dimen>
 
@@ -75,16 +72,12 @@
     <dimen name="mhsIconsSize">@dimen/_50sdp</dimen>
     <dimen name="mhsIconsGap">@dimen/_10sdp</dimen>
     <dimen name="mhsIconsMargin">0dp</dimen>
-    <dimen name="cjrButtonsTextSize">@dimen/_13ssp</dimen>
     <dimen name="shimmerWidth">@dimen/_60sdp</dimen>
     <dimen name="deckWidth">@dimen/_200sdp</dimen>
     <dimen name="deckHeight">@dimen/_80sdp</dimen>
     <dimen name="rateUsWidth">@dimen/_170sdp</dimen>
     <dimen name="rateUsHeight">@dimen/_52sdp</dimen>
     <dimen name="crjsgap">@dimen/_70sdp</dimen>
-
-
-    <dimen name="player_stats">@dimen/_13ssp</dimen>
 
 
     <!--

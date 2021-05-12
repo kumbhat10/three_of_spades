@@ -15,45 +15,28 @@
 
     <string name="default_notification_channel_id">ch_kkt</string>
     <string name="default_notification_channel_id1">ch_kkt1</string>
-    <string name="com_facebook_loginview_log_in_button_long">Your custom text</string>
     <string name="facebook_app_id">231024018145704</string>
     <string name="fb_login_protocol_scheme">fb231024018145704</string>
-    <string name="twitter_consumer_key" translatable="false">3lO8Inhu76bB6LiBHegyenODQ</string>
-    <string name="twitter_consumer_secret" translatable="false">gXjsRXLBFXCWT2p8RiqbAXEZ9LggL9yzt4xJ5fI9rhkHCkemd6</string>
 
     <string name="scheme">http</string>
     <string name="scheme1">https</string>
     <string name="hostJoinRoom">jo.in</string>
-    <string name="inviteHost">invite.in</string>
     <string name="hostFirebaseDL">kaaliteeri.page.link</string>
     <string name="packageName">com.kaalikiteeggi.three_of_spades</string>
-    <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades</string>
     <string name="inviteLink">https://kaaliteeri.page.link/invite</string>
-    <string name="websiteLink">https://sites.google.com/view/kaali-ki-teeggi/</string>
-    <string name="testDeviceId">DC0D07E34CC20346D00D6C0B21C0DAA5</string>
 
-    <string name="bannerReal">ca-app-pub-2714670043901113/2653923895</string>
     <string name="bannerReal_MP">3c2fa482ece345faa1f68203bc9b8123</string>
     <string name="bannerTest_MP">b195f8dd8ded45fe847ad89ed1d016da</string>
 
-    <string name="banner">@string/bannerReal_MP</string>
-
-    <string name="interstitialTest">ca-app-pub-3940256099942544/1033173712</string>
     <string name="interstitialTest_mp">24534e1901884e398f1253216226017e</string>
-    <string name="interstitialTestVideo">ca-app-pub-3940256099942544/8691691433</string>
-    <string name="interstitialReal">ca-app-pub-2714670043901113/6210025529</string>
     <string name="interstitialReal_mp">f9356ee2eeb346949d95926fc2fcb60f</string>
-    <string name="interstitial">@string/interstitialReal</string>
 
-    <string name="rewardedReal">ca-app-pub-2714670043901113/5307668082</string>
     <string name="rewardedReal_mp">380ef1aa57bb4c409eb2c71cc1f938af</string>
     <string name="rewardedTest_mp">920b6145fb1546cf8b5cf2ac34638bb7</string>
-    <string name="rewarded">@string/rewardedReal</string>
 
     <string name="app_name">3 of Spades</string>
     <string name="developer">Dushyant Kumbhat</string>
     <string name="developer_contact">kaaliteerifun@gmail.com</string>
-    <string name="click_contact">Click below to contact us</string>
 
     <string name="play">Play</string>
     <string name="createRoom">Create Room</string>
@@ -69,9 +52,7 @@
     <string name="signout">Sign Out</string>
 
     <string name="hinRoomID">Room ID</string>
-    <string name="developerCredits">Contact Us</string>
     <string name="waitingToJoin">Invite\nPlayers</string>
-    <string name="playerJoinedConfirmation">Ready to Start</string>
     <string name="shuffling_cards">Shuffling Cards</string>
     <string name="playerView6">Player</string>
     <string name="playerView5">Player</string>
@@ -83,7 +64,6 @@
     <string name="partner">Partner</string>
     <string name="partner1">Buddy 1</string>
     <string name="partner2">Buddy 2</string>
-    <string name="bidValue">   Bid: </string>
     <string name="bidValue1">NIL</string>
     <string name="bidValue2">000</string>
     <string name="bid05button"> +5</string>
@@ -95,7 +75,6 @@
 
     <string name="passText">Next</string>
     <string name="passTextGS">Pass</string>
-    <string name="chatWindowDisplay">No Messages yet. Send first message</string>
     <string name="sendChatButton">Send</string>
     <string name="chatInputHint">Type here…</string>
     <string name="noOfChat">0</string>
@@ -115,16 +94,11 @@
     <string name="playerRank">1st</string>
     <string name="newplayer">New\nPlayer</string>
     <string name="room_id">Offline Room</string>
-    <string name="share"> Invite </string>
-    <string name="host">Host</string>
     <string name="welcomeBack">Hello</string>
 
     <string name="todo">TODO</string>
-    <string name="player_stats">Player Stats</string>
-    <string name="rounds_played">"Played  :  &#127918; "</string> //1F3AE - game played emoji in decimal from hexadecimal
+    //1F3AE - game played emoji in decimal from hexadecimal
     <string name="nill">Nill</string>
-    <string name="rounds_won">"Won  :  &#127942; "</string>
-    <string name="rounds_bided">"Bid :  &#127919; "</string>
     <string name="sound">Sound</string>
     <string name="vibrate">Vibrate</string>
     <string name="start_next_game">Start next round</string>
@@ -149,15 +123,10 @@
     <string name="joinHelper">Enter 4 digit Room ID</string>
     <string name="yes_love_it">Love it</string>
     <string name="could_be_better">Could be better</string>
-    <string name="all_time">  All Time  </string>
     <string name="total_all_time">(All time score)</string>
     <string name="versionInfo">"ver: "</string>
-    <string name="today">   Today  </string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="top_players">Top Players</string>
     <string name="userscore">$ 000,000</string>
-    <string name="playersjoined">All players have joined</string>
-    <string name="gamesplayedstats">Null</string>
     <string name="train">Train</string>
     <string name="privacy_policy"><u>Privacy Policy</u></string>
     <string name="register">Please Register or Sign in using any option</string>

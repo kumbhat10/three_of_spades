@@ -14,18 +14,13 @@
     <color name="shimmerImageBackground">#FFFFFF</color>
     <color name="shimmerBackground">@color/Black</color>
     <color name="BlackTrans">#D2000000</color>
-    <color name="BlackTransDark">#E4000000</color>
-    <color name="BlackTransUserStats">#FD000000</color>
     <color name="BlackTransUserStats2">#EE000000</color>
     <color name="BlackTransUserStats3">#C5C5C5</color>
-    <color name="BlackTransUserStats5">#C4000000</color>
-    <color name="BlackTransUserStats6">#BC000000</color>
     <color name="chat1">#E1000000</color>
     <color name="chat2">#D2092629</color>
     <color name="score1">#000000</color>
     <color name="score2">#E6091922</color>
     <color name="userRank1">#F2000000</color>
-    <color name="userRank2">#EE091013</color>
     <color name="userRank3">#DD10081C</color>
 
     <color name="mhsTintBackground">#83FFFFFF</color>
@@ -53,8 +48,6 @@
     <color name = "inActiveCard">#C1323232</color>
     <color name = "highlightCard1">#9A39FF00</color>
 
-    <color name="trackSwitchON">#0F56F100</color>
-    <color name="trackSwitchOFF">#2AA3A3A3</color>
     <color name="thumbSwitchON">@color/icon_yellow</color>
     <color name="thumbSwitchOFF">#9C9C9C</color>
 
@@ -63,31 +56,17 @@
     <color name = "borderNblueDark0b">#2B70E8</color>
     <color name = "borderNblueDark1b">#3A65AE</color>
     <color name = "borderNblueDark2b">#1E3357</color>
-    <color name = "borderNblueDark3b">#1F434C</color>
 
     <color name = "shine0black">#BFBFBF</color>
-    <color name = "shine1black">#2C2C2C</color>
     <color name = "shine2black">#000000</color>
 
     <color name = "shine0blackbar">#FFFFFF</color>
     <color name = "shine2blackbar">#000000</color>
 
-    <color name = "shine0bk">#082957</color>
-    <color name = "shine1bk">#171E4A</color>
-    <color name = "shine2bk">#10111B</color>
-
     <color name = "borderblueDark0g">#A5FF47</color>
     <color name = "borderblueDark1g">#63C300</color>
     <color name = "borderblueDark2g">#56A307</color>
     <color name = "Red">#FF0000</color>
-
-    <color name = "borderRed0">#FF4646</color>
-    <color name = "borderRed1">#DA1919</color>
-    <color name = "borderRed2">#AA0606</color>
-
-    <color name = "h1">#FF5652</color>
-    <color name = "h2">#CF1B16</color>
-    <color name = "h3">#7E1814</color>
 
     <color name = "borderblueDark0o">#FF7D36</color>
     <color name = "borderBlueDark1o">#D55C1C</color>
@@ -95,7 +74,6 @@
 
     <color name="progressBarPlayer4">#00FF0A</color>
     <color name="colorongreen">#1B1B1B</color>
-    <color name="progressBarPlayer44">#00FF0A</color>
     <color name="scoreTableText">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
 
