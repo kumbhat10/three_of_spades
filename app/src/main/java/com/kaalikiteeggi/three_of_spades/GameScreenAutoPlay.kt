@@ -1571,7 +1571,6 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		displayShufflingCards() //show suits cards and animate
 		centralText(getString(R.string.shufflingcards), 5200)
 		speak("Shuffling cards Please wait", speed = 1f)
-
 		Handler(Looper.getMainLooper()).postDelayed({
 			findViewById<ImageView>(R.id.imageViewWinnerCenter_4).animation = null
 			findViewById<ImageView>(R.id.imageViewWinnerCenter_4).clearAnimation()
