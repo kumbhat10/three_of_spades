@@ -76,7 +76,7 @@
         android:id="@+id/nameDeveloper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/emailID"
+        app:layout_constraintBottom_toTopOf="@id/textView4"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="cursive"
@@ -91,7 +91,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/emailID"
+        android:id="@+id/textView4"
         android:onClick="sendEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

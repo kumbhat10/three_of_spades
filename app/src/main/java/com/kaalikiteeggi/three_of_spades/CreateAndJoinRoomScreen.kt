@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -133,6 +134,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 		}
 		mAuth = FirebaseAuth.getInstance()
 		uid = mAuth.uid.toString()
+		FirebaseCrashlytics.getInstance().setUserId(uid)
 	}
 
 	private fun updateUIAndAnimateElements() {

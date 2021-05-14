@@ -8,6 +8,7 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/blackglassglossy.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/blueburst.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/border.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/button_pressed_score_table.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/button_score_total.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/c10.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/c11.xml" value="0.19583333333333333" />
@@ -22,6 +23,9 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/c7.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/c8.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/c9.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/coin_bid.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/coin_blank.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/coinkon.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/contact_us.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/d10.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/d11.xml" value="0.19583333333333333" />
@@ -81,6 +85,7 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/scrollbar_track.xml" value="0.1109375" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/share_room.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/shine_chat_background.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/shine_game_score.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/shine_player_stats.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/shine_score_table.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/shine_user_rank.xml" value="0.19583333333333333" />
@@ -95,17 +100,20 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/yellowbutton.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_create_join_room_screen.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_developer_credits.xml" value="0.1796875" />
-        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_game_screen.xml" value="0.19322916666666667" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_game_screen.xml" value="0.22" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_main_home_screen.xml" value="0.18143459915611815" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_splash_screen.xml" value="0.22" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_start_screen.xml" value="0.22" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_train.xml" value="0.1" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/cards_item_list_partner.xml" value="0.22" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/chat_text.xml" value="0.1" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/coin_reward_grid.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/dummy.xml" value="0.1796875" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/fragment_test.xml" value="0.1796875" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/icons_home_screen.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/player_stats_grid.xml" value="0.5" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/score_board_table_4.xml" value="0.1796875" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/score_board_table_7.xml" value="0.1796875" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/user_rank.xml" value="0.22" />
         <entry key="..\:/Users/kumbh/AppData/Local/Android/Sdk/platforms/android-30/data/res/drawable/ratingbar_indicator_material.xml" value="0.19583333333333333" />
       </map>

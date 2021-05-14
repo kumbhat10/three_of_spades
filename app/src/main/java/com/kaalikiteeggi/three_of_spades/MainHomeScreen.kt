@@ -171,10 +171,6 @@ class MainHomeScreen : AppCompatActivity() {
 	private var loadInterAdTry = 0
 	private var countRewardWatch = 3
 	private var dailyRewardList = listOf(500, 1000, 2000, 3000, 4000, 5000, 5000)
-	private var coinDur = 900L
-	private var coinBurst = true
-	private var coinSpeed = 4f
-	private var coinCount = 50
 	private var dailyRewardAmount = 0
 	private var dailyRewardClicked = false
 	private var claimedToday = false
@@ -427,7 +423,7 @@ class MainHomeScreen : AppCompatActivity() {
 		editor = sharedPreferences.edit()
 		if (user != null) {
 			FirebaseCrashlytics.getInstance().setUserId(uid)
-			userName = user.displayName?.toString()!!.split(" ")[0]
+			userName = user.displayName!!.split(" ")[0]
 			usernameCardMHS.text = userName
 			if (intent.getBooleanExtra("newUser", false)) { //check if user has joined room or created one and display Toast
 				editor.putBoolean("rated", rated)
@@ -1270,8 +1266,8 @@ class MainHomeScreen : AppCompatActivity() {
 		textToSpeech = TextToSpeech(applicationContext) { status ->
 			if (status == TextToSpeech.SUCCESS) {
 				val result = textToSpeech.setLanguage(Locale.ENGLISH)
-				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) { //					toastCenter("Missing Language data - Text to speech")
-				}
+//				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) { //					toastCenter("Missing Language data - Text to speech")
+//				}
 			}
 		}
 	}
@@ -1394,8 +1390,10 @@ class MainHomeScreen : AppCompatActivity() {
 					if (querySnapshot.isEmpty) maxItemsFetchAT = -1
 					querySnapAT = querySnapshot
 					rankProgress.visibility = View.GONE
-					userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT))
-					adapter.notifyDataSetChanged()
+					val previousSize = userArrayList.size
+					val newItems = createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT, startAt = 0)
+					userArrayList.addAll(newItems)
+					adapter.notifyItemRangeInserted(previousSize, newItems.size)
 					loadingProgressBar.visibility = View.GONE
 					anim(recyclerView, R.anim.slide_down_in)
 					recyclerViewScrollListener = object : RecyclerView.OnScrollListener() {
@@ -1417,8 +1415,10 @@ class MainHomeScreen : AppCompatActivity() {
 										if (querySnapshot.isEmpty) maxItemsFetchAT = -1
 										else {
 											querySnapAT = querySnapshot
-											userArrayList.addAll(createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT))
-											adapter.notifyDataSetChanged()
+											val previousSize = userArrayList.size
+											val newItems = createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT, startAt = previousSize)
+											userArrayList.addAll(newItems)
+											adapter.notifyItemRangeInserted(previousSize, newItems.size)
 											loadingProgressBar.visibility = View.GONE
 										}
 									}
@@ -1448,8 +1448,10 @@ class MainHomeScreen : AppCompatActivity() {
 					loadingProgressBar.visibility = View.GONE
 					rankProgress.visibility = View.GONE
 					querySnapDaily = querySnapshot
-					userArrayList1.addAll(createUserArrayFromSnapshot(querySnapDaily))
-					adapter1.notifyDataSetChanged()
+					val previousSize = userArrayList1.size
+					val newItems = createUserArrayFromSnapshot(querySnapDaily, startAt = 0)
+					userArrayList1.addAll(newItems)
+					adapter1.notifyItemRangeInserted(previousSize, newItems.size)
 					anim(recyclerView1, R.anim.slide_down_in)
 					recyclerView1ScrollListener = object : RecyclerView.OnScrollListener() {
 						override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -1471,8 +1473,10 @@ class MainHomeScreen : AppCompatActivity() {
 											maxItemsFetchDaily = -1
 										} else {
 											querySnapDaily = querySnapshot
-											userArrayList1.addAll(createUserArrayFromSnapshot(querySnapDaily))
-											adapter1.notifyDataSetChanged()
+											val previousSize = userArrayList1.size
+											val newItems = createUserArrayFromSnapshot(querySnapDaily, startAt = previousSize)
+											userArrayList1.addAll(newItems)
+											adapter1.notifyItemRangeInserted(previousSize, newItems.size)
 											loadingProgressBar.visibility = View.GONE
 										}
 									}
@@ -1497,7 +1501,7 @@ class MainHomeScreen : AppCompatActivity() {
 
 	private fun inviteFriends() {
 		try {
-			val message = "Hey, Let's play 3 of Spades (Kaali ki Teeggi) online. \n\nClick below \n${				//            getString(R.string.playStoreLink)
+			val message = "Hey, Let's play 3 of Spades (Kaali ki Teeggi) online. \n\nClick below \n${
 				getString(R.string.inviteLink)
 			}\n"
 			val intentInvite = Intent()
@@ -1593,7 +1597,7 @@ class MainHomeScreen : AppCompatActivity() {
 			super.onBackPressed()
 			closeRatingWindow(View(this))
 			backButtonPressedStatus = false
-			this.enterPictureInPictureMode()
+//			this.enterPictureInPictureMode()
 		} else if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || playerStatsML.progress == 0f || createRoomWindowStatus || ratingWindowOpenStatus) && checkRatingRequest()) {
 			backButtonPressedStatus = true
 			openRatingWindow(View(this))

@@ -66,10 +66,11 @@
     <string name="partner2">Buddy 2</string>
     <string name="bidValue1">NIL</string>
     <string name="bidValue2">000</string>
-    <string name="bid05button"> +5</string>
-    <string name="bid10button">+10</string>
-    <string name="bid20button">+20</string>
-    <string name="bid50button">+50</string>
+    <string name="bid05button">5</string>
+    <string name="bid10button">10</string>
+    <string name="bid20button">20</string>
+    <string name="bid50button">50</string>
+    <string name="bid75button">75</string>
     <string name="raise_bid_or_pass">Raise Bid or Pass</string>
     <string name="chooseTrump">Select Trump suit</string>
 
@@ -90,6 +91,7 @@
     <string name="anyPartner">Any</string>
     <string name="_10_pts">10 pts</string>
     <string name="_400">400</string>
+    <string name="_700">700</string>
     <string name="playeName">Player Name?</string>
     <string name="playerRank">1st</string>
     <string name="newplayer">New\nPlayer</string>

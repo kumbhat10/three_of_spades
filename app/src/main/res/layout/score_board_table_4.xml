@@ -12,67 +12,60 @@
         android:layout_marginStart="0dp"
         android:layout_marginBottom="0dp">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/gameNumber_4"
+            android:layout_width="@dimen/scoreTableWidthLarge"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/_2sdp"
+            android:paddingBottom="@dimen/_2sdp"
+            android:text="@string/playerView1"
+            android:textColor="@color/font_grey_settings"
+            android:textSize="@dimen/scoreTableTextSize" />
 
-            <TextView
-                android:id="@+id/gameNumber_4"
-                android:layout_width="@dimen/scoreTableWidthLarge"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="@dimen/_2sdp"
-                android:paddingBottom="@dimen/_2sdp"
-                android:text="@string/playerView1"
-                android:textColor="@color/scoreTableText"
-                android:textSize="@dimen/scoreTableTextSize" />
+        <TextView
+            android:id="@+id/player1_4"
+            android:layout_width="@dimen/scoreTableWidthLarge"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/_2sdp"
+            android:paddingBottom="@dimen/_2sdp"
+            android:text="@string/playerView1"
+            android:textColor="@color/font_grey_settings"
+            android:textSize="@dimen/scoreTableTextSize" />
 
-            <TextView
-                android:id="@+id/player1_4"
-                android:layout_width="@dimen/scoreTableWidthLarge"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="@dimen/_2sdp"
-                android:paddingBottom="@dimen/_2sdp"
-                android:text="@string/playerView1"
-                android:textColor="@color/scoreTableText"
-                android:textSize="@dimen/scoreTableTextSize" />
+        <TextView
+            android:id="@+id/player2_4"
+            android:layout_width="@dimen/scoreTableWidthLarge"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/_2sdp"
+            android:paddingBottom="@dimen/_2sdp"
+            android:text="@string/playerView1"
+            android:textColor="@color/font_grey_settings"
+            android:textSize="@dimen/scoreTableTextSize" />
 
-            <TextView
-                android:id="@+id/player2_4"
-                android:layout_width="@dimen/scoreTableWidthLarge"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="@dimen/_2sdp"
-                android:paddingBottom="@dimen/_2sdp"
-                android:text="@string/playerView1"
-                android:textColor="@color/scoreTableText"
-                android:textSize="@dimen/scoreTableTextSize" />
+        <TextView
+            android:id="@+id/player3_4"
+            android:layout_width="@dimen/scoreTableWidthLarge"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/_2sdp"
+            android:paddingBottom="@dimen/_2sdp"
+            android:text="@string/playerView1"
+            android:textColor="@color/font_grey_settings"
+            android:textSize="@dimen/scoreTableTextSize" />
 
-            <TextView
-                android:id="@+id/player3_4"
-                android:layout_width="@dimen/scoreTableWidthLarge"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="@dimen/_2sdp"
-                android:paddingBottom="@dimen/_2sdp"
-                android:text="@string/playerView1"
-                android:textColor="@color/scoreTableText"
-                android:textSize="@dimen/scoreTableTextSize" />
-
-            <TextView
-                android:id="@+id/player4_4"
-                android:layout_width="@dimen/scoreTableWidthLarge"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="@dimen/_2sdp"
-                android:paddingBottom="@dimen/_2sdp"
-                android:text="@string/playerView1"
-                android:textColor="@color/scoreTableText"
-                android:textSize="@dimen/scoreTableTextSize" />
-
-        </TableRow>
-
+        <TextView
+            android:id="@+id/player4_4"
+            android:layout_width="@dimen/scoreTableWidthLarge"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/_2sdp"
+            android:paddingBottom="@dimen/_2sdp"
+            android:text="@string/playerView1"
+            android:textColor="@color/font_grey_settings"
+            android:textSize="@dimen/scoreTableTextSize" />
 
     </LinearLayout>
 </RelativeLayout>

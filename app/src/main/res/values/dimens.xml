@@ -23,7 +23,7 @@
     <dimen name="radiusInner2">@dimen/_69sdp</dimen>
     <dimen name="radiusInner3">@dimen/_69sdp</dimen>
     <dimen name="imageGapEnd">0dp</dimen>
-    <dimen name="imageGapEnd_4player">@dimen/_25sdp</dimen>
+    <dimen name="imageGapEnd_4player">@dimen/_20sdp</dimen>
     <dimen name="imagePadding">@dimen/_4sdp</dimen>
     <dimen name="imagePaddingTextGap">@dimen/_minus2sdp</dimen>
 
@@ -78,6 +78,9 @@
     <dimen name="rateUsWidth">@dimen/_170sdp</dimen>
     <dimen name="rateUsHeight">@dimen/_52sdp</dimen>
     <dimen name="crjsgap">@dimen/_70sdp</dimen>
+    <dimen name="bidcoingap">@dimen/_11sdp</dimen>
+    <dimen name="bidcoinsize">@dimen/_55sdp</dimen>
+    <dimen name="bidcointextsize">@dimen/_16ssp</dimen>
 
 
     <!--

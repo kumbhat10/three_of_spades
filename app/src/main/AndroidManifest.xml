@@ -45,6 +45,11 @@
         <!-- android:name="firebase_performance_collection_enabled" -->
         <!-- android:value="false" /> -->
 
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_stat_name" />
@@ -146,7 +151,6 @@
         <!--android:resizeableActivity="true" -->
         <activity
             android:name=".MainHomeScreen"
-            android:supportsPictureInPicture="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:launchMode="singleTop"

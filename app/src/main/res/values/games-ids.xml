@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-Google Play game services IDs.
-Save this file as res/values/games-ids.xml in your project.
--->
+<!--Google Play game services IDs. Save this file as res/values/games-ids.xml in your project.-->
 <resources>
-    <!-- app_id -->
-    <string name="app_id" translatable="false">3216414081</string>
-    <!-- package_name -->
-    <!-- achievement achievement_collect_10000_coins -->
-    <!-- achievement achievement_collect_15000_coins -->
-    <!-- achievement achievement_collect_20000_coins -->
-    <!-- leaderboard Top Score -->
-    <!-- leaderboard Maximum Games Played -->
-    <!-- leaderboard Maximum Number of Biding -->
-    <!-- leaderboard Winning rate after Biding -->
+    <!--app_id-->
+    <string name="app_id" translatable="false">295166366323</string>
+    <!--package_name-->
+    <string name="package_name" translatable="false">com.kaalikiteeggi.three_of_spades</string>
+    <!--achievement Collect 10,000 Coins-->
+    <string name="achievement_collect_10000_coins" translatable="false">CgkI86SlyssIEAIQAQ</string>
+    <!--achievement Collect 15,000 Coins-->
+    <string name="achievement_collect_15000_coins" translatable="false">CgkI86SlyssIEAIQAg</string>
+    <!--achievement Collect 20,000 coins-->
+    <string name="achievement_collect_20000_coins" translatable="false">CgkI86SlyssIEAIQAw</string>
+    <!--leaderboard Top Score-->
+    <string name="leaderboard_top_score" translatable="false">CgkI86SlyssIEAIQBA</string>
+    <!--leaderboard Maximum Games Played-->
+    <string name="leaderboard_maximum_games_played" translatable="false">CgkI86SlyssIEAIQBQ</string>
+    <!--leaderboard Maximum Times Biding-->
+    <string name="leaderboard_maximum_times_biding" translatable="false">CgkI86SlyssIEAIQBg</string>
+    <!--leaderboard % Chance of winning after Biding-->
+    <string name="leaderboard__chance_of_winning_after_biding" translatable="false">CgkI86SlyssIEAIQBw</string>
 </resources>
-

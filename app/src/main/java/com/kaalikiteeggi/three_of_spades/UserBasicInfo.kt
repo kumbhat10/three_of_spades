@@ -3,6 +3,9 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.annotation.SuppressLint
+import android.text.Html
+import android.text.Spanned
+import androidx.core.text.HtmlCompat
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import java.lang.Exception
@@ -15,6 +18,7 @@ class UserBasicInfo(val empty: Boolean = true, val index: Int = 0, val uid: Stri
 	val photoURL: String = "", val played: Int = 0, val playedDaily: Int = 0, val lastSeen: Int = SimpleDateFormat("yyyyMMdd").format(Date())
 	.toInt(), val won: Int = 0, val bid: Int = 0, private val wonDaily: Int = 0, private val bidDaily: Int = 0, joinDate: Int=0, val appVersion:String = "--") {
 
+	val userRank: Spanned? = Html.fromHtml("${index + 1}<sup>${rankExtFromInt(index + 1)}</sup>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 	val userScore: String = String.format("%,d", played) + " " + Emoji().gamePlayed + "\n" + String.format("%,d", won) + " " + Emoji().trophy + "\n" + String.format("%,d", bid) + " " + Emoji().score
 	val userScoreDaily: String = String.format("%,d", playedDaily) + " " + Emoji().gamePlayed + "\n" + String.format("%,d", wonDaily) + " " + Emoji().trophy + "\n" + String.format("%,d", bidDaily) + " " + Emoji().score
 	val userScoreFill: String = "Play " + Emoji().gamePlayed + "\n" + "Win " + Emoji().trophy + "\n" + "Bid " + Emoji().score
@@ -62,12 +66,15 @@ fun extractUserData(document: DocumentSnapshot, index:Int=0): UserBasicInfo {
 		appVersion = appVersion, wonDaily = wonDaily, bid = bid, bidDaily = bidDaily)
 }
 
-fun createUserArrayFromSnapshot(querySnapshot: QuerySnapshot, filterLastSeen:Boolean = false, lsdLimit:Int = 0): ArrayList<UserBasicInfo> {
+fun createUserArrayFromSnapshot(querySnapshot: QuerySnapshot, filterLastSeen:Boolean = false, lsdLimit:Int = 0, startAt:Int = 0): ArrayList<UserBasicInfo> {
 	val tempArray = ArrayList<UserBasicInfo>()
+	var index = startAt + 1
 	for (document in querySnapshot) {
 		try {
-			if (!(filterLastSeen && document["LSD"].toString()
-					.toInt() < lsdLimit)) tempArray.add(extractUserData(document))
+			if (!(filterLastSeen && document["LSD"].toString().toInt() < lsdLimit)) {
+				tempArray.add(extractUserData(document, index = index-1))
+				index += 1
+			}
 		}catch (me:Exception) {		}
 	}
 	return tempArray

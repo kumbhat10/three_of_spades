@@ -34,7 +34,7 @@ class ListViewAdapter(private val context: Context, private val userArrayList: A
 	@SuppressLint("SetTextI18n")
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		val position = holder.bindingAdapterPosition
-		holder.itemView.userRank.text = Html.fromHtml("${position + 1}<sup>${rankExtFromInt(position + 1)}</sup>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+		holder.itemView.userRank.text = userArrayList[position].userRank
 		if(position<3) {
 			holder.itemView.userRank.setBackgroundResource(R.drawable.trophy)
 			holder.itemView.userRank.setTextColor(ContextCompat.getColor(context, R.color.Black))
