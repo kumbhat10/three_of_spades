@@ -1412,8 +1412,8 @@
         android:paddingStart="@dimen/_5sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:text="@string/Bider"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_18ssp"
+        android:textColor="@color/username"
+        android:textSize="@dimen/_13ssp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RelativeOverlap,RtlSymmetry" />
@@ -1434,11 +1434,11 @@
         android:layout_height="@dimen/_28sdp"
         android:layout_marginStart="0dp"
         android:layout_marginTop="@dimen/_minus2sdp"
-        android:background="@drawable/redrectanlgesimple"
+        android:background="@drawable/shine_game_score"
         android:gravity="center"
         android:text="@string/bidValue2"
         android:textColor="@color/white"
-        android:textSize="@dimen/_19ssp"
+        android:textSize="@dimen/_13ssp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewBider"
         app:ticker_animationDuration="800"
@@ -2133,7 +2133,7 @@
         android:id="@+id/konfettiGSA"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scoreViewLayout"

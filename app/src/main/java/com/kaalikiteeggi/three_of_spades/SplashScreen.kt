@@ -64,7 +64,7 @@ class SplashScreen : AppCompatActivity() {
 		            4 -> splashBckgd.setImageResource(R.drawable.blueburst)
 		            2 -> splashBckgd.setImageResource(R.drawable.greenyellowburst)
 		            3 -> splashBckgd.setImageResource(R.drawable.navyblueburst)
-		            2 -> splashBckgd.setImageResource(R.drawable.redorangeburst)
+		            1 -> splashBckgd.setImageResource(R.drawable.redorangeburst)
 		            5 -> splashBckgd.setImageResource(R.drawable.yellowburst)
 				}
 		icon3.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_once))

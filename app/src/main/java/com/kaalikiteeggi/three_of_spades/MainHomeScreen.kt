@@ -1308,7 +1308,7 @@ class MainHomeScreen : AppCompatActivity() {
 
 	fun trainingStart(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press)) //		if(mInterstitialAdMP.isReady) mInterstitialAdMP.show()
-		System.gc()
+//		toastCenter( Random.nextInt(0, 6).toString() )
 		trainAccess = false
 		if (trainAccess) {
 			maskAllLoading.visibility = View.VISIBLE
@@ -1317,9 +1317,10 @@ class MainHomeScreen : AppCompatActivity() {
 			startActivity(Intent(this, TrainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
 			overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
 			finishAndRemoveTask() //			Handler(Looper.getMainLooper()).postDelayed({ finish() }, 1000)
-		} else {
-			toastCenter("Sorry You don't have access")
 		}
+//		else {
+////			toastCenter("Sorry You don't have access")
+//		}
 	}
 
 	private fun ranking() {

@@ -19,7 +19,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 68
-        versionName "68A"
+        versionName "68B"
         ndkVersion  "23.0.7272597 rc3"//"22.0.7026061"//"21.3.6528147" //6363665"
         signingConfig signingConfigs.debug
     }

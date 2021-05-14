@@ -46,11 +46,11 @@ class DeveloperCredits : AppCompatActivity() {
 //        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_developer_credits)
         when (Random.nextInt(0, 6)) {
-            0 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.redblackburst)
+            4 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.redblackburst)
             1 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.blueburst)
             2 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.greenyellowburst)
             3 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.navyblueburst)
-            4 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.redorangeburst)
+            0 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.redorangeburst)
             5 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.yellowburst)
         }
         findViewById<ImageView>(R.id.icon_3developer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
