@@ -212,7 +212,6 @@ class MainHomeScreen : AppCompatActivity() {
 		soundBkgd.isLooping = true
 		soundBkgd.setVolume(0.05F, 0.05F)
 		getSharedPrefs()
-		fireStoreRef = Firebase.firestore.collection("Users").document(uid)
 		SoundManager.initialize(this)
 		initializeAds()
 		Handler(Looper.getMainLooper()).post {
@@ -418,6 +417,8 @@ class MainHomeScreen : AppCompatActivity() {
 
 	@SuppressLint("SimpleDateFormat", "SetTextI18n")
 	private fun getUserData() {
+		fireStoreRef = Firebase.firestore.collection("Users").document(uid)
+
 		val user = mAuth.currentUser
 		sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
 		editor = sharedPreferences.edit()
@@ -602,9 +603,7 @@ class MainHomeScreen : AppCompatActivity() {
 			musicSwitch.isChecked = musicStatus
 			if (musicStatus) {
 				soundBkgd.start()
-				settMusicIcon.setImageResource(R.drawable.music)
 			} else {
-				settMusicIcon.setImageResource(R.drawable.nomusic)
 			}
 		} else {
 			musicStatus = true
@@ -616,16 +615,10 @@ class MainHomeScreen : AppCompatActivity() {
 		if (sharedPreferences.contains("soundStatus")) {
 			soundStatus = sharedPreferences.getBoolean("soundStatus", true)
 			soundSwitch.isChecked = soundStatus
-			if (soundStatus) {
-				settSoundIcon.setImageResource(R.drawable.sound_on_png)
-			} else settSoundIcon.setImageResource(R.drawable.sound_off_png)
 		}
 		if (sharedPreferences.contains("vibrateStatus")) {
 			vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)
 			vibrateSwitch.isChecked = vibrateStatus
-			if (vibrateStatus) {
-				settVibrateIcon.setImageResource(R.drawable.vibrateon)
-			} else settVibrateIcon.setImageResource(R.drawable.vibrateoff)
 		}
 		if (sharedPreferences.contains("Room")) {
 			val roomID = sharedPreferences.getString("Room", "").toString()
@@ -749,6 +742,10 @@ class MainHomeScreen : AppCompatActivity() {
 			.withLogLevel(MoPubLog.LogLevel.DEBUG)
 		else SdkConfiguration.Builder(getString(R.string.bannerReal_MP))
 			.withLogLevel(MoPubLog.LogLevel.NONE)
+		rewardedAdUnitId = if (BuildConfig.DEBUG) getString(R.string.rewardedTest_mp) else getString(R.string.rewardedReal_mp)
+		val adUnitID = if (BuildConfig.DEBUG) getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
+		else getString(R.string.interstitialReal_mp) // test interstitial ad
+		mInterstitialAdMP = MoPubInterstitial(this, adUnitID)
 		MoPub.initializeSdk(this, configBuilder.build()) { loadDifferentAds() }
 	}
 
@@ -759,16 +756,12 @@ class MainHomeScreen : AppCompatActivity() {
 		addViewMHS.adSize = MoPubView.MoPubAdSize.HEIGHT_280
 		addViewMHS.loadAd()
 		loadInterstitialAd()
-		rewardedAdUnitId = if (BuildConfig.DEBUG) getString(R.string.rewardedTest_mp) else getString(R.string.rewardedReal_mp)
 		loadRewardAd()
 	}
 
 	private fun loadInterstitialAd() {
 		loadInterAdTry += 1 // try 5 times
-		val adUnitID = if (BuildConfig.DEBUG) getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
-		else getString(R.string.interstitialReal_mp) // test interstitial ad
 
-		mInterstitialAdMP = MoPubInterstitial(this, adUnitID)
 		val mInterstitialAdMPListener = object : MoPubInterstitial.InterstitialAdListener {
 			override fun onInterstitialLoaded(interstitial: MoPubInterstitial?) {
 				loadInterAdTry = 0
@@ -902,19 +895,17 @@ class MainHomeScreen : AppCompatActivity() {
 	private fun openSettingsWindow() {
 		settingsWindowStatus = true
 		settingsLayout.visibility = View.VISIBLE
-		Handler(Looper.getMainLooper()).postDelayed({
+//		Handler(Looper.getMainLooper()).postDelayed({
 			closeSettings.visibility = View.VISIBLE
-		}, 220)
-		anim(settingsLayoutTemp, R.anim.zoomin_center)
+//		}, 220)
+//		anim(settingsLayoutTemp, R.anim.zoomin_center)
 	}
 
 	fun closeSettingsWindow(view: View) {
 		settingsWindowStatus = false
-		anim(settingsLayoutTemp, R.anim.zoomout_center)
+//		anim(settingsLayoutTemp, R.anim.zoomout_center)
 		closeSettings.visibility = View.GONE
-		Handler(Looper.getMainLooper()).postDelayed({
 			settingsLayout.visibility = View.GONE
-		}, 250)
 		closeSettings.clearAnimation()
 	}
 
@@ -1232,10 +1223,8 @@ class MainHomeScreen : AppCompatActivity() {
 		musicStatus = musicSwitch.isChecked
 		if (musicStatus) {
 			soundBkgd.start()
-			settMusicIcon.setImageResource(R.drawable.music)
 		} else {
 			soundBkgd.pause()
-			settMusicIcon.setImageResource(R.drawable.nomusic)
 		}
 		editor.putBoolean("musicStatus", musicStatus) // write username to preference file
 		editor.apply()
@@ -1245,8 +1234,7 @@ class MainHomeScreen : AppCompatActivity() {
 		soundStatus = soundSwitch.isChecked
 		if (soundStatus) {
 			SoundManager.getInstance().playUpdateSound()
-			settSoundIcon.setImageResource(R.drawable.sound_on_png)
-		} else settSoundIcon.setImageResource(R.drawable.sound_off_png)
+		}
 		editor.putBoolean("soundStatus", soundStatus) // write username to preference file
 		editor.apply()
 
@@ -1256,8 +1244,7 @@ class MainHomeScreen : AppCompatActivity() {
 		vibrateStatus = vibrateSwitch.isChecked
 		if (vibrateStatus) {
 			vibrationStart(1000)
-			settVibrateIcon.setImageResource(R.drawable.vibrateon)
-		} else settVibrateIcon.setImageResource(R.drawable.vibrateoff)
+		}
 		editor.putBoolean("vibrateStatus", vibrateStatus) // write username to preference file
 		editor.apply()
 	}
@@ -1584,7 +1571,11 @@ class MainHomeScreen : AppCompatActivity() {
 			data = Uri.parse("https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades")
 			setPackage("com.android.vending")
 		}
-		startActivity(intent)
+		try {
+			startActivity(intent)
+		}catch(e:Exception){
+
+		}
 	}
 
 	private fun checkRatingRequest(minGames: Int = 4): Boolean {

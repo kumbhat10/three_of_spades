@@ -547,7 +547,6 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		p3Gain += scoreList[3]
 		p4Gain += scoreList[4]
 
-
 		totalDailyCoins += scoreList[1]
 		p1Coins += scoreList[1]
 		p2Coins += scoreList[2]

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/iconWidth"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/_113sdp"
     android:paddingTop="@dimen/_10sdp"
     android:background="@drawable/shine_player_stats">
 

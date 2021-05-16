@@ -260,7 +260,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 	private var newGameStatus = true
 
 	// endregion
-	@SuppressLint("ShowToast")
+	@SuppressLint("ShowToast", "MissingPermission")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		CaocConfig.Builder.create()
@@ -827,7 +827,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 					if (gameState == 3) {
 						if (soundStatus) SoundManager.getInstance()
 							.playSuccessSound() //soundSuccess.start()
-						refGameData.child("Bid").removeEventListener(bidingTurnListener)
+						if(this@GameScreen::bidingTurnListener.isInitialized) refGameData.child("Bid").removeEventListener(bidingTurnListener)
 						bidingStarted = false
 						finishBackgroundAnimationBidding() // also highlight bidder winner & removed automatically at game state 5
 						startTrumpSelection()
@@ -1646,8 +1646,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			override fun onCancelled(p0: DatabaseError) {}
 			override fun onDataChange(p0: DataSnapshot) {
 				if (p0.value != null && activityExists) {
-					if (gameTurn != p0.child("T").value.toString()
-							.toInt()) { // if the game turn changes then only proceed
+					if (gameTurn != p0.child("T").value.toString().toInt()) { // if the game turn changes then only proceed
 						playerTurn = p0.child("P").value.toString().toInt()
 						gameTurn = p0.child("T").value.toString().toInt()
 						trumpStart = p0.child("R").value.toString() // trump of start game
@@ -1726,12 +1725,15 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				if (gameTurn == 1) write("RO", mutableMapOf("T" to gameTurn + 1, "P" to nextTurn(fromInt), "R" to cardsSuit[cardSelected.toString()
 					.toInt()]))
 				else write("RO", mutableMapOf("T" to gameTurn + 1, "P" to nextTurn(fromInt), "R" to trumpStart))
-			} //                .addOnFailureListener{ // try again  - dummy - check if any other way could be done
-			//                refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener{
-			//                    if(gameTurn==1) write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to cardsSuit[cardSelected.toString().toInt()] ))
-			//                    else write("RO",mutableMapOf("T" to gameTurn+1,"P" to nextTurn(playerTurn),"R" to trumpStart))
-			//                }
-			//            }
+			}.addOnFailureListener {// try again  - dummy - check if any other way could be done
+					logFirebaseEvent(key = "Failed-Next-Turn")
+					refGameData.child("CT/$from").setValue(cardSelected).addOnSuccessListener {
+						if (gameTurn == 1) write("RO", mutableMapOf("T" to gameTurn + 1, "P" to nextTurn(fromInt), "R" to cardsSuit[cardSelected.toString()
+							.toInt()]))
+						else write("RO", mutableMapOf("T" to gameTurn + 1, "P" to nextTurn(fromInt), "R" to trumpStart))
+					}
+				}
+
 			cardsInHand.remove(cardSelected)
 			if (roundNumber != roundNumberLimit) {
 				write("CH/$from", cardsInHand)
@@ -1741,6 +1743,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				findViewById<LinearLayout>(R.id.imageGallery).removeAllViews() // show no self cards after throwing last card
 			}
 			write("OL/$from", 1) // Turn them online again
+
 		}
 	}
 
@@ -1785,7 +1788,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		for (i in 1 until nPlayers) {
 			startTurn = nextTurn(startTurn)
 			currentCard = roundCards[startTurn - 1]
-			if (currentCard != 53 && currentCard != 99 && winnerCard != 53) winnerCard = compareCardsForWinner(currentCard, winnerCard) // dummy check whats causes to declare round winner earlier
+			if (currentCard != 53 && currentCard != 99 && winnerCard != 53 && winnerCard !=99) winnerCard = compareCardsForWinner(currentCard, winnerCard) // dummy check whats causes to declare round winner earlier
 		}
 		roundWinner = roundCards.indexOf(winnerCard) + 1
 		animatePlayer(roundWinner)
@@ -1826,7 +1829,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		//        write("CT", mutableMapOf("p1" to cardsIndexLimit,"p2" to cardsIndexLimit,"p3" to cardsIndexLimit,"p4" to cardsIndexLimit,"p5" to cardsIndexLimit,"p6" to cardsIndexLimit,"p7" to cardsIndexLimit))
 		if (nPlayers7) write("CT", mutableMapOf("p1" to cardsIndexLimit, "p2" to cardsIndexLimit, "p3" to cardsIndexLimit, "p4" to cardsIndexLimit, "p5" to cardsIndexLimit, "p6" to cardsIndexLimit, "p7" to cardsIndexLimit))
 		if (nPlayers4) write("CT", mutableMapOf("p1" to cardsIndexLimit, "p2" to cardsIndexLimit, "p3" to cardsIndexLimit, "p4" to cardsIndexLimit))
-		write("SC/p$roundWinner", tablePoints + ptAll[roundWinner - 1]) // add table points to the round winner player - don't use round winner - player update for themself so use fromInt
+//		write("SC/p$roundWinner", tablePoints + ptAll[roundWinner - 1]) // add table points to the round winner player - don't use round winner - player update for themself so use fromInt
 		write("SC/p$fromInt", tablePoints + ptAll[fromInt - 1]) // add table points to the round winner player
 		//        write("RO/P",roundWinner) // write next player turn to be round player turn
 		//        write("RO/R","")
@@ -2632,7 +2635,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 	}
 
-	@SuppressLint("NewApi")
+	@SuppressLint("NewApi", "MissingPermission")
 	private fun vibrationStart(duration: Long = 200) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
@@ -2666,22 +2669,17 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 	}
 
-	private fun loadInterstitialAd(showAd: Boolean = false) { //        val adUnitID = if (BuildConfig.DEBUG)getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
-		//        else getString(R.string.interstitialReal_mp) // test interstitial ad
-		//
-		//        mInterstitialAdMP = MoPubInterstitial(this, adUnitID)
+	private fun loadInterstitialAd(showAd: Boolean = false) {
+
 		val mInterstitialAdMPListener = object : MoPubInterstitial.InterstitialAdListener {
 			override fun onInterstitialLoaded(interstitial: MoPubInterstitial?) {
 				loadInterAdTry = 0
 			}
-
 			override fun onInterstitialFailed(interstitial: MoPubInterstitial?, errorCode: MoPubErrorCode?) {
 				if (loadInterAdTry < 5) loadInterstitialAd()
 			}
-
 			override fun onInterstitialShown(interstitial: MoPubInterstitial?) { //                loadInterstitialAd()  // dummy
 			}
-
 			override fun onInterstitialClicked(interstitial: MoPubInterstitial?) {}
 			override fun onInterstitialDismissed(interstitial: MoPubInterstitial?) {
 				logFirebaseEvent(key = "watched_ad")

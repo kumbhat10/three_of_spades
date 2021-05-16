@@ -288,171 +288,99 @@
         android:onClick="closeSettingsWindow"
         android:visibility="gone">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@id/settingsLayoutTemp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/blackcirclebutton"
-            android:clickable="true"
-            android:focusable="true"
-            android:orientation="vertical"
-            android:paddingStart="@dimen/_40sdp"
-            android:paddingTop="@dimen/_55sdp"
-            android:paddingEnd="@dimen/_40sdp"
-            android:paddingBottom="@dimen/_55sdp"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_230sdp"
+            android:background="@drawable/shine_player_stats"
+            android:layout_margin="@dimen/_30sdp"
+            android:padding="@dimen/_20sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_54sdp"
-                android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/settMusicIcon"
-                    android:layout_width="@dimen/_43sdp"
-                    android:layout_height="@dimen/_43sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_7sdp"
-                    android:layout_marginBottom="@dimen/_7sdp"
-                    android:background="@drawable/border_blue"
-                    android:onClick="music"
-                    android:soundEffectsEnabled="true"
-                    android:src="@drawable/music"
-                    tools:ignore="ContentDescription" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                <TextView
+                    android:id="@+id/textMusic"
+                    android:layout_width="@dimen/settingWidth"
+                    android:layout_height="@dimen/settingHeight"
                     android:gravity="center|start"
-                    android:paddingStart="@dimen/_11sdp"
-                    android:paddingEnd="0dp"
                     android:text="@string/music"
-                    android:textColor="@color/BlackTransUserStats3"
-                    android:textSize="@dimen/_15ssp" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:textColor="@color/font_grey_settings"
+                    android:textSize="@dimen/_15ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/musicSwitch"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/textSound"/>
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/musicSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/_11sdp"
+                        android:layout_width="@dimen/settingWidth"
+                        android:layout_height="@dimen/settingHeight"
+                        app:layout_constraintStart_toEndOf="@id/textMusic"
+                        app:layout_constraintBottom_toTopOf="@id/textSound"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         android:checked="true"
                         android:onClick="music"
                         android:thumb="@drawable/thumb_music"
                         app:track="@drawable/track1" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_54sdp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/settSoundIcon"
-                    android:layout_width="@dimen/_43sdp"
-                    android:layout_height="@dimen/_43sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_7sdp"
-                    android:layout_marginBottom="@dimen/_7sdp"
-                    android:background="@drawable/border_blue"
-                    android:onClick="sound"
-                    android:soundEffectsEnabled="true"
-                    android:src="@drawable/sound_on_png"
-                    tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:id="@+id/textSound"
+                    android:layout_width="@dimen/settingWidth"
+                    android:layout_height="@dimen/settingHeight"
                     android:gravity="center|start"
-                    android:paddingStart="@dimen/_11sdp"
-                    android:paddingEnd="0dp"
                     android:text="@string/sound"
-                    android:textColor="@color/BlackTransUserStats3"
-                    android:textSize="@dimen/_15ssp" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:textColor="@color/font_grey_settings"
+                    android:textSize="@dimen/_15ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textMusic"
+                    app:layout_constraintBottom_toTopOf="@id/textVibrate"
+                    app:layout_constraintEnd_toStartOf="@id/soundSwitch"/>
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/soundSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/_11sdp"
+                        android:layout_width="@dimen/settingWidth"
+                        android:layout_height="@dimen/settingHeight"
+                        app:layout_constraintTop_toBottomOf="@+id/textMusic"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/textVibrate"
+                        app:layout_constraintStart_toEndOf="@id/textSound"
                         android:checked="true"
                         android:onClick="sound"
                         android:thumb="@drawable/thumb_sound"
                         app:track="@drawable/track1" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_54sdp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/settVibrateIcon"
-                    android:layout_width="@dimen/_43sdp"
-                    android:layout_height="@dimen/_43sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_7sdp"
-                    android:layout_marginBottom="@dimen/_7sdp"
-                    android:background="@drawable/border_off_orange"
-                    android:onClick="vibrate"
-                    android:soundEffectsEnabled="true"
-                    android:src="@drawable/vibrateon"
-                    tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:id="@+id/textVibrate"
+                    android:layout_width="@dimen/settingWidth"
+                    android:layout_height="@dimen/settingHeight"
                     android:gravity="center|start"
-                    android:paddingStart="@dimen/_11sdp"
-                    android:paddingEnd="0dp"
                     android:text="@string/vibrate"
-                    android:textColor="@color/BlackTransUserStats3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/vibrateSwitch"
+                    app:layout_constraintTop_toBottomOf="@id/textSound"
+                    android:textColor="@color/font_grey_settings"
                     android:textSize="@dimen/_15ssp" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/vibrateSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/_11sdp"
+                        android:layout_width="@dimen/settingWidth"
+                        android:layout_height="@dimen/settingHeight"
                         android:checked="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textSound"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textVibrate"
                         android:onClick="vibrate"
                         android:thumb="@drawable/thumb_vibrate"
                         app:track="@drawable/track1" />
-                </RelativeLayout>
 
-            </LinearLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/closeSettings"
@@ -463,7 +391,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:onClick="closeSettingsWindow"
-            app:layout_constraintBottom_toBottomOf="@id/settingsLayoutTemp"
+            app:layout_constraintTop_toBottomOf="@id/settingsLayoutTemp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/close"
@@ -836,7 +764,7 @@
         android:background="@color/BlackTrans"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
