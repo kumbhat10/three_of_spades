@@ -18,8 +18,8 @@ android {
         applicationId "com.kaalikiteeggi.three_of_spades"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 68
-        versionName "68B"
+        versionCode 69
+        versionName "69A"
         ndkVersion  "23.0.7272597 rc3"//"22.0.7026061"//"21.3.6528147" //6363665"
         signingConfig signingConfigs.debug
     }
@@ -78,7 +78,8 @@ dependencies {
 //    implementation 'com.romainpiel.shimmer:library:1.4.0@aar'
 
 //    implementation 'com.twitter.sdk.android:twitter:3.3.0'
-    implementation 'com.facebook.android:facebook-login:7.1.0'
+//    implementation 'com.facebook.android:facebook-login:7.1.0'
+    implementation 'com.facebook.android:facebook-android-sdk:8.2.0'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Import the BoM for the Firebase platform
@@ -87,7 +88,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx:23.0.0'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.0'
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.0.0'
-//    implementation 'com.google.firebase:firebase-crashlytics-ndk:17.4.1'
 
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:20.0.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:19.0.0'
@@ -95,6 +95,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.0.0'
     implementation 'com.google.firebase:firebase-perf-ktx:20.0.0'
 
+//    implementation 'com.facebook.android:audience-network-sdk:6.4.0'
+//    implementation 'com.mopub.mediation:facebookaudiencenetwork:6.4.0.1'
     implementation('com.mopub:mopub-sdk-banner:5.16.4@aar') {
         transitive = true
     }

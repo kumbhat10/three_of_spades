@@ -26,7 +26,6 @@
         android:resizeable="true"
         android:smallScreens="true" />
 
-
     <application
         android:allowBackup="false"
         android:hardwareAccelerated="true"
@@ -40,11 +39,12 @@
         android:theme="@style/Theme.App"
         tools:replace="android:allowBackup">
 
-
-        <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
-            android:value="false"/>
-        <meta-data android:name="com.facebook.sdk.AutoInitEnabled"
-            android:value="false"/>
+<!--        <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled"-->
+<!--            android:value="false"/>-->
+<!--        <meta-data android:name="com.facebook.sdk.AutoInitEnabled"-->
+<!--            android:value="false"/>-->
+<!--        <meta-data android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"-->
+<!--            android:value="true"/>-->
 
         <meta-data
             android:name="firebase_performance_logcat_enabled"
@@ -112,7 +112,6 @@
 
         <!-- MoPub's consent dialog -->
         <activity android:name="com.mopub.common.privacy.ConsentDialogActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
-
         <!-- All ad formats -->
         <activity android:name="com.mopub.common.MoPubBrowser" android:configChanges="keyboardHidden|orientation|screenSize"/>
 

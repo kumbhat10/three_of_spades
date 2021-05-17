@@ -7,18 +7,14 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -36,12 +32,10 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_start_screen.*
-import java.util.*
 
 
 class StartScreen : AppCompatActivity() {
 	private lateinit var textToSpeech: TextToSpeech
-	private lateinit var toast: Toast
 	private lateinit var callBackManager: CallbackManager
 	private lateinit var mAuth: FirebaseAuth
 	private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -129,7 +123,6 @@ class StartScreen : AppCompatActivity() {
 			loadingText3.text = getString(R.string.wait)
 			loadingTextSC.visibility = View.VISIBLE
 		}) //endregion
-		initializeSpeechEngine()
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -233,7 +226,6 @@ class StartScreen : AppCompatActivity() {
 
 	private fun startNextActivity(userGivenName: String?) {
 		SoundManager.getInstance().playSuccessSound() //soundSuccess.start()
-		speak("Hello  ${userGivenName.toString().split(" ")[0]}")
 		loadingText3.visibility = View.GONE
 		loadingTextSC.visibility = View.GONE
 		signInSuccess.visibility = View.VISIBLE
@@ -247,23 +239,6 @@ class StartScreen : AppCompatActivity() {
 	private fun toastCenter(message: String) {
 		Snackbar.make(startBckgd, message, Snackbar.LENGTH_LONG).setAction("Dismiss") {}
 			.setActionTextColor(getColor(R.color.borderblue)).show()
-	}
-
-	private fun speak(speechText: String, pitch: Float = 0.9f, speed: Float = 1f) {
-		textToSpeech.setPitch(pitch)
-		textToSpeech.setSpeechRate(speed)
-		textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
-	}
-
-	private fun initializeSpeechEngine() {
-		textToSpeech = TextToSpeech(applicationContext) { status ->
-			if (status == TextToSpeech.SUCCESS) {
-				val result = textToSpeech.setLanguage(Locale.ENGLISH)
-				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-					toastCenter("Missing Language data - Text to speech")
-				}
-			}
-		}
 	}
 
 	fun openPrivacyPolicy(view: View) {
@@ -285,15 +260,6 @@ class StartScreen : AppCompatActivity() {
 			} catch (me: Exception) {
 			}
 		}
-	}
-
-	override fun onDestroy() {
-		try {
-			textToSpeech.shutdown()
-		} catch (me: java.lang.Exception) {
-		}
-		super.onDestroy()
-
 	}
 }
 

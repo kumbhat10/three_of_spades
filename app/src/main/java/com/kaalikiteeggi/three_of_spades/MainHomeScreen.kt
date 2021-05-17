@@ -623,7 +623,7 @@ class MainHomeScreen : AppCompatActivity() {
 		if (sharedPreferences.contains("Room")) {
 			val roomID = sharedPreferences.getString("Room", "").toString()
 			if (roomID.isNotEmpty()) {
-				Handler(Looper.getMainLooper()).postDelayed({ deleteAllRoomData(roomID) }, 0)				//                deleteAllRoomdata(roomID)
+//				Handler(Looper.getMainLooper()).postDelayed({ deleteAllRoomData(roomID) }, 0)				//                deleteAllRoomdata(roomID)
 			}
 			editor.remove("Room").apply()
 		}
@@ -738,15 +738,23 @@ class MainHomeScreen : AppCompatActivity() {
 
 	@Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
 	private fun initializeAds() {
-		val configBuilder = if (BuildConfig.DEBUG) SdkConfiguration.Builder(getString(R.string.bannerTest_MP))
+		val configBuilder = if (BuildConfig.DEBUG) SdkConfiguration.Builder(getString(R.string.rewardedTest_mp))
 			.withLogLevel(MoPubLog.LogLevel.DEBUG)
-		else SdkConfiguration.Builder(getString(R.string.bannerReal_MP))
+		else SdkConfiguration.Builder(getString(R.string.rewardedReal_mp))
 			.withLogLevel(MoPubLog.LogLevel.NONE)
+
 		rewardedAdUnitId = if (BuildConfig.DEBUG) getString(R.string.rewardedTest_mp) else getString(R.string.rewardedReal_mp)
 		val adUnitID = if (BuildConfig.DEBUG) getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
 		else getString(R.string.interstitialReal_mp) // test interstitial ad
 		mInterstitialAdMP = MoPubInterstitial(this, adUnitID)
-		MoPub.initializeSdk(this, configBuilder.build()) { loadDifferentAds() }
+
+
+//		AdSettings.addTestDevice("bd40e50a-23b8-4798-8370-0ebbd6bf23fb") //onePlus
+//		AudienceNetworkAds.buildInitSettings(applicationContext).withInitListener {
+		MoPub.getPersonalInformationManager()?.grantConsent()
+		MoPub.initializeSdk(this, configBuilder.build()) {loadDifferentAds()}
+//		Handler(Looper.getMainLooper()).postDelayed({  }, 3000L)
+//		}.initialize()
 	}
 
 	private fun loadDifferentAds() {
@@ -756,7 +764,7 @@ class MainHomeScreen : AppCompatActivity() {
 		addViewMHS.adSize = MoPubView.MoPubAdSize.HEIGHT_280
 		addViewMHS.loadAd()
 		loadInterstitialAd()
-		loadRewardAd()
+//		loadRewardAd()
 	}
 
 	private fun loadInterstitialAd() {
@@ -817,7 +825,6 @@ class MainHomeScreen : AppCompatActivity() {
 					toastCenter("Sorry $userName No coins added")
 				}
 			}
-
 			override fun onRewardedAdCompleted(adUnitIds: Set<String?>, reward: MoPubReward) {
 				rewardStatus = true
 				rewardAmount = if (dailyRewardClicked) dailyRewardAmount
@@ -839,11 +846,10 @@ class MainHomeScreen : AppCompatActivity() {
 				}
 				dailyRewardClicked = false
 			}
-
 			override fun onRewardedAdLoadFailure(adUnitId: String, errorCode: MoPubErrorCode) {
-				if (loadRewardedAdTry <= 2) loadRewardAd()
+				if(BuildConfig.DEBUG) toastCenter("Failed to load reward Ad")
+//				if (loadRewardedAdTry <= 2) loadRewardAd()
 			}
-
 			override fun onRewardedAdLoadSuccess(adUnitId: String) {
 				loadRewardedAdTry = 1
 				when (countRewardWatch) {
@@ -854,21 +860,20 @@ class MainHomeScreen : AppCompatActivity() {
 				}
 				watchVideo.visibility = View.VISIBLE
 			}
-
 			override fun onRewardedAdShowError(adUnitId: String, errorCode: MoPubErrorCode) {
 				watchVideo.clearAnimation()
 				watchVideo.visibility = View.GONE
 				loadRewardAd()
 			}
-
 			override fun onRewardedAdStarted(adUnitId: String) {
 				dailyRewardGridLayout.visibility = View.GONE
 				watchVideo.clearAnimation()
 				watchVideo.visibility = View.GONE
 				if (musicStatus) soundBkgd.pause()
 			}
-		} //		MoPubRewardedAds.setRewardedAdListener(rewardAdListener)
-		//		if(loadRewardedAdTry<=2) MoPubRewardedAds.loadRewardedAd(rewardedAdUnitId)
+		}
+		MoPubRewardedAds.setRewardedAdListener(rewardAdListener)
+		MoPubRewardedAds.loadRewardedAd(rewardedAdUnitId)
 	}
 
 	fun showRewardedVideoAd(view: View) {
@@ -1296,6 +1301,12 @@ class MainHomeScreen : AppCompatActivity() {
 	fun trainingStart(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press)) //		if(mInterstitialAdMP.isReady) mInterstitialAdMP.show()
 //		toastCenter( Random.nextInt(0, 6).toString() )
+		if(MoPubRewardedAds.hasRewardedAd(rewardedAdUnitId)) MoPubRewardedAds.showRewardedAd(rewardedAdUnitId)
+		else loadRewardAd()
+		if (mInterstitialAdMP.isReady) {
+//			mInterstitialAdMP.show()
+		}else loadInterstitialAd()
+
 		trainAccess = false
 		if (trainAccess) {
 			maskAllLoading.visibility = View.VISIBLE
@@ -1655,6 +1666,7 @@ class MainHomeScreen : AppCompatActivity() {
 			mInterstitialAdMP.destroy()
 		} // Destroy MoPub Interstitial add
 		MoPubRewardedAds.setRewardedAdListener(null)
+		mInterstitialAdMP.destroy()
 		MoPub.onDestroy(this)
 		super.onDestroy()
 	}
