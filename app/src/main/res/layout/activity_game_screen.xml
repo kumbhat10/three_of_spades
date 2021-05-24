@@ -5,7 +5,6 @@
     android:id="@+id/gameScreen1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Black"
     tools:context=".GameScreen">
 
     <ImageView
@@ -1403,7 +1402,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/imageViewChat" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/textViewBider"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_28sdp"
@@ -1457,9 +1456,9 @@
         android:visibility="gone"
         tools:ignore="MissingConstraints" />
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/playerCards"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/_64sdp"
         android:layout_marginStart="@dimen/_50sdp"
         android:layout_marginEnd="@dimen/_55sdp"
@@ -1471,7 +1470,11 @@
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_centerHorizontal="true"
             android:animateLayoutChanges="true"
             android:focusable="true"
@@ -1494,7 +1497,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:orientation="horizontal" />
         </HorizontalScrollView>
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chatLinearLayout"
@@ -2033,7 +2036,7 @@
             android:contentDescription="@string/app_name"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:srcCompat="@drawable/c10" />
 
         <ImageView
@@ -2049,7 +2052,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/c10"
-            android:visibility="gone" />
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/imageViewTable3_4"

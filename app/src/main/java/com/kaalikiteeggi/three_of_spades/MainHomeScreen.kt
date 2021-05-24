@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER", "DEPRECATION")
+@file:Suppress("UNUSED_PARAMETER", "DEPRECATION", "NAME_SHADOWING")
 
 package com.kaalikiteeggi.three_of_spades
 
@@ -44,6 +44,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -623,7 +624,7 @@ class MainHomeScreen : AppCompatActivity() {
 		if (sharedPreferences.contains("Room")) {
 			val roomID = sharedPreferences.getString("Room", "").toString()
 			if (roomID.isNotEmpty()) {
-//				Handler(Looper.getMainLooper()).postDelayed({ deleteAllRoomData(roomID) }, 0)				//                deleteAllRoomdata(roomID)
+				Handler(Looper.getMainLooper()).postDelayed({ deleteAllRoomData(roomID) }, 0)				//                deleteAllRoomdata(roomID)
 			}
 			editor.remove("Room").apply()
 		}
@@ -714,7 +715,7 @@ class MainHomeScreen : AppCompatActivity() {
 		val params = AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
 			.build()
 		billingClient.acknowledgePurchase(params) {}
-		if (purchase.sku == "remove_ads") {
+		if (purchase.skus[0] == "remove_ads") {
 			premiumStatus = true
 			if (soundStatus) SoundManager.getInstance().playSuccessSound()
 			toastCenter("Congratulations!! Your Payment is approved \n You won't see Ads now")
@@ -728,7 +729,6 @@ class MainHomeScreen : AppCompatActivity() {
 			editor.putBoolean("premium", true) // write username to preference file
 			editor.apply()
 		}
-
 	}
 
 	private fun consumePurchase(purchase: Purchase) {
@@ -1255,12 +1255,13 @@ class MainHomeScreen : AppCompatActivity() {
 	}
 
 	private fun initializeSpeechEngine() {
-		textToSpeech = TextToSpeech(applicationContext) { status ->
-			if (status == TextToSpeech.SUCCESS) {
-				val result = textToSpeech.setLanguage(Locale.ENGLISH)
-//				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) { //					toastCenter("Missing Language data - Text to speech")
-//				}
-			}
+		textToSpeech = TextToSpeech(applicationContext) {
+//			if (status == TextToSpeech.SUCCESS) {
+//				val result = textToSpeech.setLanguage(Locale.ENGLISH)
+////				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+//			// 					toastCenter("Missing Language data - Text to speech")
+////				}
+//			}
 		}
 	}
 
@@ -1299,13 +1300,20 @@ class MainHomeScreen : AppCompatActivity() {
 	}
 
 	fun trainingStart(view: View) {
-		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press)) //		if(mInterstitialAdMP.isReady) mInterstitialAdMP.show()
-//		toastCenter( Random.nextInt(0, 6).toString() )
-		if(MoPubRewardedAds.hasRewardedAd(rewardedAdUnitId)) MoPubRewardedAds.showRewardedAd(rewardedAdUnitId)
-		else loadRewardAd()
-		if (mInterstitialAdMP.isReady) {
-//			mInterstitialAdMP.show()
-		}else loadInterstitialAd()
+		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+		//		if(mInterstitialAdMP.isReady) mInterstitialAdMP.show()
+//		if(MoPubRewardedAds.hasRewardedAd(rewardedAdUnitId)) MoPubRewardedAds.showRewardedAd(rewardedAdUnitId)
+//		else loadRewardAd()
+//		if (mInterstitialAdMP.isReady) {
+////			mInterstitialAdMP.show()
+//		}else loadInterstitialAd()
+
+//		Firebase.database.getReference("GameData/Test").setValue("")
+		Firebase.database.getReference("GameData/Test").setValue(gameData4())
+		Firebase.database.getReference("GameData/Test").get().addOnSuccessListener {
+			data -> val a = data.getValue<GameData>()
+			val b=5
+		}
 
 		trainAccess = false
 		if (trainAccess) {
@@ -1400,7 +1408,6 @@ class MainHomeScreen : AppCompatActivity() {
 							super.onScrollStateChanged(recyclerView, newState)
 							if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) isScrollingAllTime = true
 						}
-
 						override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 							super.onScrolled(recyclerView, dx, dy)
 							val itemCount = layoutManager.itemCount
@@ -1457,7 +1464,6 @@ class MainHomeScreen : AppCompatActivity() {
 							super.onScrollStateChanged(recyclerView, newState)
 							if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) isScrollingDaily = true
 						}
-
 						override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 							super.onScrolled(recyclerView, dx, dy)
 							val itemCount = layoutManager1.itemCount

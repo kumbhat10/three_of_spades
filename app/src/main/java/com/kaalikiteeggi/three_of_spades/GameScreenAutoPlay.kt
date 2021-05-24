@@ -25,6 +25,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.snackbar.Snackbar
@@ -151,6 +152,10 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 	private lateinit var gameState: MutableLiveData<Int>
 	private lateinit var playerTurn: MutableLiveData<Int>
 	private lateinit var gameTurn: MutableLiveData<Int>
+	private lateinit var ct1: MutableLiveData<Int>
+	private lateinit var ct2: MutableLiveData<Int>
+	private lateinit var ct3: MutableLiveData<Int>
+	private lateinit var ct4: MutableLiveData<Int>
 
 	private var gameNumber: Int = 1
 	private var gameLimitNoAds: Int = 2
@@ -167,10 +172,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 
 	private var scoreSheetNotUpdated = true
 	private var played = false
-	private lateinit var ct1: MutableLiveData<Int>
-	private lateinit var ct2: MutableLiveData<Int>
-	private lateinit var ct3: MutableLiveData<Int>
-	private lateinit var ct4: MutableLiveData<Int>
+
 
 	private var pt1 = 0
 	private var pt2 = 0
@@ -363,18 +365,14 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 			gameState.observe(this, gameStateListener) // endregion
 			uid = FirebaseAuth.getInstance().uid.toString()
 			FirebaseCrashlytics.getInstance().setUserId(uid)
-			refUsersData.document(uid)
-				.set(hashMapOf("LPD_bot" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-					.toInt()), SetOptions.merge())
+			refUsersData.document(uid).set(hashMapOf("LPD_bot" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()), SetOptions.merge())
 		} // endregion
 		// region table card listener
 		ct1 = MutableLiveData()
 		ct1.value = cardsIndexLimit
 		ct1.observe(this, {
 			tablePointsCalculator()
-			if (ct1.value!! <= (cardsIndexLimit - 2)) {
-				if (soundStatus) SoundManager.getInstance()
-					.playCardPlayedSound() // soundCardPlayed.start()
+			if (ct1.value!! <= (cardsIndexLimit - 2)) {// soundCardPlayed.start()
 				findViewById<ImageView>(refIDMappedTableImageView[0]).visibility = View.VISIBLE
 				findViewById<ImageView>(refIDMappedTableImageView[0]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[0]))
 				findViewById<ImageView>(refIDMappedTableImageView[0]).setImageResource(cardsDrawable[ct1.value!!])
@@ -388,8 +386,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		ct2.observe(this, {
 			tablePointsCalculator()
 			if (ct2.value!! <= (cardsIndexLimit - 2)) {
-				if (soundStatus) SoundManager.getInstance()
-					.playCardPlayedSound() // soundCardPlayed.start()
+				if (soundStatus) SoundManager.getInstance().playCardPlayedSound()
 				findViewById<ImageView>(refIDMappedTableImageView[1]).visibility = View.VISIBLE
 				findViewById<ImageView>(refIDMappedTableImageView[1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[1]))
 				findViewById<ImageView>(refIDMappedTableImageView[1]).setImageResource(cardsDrawable[ct2.value!!])
@@ -403,8 +400,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		ct3.observe(this, {
 			tablePointsCalculator()
 			if (ct3.value!! <= (cardsIndexLimit - 2)) {
-				if (soundStatus) SoundManager.getInstance()
-					.playCardPlayedSound() // soundCardPlayed.start()
+				if (soundStatus) SoundManager.getInstance().playCardPlayedSound()
 				findViewById<ImageView>(refIDMappedTableImageView[2]).visibility = View.VISIBLE
 				findViewById<ImageView>(refIDMappedTableImageView[2]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[2]))
 				findViewById<ImageView>(refIDMappedTableImageView[2]).setImageResource(cardsDrawable[ct3.value!!])
@@ -418,8 +414,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		ct4.observe(this, {
 			tablePointsCalculator()
 			if (ct4.value!! <= (cardsIndexLimit - 2)) {
-				if (soundStatus) SoundManager.getInstance()
-					.playCardPlayedSound() // soundCardPlayed.start()
+				if (soundStatus) SoundManager.getInstance().playCardPlayedSound()
 				findViewById<ImageView>(refIDMappedTableImageView[3]).visibility = View.VISIBLE
 				findViewById<ImageView>(refIDMappedTableImageView[3]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[3]))
 				findViewById<ImageView>(refIDMappedTableImageView[3]).setImageResource(cardsDrawable[ct4.value!!])
@@ -1112,7 +1107,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 			gallery.addView(viewTemp)
 		}
 		if (animations) {
-			findViewById<RelativeLayout>(R.id.playerCards).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
+			findViewById<ConstraintLayout>(R.id.playerCards).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
 		}
 		if (bidingRequest && activityExists) {
 			startBidding()
@@ -1151,7 +1146,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 			findViewById<TextView>(R.id.textViewPartnerSelect).text = getString(R.string.partnerSelection1_4)
 			speak("Choose a partner card") //choose 1st buddy text
 //			displayAllCardsForPartnerSelection()  // inflate all the cards to choose from
-			partnerSelectRV.layoutManager = LinearLayoutManager(this, LinearLayout.HORIZONTAL,false)
+			partnerSelectRV.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL,false)
 			partnerSelectRV.adapter = PartnerCardListAdapter(nPlayers = 4){output ->
 				partnerSelectClick4(output)
 			}
@@ -1348,7 +1343,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		playerTurn.observe(this, bidTurnListener)
 	}
 
-	fun moveView(viewToMove: View, fromView: View, duration: Long = 350) {
+	private fun moveView(viewToMove: View, fromView: View, duration: Long = 350) {
 		val xViewToMove = viewToMove.x
 		val yViewToMove = viewToMove.y
 		viewToMove.x = fromView.x
