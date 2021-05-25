@@ -935,16 +935,20 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			copyAllCards.addAll(allCards)
 			copyAllCards[fromInt - 1] = (cardSelected.toString().toInt())
 
-			gameData.ct?.set(fromInt-1, cardSelected as Int)
+			gameData.ct?.set(fromInt-1, cardSelected.toString().toInt())
 
 			writeChild(data = mutableMapOf(
 					"p1" to gameData.p1, "p1s" to gameData.p1s, "pc1s" to gameData.pc1s,
-					"p2" to gameData.p2, "p2s" to gameData.p2s, "pc1s" to gameData.pc2s,
-					"ct" to gameData.ct!!, "sc" to ptAll,
-					"rt" to gameTurn + 1, "pt" to nextTurn(fromInt), "rtr" to rtr))
+					"p2" to gameData.p2, "p2s" to gameData.p2s, "pc2s" to gameData.pc2s,
+					"ct" to gameData.ct!!, "rt" to gameTurn + 1, "pt" to nextTurn(fromInt), "rtr" to rtr))
 
 			write("OL/$from", 1) // Turn them online again - check if really required
 		}
+	}
+	private fun startNextRound() {
+		gameData.sc!![fromInt-1] = tablePoints + gameData.sc!![fromInt-1]
+		writeChild(data = mutableMapOf("ct" to allCardsReset, "sc" to gameData.sc!!,
+				"rt" to 1, "pt" to fromInt, "rn" to gameData.rn+1, "rtr" to ""))
 	}
 	private fun checkIfPartnerAndUpdateServer4(cardSelected: Any, playerTurn: Int?) {
 		if (cardSelected.toString().toInt() == pc1 && p1s != 1) {
@@ -990,14 +994,6 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			}
 		}
 	}
-	private fun startNextRound() {
-		//		if (buFound1 == 2) write("BU1/s1", 1)  // locking the partner found but not confirmed by 1
-		//		if (nPlayers7 && buFound2 == 2) write("BU2/s2", 1)  // locking the partner found but not confirmed by 1
-
-		gameData.sc!![fromInt-1] = tablePoints + gameData.sc!![fromInt-1]
-		writeChild(data = mutableMapOf("ct" to allCardsReset, "sc" to gameData.sc!!,
-				"rt" to 1, "pt" to fromInt, "rn" to gameData.rn+1, "rtr" to ""))
-	}
 
 	private fun gameState6() {
 		if (!gameState6) {
@@ -1013,7 +1009,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			refRoomDatabase.child("S").addListenerForSingleValueEvent(object : ValueEventListener {
 				override fun onCancelled(p0: DatabaseError) {}
 				override fun onDataChange(p0: DataSnapshot) {
-					if (scoreList != p0.value as List<Int> || newGameStatus) {
+					if (newGameStatus) {
 						newGameStatus = false
 						scoreList = p0.value as List<Int>
 						updateWholeScoreBoard()
@@ -1022,7 +1018,6 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			})
 			Handler(Looper.getMainLooper()).postDelayed({
 				if (!premiumStatus && mInterstitialAdMP.isReady && (gameData.gn % gameLimitNoAds == 0)) mInterstitialAdMP.show()
-
 				if (fromInt == 1) { // only to host
 					//				findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
 					findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.VISIBLE
@@ -1229,25 +1224,25 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 	}
 
 	private fun updateWholeScoreBoard() {
-		p1Gain += scoreList[1].toString().toInt()
-		p2Gain += scoreList[2].toString().toInt()
-		p3Gain += scoreList[3].toString().toInt()
-		p4Gain += scoreList[4].toString().toInt()
+		p1Gain += scoreList[1]
+		p2Gain += scoreList[2]
+		p3Gain += scoreList[3]
+		p4Gain += scoreList[4]
 
-		totalDailyCoins += scoreList[fromInt].toString().toInt()
-		p1Coins += scoreList[1].toString().toInt()
-		p2Coins += scoreList[2].toString().toInt()
-		p3Coins += scoreList[3].toString().toInt()
-		p4Coins += scoreList[4].toString().toInt()
+		totalDailyCoins += scoreList[fromInt]
+		p1Coins += scoreList[1]
+		p2Coins += scoreList[2]
+		p3Coins += scoreList[3]
+		p4Coins += scoreList[4]
 
 		if (nPlayers7) {
-			p5Gain += scoreList[5].toString().toInt()
-			p6Gain += scoreList[6].toString().toInt()
-			p7Gain += scoreList[7].toString().toInt()
+			p5Gain += scoreList[5]
+			p6Gain += scoreList[6]
+			p7Gain += scoreList[7]
 
-			p5Coins += scoreList[5].toString().toInt()
-			p6Coins += scoreList[6].toString().toInt()
-			p7Coins += scoreList[7].toString().toInt()
+			p5Coins += scoreList[5]
+			p6Coins += scoreList[6]
+			p7Coins += scoreList[7]
 		}
 		scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
 		scoreBoardTable(display = false, data = createScoreTableTotal(), upDateTotal = true)
@@ -1882,7 +1877,6 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 		findViewById<ImageView>(refIDMappedImageView[fromInt - 1]).visibility = View.INVISIBLE
 	}
-
 
 	private fun shufflingWindow(time: Long = 4900, fadeOffTime: Long = 500, gameStateChange: Boolean = false) {
 		shuffleOver = false
