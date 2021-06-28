@@ -63,7 +63,7 @@ class DeveloperCredits : AppCompatActivity() {
         soundStatus = intent.getBooleanExtra("soundStatus", true)    //Get roomID and display
         text = "VC: $vc\nVN: $vn\n W: ${resources.configuration.screenWidthDp}\nH: ${resources.configuration.screenHeightDp}\nUser ID: $uid"
         findViewById<TextView>(R.id.sizeDC).text = text
-        SoundManager.initialize(applicationContext)
+//        SoundManager.initialize(applicationContext)
 //        soundUpdate = MediaPlayer.create(applicationContext, R.raw.card_played)
         Handler(Looper.getMainLooper()).post {
             createEmailIntent()
@@ -74,7 +74,7 @@ class DeveloperCredits : AppCompatActivity() {
 
 
     fun openWebsite(view: View){
-        if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        if (soundStatus) SoundManager.instance?.playUpdateSound()
         try{
             intentBuilder.build().launchUrl(this, Uri.parse(homePageKKT))
         }catch (me:Exception){
@@ -102,7 +102,7 @@ class DeveloperCredits : AppCompatActivity() {
     }
 
     fun copyToClipBoard(view: View){
-        if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        if (soundStatus) SoundManager.instance?.playUpdateSound()
         Toast.makeText(applicationContext,"Text copied to clipboard",Toast.LENGTH_SHORT).show()
         val clipBoard = applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Text copied",text)
@@ -132,7 +132,7 @@ class DeveloperCredits : AppCompatActivity() {
     }
 
     fun sendEmail(view: View){
-        if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        if (soundStatus) SoundManager.instance?.playUpdateSound()
         if(this::emailIntent.isInitialized) {
             try{
                 startActivity(Intent.createChooser( emailIntent, "Contact us : ") )
@@ -143,7 +143,7 @@ class DeveloperCredits : AppCompatActivity() {
         else createEmailIntent()
     }
     fun sendWhatsapp(view: View){
-        if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        if (soundStatus) SoundManager.instance?.playUpdateSound()
         val content =   "(Auto generated info for debugging purpose) " +
                 "\n\nUserName: ${FirebaseAuth.getInstance().currentUser?.displayName}" +
                 "\nEmail: ${FirebaseAuth.getInstance().currentUser?.email}" +
@@ -169,7 +169,7 @@ class DeveloperCredits : AppCompatActivity() {
     }
     override fun onBackPressed() {
 //        super.onBackPressed()
-        if (soundStatus) SoundManager.getInstance().playUpdateSound()
+        if (soundStatus) SoundManager.instance?.playUpdateSound()
         overridePendingTransition(R.anim.slide_right_activity,R.anim.slide_right_activity)
         finishAndRemoveTask()
 //        finishAfterTransition()

@@ -38,7 +38,6 @@ import java.util.concurrent.Executors
 import kotlin.random.Random
 
 class SplashScreen : AppCompatActivity() {
-	private lateinit var soundInto: MediaPlayer
 	private var user: FirebaseUser? = null
 	private lateinit var appUpdateManager: AppUpdateManager
 	private lateinit var snackBar: Snackbar
@@ -67,9 +66,7 @@ class SplashScreen : AppCompatActivity() {
 				}
 		icon3.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_once))
 		updateUI()
-		soundInto = MediaPlayer.create(applicationContext, R.raw.card_shuffle)
-		soundInto.setVolume(0.12F, 0.12F)
-		soundInto.start()
+		MediaPlayer.create(applicationContext, R.raw.card_shuffle).apply { setVolume(0.13F, 0.13F) }.start()
 		mobileAds()
 		Executors.newSingleThreadExecutor().execute {
 			checkAppUpdate()

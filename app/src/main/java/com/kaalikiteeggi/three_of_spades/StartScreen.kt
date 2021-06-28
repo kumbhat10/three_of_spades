@@ -72,15 +72,14 @@ class StartScreen : AppCompatActivity() {
 		startBckgd.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
 		findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_zoom))
 		vcStart.text = "Ver: " + packageManager.getPackageInfo(packageName, 0).versionName
-		SoundManager.getInstance().playUpdateSound() //soundUpdate.start()
+		SoundManager.instance?.playUpdateSound() //soundUpdate.start()
 		mAuth = FirebaseAuth.getInstance() // endregion
-		SoundManager.initialize(applicationContext)
 
 		// region Facebook Login
 		val loginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
 		loginButton.setOnClickListener {
 			it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-			SoundManager.getInstance().playUpdateSound() //soundUpdate.start()
+			SoundManager.instance?.playUpdateSound() //soundUpdate.start()
 			maskButtons.visibility = View.VISIBLE
 			loadingText3.text = getString(R.string.wait)
 			loadingTextSC.visibility = View.VISIBLE
@@ -96,13 +95,13 @@ class StartScreen : AppCompatActivity() {
 			}
 
 			override fun onCancel() {
-				SoundManager.getInstance().playErrorSound() //soundError.start()
+				SoundManager.instance?.playErrorSound() //soundError.start()
 				toastCenter("Facebook login cancelled")
 				maskButtons.visibility = View.GONE
 			}
 
 			override fun onError(error: FacebookException?) {
-				SoundManager.getInstance().playErrorSound() //soundError.start()
+				SoundManager.instance?.playErrorSound() //soundError.start()
 				if (error != null) {
 					toastCenter("Facebook login Error : ${error.message}")
 				}
@@ -117,7 +116,7 @@ class StartScreen : AppCompatActivity() {
 		mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 		findViewById<SignInButton>(R.id.googleSignInButton).setOnClickListener(View.OnClickListener {
 			it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-			SoundManager.getInstance().playUpdateSound() //soundUpdate.start()
+			SoundManager.instance?.playUpdateSound() //soundUpdate.start()
 			startActivityForResult(mGoogleSignInClient.signInIntent, googleCode)
 			maskButtons.visibility = View.VISIBLE
 			loadingText3.text = getString(R.string.wait)
@@ -154,15 +153,15 @@ class StartScreen : AppCompatActivity() {
 			maskButtons.visibility = View.GONE
 			try {
 				if ((exception as FirebaseAuthUserCollisionException).errorCode == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL") {
-					SoundManager.getInstance().playErrorSound() //soundError.start()
+					SoundManager.instance?.playErrorSound() //soundError.start()
 					toastCenter("Account already exists for email" + "\n \n${exception.email} \n \nPlease Sign in with Google or different email")
 					LoginManager.getInstance().logOut()
 				} else {
-					SoundManager.getInstance().playErrorSound() //soundError.start()
+					SoundManager.instance?.playErrorSound() //soundError.start()
 					toastCenter("${exception.message} \n PLease try again or use other method")
 				}
 			} catch (error: Exception) {
-				SoundManager.getInstance().playErrorSound() //soundError.start()
+				SoundManager.instance?.playErrorSound() //soundError.start()
 				toastCenter("${exception.message} \n PLease try again or use other method")
 			}
 
@@ -225,7 +224,7 @@ class StartScreen : AppCompatActivity() {
 	}
 
 	private fun startNextActivity(userGivenName: String?) {
-		SoundManager.getInstance().playSuccessSound() //soundSuccess.start()
+		SoundManager.instance?.playSuccessSound() //soundSuccess.start()
 		loadingText3.visibility = View.GONE
 		loadingTextSC.visibility = View.GONE
 		signInSuccess.visibility = View.VISIBLE

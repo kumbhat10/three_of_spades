@@ -213,7 +213,7 @@ class MainHomeScreen : AppCompatActivity() {
 		soundBkgd.isLooping = true
 		soundBkgd.setVolume(0.05F, 0.05F)
 		getSharedPrefs()
-		SoundManager.initialize(this)
+//		SoundManager.initialize(this)
 		initializeAds()
 		Handler(Looper.getMainLooper()).post {
 			vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -249,7 +249,7 @@ class MainHomeScreen : AppCompatActivity() {
 	}
 
 	private fun actionGridItemClick(position: Int) {
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		when (position) {
 			0 -> createRoomWindowOpen()
 			1 -> joinRoomWindowOpen()
@@ -318,7 +318,7 @@ class MainHomeScreen : AppCompatActivity() {
 	}
 
 	private fun dailyRewardWindowDisplay() {
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		val listDailyRewardItem = setDataListDR()
 		val imageAdapter = DailyRewardGridAdapter(listDailyRewardItem, min(listDailyRewardItem.size, consecutiveDay))
 		dailyRewardGrid.adapter = imageAdapter
@@ -361,13 +361,13 @@ class MainHomeScreen : AppCompatActivity() {
 
 	fun closeDailyRewardWindowDisplay(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		dailyRewardGridLayout.visibility = View.GONE
 	}
 
 	fun addPoints() {
 		callConfetti()
-		if (soundStatus) SoundManager.getInstance().playZipSound()
+		if (soundStatus) SoundManager.instance?.playZipSound()
 		dailyRewardClicked = false
 		rewardAmount = dailyRewardAmount
 		totalCoins += rewardAmount  // reward with daily reward amount for watching video
@@ -375,7 +375,7 @@ class MainHomeScreen : AppCompatActivity() {
 		logFirebaseEvent("daily_rewards", 1, "coins$rewardAmount")
 		watchVideoCoin.text = rewardAmount.toString()
 		watchVideoCoin.visibility = View.VISIBLE
-		if (soundStatus) SoundManager.getInstance().playCardCollectSound()
+		if (soundStatus) SoundManager.instance?.playCardCollectSound()
 		anim(watchVideoCoin, R.anim.slide_500_coins)
 		Handler(Looper.getMainLooper()).postDelayed({
 			if (vibrateStatus) vibrationStart()
@@ -390,7 +390,7 @@ class MainHomeScreen : AppCompatActivity() {
 	fun claimDailyReward(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 		if (vibrateStatus) vibrationStart()
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		dailyRewardClicked = true
 		dailyRewardStatus = true
 		if (premiumStatus) {
@@ -450,7 +450,7 @@ class MainHomeScreen : AppCompatActivity() {
 						removeAds.visibility = View.GONE
 						addViewMHS.visibility = View.GONE
 					}
-					if (soundStatus) SoundManager.getInstance().playSuccessSound()
+					if (soundStatus) SoundManager.instance?.playSuccessSound()
 					maskAllLoading.visibility = View.GONE
 					photoURL = dataSnapshot.get("ph").toString()
 					Picasso.get().load(photoURL).resize(400, 400)
@@ -634,7 +634,7 @@ class MainHomeScreen : AppCompatActivity() {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 		if (premiumStatus) openClosePlayerStats(View(this))
 		else {
-			if (soundStatus) SoundManager.getInstance().playUpdateSound()
+			if (soundStatus) SoundManager.instance?.playUpdateSound()
 			setupBillingClient() // memory leak issue so not to initialize everytime
 //			querySkuDetailsRequest()
 		}
@@ -650,18 +650,18 @@ class MainHomeScreen : AppCompatActivity() {
 						toastCenter("Successful purchase")
 						lifecycleScope.launch { acknowledgePurchase(purchase) }
 					} else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
-						if (soundStatus) SoundManager.getInstance().playUpdateSound()
+						if (soundStatus) SoundManager.instance?.playUpdateSound()
 						toastCenter("Your Payment is processing \nWe will update you after finishing processing")
 					}
 				}
 			} else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-				SoundManager.getInstance().playErrorSound()
+				SoundManager.instance?.playErrorSound()
 				toastCenter("Payment Cancelled")
 			} else if (billingResult.responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
-				SoundManager.getInstance().playErrorSound()
+				SoundManager.instance?.playErrorSound()
 				toastCenter("Already processing pending item")
 			} else {
-				SoundManager.getInstance().playErrorSound()
+				SoundManager.instance?.playErrorSound()
 				toastCenter("Payment Failed. Try again \n ${billingResult.responseCode}")
 			}
 		}
@@ -717,7 +717,7 @@ class MainHomeScreen : AppCompatActivity() {
 		billingClient.acknowledgePurchase(params) {}
 		if (purchase.skus[0] == "remove_ads") {
 			premiumStatus = true
-			if (soundStatus) SoundManager.getInstance().playSuccessSound()
+			if (soundStatus) SoundManager.instance?.playSuccessSound()
 			toastCenter("Congratulations!! Your Payment is approved \n You won't see Ads now")
 			refUsersData.document(uid).set(hashMapOf("pr" to 1), SetOptions.merge())
 			Firebase.firestore.collection("PremiumUser").document(uid)
@@ -807,12 +807,12 @@ class MainHomeScreen : AppCompatActivity() {
 			override fun onRewardedAdClosed(adUnitId: String) {
 				if (musicStatus) soundBkgd.start()
 				if (rewardStatus) {
-					if (soundStatus) SoundManager.getInstance().playZipSound()
+					if (soundStatus) SoundManager.instance?.playZipSound()
 					rewardStatus = false
 					watchVideoCoin.text = rewardAmount.toString()
 					watchVideoCoin.visibility = View.VISIBLE
 					logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, 1, "coins$rewardAmount")
-					if (soundStatus) SoundManager.getInstance().playCardCollectSound()
+					if (soundStatus) SoundManager.instance?.playCardCollectSound()
 					anim(watchVideoCoin, R.anim.slide_500_coins)
 					Handler(Looper.getMainLooper()).postDelayed({
 						if (vibrateStatus) vibrationStart()
@@ -877,7 +877,7 @@ class MainHomeScreen : AppCompatActivity() {
 	}
 
 	fun showRewardedVideoAd(view: View) {
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		if (MoPubRewardedAds.hasRewardedAd(rewardedAdUnitId)) {
 			MoPubRewardedAds.showRewardedAd(rewardedAdUnitId)
 		} else {
@@ -889,7 +889,7 @@ class MainHomeScreen : AppCompatActivity() {
 
 	fun openClosePlayerStats(view: View) {
 		if (view.id != R.id.backgroundmhs && view.id != R.id.playerStats) {
-			if (soundStatus) SoundManager.getInstance().playUpdateSound()
+			if (soundStatus) SoundManager.instance?.playUpdateSound()
 			view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 		}
 		if (playerStatsML.progress == 1f) {
@@ -937,7 +937,7 @@ class MainHomeScreen : AppCompatActivity() {
 
 	fun createRoomButtonClicked(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		createRoomStatus = true
 		offlineRoomCreate = view.tag.toString().toInt() == 0
 
@@ -960,7 +960,7 @@ class MainHomeScreen : AppCompatActivity() {
 		loadingText.text = getString(R.string.creatingRoom)
 		if (!offlineGameAllowed && offlineRoomCreate) {
 			toastCenter(offlineGameAllowedM)
-			if (soundStatus) SoundManager.getInstance().playErrorSound()
+			if (soundStatus) SoundManager.instance?.playErrorSound()
 			if (vibrateStatus) vibrationStart()
 			loadingText.text = offlineGameAllowedM
 			Handler(Looper.getMainLooper()).postDelayed({
@@ -968,7 +968,7 @@ class MainHomeScreen : AppCompatActivity() {
 			}, 4000)
 		} else if (offlineGameAllowed && offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 1200)
 		else if (!onlineGameAllowed) {
-			if (soundStatus) SoundManager.getInstance().playErrorSound()
+			if (soundStatus) SoundManager.instance?.playErrorSound()
 			if (vibrateStatus) vibrationStart()
 			loadingText.text = onlineGameAllowedM
 			Handler(Looper.getMainLooper()).postDelayed({
@@ -997,7 +997,7 @@ class MainHomeScreen : AppCompatActivity() {
 	}
 
 	private fun startNextActivity(roomID: String = "ABCD") {
-		if (soundStatus) SoundManager.getInstance().playSuccessSound()
+		if (soundStatus) SoundManager.instance?.playSuccessSound()
 		if (!offlineRoomCreate) {
 			editor.putString("Room", roomID) // write room ID in storage - to delete later
 			editor.apply()
@@ -1051,7 +1051,7 @@ class MainHomeScreen : AppCompatActivity() {
 
 	fun joinRoomButtonClicked(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		if (vibrateStatus) vibrationStart()
 		val roomID = roomIDInput.text.toString() //read text field
 		if (roomID.isNotEmpty()) {
@@ -1071,7 +1071,7 @@ class MainHomeScreen : AppCompatActivity() {
 								val que = if (queTemp != 0) queTemp else playersJoined + 1
 
 								if (que > nPlayers) {
-									SoundManager.getInstance().playErrorSound()
+									SoundManager.instance?.playErrorSound()
 									speak("Sorry. Room is full")
 									if (vibrateStatus) vibrationStart()
 									maskAllLoading.visibility = View.GONE
@@ -1081,7 +1081,7 @@ class MainHomeScreen : AppCompatActivity() {
 									roomIDInput.text?.clear()
 								} else {
 									if (vibrateStatus) vibrationStart()
-									if (soundStatus) SoundManager.getInstance().playSuccessSound()
+									if (soundStatus) SoundManager.instance?.playSuccessSound()
 									maskAllLoading.visibility = View.VISIBLE
 									loadingText.text = getString(R.string.joiningRoom)
 									logFirebaseEvent("create_join_room_screen", 1, "join_$nPlayers")
@@ -1096,7 +1096,7 @@ class MainHomeScreen : AppCompatActivity() {
 									}
 								}
 							} else {
-								SoundManager.getInstance().playErrorSound()
+								SoundManager.instance?.playErrorSound()
 								speak("Sorry,No room found. Please check room ID", speed = 1.0f)
 								if (vibrateStatus) vibrationStart()
 								maskAllLoading.visibility = View.GONE
@@ -1129,7 +1129,7 @@ class MainHomeScreen : AppCompatActivity() {
 				}
 			}
 		} else {
-			SoundManager.getInstance().playErrorSound()
+			SoundManager.instance?.playErrorSound()
 			speak("Please enter room ID")
 			vibrationStart()
 			errorJoinRoomID = false
@@ -1213,8 +1213,8 @@ class MainHomeScreen : AppCompatActivity() {
 
 	fun developerCredits(view: View) {
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-		if (soundStatus) SoundManager.getInstance()
-			.playUpdateSound()  //Pass username and current activity alias to be able to come back with same info
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
+		//Pass username and current activity alias to be able to come back with same info
 		startActivity(Intent(this, DeveloperCredits::class.java).putExtra("uid", uid)
 			.putExtra("soundStatus", soundStatus))
 		overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
@@ -1238,7 +1238,7 @@ class MainHomeScreen : AppCompatActivity() {
 	fun sound(view: View) {
 		soundStatus = soundSwitch.isChecked
 		if (soundStatus) {
-			SoundManager.getInstance().playUpdateSound()
+			SoundManager.instance?.playUpdateSound()
 		}
 		editor.putBoolean("soundStatus", soundStatus) // write username to preference file
 		editor.apply()
@@ -1319,7 +1319,7 @@ class MainHomeScreen : AppCompatActivity() {
 		if (trainAccess) {
 			maskAllLoading.visibility = View.VISIBLE
 			loadingText.text = getString(R.string.startTrain)
-			if (soundStatus) SoundManager.getInstance().playUpdateSound()
+			if (soundStatus) SoundManager.instance?.playUpdateSound()
 			startActivity(Intent(this, TrainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
 			overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
 			finishAndRemoveTask() //			Handler(Looper.getMainLooper()).postDelayed({ finish() }, 1000)
@@ -1546,7 +1546,7 @@ class MainHomeScreen : AppCompatActivity() {
 	fun openRatingWindow(view: View) {
 		if (view.tag == "rate") {
 			view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-			if (soundStatus) SoundManager.getInstance().playUpdateSound()
+			if (soundStatus) SoundManager.instance?.playUpdateSound()
 		}
 		rateUsLayout.visibility = View.VISIBLE
 		anim(rateUsLayoutFrame, R.anim.zoomin_center)
@@ -1562,7 +1562,7 @@ class MainHomeScreen : AppCompatActivity() {
 
 	fun askLaterRating(view: View) { // request for rating after x days from today if choose ask later
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		logFirebaseEvent("rate_us_vector.xml", 1, "rate_later")
 		closeRatingWindow(View(this))
 		ratingRequestDate = getChangedDate(SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
@@ -1575,7 +1575,7 @@ class MainHomeScreen : AppCompatActivity() {
 
 	fun rateUs(view: View) { // once clicked never ask to rate again
 		view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		closeRatingWindow(View(this))
 		if (!rated) inAppReview()  //openPlayStore() //- disable in app review for a while
 		else openPlayStore()
@@ -1601,7 +1601,7 @@ class MainHomeScreen : AppCompatActivity() {
 	}
 
 	override fun onBackPressed() { //minimize the app and avoid destroying the activity
-		if (soundStatus) SoundManager.getInstance().playUpdateSound()
+		if (soundStatus) SoundManager.instance?.playUpdateSound()
 		if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || playerStatsML.progress == 0f || createRoomWindowStatus) && ratingWindowOpenStatus && backButtonPressedStatus) {			//            moveTaskToBack(true)
 			super.onBackPressed()
 			closeRatingWindow(View(this))

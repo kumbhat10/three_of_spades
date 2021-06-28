@@ -19,7 +19,7 @@ class GameData() {
 	var pc2:Int? = null
 	var pc2s:Int = 13
 	var pt:Int? = null
-	var rn:Int = 0
+	var rn:Int = 1
 	var rt:Int = 1
 	var rtr:String = ""
 	var sc:MutableList<Int>? = null

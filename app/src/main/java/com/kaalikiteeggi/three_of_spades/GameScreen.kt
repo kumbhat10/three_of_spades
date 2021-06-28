@@ -234,15 +234,12 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			.errorDrawable(R.drawable.bug_icon) //default: bug image
 			.restartActivity(MainHomeScreen::class.java).apply()
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-		setContentView(R.layout.activity_game_screen) //        changeBackground() // always start with default
-		roomID = intent.getStringExtra("roomID")!!
-			.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
-		from = intent.getStringExtra("from")!!
-			.toString()    //check if user has joined room or created one and display Toast
+		setContentView(R.layout.activity_game_screen)
+		roomID = intent.getStringExtra("roomID")!!.toString()
+		from = intent.getStringExtra("from")!!.toString()
 		fromInt = from.split("")[2].toInt()
 		selfName = intent.getStringExtra("selfName")!!.toString()
 		totalDailyCoins = intent.getIntExtra("totalDailyCoins", 0)
-
 		playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
 		val userStats = intent.getIntegerArrayListExtra("userStats")!!
 		val userStatsDaily = intent.getIntegerArrayListExtra("userStatsDaily")!!
@@ -257,16 +254,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		nPlayers7 = nPlayers == 7
 		nPlayers4 = nPlayers == 4
 		setupGame4or7()
-		SoundManager.initialize(applicationContext)
-		refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
-		refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
-		refIDMappedImageView = PlayersReference().refIDMappedImageView(from, nPlayers)
-		refIDMappedHighlightView = PlayersReference().refIDMappedHighlightView(from, nPlayers)
-		refIDMappedPartnerIconImageView = PlayersReference().refIDMappedPartnerIconImageView(from, nPlayers)
-		refIDMappedOnlineIconImageView = PlayersReference().refIDMappedOnlineIconImageView(from, nPlayers)
-		refIDMappedTableAnim = PlayersReference().refIDMappedTableAnim(from, nPlayers)
-		refIDMappedTableWinnerAnim = PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
-		refIDMappedTableImageView = PlayersReference().refIDMappedTableImageView(from, nPlayers)
+
 		refRoomDatabase = Firebase.database.getReference("GameData/$roomID")
 		refGameDatabase = Firebase.database.getReference("GameData/$roomID/G")
 		refRoomFirestore = Firebase.firestore.collection(getString(R.string.pathRoom))
@@ -300,7 +288,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			}
 			override fun onFinish() {
 				autoPlayCard()
-				if (soundStatus) SoundManager.getInstance().playTimerSound()
+				if (soundStatus) SoundManager.instance?.playTimerSound()
 				if (vibrateStatus) vibrationStart()
 				progressbarTimer.progress = 0
 				findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
@@ -321,7 +309,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				if (!bidded) {
 					bidded = true
 					if (vibrateStatus) vibrationStart()
-					if (soundStatus) SoundManager.getInstance().playTimerSound()
+					if (soundStatus) SoundManager.instance?.playTimerSound()
 					gameData.bs?.set(fromInt-1, 0)
 					writeChild(data = mutableMapOf("pt" to nextValidBidder, "bs" to gameData.bs!!, "bvo" to gameData.bv!!))
 					progressbarTimer.progress = 0
@@ -433,23 +421,21 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				if (data.value != null && activityExists) {
 					gameData = data.getValue<GameData>()!!
 					//region Table Cards & Table Points - Independent of everything else
-					if(gameData.gs == 5) {
-						for (iIndex in 0 until nPlayers) {
-							showTableCard(index = iIndex, card = gameData.ct!![iIndex], newCard = gameData.ct!![iIndex] != allCards[iIndex])
-						}
-						tablePointsCalculator()
-					}
-						//endregion
+					if (gameData.gs == 5) {
+						showTableCard()
+					} else showTableCard(resetCards = true)
+					tablePointsCalculator()
+					//endregion
 					trump.value = gameData.tr
 					currentBidder.value = gameData.bb!!
 					bidValue.value = gameData.bv!!
 					partner1Card.value = gameData.pc1!!
 					partner1CardText.value = gameData.pc1s
-					if(nPlayers7) {
+					if (nPlayers7) {
 						partner2CardText.value = gameData.pc2s
 						partner2Card.value = gameData.pc2!!
 					}
-					when(gameData.gs){
+					when (gameData.gs) {
 						1->gameState1()
 						3->gameState3()
 						4->gameState4()
@@ -513,12 +499,11 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		roundNumber = 1
 		roundWinner = 0
 		tablePoints = 0
+		allCards = allCardsReset.toMutableList()
 		if (nPlayers4) {
-			allCards = mutableListOf(cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit)
 			ptAll = mutableListOf(0, 0, 0, 0)
 			buddyText1.text = getString(R.string.partner)
 		} else {
-			allCards = mutableListOf(cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit)
 			ptAll = mutableListOf(0, 0, 0, 0, 0, 0, 0)
 			partner2CardText.value = 13
 			partner2Card.value = cardsIndexLimit
@@ -527,6 +512,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			gameData.p2 = 8
 			p2s = 0
 		}
+		showTableCard(resetCards = true)
 	}
 	@SuppressLint("SetTextI18n")
 	private fun updatePlayerNames() {
@@ -557,7 +543,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		if (bidSpeak && bidingStarted && soundStatus) {
 			speak("${playerName(gameData.bb!!)} bid ${gameData.bv!!}", speed = 1f)
 			moveView(bidCoin, findViewById(refIDMappedImageView[gameData.bb!! - 1]))
-		} else if (!bidSpeak && bidingStarted && soundStatus && prevPlayerTurn != gameData.pt!!) speak("${playerName(prevPlayerTurn)} passed", speed = 1f) //                        else if (soundStatus) SoundManager.getInstance().playUpdateSound() //
+		} else if (!bidSpeak && bidingStarted && soundStatus && prevPlayerTurn != gameData.pt!!) speak("${playerName(prevPlayerTurn)} passed", speed = 1f) //                        else if (soundStatus) SoundManager.instance?.playUpdateSound() //
 
 		findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE //biding frame invisible
 		resetBackgroundAnimationBidding() //set pass label on photo if passed
@@ -598,7 +584,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		if (!bidded) {
 			bidded = true
 			countDownTimer("Bidding", purpose = "cancel")
-			if (soundStatus) SoundManager.getInstance().playUpdateSound() //
+			if (soundStatus) SoundManager.instance?.playUpdateSound() //
 			when (view.tag) {
 				"pass" -> {
 					gameData.bs?.set(fromInt-1, 0)
@@ -627,7 +613,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 
 	private fun gameState3(){
 		gameState1 = false
-		if (soundStatus) SoundManager.getInstance().playSuccessSound()
+		if (soundStatus) SoundManager.instance?.playSuccessSound()
 		bidingStarted = false
 		finishBackgroundAnimationBidding() // also highlight bidder winner & removed automatically at game state 5
 		startTrumpSelection()
@@ -648,7 +634,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 	}
 	fun onTrumpSelectionClick(view: View) {
-		if (soundStatus) SoundManager.getInstance().playUpdateSound() //
+		if (soundStatus) SoundManager.instance?.playUpdateSound() //
 		when (view.tag) {
 			"h" -> writeChild(data = mutableMapOf("tr" to "H", "gs" to 4)) //write("G/Tr", "H")
 			"s" -> writeChild(data = mutableMapOf("tr" to "S", "gs" to 4)) //write("G/Tr", "S")
@@ -666,7 +652,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		gameState1 = false
 		if (!gameState4) {
 			gameState4 = true
-			if (soundStatus) SoundManager.getInstance().playSuccessSound()
+			if (soundStatus) SoundManager.instance?.playSuccessSound()
 			if (gameData.bb!! != 0) moveView(trumpImage, findViewById(refIDMappedImageView[gameData.bb!! - 1]))
 			startPartnerSelection()
 		}
@@ -699,10 +685,10 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 	}
 	private fun partnerSelectClick4(cardSelected: Int) { // assumption is cardsInHand already updated
 		if ((cardsInHand as List<*>).contains((cardSelected).toLong())) {
-			if (soundStatus) SoundManager.getInstance().playErrorSound() //
+			if (soundStatus) SoundManager.instance?.playErrorSound() //
 			if (vibrateStatus) vibrationStart()
-			toastCenter("$selfName, You already have the same card")
-			speak("You already have same. Choose other card", speed = 1.1f)
+			toastCenter("$selfName, You have this card")
+			speak("You have this card. Choose any other card", speed = 1.1f)
 		} else {
 			writeChild(data = mutableMapOf("pc1" to cardSelected, "pc1s" to 1, "gs" to 5))
 			linearLayoutPartnerSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
@@ -716,13 +702,13 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		if (counterPartnerSelection == 0) {
 			when {
 				(cardsInHand as List<*>).contains((cardSelected * 2).toLong()) and (cardsInHand as List<*>).contains((cardSelected * 2 + 1).toLong()) -> {
-					if (soundStatus) SoundManager.getInstance().playErrorSound()
+					if (soundStatus) SoundManager.instance?.playErrorSound()
 					if (vibrateStatus) vibrationStart()
 					toastCenter("$selfName, You already have both of selected card")
 					speak("You already have both card")
 				}
 				(cardsInHand as List<*>).contains((cardSelected * 2).toLong()) or (cardsInHand as List<*>).contains((cardSelected * 2 + 1).toLong()) -> {
-					if (soundStatus) SoundManager.getInstance().playUpdateSound()
+					if (soundStatus) SoundManager.instance?.playUpdateSound()
 					writeChild(data = mutableMapOf("pc1" to cardSelected, "pc1s" to 11)) // only card
 					pc1 = cardSelected
 					pc1s = 1
@@ -732,7 +718,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 					counterPartnerSelection = 1
 				}
 				else -> {
-					if (soundStatus) SoundManager.getInstance().playUpdateSound()
+					if (soundStatus) SoundManager.instance?.playUpdateSound()
 					pc1 = cardSelected
 					writeChild(data = mutableMapOf("pc1" to cardSelected, "pc1s" to 10)) // Any card
 					pc1s = 0
@@ -744,7 +730,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			}
 		} else if (counterPartnerSelection == 1) {
 			if ((cardsInHand as List<*>).contains((cardSelected * 2).toLong()) and (cardsInHand as List<*>).contains((cardSelected * 2 + 1).toLong())) {
-				if (soundStatus) SoundManager.getInstance().playErrorSound() //
+				if (soundStatus) SoundManager.instance?.playErrorSound() //
 				if (vibrateStatus) vibrationStart()
 				toastCenter("$selfName, You already have both of same cards")
 				speak("You have both. Choose any other card")
@@ -758,10 +744,10 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 						linearLayoutPartnerSelection.visibility = View.GONE
 					}, 180)
 				} else {
-					if (soundStatus) SoundManager.getInstance().playErrorSound()
+					if (soundStatus) SoundManager.instance?.playErrorSound()
 					if (vibrateStatus) vibrationStart()
 //					toastCenter("You already have and chosen same card")
-					speak("card is already selected. Choose other card")
+					speak("this card is already selected. Choose other card")
 				}
 			} else {
 				if (pc1 == cardSelected) writeChild(data = mutableMapOf("pc2" to cardSelected, "pc2s" to 12, "pc1s" to 12, "gs" to 5))  // bider has none in his hands and both same selected
@@ -781,10 +767,10 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		if (!roundStarted) {
 			newGameStatus = true
 			roundStarted = true
-			if (soundStatus) SoundManager.getInstance().playSuccessSound()
+			if (soundStatus) SoundManager.instance?.playSuccessSound()
 			getBuddyAndDisplay()
 			finishPassOverlay()
-			if (gameData.bb!! > 0) updatePlayerScoreInfo(ptAll)
+			if (gameData.bb!! > 0) updatePlayerScoreInfo()
 			getCardsAndDisplay(animation = false)
 			findViewById<ConstraintLayout>(R.id.relativeLayoutTableCards).visibility = View.VISIBLE
 			Handler(Looper.getMainLooper()).postDelayed({
@@ -798,7 +784,6 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				speak("You will get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
 			}
 		} else {
-//			getCardsAndDisplay() // dummy - not required to keep fetching cards and display
 			startPlayingRound()
 		}
 	}
@@ -820,7 +805,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		if (p1s != gameData.p1s && p1s != 1) {
 			p1s = gameData.p1s
 			displayPartnerIcon()
-			if (soundStatus) SoundManager.getInstance().playSuccessSound()
+			if (soundStatus) SoundManager.instance?.playSuccessSound()
 			if (vibrateStatus) vibrationStart()
 			if (gameData.p1s == 1) {
 				speak("${playerName(gameData.p1)}.  is partner now", speed = 1.05f)
@@ -832,7 +817,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			if (p2s != gameData.p2s && p2s != 1) {
 				p2s = gameData.p2s
 				displayPartnerIcon()
-				if (soundStatus) SoundManager.getInstance().playSuccessSound()
+				if (soundStatus) SoundManager.instance?.playSuccessSound()
 				if (vibrateStatus) vibrationStart()
 				if (gameData.p2s == 1) {
 					speak("${playerName(gameData.p2)} .  is partner now", speed = 1.1f)
@@ -841,17 +826,16 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			if (gameData.p2 != 0 && gameData.p2s == 1) partner2CardText.value = gameData.p2
 		}// endregion
 
-		if (roundNumber < gameData.rn || gameData.ct?.get(fromInt-1) != cardsIndexLimit) { // check for new round or not
+		if (roundNumber < gameData.rn || gameData.ct?.get(fromInt-1) != cardsIndexLimit || gameData.pt!! != fromInt) { // check for new round or not
 			roundNumber = gameData.rn
 			played = false
-			if (roundNumber > 8 && !premiumStatus) loadInterstitialAd() // load the ad again
+			if ((gameData.rn > 8 || BuildConfig.DEBUG) && !premiumStatus) loadInterstitialAd() // load the ad again
 		}
 		ptAll = gameData.sc!!
-		updatePlayerScoreInfo(ptAll)
+		updatePlayerScoreInfo()
 		play()
-
-
 	}
+
 	private fun play(){
 		if (gameTurn != gameData.rt){ // if the game turn changes then only proceed
 			gameTurn = gameData.rt  // check later
@@ -897,15 +881,14 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 	}
 	private fun validateSelfPlayedCard(view: View) {
-		if (gameData.gs == 5 && "p$playerTurn" == from && gameTurn != 8 && gameTurn != 0) { // dummy error chance - why just 8 and not 5 also ? Investigate later
+		if (!played && gameData.gs == 5 && gameData.pt == fromInt && !(gameTurn == 8 && nPlayers7) && !(gameTurn == 5 && nPlayers4) && gameTurn != 0) { // dummy error chance - why just 8 and not 5 also ? Investigate later
 			val cardSelected = view.tag.toString().toInt()
 			if (gameTurn == 1 || cardsSuit[cardSelected] == gameData.rtr || cardsSuit.slice(cardsInHand as Iterable<Int>)
 							.indexOf(gameData.rtr) == -1) {
 				countDownTimer("PlayCard", purpose = "cancel")
 				startNextTurn(cardSelected.toLong()) // allow throw if first chance, or same suit as first turn or doesn't have same suit card
 			} else {
-				if (soundStatus) SoundManager.getInstance()
-						.playErrorSound() // soundCardPlayed.start()
+				if (soundStatus) SoundManager.instance?.playErrorSound()
 				if (vibrateStatus) vibrationStart()
 				speak("Play ${getSuitName(gameData.rtr)} card")
 			}
@@ -914,9 +897,8 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 	private fun startNextTurn(cardSelected: Any) {  // always called whenever played any card
 		if (!played) {
 			played = true
-
 			cardsInHand.remove(cardSelected)
-			if (roundNumber != roundNumberLimit) {
+			if (gameData.rn != roundNumberLimit) {
 				write("CH/$from", cardsInHand)
 				getCardsAndDisplay()
 			}
@@ -930,25 +912,21 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				else checkIfPartnerAndUpdateServer4(cardSelected, playerTurn)
 			}
 
-			val rtr = if (gameTurn == 1) cardsSuit[cardSelected.toString().toInt()] else gameData.rtr
-			val copyAllCards = mutableListOf<Int>()
-			copyAllCards.addAll(allCards)
-			copyAllCards[fromInt - 1] = (cardSelected.toString().toInt())
-
 			gameData.ct?.set(fromInt-1, cardSelected.toString().toInt())
 
 			writeChild(data = mutableMapOf(
-					"p1" to gameData.p1, "p1s" to gameData.p1s, "pc1s" to gameData.pc1s,
-					"p2" to gameData.p2, "p2s" to gameData.p2s, "pc2s" to gameData.pc2s,
-					"ct" to gameData.ct!!, "rt" to gameTurn + 1, "pt" to nextTurn(fromInt), "rtr" to rtr))
+				"p1"  to gameData.p1,  "p1s" to gameData.p1s, "pc1s" to gameData.pc1s,
+				"p2"  to gameData.p2,  "p2s" to gameData.p2s, "pc2s" to gameData.pc2s,
+				"ct"  to gameData.ct!!, "rt" to gameTurn + 1,   "pt" to nextTurn(fromInt),
+				"rtr" to if (gameTurn == 1) cardsSuit[cardSelected.toString().toInt()] else gameData.rtr))
 
-			write("OL/$from", 1) // Turn them online again - check if really required
+			write("OL/$from", 1) // dummy - Turn them online again - check if really required
 		}
 	}
 	private fun startNextRound() {
 		gameData.sc!![fromInt-1] = tablePoints + gameData.sc!![fromInt-1]
 		writeChild(data = mutableMapOf("ct" to allCardsReset, "sc" to gameData.sc!!,
-				"rt" to 1, "pt" to fromInt, "rn" to gameData.rn+1, "rtr" to ""))
+			"rt" to 1, "pt" to fromInt, "rn" to gameData.rn+1, "rtr" to ""))
 	}
 	private fun checkIfPartnerAndUpdateServer4(cardSelected: Any, playerTurn: Int?) {
 		if (cardSelected.toString().toInt() == pc1 && p1s != 1) {
@@ -998,11 +976,12 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 	private fun gameState6() {
 		if (!gameState6) {
 			gameState6 = true
+			showTableCard(resetCards = true)
 			if (fromInt == 1) logFirebaseEvent(key = "played$nPlayers")
 			findViewById<ConstraintLayout>(R.id.relativeLayoutTableCards).visibility = View.GONE
 			countDownTimer("PlayCard", purpose = "cancel")
 			if (vibrateStatus) vibrationStart()
-			if (soundStatus) SoundManager.getInstance().playShuffleSound() //
+			if (soundStatus) SoundManager.instance?.playShuffleSound() //
 			displayShufflingCards(distribute = false)
 			scoreOpenStatus = true
 			if (!mInterstitialAdMP.isReady && !premiumStatus) loadInterstitialAd()
@@ -1045,6 +1024,15 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 	}
 
 	private fun setupGame4or7() {
+		refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
+		refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
+		refIDMappedImageView = PlayersReference().refIDMappedImageView(from, nPlayers)
+		refIDMappedHighlightView = PlayersReference().refIDMappedHighlightView(from, nPlayers)
+		refIDMappedPartnerIconImageView = PlayersReference().refIDMappedPartnerIconImageView(from, nPlayers)
+		refIDMappedOnlineIconImageView = PlayersReference().refIDMappedOnlineIconImageView(from, nPlayers)
+		refIDMappedTableAnim = PlayersReference().refIDMappedTableAnim(from, nPlayers)
+		refIDMappedTableWinnerAnim = PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
+		refIDMappedTableImageView = PlayersReference().refIDMappedTableImageView(from, nPlayers)
 		findViewById<GifImageView>(R.id.imageViewChat).visibility = View.VISIBLE
 		textViewCenterPoint = if (nPlayers4) findViewById(R.id.textViewCenterPoints_4)
 		else findViewById(R.id.textViewCenterPoints)
@@ -1130,6 +1118,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			findViewById<ImageView>(R.id.onlinep3_4).visibility = View.VISIBLE
 			findViewById<ImageView>(R.id.playerView3_4).visibility = View.VISIBLE
 		}
+		allCards = allCardsReset.toMutableList()
 	}
 
 	private fun updateOnlineStatus(index: Int, newValue: Int) {
@@ -1170,7 +1159,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				if (dataSnapshot != null && dataSnapshot.exists() && error == null) {
 					val data = (dataSnapshot.data as Map<String, String>)["M"].toString()
 					if (data.isNotEmpty() && lastChat != data) { // if chat is not empty
-						if (soundStatus) SoundManager.getInstance().playChatSound()
+						if (soundStatus) SoundManager.instance?.playChatSound()
 						chatArray.add(data)
 						chatAdapter.notifyItemInserted(chatArray.size - 1)
 						chatRecyclerView.scrollToPosition(chatArray.size - 1)
@@ -1202,8 +1191,8 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 					write("OL/$from", 1)
 				} else {
 					activityExists = false
-					toastCenter("Ooppps ! ${playerName(1)} has closed this room")
-					speak("${playerName(1)} has closed this room.", speed = 1.05f)
+					toastCenter("${playerName(1)} has left the game")
+					speak("${playerName(1)} has left the game", speed = 1.05f)
 					findViewById<ImageView>(refIDMappedOnlineIconImageView[0]).setImageResource(R.drawable.status_offline)
 					val view = View(applicationContext)
 					view.tag = "notClicked"
@@ -1254,15 +1243,15 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 		if (scoreList[fromInt] > 0) {
 			if (soundStatus) {
-				SoundManager.getInstance().playDholSound()
-				SoundManager.getInstance().playWonSound()
+				SoundManager.instance?.playDholSound()
+				SoundManager.instance?.playWonSound()
 			}
 			speak("Congratulations! Your team won", speed = 1.1f)
 			createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Win, burst = false, speed = coinSpeed, ratePerSec = coinRate)
 			nGamesWon += 1
 			nGamesWonDaily += 1
 		} else {
-			if (soundStatus) SoundManager.getInstance().playLostSound()
+			if (soundStatus) SoundManager.instance?.playLostSound()
 			speak("Sorry! Your team lost", speed = 1.1f)
 			createKonfetti(applicationContext, konfettiGSA, duration = coinDur, konType = KonType.Lost, burst = false, speed = coinSpeed, ratePerSec = coinRate)
 		}
@@ -1383,46 +1372,18 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 	fun startNextGame(view: View) { // dummy - try to parameterize and write all at once - or read from CreateGameData class
 		findViewById<AppCompatTextView>(R.id.startNextRoundButton).clearAnimation()
 		findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.GONE
-		val cardsShuffled = if (nPlayers7) (0..97).shuffled()  // create shuffled pack of 2 decks with 6 cards removed ( 7Player x 14 = 98 cards only)
-		else (0..51).shuffled()
-		val playerTurn = Random.nextInt(1, nPlayers)
-		if (nPlayers7) {
-			write("CT", mutableMapOf("p1" to cardsIndexLimit, "p2" to cardsIndexLimit, "p3" to cardsIndexLimit, "p4" to cardsIndexLimit, "p5" to cardsIndexLimit, "p6" to cardsIndexLimit, "p7" to cardsIndexLimit))
-			write("CH", mutableMapOf("p1" to cardsShuffled.slice(0..13)
-				.sortedBy { it }, "p2" to cardsShuffled.slice(14..27)
-				.sortedBy { it }, "p3" to cardsShuffled.slice(28..41)
-				.sortedBy { it }, "p4" to cardsShuffled.slice(42..55)
-				.sortedBy { it }, "p5" to cardsShuffled.slice(56..69)
-				.sortedBy { it }, "p6" to cardsShuffled.slice(70..83)
-				.sortedBy { it }, "p7" to cardsShuffled.slice(84..97).sortedBy { it }))
-			if (getString(R.string.testGameData).contains('n')) {
-				write("Bid", mutableMapOf("BV" to 350, "BT" to playerTurn, "BB" to playerTurn, "BS" to mutableMapOf("p1" to 1, "p2" to 1, "p3" to 1, "p4" to 1, "p5" to 1, "p6" to 1, "p7" to 1)))
-			} else {
-				write("Bid", mutableMapOf("BV" to 350, "BT" to 1, "BB" to 1, "BS" to mutableMapOf("p1" to 1, "p2" to 1, "p3" to 1, "p4" to 1, "p5" to 1, "p6" to 1, "p7" to 1)))
-			}
-			write("BU2", mutableMapOf("partner2" to 8, "s2" to 0))
-			write("BU", mutableMapOf("partner1" to "", "b1s" to "", "partner2" to "", "b2s" to ""))
-			write("SC", mutableMapOf("p1" to 0, "p2" to 0, "p3" to 0, "p4" to 0, "p5" to 0, "p6" to 0, "p7" to 0))
 
-		} else if (nPlayers4) {
-			write("CT", mutableMapOf("p1" to cardsIndexLimit, "p2" to cardsIndexLimit, "p3" to cardsIndexLimit, "p4" to cardsIndexLimit))
-			write("CH", mutableMapOf("p1" to cardsShuffled.slice(0..12)
-				.sortedBy { it }, "p2" to cardsShuffled.slice(13..25)
-				.sortedBy { it }, "p3" to cardsShuffled.slice(26..38)
-				.sortedBy { it }, "p4" to cardsShuffled.slice(39..51).sortedBy { it }))
-			if (getString(R.string.testGameData).contains('n')) {
-				write("Bid", mutableMapOf("BV" to 175, "BT" to playerTurn, "BB" to playerTurn, "BS" to mutableMapOf("p1" to 1, "p2" to 1, "p3" to 1, "p4" to 1)))
-			} else {
-				write("Bid", mutableMapOf("BV" to 175, "BT" to 1, "BB" to 1, "BS" to mutableMapOf("p1" to 1, "p2" to 1, "p3" to 1, "p4" to 1)))
+		refRoomDatabase.child("G").setValue(
+			if (nPlayers4) gameData4(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1)
+			else gameData7(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1)
+		)
+			.addOnFailureListener {
+				toastCenter("Failed to start new game. Please Try again")
+				speak("Failed to start new game. Please try again")
+				findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.VISIBLE
+			}.addOnSuccessListener {
+				findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.GONE
 			}
-			write("BU", mutableMapOf("partner1" to "", "b1s" to "", "partner2" to "", "b2s" to ""))
-			write("SC", mutableMapOf("p1" to 0, "p2" to 0, "p3" to 0, "p4" to 0))
-		}
-		write("Tr", "")
-		write("R", 1)
-		write("RO", mutableMapOf("T" to 1, "P" to 0, "R" to ""))
-		write("BU1", mutableMapOf("partner1" to 8, "s1" to 0))
-		write("GS", 1)
 	}
 
 	private fun tablePointsCalculator() {
@@ -1438,12 +1399,12 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 	}
 
-	private fun updatePlayerScoreInfo(pointsList: List<Int>) {
+	private fun updatePlayerScoreInfo() {
 		if (gameData.gs == 5) {
-			val t1 = if (gameData.p1s != 0) pointsList[gameData.p1 - 1] else 0
-			val t2 = if (nPlayers7 && p2s != 0 && gameData.p1 != gameData.p2) pointsList[gameData.p2 - 1] else 0 // if not same partners then only add other points
+			val t1 = if (gameData.p1s != 0) gameData.sc!![gameData.p1 - 1] else 0
+			val t2 = if (nPlayers7 && p2s != 0 && gameData.p1 != gameData.p2) gameData.sc!![gameData.p2 - 1] else 0 // if not same partners then only add other points
 
-			if (gameData.bb!! > 0) bidTeamScore = pointsList[gameData.bb!! - 1] + t1 + t2
+			if (gameData.bb!! > 0) bidTeamScore = gameData.sc!![gameData.bb!! - 1] + t1 + t2
 
 			for (i in 0 until nPlayers) {
 				val j = i + 1
@@ -1452,15 +1413,15 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 					findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$bidTeamScore /${gameData.bv!!}"
 				} else {
 					findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j)
-					findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${pointsList.sum() - bidTeamScore} /${scoreLimit - gameData.bv!!}" //                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
+					findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${gameData.sc!!.sum() - bidTeamScore} /${scoreLimit - gameData.bv!!}" //                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
 				}
 			}
-			val tt1 = if (gameData.p1s == 1) pointsList[gameData.p1 - 1] else 0
-			val tt2 = if (nPlayers7 && gameData.p2s == 1 && gameData.p1 != gameData.p2) pointsList[gameData.p2 - 1] else 0 // if not same partners then only add other player points
+			val tt1 = if (gameData.p1s == 1) gameData.sc!![gameData.p1 - 1] else 0
+			val tt2 = if (nPlayers7 && gameData.p2s == 1 && gameData.p1 != gameData.p2) gameData.sc!![gameData.p2 - 1] else 0 // if not same partners then only add other player points
 
-			val bidTeamScoreFinal = if (gameData.bb!! > 0) pointsList[gameData.bb!! - 1] + tt1 + tt2 else tt1 + tt2 // total score of bid team
-			if (nPlayers4) decideGameWinnerTeam4(bidTeamScoreFinal, totalGamePoints = pointsList.sum())
-			else decideGameWinnerTeam7(bidTeamScoreFinal, totalGamePoints = pointsList.sum())
+			val bidTeamScoreFinal = if (gameData.bb!! > 0) gameData.sc!![gameData.bb!! - 1] + tt1 + tt2 else tt1 + tt2 // total score of bid team
+			if (nPlayers4) decideGameWinnerTeam4(bidTeamScoreFinal, totalGamePoints = gameData.sc!!.sum())
+			else decideGameWinnerTeam7(bidTeamScoreFinal, totalGamePoints = gameData.sc!!.sum())
 		}
 	}
 
@@ -1607,27 +1568,21 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 	}
 
-	private fun showTableCard(index: Int, card: Int, newCard: Boolean = false) {
-		if (card <= (cardsIndexLimit - 2)) {
-			if (soundStatus && newCard) SoundManager.getInstance().playCardPlayedSound()
-			findViewById<ImageView>(refIDMappedTableImageView[index]).visibility = View.VISIBLE
-			if (newCard) findViewById<ImageView>(refIDMappedTableImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[index]))
-			findViewById<ImageView>(refIDMappedTableImageView[index]).setImageResource(cardsDrawable[card])
-		} else {
-			findViewById<ImageView>(refIDMappedTableImageView[index]).visibility = View.INVISIBLE
-			findViewById<ImageView>(refIDMappedTableImageView[index]).clearAnimation()
-		}
-		allCards[index] = card
-	}
-
-	private fun endGameRound() {
-		ptAll[fromInt-1] = tablePoints + ptAll[fromInt - 1]
-		refRoomDatabase.child("G")
-			.setValue(mutableMapOf("p1" to 8, "bs1" to 0, "p2" to 8, "bs2" to 0, "CT" to allCardsReset, "SC" to ptAll, "rt" to 1, "rPT" to 0, "rn" to 0, "Tr" to "", "rtr" to ""))
-			.addOnSuccessListener {
-			}.addOnFailureListener {
-				logFirebaseEvent(key = "Failed-Next-Turn")
+	private fun showTableCard(resetCards:Boolean = false) {
+		for (index in 0 until nPlayers) {
+			val card = gameData.ct!![index]
+			val newCard = card != allCards[index]
+			if (card <= (cardsIndexLimit - 2) && !resetCards) {
+				if (soundStatus && newCard) SoundManager.instance?.playCardPlayedSound()
+				findViewById<ImageView>(refIDMappedTableImageView[index]).visibility = View.VISIBLE
+				if (newCard) findViewById<ImageView>(refIDMappedTableImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[index]))
+				findViewById<ImageView>(refIDMappedTableImageView[index]).setImageResource(cardsDrawable[card])
+			} else {
+				findViewById<ImageView>(refIDMappedTableImageView[index]).visibility = View.INVISIBLE
+				findViewById<ImageView>(refIDMappedTableImageView[index]).clearAnimation()
 			}
+			allCards[index] = card
+		}
 	}
 
 	private fun declareRoundWinner() {
@@ -1642,23 +1597,36 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 		roundWinner = roundCards.toIntArray().indexOf(winnerCard) + 1
 		animatePlayer(roundWinner)
-		findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_big_fast))
+		findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1])
+			.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_big_fast))
 		Handler(Looper.getMainLooper()).postDelayed({ animateWinner() }, 550)
 		Handler(Looper.getMainLooper()).postDelayed({ // start after 1.5 seconds
-			if (roundNumber < roundNumberLimit) {
+			if (gameData.rn < roundNumberLimit) {
 				if (roundWinner == fromInt) { // only winner can start next round
 					startNextRound()
 				} else {
 					centralText("Waiting for ${playerName(roundWinner)} to play next card", 1500)
 				}
-			} else if (roundNumber == roundNumberLimit) {
+			} else if (gameData.rn == roundNumberLimit) {
 				clearAllAnimation()
 				if (roundWinner == fromInt) { // winner will change game state to 6
-					//                        write("GS",6)
 					endGameRound() // update points of last round to server by winner
 				}
 			}
 		}, 1500)
+	}
+	private fun endGameRound() {
+		gameData.sc!![fromInt-1] = tablePoints + gameData.sc!![fromInt - 1]
+		refRoomDatabase.child("G")
+			.setValue(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset,
+				"sc" to gameData.sc!!, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to ""))
+			.addOnSuccessListener {
+			}.addOnFailureListener {
+				logFirebaseEvent(key = "Failed-Next-Turn")
+				refRoomDatabase.child("G")
+					.setValue(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset,
+						"sc" to gameData.sc!!, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to ""))
+			}
 	}
 
 	private fun compareCardsForWinner(currentCard: Int, winnerCard: Int): Int {
@@ -1741,8 +1709,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 	}
 
 	private fun animateWinner() {
-		if (soundStatus) SoundManager.getInstance()
-			.playCardCollectSound() //        soundCollectCards.start()
+		if (soundStatus) SoundManager.instance?.playCardCollectSound() //        soundCollectCards.start()
 		if (nPlayers7) {
 			imageViewWinnerCenter.visibility = View.VISIBLE
 			if (roundWinner > 0) imageViewWinnerCenter.startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
@@ -1881,7 +1848,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 	private fun shufflingWindow(time: Long = 4900, fadeOffTime: Long = 500, gameStateChange: Boolean = false) {
 		shuffleOver = false
 		if (soundStatus) Handler(Looper.getMainLooper()).postDelayed({
-			SoundManager.getInstance().playShuffleSound()
+			SoundManager.instance?.playShuffleSound()
 		}, 400) //delayed sound play of shuffling
 		displayShufflingCards() //show suits cards and animate
 		centralText(getString(R.string.shufflingcards), 5200)
@@ -1954,7 +1921,6 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				override fun onAnimationEnd(animation: Animation?) {
 					imageViewWinnerCenter_4.startAnimation(anim)
 				}
-
 				override fun onAnimationStart(animation: Animation?) {}
 			})
 			imageViewWinnerCenter_4.startAnimation(anim)

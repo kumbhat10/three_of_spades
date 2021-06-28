@@ -221,7 +221,6 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		setContentView(R.layout.activity_game_screen) //        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
 		//        changeBackground()
-		SoundManager.initialize(applicationContext)
 		roomID = intent.getStringExtra("roomID")!!
 			.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
 		from = intent.getStringExtra("from")!!
@@ -258,16 +257,13 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 			countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 20) {
 				@SuppressLint("SetTextI18n")
 				override fun onTick(millisUntilFinished: Long) {
-
 					findViewById<ProgressBar>(R.id.progressbarTimer).progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
 					findViewById<TextView>(R.id.textViewTimer).text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
 						.toString() + "s"
 				}
-
 				override fun onFinish() {
 					autoPlayCard(cardsInHand, forcePlay = false)
-					if (soundStatus) SoundManager.getInstance()
-						.playTimerSound() //soundTimerFinish.start()
+					if (soundStatus) SoundManager.instance?.playTimerSound()
 					if (vibrateStatus) vibrationStart()
 					findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
 					findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
@@ -285,11 +281,9 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 					textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt()
 						.toString() + "s"
 				}
-
 				override fun onFinish() {
 					if (vibrateStatus) vibrationStart()
-					if (soundStatus) SoundManager.getInstance()
-						.playTimerSound() //soundTimerFinish.start()
+					if (soundStatus) SoundManager.instance?.playTimerSound()
 					bidStatus[playerTurn.value!! - 1] = 0
 					bidingStarted = true
 					playerTurn.value = nextBidderTurn(fromInt)
@@ -322,8 +316,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 					}
 				}
 				if (gameState.value!! == 3) {
-					if (soundStatus) SoundManager.getInstance()
-						.playSuccessSound() // soundSuccess.start()
+					if (soundStatus) SoundManager.instance?.playSuccessSound()
 					roundStarted = false
 					bidingStarted = false
 					playerTurn.removeObserver(bidTurnListener)
@@ -331,15 +324,14 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 					startTrumpSelection()
 				}
 				if (gameState.value!! == 4) {
-					if (soundStatus) SoundManager.getInstance()
-						.playSuccessSound() // soundSuccess.start()
+					if (soundStatus) SoundManager.instance?.playSuccessSound() // soundSuccess.start()
 					getTrumpStartPartnerSelection()
 				}
 				if (gameState.value!! == 5) {
 					newGameStatus = true
 					if (!roundStarted) {
 						finishPassOverlay()
-						if (soundStatus) SoundManager.getInstance().playSuccessSound()
+						if (soundStatus) SoundManager.instance?.playSuccessSound()
 						updatePlayerScoreInfo(listOf(pt1, pt2, pt3, pt4))
 						displaySelfCards(animations = false)
 						Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 3000)
@@ -372,7 +364,8 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		ct1.value = cardsIndexLimit
 		ct1.observe(this, {
 			tablePointsCalculator()
-			if (ct1.value!! <= (cardsIndexLimit - 2)) {// soundCardPlayed.start()
+			if (ct1.value!! <= (cardsIndexLimit - 2)) {
+				if (soundStatus) SoundManager.instance?.playCardPlayedSound()
 				findViewById<ImageView>(refIDMappedTableImageView[0]).visibility = View.VISIBLE
 				findViewById<ImageView>(refIDMappedTableImageView[0]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[0]))
 				findViewById<ImageView>(refIDMappedTableImageView[0]).setImageResource(cardsDrawable[ct1.value!!])
@@ -386,7 +379,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		ct2.observe(this, {
 			tablePointsCalculator()
 			if (ct2.value!! <= (cardsIndexLimit - 2)) {
-				if (soundStatus) SoundManager.getInstance().playCardPlayedSound()
+				if (soundStatus) SoundManager.instance?.playCardPlayedSound()
 				findViewById<ImageView>(refIDMappedTableImageView[1]).visibility = View.VISIBLE
 				findViewById<ImageView>(refIDMappedTableImageView[1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[1]))
 				findViewById<ImageView>(refIDMappedTableImageView[1]).setImageResource(cardsDrawable[ct2.value!!])
@@ -400,7 +393,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		ct3.observe(this, {
 			tablePointsCalculator()
 			if (ct3.value!! <= (cardsIndexLimit - 2)) {
-				if (soundStatus) SoundManager.getInstance().playCardPlayedSound()
+				if (soundStatus) SoundManager.instance?.playCardPlayedSound()
 				findViewById<ImageView>(refIDMappedTableImageView[2]).visibility = View.VISIBLE
 				findViewById<ImageView>(refIDMappedTableImageView[2]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[2]))
 				findViewById<ImageView>(refIDMappedTableImageView[2]).setImageResource(cardsDrawable[ct3.value!!])
@@ -414,7 +407,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		ct4.observe(this, {
 			tablePointsCalculator()
 			if (ct4.value!! <= (cardsIndexLimit - 2)) {
-				if (soundStatus) SoundManager.getInstance().playCardPlayedSound()
+				if (soundStatus) SoundManager.instance?.playCardPlayedSound()
 				findViewById<ImageView>(refIDMappedTableImageView[3]).visibility = View.VISIBLE
 				findViewById<ImageView>(refIDMappedTableImageView[3]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[3]))
 				findViewById<ImageView>(refIDMappedTableImageView[3]).setImageResource(cardsDrawable[ct4.value!!])
@@ -509,7 +502,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		relativeLayoutTableCards.visibility = View.GONE
 		countDownTimer("PlayCard", purpose = "cancel")
 		if (vibrateStatus) vibrationStart()
-		if (soundStatus) SoundManager.getInstance().playShuffleSound() //soundShuffle.start()
+		if (soundStatus) SoundManager.instance?.playShuffleSound() //soundShuffle.start()
 		displayShufflingCards(distribute = false)
 		scoreOpenStatus = true
 		if (newGameStatus) { // dummy - newGameStatus not needed as score list has game index which is unique
@@ -771,18 +764,18 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 
 			if (fromInt == bidder && buFound1 != 1) {
 				if (soundStatus) {
-					SoundManager.getInstance().playWonSound()
-					SoundManager.getInstance().playDholSound()
+					SoundManager.instance?.playWonSound()
+					SoundManager.instance?.playDholSound()
 				}
 				speak("Well done! You won")
 			} else if ((fromInt == bidder || from == "p$buPlayer1") && buFound1 == 1) {
 				if (soundStatus) {
-					SoundManager.getInstance().playDholSound()
-					SoundManager.getInstance().playWonSound()
+					SoundManager.instance?.playDholSound()
+					SoundManager.instance?.playWonSound()
 				}
 				speak("Well done! Your team won")
 			} else {
-				if (soundStatus) SoundManager.getInstance().playLostSound() //soundLost.start()
+				if (soundStatus) SoundManager.instance?.playLostSound() //soundLost.start()
 				speak("Sorry Your team lost")
 			}
 
@@ -802,12 +795,12 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 			centralText("Game Over: Defender team Won \n         Bidder team Lost")
 
 			if (fromInt == bidder || fromInt == buPlayer1) {
-				if (soundStatus) SoundManager.getInstance().playLostSound()
+				if (soundStatus) SoundManager.instance?.playLostSound()
 				speak("Sorry Your team lost")
 			} else {
 				if (soundStatus) {
-					SoundManager.getInstance().playDholSound()
-					SoundManager.getInstance().playWonSound()
+					SoundManager.instance?.playDholSound()
+					SoundManager.instance?.playWonSound()
 				}
 				speak("Well done! Your team won")
 			}
@@ -927,7 +920,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 				countDownTimer("PlayCard", purpose = "cancel")
 				startNextTurn(cardSelected, forcePlay = false) // allow throw if first chance, or same suit as first turn or doesn't have same suit card
 			} else {
-				if (soundStatus) SoundManager.getInstance().playErrorSound() // soundError.start()
+				if (soundStatus) SoundManager.instance?.playErrorSound() // soundError.start()
 				if (vibrateStatus) vibrationStart()
 //				toastCenter("${playerName(playerTurn.value!!)}, Please play ${getSuitName(trumpStart)} card")
 				speak("Please play ${getSuitName(trumpStart)} card", speed = 1.1f)
@@ -980,7 +973,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 			buFound1 = 1
 			findViewById<TickerView>(R.id.buddyText1).text = playerName(buPlayer1)
 			displayPartnerIcon()
-			if (soundStatus) SoundManager.getInstance().playSuccessSound() //soundSuccess.start()
+			if (soundStatus) SoundManager.instance?.playSuccessSound() //soundSuccess.start()
 			if (vibrateStatus) vibrationStart()
 			speak("${playerName(playerTurnInt)} is partner now")
 		}
@@ -1125,8 +1118,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 	}
 
 	private fun animateWinner() {
-		if (soundStatus) SoundManager.getInstance()
-			.playCardCollectSound() //soundCollectCards.start()
+		if (soundStatus) SoundManager.instance?.playCardCollectSound()
 		findViewById<ImageView>(R.id.imageViewWinnerCenter_4).visibility = View.VISIBLE
 		findViewById<ImageView>(R.id.imageViewWinnerCenter_4).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
 		Handler(Looper.getMainLooper()).postDelayed({
@@ -1186,7 +1178,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 
 	private fun partnerSelectClick4(cardSelected: Int) { // assumption is cards in Hand already updated
 		if (!partnerCardSelected && bidder == fromInt && cardsInHand.contains(cardSelected)) {
-			if (soundStatus) SoundManager.getInstance().playErrorSound() //soundError.start()
+			if (soundStatus) SoundManager.instance?.playErrorSound()
 			if (vibrateStatus) vibrationStart()
 			speak("Choose any other card", speed = 1.05f)
 			toastCenter("You already have same card. Choose other card")
@@ -1262,7 +1254,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 	fun onTrumpSelectionClick(view: View) {
 		if (!trumpSelected) {
 			trumpSelected = true
-			if (soundStatus) SoundManager.getInstance().playUpdateSound() //soundUpdate.start()
+			if (soundStatus) SoundManager.instance?.playUpdateSound() //soundUpdate.start()
 			when (view.tag) {
 				"h" -> {
 					trump = "H"
@@ -1306,7 +1298,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 			if (bidSpeak && bidingStarted && soundStatus) {
 				speak("${playerName(bidder)} bid $bidValue", speed = 1.3f)
 				GameScreenAutoPlay().moveView(bidCoin, findViewById(refIDMappedImageView[bidder - 1]))
-			} //            else if (soundStatus) SoundManager.getInstance().playUpdateSound()//soundUpdate.start()
+			} //            else if (soundStatus) SoundManager.instance?.playUpdateSound()//soundUpdate.start()
 			textViewBidValue.text = "$bidValue" //.toString() //show current bid value $emojiScore
 			findViewById<TextView>(R.id.textViewBider).text = getString(R.string.Bider) + playerName(bidder) //            textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.font_yellow)
 			//            findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
@@ -1380,7 +1372,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		countDownTimer("Bidding", purpose = "cancel")
 		if (!bidDone) {
 			bidDone = true
-			if (soundStatus) SoundManager.getInstance().playUpdateSound() // soundUpdate.start()
+			if (soundStatus) SoundManager.instance?.playUpdateSound() // soundUpdate.start()
 			when (view.tag) {
 				"pass" -> {
 					bidStatus[playerTurn.value!! - 1] = 0
@@ -1537,7 +1529,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 	private fun shufflingWindow(time: Long = 4900, fadeOffTime: Long = 700, gameStateChange: Boolean = false) {
 		shuffleOver = false
 		if (soundStatus) Handler(Looper.getMainLooper()).postDelayed({
-			SoundManager.getInstance().playShuffleSound() // soundShuffle.start()
+			SoundManager.instance?.playShuffleSound() // soundShuffle.start()
 		}, 400) //delayed sound play of shuffling
 		displayShufflingCards() //show suits cards and animate
 		centralText(getString(R.string.shufflingcards), 5200)
