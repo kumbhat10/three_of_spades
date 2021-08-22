@@ -50,7 +50,7 @@ class SplashScreen : AppCompatActivity() {
 	else 4200L
 	private val timerLoading = timer - 500L
 	private val requestCodeAppUpdate = 800
-
+	private lateinit var timeOverSound: MediaPlayer
 	override fun onCreate(savedInstanceState: Bundle?) {
 		setTheme(R.style.Theme_App)
 		super.onCreate(savedInstanceState)
@@ -66,7 +66,8 @@ class SplashScreen : AppCompatActivity() {
 				}
 		icon3.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_once))
 		updateUI()
-		MediaPlayer.create(applicationContext, R.raw.card_shuffle).apply { setVolume(0.13F, 0.13F) }.start()
+		val sound = MediaPlayer.create(applicationContext, R.raw.card_shuffle).apply { setVolume(0.13F, 0.13F) }
+		sound.start()
 		mobileAds()
 		Executors.newSingleThreadExecutor().execute {
 			checkAppUpdate()
@@ -80,11 +81,13 @@ class SplashScreen : AppCompatActivity() {
 	@SuppressLint("SetTextI18n")
 	private fun updateUI() {
 		val loadingAnim = ObjectAnimator.ofInt(loading, "progress", 0, 10000)
+		timeOverSound = MediaPlayer.create(applicationContext, R.raw.timer_over).apply { setVolume(1F, 1F) }
 		loadingAnim.duration = timerLoading //		loadingAnim.setInterpolator { object: BounceInterpolator() }
 		loadingAnim.addListener(object : Animator.AnimatorListener {
 			override fun onAnimationStart(animation: Animator?) {}
 			override fun onAnimationEnd(animation: Animator?) {
 				loadingSplash.text = "Lets Play"
+				timeOverSound.start()
 			}
 			override fun onAnimationCancel(animation: Animator?) {}
 			override fun onAnimationRepeat(animation: Animator?) {}

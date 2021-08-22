@@ -11,6 +11,14 @@ if (!project.hasProperty("disable-performance-plugin")) {
 }
 
 android {
+    signingConfigs {
+        kkt_release {
+            storeFile file('C:\\Users\\kumbh\\OneDrive\\Documents\\kaalikitiggi.jks')
+            storePassword 'Kanakrajj10'
+            keyAlias 'key1'
+            keyPassword 'Kanakrajj10'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
     defaultConfig {
@@ -38,6 +46,7 @@ android {
             }
             android.buildTypes.release.ndk.debugSymbolLevel = 'FULL'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.kkt_release
         }
     }
     compileOptions {
@@ -66,7 +75,6 @@ dependencies {
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
     implementation 'cat.ereza:customactivityoncrash:2.3.0'
     implementation 'ch.halcyon:squareprogressbar:1.6.4'
-//    implementation group: 'ch.halcyon', name: 'squareprogressbar', version: '1.6.4'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.21'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'  // keep same size across different screen resolutions
     implementation 'com.intuit.ssp:ssp-android:1.0.6' // keep same text size across different screen resolutions
@@ -80,20 +88,20 @@ dependencies {
 
 //    implementation 'com.twitter.sdk.android:twitter:3.3.0'
 //    implementation 'com.facebook.android:facebook-login:7.1.0'
-    implementation 'com.facebook.android:facebook-android-sdk:8.2.0'
+    implementation 'com.facebook.android:facebook-android-sdk:11.1.0'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Import the BoM for the Firebase platform
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
-    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.1'
-    implementation 'com.google.firebase:firebase-database-ktx:20.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.0.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.3'
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.1'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.1'
 
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:20.1.0'
-    implementation 'com.google.firebase:firebase-analytics-ktx:19.0.0'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:20.1.1'
+    implementation 'com.google.firebase:firebase-analytics-ktx:19.0.1'
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.0.0'
-    implementation 'com.google.firebase:firebase-perf-ktx:20.0.1'
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.1.0'
+    implementation 'com.google.firebase:firebase-perf-ktx:20.0.2'
 
 //    implementation 'com.facebook.android:audience-network-sdk:6.4.0'
 //    implementation 'com.mopub.mediation:facebookaudiencenetwork:6.4.0.1'
@@ -104,27 +112,27 @@ dependencies {
     implementation('com.mopub:mopub-sdk-fullscreen:5.17.0@aar') {
         transitive = true
     }
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.guava:guava:29.0-android' // don't user 29.0-jre as it clashes with firebase SDK and not supported for android 6
     implementation 'com.google.android.play:core:1.10.0'
     implementation 'com.google.android.play:core-ktx:1.8.1'
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.google.android.gms:play-services-ads:20.2.0'
     implementation 'com.google.android.gms:play-services-base:17.6.0'
     implementation 'com.google.android.gms:play-services-games:21.0.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.1'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
-    implementation 'com.google.android.gms:play-services-tagmanager:17.0.0'
+    implementation 'com.google.android.gms:play-services-tagmanager:17.0.1'
 
 
     implementation 'androidx.browser:browser:1.3.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'com.android.billingclient:billing:4.0.0'
     implementation 'com.android.billingclient:billing-ktx:4.0.0'
 }

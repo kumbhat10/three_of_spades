@@ -340,8 +340,8 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			}
 		}
 		//endregion
-		trump.observe(this, {
-			when(it){
+		trump.observe(this) {
+			when (it) {
 				"H" -> {
 					findViewById<ImageView>(R.id.trumpImage).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_hearts))
 					findViewById<TickerView>(R.id.trumpText).text = "Heart"
@@ -358,52 +358,52 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 					findViewById<ImageView>(R.id.trumpImage).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_clubs))
 					findViewById<TickerView>(R.id.trumpText).text = "Club"
 				}
-				else->{
+				else -> {
 					findViewById<ImageView>(R.id.trumpImage).setImageResource(R.drawable.trump)
 					findViewById<TickerView>(R.id.trumpText).text = getString(R.string.Trump)
 				}
 			}
-		})
+		}
 		currentBidder.value = 0
-		currentBidder.observe(this, {
-			if(it==0) textViewBider.text = getString(R.string.Bider)
+		currentBidder.observe(this) {
+			if (it == 0) textViewBider.text = getString(R.string.Bider)
 			else textViewBider.text = "Bid: " + playerName(currentBidder.value!!)
-		})
+		}
 		bidValue.value = 0
-		bidValue.observe(this, {
-			textViewBidValue.text = if(it == 0) getString(R.string.bidValue1) else it.toString()
-		})
+		bidValue.observe(this) {
+			textViewBidValue.text = if (it == 0) getString(R.string.bidValue1) else it.toString()
+		}
 		partner1Card.value = cardsIndexLimit
-		partner1Card.observe(this,{
-			if(it==cardsIndexLimit){
+		partner1Card.observe(this) {
+			if (it == cardsIndexLimit) {
 				buddyImage1.setImageResource(R.drawable.ic_back_side_blue)
-			}else{
+			} else {
 				buddyImage1.setImageResource(cardsDrawablePartner[it])
 			}
-		})
+		}
 		partner1CardText.value = 13
-		partner1CardText.observe(this, {
+		partner1CardText.observe(this) {
 			when (it) {
 				12 -> buddyText1.text = getString(R.string.bothPartner)
 				11 -> buddyText1.text = getString(R.string.onlyPartner)
 				10 -> buddyText1.text = getString(R.string.anyPartner)
 				in 1..nPlayers -> buddyText1.text = playerName(it)
-				else -> buddyText1.text = if(nPlayers4) getString(R.string.partner) else getString(R.string.partner1)
+				else -> buddyText1.text = if (nPlayers4) getString(R.string.partner) else getString(R.string.partner1)
 			}
-		})
+		}
 
 		if(nPlayers7){
 			partner2Card.value = cardsIndexLimit
-			partner2Card.observe(this,{
-				if(it==cardsIndexLimit){
+			partner2Card.observe(this) {
+				if (it == cardsIndexLimit) {
 					buddyImage2.setImageResource(R.drawable.ic_back_side_blue)
-				}else{
+				} else {
 					buddyImage2.setImageResource(cardsDrawablePartner[it])
 				}
-			})
+			}
 
 			partner2CardText.value = 13
-			partner2CardText.observe(this, {
+			partner2CardText.observe(this) {
 				when (it) {
 					12 -> buddyText2.text = getString(R.string.bothPartner)
 					11 -> buddyText2.text = getString(R.string.onlyPartner)
@@ -411,7 +411,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 					in 1..nPlayers -> buddyText2.text = playerName(it)
 					else -> buddyText2.text = getString(R.string.partner1)
 				}
-			})
+			}
 		}
 
 		//region Game Data Listener
