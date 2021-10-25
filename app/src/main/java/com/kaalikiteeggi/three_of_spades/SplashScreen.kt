@@ -18,6 +18,9 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -51,6 +54,7 @@ class SplashScreen : AppCompatActivity() {
 	private val timerLoading = timer - 500L
 	private val requestCodeAppUpdate = 800
 	private lateinit var timeOverSound: MediaPlayer
+	private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 	override fun onCreate(savedInstanceState: Bundle?) {
 		setTheme(R.style.Theme_App)
 		super.onCreate(savedInstanceState)
@@ -69,6 +73,17 @@ class SplashScreen : AppCompatActivity() {
 		val sound = MediaPlayer.create(applicationContext, R.raw.card_shuffle).apply { setVolume(0.13F, 0.13F) }
 		sound.start()
 		mobileAds()
+		resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result ->
+			if (result.resultCode != Activity.RESULT_OK) {
+				checkAppUpdate()
+				toastCenter("App update failed \n Please try again or Restart app", duration = Snackbar.LENGTH_INDEFINITE)
+			} else if (result.resultCode == Activity.RESULT_OK) {
+				toastCenter("App was updated successfully", duration = Snackbar.LENGTH_SHORT) // dummy
+				isAppLatest = true
+				if (isTimerOver && !isNextActivityStarted) nextActivity()
+			}
+		}
+
 		Executors.newSingleThreadExecutor().execute {
 			checkAppUpdate()
 		}
@@ -136,11 +151,11 @@ class SplashScreen : AppCompatActivity() {
 		//		}.initialize()
 		MoPub.getPersonalInformationManager()?.grantConsent()
 		MoPub.initializeSdk(applicationContext, configBuilder.build()) {
-			val interstitialAdID = if (BuildConfig.DEBUG) getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
-			else getString(R.string.interstitialReal_mp) // test interstitial ad
+//			val interstitialAdID = if (BuildConfig.DEBUG) getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
+//			else getString(R.string.interstitialReal_mp) // test interstitial ad
 //			val mInterstitial = MoPubInterstitial(this, interstitialAdID)
 //			mInterstitial.load()
-			val rewardedAdId = if (BuildConfig.DEBUG) getString(R.string.rewardedTest_mp) else getString(R.string.rewardedReal_mp)
+//			val rewardedAdId = if (BuildConfig.DEBUG) getString(R.string.rewardedTest_mp) else getString(R.string.rewardedReal_mp)
 //			MoPubRewardedAds.loadRewardedAd(rewardedAdId)
 		}
 	}
@@ -206,4 +221,5 @@ class SplashScreen : AppCompatActivity() {
 		}
 		super.onActivityResult(requestCode, resultCode, data)
 	}
+
 }

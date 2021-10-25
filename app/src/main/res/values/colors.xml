@@ -53,9 +53,21 @@
 
     <color name="borderblue">#0B70C8</color>
 
-    <color name = "borderNblueDark0b">#2B70E8</color>
-    <color name = "borderNblueDark1b">#3A65AE</color>
-    <color name = "borderNblueDark2b">#1E3357</color>
+    <color name = "blue0">#2B70E8</color>
+    <color name = "blue1">#3A65AE</color>
+    <color name = "blue2">#1E3357</color>
+
+    <color name="table">@color/tablePurple</color>
+    <color name="tableBlue">#04173A</color>
+    <color name="tableRed">#FF0000</color>
+    <color name="tablePink">#610424</color>
+    <color name="tableGreen">#044207</color>
+    <color name="tableYellow">#A69604</color>
+    <color name="tablePurple">#150532</color>
+    <color name="tableBrown">#420202</color>
+    <color name="tableX1">#056A62</color>
+    <color name="tableOrange">#CA4700</color>
+
 
     <color name = "shine0black">#BFBFBF</color>
     <color name = "shine2black">#000000</color>
@@ -69,8 +81,12 @@
     <color name = "Red">#FF0000</color>
 
     <color name = "borderblueDark0o">#FF7D36</color>
-    <color name = "borderBlueDark1o">#D55C1C</color>
+    <color name = "borderblueDark1o">#D55C1C</color>
     <color name = "borderblueDark2o">#BD571F</color>
+
+    <color name="red0">#F61201</color>
+    <color name="red1">#AE180D</color>
+    <color name="red2">#93362F</color>
 
     <color name="progressBarPlayer4">#00FF0A</color>
     <color name="colorongreen">#1B1B1B</color>

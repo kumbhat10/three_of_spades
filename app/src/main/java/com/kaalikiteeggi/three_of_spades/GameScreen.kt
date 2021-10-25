@@ -524,12 +524,10 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 	}
 	private fun startBidding() {
-		//			if (playerTurn != gameData.pt) {
 		val bidSpeak = gameData.bvo!! < gameData.bv!!
 		val prevPlayerTurn = playerTurn
 		playerTurn = gameData.pt!!
 		nextValidBidder = nextBidderTurn(gameData.pt!!, gameData.bs!!)
-
 		if (!bidingStarted) {
 			textViewBidValue.text = gameData.bv!!.toString()
 			bidNowImage.visibility = View.VISIBLE
@@ -539,12 +537,10 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		} else {
 			centralText("Waiting for ${playerName(gameData.pt!!)} to bid", 0) //display message always
 		}
-
 		if (bidSpeak && bidingStarted && soundStatus) {
 			speak("${playerName(gameData.bb!!)} bid ${gameData.bv!!}", speed = 1f)
 			moveView(bidCoin, findViewById(refIDMappedImageView[gameData.bb!! - 1]))
 		} else if (!bidSpeak && bidingStarted && soundStatus && prevPlayerTurn != gameData.pt!!) speak("${playerName(prevPlayerTurn)} passed", speed = 1f) //                        else if (soundStatus) SoundManager.instance?.playUpdateSound() //
-
 		findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE //biding frame invisible
 		resetBackgroundAnimationBidding() //set pass label on photo if passed
 		if (gameData.bb!! > 0) {
@@ -553,8 +549,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		}
 		if (gameData.pt!! > 0) {
 			val tView: ImageView = findViewById(refIDMappedImageView[gameData.pt!! - 1])
-			bidNowImage.animate().x(tView.x).y(tView.y).duration = 450
-		}
+			bidNowImage.animate().x(tView.x).y(tView.y).duration = 450		}
 		animatePlayer(gameData.pt!!)  // animate current player
 		if (gameData.bs?.get(fromInt-1) == 1 && gameData.pt!! > 0) {  // highlight current player
 			findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[gameData.pt!! - 1]).visibility = View.VISIBLE
