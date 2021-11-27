@@ -10,34 +10,33 @@
                 android:startColor="@color/Black"
                 android:type="radial" />
             <corners
-                android:radius="@dimen/radiusInner1x"/>
+                android:radius="@dimen/radiusInner1"/>
         </shape>
     </item>
 
     <item
-        android:bottom="@dimen/tableInner1x"
-        android:left="@dimen/tableInner1x"
-        android:right="@dimen/tableInner1x"
-        android:top="@dimen/tableInner1x">
+        android:bottom="@dimen/tableInner1"
+        android:left="@dimen/tableInner1"
+        android:right="@dimen/tableInner1"
+        android:top="@dimen/tableInner1">
         <shape android:shape="rectangle"
             android:thickness="@dimen/_36sdp">
             <solid
                 android:color="@color/Black"/>
             <corners
-                android:radius="@dimen/radiusInner2x"/>
+                android:radius="@dimen/radiusInner2"/>
         </shape>
     </item>
 
     <item
-        android:bottom="@dimen/tableInner2x"
-        android:left="@dimen/tableInner2x"
-        android:right="@dimen/tableInner2x"
-        android:top="@dimen/tableInner2x">
+        android:bottom="@dimen/tableInner2"
+        android:left="@dimen/tableInner2"
+        android:right="@dimen/tableInner2"
+        android:top="@dimen/tableInner2">
         <shape android:shape="rectangle">
-            <solid
-                android:color="@color/tableRed"/>
+            <solid android:color="@color/tableX1"/>
             <corners
-                android:radius="@dimen/radiusInner3x"/>
+                android:radius="@dimen/radiusInner3"/>
         </shape>
     </item>
 

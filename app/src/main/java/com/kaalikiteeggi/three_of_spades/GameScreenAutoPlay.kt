@@ -220,7 +220,6 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		setContentView(R.layout.activity_game_screen) //        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
-		//        changeBackground()
 		roomID = intent.getStringExtra("roomID")!!
 			.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
 		from = intent.getStringExtra("from")!!
@@ -428,17 +427,6 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		startNextGame(View(applicationContext))
 	}
 
-	private fun changeBackground() {
-		when (Random.nextInt(0, 6)) {
-			0 -> gameBkgd.setImageResource(R.drawable.poker)
-			1 -> gameBkgd.setImageResource(R.drawable.pokerblue)
-			2 -> gameBkgd.setImageResource(R.drawable.pokercyan)
-			3 -> gameBkgd.setImageResource(R.drawable.pokerred)
-			4 -> gameBkgd.setImageResource(R.drawable.pokerred1)
-			5 -> gameBkgd.setImageResource(R.drawable.poker)
-		}
-	}
-
 	private fun logFirebaseEvent(event: String = "game_screen", int: Int = 1, key: String) {
 		val params = Bundle()
 		params.putInt(key, int)
@@ -609,7 +597,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 		}
 	}
 
-	fun closeChatScoreWindow(view: View) { //        changeBackground()
+	fun closeChatScoreWindow(view: View) {
 		//        findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.GONE
 		scrollViewScore.visibility = View.GONE
 		scoreViewLayout.visibility = View.GONE
@@ -654,7 +642,7 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 	}
 
 	private fun resetVariables() {
-		if (gameNumber > 1) changeBackground() // change background only from 2nd game
+		if (gameNumber > 1) gameBkgd.setImageResource(GameScreenData().tableBackground.random())// change background only from 2nd game
 		buddyImage1.setImageResource(R.drawable.ic_back_side_blue)
 		findViewById<ImageView>(R.id.trumpImage).setImageResource(R.drawable.trump)
 		textViewBidValue.text = getString(R.string.bidValue2)  //$emojiScore

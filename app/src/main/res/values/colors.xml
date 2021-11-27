@@ -57,14 +57,16 @@
     <color name = "blue1">#3A65AE</color>
     <color name = "blue2">#1E3357</color>
 
-    <color name="table">@color/tablePurple</color>
-    <color name="tableBlue">#04173A</color>
-    <color name="tableRed">#FF0000</color>
-    <color name="tablePink">#610424</color>
-    <color name="tableGreen">#044207</color>
-    <color name="tableYellow">#A69604</color>
-    <color name="tablePurple">#150532</color>
+    <color name="table">@color/tableGreen</color>
+
     <color name="tableBrown">#420202</color>
+    <color name="tableBlue">#04173A</color>
+    <color name="tableGreen">#044207</color>
+    <color name="tablePink">#610424</color>
+    <color name="tablePurple">#150532</color>
+    <color name="tableRed">#FF0000</color>
+    <color name="tableYellow">#A69604</color>
+
     <color name="tableX1">#056A62</color>
     <color name="tableOrange">#CA4700</color>
 

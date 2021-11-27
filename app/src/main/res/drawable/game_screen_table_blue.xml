@@ -34,14 +34,7 @@
         android:right="@dimen/tableInner2"
         android:top="@dimen/tableInner2">
         <shape android:shape="rectangle">
-            <gradient
-                android:centerColor="@color/blue1"
-                android:centerX="0.5"
-                android:centerY="0.5"
-                android:endColor="@color/blue2"
-                android:gradientRadius="100%p"
-                android:startColor="@color/blue0"
-                android:type="radial" />
+            <solid android:color="@color/table"/>
             <corners
                 android:radius="@dimen/radiusInner3"/>
         </shape>

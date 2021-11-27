@@ -49,9 +49,9 @@ class SplashScreen : AppCompatActivity() {
 	private var isTimerOver = false
 	private var isNextActivityStarted = false
 	private var background = 4
-	private val timer = if (!BuildConfig.DEBUG) 4200L
-	else 4200L
-	private val timerLoading = timer - 500L
+	private val timer = if (!BuildConfig.DEBUG) 3200L
+	else 3200L
+	private val timerLoading = timer - 700L
 	private val requestCodeAppUpdate = 800
 	private lateinit var timeOverSound: MediaPlayer
 	private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -84,9 +84,9 @@ class SplashScreen : AppCompatActivity() {
 			}
 		}
 
-		Executors.newSingleThreadExecutor().execute {
-			checkAppUpdate()
-		}
+//		Executors.newSingleThreadExecutor().execute {
+//			checkAppUpdate()
+//		}
 		handler.postDelayed({
 			isTimerOver = true
 			if (isAppLatest) nextActivity()

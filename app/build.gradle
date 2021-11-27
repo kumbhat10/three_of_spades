@@ -19,13 +19,13 @@ android {
             keyPassword 'Kanakrajj10'
         }
     }
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
     defaultConfig {
         ext.alwaysUpdateBuildId = false
         applicationId "com.kaalikiteeggi.three_of_spades"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 69
         versionName "69A"
         ndkVersion  "23.0.7272597 rc3"//"22.0.7026061"//"21.3.6528147" //6363665"
@@ -82,10 +82,9 @@ dependencies {
     implementation 'nl.dionsegijn:konfetti:1.2.5'  // konfetti for winner or loser
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.bitvale:lightprogress:1.0.1' // spotlight type hanging animation - for loading
-    implementation "com.airbnb.android:lottie:3.7.0"
+    implementation "com.airbnb.android:lottie:4.2.1"
 
 //    implementation 'com.romainpiel.shimmer:library:1.4.0@aar'
-
 //    implementation 'com.twitter.sdk.android:twitter:3.3.0'
 //    implementation 'com.facebook.android:facebook-login:7.1.0'
     implementation 'com.facebook.android:facebook-android-sdk:11.1.0'
@@ -93,14 +92,14 @@ dependencies {
 
     // Import the BoM for the Firebase platform
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
-    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.4'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.2'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.3'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.4'
 
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:20.1.1'
-    implementation 'com.google.firebase:firebase-analytics-ktx:19.0.2'
-    implementation 'com.google.firebase:firebase-messaging:22.0.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.1.0'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.0.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:20.0.0'
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.1.1'
     implementation 'com.google.firebase:firebase-perf-ktx:20.0.3'
 
 //    implementation 'com.facebook.android:audience-network-sdk:6.4.0'
@@ -117,7 +116,7 @@ dependencies {
     implementation 'com.google.android.play:core:1.10.2'
     implementation 'com.google.android.play:core-ktx:1.8.1'
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
-    implementation 'com.google.android.gms:play-services-ads:20.4.0'
+    implementation 'com.google.android.gms:play-services-ads:20.5.0'
     implementation 'com.google.android.gms:play-services-base:17.6.0'
     implementation 'com.google.android.gms:play-services-games:21.0.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:17.1.0'
@@ -125,14 +124,14 @@ dependencies {
     implementation 'com.google.android.gms:play-services-tagmanager:17.0.1'
 
 
-    implementation 'androidx.browser:browser:1.3.0'
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    implementation 'androidx.browser:browser:1.4.0'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'com.android.billingclient:billing:4.0.0'
     implementation 'com.android.billingclient:billing-ktx:4.0.0'
 }

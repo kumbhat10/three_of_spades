@@ -213,7 +213,6 @@ class MainHomeScreen : AppCompatActivity() {
 		soundBkgd.isLooping = true
 		soundBkgd.setVolume(0.05F, 0.05F)
 		getSharedPrefs()
-//		SoundManager.initialize(this)
 		initializeAds()
 		Handler(Looper.getMainLooper()).post {
 			vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -604,7 +603,6 @@ class MainHomeScreen : AppCompatActivity() {
 			musicSwitch.isChecked = musicStatus
 			if (musicStatus) {
 				soundBkgd.start()
-			} else {
 			}
 		} else {
 			musicStatus = true
@@ -624,7 +622,9 @@ class MainHomeScreen : AppCompatActivity() {
 		if (sharedPreferences.contains("Room")) {
 			val roomID = sharedPreferences.getString("Room", "").toString()
 			if (roomID.isNotEmpty()) {
-				Handler(Looper.getMainLooper()).postDelayed({ deleteAllRoomData(roomID) }, 0)				//                deleteAllRoomdata(roomID)
+				Handler(Looper.getMainLooper()).postDelayed({
+//					deleteAllRoomData(roomID)
+															}, 0)
 			}
 			editor.remove("Room").apply()
 		}
@@ -872,8 +872,8 @@ class MainHomeScreen : AppCompatActivity() {
 				if (musicStatus) soundBkgd.pause()
 			}
 		}
-		MoPubRewardedAds.setRewardedAdListener(rewardAdListener)
-		MoPubRewardedAds.loadRewardedAd(rewardedAdUnitId)
+//		MoPubRewardedAds.setRewardedAdListener(rewardAdListener)
+//		MoPubRewardedAds.loadRewardedAd(rewardedAdUnitId)
 	}
 
 	fun showRewardedVideoAd(view: View) {

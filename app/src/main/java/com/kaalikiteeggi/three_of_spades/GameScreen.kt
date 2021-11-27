@@ -31,7 +31,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.google.android.gms.ads.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -54,9 +53,7 @@ import com.mopub.mobileads.MoPubInterstitial
 import com.mopub.mobileads.MoPubView
 import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
 import kotlinx.android.synthetic.main.activity_game_screen.*
-import kotlinx.android.synthetic.main.cards_item_list_partner.view.*
 import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
 import java.text.SimpleDateFormat
@@ -64,7 +61,6 @@ import java.util.*
 import kotlin.math.min
 import kotlin.math.round
 import kotlin.properties.Delegates
-import kotlin.random.Random
 
 @SuppressLint("SetTextI18n")
 class GameScreen : AppCompatActivity() { //    region Initialization
@@ -263,6 +259,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		FirebaseCrashlytics.getInstance().setUserId(uid)
 		Handler(Looper.getMainLooper()).post {
 			vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+			refRoomFirestore.document(roomID).set(hashMapOf("PJ" to 11), SetOptions.merge()) // 11 means game started
 			updatePlayerInfo()
 			initializeSpeechEngine()
 			getSharedPrefs()
@@ -297,8 +294,8 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				progressbarTimer.clearAnimation()
 				textViewTimer.clearAnimation()
 			}
-		} //        endregion
-		// region       Countdown Biding
+		} // endregion
+		// region Countdown Biding
 		countDownBidding = object : CountDownTimer(timeCountdownBid, 50) {
 			@SuppressLint("SetTextI18n")
 			override fun onTick(millisUntilFinished: Long) { //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
@@ -327,7 +324,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 					speak("Time's Up ${playerName(fromInt)}. You can't bid now", speed = 1.05f)
 				}
 			}
-		} //        endregion
+		} // endregion
 		//region Online Status Listener
 		onlineStatusListener = object : ValueEventListener {
 			override fun onCancelled(p0: DatabaseError) {}
@@ -413,19 +410,26 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				}
 			}
 		}
-
-		//region Game Data Listener
+		createGameDataListener() // Create Game data listener
+		applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true)
+		findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, actionId, _ ->
+			return@setOnEditorActionListener when (actionId) {
+				EditorInfo.IME_ACTION_SEND -> {
+					sendChat(v)
+					hideKeyboard()
+					false
+				}
+				else -> false
+			}
+		}  // close keyboard after sending chat
+	}
+	private fun createGameDataListener(){
 		gameDataListener = object : ValueEventListener {
 			override fun onCancelled(p0: DatabaseError) {}
 			override fun onDataChange(data: DataSnapshot) {
 				if (data.value != null && activityExists) {
 					gameData = data.getValue<GameData>()!!
-					//region Table Cards & Table Points - Independent of everything else
-					if (gameData.gs == 5) {
-						showTableCard()
-					} else showTableCard(resetCards = true)
-					tablePointsCalculator()
-					//endregion
+					tableCardsHandle()
 					trump.value = gameData.tr
 					currentBidder.value = gameData.bb!!
 					bidValue.value = gameData.bv!!
@@ -445,20 +449,13 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				}
 			}
 		}
-		//endregion
-		applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true)
-		findViewById<EditText>(R.id.editTextChatInput).setOnEditorActionListener { v, actionId, _ ->
-			return@setOnEditorActionListener when (actionId) {
-				EditorInfo.IME_ACTION_SEND -> {
-					sendChat(v)
-					hideKeyboard()
-					false
-				}
-				else -> false
-			}
-		}  // close keyboard after sending chat
 	}
-
+	private fun tableCardsHandle(){ //Table Cards & Table Points - Independent of everything else
+		if (gameData.gs == 5) {
+			showTableCard()
+		} else showTableCard(resetCards = true)
+		tablePointsCalculator()
+	}
 	private fun gameState1(){
 		findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
 		getCardsAndDisplay(display = false)
@@ -472,7 +469,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		} else if (activityExists) startBidding()
 	}
 	private fun resetVariables() {
-		if (gameData.gn > 1) changeBackground()
+		if (gameData.gn > 1) 		gameBkgd.setImageResource(GameScreenData().tableBackground.random()) //changeBackground()
 		currentBidder.value = 0
 		bidNowImage.visibility = View.GONE
 		for (i in 0 until nPlayers) { // first reset background and animation of all partner icon
@@ -807,7 +804,6 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			} else speak("New partner found", speed = 1.05f)
 		}
 		if (gameData.p1 != 0 && gameData.p1s == 1) partner1CardText.value = gameData.p1
-
 		if(nPlayers7) {
 			if (p2s != gameData.p2s && p2s != 1) {
 				p2s = gameData.p2s
@@ -819,7 +815,8 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 				} else speak("New partner found")
 			}
 			if (gameData.p2 != 0 && gameData.p2s == 1) partner2CardText.value = gameData.p2
-		}// endregion
+		}
+		// endregion
 
 		if (roundNumber < gameData.rn || gameData.ct?.get(fromInt-1) != cardsIndexLimit || gameData.pt!! != fromInt) { // check for new round or not
 			roundNumber = gameData.rn
@@ -1007,17 +1004,6 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		firebaseAnalytics.logEvent(event, params)
 	}
 
-	private fun changeBackground() {
-		when (Random.nextInt(0, 6)) {
-			0 -> gameBkgd.setImageResource(R.drawable.poker)
-			1 -> gameBkgd.setImageResource(R.drawable.pokerblue)
-			2 -> gameBkgd.setImageResource(R.drawable.pokercyan)
-			3 -> gameBkgd.setImageResource(R.drawable.pokerred)
-			4 -> gameBkgd.setImageResource(R.drawable.pokerred1)
-			5 -> gameBkgd.setImageResource(R.drawable.poker)
-		}
-	}
-
 	private fun setupGame4or7() {
 		refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
 		refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
@@ -1081,12 +1067,11 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			cardsPointsPartner = PlayingCards().cardsPointsPartner7
 			cardsIndexLimit = 99
 			roundNumberLimit = 14
-			scoreLimit = 705
+			scoreLimit = maxBidValue + 5
 			onlineStatus = mutableListOf(0, 0, 0, 0, 0, 0, 0)
 			allCardsReset = mutableListOf(cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit)
 		}
 		if (nPlayers4) {
-			allCardsReset = mutableListOf(cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit)
 			onlineStatus = mutableListOf(0, 0, 0, 0)
 			maxBidValue = 350
 			refIDValesTextViewScore = PlayersReference().refIDTextViewScoreSheet4
@@ -1098,7 +1083,9 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			cardsPointsPartner = PlayingCards().cardsPoints4
 			cardsIndexLimit = 53
 			roundNumberLimit = 13
-			scoreLimit = 355 //			scoreList = listOf(0,0,0,0,0)
+			scoreLimit = maxBidValue + 5
+			allCardsReset = mutableListOf(cardsIndexLimit, cardsIndexLimit, cardsIndexLimit, cardsIndexLimit)
+//			scoreList = listOf(0,0,0,0,0)
 			//			ptAll = listOf(0,0,0,0)
 			findViewById<TickerView>(R.id.textView1_4).visibility = View.VISIBLE
 			findViewById<TickerView>(R.id.textView1_4a).visibility = View.VISIBLE
@@ -1151,7 +1138,7 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 		getCardsAndDisplay(display = false)
 
 		chatRegistration = refRoomFirestore.document(roomID + "_chat").addSnapshotListener { dataSnapshot, error ->
-				if (dataSnapshot != null && dataSnapshot.exists() && error == null) {
+				if ((dataSnapshot != null) && dataSnapshot.exists() && (error == null)) {
 					val data = (dataSnapshot.data as Map<String, String>)["M"].toString()
 					if (data.isNotEmpty() && lastChat != data) { // if chat is not empty
 						if (soundStatus) SoundManager.instance?.playChatSound()
