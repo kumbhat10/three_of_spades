@@ -7,6 +7,7 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
@@ -178,7 +179,6 @@ class MainHomeScreen : AppCompatActivity() {
 	private var dailyRewardStatus = false
 
 	// endregion
-
 	@SuppressLint("ShowToast", "SetTextI18n")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		setTheme(R.style.Theme_App)
@@ -192,16 +192,20 @@ class MainHomeScreen : AppCompatActivity() {
 			.trackActivities(false) //default: false
 			.errorDrawable(R.drawable.bug_icon) //default: bug image
 			.apply()
+		if(!resources.getBoolean(R.bool.portrait_only)) {
+//			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+		}
 		setContentView(R.layout.activity_main_home_screen)
 		background = Random.nextInt(0, 6)
-		when (background) {
-			0 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.redblackburst)
-			1 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.blueburst)
-			4 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.greenyellowburst)
-			3 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.navyblueburst)
-			2 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.redorangeburst)
-			5 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.yellowburst)
-		}
+//		when (background) {
+//			0 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.redblackburst)
+//			1 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.blueburst)
+//			4 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.greenyellowburst)
+//			3 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.navyblueburst)
+//			2 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.redorangeburst)
+//			5 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.yellowburst)
+//		}
+		backgroundmhs.background = ContextCompat.getDrawable(this, GameScreenData().tableBackground.random())
 		checkJoinRoom(intent)
 		mainIconGridDisplay()
 		newUser = intent.getBooleanExtra("newUser", true)
@@ -747,8 +751,6 @@ class MainHomeScreen : AppCompatActivity() {
 		val adUnitID = if (BuildConfig.DEBUG) getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
 		else getString(R.string.interstitialReal_mp) // test interstitial ad
 		mInterstitialAdMP = MoPubInterstitial(this, adUnitID)
-
-
 //		AdSettings.addTestDevice("bd40e50a-23b8-4798-8370-0ebbd6bf23fb") //onePlus
 //		AudienceNetworkAds.buildInitSettings(applicationContext).withInitListener {
 		MoPub.getPersonalInformationManager()?.grantConsent()

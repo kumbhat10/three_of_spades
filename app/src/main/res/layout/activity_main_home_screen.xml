@@ -6,7 +6,8 @@
     android:id="@+id/backgroundmhs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blueburst"
+    android:background="@drawable/table_gs_red"
+    android:foreground="@drawable/tint_backgroundmhs"
     android:onClick="openClosePlayerStats"
     tools:context=".MainHomeScreen"
     tools:ignore="DuplicateClickableBoundsCheck">
@@ -15,7 +16,6 @@
         android:id="@+id/playerStatsML"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/tint_backgroundmhs"
         app:layoutDescription="@xml/player_stats_motion_scene"
         app:layout_constraintBottom_toTopOf="@+id/addViewMHS"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,6 +122,7 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_5sdp"
+            android:visibility="invisible"
             android:background="@drawable/shine_player_stats"
             android:onClick="openClosePlayerStats"
             app:layout_constraintEnd_toEndOf="parent"
@@ -764,7 +765,7 @@
         android:background="@color/BlackTrans"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -910,5 +911,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adViewMHS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_admob"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

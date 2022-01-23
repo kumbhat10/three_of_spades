@@ -87,25 +87,19 @@ class StartScreen : AppCompatActivity() {
 		callBackManager = CallbackManager.Factory.create()
 		loginButton.setPermissions("email", "public_profile")
 		loginButton.registerCallback(callBackManager, object : FacebookCallback<LoginResult> {
-			override fun onSuccess(result: LoginResult?) {
-				if (result != null) {
-					val credentialFacebook = FacebookAuthProvider.getCredential(result.accessToken.token)
-					signInWithCredential(credentialFacebook, "facebook")
-				}
-			}
-
 			override fun onCancel() {
 				SoundManager.instance?.playErrorSound() //soundError.start()
 				toastCenter("Facebook login cancelled")
 				maskButtons.visibility = View.GONE
 			}
-
-			override fun onError(error: FacebookException?) {
+			override fun onError(error: FacebookException) {
 				SoundManager.instance?.playErrorSound() //soundError.start()
-				if (error != null) {
-					toastCenter("Facebook login Error : ${error.message}")
-				}
+				toastCenter("Facebook login Error : ${error.message}")
 				maskButtons.visibility = View.GONE
+				}
+			override fun onSuccess(result: LoginResult) {
+				val credentialFacebook = FacebookAuthProvider.getCredential(result.accessToken.token)
+				signInWithCredential(credentialFacebook, "facebook")
 			}
 		}) // endregion
 		// region Google Sign In

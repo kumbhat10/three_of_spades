@@ -12,10 +12,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.*
 import android.speech.tts.TextToSpeech
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -229,8 +226,12 @@ class GameScreen : AppCompatActivity() { //    region Initialization
 			.trackActivities(false) //default: false
 			.errorDrawable(R.drawable.bug_icon) //default: bug image
 			.restartActivity(MainHomeScreen::class.java).apply()
-		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		setContentView(R.layout.activity_game_screen)
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+			val controller = window.insetsController
+			controller!!.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+			controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+		}else window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		roomID = intent.getStringExtra("roomID")!!.toString()
 		from = intent.getStringExtra("from")!!.toString()
 		fromInt = from.split("")[2].toInt()

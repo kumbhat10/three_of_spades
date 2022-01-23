@@ -12,9 +12,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.*
 import android.speech.tts.TextToSpeech
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
@@ -218,8 +216,12 @@ class GameScreenAutoPlay : AppCompatActivity() { //    region Initialization
 			.errorDrawable(R.drawable.bug_icon) //default: bug image
 			.restartActivity(MainHomeScreen::class.java).apply()
 
-		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		setContentView(R.layout.activity_game_screen) //        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE // keep screen in landscape mode always
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+			val controller = window.insetsController
+			controller!!.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+			controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+		}else window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		roomID = intent.getStringExtra("roomID")!!
 			.toString()    //Get roomID and display    selfName = intent.getStringExtra("selfName") //Get Username first  - selfName ,roomID available
 		from = intent.getStringExtra("from")!!

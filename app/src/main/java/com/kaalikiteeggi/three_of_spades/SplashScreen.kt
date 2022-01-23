@@ -12,6 +12,9 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Animatable2
+import android.graphics.drawable.AnimatedVectorDrawable
+import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -19,9 +22,9 @@ import android.os.Looper
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -33,9 +36,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.mopub.common.MoPub
 import com.mopub.common.SdkConfiguration
 import com.mopub.common.logging.MoPubLog
-import com.mopub.mobileads.MoPubInterstitial
-import com.mopub.mobileads.MoPubRewardedAds
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_game_screen.*
+import kotlinx.android.synthetic.main.activity_main_home_screen.*
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import java.util.concurrent.Executors
 import kotlin.random.Random
@@ -45,33 +48,59 @@ class SplashScreen : AppCompatActivity() {
 	private lateinit var appUpdateManager: AppUpdateManager
 	private lateinit var snackBar: Snackbar
 	private var handler = Handler(Looper.getMainLooper())
-	private var isAppLatest = true
+	private var isAppLatest = false
 	private var isTimerOver = false
 	private var isNextActivityStarted = false
 	private var background = 4
-	private val timer = if (!BuildConfig.DEBUG) 3200L
-	else 3200L
-	private val timerLoading = timer - 700L
+	private val timer = if (!BuildConfig.DEBUG) 4500L
+	else 4500L
+	private val timerLoading = timer - 1000L
 	private val requestCodeAppUpdate = 800
 	private lateinit var timeOverSound: MediaPlayer
+	private lateinit var backGroundSound: MediaPlayer
 	private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 	override fun onCreate(savedInstanceState: Bundle?) {
 		setTheme(R.style.Theme_App)
 		super.onCreate(savedInstanceState)
+//		val splashScreen = installSplashScreen()
+//		splashScreen.setOnExitAnimationListener {
+//
+//		}
 		setContentView(R.layout.activity_splash_screen)
-		background =  Random.nextInt(0, 6)
-				when (background) {
-		            0 -> splashBckgd.setImageResource(R.drawable.redblackburst)
-		            4 -> splashBckgd.setImageResource(R.drawable.blueburst)
-		            2 -> splashBckgd.setImageResource(R.drawable.greenyellowburst)
-		            3 -> splashBckgd.setImageResource(R.drawable.navyblueburst)
-		            1 -> splashBckgd.setImageResource(R.drawable.redorangeburst)
-		            5 -> splashBckgd.setImageResource(R.drawable.yellowburst)
-				}
-		icon3.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_once))
+//		splashRoot.background = ContextCompat.getDrawable(this, GameScreenData().tableBackground.random())
+
+//		splashBckgd.setImageResource(GameScreenData().tableBackground.random())
+//		background =  Random.nextInt(0, 6)
+//				when (background) {
+//		            0 -> splashBckgd.setImageResource(R.drawable.redblackburst)
+//		            4 -> splashBckgd.setImageResource(R.drawable.blueburst)
+//		            2 -> splashBckgd.setImageResource(R.drawable.greenyellowburst)
+//		            3 -> splashBckgd.setImageResource(R.drawable.navyblueburst)
+//		            1 -> splashBckgd.setImageResource(R.drawable.redorangeburst)
+//		            5 -> splashBckgd.setImageResource(R.drawable.yellowburst)
+//				}
+		val avd = (icon3.drawable as AnimatedVectorDrawable)
+		avd.registerAnimationCallback(object : Animatable2.AnimationCallback() {
+			override fun onAnimationStart(drawable: Drawable?) {
+				loadingSplash.visibility = View.VISIBLE
+				loadingSplash.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
+//				icon3.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_once))
+			}
+			override fun onAnimationEnd(drawable: Drawable?) {
+//				timeOverSound.start()
+				loadingSplash.postDelayed({
+					loadingSplash.text = getString(R.string.splashLoadingDone)
+				},400L)
+//				loadingProgress.isIndeterminate = false
+				loadingProgress.setProgressCompat(100, true)
+//				loadingProgress.progress = 100
+//				showUserProfile()
+			}
+		})
+		avd.start()
 		updateUI()
-		val sound = MediaPlayer.create(applicationContext, R.raw.card_shuffle).apply { setVolume(0.13F, 0.13F) }
-		sound.start()
+		backGroundSound = MediaPlayer.create(applicationContext, R.raw.card_shuffle).apply { setVolume(0.13F, 0.13F) }
+		backGroundSound.start()
 		mobileAds()
 		resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result ->
 			if (result.resultCode != Activity.RESULT_OK) {
@@ -84,38 +113,61 @@ class SplashScreen : AppCompatActivity() {
 			}
 		}
 
-//		Executors.newSingleThreadExecutor().execute {
-//			checkAppUpdate()
-//		}
+		Executors.newSingleThreadExecutor().execute {
+			checkAppUpdate()
+		}
 		handler.postDelayed({
 			isTimerOver = true
-			if (isAppLatest) nextActivity()
+//			if (isAppLatest) nextActivity()
 		}, timer) // dummy 3500
 	}
 
 	@SuppressLint("SetTextI18n")
 	private fun updateUI() {
-		val loadingAnim = ObjectAnimator.ofInt(loading, "progress", 0, 10000)
 		timeOverSound = MediaPlayer.create(applicationContext, R.raw.timer_over).apply { setVolume(1F, 1F) }
-		loadingAnim.duration = timerLoading //		loadingAnim.setInterpolator { object: BounceInterpolator() }
-		loadingAnim.addListener(object : Animator.AnimatorListener {
-			override fun onAnimationStart(animation: Animator?) {}
-			override fun onAnimationEnd(animation: Animator?) {
-				loadingSplash.text = "Lets Play"
-				timeOverSound.start()
-			}
-			override fun onAnimationCancel(animation: Animator?) {}
-			override fun onAnimationRepeat(animation: Animator?) {}
-		})
-		loadingAnim.start()
+//		val loadingAnim = ObjectAnimator.ofInt(loading, "progress", 0, 10000)
+//		loadingAnim.duration = timerLoading //		loadingAnim.setInterpolator { object: BounceInterpolator() }
+//		loadingAnim.addListener(object : Animator.AnimatorListener {
+//			override fun onAnimationStart(animation: Animator?) {}
+//			override fun onAnimationEnd(animation: Animator?) {
+////				loadingSplash.text = "Lets Play"
+////				timeOverSound.start()
+//			}
+//			override fun onAnimationCancel(animation: Animator?) {}
+//			override fun onAnimationRepeat(animation: Animator?) {}
+//		})
+//		loadingAnim.start()
+		loadUserProfile()
+	}
+	private fun loadUserProfile(){
 		user = FirebaseAuth.getInstance().currentUser // dummy - could be a problem if invalid mAuth and not null
 		if (user != null) {
 			FirebaseCrashlytics.getInstance().setUserId(user!!.uid)
-			userNameSplash.text = user?.displayName.toString().split(" ")[0]
-			userNameSplash.visibility = View.VISIBLE
-			welcome2.visibility = View.VISIBLE
-			profilePic2.visibility = View.VISIBLE
-			Picasso.get().load(user?.photoUrl.toString()).resize(300, 300).into(profilePic2)
+//			userNameSplash.text = user?.displayName.toString().split(" ")[0]
+//			Picasso.get().load(user?.photoUrl.toString()).resize(300, 300).into(profilePic2)
+		}
+	}
+
+	private fun mobileAds() {
+		//		MobileAds.initialize(this)
+		val configBuilder = if (BuildConfig.DEBUG) SdkConfiguration.Builder(getString(R.string.bannerTest_MP))
+			.withLogLevel(MoPubLog.LogLevel.DEBUG)
+		else SdkConfiguration.Builder(getString(R.string.bannerReal_MP))
+			.withLogLevel(MoPubLog.LogLevel.NONE)
+
+		//		AdSettings.addTestDevice("bd40e50a-23b8-4798-8370-0ebbd6bf23fb") //onePlus
+		//		val facebookConfig = hashMapOf("banner" to "", "interstitial" to "")
+		//		AudienceNetworkAds.buildInitSettings(applicationContext).withPlacementIds(listOf("607386246545418_617997035484339")).withInitListener {
+		//			MoPub.initializeSdk(applicationContext, configBuilder.build()) { }
+		//		}.initialize()
+		MoPub.getPersonalInformationManager()?.grantConsent()
+		MoPub.initializeSdk(applicationContext, configBuilder.build()) {
+//			val interstitialAdID = if (BuildConfig.DEBUG) getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
+//			else getString(R.string.interstitialReal_mp) // test interstitial ad
+//			val mInterstitial = MoPubInterstitial(this, interstitialAdID)
+//			mInterstitial.load()
+//			val rewardedAdId = if (BuildConfig.DEBUG) getString(R.string.rewardedTest_mp) else getString(R.string.rewardedReal_mp)
+//			MoPubRewardedAds.loadRewardedAd(rewardedAdId)
 		}
 	}
 
@@ -138,33 +190,6 @@ class SplashScreen : AppCompatActivity() {
 	}
 
 	@Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
-	private fun mobileAds() { //		MobileAds.initialize(this)
-		val configBuilder = if (BuildConfig.DEBUG) SdkConfiguration.Builder(getString(R.string.bannerTest_MP))
-			.withLogLevel(MoPubLog.LogLevel.DEBUG)
-		else SdkConfiguration.Builder(getString(R.string.bannerReal_MP))
-			.withLogLevel(MoPubLog.LogLevel.NONE)
-
-		//		AdSettings.addTestDevice("bd40e50a-23b8-4798-8370-0ebbd6bf23fb") //onePlus
-		//		val facebookConfig = hashMapOf("banner" to "", "interstitial" to "")
-		//		AudienceNetworkAds.buildInitSettings(applicationContext).withPlacementIds(listOf("607386246545418_617997035484339")).withInitListener {
-		//			MoPub.initializeSdk(applicationContext, configBuilder.build()) { }
-		//		}.initialize()
-		MoPub.getPersonalInformationManager()?.grantConsent()
-		MoPub.initializeSdk(applicationContext, configBuilder.build()) {
-//			val interstitialAdID = if (BuildConfig.DEBUG) getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
-//			else getString(R.string.interstitialReal_mp) // test interstitial ad
-//			val mInterstitial = MoPubInterstitial(this, interstitialAdID)
-//			mInterstitial.load()
-//			val rewardedAdId = if (BuildConfig.DEBUG) getString(R.string.rewardedTest_mp) else getString(R.string.rewardedReal_mp)
-//			MoPubRewardedAds.loadRewardedAd(rewardedAdId)
-		}
-	}
-
-	override fun onDestroy() {
-		handler.removeCallbacksAndMessages(null)
-		MoPub.onDestroy(this)
-		super.onDestroy()
-	}
 
 	private fun checkAppUpdate() {
 		appUpdateManager = AppUpdateManagerFactory.create(baseContext)
@@ -207,19 +232,10 @@ class SplashScreen : AppCompatActivity() {
 			}
 		}
 	}
-
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		if (requestCode == requestCodeAppUpdate) {
-			if (resultCode != Activity.RESULT_OK) {
-				checkAppUpdate()
-				toastCenter("App update failed \n Please try again or Restart app", duration = Snackbar.LENGTH_INDEFINITE)
-			} else if (resultCode == Activity.RESULT_OK) {
-				toastCenter("App was updated successfully", duration = Snackbar.LENGTH_SHORT) // dummy
-				isAppLatest = true
-				if (isTimerOver && !isNextActivityStarted) nextActivity()
-			}
-		}
-		super.onActivityResult(requestCode, resultCode, data)
+	override fun onDestroy() {
+		handler.removeCallbacksAndMessages(null)
+		MoPub.onDestroy(this)
+		super.onDestroy()
 	}
 
 }

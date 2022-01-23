@@ -5,7 +5,7 @@
     <dimen name="upWidth">@dimen/_75sdp</dimen>
     <dimen name="upTop">@dimen/_10sdp</dimen>
     <dimen name="upStart">@dimen/_10sdp</dimen>
-    <dimen name="upTextSize">@dimen/_27ssp</dimen>
+    <dimen name="upTextSize">@dimen/_24ssp</dimen>
 
     <dimen name="gridWidth">@dimen/_217sdp</dimen>  <!--114 + 114 + 9 = 237-->
     <dimen name="iconWidth">@dimen/_105sdp</dimen>

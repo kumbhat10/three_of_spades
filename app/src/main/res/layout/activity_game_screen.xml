@@ -15,7 +15,7 @@
         android:foreground="@drawable/tint_backgroundgame"
         android:onClick="closeChatScoreWindow"
         android:scaleType="fitXY"
-        android:src="@drawable/game_screen_table_red"
+        android:src="@drawable/table_gs_red"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

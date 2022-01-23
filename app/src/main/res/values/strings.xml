@@ -34,6 +34,10 @@
     <string name="rewardedReal_mp">380ef1aa57bb4c409eb2c71cc1f938af</string>
     <string name="rewardedTest_mp">920b6145fb1546cf8b5cf2ac34638bb7</string>
 
+    <string name="banner_admob">ca-app-pub-2714670043901113/2653923895</string>
+    <string name="inter_admob">ca-app-pub-2714670043901113/6210025529</string>
+    <string name="reward_admob">ca-app-pub-2714670043901113/5307668082</string>
+
     <string name="app_name">3 of Spades</string>
     <string name="developer">Dushyant Kumbhat</string>
     <string name="developer_contact">kaaliteerifun@gmail.com</string>
@@ -135,5 +139,6 @@
     <string name="no_ad">Ads</string>
     <string name="swipe">Swipe Up/Down to hide/reveal</string>
     <string name="join">Join</string>
+    <string name="splashLoadingDone">Lets Play</string>
 
 </resources>

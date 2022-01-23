@@ -5,12 +5,17 @@
       <map>
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable-anydpi/ic_stat_name.xml" value="0.1515" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/active.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/animatedvector.xml" value="0.1315" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/avd_anim.xml" value="0.1395" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/biddericon.xml" value="0.265" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/blackcirclebutton.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/blackglassglossy.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/blacksquarebutton.xml" value="0.2815" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/blueburst.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/border.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/border_off_orange.xml" value="0.1" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/bug_icon.xml" value="0.173" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/burst_background.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/button_pressed_score_table.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/button_score_total.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/button_square.xml" value="0.1" />
@@ -27,6 +32,7 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/c7.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/c8.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/c9.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/casino_background.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/coin_bid.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/coin_blank.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/coinkon.xml" value="0.19583333333333333" />
@@ -65,11 +71,15 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/ic_back_side_blue.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/ic_back_side_red.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/ic_hearts.xml" value="0.19583333333333333" />
-        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/icon3s_shadow.xml" value="0.173" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/icon3s_shadow.xml" value="0.10666666666666667" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/icon3s_shadowModified.xml" value="0.1815" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/icon3s_shadow_animated.xml" value="0.1" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/joystick.xml" value="0.1415" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/mesh1.xml" value="0.1825" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/navyblueburst.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/no_ads.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/no_ads_merged.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/orangesquarebutton.xml" value="0.2815" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/phone.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/played.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/progress_splash.xml" value="0.19583333333333333" />
@@ -100,19 +110,22 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/shine_score_table.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/shine_user_rank.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/shine_user_rank_bkgd.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/spade.xml" value="0.1825" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/spadesace.xml" value="0.132" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/splash.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/star_half.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_blue.xml" value="0.1865" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_brown.xml" value="0.1865" />
-        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_green.xml" value="0.1865" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_green.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_orange.xml" value="0.1865" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_pink.xml" value="0.1865" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_purple.xml" value="0.1865" />
-        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_red.xml" value="0.1825" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_red.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_x1.xml" value="0.1865" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_yellow.xml" value="0.1865" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_jr_blrown.xml" value="0.1865" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_jr_blue.xml" value="0.1825" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_jr_brown.xml" value="0.1825" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_jr_green.xml" value="0.1825" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_jr_orange.xml" value="0.1865" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_jr_pink.xml" value="0.1865" />
@@ -122,16 +135,19 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_jr_yellow.xml" value="0.1865" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/target.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/tint_backgroundgame.xml" value="0.1865" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/tint_backgroundmhs.xml" value="0.1825" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/track1.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/trend.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/trophy.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/trump.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/yellowbutton.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout-land/activity_splash_screen.xml" value="0.22" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout-sw600dp/activity_main_home_screen.xml" value="0.1" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_create_join_room_screen.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_developer_credits.xml" value="0.1796875" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_game_screen.xml" value="0.22" />
-        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_main_home_screen.xml" value="0.22" />
-        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_splash_screen.xml" value="0.22" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_main_home_screen.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_splash_screen.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_start_screen.xml" value="0.22" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_train.xml" value="0.1" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/cards_item_list_partner.xml" value="0.22" />
@@ -150,4 +166,11 @@
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.14279606669516887" />
+      </ProjectState>
+    </option>
+  </component>
 </project>

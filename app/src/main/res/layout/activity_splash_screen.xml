@@ -2,100 +2,99 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splashRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/splashRoot"
     tools:context="com.kaalikiteeggi.three_of_spades.SplashScreen">
 
     <ImageView
         android:id="@+id/splashBckgd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="@drawable/tint_backgroundmhs"
+        android:src="@drawable/background_glitter"
+        android:contentDescription="@string/todo"
         android:scaleType="fitXY"
         android:visibility="visible"
-        android:contentDescription="@string/todo" />
-
-    <ProgressBar
-        android:id="@+id/loading"
-        android:visibility="visible"
-        android:layout_margin="@dimen/_15sdp"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:max="10000"
-        android:indeterminate="false"
-        android:progressDrawable="@drawable/progress_splash"
-        android:indeterminateOnly="false"
-        app:layout_constraintBottom_toBottomOf="@id/icon3"
-        app:layout_constraintEnd_toEndOf="@id/icon3"
-        app:layout_constraintStart_toStartOf="@id/icon3"
-        app:layout_constraintTop_toTopOf="@id/icon3" />
-
-     <ImageView
-        android:id="@+id/icon3"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:contentDescription="@null"
-        android:src="@drawable/icon3s_shadow"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/loadingSplash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_45sdp"
-        android:fontFamily="@font/almendra_display"
-        android:text="@string/loading"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_21ssp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/icon3"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profilePic2"
-        android:layout_width="@dimen/upWidth"
-        android:layout_height="@dimen/upWidth"
-        android:layout_marginStart="@dimen/upStart"
-        android:layout_marginTop="@dimen/upTop"
-        android:contentDescription="@null"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.ProfilePic" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/userNameSplash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_2sdp"
-        android:gravity="start|top"
-        android:paddingEnd="@dimen/_50sdp"
-        android:text="@string/playeName"
-        android:textSize="@dimen/upTextSize"
-        android:textColor="@color/white"
-        android:visibility="gone"
-        tools:ignore="RtlSymmetry"
-        app:layout_constraintBottom_toBottomOf="@+id/profilePic2"
-        app:layout_constraintStart_toEndOf="@+id/profilePic2"  />
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:shimmer_auto_start="true"
+        app:shimmer_base_alpha="0.85"
+        app:shimmer_direction="left_to_right"
+        app:shimmer_duration="1000"
+        app:shimmer_repeat_delay="400"
+        app:shimmer_highlight_alpha="1"
+        app:shimmer_highlight_color="#FFFFFF"
+        app:shimmer_width_ratio="0.3">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/welcome2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_1sdp"
-        android:gravity="bottom|start"
-        android:text="@string/welcomeBack"
-        android:textColor="@color/icon_yellow"
-        android:textSize="@dimen/_21ssp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/userNameSplash"
-        app:layout_constraintStart_toEndOf="@+id/profilePic2" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/logoImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/canva_3s_png"
+                android:contentDescription="@string/todo"
+                android:visibility="visible"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/icon3"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_135sdp"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                app:layout_constraintVertical_bias="0.52"
+                android:src="@drawable/icon3s_shadow_animated"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/loadingSplash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/almendra_display"
+                android:text="@string/loading"
+                android:textColor="@color/font_yellow"
+                android:layout_marginTop="@dimen/_82sdp"
+                android:textSize="@dimen/_20ssp"
+                android:textStyle="bold"
+                android:visibility="visible"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:padding="@dimen/_6sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/icon3" />
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/loadingProgress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:max="100"
+                android:visibility="visible"
+                android:layout_marginStart="@dimen/_45sdp"
+                android:layout_marginEnd="@dimen/_45sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/loadingSplash" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

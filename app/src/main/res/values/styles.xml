@@ -1,21 +1,23 @@
 <resources>
 
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        // Set the splash screen background, animated icon, and animation duration.
+        <item name="windowSplashScreenBackground">@color/font_grey_settings</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/icon3s_shadow_animated</item> // Use windowSplashScreenAnimatedIcon to add either a drawable or an animated drawable. One of these is required.
+        <item name="windowSplashScreenAnimationDuration">3500</item>  # Required for
+        # animated icons
+        // Set the theme of the Activity that directly follows your splash screen.
+        <item name="postSplashScreenTheme">@style/Theme.App</item>  # Required.
+    </style>
+
+
     <style name="Theme.App" parent="Theme.MaterialComponents.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorSecondary</item>
         <item name="colorPrimaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorOnPrimary">@color/colorOnSecondary</item>
         <item name="colorSecondary">@color/colorPrimary</item>
         <item name="colorSecondaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnSecondary">@color/colorOnPrimary</item>
-
-<!--        <item name="colorPrimarySurface">#BF1DD1</item>-->
-<!--        <item name="colorOnPrimarySurface">#4B8CD1</item>-->
-        <!--        <item name="colorOnSurface">#0087FD</item>-->
-        <!--        <item name="colorSurface">#AE6543</item>-->
-        <!--        <item name="scrimBackground">#78E807</item>-->
-        <!--        <item name="colorOnBackground">@color/colorSecondary</item>-->
-<!--        <item name="elevationOverlayColor">#6D74FF</item>-->
     </style>
 
     <style name="Theme.launcher" parent="Theme.MaterialComponents.NoActionBar">

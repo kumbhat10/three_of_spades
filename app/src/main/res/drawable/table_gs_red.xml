@@ -40,5 +40,31 @@
                 android:radius="@dimen/radiusInner3x"/>
         </shape>
     </item>
+<!--    <item-->
+<!--        android:bottom="@dimen/tableInner2x"-->
+<!--        android:left="@dimen/tableInner2x"-->
+<!--        android:right="@dimen/tableInner2x"-->
+<!--        android:top="@dimen/tableInner2x">-->
 
+<!--        <shape android:shape="rectangle">-->
+<!--            <gradient-->
+<!--                android:startColor="#70B1B1B1"-->
+<!--                android:centerColor="#83474747"-->
+<!--                android:endColor="#BF000000"-->
+<!--                android:centerX="0.5"-->
+<!--                android:centerY="0.5"-->
+<!--                android:gradientRadius="@dimen/_390sdp"-->
+<!--                android:type="radial"/>-->
+<!--            <corners-->
+<!--                android:radius="@dimen/radiusInner3x"/>-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--    <item-->
+<!--        android:bottom="@dimen/tableInner2x"-->
+<!--        android:left="@dimen/tableInner2x"-->
+<!--        android:right="@dimen/tableInner2x"-->
+<!--        android:top="@dimen/tableInner2x"-->
+<!--        android:drawable="@drawable/blackcirclebutton">-->
+
+<!--    </item>-->
 </layer-list>

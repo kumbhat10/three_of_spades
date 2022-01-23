@@ -50,7 +50,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 	private fun sendNotification(remoteMessage: RemoteMessage) {
 		val intent = Intent(this, MainHomeScreen::class.java)
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-		val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+		val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
 		val channelId = getString(R.string.default_notification_channel_id1)
 		val defaultSoundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.notification)

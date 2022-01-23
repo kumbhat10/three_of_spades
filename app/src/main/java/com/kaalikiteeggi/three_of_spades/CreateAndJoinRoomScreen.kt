@@ -12,6 +12,8 @@ import android.media.MediaPlayer
 import android.os.*
 import android.speech.tts.TextToSpeech
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
@@ -115,8 +117,12 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             .trackActivities(false) //default: false
             .errorDrawable(R.drawable.bug_icon) //default: bug image
             .apply()
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        setContentView(R.layout.activity_create_join_room_screen) //		SoundManager.initialize(this)
+        setContentView(R.layout.activity_create_join_room_screen)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            val controller = window.insetsController
+            controller!!.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }else window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         backgroundJR.setImageResource(tableBackground.random())
         refRoomData = Firebase.firestore.collection(getString(R.string.pathRoom))
         nPlayers = intent.getIntExtra("nPlayers", 0)
