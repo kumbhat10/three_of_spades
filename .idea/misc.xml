@@ -136,6 +136,7 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/target.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/tint_backgroundgame.xml" value="0.1865" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/tint_backgroundmhs.xml" value="0.1825" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/tint_splashscreen.xml" value="0.1" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/track1.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/trend.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/trophy.xml" value="0.19583333333333333" />
@@ -147,7 +148,7 @@
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_developer_credits.xml" value="0.1796875" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_game_screen.xml" value="0.22" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_main_home_screen.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_splash_screen.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_splash_screen.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_start_screen.xml" value="0.22" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_train.xml" value="0.1" />
         <entry key="..\:/Users/kumbh/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/cards_item_list_partner.xml" value="0.22" />

@@ -107,14 +107,14 @@
             <set>
                 <objectAnimator
                     android:propertyName="trimPathStart"
-                    android:duration="1900"
+                    android:duration="1700"
                     android:valueFrom="1"
                     android:valueTo="0"
                     android:valueType="floatType"
                     android:interpolator="@android:interpolator/linear"/>
                 <objectAnimator
                     android:propertyName="trimPathOffset"
-                    android:duration="1900"
+                    android:duration="1600"
                     android:valueFrom="1"
                     android:valueTo="0"
                     android:valueType="floatType"
@@ -153,8 +153,8 @@
                     android:interpolator="@android:interpolator/fast_out_slow_in"/>
                 <objectAnimator
                     android:propertyName="fillAlpha"
-                    android:startOffset="1300"
-                    android:duration="1500"
+                    android:startOffset="1500"
+                    android:duration="600"
                     android:valueFrom="0"
                     android:valueTo="1"
                     android:valueType="floatType"
@@ -177,8 +177,8 @@
 
                 <objectAnimator
                     android:propertyName="fillAlpha"
-                    android:startOffset="1800"
-                    android:duration="1500"
+                    android:startOffset="1400"
+                    android:duration="1000"
                     android:valueFrom="0"
                     android:valueTo="1"
                     android:valueType="floatType"
@@ -191,7 +191,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillAlpha"
-                android:startOffset="1900"
+                android:startOffset="1400"
                 android:duration="1500"
                 android:valueFrom="0"
                 android:valueTo="1"
@@ -203,7 +203,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillAlpha"
-                android:startOffset="1900"
+                android:startOffset="1400"
                 android:duration="1500"
                 android:valueFrom="0"
                 android:valueTo="1"
@@ -215,7 +215,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillAlpha"
-                android:startOffset="1900"
+                android:startOffset="1400"
                 android:duration="1500"
                 android:valueFrom="0"
                 android:valueTo="0.8"
@@ -227,7 +227,7 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:propertyName="fillAlpha"
-                android:startOffset="1900"
+                android:startOffset="1400"
                 android:duration="1500"
                 android:valueFrom="0"
                 android:valueTo="1"
