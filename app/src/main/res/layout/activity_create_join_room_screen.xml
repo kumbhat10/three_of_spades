@@ -16,7 +16,7 @@
         android:scaleType="fitXY"
         android:foreground="@drawable/tint_backgroundgame"
         android:src="@drawable/game_screen_table_blue"
-        app:layout_constraintBottom_toTopOf="@+id/addViewCreateJoinRoom"
+        app:layout_constraintBottom_toTopOf="@+id/bannerCJRS"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/todo" />
     
@@ -65,7 +65,7 @@
         android:textSize="@dimen/_14ssp"
         android:visibility="gone"
         app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintBottom_toTopOf="@+id/addViewCreateJoinRoom"
+        app:layout_constraintBottom_toTopOf="@+id/bannerCJRS"
         app:layout_constraintEnd_toStartOf="@+id/imageViewShareButton2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageViewShareButton2" />
@@ -88,7 +88,7 @@
         android:scrollbarTrackVertical="@drawable/scrollbar_track"
         android:scrollbars="vertical"
         android:verticalScrollbarPosition="left"
-        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
+        app:layout_constraintBottom_toTopOf="@id/bannerCJRS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomIDTitle"
@@ -100,7 +100,7 @@
         android:layout_height="@dimen/crjsgap"
         android:layout_marginBottom="@dimen/_5ssp"
         app:layout_constraintTop_toBottomOf="@id/playersJoin"
-        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
+        app:layout_constraintBottom_toTopOf="@id/bannerCJRS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:indeterminate="true"
@@ -115,7 +115,7 @@
         android:layout_height="@dimen/crjsgap"
         android:layout_marginBottom="@dimen/_10ssp"
         android:onClick="shareRoomInfo"
-        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
+        app:layout_constraintBottom_toTopOf="@id/bannerCJRS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"
@@ -136,24 +136,17 @@
         android:textColor="@color/white"
         android:textSize="@dimen/_22ssp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
+        app:layout_constraintBottom_toTopOf="@id/bannerCJRS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playersJoin"
         app:layout_constraintVertical_bias="0.5" />
 
-    <com.mopub.mobileads.MoPubView
-        android:id="@+id/addViewCreateJoinRoom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
     <View
         android:id="@+id/maskAllLoading1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
+        app:layout_constraintBottom_toTopOf="@id/bannerCJRS"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/BlackTrans"
         android:clickable="true"
@@ -167,7 +160,7 @@
         android:layout_width="@dimen/_65sdp"
         android:layout_height="@dimen/_65sdp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/addViewCreateJoinRoom"
+        app:layout_constraintBottom_toTopOf="@id/bannerCJRS"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:indeterminate="true"
@@ -192,5 +185,16 @@
         android:text="@string/firingServer"
         android:textColor="@color/white"
         android:textSize="@dimen/_15ssp" />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bannerCJRS"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_admob"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

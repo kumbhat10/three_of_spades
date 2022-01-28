@@ -6,8 +6,6 @@
     android:id="@+id/backgroundmhs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/table_gs_red"
-    android:foreground="@drawable/tint_backgroundmhs"
     android:onClick="openClosePlayerStats"
     tools:context=".MainHomeScreen"
     tools:ignore="DuplicateClickableBoundsCheck">
@@ -16,8 +14,9 @@
         android:id="@+id/playerStatsML"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@drawable/background_glitter"
         app:layoutDescription="@xml/player_stats_motion_scene"
-        app:layout_constraintBottom_toTopOf="@+id/addViewMHS"
+        app:layout_constraintBottom_toTopOf="@+id/bannerMHS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -122,8 +121,8 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_5sdp"
-            android:visibility="invisible"
-            android:background="@drawable/shine_player_stats"
+            android:visibility="visible"
+            android:background="@color/profileCard"
             android:onClick="openClosePlayerStats"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -181,9 +180,9 @@
             app:layout_constraintBottom_toBottomOf="@id/userCoinImage"
             app:layout_constraintStart_toEndOf="@id/userCoinImage"
             app:layout_constraintTop_toTopOf="@id/userCoinImage"
-            app:ticker_animationDuration="1500"
+            app:ticker_animationDuration="2000"
             app:ticker_defaultCharacterList="number"
-            app:ticker_defaultPreferredScrollingDirection="any"
+            app:ticker_defaultPreferredScrollingDirection="up"
             tools:ignore="TouchTargetSizeCheck" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -807,7 +806,7 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/addViewMHS"
+        app:layout_constraintBottom_toTopOf="@id/bannerMHS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -904,23 +903,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.mopub.mobileads.MoPubView
-        android:id="@+id/addViewMHS"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adViewMHS"
-        android:layout_width="wrap_content"
+        android:id="@+id/bannerMHS"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintEnd_toEndOf="parent"
-        ads:adSize="BANNER"
+        ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/banner_admob"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

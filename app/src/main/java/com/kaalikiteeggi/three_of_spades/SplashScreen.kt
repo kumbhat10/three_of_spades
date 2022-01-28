@@ -17,10 +17,15 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.initialization.InitializationStatus
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -33,6 +38,7 @@ import com.mopub.common.MoPub
 import com.mopub.common.SdkConfiguration
 import com.mopub.common.logging.MoPubLog
 import kotlinx.android.synthetic.main.activity_splash_screen.*
+import java.util.*
 import java.util.concurrent.Executors
 
 class SplashScreen : AppCompatActivity() {
@@ -57,11 +63,14 @@ class SplashScreen : AppCompatActivity() {
         avd.registerAnimationCallback(object : Animatable2.AnimationCallback() {
             override fun onAnimationStart(drawable: Drawable?) {
                 loadingSplash.visibility = View.VISIBLE
+                handler.postDelayed({
+                    isTimerOver = true
+                    if (isAppLatest) nextActivity()
+                }, timer) // dummy 3500
             }
-
             override fun onAnimationEnd(drawable: Drawable?) {
                 loadingSplash.text = getString(R.string.splashLoadingDone)
-                loadingProgress.setProgressCompat(100, false)
+                loadingProgress.setProgressCompat(100, true)
             }
         })
         avd.start()
@@ -80,13 +89,10 @@ class SplashScreen : AppCompatActivity() {
         Executors.newSingleThreadExecutor().execute {
             checkAppUpdate()
         }
-        handler.postDelayed({
-            isTimerOver = true
-			if (isAppLatest) nextActivity()
-        }, timer) // dummy 3500
+
     }
 
-	private fun loadUserProfile() {
+    private fun loadUserProfile() {
         user = FirebaseAuth.getInstance().currentUser // dummy - could be a problem if invalid mAuth and not null
         if (user != null) {
             FirebaseCrashlytics.getInstance().setUserId(user!!.uid)
@@ -94,24 +100,18 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun mobileAds() {
-        //		MobileAds.initialize(this)
-        val configBuilder = if (BuildConfig.DEBUG) SdkConfiguration.Builder(getString(R.string.bannerTest_MP)).withLogLevel(MoPubLog.LogLevel.DEBUG)
-        else SdkConfiguration.Builder(getString(R.string.bannerReal_MP)).withLogLevel(MoPubLog.LogLevel.NONE)
-
-        //		AdSettings.addTestDevice("bd40e50a-23b8-4798-8370-0ebbd6bf23fb") //onePlus
-        //		val facebookConfig = hashMapOf("banner" to "", "interstitial" to "")
-        //		AudienceNetworkAds.buildInitSettings(applicationContext).withPlacementIds(listOf("607386246545418_617997035484339")).withInitListener {
-        //			MoPub.initializeSdk(applicationContext, configBuilder.build()) { }
-        //		}.initialize()
-        MoPub.getPersonalInformationManager()?.grantConsent()
-        MoPub.initializeSdk(applicationContext, configBuilder.build()) {
-//			val interstitialAdID = if (BuildConfig.DEBUG) getString(R.string.interstitialTest_mp) // real interstitial ad id - MoPub
-//			else getString(R.string.interstitialReal_mp) // test interstitial ad
-//			val mInterstitial = MoPubInterstitial(this, interstitialAdID)
-//			mInterstitial.load()
-//			val rewardedAdId = if (BuildConfig.DEBUG) getString(R.string.rewardedTest_mp) else getString(R.string.rewardedReal_mp)
-//			MoPubRewardedAds.loadRewardedAd(rewardedAdId)
+        MobileAds.initialize(this){initializationStatus->
+            val statusMap = initializationStatus.adapterStatusMap
+            for (adapterClass in statusMap.keys) {
+                val status = statusMap[adapterClass]
+                Log.d("MyApp", String.format(
+                    "Adapter name: %s, Description: %s, Latency: %d",
+                    adapterClass, status!!.description, status.latency))
+            }
         }
+        val requestBuilder = RequestConfiguration.Builder().setTestDeviceIds(listOf("CE88E5381EAA1C30F911F4851420C18E")).build()
+        MobileAds.setRequestConfiguration(requestBuilder)
+
     }
 
     private fun nextActivity() {
@@ -140,7 +140,7 @@ class SplashScreen : AppCompatActivity() {
                 appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, requestCodeAppUpdate)
             } else {
                 isAppLatest = true
-				if (isTimerOver && !isNextActivityStarted) nextActivity()
+                if (isTimerOver && !isNextActivityStarted) nextActivity()
             }
         }.addOnFailureListener {
             toastCenter("Failed to check App update \nPlease update from PlayStore", duration = 2000)

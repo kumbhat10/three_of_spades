@@ -93,9 +93,9 @@ dependencies {
 
     // Import the BoM for the Firebase platform
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.0.1'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.3'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.6'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.7'
 
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.0.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:20.0.2'
@@ -106,6 +106,8 @@ dependencies {
 //    implementation 'com.facebook.android:audience-network-sdk:6.4.0'
 //    implementation 'com.mopub.mediation:facebookaudiencenetwork:6.4.0.1'
     implementation 'com.applovin:applovin-sdk:11.0.0'
+    implementation  'com.google.ads.mediation:applovin:10.3.5.0'
+
     implementation('com.mopub:mopub-sdk-banner:5.18.0@aar') {
         transitive = true
     }

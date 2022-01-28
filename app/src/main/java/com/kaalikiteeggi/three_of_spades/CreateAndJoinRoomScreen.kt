@@ -22,6 +22,8 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import cat.ereza.customactivityoncrash.config.CaocConfig
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -33,13 +35,9 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.mopub.common.MoPub
-import com.mopub.common.SdkConfiguration
-import com.mopub.common.logging.MoPubLog
-import com.mopub.mobileads.MoPubView
 import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CreateAndJoinRoomScreen : AppCompatActivity() {
     // region Initialization
@@ -50,9 +48,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private lateinit var refRoomData: CollectionReference
     private var refUsersData = Firebase.firestore.collection("Users")
 
-    private var tableBackground = listOf(R.drawable.table_gs_blue, R.drawable.table_gs_brown, R.drawable.table_gs_green,
-        R.drawable.table_gs_orange, R.drawable.table_gs_pink, R.drawable.table_gs_purple,
-        R.drawable.table_gs_red, R.drawable.table_gs_x1, R.drawable.table_gs_yellow)
+    private var tableBackground = listOf(R.drawable.table_gs_blue, R.drawable.table_gs_brown, R.drawable.table_gs_green, R.drawable.table_gs_orange, R.drawable.table_gs_pink, R.drawable.table_gs_purple, R.drawable.table_gs_red, R.drawable.table_gs_x1, R.drawable.table_gs_yellow)
 
     private lateinit var registration: ListenerRegistration
     private lateinit var alertDialog: AlertDialog
@@ -108,8 +104,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     // endregion
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CaocConfig.Builder.create()
-            .backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
             .enabled(true) //default: true
             .showErrorDetails(true) //default: true
             .showRestartButton(true) //default: true
@@ -118,11 +113,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             .errorDrawable(R.drawable.bug_icon) //default: bug image
             .apply()
         setContentView(R.layout.activity_create_join_room_screen)
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val controller = window.insetsController
             controller!!.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
             controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }else window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        } else window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         backgroundJR.setImageResource(tableBackground.random())
         refRoomData = Firebase.firestore.collection(getString(R.string.pathRoom))
         nPlayers = intent.getIntExtra("nPlayers", 0)
@@ -142,7 +137,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         playersJoin.adapter = adapter
 
         Handler(Looper.getMainLooper()).post {
-            v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            v = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                (this.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+            }
+            else getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
             soundBkgd = MediaPlayer.create(this, R.raw.music)
             soundBkgd.isLooping = true
             soundBkgd.setVolume(0.05F, 0.05F)
@@ -157,14 +156,14 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         FirebaseCrashlytics.getInstance().setUserId(uid)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUIAndAnimateElements() {
         roomID = intent.getStringExtra("roomID")!!.toString()    //Get roomID and display
         selfName = intent.getStringExtra("selfName")!!.toString()  //Get Username
         photoURL = intent.getStringExtra("photoURL")!!.toString()  //Get Photo URL
         totalCoins = intent.getIntExtra("totalCoins", 0)
         totalDailyCoins = intent.getIntExtra("totalDailyCoins", 0)
-        from = intent.getStringExtra("from")!!
-            .toString()     //check if user has joined room or created one and display Toast
+        from = intent.getStringExtra("from")!!.toString()     //check if user has joined room or created one and display Toast
         fromInt = from.split("")[2].toInt()
         userStats = intent.getIntegerArrayListExtra("userStats")!!
         userStatsTotal = intent.getIntegerArrayListExtra("userStatsTotal")!!
@@ -188,11 +187,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateRoomInfoOffline() {
-        userBasicInfoList.add(0,
-            UserBasicInfo(empty = false, index = 0, name = selfName, score = totalCoins, photoURL = photoURL, played = userStatsTotal[0], won = userStatsTotal[1], bid = userStatsTotal[2]))
+        userBasicInfoList.add(0, UserBasicInfo(empty = false, index = 0, name = selfName, score = totalCoins, photoURL = photoURL, played = userStatsTotal[0], won = userStatsTotal[1], bid = userStatsTotal[2]))
         adapter.notifyDataSetChanged()
-
         val data = CreateRoomData(userBasicInfoList[0]).offlineData  // create other 3 offline players data
         playerInfo = ArrayList()
         playerInfoCoins = ArrayList()
@@ -324,14 +322,15 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
         if (playerJoining == 11) {
             userBasicInfoStatus.observe(this) { eachStatus ->
-                if (eachStatus.all { it }){
+                if (eachStatus.all { it }) {
                     toastCenter("Ready To start")
-                    handler.postDelayed({startNextActivity()}, 1500L)
+                    handler.postDelayed({ startNextActivity() }, 1500L)
                 }
             }
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun getDataNUpdateAdapter(uid: String, index: Int = 0) {
         refUsersData.document(uid).get().addOnSuccessListener { dataSnapshot ->
             if (dataSnapshot.exists()) {
@@ -374,21 +373,20 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
                     }
                 }
                 myRefGameData.child(roomID).setValue(gameData).addOnSuccessListener {
-                    refRoomData.document(roomID).set(hashMapOf("PJ" to 10), SetOptions.merge())
-                        .addOnSuccessListener {
-                            startGameButton.clearAnimation()
-                            startGameButton.visibility = View.GONE
-                            refRoomData.document(roomID + "_chat").set(hashMapOf(
-                                "M" to "",
-                                "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
-                                "dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),
-                            ))
-                        }.addOnFailureListener { exception ->
-                            maskAllLoading1.visibility = View.GONE
-                            progressBarLoading4.visibility = View.GONE
-                            loadingText1.visibility = View.GONE
-                            toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}")
-                        }
+                    refRoomData.document(roomID).set(hashMapOf("PJ" to 10), SetOptions.merge()).addOnSuccessListener {
+                        startGameButton.clearAnimation()
+                        startGameButton.visibility = View.GONE
+                        refRoomData.document(roomID + "_chat").set(hashMapOf(
+                            "M" to "",
+                            "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
+                            "dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),
+                        ))
+                    }.addOnFailureListener { exception ->
+                        maskAllLoading1.visibility = View.GONE
+                        progressBarLoading4.visibility = View.GONE
+                        loadingText1.visibility = View.GONE
+                        toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}")
+                    }
                 }.addOnFailureListener { exception ->
                     maskAllLoading1.visibility = View.GONE
                     progressBarLoading4.visibility = View.GONE
@@ -410,10 +408,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     private fun startNextActivity() {
         if (nPlayers == 7) {
-            playerInfo.addAll(listOf(p1, p2, p3, p4, p5, p6, p7,
-                    userBasicInfoList[0].photoURL, userBasicInfoList[1].photoURL, userBasicInfoList[2].photoURL, userBasicInfoList[3].photoURL, userBasicInfoList[4].photoURL, userBasicInfoList[5].photoURL, userBasicInfoList[6].photoURL))
-            playerInfoCoins.addAll(listOf(userBasicInfoList[0].score, userBasicInfoList[1].score, userBasicInfoList[2].score, userBasicInfoList[3].score, userBasicInfoList[4].score,
-                    userBasicInfoList[5].score, userBasicInfoList[6].score))
+            playerInfo.addAll(listOf(p1, p2, p3, p4, p5, p6, p7, userBasicInfoList[0].photoURL, userBasicInfoList[1].photoURL, userBasicInfoList[2].photoURL, userBasicInfoList[3].photoURL, userBasicInfoList[4].photoURL, userBasicInfoList[5].photoURL, userBasicInfoList[6].photoURL))
+            playerInfoCoins.addAll(listOf(userBasicInfoList[0].score, userBasicInfoList[1].score, userBasicInfoList[2].score, userBasicInfoList[3].score, userBasicInfoList[4].score, userBasicInfoList[5].score, userBasicInfoList[6].score))
         } else if (nPlayers == 4) {
             playerInfo.addAll(listOf(p1, p2, p3, p4, userBasicInfoList[0].photoURL, userBasicInfoList[1].photoURL, userBasicInfoList[2].photoURL, userBasicInfoList[3].photoURL))
             playerInfoCoins.addAll(listOf(userBasicInfoList[0].score, userBasicInfoList[1].score, userBasicInfoList[2].score, userBasicInfoList[3].score))
@@ -421,24 +417,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         if (!offline) {
             if (soundStatus) SoundManager.instance?.playUpdateSound()
             startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreen::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
-                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }
-                .apply { putExtra("totalDailyCoins", totalDailyCoins) }
-                .apply { putExtra("roomID", roomID) }
-                .putStringArrayListExtra("playerInfo", playerInfo)
-                .putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins)
-                .putIntegerArrayListExtra("userStats", userStats)
-                .putIntegerArrayListExtra("userStatsDaily", userStatsDaily)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("roomID", roomID) }.putStringArrayListExtra("playerInfo", playerInfo).putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins).putIntegerArrayListExtra("userStats", userStats).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         } else {
             startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreenAutoPlay::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
-                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }
-                .apply { putExtra("totalDailyCoins", totalDailyCoins) }
-                .apply { putExtra("roomID", roomID) }
-                .putStringArrayListExtra("playerInfo", playerInfo)
-                .putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins)
-                .putIntegerArrayListExtra("userStats", userStats)
-                .putIntegerArrayListExtra("userStatsDaily", userStatsDaily)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("roomID", roomID) }.putStringArrayListExtra("playerInfo", playerInfo).putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins).putIntegerArrayListExtra("userStats", userStats).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
         overridePendingTransition(R.anim.slide_top_in_activity, R.anim.slide_top_in_activity) //		finishAfterTransition()
         finishAndRemoveTask()
@@ -469,18 +451,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     private fun initializeAds() {
         if (!premiumStatus) {
-            val configBuilder = if (BuildConfig.DEBUG) SdkConfiguration.Builder(getString(R.string.bannerTest_MP)).withLogLevel(MoPubLog.LogLevel.DEBUG)
-            else SdkConfiguration.Builder(getString(R.string.bannerReal_MP)).withLogLevel(MoPubLog.LogLevel.NONE)
-            MoPub.initializeSdk(this, configBuilder.build()) {
-                val adUnitID = if (BuildConfig.DEBUG) getString(R.string.bannerTest_MP)
-                else getString(R.string.bannerReal_MP)
-                addViewCreateJoinRoom.visibility = View.VISIBLE
-                addViewCreateJoinRoom.setAdUnitId(adUnitID)
-                addViewCreateJoinRoom.adSize = MoPubView.MoPubAdSize.HEIGHT_280
-                addViewCreateJoinRoom.loadAd()
-            }
+            MobileAds.initialize(this) //initialize admob ads
+            bannerCJRS.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
+            bannerCJRS.visibility = View.VISIBLE
         } else {
-            addViewCreateJoinRoom.visibility = View.GONE
+            bannerCJRS.visibility = View.GONE
         }
     }
 
@@ -492,7 +467,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
-            if (premiumStatus) addViewCreateJoinRoom.visibility = View.GONE
+            if (premiumStatus) bannerCJRS.visibility = View.GONE
             else initializeAds()
         }
         if (sharedPreferences.contains("musicStatus")) {
@@ -570,7 +545,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        addViewCreateJoinRoom.destroy() // destroy MoPub banner add view
+        bannerCJRS.destroy() // destroy MoPub banner add view
         if (this::soundBkgd.isInitialized) soundBkgd.release() //		adapter = null
         playersJoin.adapter = null
         try {
@@ -590,9 +565,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     private fun createDynamicLink() {
-        shareLink =
-            "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=54" +                //				"&st=3%20of%20Spades" +
-                    "&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID + "&si=https://tinyurl.com/3ofspade" //https://i.pinimg.com/564x/f9/fd/d9/f9fdd9bf6fbb9f00d945e1b22b293aea.jpg"
+        shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=54" +                //				"&st=3%20of%20Spades" +
+                "&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID + "&si=https://tinyurl.com/3ofspade" //https://i.pinimg.com/564x/f9/fd/d9/f9fdd9bf6fbb9f00d945e1b22b293aea.jpg"
     }
 
     fun shareRoomInfo(view: View) {

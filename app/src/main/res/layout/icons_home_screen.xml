@@ -3,9 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/iconWidth"
-    android:layout_height="@dimen/_113sdp"
-    android:paddingTop="@dimen/_10sdp"
-    android:background="@drawable/shine_player_stats">
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/_10sdp">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/iconImage1s"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:shimmer_base_alpha="0.85"
+        app:shimmer_duration="800"
+        app:shimmer_repeat_delay="1000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
 
     <ImageView
         android:id="@+id/iconImage1"
@@ -19,22 +30,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/iconText"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_25sdp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginStart="@dimen/_3sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_3sdp"
-        android:background="@drawable/blackglassglossy"
         android:gravity="center"
         android:text="@string/createRoom"
         android:textColor="@color/BlackTransUserStats3"
         android:textSize="@dimen/_11ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iconImage1"
-        android:layout_marginBottom="@dimen/_3sdp"
+        app:layout_constraintTop_toBottomOf="@id/iconImage1s"
         app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
