@@ -40,7 +40,7 @@
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profileCard"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription,TextContrastCheck" />
 
         <ImageView
             android:id="@+id/contactUS"
@@ -49,6 +49,7 @@
             android:layout_marginTop="@dimen/mhsIconsGap"
             android:layout_marginEnd="@dimen/mhsIconsMargin"
             android:clickable="true"
+            android:contentDescription="@string/todo"
             android:focusable="true"
             android:gravity="center"
             android:onClick="developerCredits"
@@ -56,7 +57,7 @@
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/removeAds"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
 
         <TextView
             android:id="@+id/rateUsIcon"
@@ -121,14 +122,14 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_5sdp"
-            android:visibility="visible"
             android:background="@color/profileCard"
             android:onClick="openClosePlayerStats"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.ProfileCard"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profilePic"
@@ -155,17 +156,20 @@
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@id/profilePic"
             app:layout_constraintStart_toEndOf="@id/profilePic"
-            app:layout_constraintTop_toTopOf="@id/profilePic" />
+            app:layout_constraintTop_toTopOf="@id/profilePic"
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
         <ImageView
             android:id="@+id/userCoinImage"
             android:layout_width="@dimen/_35sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_1sdp"
+            android:contentDescription="@string/todo"
             android:src="@drawable/coin_trans_1"
             android:visibility="visible"
             app:layout_constraintStart_toEndOf="@id/profilePic"
-            app:layout_constraintTop_toBottomOf="@id/usernameCardMHS" />
+            app:layout_constraintTop_toBottomOf="@id/usernameCardMHS"
+            tools:ignore="ImageContrastCheck" />
 
         <com.robinhood.ticker.TickerView
             android:id="@+id/userScoreMHS"
@@ -214,7 +218,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginBottom="@dimen/_30sdp"
                 android:background="@drawable/shine_player_stats"
                 android:clickable="true"
                 android:focusable="true"
@@ -229,7 +232,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/playerStatsGrid"
-                tools:ignore="RelativeOverlap" />
+                tools:ignore="RelativeOverlap,TextContrastCheck" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -265,14 +268,14 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/watchVideo"
-        android:layout_width="@dimen/_64sdp"
-        android:layout_height="@dimen/mhsIconsSize"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/mhsWatchVideoIconsSize"
         android:layout_marginTop="@dimen/_24sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="showRewardedVideoAd"
+        android:onClick="callToShowRewardedVideoAd"
         android:src="@drawable/watch_ad_500"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -764,7 +767,7 @@
         android:background="@color/BlackTrans"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -908,6 +911,7 @@
         android:id="@+id/bannerMHS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintEnd_toEndOf="parent"

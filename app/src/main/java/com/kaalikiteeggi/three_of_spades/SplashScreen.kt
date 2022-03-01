@@ -1,19 +1,10 @@
 package com.kaalikiteeggi.three_of_spades
 
-//import com.adcolony.sdk.AdColony
-//import com.adcolony.sdk.AdColonyAppOptions
-//import com.facebook.ads.AdSettings
-//import com.google.ads.mediation.adcolony.AdColonyMediationAdapter
-//import com.google.ads.mediation.inmobi.InMobiConsent
-//import com.inmobi.sdk.InMobiSdk
-//import com.unity3d.ads.UnityAds
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Animatable2
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -22,10 +13,9 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.applovin.sdk.AppLovinPrivacySettings
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
-import com.google.android.gms.ads.initialization.InitializationStatus
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -34,11 +24,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.mopub.common.MoPub
-import com.mopub.common.SdkConfiguration
-import com.mopub.common.logging.MoPubLog
 import kotlinx.android.synthetic.main.activity_splash_screen.*
-import java.util.*
 import java.util.concurrent.Executors
 
 class SplashScreen : AppCompatActivity() {
@@ -100,7 +86,8 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun mobileAds() {
-        MobileAds.initialize(this){initializationStatus->
+        AppLovinPrivacySettings.setHasUserConsent(true, this)
+        MobileAds.initialize(applicationContext){initializationStatus->
             val statusMap = initializationStatus.adapterStatusMap
             for (adapterClass in statusMap.keys) {
                 val status = statusMap[adapterClass]
@@ -169,12 +156,6 @@ class SplashScreen : AppCompatActivity() {
                 appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, requestCodeAppUpdate)
             }
         }
-    }
-
-    override fun onDestroy() {
-        handler.removeCallbacksAndMessages(null)
-        MoPub.onDestroy(this)
-        super.onDestroy()
     }
 
 }

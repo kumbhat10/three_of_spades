@@ -5,6 +5,7 @@ class Emoji {
 	val trophy = String(Character.toChars(0x1F3C6))
 	val calculator = String(Character.toChars(0x1F5A9))
 	val doc = String(Character.toChars(0x1F5BA))
+	val celebrate = String(Character.toChars(0x1F973))
 
 	val money = String(Character.toChars(0x1F4B0))
 	val score = String(Character.toChars(0x1F3AF))

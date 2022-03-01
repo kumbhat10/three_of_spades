@@ -103,10 +103,12 @@ class StartScreen : AppCompatActivity() {
 			}
 		}) // endregion
 		// region Google Sign In
+
 		val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 			.requestIdToken(getString(R.string.default_web_client_id))
-			.requestEmail() //            .requestScopes(Games.SCOPE_GAMES_LITE)
+			.requestEmail()
 			.build()
+
 		mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 		findViewById<SignInButton>(R.id.googleSignInButton).setOnClickListener(View.OnClickListener {
 			it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))

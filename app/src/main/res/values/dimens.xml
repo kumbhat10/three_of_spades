@@ -77,6 +77,7 @@
     <dimen name="scoreTableTextSize">@dimen/_9ssp</dimen>
 
     <dimen name="mhsIconsSize">@dimen/_50sdp</dimen>
+    <dimen name="mhsWatchVideoIconsSize">@dimen/_60sdp</dimen>
     <dimen name="mhsIconsGap">@dimen/_10sdp</dimen>
     <dimen name="mhsIconsMargin">0dp</dimen>
     <dimen name="shimmerWidth">@dimen/_60sdp</dimen>

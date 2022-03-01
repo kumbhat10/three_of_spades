@@ -2,13 +2,11 @@ package com.kaalikiteeggi.three_of_spades
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.user_rank.view.*
@@ -32,7 +30,7 @@ class ListViewAdapter(private val context: Context, private val userArrayList: A
 	}
 
 	@SuppressLint("SetTextI18n")
-	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position1: Int) {
 		val position = holder.bindingAdapterPosition
 		holder.itemView.userRank.text = userArrayList[position].userRank
 		if(position<3) {

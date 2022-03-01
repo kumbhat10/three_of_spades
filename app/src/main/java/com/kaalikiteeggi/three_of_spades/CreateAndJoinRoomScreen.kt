@@ -34,11 +34,11 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.mopub.common.MoPub
 import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("DEPRECATION")
 class CreateAndJoinRoomScreen : AppCompatActivity() {
     // region Initialization
     private lateinit var soundBkgd: MediaPlayer
@@ -127,10 +127,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             val emptyUser = UserBasicInfo()
             userBasicInfoList = MutableList(nPlayers) { emptyUser }
             userBasicInfoStatus.value = MutableList(nPlayers) { false }
-//			for (iUser in 0 until nPlayers) {
-//				userBasicInfoList.add(emptyUser)
-//				userBasicInfoStatus.value!!.add(false)
-//			}
         }
         playersJoin.layoutManager = LinearLayoutManager(this)
         adapter = LVAdapterJoinRoom(this, userBasicInfoList)
@@ -560,7 +556,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         } catch (error: Exception) {
             toastCenter(error.localizedMessage)
         }
-        MoPub.onDestroy(this)
         super.onDestroy()
     }
 

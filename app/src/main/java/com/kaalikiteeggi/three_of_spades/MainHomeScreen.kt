@@ -3,7 +3,9 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.media.MediaPlayer
@@ -30,10 +32,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.android.billingclient.api.*
+import com.applovin.sdk.AppLovinPrivacySettings
 import com.facebook.login.LoginManager
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -51,9 +56,6 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
-import com.mopub.common.MoPub
-import com.mopub.common.MoPubReward
-import com.mopub.mobileads.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main_home_screen.*
 import kotlinx.android.synthetic.main.fragment_test.view.*
@@ -79,9 +81,7 @@ class MainHomeScreen : AppCompatActivity() {
     private val howtoPlayUrl = "http://sites.google.com/view/kaali-ki-teeggi/how-to-play"
     private var rewardStatus = false
     private var rewardAmount = 0
-    private var clickedCreateRoom = false
     private var offlineRoomCreate = true
-    private var onceAdWatched = false
     private val today = CreateUser().todayDate
     private val todayClass = GetFormattedDate(dateInput = today)
     private var errorJoinRoomID = false
@@ -113,6 +113,7 @@ class MainHomeScreen : AppCompatActivity() {
 
     private lateinit var recyclerView1: RecyclerView
     private lateinit var recyclerView1ScrollListener: RecyclerView.OnScrollListener
+    private lateinit var alertDialog: AlertDialog
 
     private lateinit var adapter1: ListViewAdapter
     private lateinit var layoutManager1: LinearLayoutManager
@@ -129,9 +130,8 @@ class MainHomeScreen : AppCompatActivity() {
     private lateinit var refRoomData: CollectionReference
     private lateinit var fireStoreRef: DocumentReference
 
-    private lateinit var mInterstitialAdMP: MoPubInterstitial
     private var mInterstitialAd: InterstitialAd? = null
-    private lateinit var rewardedAdUnitId: String
+    private var mRewardedAd: RewardedAd? = null
     private lateinit var billingClient: BillingClient
     private var billingClientTry = 0
     private lateinit var mAuth: FirebaseAuth
@@ -169,12 +169,10 @@ class MainHomeScreen : AppCompatActivity() {
 
     private var loadRewardedAdTry = 0
     private var loadInterAdTry = 0
-    private var countRewardWatch = 3
     private var dailyRewardList = listOf(500, 1000, 2000, 3000, 4000, 5000, 5000)
     private var dailyRewardAmount = 0
     private var clickedDailyReward = false
     private var claimedToday = false
-    private var dailyRewardStatus = false
 
     // endregion
     @SuppressLint("ShowToast", "SetTextI18n")
@@ -194,15 +192,6 @@ class MainHomeScreen : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main_home_screen)
         background = Random.nextInt(0, 6)
-//		when (background) {
-//			0 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.redblackburst)
-//			1 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.blueburst)
-//			4 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.greenyellowburst)
-//			3 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.navyblueburst)
-//			2 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.redorangeburst)
-//			5 -> backgroundmhs.background = ContextCompat.getDrawable(this, R.drawable.yellowburst)
-//		}
-//		backgroundmhs.background = ContextCompat.getDrawable(this, GameScreenData().tableBackground.random())
         checkJoinRoom(intent)
         mainIconGridDisplay()
         newUser = intent.getBooleanExtra("newUser", true)
@@ -313,9 +302,6 @@ class MainHomeScreen : AppCompatActivity() {
         firebaseAnalytics.logEvent(event, params)
     }
 
-    private fun callConfetti() {
-    }
-
     private fun dailyRewardWindowDisplay() {
         if (soundStatus) SoundManager.instance?.playUpdateSound()
         val listDailyRewardItem = setDataListDR()
@@ -362,56 +348,6 @@ class MainHomeScreen : AppCompatActivity() {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (soundStatus) SoundManager.instance?.playUpdateSound()
         dailyRewardGridLayout.visibility = View.GONE
-    }
-
-    fun addPoints() {
-        callConfetti()
-        if (soundStatus) SoundManager.instance?.playZipSound()
-        clickedDailyReward = false
-        rewardAmount = dailyRewardAmount
-        totalCoins += rewardAmount  // reward with daily reward amount for watching video
-        userBasicInfo.score = totalCoins  // reward with daily reward amount for watching video
-        logFirebaseEvent("daily_rewards", 1, "coins$rewardAmount")
-        watchVideoCoin.text = rewardAmount.toString()
-        watchVideoCoin.visibility = View.VISIBLE
-        if (soundStatus) SoundManager.instance?.playCardCollectSound()
-        anim(watchVideoCoin, R.anim.slide_500_coins)
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (vibrateStatus) vibrationStart()
-            userScoreMHS.setText(String.format("%,d", totalCoins), true)
-            watchVideoCoin.visibility = View.GONE
-            loadRewardAd()
-        }, 1250)
-        refUsersData.document(uid).set(hashMapOf("sc" to totalCoins, "LSD" to today, "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
-    }
-
-    fun claimDailyReward(view: View) {
-        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        if (vibrateStatus) vibrationStart()
-        if (soundStatus) SoundManager.instance?.playUpdateSound()
-        clickedDailyReward = true
-        dailyRewardStatus = true
-        if (premiumStatus) {
-            dailyRewardGridLayout.visibility = View.GONE
-            addPoints()
-        } else if (MoPubRewardedAds.hasRewardedAd(rewardedAdUnitId) && !newUser) { // MoPubRewardedAds loaded or not check
-            MoPubRewardedAds.showRewardedAd(rewardedAdUnitId)
-            watchVideo.clearAnimation()
-            watchVideo.visibility = View.GONE
-        } else if (mInterstitialAdMP.isReady && !newUser) {
-            mInterstitialAdMP.show()
-            dailyRewardGridLayout.visibility = View.GONE
-            watchVideo.clearAnimation()
-            watchVideo.visibility = View.GONE
-            loadRewardAd()
-        } else {
-            dailyRewardGridLayout.visibility = View.GONE
-            addPoints()
-            watchVideo.clearAnimation()
-            watchVideo.visibility = View.GONE
-            loadRewardAd()
-            if (!premiumStatus) loadInterstitialAd()
-        }
     }
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
@@ -723,36 +659,36 @@ class MainHomeScreen : AppCompatActivity() {
 
     @Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
     private fun initializeAds() {
-        MobileAds.initialize(this) //initialize admob ads
+        AppLovinPrivacySettings.setHasUserConsent(true, this)
+        MobileAds.initialize(this) {
+            Log.d("Inter", "onInitializationComplete")
+            bannerMHS.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
+            bannerMHS.visibility = View.VISIBLE
+            loadRewardAd()
+            loadInterstitialAd()
+        }
         val requestBuilder = RequestConfiguration.Builder().setTestDeviceIds(listOf("CE88E5381EAA1C30F911F4851420C18E")).build()
         MobileAds.setRequestConfiguration(requestBuilder)
-        bannerMHS.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
-        //		loadRewardAd()
-        loadInterstitialAd()
     }
 
     private fun loadInterstitialAd() {
-        Log.d("Inter", "loadInterstitialAd")
         loadInterAdTry += 1 // try 5 times
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(this, getString(R.string.inter_admob), adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 Log.d("Inter", "onAdFailedToLoad")
-                if (loadInterAdTry < 4) loadInterstitialAd()
+                if (loadInterAdTry <= 2) loadInterstitialAd()
             }
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("Inter", "onAdLoaded")
                 loadInterAdTry = 0
                 mInterstitialAd = interstitialAd
-                if(!onceAdWatched) showInterstitialAd() // dummy
-
             }
         })
     }
 
-    private fun showInterstitialAd(){
-        Log.d("Inter", "showInterstitialAd")
-        if(mInterstitialAd!=null){
+    private fun showInterstitialAd() {
+        if (mInterstitialAd != null) {
             mInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                     Log.d("Inter", "onAdFailedToShowFullScreenContent")
@@ -762,28 +698,14 @@ class MainHomeScreen : AppCompatActivity() {
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("Inter", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
-                    loadInterstitialAd()
-                    onceAdWatched = true
-                    if (clickedDailyReward) {
-                        clickedDailyReward = false
-                        addPoints()
-                    } else if (clickedCreateRoom) {
-                        clickedCreateRoom = false
-                        createRoom()
-                    }
+                    addPoints()
                 }
-                override fun onAdShowedFullScreenContent() {
-                    Log.d("Inter", "onAdShowedFullScreenContent")
-                    onceAdWatched = true
-                    mInterstitialAd = null
-                    loadInterstitialAd()
-                }
-                override fun onAdImpression() {
-                    Log.d("Inter", "onAdImpression")
-                }
+                override fun onAdShowedFullScreenContent() {}
+                override fun onAdImpression() {}
             }
+            mInterstitialAd!!.setImmersiveMode(true)
             mInterstitialAd!!.show(this)
-        }else{
+        } else {
             Log.d("Inter", "InterstitialAd is Null")
             loadInterstitialAd()
         }
@@ -791,92 +713,139 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun loadRewardAd() {
         loadRewardedAdTry += 1
-        val rewardAdListener = object : MoPubRewardedAdListener {
-            override fun onRewardedAdClicked(adUnitId: String) {}
-            override fun onRewardedAdClosed(adUnitId: String) {
-                if (musicStatus) soundBkgd.start()
-                if (rewardStatus) {
-                    if (soundStatus) SoundManager.instance?.playZipSound()
-                    rewardStatus = false
-                    watchVideoCoin.text = rewardAmount.toString()
-                    watchVideoCoin.visibility = View.VISIBLE
-                    logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, 1, "coins$rewardAmount")
-                    if (soundStatus) SoundManager.instance?.playCardCollectSound()
-                    anim(watchVideoCoin, R.anim.slide_500_coins)
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        if (vibrateStatus) vibrationStart()
-                        userScoreMHS.setText(String.format("%,d", totalCoins), true)
-                        watchVideoCoin.visibility = View.GONE
-                        loadRewardAd()
-                    }, 1250)
-                } else {
-                    loadRewardAd()
-                    toastCenter("Sorry $userName No coins added")
-                }
+        var adRequest = AdRequest.Builder().build()
+        RewardedAd.load(this, getString(R.string.reward_admob), adRequest, object : RewardedAdLoadCallback() {
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                Log.d("Inter", "Rewarded failed to load")
+                mRewardedAd = null
+                if (loadRewardedAdTry <= 3) loadRewardAd()
             }
-
-            override fun onRewardedAdCompleted(adUnitIds: Set<String?>, reward: MoPubReward) {
-                rewardStatus = true
-                rewardAmount = if (clickedDailyReward) dailyRewardAmount
-                else when (countRewardWatch) {
-                    0 -> 100
-                    1 -> 250
-                    2 -> 500
-                    else -> 1000
-                }
-                totalCoins += rewardAmount  // reward with 500 coins for watching video
-                userBasicInfo.score = totalCoins
-                if (!clickedDailyReward) {
-                    countRewardWatch += 1
-                    refUsersData.document(uid).set(hashMapOf("sc" to totalCoins), SetOptions.merge())
-                } else {
-                    refUsersData.document(uid).set(hashMapOf("sc" to totalCoins, "LSD" to today, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
-                }
-                clickedDailyReward = false
-            }
-
-            override fun onRewardedAdLoadFailure(adUnitId: String, errorCode: MoPubErrorCode) {
-                if (BuildConfig.DEBUG) toastCenter("Failed to load reward Ad")
-//				if (loadRewardedAdTry <= 2) loadRewardAd()
-            }
-
-            override fun onRewardedAdLoadSuccess(adUnitId: String) {
+            override fun onAdLoaded(rewardedAd: RewardedAd) {
+                Log.d("Inter", "Rewarded ad loaded")
+                mRewardedAd = rewardedAd
                 loadRewardedAdTry = 1
-                when (countRewardWatch) {
-                    0 -> watchVideo.setImageResource(R.drawable.watch_ad_100)
-                    1 -> watchVideo.setImageResource(R.drawable.watch_ad_250)
-                    2 -> watchVideo.setImageResource(R.drawable.watch_ad_500)
-                    else -> watchVideo.setImageResource(R.drawable.watch_ad_1000)
-                }
+                watchVideo.setImageResource(R.drawable.watch_ad_1000)
                 watchVideo.visibility = View.VISIBLE
             }
-
-            override fun onRewardedAdShowError(adUnitId: String, errorCode: MoPubErrorCode) {
-                watchVideo.clearAnimation()
-                watchVideo.visibility = View.GONE
-                loadRewardAd()
-            }
-
-            override fun onRewardedAdStarted(adUnitId: String) {
-                dailyRewardGridLayout.visibility = View.GONE
-                watchVideo.clearAnimation()
-                watchVideo.visibility = View.GONE
-                if (musicStatus) soundBkgd.pause()
-            }
-        }
-//		MoPubRewardedAds.setRewardedAdListener(rewardAdListener)
-//		MoPubRewardedAds.loadRewardedAd(rewardedAdUnitId)
+        })
     }
 
-    fun showRewardedVideoAd(view: View) {
-        if (soundStatus) SoundManager.instance?.playUpdateSound()
-        if (MoPubRewardedAds.hasRewardedAd(rewardedAdUnitId)) {
-            MoPubRewardedAds.showRewardedAd(rewardedAdUnitId)
+    private fun showRewardedVideoAd() {
+        if (mRewardedAd != null) {
+            mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdShowedFullScreenContent() {                        // Called when ad is shown.
+                    Log.d("Inter", "mRewardedAd Ad was shown.")
+                    if (clickedDailyReward) dailyRewardGridLayout.visibility = View.GONE
+                    watchVideo.clearAnimation()
+                    watchVideo.visibility = View.GONE
+                    if (musicStatus) soundBkgd.pause()
+                }
+                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                    // Called when ad fails to show.
+                    Log.d("Inter", "mRewardedAd Ad failed to show.")
+                    watchVideo.clearAnimation()
+                    watchVideo.visibility = View.GONE
+                    loadRewardAd()
+                }
+                override fun onAdDismissedFullScreenContent() {// Called when ad is dismissed. Set the ad reference to null so you don't show the ad a second time.
+                    Log.d("Inter", "mRewardedAd Ad was dismissed.")
+                    mRewardedAd = null
+                    if (musicStatus) soundBkgd.start()
+                    if (rewardStatus) {
+                        addPoints()
+                        rewardStatus = false
+                    } else {
+                        loadRewardAd()
+                        toastCenter("Sorry $userName No coins added")
+                    }
+                }
+            }
+            mRewardedAd?.show(this) {
+                Log.d("Inter", "Earned Reward")
+                rewardStatus = true // successfully received reward
+                loadRewardAd()
+            }
         } else {
             watchVideo.clearAnimation()
             watchVideo.visibility = View.GONE
             loadRewardAd()
         }
+    }
+
+    fun addPoints() {
+        if (soundStatus) SoundManager.instance?.playZipSound()
+        rewardAmount = if (clickedDailyReward) dailyRewardAmount
+        else 1000
+        showDialogue(rewardAmount.toString())
+        if (clickedDailyReward) logFirebaseEvent("daily_rewards", 1, "coins$rewardAmount")
+        else logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, 1, "coins$rewardAmount")
+
+        totalCoins += rewardAmount  // reward with daily reward amount for watching video
+        userBasicInfo.score = totalCoins  // reward with daily reward amount for watching video
+        watchVideoCoin.text = rewardAmount.toString()
+        watchVideoCoin.visibility = View.VISIBLE
+        if (soundStatus) SoundManager.instance?.playCardCollectSound()
+        anim(watchVideoCoin, R.anim.slide_500_coins)
+        if (!clickedDailyReward) {
+            refUsersData.document(uid).set(hashMapOf("sc" to totalCoins), SetOptions.merge())
+        } else {
+            refUsersData.document(uid).set(hashMapOf("sc" to totalCoins, "LSD" to today, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
+        }
+        clickedDailyReward = false
+        watchVideoCoin.visibility = View.GONE
+        loadRewardAd()
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (vibrateStatus) vibrationStart()
+            userScoreMHS.setText(String.format("%,d", totalCoins), true)
+//            watchVideoCoin.visibility = View.GONE
+//            loadRewardAd()
+        }, 1250)
+    }
+
+    private fun showDialogue(coins: String) {
+        if (!this::alertDialog.isInitialized) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Congratulations !!! ${Emoji().celebrate}${Emoji().celebrate}${Emoji().celebrate}")
+            builder.setMessage("\nYou received $coins coins\n")
+            builder.setPositiveButton("Ok") { _: DialogInterface, _: Int ->
+            }
+            alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_player_stats))
+        }
+        alertDialog.show()
+    }
+
+    fun claimDailyReward(view: View) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        if (vibrateStatus) vibrationStart()
+        if (soundStatus) SoundManager.instance?.playUpdateSound()
+        clickedDailyReward = true
+        if (premiumStatus) {
+            dailyRewardGridLayout.visibility = View.GONE
+            addPoints()
+        } else if (mRewardedAd != null && !newUser) { // check Rewarded Ads loaded or not
+            showRewardedVideoAd()
+            watchVideo.clearAnimation()
+            watchVideo.visibility = View.GONE
+        } else if (mInterstitialAd != null && !newUser) { // check Interstitial Ads loaded or not
+            showInterstitialAd()
+            dailyRewardGridLayout.visibility = View.GONE
+            watchVideo.clearAnimation()
+            watchVideo.visibility = View.GONE
+            loadRewardAd()
+        } else {
+            dailyRewardGridLayout.visibility = View.GONE
+            addPoints()
+            watchVideo.clearAnimation()
+            watchVideo.visibility = View.GONE
+            loadRewardAd()
+            if (!premiumStatus) loadInterstitialAd()
+        }
+    }
+
+    fun callToShowRewardedVideoAd(view: View) {
+        if (soundStatus) SoundManager.instance?.playUpdateSound()
+        showRewardedVideoAd()
     }
 
     fun openClosePlayerStats(view: View) {
@@ -911,7 +880,6 @@ class MainHomeScreen : AppCompatActivity() {
             override fun onCancelled(errorDataLoad: DatabaseError) {
                 onlineGameAllowedM = errorDataLoad.message
             }
-
             override fun onDataChange(data: DataSnapshot) {
                 if (data.exists()) {
                     onlineGameAllowed = data.child("OnlineGame").value.toString().toInt() == 1
@@ -929,7 +897,6 @@ class MainHomeScreen : AppCompatActivity() {
     fun createRoomButtonClicked(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (soundStatus) SoundManager.instance?.playUpdateSound()
-        clickedCreateRoom = true
         offlineRoomCreate = view.tag.toString().toInt() == 0
 
         nPlayers = when (view.tag.toString().toInt()) {
@@ -937,12 +904,7 @@ class MainHomeScreen : AppCompatActivity() {
             4 -> 4
             else -> 7
         }
-        if (premiumStatus || dailyRewardStatus || onceAdWatched || newUser) {
-            createRoom()
-            clickedCreateRoom = false
-        } else if (this::mInterstitialAdMP.isInitialized) {
-            if (mInterstitialAdMP.isReady) mInterstitialAdMP.show()
-        }
+        createRoom()
     }
 
     @SuppressLint("SetTextI18n")
@@ -1160,9 +1122,7 @@ class MainHomeScreen : AppCompatActivity() {
         }
     }
 
-    private fun joinRoomWindowOpen(showAds: Boolean = true) { //		if (mInterstitialAdMP.isReady && !premiumStatus && !dailyRewardStatus && !onceAdWatched && !newUser && showAds) {
-        //			mInterstitialAdMP.show()
-        //		}
+    private fun joinRoomWindowOpen(showAds: Boolean = true) {
         Handler(Looper.getMainLooper()).postDelayed({
             closeJoinRoom.visibility = View.VISIBLE
         }, 270)
@@ -1271,20 +1231,11 @@ class MainHomeScreen : AppCompatActivity() {
 
     fun trainingStart(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        //		if(mInterstitialAdMP.isReady) mInterstitialAdMP.show()
-//		if(MoPubRewardedAds.hasRewardedAd(rewardedAdUnitId)) MoPubRewardedAds.showRewardedAd(rewardedAdUnitId)
-//		else loadRewardAd()
-//		if (mInterstitialAdMP.isReady) {
-////			mInterstitialAdMP.show()
-//		}else loadInterstitialAd()
-
 //		Firebase.database.getReference("GameData/Test").setValue("")
-        Firebase.database.getReference("GameData/Test").setValue(gameData4())
+        Firebase.database.getReference("GameData/Test").setValue(getGameData7())
         Firebase.database.getReference("GameData/Test").get().addOnSuccessListener { data ->
             val a = data.getValue<GameData>()
-            val b = 5
         }
-
         trainAccess = false
         if (trainAccess) {
             maskAllLoading.visibility = View.VISIBLE
@@ -1292,11 +1243,8 @@ class MainHomeScreen : AppCompatActivity() {
             if (soundStatus) SoundManager.instance?.playUpdateSound()
             startActivity(Intent(this, TrainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
             overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
-            finishAndRemoveTask() //			Handler(Looper.getMainLooper()).postDelayed({ finish() }, 1000)
+            finishAndRemoveTask()
         }
-//		else {
-////			toastCenter("Sorry You don't have access")
-//		}
     }
 
     private fun ranking() {
@@ -1566,7 +1514,6 @@ class MainHomeScreen : AppCompatActivity() {
             super.onBackPressed()
             closeRatingWindow(View(this))
             backButtonPressedStatus = false
-//			this.enterPictureInPictureMode()
         } else if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || playerStatsML.progress == 0f || createRoomWindowStatus || ratingWindowOpenStatus) && checkRatingRequest()) {
             backButtonPressedStatus = true
             openRatingWindow(View(this))
@@ -1613,19 +1560,31 @@ class MainHomeScreen : AppCompatActivity() {
     override fun onDestroy() {
         if (this::soundBkgd.isInitialized) soundBkgd.release()
         if (this::billingClient.isInitialized) billingClient.endConnection()
-
         if (this::viewPagerCallback.isInitialized) viewPager2.unregisterOnPageChangeCallback(viewPagerCallback)
         if (this::recyclerViewScrollListener.isInitialized) recyclerView.removeOnScrollListener(recyclerViewScrollListener)
         if (this::recyclerView1ScrollListener.isInitialized) recyclerView1.removeOnScrollListener(recyclerView1ScrollListener)
         if (this::tabLayoutMediator.isInitialized) tabLayoutMediator.detach()
         viewPager2.adapter = null
+        try {
+            mInterstitialAd!!.fullScreenContentCallback = null
+            mInterstitialAd = null
+        } catch (me: java.lang.Exception) {
+        }
+
+        try {
+            mRewardedAd!!.fullScreenContentCallback = null
+            mRewardedAd = null
+        } catch (me: java.lang.Exception) {
+        }
 
         try {
             textToSpeech.stop()
             textToSpeech.shutdown()
         } catch (me: java.lang.Exception) {
         }
+        bannerMHS.destroy()
         super.onDestroy()
+
     }
 
     private fun inAppReview() {

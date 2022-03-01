@@ -33,10 +33,11 @@
         android:textColor="@color/font_grey_settings"
         android:textSize="@dimen/_13ssp"
         android:visibility="visible"
-        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buddyText1" />
+        app:layout_constraintTop_toBottomOf="@+id/buddyText1"
+        tools:ignore="TextContrastCheck" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textView1_4"
@@ -1340,7 +1341,8 @@
         android:textSize="@dimen/_20ssp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TooManyViews" />
 
     <ProgressBar
         android:id="@+id/progressbarTimer"
@@ -1358,21 +1360,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/scoreSheetBUtton"
-        android:layout_width="@dimen/_45sdp"
-        android:layout_height="@dimen/_45sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:background="@drawable/blacksquarebutton"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:onClick="openCloseScoreSheet"
-        android:src="@drawable/button_pressed_score_table"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/imageViewChat"
@@ -1415,7 +1403,7 @@
         android:textSize="@dimen/_13ssp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="RelativeOverlap,RtlSymmetry" />
+        tools:ignore="RelativeOverlap,RtlSymmetry,TextContrastCheck" />
 
     <TextView
         android:id="@+id/bidCoin"
@@ -1501,7 +1489,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chatLinearLayout"
-        android:layout_width="@dimen/_250sdp"
+        android:layout_width="@dimen/_260sdp"
         android:layout_height="0dp"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="-20dp"
@@ -1514,7 +1502,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.mopub.mobileads.MoPubView
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_admob"
             android:id="@+id/addViewChatGameScreenBanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -2140,7 +2131,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scoreViewLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="@dimen/_1sdp"
@@ -2148,6 +2139,7 @@
         android:background="@drawable/shine_score_table"
         android:clickable="true"
         android:focusable="true"
+        android:onClick="openCloseScoreSheet"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -2156,7 +2148,7 @@
 
         <LinearLayout
             android:id="@+id/imageGalleryScoreName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_30sdp"
             android:background="@drawable/shine_player_stats"
             android:clickable="true"
@@ -2166,11 +2158,12 @@
             android:paddingBottom="@dimen/_2sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <LinearLayout
             android:id="@+id/imageGalleryScoreTotal"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_23sdp"
             android:layout_marginTop="0dp"
             android:background="@drawable/shine_game_score"
@@ -2185,13 +2178,13 @@
 
         <ScrollView
             android:id="@+id/scrollViewScore"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/_2sdp"
             android:clickable="true"
-            android:fadeScrollbars="false"
             android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:onClick="openCloseScoreSheet"
+            android:fadeScrollbars="false"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarSize="@dimen/_6sdp"
             android:scrollbarStyle="insideOverlay"
@@ -2207,17 +2200,20 @@
 
             <LinearLayout
                 android:id="@+id/imageGalleryScore"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:orientation="vertical"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:orientation="vertical" />
+                android:onClick="openCloseScoreSheet"/>
         </ScrollView>
 
-        <com.mopub.mobileads.MoPubView
+        <com.google.android.gms.ads.AdView
             android:id="@+id/addViewGameScreenBanner"
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/banner_admob"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
@@ -2251,5 +2247,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RelativeOverlap" />
+
+    <ImageView
+        android:id="@+id/scoreSheetButton"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/blacksquarebutton"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:onClick="openCloseScoreSheet"
+        android:src="@drawable/button_pressed_score_table"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
