@@ -1591,7 +1591,6 @@
             app:layout_constraintTop_toTopOf="@+id/editTextChatInput1"
             tools:ignore="TouchTargetSizeCheck" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
