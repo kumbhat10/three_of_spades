@@ -34,7 +34,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_create_join_room_screen.*
+import com.kaalikiteeggi.three_of_spades.databinding.ActivityCreateJoinRoomScreenBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -100,6 +100,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     //	private var userBasicInfoStatus = mutableListOf<Boolean>()
     private var userBasicInfoStatus = MutableLiveData<MutableList<Boolean>>()
     private lateinit var adapter: LVAdapterJoinRoom
+    private lateinit var binding: ActivityCreateJoinRoomScreenBinding
 
     // endregion
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,13 +113,15 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             .trackActivities(false) //default: false
             .errorDrawable(R.drawable.bug_icon) //default: bug image
             .apply()
-        setContentView(R.layout.activity_create_join_room_screen)
+        binding = ActivityCreateJoinRoomScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        setContentView(R.layout.activity_create_join_room_screen)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val controller = window.insetsController
             controller!!.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
             controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        backgroundJR.setImageResource(tableBackground.random())
+        binding.backgroundJR.setImageResource(tableBackground.random())
         refRoomData = Firebase.firestore.collection(getString(R.string.pathRoom))
         nPlayers = intent.getIntExtra("nPlayers", 0)
         offline = intent.getBooleanExtra("offline", true)
@@ -128,9 +131,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             userBasicInfoList = MutableList(nPlayers) { emptyUser }
             userBasicInfoStatus.value = MutableList(nPlayers) { false }
         }
-        playersJoin.layoutManager = LinearLayoutManager(this)
+        binding.playersJoin.layoutManager = LinearLayoutManager(this)
         adapter = LVAdapterJoinRoom(this, userBasicInfoList)
-        playersJoin.adapter = adapter
+        binding.playersJoin.adapter = adapter
 
         Handler(Looper.getMainLooper()).post {
             v = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -165,15 +168,15 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         userStatsTotal = intent.getIntegerArrayListExtra("userStatsTotal")!!
         userStatsDaily = intent.getIntegerArrayListExtra("userStatsDaily")!!
         if (!offline) {
-            imageViewShareButton2.visibility = View.VISIBLE
-            waitingToJoinText.visibility = View.VISIBLE
-            imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_scale_infinite))
-            roomIDTitle.text = "Room ID: $roomID"   // display the room ID
+            binding.imageViewShareButton2.visibility = View.VISIBLE
+            binding.waitingToJoinText.visibility = View.VISIBLE
+            binding.imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_scale_infinite))
+            binding.roomIDTitle.text = "Room ID: $roomID"   // display the room ID
         } else {
-            offlineProgressbar.visibility = View.VISIBLE
+            binding.offlineProgressbar.visibility = View.VISIBLE
         }
         if (fromInt == 1) { //  close icon only to host
-            leaveJoiningRoomIcon.visibility = View.VISIBLE
+            binding.leaveJoiningRoomIcon.visibility = View.VISIBLE
         }
         createDynamicLink()
     }
@@ -304,11 +307,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         if (playerJoining == nPlayers) allPlayersJoined()
         if (playerJoining >= 10) {
             if (fromInt != 1 || playerJoining == 11) {
-                maskAllLoading1.visibility = View.VISIBLE
-                progressBarLoading4.visibility = View.VISIBLE
-                loadingText1.visibility = View.VISIBLE
+                binding.maskAllLoading1.visibility = View.VISIBLE
+                binding.progressBarLoading4.visibility = View.VISIBLE
+                binding.loadingText1.visibility = View.VISIBLE
             }
-            loadingText1.text = getString(R.string.starting_game)
+            binding.loadingText1.text = getString(R.string.starting_game)
             registration.remove()
             playerInfo = ArrayList()
             playerInfoCoins = ArrayList()
@@ -342,11 +345,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private fun allPlayersJoined() {
         if (soundStatus) SoundManager.instance?.playSuccessSound()
         speak("Ready to Start", speed = 1.06f, forceSpeak = false)
-        imageViewShareButton2.clearAnimation()
-        imageViewShareButton2.visibility = View.GONE
-        offlineProgressbar.visibility = View.GONE
-        waitingToJoinText.visibility = View.GONE
-        Handler(Looper.getMainLooper()).postDelayed({ startGameButton.visibility = View.VISIBLE }, 600)        //		anim(startGameButton, R.anim.anim_scale_appeal)
+        binding.imageViewShareButton2.clearAnimation()
+        binding.imageViewShareButton2.visibility = View.GONE
+        binding.offlineProgressbar.visibility = View.GONE
+        binding.waitingToJoinText.visibility = View.GONE
+        Handler(Looper.getMainLooper()).postDelayed({ binding.startGameButton.visibility = View.VISIBLE }, 600)        //		anim(startGameButton, R.anim.anim_scale_appeal)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -354,11 +357,11 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (soundStatus) SoundManager.instance?.playUpdateSound()
         if (fromInt == 1) {
-            maskAllLoading1.visibility = View.VISIBLE
-            progressBarLoading4.visibility = View.VISIBLE
-            loadingText1.visibility = View.VISIBLE
+            binding.maskAllLoading1.visibility = View.VISIBLE
+            binding.progressBarLoading4.visibility = View.VISIBLE
+            binding.loadingText1.visibility = View.VISIBLE
             if (!offline) {
-                loadingText1.text = getString(R.string.firingServer)
+                binding.loadingText1.text = getString(R.string.firingServer)
                 val gameData = if (!BuildConfig.DEBUG) {  //(getString(R.string.testGameData).contains('n')) {
                     if (nPlayers == 7) CreateGameData(uid, selfName).gameData7
                     else CreateGameData(uid, selfName).gameData4
@@ -370,29 +373,29 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
                 }
                 myRefGameData.child(roomID).setValue(gameData).addOnSuccessListener {
                     refRoomData.document(roomID).set(hashMapOf("PJ" to 10), SetOptions.merge()).addOnSuccessListener {
-                        startGameButton.clearAnimation()
-                        startGameButton.visibility = View.GONE
+                        binding.startGameButton.clearAnimation()
+                        binding.startGameButton.visibility = View.GONE
                         refRoomData.document(roomID + "_chat").set(hashMapOf(
                             "M" to "",
                             "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
                             "dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),
                         ))
                     }.addOnFailureListener { exception ->
-                        maskAllLoading1.visibility = View.GONE
-                        progressBarLoading4.visibility = View.GONE
-                        loadingText1.visibility = View.GONE
+                        binding.maskAllLoading1.visibility = View.GONE
+                        binding.progressBarLoading4.visibility = View.GONE
+                        binding.loadingText1.visibility = View.GONE
                         toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}")
                     }
                 }.addOnFailureListener { exception ->
-                    maskAllLoading1.visibility = View.GONE
-                    progressBarLoading4.visibility = View.GONE
-                    loadingText1.visibility = View.GONE
+                    binding.maskAllLoading1.visibility = View.GONE
+                    binding.progressBarLoading4.visibility = View.GONE
+                    binding.loadingText1.visibility = View.GONE
                     toastCenter("Failed to create server \nPlease try again\n${exception.localizedMessage!!}")
                 }
             } else {
-                loadingText1.text = getString(R.string.starting_game)
-                startGameButton.clearAnimation()
-                startGameButton.visibility = View.GONE
+                binding.loadingText1.text = getString(R.string.starting_game)
+                binding.startGameButton.clearAnimation()
+                binding.startGameButton.visibility = View.GONE
                 startNextActivity()
             }
         } else {            //			soundError.start()
@@ -448,10 +451,10 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private fun initializeAds() {
         if (!premiumStatus) {
             MobileAds.initialize(this) //initialize admob ads
-            bannerCJRS.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
-            bannerCJRS.visibility = View.VISIBLE
+            binding.bannerCJRS.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
+            binding.bannerCJRS.visibility = View.VISIBLE
         } else {
-            bannerCJRS.visibility = View.GONE
+            binding.bannerCJRS.visibility = View.GONE
         }
     }
 
@@ -463,7 +466,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE)  //init preference file in private mode
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
-            if (premiumStatus) bannerCJRS.visibility = View.GONE
+            if (premiumStatus) binding.bannerCJRS.visibility = View.GONE
             else initializeAds()
         }
         if (sharedPreferences.contains("musicStatus")) {
@@ -541,9 +544,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        bannerCJRS.destroy() // destroy MoPub banner add view
+        binding.bannerCJRS.destroy() // destroy MoPub banner add view
         if (this::soundBkgd.isInitialized) soundBkgd.release() //		adapter = null
-        playersJoin.adapter = null
+        binding.playersJoin.adapter = null
         try {
             if (this::textToSpeech.isInitialized) {
                 textToSpeech.stop()
@@ -560,13 +563,13 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     private fun createDynamicLink() {
-        shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=54" +                //				"&st=3%20of%20Spades" +
+        shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=70" +
                 "&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID + "&si=https://tinyurl.com/3ofspade" //https://i.pinimg.com/564x/f9/fd/d9/f9fdd9bf6fbb9f00d945e1b22b293aea.jpg"
     }
 
     fun shareRoomInfo(view: View) {
         if (!offline) {
-            imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+            binding.imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
             if (soundStatus) SoundManager.instance?.playUpdateSound()
             val message = "${Emoji().gamePlayed}${Emoji().trophy} Join my room => $roomID ${Emoji().score}${Emoji().money}" + "\n\n$shareLink"
             val intent = Intent()
@@ -583,7 +586,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     private fun toastCenter(message: String) {
-        Snackbar.make(findViewById(R.id.backgroundJR), message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.backgroundJR, message, Snackbar.LENGTH_SHORT).show()
 
     }
 }

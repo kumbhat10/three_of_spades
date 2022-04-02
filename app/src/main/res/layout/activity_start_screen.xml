@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/startRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Black"
+    android:background="@drawable/background_glitter"
     android:clickable="true"
     android:focusable="true"
     android:paddingStart="0dp"
@@ -12,130 +13,117 @@
     tools:context=".StartScreen">
 
     <ImageView
-        android:id="@+id/startBckgd"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:foreground="@drawable/tint_background4"
-        android:scaleType="centerCrop"
-        android:scaleX="2.5"
-        android:scaleY="2.5"
-        android:src="@drawable/redorangeburst"
+        android:id="@+id/logoImageSC"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/canva_3s_png"
+        android:contentDescription="@string/todo"
         android:visibility="visible"
-        tools:ignore="ContentDescription" />
-
-    <ProgressBar
-        android:id="@+id/loadingStartScreen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignStart="@id/icon_3startscreen"
-        android:layout_alignTop="@id/icon_3startscreen"
-        android:layout_alignEnd="@id/icon_3startscreen"
-        android:layout_alignBottom="@id/icon_3startscreen"
-        android:progress="100"
-        android:layout_margin="@dimen/_25sdp"
-        android:indeterminate="false"
-        android:progressDrawable="@drawable/progress_splash"
-        android:indeterminateOnly="false"
-        android:visibility="visible" />
-
-<!--        <ImageView-->
-<!--            android:layout_width="@dimen/_250sdp"-->
-<!--            android:layout_height="@dimen/_270sdp"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:contentDescription="@null"-->
-<!--            android:src="@drawable/spade"-->
-<!--            android:visibility="gone" />-->
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@id/signUpText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/icon_3startscreen"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:layout_centerInParent="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:contentDescription="@null"
         android:scaleX="0.5"
         android:scaleY="0.5"
-        android:src="@drawable/icon3s_shadow" />
+        android:src="@drawable/icon3s_shadow"
+        app:layout_constraintBottom_toTopOf="@id/signUpText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/signUpText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/facebookLoginButton"
-        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toTopOf="@+id/facebookLoginButton"
         android:layout_marginBottom="@dimen/_10sdp"
         android:text="@string/register"
         android:textColor="#ECECEC"
-        android:textSize="@dimen/_10ssp" />
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.facebook.login.widget.LoginButton xmlns:facebook="http://schemas.android.com/apk/res-auto"
         android:id="@+id/facebookLoginButton"
         android:layout_width="@dimen/loginWidth"
         android:layout_height="80dp"
-        android:layout_above="@+id/orOption"
-        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toTopOf="@+id/orOption"
         android:layout_marginBottom="@dimen/_2sdp"
         android:paddingTop="@dimen/_8sdp"
         android:paddingBottom="@dimen/_7sdp"
         android:textSize="@dimen/_12ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         facebook:com_facebook_login_text="       Sign in" />
 
     <TextView
         android:id="@+id/orOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/googleSignInButton"
-        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toTopOf="@+id/googleSignInButton"
         android:layout_marginBottom="@dimen/_2sdp"
         android:gravity="center"
         android:text="or"
         android:textColor="#ECECEC"
         android:textSize="@dimen/_11ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="HardcodedText" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleSignInButton"
         android:layout_width="@dimen/loginWidthGoogle"
         android:layout_height="@dimen/loginHeightGoogle"
-        android:layout_above="@id/privacyPolicy"
-        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toTopOf="@id/privacyPolicy"
         android:layout_marginBottom="@dimen/_10sdp"
         android:insetBottom="0dp"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/privacyPolicy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/_9sdp"
         android:onClick="openPrivacyPolicy"
         android:text="@string/privacy_policy"
         android:textColor="#2C89FB"
-        android:textSize="@dimen/_10ssp" />
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/maskButtons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignTop="@+id/signUpText"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/_minus2sdp"
         android:background="@drawable/shine_player_stats"
         android:clickable="true"
         android:elevation="@dimen/_64sdp"
         android:focusable="true"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/loadingText3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_2sdp"
             android:gravity="center"
             android:text="@string/signIN"
@@ -185,11 +173,11 @@
         android:id="@+id/vcStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:textColor="#D5D5D5"
         android:textSize="@dimen/_9ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="RelativeOverlap" />
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

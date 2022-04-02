@@ -1,7 +1,7 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="testGameData">n</string>
     <string name="useTestDevice">y</string>
-    <string name="pathRoom">Room</string>
+    <string name="pathRoom">NewRoom</string>
 
     <string name="customactivityoncrash_error_activity_error_occurred_explanation">"It's not you, It's us &#128522; \n\nServer is high on spirit &#129396; \n\n(Sending error report to developer)"</string>
     <string name="customactivityoncrash_error_activity_restart_app">Home</string>
@@ -20,7 +20,8 @@
 
     <string name="scheme">http</string>
     <string name="scheme1">https</string>
-    <string name="hostJoinRoom">jo.in</string>
+    <string name="hostJoinRoom" tools:ignore="Typos">jo.in1</string>
+    <string name="hostJoinRoomOld">jo.in</string>
     <string name="hostFirebaseDL">kaaliteeri.page.link</string>
     <string name="packageName">com.kaalikiteeggi.three_of_spades</string>
     <string name="inviteLink">https://kaaliteeri.page.link/invite</string>
@@ -134,7 +135,7 @@
     <string name="userscore">$ 000,000</string>
     <string name="train">Train</string>
     <string name="privacy_policy"><u>Privacy Policy</u></string>
-    <string name="register">Please Register or Sign in using any option</string>
+    <string name="register">Please Sign in</string>
     <string name="rate_us">Rate\nus</string>
     <string name="no_ad">Ads</string>
     <string name="swipe">Swipe Up/Down to hide/reveal</string>

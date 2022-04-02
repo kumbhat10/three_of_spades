@@ -45,16 +45,8 @@ class DeveloperCredits : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_developer_credits)
-        when (Random.nextInt(0, 6)) {
-            4 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.redblackburst)
-            1 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.blueburst)
-            2 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.greenyellowburst)
-            3 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.navyblueburst)
-            0 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.redorangeburst)
-            5 -> devBckgd.background = ContextCompat.getDrawable(this, R.drawable.yellowburst)
-        }
+
         findViewById<ImageView>(R.id.icon_3developer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
-//        devBckgd.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
 
         vn = packageManager.getPackageInfo(packageName,0).versionName
         vc = packageManager.getPackageInfo(packageName,0).versionCode.toString()
@@ -63,15 +55,12 @@ class DeveloperCredits : AppCompatActivity() {
         soundStatus = intent.getBooleanExtra("soundStatus", true)    //Get roomID and display
         text = "VC: $vc\nVN: $vn\n W: ${resources.configuration.screenWidthDp}\nH: ${resources.configuration.screenHeightDp}\nUser ID: $uid"
         findViewById<TextView>(R.id.sizeDC).text = text
-//        SoundManager.initialize(applicationContext)
-//        soundUpdate = MediaPlayer.create(applicationContext, R.raw.card_played)
+
         Handler(Looper.getMainLooper()).post {
             createEmailIntent()
             buildCustomTabIntent()
         }
     }
-
-
 
     fun openWebsite(view: View){
         if (soundStatus) SoundManager.instance?.playUpdateSound()

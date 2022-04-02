@@ -11,6 +11,7 @@ import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
+import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.text.Html
 import android.util.Log
@@ -18,7 +19,7 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AbsListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
@@ -51,18 +52,17 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.kaalikiteeggi.three_of_spades.databinding.ActivityMainHomeScreenBinding
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main_home_screen.*
 import kotlinx.android.synthetic.main.fragment_test.view.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.min
 import kotlin.math.round
 import kotlin.random.Random
@@ -173,7 +173,7 @@ class MainHomeScreen : AppCompatActivity() {
     private var dailyRewardAmount = 0
     private var clickedDailyReward = false
     private var claimedToday = false
-
+    private lateinit var binding: ActivityMainHomeScreenBinding
     // endregion
     @SuppressLint("ShowToast", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -190,7 +190,9 @@ class MainHomeScreen : AppCompatActivity() {
         if (!resources.getBoolean(R.bool.portrait_only)) {
 //			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         }
-        setContentView(R.layout.activity_main_home_screen)
+        binding = ActivityMainHomeScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        setContentView(R.layout.activity_main_home_screen)
         background = Random.nextInt(0, 6)
         checkJoinRoom(intent)
         mainIconGridDisplay()
@@ -204,8 +206,8 @@ class MainHomeScreen : AppCompatActivity() {
         soundBkgd.setVolume(0.05F, 0.05F)
         getSharedPrefs()
         initializeAds()
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         Handler(Looper.getMainLooper()).post {
-            vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             getUserData()
             checkIfOnlineGameAllowed()
             initTabLayoutAdapter()
@@ -273,11 +275,21 @@ class MainHomeScreen : AppCompatActivity() {
                     joinRoomPending = true
                     if (userDataFetched) autoJoinRoom()
                 }
+                else if (intent.data?.query?.contains("link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoomOld)}/")!!) {
+                    if (soundStatus) SoundManager.instance?.playErrorSound()
+                    if (vibrateStatus) vibrationStart()
+                    toastCenter("The link belongs to old version. Please ask your friend to Update their app")
+                }
             }
             if (intent.data?.host == getString(R.string.hostJoinRoom)) { // re-routed from browser/chrome
                 roomID = intent.data?.lastPathSegment.toString()
                 joinRoomPending = true
                 if (userDataFetched) autoJoinRoom()
+            }
+            else if (intent.data?.host == getString(R.string.hostJoinRoomOld)) { // re-routed from browser/chrome
+                if (soundStatus) SoundManager.instance?.playErrorSound()
+                if (vibrateStatus) vibrationStart()
+                toastCenter("The link belongs to old version. Please ask your friend to Update their app")
             }
         }
     }
@@ -548,7 +560,7 @@ class MainHomeScreen : AppCompatActivity() {
             val roomID = sharedPreferences.getString("Room", "").toString()
             if (roomID.isNotEmpty()) {
                 Handler(Looper.getMainLooper()).postDelayed({
-//					deleteAllRoomData(roomID)
+					deleteAllRoomData(roomID)
                 }, 0)
             }
             editor.remove("Room").apply()
@@ -928,7 +940,7 @@ class MainHomeScreen : AppCompatActivity() {
                 maskAllLoading.visibility = View.GONE
             }, 3500)
         } else {
-            val allowedChars = ('A'..'H') + ('J'..'N') + ('P'..'Z') + ('2'..'9')  // 1, I , O and 0 skipped
+            val allowedChars = ('A'..'H') + ('J'..'N') + ('P'..'Z') + ('2'..'9')  // 1, I , O and 0 skipped as they look same
             val roomID = (1..4).map { allowedChars.random() }.joinToString("")
             if (nPlayers == 7) {
                 if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data7)
@@ -1207,9 +1219,9 @@ class MainHomeScreen : AppCompatActivity() {
     @SuppressLint("NewApi")
     private fun vibrationStart(duration: Long = 150) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
+           if(this::vibrator.isInitialized) vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
-            vibrator.vibrate(duration)
+            if(this::vibrator.isInitialized) vibrator.vibrate(duration)
         }
     }
 
@@ -1230,12 +1242,13 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     fun trainingStart(view: View) {
+
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 //		Firebase.database.getReference("GameData/Test").setValue("")
-        Firebase.database.getReference("GameData/Test").setValue(getGameData7())
-        Firebase.database.getReference("GameData/Test").get().addOnSuccessListener { data ->
-            val a = data.getValue<GameData>()
-        }
+//        Firebase.database.getReference("GameData/Test").setValue(getGameData7())
+////        Firebase.database.getReference("GameData/Test").get().addOnSuccessListener { data ->
+////            val a = data.getValue<GameData>()
+////        }
         trainAccess = false
         if (trainAccess) {
             maskAllLoading.visibility = View.VISIBLE

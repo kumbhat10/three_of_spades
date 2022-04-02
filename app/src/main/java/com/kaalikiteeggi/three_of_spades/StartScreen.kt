@@ -31,6 +31,7 @@ import com.google.firebase.auth.*
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.kaalikiteeggi.three_of_spades.databinding.ActivityStartScreenBinding
 import kotlinx.android.synthetic.main.activity_start_screen.*
 
 
@@ -47,6 +48,7 @@ class StartScreen : AppCompatActivity() {
 	private lateinit var intentBuilder: CustomTabsIntent.Builder
 	private val privacyPolicyUrl = "https://sites.google.com/view/kaali-ki-teeggi/privacy-policy"
 
+	private lateinit var binding: ActivityStartScreenBinding
 	@SuppressLint("ShowToast", "SetTextI18n")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -59,17 +61,10 @@ class StartScreen : AppCompatActivity() {
 			.trackActivities(false) //default: false
 			.errorDrawable(R.drawable.bug_icon) //default: bug image
 			.apply()
+		binding = ActivityStartScreenBinding.inflate(layoutInflater)
+		setContentView(binding.root)
+//		setContentView(R.layout.activity_start_screen)
 
-		setContentView(R.layout.activity_start_screen)
-		when (intent.getIntExtra("background", 1)) {
-			0 -> startBckgd.setImageResource(R.drawable.redblackburst)
-			1 -> startBckgd.setImageResource(R.drawable.blueburst)
-			2 -> startBckgd.setImageResource(R.drawable.greenyellowburst)
-			3 -> startBckgd.setImageResource(R.drawable.navyblueburst)
-			4 -> startBckgd.setImageResource(R.drawable.redorangeburst)
-			5 -> startBckgd.setImageResource(R.drawable.yellowburst)
-		}
-		startBckgd.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise))
 		findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_zoom))
 		vcStart.text = "Ver: " + packageManager.getPackageInfo(packageName, 0).versionName
 		SoundManager.instance?.playUpdateSound() //soundUpdate.start()
@@ -232,7 +227,7 @@ class StartScreen : AppCompatActivity() {
 	}
 
 	private fun toastCenter(message: String) {
-		Snackbar.make(startBckgd, message, Snackbar.LENGTH_LONG).setAction("Dismiss") {}
+		Snackbar.make(startRoot, message, Snackbar.LENGTH_LONG).setAction("Dismiss") {}
 			.setActionTextColor(getColor(R.color.borderblue)).show()
 	}
 

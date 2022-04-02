@@ -24,7 +24,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import kotlinx.android.synthetic.main.activity_splash_screen.*
+import com.kaalikiteeggi.three_of_spades.databinding.ActivitySplashScreenBinding
 import java.util.concurrent.Executors
 
 class SplashScreen : AppCompatActivity() {
@@ -36,27 +36,31 @@ class SplashScreen : AppCompatActivity() {
     private var isTimerOver = false
     private var isNextActivityStarted = false
     private var background = 4
-    private val timer = if (!BuildConfig.DEBUG) 4500L
-    else 4500L
+    private val timer = if (!BuildConfig.DEBUG) 3500L
+    else 3500L
     private val requestCodeAppUpdate = 800
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var binding:ActivitySplashScreenBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_App)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash_screen)
+        binding = ActivitySplashScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        setContentView(R.layout.activity_splash_screen)
 
-        val avd = (icon3.drawable as AnimatedVectorDrawable)
+        val avd = (binding.icon3.drawable as AnimatedVectorDrawable)
         avd.registerAnimationCallback(object : Animatable2.AnimationCallback() {
             override fun onAnimationStart(drawable: Drawable?) {
-                loadingSplash.visibility = View.VISIBLE
+                binding.loadingSplash.visibility = View.VISIBLE
                 handler.postDelayed({
                     isTimerOver = true
                     if (isAppLatest) nextActivity()
                 }, timer) // dummy 3500
             }
             override fun onAnimationEnd(drawable: Drawable?) {
-                loadingSplash.text = getString(R.string.splashLoadingDone)
-                loadingProgress.setProgressCompat(100, true)
+                binding.loadingSplash.text = getString(R.string.splashLoadingDone)
+                binding.loadingProgress.setProgressCompat(100, true)
             }
         })
         avd.start()
@@ -75,7 +79,6 @@ class SplashScreen : AppCompatActivity() {
         Executors.newSingleThreadExecutor().execute {
             checkAppUpdate()
         }
-
     }
 
     private fun loadUserProfile() {
@@ -98,7 +101,6 @@ class SplashScreen : AppCompatActivity() {
         }
         val requestBuilder = RequestConfiguration.Builder().setTestDeviceIds(listOf("CE88E5381EAA1C30F911F4851420C18E")).build()
         MobileAds.setRequestConfiguration(requestBuilder)
-
     }
 
     private fun nextActivity() {

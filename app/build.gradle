@@ -20,15 +20,17 @@ android {
         }
     }
     compileSdkVersion 31
+    buildFeatures{
+        viewBinding = true
+    }
     defaultConfig {
         ext.alwaysUpdateBuildId = false
         applicationId "com.kaalikiteeggi.three_of_spades"
         minSdkVersion 24
         //noinspection OldTargetApi
         targetSdkVersion 31
-        versionCode 69
-        versionName "69A"
-        ndkVersion  "23.0.7272597 rc3"//"22.0.7026061"//"21.3.6528147" //6363665"
+        versionCode 70
+        versionName "70A"
         signingConfig signingConfigs.debug
     }
     buildTypes {
@@ -36,6 +38,7 @@ android {
             FirebasePerformance{
                 instrumentationEnabled false
             }
+            signingConfig signingConfigs.debug
         }
         release {
             shrinkResources false
@@ -66,7 +69,6 @@ android {
             }
         }
     }
-    ndkVersion '23.0.7272597 rc3'
 }
 
 dependencies {

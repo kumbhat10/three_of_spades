@@ -40,7 +40,7 @@
         tools:ignore="TextContrastCheck" />
 
     <com.robinhood.ticker.TickerView
-        android:id="@+id/textView1_4"
+        android:id="@+id/textView14"
         android:layout_width="@dimen/width_playername_4"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/imageGapEnd_4player"
@@ -63,7 +63,7 @@
         app:ticker_defaultPreferredScrollingDirection="any" />
 
     <com.robinhood.ticker.TickerView
-        android:id="@+id/textView1_4a"
+        android:id="@+id/textView14a"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/userScoreGap"
@@ -75,9 +75,9 @@
         android:textColor="@color/userScoreColor"
         android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/textView1_4"
-        app:layout_constraintStart_toStartOf="@+id/textView1_4"
-        app:layout_constraintTop_toBottomOf="@+id/textView1_4"
+        app:layout_constraintEnd_toEndOf="@+id/textView14"
+        app:layout_constraintStart_toStartOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/textView14"
         app:ticker_animationDuration="900"
         app:ticker_defaultCharacterList="number"
         app:ticker_defaultPreferredScrollingDirection="any" />
@@ -141,8 +141,8 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/status_online"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/textView1_4"
-        app:layout_constraintStart_toEndOf="@id/textView1_4" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView14"
+        app:layout_constraintStart_toEndOf="@id/textView14" />
 
     <ImageView
         android:id="@+id/partnerIcon1_4"
@@ -1899,7 +1899,7 @@
             android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/textViewCenterPoints_4"
+            android:id="@+id/textViewCenterPoints4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -2107,7 +2107,7 @@
             app:srcCompat="@drawable/ic_back_side_blue" />
 
         <ImageView
-            android:id="@+id/imageViewWinnerCenter_4"
+            android:id="@+id/imageViewWinnerCenter4"
             android:layout_width="@dimen/tableCardImageWidth_4"
             android:layout_height="@dimen/tableCardImageHeight_4"
             app:layout_constraintBottom_toTopOf="@+id/imageViewSelf_4"

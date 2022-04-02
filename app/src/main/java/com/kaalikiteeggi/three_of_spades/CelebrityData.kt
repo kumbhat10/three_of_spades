@@ -14,6 +14,7 @@ class CelebrityData {
         listOf("Sarah","https://i.pinimg.com/564x/8e/f3/49/8ef3491a92ef92dc2287280f008d3550.jpg"),// random
         listOf("Mahlagha","https://i.pinimg.com/564x/46/92/37/4692370ac94ed3fd544bbcf5ea9a7a06.jpg"),// mahlagha jaberi model
         listOf("Nicole","https://i.pinimg.com/564x/53/e3/d9/53e3d95ddb735d03105e7f2b28d34620.jpg"),// Nicole Scherzinger
+        listOf("Nora","https://i.pinimg.com/564x/b1/39/58/b13958d91a0522be3c4bec3f2ff2c3fa.jpg"),// Nicole Scherzinger
         listOf("Jessica","https://i.pinimg.com/564x/4c/bf/3a/4cbf3a378c8b03caa79bb4cb3b2e7ab3.jpg"),//
         listOf("Harry","https://i.pinimg.com/474x/6b/4c/01/6b4c017e414475cc0509beb5f17b160e.jpg"),// belda
         listOf("Ranveer","https://i.pinimg.com/564x/fb/e8/9b/fbe89bc072197ead73379d8a8a7647af.jpg"),// belda
@@ -57,29 +58,50 @@ class CelebrityData {
         listOf("Phoebe","https://i.pinimg.com/564x/d8/e6/46/d8e6464d267defd91f3c16e487fee6a1.jpg"),//
         listOf("Penny","https://i.pinimg.com/564x/9b/14/38/9b1438ea425b94aaccf2f8dd8b924706.jpg"),//
         listOf("Brad","https://i.pinimg.com/564x/49/32/25/493225785622b2f380a728c04dde7ca0.jpg"),// pitt
+        listOf("Amina","https://i.pinimg.com/564x/28/2b/e5/282be58c21660c9637633d7463c4c388.jpg"),// pitt
         listOf("Amitabh","https://i.pinimg.com/564x/15/2b/9d/152b9df34c7821446e4b64f02711451f.jpg"),// pitt
         listOf("Bradley","https://i.pinimg.com/474x/4f/13/2d/4f132ddb9ef27bf0d2c70e5b519d623b.jpg"),// pitt
         listOf("Modi","https://i.pinimg.com/564x/4e/f0/bb/4ef0bb0f5c5acaab38029530402eb048.jpg"),// pitt
         listOf("Harvey","https://i.pinimg.com/564x/67/92/c6/6792c607001dbbd0e83ff77ef41e02d0.jpg"),//
         listOf("Ross","https://i.pinimg.com/564x/4b/34/b1/4b34b1981e5fe124f53f59cf29c3eb9a.jpg"),// geller
+        listOf("Komal","https://i.pinimg.com/564x/76/9d/18/769d18c710d58559bfb966b5a74a4957.jpg"),// geller
         listOf("Joe","https://i.pinimg.com/564x/39/c2/b6/39c2b6edea570b8d8da91c93efffc4e3.jpg"),//
         listOf("Scarlet","https://i.pinimg.com/564x/d2/f3/4a/d2f34aeccd194eee32954bc0464d370c.jpg"),// Johansson
         listOf("Irina","https://i.pinimg.com/564x/54/fb/9e/54fb9e98658b228cb46a098d1d76ca0d.jpg"),// Johansson
+        listOf("Zohra","https://i.pinimg.com/564x/85/6b/9c/856b9c6f6cac474f05acfae0113d937f.jpg"),// Johansson
+        listOf("Ruksa","https://i.pinimg.com/564x/07/2a/27/072a27ff92e4f4261000b11a07c98973.jpg"),// Johansson
         listOf("Kiara","https://i.pinimg.com/564x/28/8f/b4/288fb4a9cfee013ccbd4f4b6ef52415a.jpg"),// advani
+        listOf("Niharika","https://i.pinimg.com/564x/db/49/80/db4980692a7fbab5aeed0332b0223a7f.jpg"),// advani
         listOf("Angelina","https://i.pinimg.com/564x/da/08/f1/da08f19159cab805ac936dfe6b78e486.jpg"),//
         listOf("Bahubali","https://i.pinimg.com/564x/24/17/30/241730099569acf2c0c379364f6ed8d6.jpg"),//
+        listOf("Nora","https://i.pinimg.com/564x/62/ad/c0/62adc03c984711c9ea92f8ce5a95bfe6.jpg"),//
         listOf("Katappa","https://i.pinimg.com/564x/8c/eb/43/8ceb43de8c45c279b3e12a552bca39ce.jpg"),//
+        listOf("Nayanthra","https://i.pinimg.com/564x/25/2c/46/252c4691ed106e645fc9407bcef37110.jpg"),//
+        listOf("Nivetha","https://i.pinimg.com/564x/31/2c/5a/312c5a0436e7c4e7731c81948dcebe9e.jpg"),//
         listOf("Kolna","https://i.pinimg.com/564x/94/98/10/949810e2aa1263419fc0fab60487d46e.jpg"),//
         listOf("Tokyo","https://i.pinimg.com/564x/6b/1f/14/6b1f14f42e6da6dc4747d6340ed641b6.jpg"),//
+        listOf("Reshma","https://i.pinimg.com/564x/ee/2c/ab/ee2cabbf2535cc12bed8a6aae312d42c.jpg"),//
+        listOf("Rashmika","https://i.pinimg.com/564x/39/5d/04/395d04dc494473638a093e56d415be6d.jpg"),//
         listOf("Megan","https://i.pinimg.com/564x/18/69/b6/1869b601d431c4f49be280cca09d8930.jpg"),//
+        listOf("Shruti","https://i.pinimg.com/564x/7b/7d/c5/7b7dc573e31b05e3a99387758b8605e6.jpg"),//
+        listOf("Amina","https://i.pinimg.com/564x/70/70/e1/7070e161485f0f0f942d39152e40972c.jpg"),//
         listOf("Megan","https://i.pinimg.com/564x/ee/92/1f/ee921f11f5af2774fa6024b3944c0b88.jpg"),//
+        listOf("Melina","https://i.pinimg.com/564x/1b/78/98/1b7898c786fdde1b9c25c3fa690b9ee0.jpg"),//
+        listOf("Hafiza","https://i.pinimg.com/564x/55/a5/70/55a57091ba3e33ae02bfa324a3fbe2cb.jpg"),//
+        listOf("Alia","https://i.pinimg.com/564x/f7/c6/94/f7c6944e0e8fe0e41e82967e7f9249da.jpg"),//
+        listOf("Nupur","https://i.pinimg.com/564x/b9/04/2c/b9042c94a43221922341746d99afdd34.jpg"),//
         listOf("Eiza","https://i.pinimg.com/564x/98/0b/53/980b53427452459c345d4837633135b3.jpg"),//
         listOf("Elsie","https://i.pinimg.com/564x/42/d0/16/42d016787c6e02b70b475ed34add3fc7.jpg"),//
         listOf("Obama","https://i.pinimg.com/564x/1f/ba/34/1fba3424e88e03855a8ac2e5e8e700e4.jpg"),//
+        listOf("Amina","https://i.pinimg.com/564x/e3/c8/35/e3c835264277156049ad9d2965ac7df4.jpg"),//
+        listOf("Roma","https://i.pinimg.com/564x/8f/9f/bd/8f9fbdc63617a71443f0c8d6b9d5f32d.jpg"),//
+        listOf("Tamara","https://i.pinimg.com/564x/9f/8b/cd/9f8bcdfcb252b010667c6e900332870f.jpg"),//
         listOf("Virat","https://i.pinimg.com/564x/17/e6/d5/17e6d5f0a7095bba7c702f19f0e8c1ec.jpg"),//
         listOf("Sachin","https://i.pinimg.com/564x/56/bc/f7/56bcf7266e264c4f7916b9a6ba37ad90.jpg"),// Tendulkar
         listOf("Chandler","https://i.pinimg.com/564x/ad/05/8a/ad058aba2ed1d732c18da13b71c2971c.jpg"),//
+        listOf("Richa","https://i.pinimg.com/564x/20/6a/51/206a5125c2d2f6045053a3c2239cf235.jpg"),//
         listOf("Angelina","https://i.pinimg.com/564x/b1/a4/48/b1a44827fa7e1174c457a3468d20318c.jpg"),//
+        listOf("Angelina","https://i.pinimg.com/564x/36/4c/4d/364c4d7dfe4fd96b71cb2fbe1b824834.jpg"),//
         listOf("Ash","https://i.pinimg.com/564x/4d/54/df/4d54dff3573826f206f2162d83f6ce8f.jpg"),//
         listOf("Morgan","https://i.pinimg.com/564x/cf/43/3e/cf433eae812ecf194ab31fcf9fd756f5.jpg"),//
         listOf("Irina","https://i.pinimg.com/564x/a8/02/99/a80299024dd75be9b5181f7044f14171.jpg"),//

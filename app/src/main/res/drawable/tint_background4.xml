@@ -7,7 +7,7 @@
         android:endColor="@color/mhsTintBackground2"
         android:centerX="0.5"
         android:centerY="0.5"
-        android:gradientRadius="@dimen/_110sdp"
+        android:gradientRadius="@dimen/_70sdp"
         android:type="radial"/>
 </shape>
 
