@@ -11,7 +11,6 @@ import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
-import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.text.Html
 import android.util.Log
@@ -73,7 +72,7 @@ class MainHomeScreen : AppCompatActivity() {
     private var ratingRequestDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()
 
     private var background = 4
-    private lateinit var soundBkgd: MediaPlayer
+    private lateinit var soundBackground: MediaPlayer
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var intentBuilder: CustomTabsIntent.Builder
@@ -174,6 +173,7 @@ class MainHomeScreen : AppCompatActivity() {
     private var clickedDailyReward = false
     private var claimedToday = false
     private lateinit var binding: ActivityMainHomeScreenBinding
+
     // endregion
     @SuppressLint("ShowToast", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -187,9 +187,9 @@ class MainHomeScreen : AppCompatActivity() {
             .trackActivities(false) //default: false
             .errorDrawable(R.drawable.bug_icon) //default: bug image
             .apply()
-        if (!resources.getBoolean(R.bool.portrait_only)) {
+//        if (!resources.getBoolean(R.bool.portrait_only)) {
 //			requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-        }
+//        }
         binding = ActivityMainHomeScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 //        setContentView(R.layout.activity_main_home_screen)
@@ -201,9 +201,9 @@ class MainHomeScreen : AppCompatActivity() {
         refRoomData = Firebase.firestore.collection(getString(R.string.pathRoom))
         mAuth = FirebaseAuth.getInstance()
         uid = mAuth.uid.toString()
-        soundBkgd = MediaPlayer.create(this, R.raw.music)
-        soundBkgd.isLooping = true
-        soundBkgd.setVolume(0.05F, 0.05F)
+        soundBackground = MediaPlayer.create(this, R.raw.music)
+        soundBackground.isLooping = true
+        soundBackground.setVolume(0.05F, 0.05F)
         getSharedPrefs()
         initializeAds()
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -218,7 +218,7 @@ class MainHomeScreen : AppCompatActivity() {
             if (BuildConfig.DEBUG) trainingButton.visibility = View.VISIBLE
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        logFirebaseEvent("MainHomeScreen", 1, "open")
+        logFirebaseEvent("MainHomeScreen",  "open")
     }
 
     private fun mainIconGridDisplay() {
@@ -274,8 +274,7 @@ class MainHomeScreen : AppCompatActivity() {
                     roomID = intent.data?.query?.split("link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/")?.get(1)?.split("&")?.get(0).toString()
                     joinRoomPending = true
                     if (userDataFetched) autoJoinRoom()
-                }
-                else if (intent.data?.query?.contains("link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoomOld)}/")!!) {
+                } else if (intent.data?.query?.contains("link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoomOld)}/")!!) {
                     if (soundStatus) SoundManager.instance?.playErrorSound()
                     if (vibrateStatus) vibrationStart()
                     toastCenter("The link belongs to old version. Please ask your friend to Update their app")
@@ -285,8 +284,7 @@ class MainHomeScreen : AppCompatActivity() {
                 roomID = intent.data?.lastPathSegment.toString()
                 joinRoomPending = true
                 if (userDataFetched) autoJoinRoom()
-            }
-            else if (intent.data?.host == getString(R.string.hostJoinRoomOld)) { // re-routed from browser/chrome
+            } else if (intent.data?.host == getString(R.string.hostJoinRoomOld)) { // re-routed from browser/chrome
                 if (soundStatus) SoundManager.instance?.playErrorSound()
                 if (vibrateStatus) vibrationStart()
                 toastCenter("The link belongs to old version. Please ask your friend to Update their app")
@@ -305,12 +303,12 @@ class MainHomeScreen : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
+        if (musicStatus && this::soundBackground.isInitialized) soundBackground.start()
     }
 
-    private fun logFirebaseEvent(event: String, int: Int, key: String) {
+    private fun logFirebaseEvent(event: String, key: String) {
         val params = Bundle()
-        params.putInt(key, int)
+        params.putInt(key, 1)
         firebaseAnalytics.logEvent(event, params)
     }
 
@@ -382,7 +380,7 @@ class MainHomeScreen : AppCompatActivity() {
             } // check if new user
         } else {
             mAuth.signOut()
-            startActivity(Intent(this, StartScreen::class.java).apply { putExtra("background", background) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            startActivity(Intent(this, StartScreen::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
             finishAndRemoveTask()
         }
         refUsersData.document(uid).get().addOnSuccessListener { dataSnapshot ->
@@ -477,21 +475,22 @@ class MainHomeScreen : AppCompatActivity() {
                     fireStoreRef.set(hashMapOf("LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "lang" to applicationContext.resources.configuration.locale.displayLanguage, "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())                    //					checkAccessToTrain()
                 } catch (exception: java.lang.Exception) {
                     mAuth.signOut()
-                    startActivity(Intent(this, StartScreen::class.java).apply { putExtra("background", background) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                    startActivity(Intent(this, StartScreen::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
                     finishAndRemoveTask()
                 }
             } else {
                 mAuth.signOut()
-                startActivity(Intent(this, StartScreen::class.java).apply { putExtra("background", background) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                startActivity(Intent(this, StartScreen::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finishAndRemoveTask()
             }
         }.addOnFailureListener {
             mAuth.signOut()
-            startActivity(Intent(this, StartScreen::class.java).apply { putExtra("background", background) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            startActivity(Intent(this, StartScreen::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
             finishAndRemoveTask()
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun createTokenFC(check: Boolean = false, oldToken: String = "") {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -539,12 +538,12 @@ class MainHomeScreen : AppCompatActivity() {
             musicStatus = sharedPreferences.getBoolean("musicStatus", true)
             musicSwitch.isChecked = musicStatus
             if (musicStatus) {
-                soundBkgd.start()
+                soundBackground.start()
             }
         } else {
             musicStatus = true
             musicSwitch.isChecked = musicStatus
-            if (this::soundBkgd.isInitialized) soundBkgd.start()
+            if (this::soundBackground.isInitialized) soundBackground.start()
             editor.putBoolean("musicStatus", musicStatus) // write username to preference file
             editor.apply()
         }
@@ -560,7 +559,7 @@ class MainHomeScreen : AppCompatActivity() {
             val roomID = sharedPreferences.getString("Room", "").toString()
             if (roomID.isNotEmpty()) {
                 Handler(Looper.getMainLooper()).postDelayed({
-					deleteAllRoomData(roomID)
+                    deleteAllRoomData(roomID)
                 }, 0)
             }
             editor.remove("Room").apply()
@@ -691,6 +690,7 @@ class MainHomeScreen : AppCompatActivity() {
                 Log.d("Inter", "onAdFailedToLoad")
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
+
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("Inter", "onAdLoaded")
                 loadInterAdTry = 0
@@ -707,11 +707,13 @@ class MainHomeScreen : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("Inter", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
                     addPoints()
                 }
+
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
@@ -725,13 +727,14 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun loadRewardAd() {
         loadRewardedAdTry += 1
-        var adRequest = AdRequest.Builder().build()
+        val adRequest = AdRequest.Builder().build()
         RewardedAd.load(this, getString(R.string.reward_admob), adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(p0: LoadAdError) {
                 Log.d("Inter", "Rewarded failed to load")
                 mRewardedAd = null
                 if (loadRewardedAdTry <= 3) loadRewardAd()
             }
+
             override fun onAdLoaded(rewardedAd: RewardedAd) {
                 Log.d("Inter", "Rewarded ad loaded")
                 mRewardedAd = rewardedAd
@@ -750,19 +753,21 @@ class MainHomeScreen : AppCompatActivity() {
                     if (clickedDailyReward) dailyRewardGridLayout.visibility = View.GONE
                     watchVideo.clearAnimation()
                     watchVideo.visibility = View.GONE
-                    if (musicStatus) soundBkgd.pause()
+                    if (musicStatus) soundBackground.pause()
                 }
-                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     // Called when ad fails to show.
                     Log.d("Inter", "mRewardedAd Ad failed to show.")
                     watchVideo.clearAnimation()
                     watchVideo.visibility = View.GONE
                     loadRewardAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {// Called when ad is dismissed. Set the ad reference to null so you don't show the ad a second time.
                     Log.d("Inter", "mRewardedAd Ad was dismissed.")
                     mRewardedAd = null
-                    if (musicStatus) soundBkgd.start()
+                    if (musicStatus) soundBackground.start()
                     if (rewardStatus) {
                         addPoints()
                         rewardStatus = false
@@ -784,13 +789,14 @@ class MainHomeScreen : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun addPoints() {
         if (soundStatus) SoundManager.instance?.playZipSound()
         rewardAmount = if (clickedDailyReward) dailyRewardAmount
         else 1000
         showDialogue(rewardAmount.toString())
-        if (clickedDailyReward) logFirebaseEvent("daily_rewards", 1, "coins$rewardAmount")
-        else logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, 1, "coins$rewardAmount")
+        if (clickedDailyReward) logFirebaseEvent("daily_rewards", "coins$rewardAmount")
+        else logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY,  "coins$rewardAmount")
 
         totalCoins += rewardAmount  // reward with daily reward amount for watching video
         userBasicInfo.score = totalCoins  // reward with daily reward amount for watching video
@@ -892,6 +898,7 @@ class MainHomeScreen : AppCompatActivity() {
             override fun onCancelled(errorDataLoad: DatabaseError) {
                 onlineGameAllowedM = errorDataLoad.message
             }
+
             override fun onDataChange(data: DataSnapshot) {
                 if (data.exists()) {
                     onlineGameAllowed = data.child("OnlineGame").value.toString().toInt() == 1
@@ -966,9 +973,9 @@ class MainHomeScreen : AppCompatActivity() {
         if (!offlineRoomCreate) {
             editor.putString("Room", roomID) // write room ID in storage - to delete later
             editor.apply()
-            logFirebaseEvent("create_join_room_screen", 1, "create_$nPlayers")
+            logFirebaseEvent("create_join_room_screen",  "create_$nPlayers")
         } else {
-            logFirebaseEvent("create_join_room_screen", 1, "create_offline_$nPlayers")
+            logFirebaseEvent("create_join_room_screen",  "create_offline_$nPlayers")
         }
         val userStatsDaily = ArrayList(listOf(nGamesPlayedDaily, nGamesWonDaily, nGamesBidDaily))
         val userStatsTotal = ArrayList(listOf(nGamesPlayed + nGamesPlayedBot, nGamesWon + nGamesWonBot, nGamesBid + nGamesBidBot))
@@ -1040,7 +1047,7 @@ class MainHomeScreen : AppCompatActivity() {
                                     if (soundStatus) SoundManager.instance?.playSuccessSound()
                                     maskAllLoading.visibility = View.VISIBLE
                                     loadingText.text = getString(R.string.joiningRoom)
-                                    logFirebaseEvent("create_join_room_screen", 1, "join_$nPlayers")
+                                    logFirebaseEvent("create_join_room_screen",  "join_$nPlayers")
                                     if (queTemp == 0) refRoomData.document(roomID)  // new player joined - not previously joined
                                         .set(hashMapOf("p$que" to userName, "PJ" to que, "p${que}h" to uid), SetOptions.merge()).addOnSuccessListener {
                                             startCJRS(roomID = roomID, playerJoining = que, nPlayers = nPlayers)
@@ -1170,9 +1177,9 @@ class MainHomeScreen : AppCompatActivity() {
     fun music(view: View) {
         musicStatus = musicSwitch.isChecked
         if (musicStatus) {
-            soundBkgd.start()
+            soundBackground.start()
         } else {
-            soundBkgd.pause()
+            soundBackground.pause()
         }
         editor.putBoolean("musicStatus", musicStatus) // write username to preference file
         editor.apply()
@@ -1219,9 +1226,9 @@ class MainHomeScreen : AppCompatActivity() {
     @SuppressLint("NewApi")
     private fun vibrationStart(duration: Long = 150) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-           if(this::vibrator.isInitialized) vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
+            if (this::vibrator.isInitialized) vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
-            if(this::vibrator.isInitialized) vibrator.vibrate(duration)
+            if (this::vibrator.isInitialized) vibrator.vibrate(duration)
         }
     }
 
@@ -1250,6 +1257,7 @@ class MainHomeScreen : AppCompatActivity() {
 ////            val a = data.getValue<GameData>()
 ////        }
         trainAccess = false
+        @Suppress("KotlinConstantConditions")
         if (trainAccess) {
             maskAllLoading.visibility = View.VISIBLE
             loadingText.text = getString(R.string.startTrain)
@@ -1312,7 +1320,7 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun handleAllTimeView() {
         if (!rankAllTimeSetupDone) {
-            logFirebaseEvent("Ranking", 1, "Requested")
+            logFirebaseEvent("Ranking",  "Requested")
             rankAllTimeSetupDone = true
             rankProgress.visibility = View.VISIBLE
             loadingProgressBar.visibility = View.VISIBLE
@@ -1365,7 +1373,7 @@ class MainHomeScreen : AppCompatActivity() {
     private fun handleDailyView() {
         if (!rankDailySetupDone) {
             loadingProgressBar.visibility = View.VISIBLE
-            logFirebaseEvent("Ranking", 1, "Requested")
+            logFirebaseEvent("Ranking",  "Requested")
             rankDailySetupDone = true
             rankProgress.visibility = View.VISIBLE
             recyclerView1 = (supportFragmentManager.findFragmentByTag("f0")?.view as View).rankGallery
@@ -1438,22 +1446,22 @@ class MainHomeScreen : AppCompatActivity() {
             intentInvite.putExtra(Intent.EXTRA_TITLE, "Invite friends")
             intentInvite.putExtra(Intent.EXTRA_TEXT, message)
             startActivity(Intent.createChooser(intentInvite, "Invite friends via "))
-            logFirebaseEvent(FirebaseAnalytics.Event.SHARE, 1, "invite")
-        } catch (me: Exception) {
+            logFirebaseEvent(FirebaseAnalytics.Event.SHARE,  "invite")
+        } catch (_: Exception) {
         }
     }
 
     private fun howToPlay() {
         try {
             intentBuilder.build().launchUrl(this, Uri.parse(howtoPlayUrl))
-            logFirebaseEvent("HowToPlay", 1, "open")
+            logFirebaseEvent("HowToPlay", "open")
         } catch (me: Exception) {
             try {
                 val intent = Intent(Intent.ACTION_VIEW).apply {
                     data = Uri.parse(howtoPlayUrl)
                 }
                 startActivity(intent)
-            } catch (me: Exception) {
+            } catch (_: Exception) {
             }
         }
     }
@@ -1486,7 +1494,7 @@ class MainHomeScreen : AppCompatActivity() {
     fun askLaterRating(view: View) { // request for rating after x days from today if choose ask later
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (soundStatus) SoundManager.instance?.playUpdateSound()
-        logFirebaseEvent("rate_us_vector.xml", 1, "rate_later")
+        logFirebaseEvent("rate_us_vector.xml",  "rate_later")
         closeRatingWindow(View(this))
         ratingRequestDate = getChangedDate(SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt(), requestRatingAfterDays)
         editor.putInt("ratingRequestDate", ratingRequestDate)
@@ -1501,8 +1509,8 @@ class MainHomeScreen : AppCompatActivity() {
         closeRatingWindow(View(this))
         if (!rated) inAppReview()  //openPlayStore() //- disable in app review for a while
         else openPlayStore()
-        if (view.tag == "good") logFirebaseEvent("rate_us_vector.xml", 1, "rate_good")
-        else if (view.tag == "bad") logFirebaseEvent("rate_us_vector.xml", 1, "rate_bad")
+        if (view.tag == "good") logFirebaseEvent("rate_us_vector.xml",  "rate_good")
+        else if (view.tag == "bad") logFirebaseEvent("rate_us_vector.xml",  "rate_bad")
     }
 
     private fun openPlayStore() {
@@ -1512,7 +1520,7 @@ class MainHomeScreen : AppCompatActivity() {
         }
         try {
             startActivity(intent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
 
         }
     }
@@ -1549,7 +1557,7 @@ class MainHomeScreen : AppCompatActivity() {
         if (vibrateStatus) vibrationStart()
         mAuth.signOut()
         LoginManager.getInstance().logOut()
-        startActivity(Intent(this, StartScreen::class.java).apply { putExtra("background", background) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        startActivity(Intent(this, StartScreen::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         overridePendingTransition(R.anim.slide_right_activity, R.anim.slide_right_activity)
         finishAndRemoveTask()
     }
@@ -1562,16 +1570,16 @@ class MainHomeScreen : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (musicStatus) soundBkgd.pause()
+        if (musicStatus) soundBackground.pause()
     }
 
     override fun onResume() {
         super.onResume()
-        if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
+        if (musicStatus && this::soundBackground.isInitialized) soundBackground.start()
     }
 
     override fun onDestroy() {
-        if (this::soundBkgd.isInitialized) soundBkgd.release()
+        if (this::soundBackground.isInitialized) soundBackground.release()
         if (this::billingClient.isInitialized) billingClient.endConnection()
         if (this::viewPagerCallback.isInitialized) viewPager2.unregisterOnPageChangeCallback(viewPagerCallback)
         if (this::recyclerViewScrollListener.isInitialized) recyclerView.removeOnScrollListener(recyclerViewScrollListener)
@@ -1581,19 +1589,19 @@ class MainHomeScreen : AppCompatActivity() {
         try {
             mInterstitialAd!!.fullScreenContentCallback = null
             mInterstitialAd = null
-        } catch (me: java.lang.Exception) {
+        } catch (_: java.lang.Exception) {
         }
 
         try {
             mRewardedAd!!.fullScreenContentCallback = null
             mRewardedAd = null
-        } catch (me: java.lang.Exception) {
+        } catch (_: java.lang.Exception) {
         }
 
         try {
             textToSpeech.stop()
             textToSpeech.shutdown()
-        } catch (me: java.lang.Exception) {
+        } catch (_: java.lang.Exception) {
         }
         bannerMHS.destroy()
         super.onDestroy()
@@ -1610,16 +1618,16 @@ class MainHomeScreen : AppCompatActivity() {
                 flow.addOnCompleteListener { result ->
                     if (result.isSuccessful) {
                         rated = true
-                        editor.putBoolean("rated", rated)
+                        editor.putBoolean("rated", true)
                         editor.apply()
-                        logFirebaseEvent("rate_us_vector.xml", 1, "rated")
+                        logFirebaseEvent("rate_us_vector.xml",  "rated")
                         refUsersData.document(uid).set(hashMapOf("rated" to 1, "ratedD" to today), SetOptions.merge())
                     } else {
                         openPlayStore()
                     }
                 }
             } else {
-                logFirebaseEvent("rate_us_vector.xml", 1, "ratedFailure")
+                logFirebaseEvent("rate_us_vector.xml",  "ratedFailure")
                 openPlayStore()
             }
         }

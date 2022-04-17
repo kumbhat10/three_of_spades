@@ -299,7 +299,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             // region Game State Listener
             gameStateListener = Observer {
                 if (gameState.value!! == 1) {
-                    binding.horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+                    binding.horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
                     if (!roundStarted) {
                         resetVariables()
                         binding.scrollViewScore.visibility = View.GONE
@@ -563,7 +563,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         for (i in 0..nPlayers) {
             viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).text = data[i].toString()
             if (!upDateHeader) viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._12ssp))
-            //            else viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._13ssp))
+            // else viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._13ssp))
             if (i > 0 && !upDateHeader && data[i].toString().toInt() < 0) {
                 // viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
                 viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.Red))
@@ -1084,7 +1084,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             //            findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).clearAnimation()
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
         }
-        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
         findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
     }
 
@@ -1418,9 +1418,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(applicationContext, R.drawable.pass)
                 if (iPlayer == fromInt) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
             } else {
-                findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+                findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
 
-                if (iPlayer == fromInt) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+                if (iPlayer == fromInt) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
             }
             if (iPlayer == fromInt) findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
         }
@@ -1435,10 +1435,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private fun finishBackgroundAnimationBidding() {  //clear Everything on finish of biding round
         for (i in 0 until nPlayers) {
-            findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+            findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
         }
-        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
         findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
         findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[bidder - 1]).visibility = View.VISIBLE
 
@@ -1518,7 +1518,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun displayShufflingCards(view: View = View(applicationContext), sets: Int = 5, distribute: Boolean = true) {
-        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         if (distribute) shufflingDistribute()
         val gallery = findViewById<LinearLayout>(R.id.imageGallery)
         gallery.removeAllViews()
@@ -1538,7 +1538,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 gallery.addView(viewTemp)
             }
         }
-        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         gallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
     }
 
@@ -1648,6 +1648,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 Log.d("Inter", "onAdFailedToLoad")
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
+
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("Inter", "onAdLoaded")
                 loadInterAdTry = 0
@@ -1664,6 +1665,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("Inter", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
@@ -1671,7 +1673,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     if (gameState.value!! == 6) {
                         binding.startNextRoundButton.visibility = View.VISIBLE
                         binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-                    }                }
+                    }
+                }
+
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }

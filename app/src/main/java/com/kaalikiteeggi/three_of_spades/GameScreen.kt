@@ -51,6 +51,7 @@ import com.google.firebase.ktx.Firebase
 import com.kaalikiteeggi.three_of_spades.databinding.ActivityGameScreenBinding
 import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.cards_item_list.view.*
 import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
 import java.text.SimpleDateFormat
@@ -60,7 +61,7 @@ import kotlin.math.round
 import kotlin.properties.Delegates
 
 @SuppressLint("SetTextI18n")
-class GameScreen : AppCompatActivity() { 
+class GameScreen : AppCompatActivity() {
 //    region Initialization
 
     private lateinit var textToSpeech: TextToSpeech
@@ -215,6 +216,7 @@ class GameScreen : AppCompatActivity() {
     private var roundNumber = 1
     private var newGameStatus = true
     private lateinit var binding: ActivityGameScreenBinding
+
     // endregion
     @SuppressLint("ShowToast", "MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -281,28 +283,28 @@ class GameScreen : AppCompatActivity() {
         countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 50) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                 binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
-                 binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
+                binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
+                binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
             }
 
             override fun onFinish() {
                 autoPlayCard()
                 if (soundStatus) SoundManager.instance?.playTimerSound()
                 if (vibrateStatus) vibrationStart()
-                 binding.progressbarTimer.progress = 0
-                 binding.closeGameRoomIcon.visibility = View.VISIBLE
-                 binding.progressbarTimer.visibility = View.GONE
-                 binding.textViewTimer.visibility = View.GONE
-                 binding.progressbarTimer.clearAnimation()
-                 binding.textViewTimer.clearAnimation()
+                binding.progressbarTimer.progress = 0
+                binding.closeGameRoomIcon.visibility = View.VISIBLE
+                binding.progressbarTimer.visibility = View.GONE
+                binding.textViewTimer.visibility = View.GONE
+                binding.progressbarTimer.clearAnimation()
+                binding.textViewTimer.clearAnimation()
             }
         } // endregion
         // region Countdown Biding
         countDownBidding = object : CountDownTimer(timeCountdownBid, 50) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) { //                     binding.closeGameRoomIcon.visibility = View.GONE
-                 binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
-                 binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
+                binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
+                binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
             }
 
             override fun onFinish() {
@@ -312,12 +314,12 @@ class GameScreen : AppCompatActivity() {
                     if (soundStatus) SoundManager.instance?.playTimerSound()
                     gameData.bs?.set(fromInt - 1, 0)
                     writeChild(data = mutableMapOf("pt" to nextValidBidder, "bs" to gameData.bs!!, "bvo" to gameData.bv!!))
-                     binding.progressbarTimer.progress = 0
-                     binding.closeGameRoomIcon.visibility = View.VISIBLE
-                     binding.progressbarTimer.visibility = View.GONE
-                     binding.textViewTimer.visibility = View.GONE
-                     binding.progressbarTimer.clearAnimation()
-                     binding.textViewTimer.clearAnimation()
+                    binding.progressbarTimer.progress = 0
+                    binding.closeGameRoomIcon.visibility = View.VISIBLE
+                    binding.progressbarTimer.visibility = View.GONE
+                    binding.textViewTimer.visibility = View.GONE
+                    binding.progressbarTimer.clearAnimation()
+                    binding.textViewTimer.clearAnimation()
                     findViewById<ConstraintLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
                     Handler(Looper.getMainLooper()).postDelayed({
                         findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE
@@ -366,7 +368,7 @@ class GameScreen : AppCompatActivity() {
         }
         currentBidder.value = 0
         currentBidder.observe(this) {
-            if (it == 0)  binding.textViewBider.text = getString(R.string.Bider)
+            if (it == 0) binding.textViewBider.text = getString(R.string.Bider)
             else binding.textViewBider.text = "Bid: " + playerName(currentBidder.value!!)
         }
         bidValue.value = 0
@@ -465,7 +467,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun gameState1() {
-        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         if (!gameState1) {
             gameState1 = true
             resetVariables()
@@ -1273,7 +1275,7 @@ class GameScreen : AppCompatActivity() {
     private fun scoreBoardTable(data: List<Any>, display: Boolean = true, upDateHeader: Boolean = false, upDateTotal: Boolean = false) {
         if (display) {
             scoreOpenStatus = true
-             binding.closeGameRoomIcon.visibility = View.GONE
+            binding.closeGameRoomIcon.visibility = View.GONE
             findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.VISIBLE
             findViewById<ConstraintLayout>(R.id.scoreViewLayout).visibility = View.VISIBLE
             findViewById<ConstraintLayout>(R.id.scoreViewLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_scoretable_open))
@@ -1287,9 +1289,9 @@ class GameScreen : AppCompatActivity() {
         for (i in 0..nPlayers) {
             viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).text = data[i].toString()
             if (!upDateHeader) viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._12ssp))
-            if (i > 0 && !upDateHeader && data[i].toString().toInt() < 0) { //                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
+            if (i > 0 && !upDateHeader && data[i].toString().toInt() < 0) {
                 viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.Red))
-            } else if (i > 0 && !upDateHeader) { //                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
+            } else if (i > 0 && !upDateHeader) {
                 viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.borderblueDark1g))
             }
         }
@@ -1304,7 +1306,7 @@ class GameScreen : AppCompatActivity() {
             }
             else -> {
                 viewTemp.layoutParams.height = resources.getDimensionPixelSize(R.dimen._22sdp)
-                viewTemp.background = ContextCompat.getDrawable(this, R.drawable.blackrectangle)
+//                viewTemp.background = ContextCompat.getDrawable(this, R.drawable.blackrectangle)
                 findViewById<LinearLayout>(R.id.imageGalleryScore).addView(viewTemp)
             }
         }
@@ -1315,7 +1317,7 @@ class GameScreen : AppCompatActivity() {
 
     fun openCloseScoreSheet(view: View) {
         if (findViewById<ScrollView>(R.id.scrollViewScore).visibility == View.VISIBLE) {
-             binding.closeGameRoomIcon.visibility = View.VISIBLE
+            binding.closeGameRoomIcon.visibility = View.VISIBLE
 
             findViewById<ConstraintLayout>(R.id.scoreViewLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
             Handler(Looper.getMainLooper()).postDelayed({
@@ -1330,7 +1332,7 @@ class GameScreen : AppCompatActivity() {
                 scoreBoardTable(display = false, data = createScoreTableTotal(), upDateTotal = true)
             }
             scoreSheetNotUpdated = false
-             binding.closeGameRoomIcon.visibility = View.GONE
+            binding.closeGameRoomIcon.visibility = View.GONE
             findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.VISIBLE
             findViewById<ConstraintLayout>(R.id.scoreViewLayout).visibility = View.VISIBLE
             findViewById<ConstraintLayout>(R.id.scoreViewLayout).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_scoretable_open))
@@ -1346,7 +1348,7 @@ class GameScreen : AppCompatActivity() {
         scoreOpenStatus = false
         findViewById<ScrollView>(R.id.scrollViewScore).visibility = View.GONE
         findViewById<ConstraintLayout>(R.id.scoreViewLayout).visibility = View.GONE
-         binding.closeGameRoomIcon.visibility = View.VISIBLE
+        binding.closeGameRoomIcon.visibility = View.VISIBLE
     }
 
     private fun playerCoins(p: String): Int {
@@ -1369,12 +1371,12 @@ class GameScreen : AppCompatActivity() {
 
         refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1)
         else getGameData7(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1)).addOnFailureListener {
-                toastCenter("Failed to start new game. Please Try again")
-                speak("Failed to start new game. Please try again")
-                findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.VISIBLE
-            }.addOnSuccessListener {
-                findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.GONE
-            }
+            toastCenter("Failed to start new game. Please Try again")
+            speak("Failed to start new game. Please try again")
+            findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.VISIBLE
+        }.addOnSuccessListener {
+            findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.GONE
+        }
     }
 
     private fun tablePointsCalculator() {
@@ -1534,12 +1536,12 @@ class GameScreen : AppCompatActivity() {
 
     private fun countDownTimer(task: String, purpose: String = "start") {
         if (purpose == "start") {
-             binding.closeGameRoomIcon.visibility = View.GONE
-             binding.progressbarTimer.progress = 100
-             binding.closeGameRoomIcon.visibility = View.GONE
-             binding.progressbarTimer.visibility = View.VISIBLE
-             binding.textViewTimer.visibility = View.VISIBLE
-             binding.textViewTimer.text = "10"
+            binding.closeGameRoomIcon.visibility = View.GONE
+            binding.progressbarTimer.progress = 100
+            binding.closeGameRoomIcon.visibility = View.GONE
+            binding.progressbarTimer.visibility = View.VISIBLE
+            binding.textViewTimer.visibility = View.VISIBLE
+            binding.textViewTimer.text = "10"
             if (task == "Bidding") {
                 countDownBidding.cancel()
                 countDownBidding.start()
@@ -1549,11 +1551,11 @@ class GameScreen : AppCompatActivity() {
                 countDownPlayCard.start()
             }
         } else if (purpose == "cancel") {
-             binding.closeGameRoomIcon.visibility = View.VISIBLE
-             binding.progressbarTimer.visibility = View.GONE
-             binding.textViewTimer.visibility = View.GONE
-             binding.progressbarTimer.clearAnimation()
-             binding.textViewTimer.clearAnimation()
+            binding.closeGameRoomIcon.visibility = View.VISIBLE
+            binding.progressbarTimer.visibility = View.GONE
+            binding.textViewTimer.visibility = View.GONE
+            binding.progressbarTimer.clearAnimation()
+            binding.textViewTimer.clearAnimation()
             if (task == "Bidding") countDownBidding.cancel()
             if (task == "PlayCard") countDownPlayCard.cancel()
         }
@@ -1609,9 +1611,9 @@ class GameScreen : AppCompatActivity() {
     private fun endGameRound() {
         gameData.sc!![fromInt - 1] = tablePoints + gameData.sc!![fromInt - 1]
         refRoomDatabase.child("G").setValue(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "sc" to gameData.sc!!, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to "")).addOnSuccessListener { }.addOnFailureListener {
-                logFirebaseEvent(key = "Failed-Next-Turn")
-                refRoomDatabase.child("G").setValue(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "sc" to gameData.sc!!, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to ""))
-            }
+            logFirebaseEvent(key = "Failed-Next-Turn")
+            refRoomDatabase.child("G").setValue(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "sc" to gameData.sc!!, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to ""))
+        }
     }
 
     private fun compareCardsForWinner(currentCard: Int, winnerCard: Int): Int {
@@ -1637,16 +1639,14 @@ class GameScreen : AppCompatActivity() {
 
     @SuppressLint("CutPasteId")
     private fun displaySelfCards(view: View = View(applicationContext), animation: Boolean = false, filter: Boolean = false, bidingRequest: Boolean = false) {
-        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         findViewById<LinearLayout>(R.id.imageGallery).removeAllViews()
         val gallery = findViewById<LinearLayout>(R.id.imageGallery)
         gallery.visibility = View.VISIBLE
         val inflater = LayoutInflater.from(applicationContext)
-        val typedValue = TypedValue()
-        applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true)
         for (x: Long in cardsInHand) {
             val viewTemp = inflater.inflate(R.layout.cards_item_list, gallery, false)
-            val imageViewDisplayCard = viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard)
+            val imageViewDisplayCard = viewTemp.imageViewDisplayCard
             if (x == cardsInHand[cardsInHand.size - 1]) {
                 imageViewDisplayCard.setPaddingRelative(0, 0, 0, 0)
                 imageViewDisplayCard.layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
@@ -1657,15 +1657,18 @@ class GameScreen : AppCompatActivity() {
             } else if (filter && gameTurn > 1 && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1) {
                 imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_active_cards))
                 imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            } else imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
+            }
+//            else imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
 
             imageViewDisplayCard.tag = x.toString() // tag the card number to the image
             if (cardsPoints.elementAt(x.toInt()) != 0) {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).text = "${cardsPoints.elementAt(x.toInt())}"
-                if (animation) viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale)) //                if (animations) imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
+                if (animation) {
+                    viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
+                }
             } else {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).visibility = View.GONE
-            } //            imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext,typedValue.resourceId)
+            }
             imageViewDisplayCard.setOnClickListener {
                 validateSelfPlayedCard(it)
                 imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
@@ -1686,7 +1689,7 @@ class GameScreen : AppCompatActivity() {
             //            findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).clearAnimation()
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
         }
-        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
         findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
     }
 
@@ -1751,8 +1754,8 @@ class GameScreen : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(this, R.drawable.pass)
                 if ("p$iPlayer" == from) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(this, R.color.progressBarPlayer2))
             } else {
-                findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.layoutBackground))
-                if ("p$iPlayer" == from) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(this, R.color.layoutBackground))
+                findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
+                if ("p$iPlayer" == from) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
             }
             if ("p$iPlayer" == from) findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
         }
@@ -1767,10 +1770,10 @@ class GameScreen : AppCompatActivity() {
 
     private fun finishBackgroundAnimationBidding() {  //clear Everything on finish of biding round
         for (i in 0 until nPlayers) {
-            findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.layoutBackground))
+            findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE //            findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).clearAnimation()
         }
-        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(this, R.color.layoutBackground))
+        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
         findViewById<LinearLayout>(R.id.imageGallery).clearAnimation() //        findViewById<ImageView>(refIDMappedImageView[bidder -1]).setBackgroundColor(ContextCompat.getColor(this, R.color.progressBarPlayer4)) // highlight bidder winner
         if (gameData.bb!! > 0) findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[gameData.bb!! - 1]).visibility = View.VISIBLE
 
@@ -1854,7 +1857,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun displayShufflingCards(view: View = View(this), sets: Int = 5, distribute: Boolean = true) {
-        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         if (distribute) shufflingDistribute()
         val gallery = findViewById<LinearLayout>(R.id.imageGallery)
         gallery.removeAllViews()
@@ -1872,7 +1875,7 @@ class GameScreen : AppCompatActivity() {
                 gallery.addView(viewTemp)
             }
         }
-        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.layoutBackground))
+        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         gallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
     }
 
@@ -2009,7 +2012,7 @@ class GameScreen : AppCompatActivity() {
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
         }
-		initializeAds()
+        initializeAds()
         if (sharedPreferences.contains("soundStatus")) {
             soundStatus = sharedPreferences.getBoolean("soundStatus", true)
         }
@@ -2056,6 +2059,7 @@ class GameScreen : AppCompatActivity() {
                 Log.d("Inter", "onAdFailedToLoad")
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
+
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("Inter", "onAdLoaded")
                 loadInterAdTry = 0
@@ -2073,6 +2077,7 @@ class GameScreen : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("Inter", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
@@ -2083,6 +2088,7 @@ class GameScreen : AppCompatActivity() {
                     }
                     if (fromInt == 1) write("OL/$from", 1) // for others except host, onStart will take care to update activity
                 }
+
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }

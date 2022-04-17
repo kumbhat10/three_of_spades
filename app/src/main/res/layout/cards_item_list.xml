@@ -32,7 +32,6 @@
         android:contextClickable="true"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="@color/BlackTransUserStats2"
         android:cropToPadding="true"
         android:elevation="0dp"
         android:fadingEdge="horizontal"

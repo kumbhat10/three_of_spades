@@ -107,8 +107,8 @@ dependencies {
 
 //    implementation 'com.facebook.android:audience-network-sdk:6.4.0'
 //    implementation 'com.mopub.mediation:facebookaudiencenetwork:6.4.0.1'
-    implementation 'com.applovin:applovin-sdk:11.3.1'
-    implementation  'com.google.ads.mediation:applovin:11.3.1.0'
+    implementation 'com.applovin:applovin-sdk:11.3.3'
+    implementation  'com.google.ads.mediation:applovin:11.3.3.0'
 
 //    implementation('com.mopub:mopub-sdk-banner:5.18.0@aar') {
 //        transitive = true

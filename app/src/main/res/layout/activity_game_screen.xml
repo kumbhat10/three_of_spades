@@ -1482,7 +1482,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:orientation="horizontal" />
         </HorizontalScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -2134,12 +2133,14 @@
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="@dimen/_1sdp"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
         android:animateLayoutChanges="true"
         android:background="@drawable/shine_score_table"
         android:clickable="true"
         android:focusable="true"
         android:onClick="openCloseScoreSheet"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -2199,7 +2200,7 @@
 
             <LinearLayout
                 android:id="@+id/imageGalleryScore"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:orientation="vertical"

@@ -29,7 +29,6 @@
     <color name="mhsTintBacsdkground2">#223FCC</color>
 
 
-    <color name="transparent">#00000000</color>
     //orange ish
     <color name="icon_yellow">#ffc107</color>
     <color name="profileCard">#DD250505</color>
@@ -43,7 +42,7 @@
 
     <color name = "cardsBackgroundDark">#C6040E17</color>
     <color name = "cardsBackgroundLight">#DDFFFFFF</color>
-    <color name = "layoutBackground">#00000000</color>
+    <color name = "transparent">#00000000</color>
     <color name = "layoutBackgroundLittle">#D501030B</color>
 
     <color name = "inActiveCard">#C1323232</color>

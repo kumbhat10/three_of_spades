@@ -16,7 +16,7 @@
             android:paddingTop="@dimen/_2sdp"
             android:paddingBottom="@dimen/_2sdp"
             android:text="@string/playerView1"
-            android:textColor="@color/font_grey_settings"
+            android:textColor="@color/icon_yellow"
             android:textSize="@dimen/scoreTableTextSize" />
 
         <TextView
@@ -74,6 +74,5 @@
             android:text="@string/playerView1"
             android:textColor="@color/font_grey_settings"
             android:textSize="@dimen/scoreTableTextSize" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

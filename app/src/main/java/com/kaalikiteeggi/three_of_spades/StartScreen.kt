@@ -36,7 +36,6 @@ import kotlinx.android.synthetic.main.activity_start_screen.*
 
 
 class StartScreen : AppCompatActivity() {
-	private lateinit var textToSpeech: TextToSpeech
 	private lateinit var callBackManager: CallbackManager
 	private lateinit var mAuth: FirebaseAuth
 	private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -63,7 +62,6 @@ class StartScreen : AppCompatActivity() {
 			.apply()
 		binding = ActivityStartScreenBinding.inflate(layoutInflater)
 		setContentView(binding.root)
-//		setContentView(R.layout.activity_start_screen)
 
 		findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_zoom))
 		vcStart.text = "Ver: " + packageManager.getPackageInfo(packageName, 0).versionName
@@ -105,14 +103,14 @@ class StartScreen : AppCompatActivity() {
 			.build()
 
 		mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-		findViewById<SignInButton>(R.id.googleSignInButton).setOnClickListener(View.OnClickListener {
+		findViewById<SignInButton>(R.id.googleSignInButton).setOnClickListener {
 			it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 			SoundManager.instance?.playUpdateSound() //soundUpdate.start()
 			startActivityForResult(mGoogleSignInClient.signInIntent, googleCode)
 			maskButtons.visibility = View.VISIBLE
 			loadingText3.text = getString(R.string.wait)
 			loadingTextSC.visibility = View.VISIBLE
-		}) //endregion
+		} //endregion
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -247,7 +245,7 @@ class StartScreen : AppCompatActivity() {
 					data = Uri.parse(privacyPolicyUrl)
 				}
 				startActivity(intent)
-			} catch (me: Exception) {
+			} catch (_: Exception) {
 			}
 		}
 	}
