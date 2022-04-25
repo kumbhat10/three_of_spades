@@ -3,35 +3,35 @@ package com.kaalikiteeggi.three_of_spades
 import kotlin.random.Random
 
 class GameData() {
-	var bb:Int? = null
-	var bs:MutableList<Int>? = null
-	var bv:Int? = null
-	var bvo:Int? = null
-	var ct:MutableList<Int>? = null
-	var ch1:MutableList<Int>? = null
-	var ch2:MutableList<Int>? = null
-	var ch3:MutableList<Int>? = null
-	var ch4:MutableList<Int>? = null
-	var ch5:MutableList<Int>? = null
-	var ch6:MutableList<Int>? = null
-	var ch7:MutableList<Int>? = null
-	var gs:Int = 1
-	var gn:Int = 1
-	var p1:Int = 8
-	var p1s:Int = 0
-	var p2:Int = 8
-	var p2s:Int = 0
-	var pc1:Int? = null
-	var pc1s:Int = 13
-	var pc2:Int? = null
-	var pc2s:Int = 13
-	var pt:Int? = null
-	var rn:Int = 1
-	var rt:Int = 1
-	var rtr:String = ""
-	var sc:MutableList<Int>? = null
-	var s:MutableList<Int>? = null
-	var tr:String = ""
+	var bb: Int? = null // current bidder
+	var bs: MutableList<Int>? = null // bid status
+	var bv: Int? = null // current bid value
+	var bvo: Int? = null // previous(old) bid value
+	var ct: MutableList<Int>? = null // list of cards on table
+	var ch1: MutableList<Int>? = null //Cards in hand for player 1
+	var ch2: MutableList<Int>? = null //Cards in hand for player 1
+	var ch3: MutableList<Int>? = null //Cards in hand for player 1
+	var ch4: MutableList<Int>? = null //Cards in hand for player 1
+	var ch5: MutableList<Int>? = null //Cards in hand for player 1
+	var ch6: MutableList<Int>? = null //Cards in hand for player 1
+	var ch7: MutableList<Int>? = null //Cards in hand for player 1
+	var gs: Int = 1 // Game state - 1 to 6 -> 1 - shuffling, resetting and biding, 2-Trump select, 3-partner selection, 5- play rounds, 6- GameOver, results declaration back to 1
+	var gn: Int = 1 // Current Game number
+	var p1: Int = 8 // Partner 1 (player number)
+	var p1s: Int = 0 // Partner 1 status -> 0:Not found, 2:Found but not confirmed, 1:found & confirmed
+	var p2: Int = 8 // Partner 2 (player number)
+	var p2s: Int = 0 // Partner 2 status -> 0:Not found, 2:Found but not confirmed, 1:found & confirmed
+	var pc1: Int? = null  //partner card -1
+	var pc1s: Int = 13   //partner card 1 status - 11, 12, 13 - Any, only, both
+	var pc2: Int? = null //partner card - 2
+	var pc2s: Int = 13  //partner card 2 status - 11, 12, 13 - Any, only, both
+	var pt: Int? = null // Player Turn
+	var rn: Int = 1     // Round number -> 1 to 13/14 (4 players/7 Players)
+	var rt: Int = 1     // Round turn number -> 1 to 5/8 (4 players/7 Players) with +1 for declaring round winner
+	var rtr: String = ""  // Round Trump - First card Suite
+	var sc: MutableList<Int>? = null  // Final reward score list for that game
+	var s: MutableList<Int>? = null  // Individual score list for current game
+	var tr: String = ""  // Master Trump for whole game
 }
 
 fun getGameData4(dummy:Boolean = false, gameNumber:Int = 1):GameData {
@@ -64,7 +64,6 @@ fun getGameData7(dummy:Boolean = false, gameNumber:Int = 1):GameData {
 	val randPlayerNext = if(randPlayer==7) 1 else randPlayer+1
 	val cardsShuffled = (0..97).shuffled() // create shuffled pack of 1 deck with no cards removed ( 4Player x 13 = 52 cards each player)
 
-
 	gameData.bb = if(!dummy) randPlayer else 7
 	gameData.bs = mutableListOf(1,1,1,1,1,1,1)
 	gameData.bv = 350
@@ -82,7 +81,7 @@ fun getGameData7(dummy:Boolean = false, gameNumber:Int = 1):GameData {
 	gameData.pc2 = 99
 	gameData.pt = if(!dummy) randPlayerNext else 1
 	gameData.sc = mutableListOf(0,0,0,0,0,0,0)
-	gameData.s = mutableListOf(0,0,0,0,0,0,0,0)
+	gameData.s = mutableListOf(0, 0, 0, 0, 0, 0, 0, 0)
 	return gameData
 }
 
@@ -92,8 +91,8 @@ fun getGameData7(dummy:Boolean = false, gameNumber:Int = 1):GameData {
 // pj = players joined
 // bs bid status
 // bv bid value
-// bb bider
-// bt bider turn
+// bb bidder
+// bt bidder turn
 // ro round
 // ro/r rung
 // r round turn (1-14)

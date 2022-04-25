@@ -1256,8 +1256,9 @@ class MainHomeScreen : AppCompatActivity() {
 ////            val a = data.getValue<GameData>()
 ////        }
         trainAccess = false
-        @Suppress("KotlinConstantConditions")
-        if (trainAccess) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://kaaliteeri.page.link/?link=http://jo.in1/AABB&apn=com.kaalikiteeggi.three_of_spades&amv=70&st=Join%20my%20room%20ID%20%3D%3E%20AABB&si=https://tinyurl.com/3ofspade")))
+
+        @Suppress("KotlinConstantConditions") if (trainAccess) {
             maskAllLoading.visibility = View.VISIBLE
             loadingText.text = getString(R.string.startTrain)
             if (soundStatus) SoundManager.instance?.playUpdateSound()
