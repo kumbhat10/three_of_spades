@@ -114,6 +114,7 @@ class GameScreen : AppCompatActivity() {
     private lateinit var selfName: String
     private lateinit var from: String
     private var fromInt = 0
+    private var nextTurnPlayer = 0
     private var nPlayers = 0
     private var totalDailyCoins = 0
     private var nPlayers7 = false
@@ -172,7 +173,7 @@ class GameScreen : AppCompatActivity() {
     private var p5Gain = 0
     private var p6Gain = 0
     private var p7Gain = 0
-    private lateinit var cardsInHand: MutableList<Long>
+    private lateinit var cardsInHand: MutableList<Int>
 
     private lateinit var gameData: GameData
     private var gameLimitNoAds: Int = 2
@@ -188,15 +189,14 @@ class GameScreen : AppCompatActivity() {
     private var scoreSheetNotUpdated = true
 
     private var played = false
-    private var bidded = false
+    private var bidDone = false
     private lateinit var allCards: MutableList<Int>
     private lateinit var ptAll: MutableList<Int>
     private var bidTeamScore = 0
     private lateinit var scoreList: List<Int>
     private var tablePoints = 0
-    private var playerTurn: Int = 0
+    private var previousPlayerTurn: Int = 0
     private var nextValidBidder: Int = 0
-    private var gameTurn = 0
 
     //	private var bidValue: Int = 0
     private var maxBidValue: Int = 350
@@ -213,7 +213,6 @@ class GameScreen : AppCompatActivity() {
     private var p1s = 0
     private var p2s = 0
     private var roundWinner = 0
-    private var roundNumber = 1
     private var newGameStatus = true
     private lateinit var binding: ActivityGameScreenBinding
 
@@ -236,6 +235,7 @@ class GameScreen : AppCompatActivity() {
             controller!!.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
             controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         } else window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
         roomID = intent.getStringExtra("roomID")!!.toString()
         from = intent.getStringExtra("from")!!.toString()
         fromInt = from.split("")[2].toInt()
@@ -244,16 +244,19 @@ class GameScreen : AppCompatActivity() {
         playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
         val userStats = intent.getIntegerArrayListExtra("userStats")!!
         val userStatsDaily = intent.getIntegerArrayListExtra("userStatsDaily")!!
+        playerInfoCoins = intent.getStringArrayListExtra("playerInfoCoins") as ArrayList<Int>
+        nPlayers = intent.getIntExtra("nPlayers", 0)
+
         nGamesPlayed = userStats[0]
         nGamesWon = userStats[1]
         nGamesBid = userStats[2]
         nGamesPlayedDaily = userStatsDaily[0]
         nGamesWonDaily = userStatsDaily[1]
         nGamesBidDaily = userStatsDaily[2]
-        playerInfoCoins = intent.getStringArrayListExtra("playerInfoCoins") as ArrayList<Int>
-        nPlayers = intent.getIntExtra("nPlayers", 0)
+
         nPlayers7 = nPlayers == 7
         nPlayers4 = nPlayers == 4
+        nextTurnPlayer = if ((fromInt == 7 && nPlayers7) || (fromInt == 4 && nPlayers4)) 1 else fromInt + 1
         setupGame4or7()
 
         refRoomDatabase = Firebase.database.getReference("GameData/$roomID")
@@ -286,7 +289,6 @@ class GameScreen : AppCompatActivity() {
                 binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
                 binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
             }
-
             override fun onFinish() {
                 autoPlayCard()
                 if (soundStatus) SoundManager.instance?.playTimerSound()
@@ -306,10 +308,9 @@ class GameScreen : AppCompatActivity() {
                 binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
                 binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
             }
-
             override fun onFinish() {
-                if (!bidded) {
-                    bidded = true
+                if (!bidDone) {
+                    bidDone = true
                     if (vibrateStatus) vibrationStart()
                     if (soundStatus) SoundManager.instance?.playTimerSound()
                     gameData.bs?.set(fromInt - 1, 0)
@@ -320,10 +321,10 @@ class GameScreen : AppCompatActivity() {
                     binding.textViewTimer.visibility = View.GONE
                     binding.progressbarTimer.clearAnimation()
                     binding.textViewTimer.clearAnimation()
-                    findViewById<ConstraintLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
+                    binding.frameAskBid.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
                     Handler(Looper.getMainLooper()).postDelayed({
-                        findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE
-                        findViewById<ConstraintLayout>(R.id.frameAskBid).clearAnimation()
+                        binding.frameAskBid.visibility = View.GONE
+                        binding.frameAskBid.clearAnimation()
                     }, 180)
                     centralText("    Time's Up !!  \nYou cannot bid anymore", 2500)
                     speak("Time's Up ${playerName(fromInt)}. You can't bid now", speed = 1.05f)
@@ -429,6 +430,49 @@ class GameScreen : AppCompatActivity() {
         }  // close keyboard after sending chat
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (fromInt != 1) checkRoomExists() // check for all except host
+        else write("OL/$from", 1) // Turn only host online
+
+        chatRegistration = refRoomFirestore.document(roomID + "_chat").addSnapshotListener { dataSnapshot, error ->
+            if ((dataSnapshot != null) && dataSnapshot.exists() && (error == null)) {
+                val data = (dataSnapshot.data as Map<String, String>)["M"].toString()
+                if (data.isNotEmpty() && lastChat != data) { // if chat is not empty
+                    if (soundStatus) SoundManager.instance?.playChatSound()
+                    chatArray.add(data)
+                    chatAdapter.notifyItemInserted(chatArray.size - 1)
+                    binding.chatRecyclerView.scrollToPosition(chatArray.size - 1)
+                    lastChat = data
+                    if (binding.chatLinearLayout.visibility != View.VISIBLE) {
+                        (binding.imageViewChat.drawable as GifDrawable).start()
+                        counterChat += 1 // increase counter by 1 is chat display is off
+                        binding.textViewChatNo.visibility = View.VISIBLE
+                        binding.textViewChatNo.text = "$counterChat New ${Emoji().message}"
+                    }
+                }
+            } else if (error != null) {
+                toastCenter(error.localizedMessage!!.toString()) // dummy
+            }
+        }
+        if (activityExists) {
+            refRoomDatabase.child("G").removeEventListener(gameDataListener)
+            refRoomDatabase.child("G").addValueEventListener(gameDataListener)
+            refRoomDatabase.child("OL").removeEventListener(onlineStatusListener)
+            refRoomDatabase.child("OL").addValueEventListener(onlineStatusListener)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        refRoomDatabase.child("OL").removeEventListener(onlineStatusListener)
+        chatRegistration.remove()
+
+        if (this::gameDataListener.isInitialized) refRoomDatabase.child("G").removeEventListener(gameDataListener)
+        countDownTimer("PlayCard", purpose = "cancel")
+        countDownTimer("Bidding", purpose = "cancel")
+    }
+
     private fun createGameDataListener() {
         gameDataListener = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {}
@@ -437,12 +481,13 @@ class GameScreen : AppCompatActivity() {
                     gameData = data.getValue<GameData>()!!
                     tableCardsHandle()
                     bidValue.value = gameData.bv!!
-                    cardsInHand = data.child("ch$fromInt").value as MutableList<Long>
+                    cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
+                    scoreList = gameData.s!!
                     if (gameData.gs in 2..5) displaySelfCards(animation = false)
-                    currentBidder.value = gameData.bb!!
-                    partner1Card.value = gameData.pc1!!
-                    partner1CardText.value = gameData.pc1s
-                    trump.value = gameData.tr
+                    currentBidder.value = gameData.bb!! //LiveData
+                    partner1Card.value = gameData.pc1!!  //LiveData
+                    partner1CardText.value = gameData.pc1s //LiveData
+                    trump.value = gameData.tr    //LiveData
                     if (nPlayers7) {
                         partner2CardText.value = gameData.pc2s
                         partner2Card.value = gameData.pc2!!
@@ -498,12 +543,9 @@ class GameScreen : AppCompatActivity() {
         nextValidBidder = 0
         // bidingStarted = false   /// biding happened before check if it is required here
         counterPartnerSelection = 0
-        gameTurn = 0
         played = false
-        playerTurn = 0
         roundStarted = false
         gameState6 = false
-        roundNumber = 1
         roundWinner = 0
         tablePoints = 0
         allCards = allCardsReset.toMutableList()
@@ -534,8 +576,6 @@ class GameScreen : AppCompatActivity() {
 
     private fun startBidding() {
         val bidSpeak = gameData.bvo!! < gameData.bv!!
-        val prevPlayerTurn = playerTurn
-        playerTurn = gameData.pt!!
         nextValidBidder = nextBidderTurn(gameData.pt!!, gameData.bs!!)
         if (!bidingStarted) {
             binding.textViewBidValue.text = gameData.bv!!.toString()
@@ -549,8 +589,8 @@ class GameScreen : AppCompatActivity() {
         if (bidSpeak && bidingStarted && soundStatus) {
             speak("${playerName(gameData.bb!!)} bid ${gameData.bv!!}", speed = 1f)
             moveView(binding.bidCoin, findViewById(refIDMappedImageView[gameData.bb!! - 1]))
-        } else if (!bidSpeak && bidingStarted && soundStatus && prevPlayerTurn != gameData.pt!!) speak("${playerName(prevPlayerTurn)} passed", speed = 1f) //                        else if (soundStatus) SoundManager.instance?.playUpdateSound() //
-        findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE //biding frame invisible
+        } else if (!bidSpeak && bidingStarted && soundStatus && previousPlayerTurn != gameData.pt!!) speak("${playerName(previousPlayerTurn)} passed", speed = 1f) //                        else if (soundStatus) SoundManager.instance?.playUpdateSound() //
+        binding.frameAskBid.visibility = View.GONE //biding frame invisible
         resetBackgroundAnimationBidding() //set pass label on photo if passed
         if (gameData.bb!! > 0) {
             findViewById<ImageView>(refIDMappedPartnerIconImageView[gameData.bb!! - 1]).visibility = View.VISIBLE
@@ -566,46 +606,46 @@ class GameScreen : AppCompatActivity() {
         }
         if (gameData.pt!! == fromInt && (gameData.bb!! != gameData.pt!! || !bidingStarted)) {
             if (gameData.bs?.get(fromInt - 1) == 1) { // show bid frame and ask to bid or pass
-                findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
-                findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.VISIBLE // this path is critical
-                findViewById<ConstraintLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
-                bidded = false
+                binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
+                binding.frameAskBid.visibility = View.VISIBLE // this path is critical
+                binding.frameAskBid.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
+                bidDone = false
                 countDownTimer("Bidding", purpose = "start")
                 if (vibrateStatus) vibrationStart()
             } else if (gameData.bs?.get(fromInt - 1) == 0) {
-                bidded = true
-                write("G/pt", nextTurn(fromInt))
+                bidDone = true
+                writeChild(data = mutableMapOf("pt" to nextTurnPlayer ))
             }
         }
         if (gameData.pt!! == fromInt && gameData.bb!! == gameData.pt!! && bidingStarted) { // finish bid and move to next game state
             writeChild(data = mutableMapOf("gs" to 3, "pt" to fromInt))
             centralText("Well done! ${playerName(fromInt)} \n You won the bid round", 0)
         }
-        //			}
         bidingStarted = true
+        previousPlayerTurn = gameData.pt!!
     }
 
     fun askToBid(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        if (!bidded) {
-            bidded = true
+        if (!bidDone) {
+            bidDone = true
             countDownTimer("Bidding", purpose = "cancel")
             if (soundStatus) SoundManager.instance?.playUpdateSound() //
             when (view.tag) {
                 "pass" -> {
                     gameData.bs?.set(fromInt - 1, 0)
-                    writeChild(data = mutableMapOf("bs" to fromInt, "pt" to nextValidBidder))
+                    writeChild(data = mutableMapOf("bs" to gameData.bs!!, "pt" to nextValidBidder))
                 }
-                "5" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 5, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to nextValidBidder))
-                "10" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 10, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to nextValidBidder))
-                "20" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 20, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to nextValidBidder))
-                "50" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 50, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to nextValidBidder))
-                "75" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 75, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to nextValidBidder))
+                "5" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 5, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to if(min(gameData.bv!! + 5, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
+                "10" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 10, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to if(min(gameData.bv!! + 10, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
+                "20" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 20, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to if(min(gameData.bv!! + 20, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
+                "50" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 50, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to if(min(gameData.bv!! + 50, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
+                "75" -> writeChild(data = mutableMapOf("bv" to min(gameData.bv!! + 75, maxBidValue), "bvo" to gameData.bv!!, "bb" to fromInt, "pt" to if(min(gameData.bv!! + 75, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
             }
-            findViewById<ConstraintLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
+            binding.frameAskBid.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
             Handler(Looper.getMainLooper()).postDelayed({
-                findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE
-                findViewById<ConstraintLayout>(R.id.frameAskBid).clearAnimation()
+                binding.frameAskBid.visibility = View.GONE
+                binding.frameAskBid.clearAnimation()
             }, 180)
         }
     }
@@ -695,7 +735,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun partnerSelectClick4(cardSelected: Int) { // assumption is cardsInHand already updated
-        if ((cardsInHand as List<*>).contains((cardSelected).toLong())) {
+        if ((cardsInHand as List<Int>).contains((cardSelected))) {
             if (soundStatus) SoundManager.instance?.playErrorSound() //
             if (vibrateStatus) vibrationStart()
             toastCenter("$selfName, You have this card")
@@ -713,13 +753,13 @@ class GameScreen : AppCompatActivity() {
     private fun partnerSelectClick7(cardSelected: Int) { // assumption is cardsInHand already updated
         if (counterPartnerSelection == 0) {
             when {
-                (cardsInHand as List<*>).contains((cardSelected * 2).toLong()) and (cardsInHand as List<*>).contains((cardSelected * 2 + 1).toLong()) -> {
+                (cardsInHand as List<Int>).contains((cardSelected * 2)) and (cardsInHand as List<Int>).contains((cardSelected * 2 + 1)) -> {
                     if (soundStatus) SoundManager.instance?.playErrorSound()
                     if (vibrateStatus) vibrationStart()
                     toastCenter("$selfName, You already have both of selected card")
                     speak("You already have both card")
                 }
-                (cardsInHand as List<*>).contains((cardSelected * 2).toLong()) or (cardsInHand as List<*>).contains((cardSelected * 2 + 1).toLong()) -> {
+                (cardsInHand as List<Int>).contains((cardSelected * 2)) or (cardsInHand as List<Int>).contains((cardSelected * 2 + 1)) -> {
                     if (soundStatus) SoundManager.instance?.playUpdateSound()
                     writeChild(data = mutableMapOf("pc1" to cardSelected, "pc1s" to 11)) // only card
                     pc1 = cardSelected
@@ -741,14 +781,14 @@ class GameScreen : AppCompatActivity() {
                 }
             }
         } else if (counterPartnerSelection == 1) {
-            if ((cardsInHand as List<*>).contains((cardSelected * 2).toLong()) and (cardsInHand as List<*>).contains((cardSelected * 2 + 1).toLong())) {
+            if ((cardsInHand as List<Int>).contains((cardSelected * 2)) and (cardsInHand as List<Int>).contains((cardSelected * 2 + 1))) {
                 if (soundStatus) SoundManager.instance?.playErrorSound() //
                 if (vibrateStatus) vibrationStart()
                 toastCenter("$selfName, You already have both of same cards")
                 speak("You have both. Choose any other card")
-            } else if ((cardsInHand as List<*>).contains((cardSelected * 2).toLong()) or (cardsInHand as List<*>).contains((cardSelected * 2 + 1).toLong())) {
+            } else if ((cardsInHand as List<Int>).contains((cardSelected * 2)) or (cardsInHand as List<Int>).contains((cardSelected * 2 + 1))) {
                 if (pc1 != cardSelected) {
-                    writeChild(data = mutableMapOf("pc2" to cardSelected, "pc2s" to 11, "gs" to 5))  // bider has one of card in his hand
+                    writeChild(data = mutableMapOf("pc2" to cardSelected, "pc2s" to 11, "gs" to 5))  // bidder has one of card in his hand
                     counterPartnerSelection = 0
                     binding.linearLayoutPartnerSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
                     Handler(Looper.getMainLooper()).postDelayed({
@@ -762,8 +802,8 @@ class GameScreen : AppCompatActivity() {
                     speak("this card is already selected. Choose other card")
                 }
             } else {
-                if (pc1 == cardSelected) writeChild(data = mutableMapOf("pc2" to cardSelected, "pc2s" to 12, "pc1s" to 12, "gs" to 5))  // bider has none in his hands and both same selected
-                else writeChild(data = mutableMapOf("pc2" to cardSelected, "pc2s" to 10, "gs" to 5)) // bider has none in his hands and is different than 1st
+                if (pc1 == cardSelected) writeChild(data = mutableMapOf("pc2" to cardSelected, "pc2s" to 12, "pc1s" to 12, "gs" to 5))  // bidder has none in his hands and both same selected
+                else writeChild(data = mutableMapOf("pc2" to cardSelected, "pc2s" to 10, "gs" to 5)) // bidder has none in his hands and is different than 1st
                 counterPartnerSelection = 0
                 binding.linearLayoutPartnerSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -790,7 +830,7 @@ class GameScreen : AppCompatActivity() {
                 startPlayingRound()
                 speak("Lets Start!", queue = TextToSpeech.QUEUE_ADD)
             }, 2000)
-            if (playerTurn != fromInt) {
+            if (gameData.pt!! != fromInt) {
                 centralText("${playerName(gameData.pt!!)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card")
                 speak("${playerName(gameData.bb!!)} will play first \n You will get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
             } else {
@@ -842,40 +882,36 @@ class GameScreen : AppCompatActivity() {
         }
         // endregion
 
-        if (roundNumber < gameData.rn || gameData.ct?.get(fromInt - 1) != cardsIndexLimit || gameData.pt!! != fromInt) { // check for new round or not
-            roundNumber = gameData.rn
-            played = false
-            if ((gameData.rn > 8 || BuildConfig.DEBUG) && !premiumStatus) loadInterstitialAd() // load the ad again
-        }
+        played = gameData.ct?.get(fromInt - 1) != cardsIndexLimit
+        if ((gameData.rn > 8 || BuildConfig.DEBUG) && !premiumStatus) loadInterstitialAd() // load the ad again
         ptAll = gameData.sc!!
         updatePlayerScoreInfo()
         play()
     }
 
     private fun play() {
-        if (gameTurn != gameData.rt) { // if the game turn changes then only proceed
-            gameTurn = gameData.rt  // check later
-            clearAllAnimation()
-            if (gameTurn == nPlayers + 1) {
-                Handler(Looper.getMainLooper()).postDelayed({ declareRoundWinner() }, 500)
-            } else if (gameTurn != 8 && gameTurn != 0) {
-                animatePlayer(gameData.pt!!)
-                if (gameData.pt!! == fromInt && !played) {
-                    centralText("Please play your next card", 0)
-                    displaySelfCards(filter = true)
-                    countDownTimer(task = "PlayCard") // start countdown timer and run autoPlayCard
-                    if (vibrateStatus) vibrationStart()
-                } else {
-                    centralText(cancel = true)
-                }
+        // if the game turn changes then only proceed
+        clearAllAnimation()
+
+        if (gameData.rt == nPlayers + 1) {
+            Handler(Looper.getMainLooper()).postDelayed({ declareRoundWinner() }, 500)
+        } else if (gameData.rt != 8 && gameData.rt != 0) {
+            animatePlayer(gameData.pt!!)
+            if (gameData.pt!! == fromInt && !played) {
+                centralText("Please play your next card", 0)
+                displaySelfCards(filter = true)
+                countDownTimer(task = "PlayCard") // start countdown timer and run autoPlayCard
+                if (vibrateStatus) vibrationStart()
+            } else {
+                centralText(cancel = true)
             }
         }
     }
 
     private fun autoPlayCard() {
         if (!played) {
-            if (gameTurn == 1) {  //can play any random card in 1st chance
-                val cardSelected = cardsInHand.random()
+            if (gameData.rt == 1) {  //can play any random card in 1st chance
+                val cardSelected = cardsInHand.random().toInt()
                 startNextTurn(cardSelected)
             } else { // play only same suit card if not 1st chance
                 var cardSelectedIndex = cardsSuit.slice(cardsInHand as Iterable<Int>).lastIndexOf(gameData.rtr) // play largest card first
@@ -897,11 +933,11 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun validateSelfPlayedCard(view: View) {
-        if (!played && gameData.gs == 5 && gameData.pt == fromInt && !(gameTurn == 8 && nPlayers7) && !(gameTurn == 5 && nPlayers4) && gameTurn != 0) { // dummy error chance - why just 8 and not 5 also ? Investigate later
+        if (!played && gameData.gs == 5 && gameData.pt == fromInt && !(gameData.rt == 8 && nPlayers7) && !(gameData.rt == 5 && nPlayers4) && gameData.rt != 0) { // dummy error chance - why just 8 and not 5 also ? Investigate later
             val cardSelected = view.tag.toString().toInt()
-            if (gameTurn == 1 || cardsSuit[cardSelected] == gameData.rtr || cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) == -1) {
+            if (gameData.rt == 1 || cardsSuit[cardSelected] == gameData.rtr || cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) == -1) {
                 countDownTimer("PlayCard", purpose = "cancel")
-                startNextTurn(cardSelected.toLong()) // allow throw if first chance, or same suit as first turn or doesn't have same suit card
+                startNextTurn(cardSelected) // allow throw if first chance, or same suit as first turn or doesn't have same suit card
             } else {
                 if (soundStatus) SoundManager.instance?.playErrorSound()
                 if (vibrateStatus) vibrationStart()
@@ -910,7 +946,7 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    private fun startNextTurn(cardSelected: Any) {  // always called whenever played any card
+    private fun startNextTurn(cardSelected: Int) {  // always called whenever played any card
         if (!played) {
             played = true
             cardsInHand.remove(cardSelected)
@@ -922,14 +958,14 @@ class GameScreen : AppCompatActivity() {
                 findViewById<LinearLayout>(R.id.imageGallery).removeAllViews() // show no self cards after throwing last card
             }
 
-            if (playerTurn != gameData.bb!!) {
-                if (nPlayers7) checkIfPartnerAndUpdateServer7(cardSelected, playerTurn)
-                else checkIfPartnerAndUpdateServer4(cardSelected, playerTurn)
+            if (gameData.pt!! != gameData.bb!!) {  //if current player turn is not bidder then check if its partner or not
+                if (nPlayers7) checkIfPartnerAndUpdateServer7(cardSelected, gameData.pt!!)
+                else checkIfPartnerAndUpdateServer4(cardSelected, gameData.pt!!)
             }
 
             gameData.ct?.set(fromInt - 1, cardSelected.toString().toInt())
 
-            writeChild(data = mutableMapOf("ch$fromInt" to cardsInHand, "p1" to gameData.p1, "p1s" to gameData.p1s, "pc1s" to gameData.pc1s, "p2" to gameData.p2, "p2s" to gameData.p2s, "pc2s" to gameData.pc2s, "ct" to gameData.ct!!, "rt" to gameTurn + 1, "pt" to nextTurn(fromInt), "rtr" to if (gameTurn == 1) cardsSuit[cardSelected.toString().toInt()] else gameData.rtr))
+            writeChild(data = mutableMapOf("ch$fromInt" to cardsInHand, "p1" to gameData.p1, "p1s" to gameData.p1s, "pc1s" to gameData.pc1s, "p2" to gameData.p2, "p2s" to gameData.p2s, "pc2s" to gameData.pc2s, "ct" to gameData.ct!!, "rt" to gameData.rt + 1, "pt" to nextTurnPlayer, "rtr" to if (gameData.rt == 1) cardsSuit[cardSelected.toString().toInt()] else gameData.rtr))
 
             write("OL/$from", 1) // dummy - Turn them online again - check if really required
         }
@@ -949,34 +985,30 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    private fun checkIfPartnerAndUpdateServer7(cardSelected: Any, playerTurn: Int?) {
+    private fun checkIfPartnerAndUpdateServer7(cardSelected: Any, playerTurn: Int) {
         if ((cardSelected.toString().toInt() == pc1 * 2 || cardSelected.toString().toInt() == pc1 * 2 + 1) && p1s != 1) {
-            if (playerTurn != null) {
-                gameData.p1 = playerTurn
-            }
+            gameData.p1 = playerTurn
             if (gameData.pc1s >= 11) { // 11 or 12 --> bidder has either one card(only) or has asked both cards(both) --> lock the partner
                 gameData.p1s = 1
-                gameData.pc1s = playerTurn!!
+                gameData.pc1s = playerTurn
             } else if (pc1s == 10) { // any card asked
                 if (gameData.p1s == 2 || gameData.rt == nPlayers) {// locking the partner by 1
                     gameData.p1s = 1
-                    gameData.pc1s = playerTurn!!
+                    gameData.pc1s = playerTurn
                 }
                 if (gameData.p1s == 0) {// 1st partner disclosed as previously was 0 .. 0 --> 2 --> 1
                     gameData.p1s = 2
                 }
             }
         } else if ((cardSelected.toString().toInt() == pc2 * 2 || cardSelected.toString().toInt() == pc2 * 2 + 1) && p2s != 1) {
-            if (playerTurn != null) { // null surround check
-                gameData.p2 = playerTurn
-            }
+            gameData.p2 = playerTurn
             if (gameData.pc2s >= 11) { // 11 or 12 --> bidder has either one card or has asked both cards --> lock the partner
                 gameData.p2s = 1
-                gameData.pc2s = playerTurn!!
+                gameData.pc2s = playerTurn
             } else if (gameData.pc2s == 10) {//any card asked
                 if (gameData.p2s == 2 || gameData.rt == nPlayers) { // locking the partner by 1 if previously was 2
                     gameData.p2s = 1
-                    gameData.pc2s = playerTurn!!
+                    gameData.pc2s = playerTurn
                 }
                 if (gameData.p2s == 0) {// 1st partner disclosed as previously was 0 .. 0 --> 2 --> 1
                     gameData.p2s = 2
@@ -997,16 +1029,21 @@ class GameScreen : AppCompatActivity() {
             displayShufflingCards(distribute = false)
             scoreOpenStatus = true
             if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
-            refRoomDatabase.child("S").addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {}
-                override fun onDataChange(p0: DataSnapshot) {
-                    if (newGameStatus) {
-                        newGameStatus = false
-                        scoreList = p0.value as List<Int>
-                        updateWholeScoreBoard()
-                    }
-                }
-            })
+            if (newGameStatus) {
+                newGameStatus = false
+//                        scoreList = p0.value as List<Int>
+                updateWholeScoreBoard()
+            }
+//            refRoomDatabase.child("S").addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onCancelled(p0: DatabaseError) {}
+//                override fun onDataChange(p0: DataSnapshot) {
+//                    if (newGameStatus) {
+//                        newGameStatus = false
+////                        scoreList = p0.value as List<Int>
+//                        updateWholeScoreBoard()
+//                    }
+//                }
+//            })
             Handler(Looper.getMainLooper()).postDelayed({
                 if (!premiumStatus && mInterstitialAd != null && (gameData.gn % gameLimitNoAds == 0)) showInterstitialAd()//mInterstitialAdMP.show()
                 if (fromInt == 1) { // only to host
@@ -1151,38 +1188,6 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (fromInt != 1) checkRoomExists() // check for all except host
-        else write("OL/$from", 1) // Turn only host online
-
-        chatRegistration = refRoomFirestore.document(roomID + "_chat").addSnapshotListener { dataSnapshot, error ->
-            if ((dataSnapshot != null) && dataSnapshot.exists() && (error == null)) {
-                val data = (dataSnapshot.data as Map<String, String>)["M"].toString()
-                if (data.isNotEmpty() && lastChat != data) { // if chat is not empty
-                    if (soundStatus) SoundManager.instance?.playChatSound()
-                    chatArray.add(data)
-                    chatAdapter.notifyItemInserted(chatArray.size - 1)
-                    binding.chatRecyclerView.scrollToPosition(chatArray.size - 1)
-                    lastChat = data
-                    if (binding.chatLinearLayout.visibility != View.VISIBLE) {
-                        (binding.imageViewChat.drawable as GifDrawable).start()
-                        counterChat += 1 // increase counter by 1 is chat display is off
-                        binding.textViewChatNo.visibility = View.VISIBLE
-                        binding.textViewChatNo.text = "$counterChat New ${Emoji().message}"
-                    }
-                }
-            } else if (error != null) {
-                toastCenter(error.localizedMessage!!.toString()) // dummy
-            }
-        }
-        if (activityExists) {
-            refRoomDatabase.child("G").removeEventListener(gameDataListener)
-            refRoomDatabase.child("G").addValueEventListener(gameDataListener)
-            refRoomDatabase.child("OL").addValueEventListener(onlineStatusListener)
-        }
-    }
-
     private fun checkRoomExists() {
         refRoomDatabase.child("OL/p1").  // display the host info in joining room screen
         addListenerForSingleValueEvent(object : ValueEventListener {
@@ -1306,7 +1311,6 @@ class GameScreen : AppCompatActivity() {
             }
             else -> {
                 viewTemp.layoutParams.height = resources.getDimensionPixelSize(R.dimen._22sdp)
-//                viewTemp.background = ContextCompat.getDrawable(this, R.drawable.blackrectangle)
                 findViewById<LinearLayout>(R.id.imageGalleryScore).addView(viewTemp)
             }
         }
@@ -1426,24 +1430,23 @@ class GameScreen : AppCompatActivity() {
             speak("Game Over   bidder team won")
             if (fromInt == gameData.bb!!) { // bidder will change game state to 6
                 val pointsListTemp = mutableListOf(gameData.gn, -gameData.bv!!, -gameData.bv!!, -gameData.bv!!, -gameData.bv!!, -gameData.bv!!, -gameData.bv!!, -gameData.bv!!)
-                if (p1s != 1 && p2s != 1) { //No partners found so far
+                if (p1s != 1 && p2s != 1) { //Case 1 : No partners found so far
                     pointsListTemp[gameData.bb!!] = gameData.bv!! * 6
-                } else if (p1s == 1 && p2s != 1) { // only partner 1 found
+                } else if (p1s == 1 && p2s != 1) { //Case 2 :  only partner 1 found
                     pointsListTemp[gameData.bb!!] = gameData.bv!! * 3
                     pointsListTemp[gameData.p1] = gameData.bv!! * 2
-                } else if (p1s != 1 && p2s == 1) { // only partner 2 found
+                } else if (p1s != 1) { //Case 3 :  only partner 2 found
                     pointsListTemp[gameData.bb!!] = gameData.bv!! * 3
                     pointsListTemp[gameData.p2] = gameData.bv!! * 2
-                } else if (gameData.p1 == gameData.p2 && gameData.p1 == 1) { //both partners found and they are same person
+                } else if (gameData.p1 == gameData.p2 && gameData.p1 == 1) { //Case 4 : both partners found and they are same person
                     pointsListTemp[gameData.bb!!] = gameData.bv!! * 3
                     pointsListTemp[gameData.p1] = gameData.bv!! * 2
-                } else if (gameData.p1 != gameData.p2 && p1s == 1 && p2s == 1) { //both partners found and they are different person
+                } else if (gameData.p1 != gameData.p2 ) { //Case 5 : both partners found and they are different person
                     pointsListTemp[gameData.bb!!] = gameData.bv!! * 2
                     pointsListTemp[gameData.p1] = gameData.bv!!
                     pointsListTemp[gameData.p2] = gameData.bv!!
                 }
-                write("S", pointsListTemp) // 0-bidder won, 1 - defenders won??
-                writeChild(data = mutableMapOf("gs" to 6))
+                writeChild(data = mutableMapOf("s" to pointsListTemp, "gs" to 6))// 0-bidder won, 1 - defenders won??
             }
         } else if (p1s == 1 && p2s == 1 && (totalGamePoints - bidTeamScore) >= (scoreLimit - gameData.bv!!)) {
             // if opponent score has reached target value & both partners are disclosed
@@ -1461,8 +1464,7 @@ class GameScreen : AppCompatActivity() {
                     pointsListTemp[gameData.p1] = -gameData.bv!!
                     pointsListTemp[gameData.p2] = -gameData.bv!!
                 }
-                write("S", pointsListTemp) // 0-bidder won, 1 - defenders won
-                writeChild(data = mutableMapOf("gs" to 6))
+                writeChild(data = mutableMapOf("s" to pointsListTemp, "gs" to 6))// 0-bidder won, 1 - defenders won
             }
         }
     }
@@ -1482,12 +1484,11 @@ class GameScreen : AppCompatActivity() {
                 val pointsListTemp = mutableListOf(gameData.gn, -gameData.bv!!, -gameData.bv!!, -gameData.bv!!, -gameData.bv!!)
                 if (p1s != 1) { //No partners found so far
                     pointsListTemp[gameData.bb!!] = gameData.bv!! * 3 // bidder gets 3 times
-                } else if (p1s == 1) { // partner 1 found
+                } else { // partner 1 found
                     pointsListTemp[gameData.bb!!] = gameData.bv!! * 2
                     pointsListTemp[gameData.p1] = gameData.bv!!
                 }
-                write("S", pointsListTemp) // 0-bidder won, 1 - defenders won??
-                writeChild(data = mutableMapOf("gs" to 6))
+                writeChild(data = mutableMapOf("s" to pointsListTemp, "gs" to 6))// 0-bidder won, 1 - defenders won??
             }
         } else if (p1s == 1 && (totalGamePoints - bidTeamScore) >= (scoreLimit - gameData.bv!!)) { // if opponent score has reached target value & both partners are disclosed
             clearAllAnimation()
@@ -1501,8 +1502,7 @@ class GameScreen : AppCompatActivity() {
                 val pointsListTemp = mutableListOf(gameData.gn, gameData.bv!!, gameData.bv!!, gameData.bv!!, gameData.bv!!)
                 pointsListTemp[gameData.bb!!] = -1 * gameData.bv!! * 2
                 pointsListTemp[gameData.p1] = -gameData.bv!!
-                write("S", pointsListTemp) // 0-bidder won, 1 - defenders won
-                writeChild(data = mutableMapOf("gs" to 6))
+                writeChild(data = mutableMapOf("s" to pointsListTemp, "gs" to 6)) // 0-bidder won, 1 - defenders won
             }
         }
     }
@@ -1580,9 +1580,9 @@ class GameScreen : AppCompatActivity() {
 
     private fun declareRoundWinner() {
         val roundCards = allCards
-        var winnerCard = roundCards[playerTurn - 1]  // -1 due to index starts from 0 and playerTurn is absolute
+        var winnerCard = roundCards[gameData.pt!! - 1]  // -1 due to index starts from 0
         var currentCard: Int
-        var startTurn = playerTurn
+        var startTurn = gameData.pt!!
         for (i in 1 until nPlayers) {
             startTurn = nextTurn(startTurn)
             currentCard = roundCards[startTurn - 1]
@@ -1644,25 +1644,24 @@ class GameScreen : AppCompatActivity() {
         val gallery = findViewById<LinearLayout>(R.id.imageGallery)
         gallery.visibility = View.VISIBLE
         val inflater = LayoutInflater.from(applicationContext)
-        for (x: Long in cardsInHand) {
+        for (x: Int in cardsInHand) {
             val viewTemp = inflater.inflate(R.layout.cards_item_list, gallery, false)
             val imageViewDisplayCard = viewTemp.imageViewDisplayCard
             if (x == cardsInHand[cardsInHand.size - 1]) {
                 imageViewDisplayCard.setPaddingRelative(0, 0, 0, 0)
                 imageViewDisplayCard.layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
             }
-            imageViewDisplayCard.setImageResource(cardsDrawable[x.toInt()])
-            if (filter && gameTurn > 1 && cardsSuit[x.toInt()] != gameData.rtr && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1) {
+            imageViewDisplayCard.setImageResource(cardsDrawable[x])
+            if (filter && gameData.rt > 1 && cardsSuit[x] != gameData.rtr && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1) {
                 imageViewDisplayCard.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
-            } else if (filter && gameTurn > 1 && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1) {
+            } else if (filter && gameData.rt > 1 && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1) {
                 imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_active_cards))
                 imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
             }
 //            else imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-
             imageViewDisplayCard.tag = x.toString() // tag the card number to the image
-            if (cardsPoints.elementAt(x.toInt()) != 0) {
-                viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).text = "${cardsPoints.elementAt(x.toInt())}"
+            if (cardsPoints.elementAt(x) != 0) {
+                viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).text = "${cardsPoints.elementAt(x)}"
                 if (animation) {
                     viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
                 }
@@ -1941,11 +1940,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun nextTurn(current: Int): Int {
-        var next = 0
-        if ((current != 7 && nPlayers7) || (current != 4 && nPlayers4)) {
-            next = current + 1
-        } else if ((current == 7 && nPlayers7) || (current == 4 && nPlayers4)) next = 1
-        return next
+        return if ((current == 7 && nPlayers7) || (current == 4 && nPlayers4)) 1 else current + 1
     }
 
     fun openCloseChatWindow(view: View) {
@@ -1982,7 +1977,7 @@ class GameScreen : AppCompatActivity() {
             textView.id = i
             val params = LinearLayout.LayoutParams(100, LinearLayout.LayoutParams.MATCH_PARENT)
             params.marginEnd = 5
-            textView.layoutParams = params //            textView.background = ContextCompat.getDrawable(this, R.drawable.blacksquarebutton)
+            textView.layoutParams = params
             textView.foreground = ContextCompat.getDrawable(this, typedValue.resourceId)
             textView.setOnClickListener { view ->
                 view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
@@ -2133,16 +2128,6 @@ class GameScreen : AppCompatActivity() {
         startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) }.apply { putExtra("returnFromGameScreen", true) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         overridePendingTransition(R.anim.slide_right_activity, R.anim.slide_right_activity)
         finishAndRemoveTask()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        refRoomDatabase.child("OL").removeEventListener(onlineStatusListener)
-        chatRegistration.remove()
-
-        if (this::gameDataListener.isInitialized) refRoomDatabase.child("G").removeEventListener(gameDataListener)
-        countDownTimer("PlayCard", purpose = "cancel")
-        countDownTimer("Bidding", purpose = "cancel")
     }
 
     override fun onPause() {

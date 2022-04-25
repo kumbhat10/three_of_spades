@@ -147,7 +147,7 @@
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".GameScreenAutoPlay"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"

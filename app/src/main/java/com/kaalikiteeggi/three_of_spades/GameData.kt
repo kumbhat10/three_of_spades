@@ -30,6 +30,7 @@ class GameData() {
 	var rt:Int = 1
 	var rtr:String = ""
 	var sc:MutableList<Int>? = null
+	var s:MutableList<Int>? = null
 	var tr:String = ""
 }
 
@@ -53,6 +54,7 @@ fun getGameData4(dummy:Boolean = false, gameNumber:Int = 1):GameData {
 	gameData.pc2 = 53
 	gameData.pt = if(!dummy) randPlayerNext else 1
 	gameData.sc = mutableListOf(0,0,0,0)
+	gameData.s = mutableListOf(0,0,0,0,0)
 	return gameData
 }
 
@@ -80,6 +82,7 @@ fun getGameData7(dummy:Boolean = false, gameNumber:Int = 1):GameData {
 	gameData.pc2 = 99
 	gameData.pt = if(!dummy) randPlayerNext else 1
 	gameData.sc = mutableListOf(0,0,0,0,0,0,0)
+	gameData.s = mutableListOf(0,0,0,0,0,0,0,0)
 	return gameData
 }
 

@@ -37,7 +37,7 @@ class SplashScreen : AppCompatActivity() {
     private var isNextActivityStarted = false
     private var background = 4
     private val timer = if (!BuildConfig.DEBUG) 3500L
-    else 3500L
+    else 500L
     private val requestCodeAppUpdate = 800
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var binding:ActivitySplashScreenBinding

@@ -559,7 +559,7 @@ class MainHomeScreen : AppCompatActivity() {
             val roomID = sharedPreferences.getString("Room", "").toString()
             if (roomID.isNotEmpty()) {
                 Handler(Looper.getMainLooper()).postDelayed({
-                    deleteAllRoomData(roomID)
+//                    deleteAllRoomData(roomID)
                 }, 0)
             }
             editor.remove("Room").apply()
@@ -607,7 +607,6 @@ class MainHomeScreen : AppCompatActivity() {
                 querySkuDetailsRequest()
                 checkPendingPurchases()
             }
-
             override fun onBillingServiceDisconnected() { //				if(billingClientTry<3) setupBillingClient() // Test if required to try again
             }
         })
@@ -948,7 +947,7 @@ class MainHomeScreen : AppCompatActivity() {
             }, 3500)
         } else {
             val allowedChars = ('A'..'H') + ('J'..'N') + ('P'..'Z') + ('2'..'9')  // 1, I , O and 0 skipped as they look same
-            val roomID = (1..4).map { allowedChars.random() }.joinToString("")
+            val roomID = if (BuildConfig.DEBUG) "AABB" else (1..4).map { allowedChars.random() }.joinToString("")
             if (nPlayers == 7) {
                 if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data7)
                 else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData7)

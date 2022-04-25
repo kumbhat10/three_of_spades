@@ -50,10 +50,15 @@
             android:layout_height="@dimen/mhsIconsSize"
             android:layout_marginTop="@dimen/mhsIconsGap"
             android:layout_marginEnd="@dimen/mhsIconsMargin"
-            android:background="@drawable/no_ads_merged"
             android:visibility="invisible"
+            android:scaleX="0"
+            android:scaleY="0"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileCard" />
+            app:layout_constraintTop_toBottomOf="@id/profileCard" >
+            <PropertySet
+                android:visibility="invisible"
+                app:visibilityMode="ignore"/>
+        </Constraint>
 
         <Constraint
             android:id="@+id/contactUS"
@@ -62,6 +67,8 @@
             android:layout_marginTop="@dimen/mhsIconsGap"
             android:layout_marginEnd="@dimen/mhsIconsMargin"
             android:visibility="invisible"
+            android:scaleX="0"
+            android:scaleY="0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/removeAds" />
 
@@ -72,6 +79,8 @@
             android:layout_marginTop="@dimen/mhsIconsGap"
             android:layout_marginEnd="@dimen/mhsIconsMargin"
             android:visibility="invisible"
+            android:scaleX="0"
+            android:scaleY="0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/contactUS" />
 
@@ -79,6 +88,8 @@
             android:id="@+id/trainingButton"
             android:layout_width="@dimen/_57sdp"
             android:layout_height="@dimen/_57sdp"
+            android:scaleX="0"
+            android:scaleY="0"
             android:layout_marginTop="@dimen/mhsIconsGap"
             android:layout_marginEnd="@dimen/mhsIconsMargin"
             android:visibility="invisible"
@@ -155,7 +166,6 @@
             android:layout_height="@dimen/mhsIconsSize"
             android:layout_marginTop="@dimen/mhsIconsGap"
             android:layout_marginEnd="@dimen/mhsIconsMargin"
-            android:background="@drawable/no_ads_merged"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profileCard" >
             <PropertySet
@@ -170,6 +180,8 @@
             android:layout_marginTop="@dimen/mhsIconsGap"
             android:layout_marginEnd="@dimen/mhsIconsMargin"
             android:visibility="visible"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/removeAds" />
 
