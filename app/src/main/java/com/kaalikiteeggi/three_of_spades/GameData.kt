@@ -3,10 +3,10 @@ package com.kaalikiteeggi.three_of_spades
 import kotlin.random.Random
 
 class GameData() {
-	var bb: Int? = null // current bidder
+	var bb: Int = 0 // current bidder
 	var bs: MutableList<Int>? = null // bid status
-	var bv: Int? = null // current bid value
-	var bvo: Int? = null // previous(old) bid value
+	var bv: Int = 0 // current bid value
+	var bvo: Int = 0 // previous(old) bid value
 	var ct: MutableList<Int>? = null // list of cards on table
 	var ch1: MutableList<Int>? = null //Cards in hand for player 1
 	var ch2: MutableList<Int>? = null //Cards in hand for player 1
@@ -15,17 +15,17 @@ class GameData() {
 	var ch5: MutableList<Int>? = null //Cards in hand for player 1
 	var ch6: MutableList<Int>? = null //Cards in hand for player 1
 	var ch7: MutableList<Int>? = null //Cards in hand for player 1
-	var gs: Int = 1 // Game state - 1 to 6 -> 1 - shuffling, resetting and biding, 2-Trump select, 3-partner selection, 5- play rounds, 6- GameOver, results declaration back to 1
+	var gs: Int = 1 // Game state - 1 to 6 -> 1 - shuffling, resetting and biding, 3-Trump select, 4-partner selection, 5- play rounds, 6- GameOver, results declaration back to 1
 	var gn: Int = 1 // Current Game number
 	var p1: Int = 8 // Partner 1 (player number)
 	var p1s: Int = 0 // Partner 1 status -> 0:Not found, 2:Found but not confirmed, 1:found & confirmed
 	var p2: Int = 8 // Partner 2 (player number)
 	var p2s: Int = 0 // Partner 2 status -> 0:Not found, 2:Found but not confirmed, 1:found & confirmed
-	var pc1: Int? = null  //partner card -1
-	var pc1s: Int = 13   //partner card 1 status - 11, 12, 13 - Any, only, both
-	var pc2: Int? = null //partner card - 2
-	var pc2s: Int = 13  //partner card 2 status - 11, 12, 13 - Any, only, both
-	var pt: Int? = null // Player Turn
+	var pc1: Int = -1  //partner card -1
+	var pc1s: Int = 13   //partner card 1 status - 10:Any, 11:Only, 12:Both
+	var pc2: Int = -1 //partner card - 2
+	var pc2s: Int = 13  //partner card 2 status - 10:Any, 11:Only, 12:Both
+	var pt: Int = 0 // Player Turn
 	var rn: Int = 1     // Round number -> 1 to 13/14 (4 players/7 Players)
 	var rt: Int = 1     // Round turn number -> 1 to 5/8 (4 players/7 Players) with +1 for declaring round winner
 	var rtr: String = ""  // Round Trump - First card Suite
