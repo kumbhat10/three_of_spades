@@ -115,6 +115,7 @@
         <activity
             android:name=".SplashScreen"
             android:exported="true"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:theme="@style/Theme.App"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
@@ -133,6 +134,7 @@
         <activity
             android:name=".CreateAndJoinRoomScreen"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
@@ -145,12 +147,14 @@
         <activity
             android:name=".GameScreen"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".GameScreenAutoPlay"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
@@ -158,6 +162,7 @@
         <activity
             android:name=".MainHomeScreen"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden"
+            android:hardwareAccelerated="true"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -194,6 +199,7 @@
         <activity
             android:name=".StartScreen"
             android:launchMode="singleTop"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 

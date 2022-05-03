@@ -24,7 +24,15 @@ class Emoji {
 	val abuse = String(Character.toChars(0x1F92C))
 	val rofl = String(Character.toChars(0x1F923))
 	val sad = String(Character.toChars(0x1F61E))
+	val devil = String(Character.toChars(0x1F608))
+	val thumbsUp = String(Character.toChars(0x1F44D))
+	val thumbsDown = String(Character.toChars(0x1F44E))
+	val nice = String(Character.toChars(0x1F44C))
+	val heart = String(Character.toChars(0x1F493))
+	val shit = String(Character.toChars(0x1F613))
+	val poo = String(Character.toChars(0x1F4A9))
+	val salute = String(Character.toChars(0x1F64F))
 
-	val emojiChatArray = listOf(smileHard, sad, abuse, cry, happyHeart, angry, smileTongue, rofl, surprised, heroGlass   )
+	val emojiChatArray = listOf(smileHard, abuse, cry, happyHeart, heroGlass, smileTongue, rofl, shit, surprised, angry, devil, salute,  thumbsUp, thumbsDown, nice, heart, poo  )
 
 }

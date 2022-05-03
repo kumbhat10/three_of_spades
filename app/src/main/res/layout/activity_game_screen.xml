@@ -1361,35 +1361,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/imageViewChat"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_marginStart="@dimen/_5sdp"
-        android:layout_marginBottom="@dimen/_6sdp"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="openCloseChatWindow"
-        android:src="@drawable/chat2"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="TooManyViews" />
-
-    <TextView
-        android:id="@+id/textViewChatNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_45sdp"
-        android:text="@string/noOfChat"
-        android:textColor="#FFFFFF"
-        android:textSize="@dimen/_12ssp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/imageViewChat" />
-
     <TextView
         android:id="@+id/textViewBider"
         android:layout_width="wrap_content"
@@ -1488,35 +1459,33 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chatLinearLayout"
-        android:layout_width="@dimen/_260sdp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="-20dp"
-        android:background="@drawable/shine_chat_background"
+        android:layout_marginBottom="@dimen/_1sdp"
+        android:background="@color/Black"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="vertical"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/playerCards"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
-            ads:adSize="BANNER"
             ads:adUnitId="@string/banner_admob"
+            ads:adSize= "BANNER"
             android:id="@+id/addViewChatGameScreenBanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatRecyclerView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:onClick="openCloseChatWindow"
             android:scrollbarSize="@dimen/_5sdp"
             android:scrollbarStyle="insideInset"
             android:scrollbarThumbVertical="@drawable/scrollbar"
@@ -1530,15 +1499,22 @@
 
         <HorizontalScrollView
             android:id="@+id/emojiGrid"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
+            android:elevation="@dimen/_10sdp"
             android:scrollbarAlwaysDrawHorizontalTrack="false"
+            android:scrollbarStyle="insideInset"
+            android:scrollbarThumbHorizontal="@drawable/scrollbar"
+            android:scrollbarTrackHorizontal="@drawable/scrollbar_track"
+            android:scrollbars="horizontal"
+            android:scrollbarSize="@dimen/_2sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
             app:layout_constraintBottom_toTopOf="@id/editTextChatInput1"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
                 android:id="@+id/emojiGrid1"
+                android:elevation="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
@@ -1549,7 +1525,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="@dimen/_35sdp"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="@dimen/_40sdp"
             android:layout_marginBottom="3dp"
             android:hint="@string/chatInputHint"
             android:imeOptions="actionSend"
@@ -1571,26 +1547,57 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sendChat"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_55sdp"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_3sdp"
-            android:background="@drawable/shine_player_stats"
+            android:background="@drawable/button_square"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:onClick="sendChat"
             android:text="@string/sendChatButton"
-            android:textColor="@color/font_grey_settings"
-            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/Black"
+            android:textSize="@dimen/_10ssp"
             app:layout_constraintBottom_toBottomOf="@id/editTextChatInput1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/editTextChatInput1"
             app:layout_constraintTop_toTopOf="@+id/editTextChatInput1"
             tools:ignore="TouchTargetSizeCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/imageViewChat"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_36sdp"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:onClick="openCloseChatWindow"
+        android:scaleX="1.6"
+        android:scaleY="1.9"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/chat_lottie"
+        app:lottie_repeatMode="restart"
+        tools:ignore="TooManyViews" />
+
+    <TextView
+        android:id="@+id/textViewChatNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_2sdp"
+        android:text="@string/noOfChat"
+        android:gravity="bottom|start"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/_12ssp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/imageViewChat"
+        app:layout_constraintStart_toStartOf="@id/imageViewChat" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameAskBid"
@@ -2133,8 +2140,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/_2sdp"
         android:layout_marginBottom="@dimen/_2sdp"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_40sdp"
+        android:layout_marginEnd="@dimen/_40sdp"
         android:animateLayoutChanges="true"
         android:background="@drawable/shine_score_table"
         android:clickable="true"

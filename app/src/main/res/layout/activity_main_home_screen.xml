@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        app:motionProgress="1">
+        app:motionProgress="0">
 
         <TextView
             android:id="@+id/removeAds"

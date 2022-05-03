@@ -9,6 +9,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.*
 import android.speech.tts.TextToSpeech
 import android.util.Log
@@ -31,6 +32,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -56,7 +58,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var shuffleOver = false
     private var ratingRequestDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()
     private var requestRatingAfterDays = 2 //dummy
-
+    private val today = CreateUser().todayDate
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
     private lateinit var alertDialog: AlertDialog
@@ -84,7 +86,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var coinDur = 1000L
     private var coinSpeed = 5f
     private var coinRate = 150
-
+    private var reviewRequested = false
     private var soundStatus = true
     private var vibrateStatus = true
     private lateinit var vibrator: Vibrator
@@ -477,6 +479,42 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
+    private fun inAppReview() {
+        val manager = ReviewManagerFactory.create(this) // FakeReviewManager(this)//
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { request1 ->
+            if (request1.isSuccessful) {
+                val reviewInfo = request1.result
+                val flow = manager.launchReviewFlow(this, reviewInfo)
+                flow.addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        rated = true
+                        editor.putBoolean("rated", true)
+                        editor.apply()
+                        logFirebaseEvent("rate_us", key = "rated_gs")
+                        refUsersData.document(uid).set(hashMapOf("rated" to 1, "ratedD" to today), SetOptions.merge())
+                    } else {
+                        openPlayStore()
+                    }
+                }
+            } else {
+                logFirebaseEvent(event = "rate_us", key = "ratedFailure_gs")
+                openPlayStore()
+            }
+        }
+    }
+
+    private fun openPlayStore() {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://play.google.com/store/apps/details?id=com.kaalikiteeggi.three_of_spades")
+            setPackage("com.android.vending")
+        }
+        try {
+            startActivity(intent)
+        } catch (_: Exception) {
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         if (gameState.value!! == 5 && playerTurn.value!! == fromInt) countDownTimer("PlayCard", purpose = "start")
@@ -497,12 +535,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
             gameNumber += 1
         }
         if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
-        Handler(Looper.getMainLooper()).postDelayed({ //            if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 2)) {  // Ask only once per game
-            //                inAppReview()
-            //                reviewRequested = true
-            //            } else
-            if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0)) showInterstitialAd()
-//			horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 3)) {  // Ask only once per game
+                inAppReview()
+                reviewRequested = true
+            } else if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0)) showInterstitialAd()
             binding.startNextRoundButton.visibility = View.VISIBLE
             binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
         }, delayWaitGameMode6)
@@ -1601,7 +1638,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (sharedPreferences.contains("vibrateStatus")) {
             vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)
         }
-        if (sharedPreferences.contains("rated")) { //            rated = sharedPreferences.getBoolean("rated", false)
+        if (sharedPreferences.contains("rated")) {
+            rated = sharedPreferences.getBoolean("rated", false)
         } else {
             editor.putBoolean("rated", rated)
             editor.apply()

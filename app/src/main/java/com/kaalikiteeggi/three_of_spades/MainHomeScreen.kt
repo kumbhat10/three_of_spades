@@ -195,6 +195,7 @@ class MainHomeScreen : AppCompatActivity() {
 //        setContentView(R.layout.activity_main_home_screen)
         background = Random.nextInt(0, 6)
         checkJoinRoom(intent)
+        playerStatsGridDisplay(transition = false)
         mainIconGridDisplay()
         newUser = intent.getBooleanExtra("newUser", true)
         returnFromGameScreen = intent.getBooleanExtra("returnFromGameScreen", false)
@@ -332,11 +333,12 @@ class MainHomeScreen : AppCompatActivity() {
         return arrayList
     }
 
-    private fun playerStatsGridDisplay() {
+    private fun playerStatsGridDisplay(transition: Boolean = true) {
 
         playerStatsGrid.layoutManager = GridLayoutManager(this, 3)
         playerStatsGrid.adapter = PlayerStatsGridAdapter(setDataListPS())
-        playerStatsML.transitionToStart()
+        if(transition) Handler(Looper.getMainLooper()).postDelayed({playerStatsML.transitionToEnd()},1500L)
+
     }
 
     private fun setDataListPS(): ArrayList<PlayerStatsItem> {
@@ -456,6 +458,7 @@ class MainHomeScreen : AppCompatActivity() {
                     userBasicInfo = extractUserData(dataSnapshot)
                     userDataFetched = true
                     if (joinRoomPending) autoJoinRoom()
+//                    Handler(Looper.getMainLooper()).postDelayed({playerStatsGridDisplay()},700L)
                     playerStatsGridDisplay()
                     if (!claimedToday && !joinRoomPending) { //if not claimed today
                         Handler(Looper.getMainLooper()).postDelayed({
@@ -953,7 +956,8 @@ class MainHomeScreen : AppCompatActivity() {
                 else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData7)
             } else if (nPlayers == 4 && !offlineRoomCreate) {
                 if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data4)
-                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData4)
+                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).data4)
+//                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData4)
             }
         }
     }
@@ -1248,13 +1252,7 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     fun trainingStart(view: View) {
-
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-//		Firebase.database.getReference("GameData/Test").setValue("")
-//        Firebase.database.getReference("GameData/Test").setValue(getGameData7())
-////        Firebase.database.getReference("GameData/Test").get().addOnSuccessListener { data ->
-////            val a = data.getValue<GameData>()
-////        }
         trainAccess = false
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://kaaliteeri.page.link/?link=http://jo.in1/AABB&apn=com.kaalikiteeggi.three_of_spades&amv=70&st=Join%20my%20room%20ID%20%3D%3E%20AABB&si=https://tinyurl.com/3ofspade")))
 
@@ -1521,7 +1519,6 @@ class MainHomeScreen : AppCompatActivity() {
         try {
             startActivity(intent)
         } catch (_: Exception) {
-
         }
     }
 
@@ -1620,7 +1617,7 @@ class MainHomeScreen : AppCompatActivity() {
                         rated = true
                         editor.putBoolean("rated", true)
                         editor.apply()
-                        logFirebaseEvent("rate_us_vector.xml",  "rated")
+                        logFirebaseEvent("rate_us",  "rated")
                         refUsersData.document(uid).set(hashMapOf("rated" to 1, "ratedD" to today), SetOptions.merge())
                     } else {
                         openPlayStore()

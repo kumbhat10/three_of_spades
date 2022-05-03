@@ -377,6 +377,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
                         binding.startGameButton.visibility = View.GONE
                         refRoomData.document(roomID + "_chat").set(hashMapOf(
                             "M" to "",
+                            "F" to 1,
+                            "Fn" to "",
                             "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(),
                             "dt" to SimpleDateFormat("HH:mm:ss z").format(Date()),
                         ))

@@ -29,8 +29,8 @@ android {
         minSdkVersion 24
         //noinspection OldTargetApi
         targetSdkVersion 31
-        versionCode 70
-        versionName "70A"
+        versionCode 71
+        versionName "71A"
         signingConfig signingConfigs.debug
     }
     buildTypes {
@@ -95,13 +95,13 @@ dependencies {
 
     // Import the BoM for the Firebase platform
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.3'
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.1.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.1.1'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.9'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.10'
 
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.0.1'
     implementation 'com.google.firebase:firebase-analytics-ktx:20.1.2'
-    implementation 'com.google.firebase:firebase-messaging:23.0.2'
+    implementation 'com.google.firebase:firebase-messaging:23.0.3'
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.1.2'
     implementation 'com.google.firebase:firebase-perf-ktx:20.0.6'
 
@@ -123,7 +123,7 @@ dependencies {
     // don't user 29.0-jre as it clashes with firebase SDK and not supported for android 6
     implementation 'com.google.android.play:core:1.10.3'
     implementation 'com.google.android.play:core-ktx:1.8.1'
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
     implementation 'com.google.android.gms:play-services-ads:20.6.0'
     implementation 'com.google.android.gms:play-services-base:18.0.1'
     implementation 'com.google.android.gms:play-services-games:22.0.1'
