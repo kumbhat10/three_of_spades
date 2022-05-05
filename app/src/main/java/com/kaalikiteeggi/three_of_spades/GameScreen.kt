@@ -1657,7 +1657,7 @@ class GameScreen : AppCompatActivity() {
                 imageViewDisplayCard.setPaddingRelative(0, 0, 0, 0)
                 imageViewDisplayCard.layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
             }
-            imageViewDisplayCard.setImageResource(cardsDrawable[x])
+            if(x != cardsIndexLimit) imageViewDisplayCard.setImageResource(cardsDrawable[x])
             if (filter && gameData.rt > 1 && cardsSuit[x] != gameData.rtr && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1) {
                 imageViewDisplayCard.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
             } else if (filter && gameData.rt > 1 && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1) {

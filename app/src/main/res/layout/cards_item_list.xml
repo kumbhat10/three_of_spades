@@ -37,6 +37,6 @@
         android:fadingEdge="horizontal"
         android:paddingStart="0dp"
         android:paddingEnd="@dimen/_minus7sdp"
-        app:srcCompat="@drawable/s3" />
+        app:srcCompat="@drawable/ic_back_side_blue" />
 
 </RelativeLayout>

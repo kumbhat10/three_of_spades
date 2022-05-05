@@ -562,7 +562,7 @@ class MainHomeScreen : AppCompatActivity() {
             val roomID = sharedPreferences.getString("Room", "").toString()
             if (roomID.isNotEmpty()) {
                 Handler(Looper.getMainLooper()).postDelayed({
-//                    deleteAllRoomData(roomID)
+                    deleteAllRoomData(roomID)
                 }, 0)
             }
             editor.remove("Room").apply()
@@ -927,6 +927,7 @@ class MainHomeScreen : AppCompatActivity() {
         }
         createRoom()
     }
+
 
     @SuppressLint("SetTextI18n")
     private fun createRoom() {

@@ -113,6 +113,7 @@ class StartScreen : AppCompatActivity() {
 		} //endregion
 	}
 
+	@Deprecated("Deprecated in Java")
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 		if (resultCode == Activity.RESULT_OK) {
@@ -185,7 +186,8 @@ class StartScreen : AppCompatActivity() {
 			try {
 				refUsersData.document(uid).get().addOnSuccessListener { documentSnapshot ->
 					if (documentSnapshot.data != null) {
-						val setData = hashMapOf("n" to userGivenName, "ph" to userPhotoUrl) //                   else hashMapOf("n" to userGivenName, "ph" to userPhotoUrl, "b_bot" to 0,"p_bot" to 0,"w_bot" to 0)
+						val setData = hashMapOf("n" to userGivenName, "ph" to userPhotoUrl)
+						//                   else hashMapOf("n" to userGivenName, "ph" to userPhotoUrl, "b_bot" to 0,"p_bot" to 0,"w_bot" to 0)
 
 						refUsersData.document(uid).set(setData, SetOptions.merge())
 							.addOnSuccessListener { startNextActivity(userGivenName) }
