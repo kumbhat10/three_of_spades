@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.android.billingclient.api.*
+import com.android.billingclient.api.BillingClient.ProductType
 import com.applovin.sdk.AppLovinPrivacySettings
 import com.facebook.login.LoginManager
 import com.google.android.gms.ads.*
@@ -57,8 +58,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kaalikiteeggi.three_of_spades.databinding.ActivityMainHomeScreenBinding
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main_home_screen.*
-import kotlinx.android.synthetic.main.fragment_test.view.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -86,6 +85,7 @@ class MainHomeScreen : AppCompatActivity() {
     private var errorJoinRoomID = false
     private var backButtonPressedStatus = false
     private var joinRoomWindowStatus = false
+    private var dailyRewardWindow = false
     private var ratingWindowOpenStatus = false
     private var createRoomWindowStatus = false
 
@@ -106,7 +106,7 @@ class MainHomeScreen : AppCompatActivity() {
     private lateinit var querySnapDaily: QuerySnapshot
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewScrollListener: RecyclerView.OnScrollListener
-    private lateinit var adapter: ListViewAdapter
+    private lateinit var adapter: UserInfoRanking
     private lateinit var layoutManager: LinearLayoutManager
     private var userArrayList = ArrayList<UserBasicInfo>()
 
@@ -114,7 +114,7 @@ class MainHomeScreen : AppCompatActivity() {
     private lateinit var recyclerView1ScrollListener: RecyclerView.OnScrollListener
     private lateinit var alertDialog: AlertDialog
 
-    private lateinit var adapter1: ListViewAdapter
+    private lateinit var adapter1: UserInfoRanking
     private lateinit var layoutManager1: LinearLayoutManager
     private var userArrayList1 = ArrayList<UserBasicInfo>()
 
@@ -216,24 +216,24 @@ class MainHomeScreen : AppCompatActivity() {
             enterText() // press enter to join room
             buildCustomTabIntent()
 //			setupBillingClient() // memory leak issue so don't initialize everytime except when requested
-            if (BuildConfig.DEBUG) trainingButton.visibility = View.VISIBLE
+            if (BuildConfig.DEBUG) binding.trainingButton.visibility = View.VISIBLE
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         logFirebaseEvent("MainHomeScreen",  "open")
     }
 
     private fun mainIconGridDisplay() {
-        mainIconGridView.layoutManager = GridLayoutManager(this, 2)
-        mainIconGridView.adapter = IconAdapter(this, setDataListMHS()) { output ->
+        binding.mainIconGridView.layoutManager = GridLayoutManager(this, 2)
+        binding.mainIconGridView.adapter = MHSIconAdapter(this, setDataListMHS()) { output ->
             actionGridItemClick(position = output) // receive position output here
         }
 
         //		mainIconGridView.visibility = View.VISIBLE
         // Attach Text watcher to room ID input - For resetting error hint on re-entering roomID
-        roomIDInput.doOnTextChanged { _, _, _, _ ->
-            if (roomIDInputLayout.error != null && !errorJoinRoomID) {
-                roomIDInputLayout.error = null
-                roomIDInputLayout.helperText = getString(R.string.joinHelper)
+        binding.roomIDInput.doOnTextChanged { _, _, _, _ ->
+            if (binding.roomIDInputLayout.error != null && !errorJoinRoomID) {
+                binding.roomIDInputLayout.error = null
+                binding.roomIDInputLayout.helperText = getString(R.string.joinHelper)
             } else if (errorJoinRoomID) {
                 errorJoinRoomID = false
             }
@@ -252,14 +252,14 @@ class MainHomeScreen : AppCompatActivity() {
         }
     }
 
-    private fun setDataListMHS(): ArrayList<DailyRewardItem> {
-        val arrayList = ArrayList<DailyRewardItem>()
-        arrayList.add(DailyRewardItem(R.drawable.joystick, getString(R.string.play)))
-        arrayList.add(DailyRewardItem(R.drawable.joinroom, getString(R.string.joinRoom)))
-        arrayList.add(DailyRewardItem(R.drawable.ranking, getString(R.string.ranking)))
-        arrayList.add(DailyRewardItem(R.drawable.howtoplay, getString(R.string.howtoplay)))
-        arrayList.add(DailyRewardItem(R.drawable.invite, getString(R.string.invite)))
-        arrayList.add(DailyRewardItem(R.drawable.settings, getString(R.string.settings)))
+    private fun setDataListMHS(): ArrayList<GenericItemDescription> {
+        val arrayList = ArrayList<GenericItemDescription>()
+        arrayList.add(GenericItemDescription(R.drawable.joystick, getString(R.string.play)))
+        arrayList.add(GenericItemDescription(R.drawable.joinroom, getString(R.string.joinRoom)))
+        arrayList.add(GenericItemDescription(R.drawable.ranking, getString(R.string.ranking)))
+        arrayList.add(GenericItemDescription(R.drawable.howtoplay, getString(R.string.howtoplay)))
+        arrayList.add(GenericItemDescription(R.drawable.invite, getString(R.string.invite)))
+        arrayList.add(GenericItemDescription(R.drawable.settings, getString(R.string.settings)))
         return arrayList
     }
 
@@ -295,10 +295,10 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun autoJoinRoom() {
         if (joinRoomPending && userDataFetched) {
-            openClosePlayerStats(backgroundmhs)
+            openClosePlayerStats(binding.backgroundmhs)
             joinRoomWindowOpen(showAds = false)
-            roomIDInput.setText(roomID)
-            joinRoomButtonClicked(joinRoomButton)
+            binding.roomIDInput.setText(roomID)
+            joinRoomButtonClicked(binding.joinRoomButton)
         }
     }
 
@@ -317,27 +317,27 @@ class MainHomeScreen : AppCompatActivity() {
         if (soundStatus) SoundManager.instance?.playUpdateSound()
         val listDailyRewardItem = setDataListDR()
         val imageAdapter = DailyRewardGridAdapter(listDailyRewardItem, min(listDailyRewardItem.size, consecutiveDay))
-        dailyRewardGrid.adapter = imageAdapter
-        dailyRewardGridLayout.visibility = View.VISIBLE
-        anim(dailyRewardGridLayout, R.anim.zoomin_center)
+        binding.dailyRewardGrid.adapter = imageAdapter
+        binding.dailyRewardGridLayout.visibility = View.VISIBLE
+        dailyRewardWindow = true
+        anim(binding.dailyRewardGridLayout, R.anim.zoomin_center)
     }
 
-    private fun setDataListDR(): ArrayList<DailyRewardItem> {
-        val arrayList = ArrayList<DailyRewardItem>()
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 1 \n${dailyRewardList[0]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 2 \n${dailyRewardList[1]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 3 \n${dailyRewardList[2]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 4 \n${dailyRewardList[3]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 5 \n${dailyRewardList[4]} coins"))
-        arrayList.add(DailyRewardItem(R.drawable.coin_trans_1, "Day 5+ \n${dailyRewardList[5]} coins"))
+    private fun setDataListDR(): ArrayList<GenericItemDescription> {
+        val arrayList = ArrayList<GenericItemDescription>()
+        arrayList.add(GenericItemDescription(R.drawable.coin_trans_1, "Day 1 \n${dailyRewardList[0]} coins"))
+        arrayList.add(GenericItemDescription(R.drawable.coin_trans_1, "Day 2 \n${dailyRewardList[1]} coins"))
+        arrayList.add(GenericItemDescription(R.drawable.coin_trans_1, "Day 3 \n${dailyRewardList[2]} coins"))
+        arrayList.add(GenericItemDescription(R.drawable.coin_trans_1, "Day 4 \n${dailyRewardList[3]} coins"))
+        arrayList.add(GenericItemDescription(R.drawable.coin_trans_1, "Day 5 \n${dailyRewardList[4]} coins"))
+        arrayList.add(GenericItemDescription(R.drawable.coin_trans_1, "Day 5+ \n${dailyRewardList[5]} coins"))
         return arrayList
     }
 
     private fun playerStatsGridDisplay(transition: Boolean = true) {
-
-        playerStatsGrid.layoutManager = GridLayoutManager(this, 3)
-        playerStatsGrid.adapter = PlayerStatsGridAdapter(setDataListPS())
-        if(transition) Handler(Looper.getMainLooper()).postDelayed({playerStatsML.transitionToEnd()},1500L)
+        binding.playerStatsGrid.layoutManager = GridLayoutManager(this, 3)
+        binding.playerStatsGrid.adapter = PlayerStatsGridAdapter(setDataListPS())
+        if(transition) Handler(Looper.getMainLooper()).postDelayed({binding.playerStatsML.transitionToEnd()},1500L)
 
     }
 
@@ -358,8 +358,9 @@ class MainHomeScreen : AppCompatActivity() {
 
     fun closeDailyRewardWindowDisplay(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        if (soundStatus) SoundManager.instance?.playUpdateSound()
-        dailyRewardGridLayout.visibility = View.GONE
+        if (soundStatus && view.tag != null) SoundManager.instance?.playUpdateSound()
+        binding.dailyRewardGridLayout.visibility = View.GONE
+        dailyRewardWindow = false
     }
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
@@ -372,7 +373,7 @@ class MainHomeScreen : AppCompatActivity() {
         if (user != null) {
             FirebaseCrashlytics.getInstance().setUserId(uid)
             userName = user.displayName!!.split(" ")[0]
-            usernameCardMHS.text = userName
+            binding.usernameCardMHS.text = userName
             if (intent.getBooleanExtra("newUser", false)) { //check if user has joined room or created one and display Toast
                 editor.putBoolean("rated", rated)
                 editor.putInt("joinDate", SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt())
@@ -390,13 +391,13 @@ class MainHomeScreen : AppCompatActivity() {
                 try {
                     premiumStatus = dataSnapshot.get("pr").toString().toInt() == 1
                     if (premiumStatus) {
-                        removeAds.visibility = View.GONE
-                        bannerMHS.visibility = View.GONE
+                        binding.removeAds.visibility = View.GONE
+                        binding.bannerMHS.visibility = View.GONE
                     }
                     if (soundStatus) SoundManager.instance?.playSuccessSound()
-                    maskAllLoading.visibility = View.GONE
+                    binding.maskAllLoading.visibility = View.GONE
                     photoURL = dataSnapshot.get("ph").toString()
-                    Picasso.get().load(photoURL).resize(400, 400).into(profilePic)                    //                    callConfetti() // don't call confetti here - call only when coins are earned
+                    Picasso.get().load(photoURL).resize(400, 400).into(binding.profilePic)                    //                    callConfetti() // don't call confetti here - call only when coins are earned
                     totalCoins = dataSnapshot.get("sc").toString().toInt()
                     if (dataSnapshot.contains("scd") && dataSnapshot.contains("p_daily")) {
                         totalDailyCoins = dataSnapshot.get("scd").toString().toInt()
@@ -407,7 +408,7 @@ class MainHomeScreen : AppCompatActivity() {
                         totalDailyCoins = 0
                         fireStoreRef.set(hashMapOf("scd" to 0, "p_daily" to 0, "w_daily" to 0, "b_daily" to 0), SetOptions.merge())
                     }
-                    userScoreMHS.setText(String.format("%,d", totalCoins), false)
+                    binding.userScoreMHS.setText(String.format("%,d", totalCoins), false)
                     nGamesPlayed = dataSnapshot.get("p").toString().toInt()
                     nGamesWon = dataSnapshot.get("w").toString().toInt()
                     nGamesBid = dataSnapshot.get("b").toString().toInt()
@@ -517,8 +518,8 @@ class MainHomeScreen : AppCompatActivity() {
         if (sharedPreferences.contains("premium")) {
             premiumStatus = sharedPreferences.getBoolean("premium", false)
             if (premiumStatus) {
-                removeAds.visibility = View.GONE
-            } else removeAds.visibility = View.VISIBLE
+                binding.removeAds.visibility = View.GONE
+            } else binding.removeAds.visibility = View.VISIBLE
         }
         if (sharedPreferences.contains("rated")) {
             rated = sharedPreferences.getBoolean("rated", false)
@@ -539,26 +540,26 @@ class MainHomeScreen : AppCompatActivity() {
         }
         if (sharedPreferences.contains("musicStatus")) {
             musicStatus = sharedPreferences.getBoolean("musicStatus", true)
-            musicSwitch.isChecked = musicStatus
+            binding.musicSwitch.isChecked = musicStatus
             if (musicStatus) {
                 soundBackground.start()
             }
         } else {
             musicStatus = true
-            musicSwitch.isChecked = musicStatus
+            binding.musicSwitch.isChecked = musicStatus
             if (this::soundBackground.isInitialized) soundBackground.start()
             editor.putBoolean("musicStatus", musicStatus) // write username to preference file
             editor.apply()
         }
         if (sharedPreferences.contains("soundStatus")) {
             soundStatus = sharedPreferences.getBoolean("soundStatus", true)
-            soundSwitch.isChecked = soundStatus
+            binding.soundSwitch.isChecked = soundStatus
         }
         if (sharedPreferences.contains("vibrateStatus")) {
             vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)
-            vibrateSwitch.isChecked = vibrateStatus
+            binding.vibrateSwitch.isChecked = vibrateStatus
         }
-        if (sharedPreferences.contains("Room")) {
+        if (sharedPreferences.contains("Room") && !joinRoomPending) {
             val roomID = sharedPreferences.getString("Room", "").toString()
             if (roomID.isNotEmpty()) {
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -586,11 +587,12 @@ class MainHomeScreen : AppCompatActivity() {
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
                 for (purchase in purchases) {
                     if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                        toastCenter("Successful purchase")
+                        toastCenter("Successful purchase", length = Snackbar.LENGTH_INDEFINITE)
+                        if (soundStatus) SoundManager.instance?.playSuccessSound()
                         lifecycleScope.launch { acknowledgePurchase(purchase) }
                     } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
                         if (soundStatus) SoundManager.instance?.playUpdateSound()
-                        toastCenter("Your Payment is processing \nWe will update you after finishing processing")
+                        toastCenter("Your Payment is processing \nWe will update you when finished", length = Snackbar.LENGTH_INDEFINITE)
                     }
                 }
             } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
@@ -598,26 +600,27 @@ class MainHomeScreen : AppCompatActivity() {
                 toastCenter("Payment Cancelled")
             } else if (billingResult.responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
                 SoundManager.instance?.playErrorSound()
-                toastCenter("Already processing pending item")
+                toastCenter("Already processing pending purchase")
             } else {
                 SoundManager.instance?.playErrorSound()
-                toastCenter("Payment Failed. Try again \n ${billingResult.responseCode}")
+                toastCenter("Payment Failed. Please try again", length = Snackbar.LENGTH_INDEFINITE)
             }
         }
         billingClient = BillingClient.newBuilder(applicationContext).enablePendingPurchases().setListener(purchaseListener).build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
-                querySkuDetailsRequest()
                 checkPendingPurchases()
+                querySkuDetailsRequest()
             }
-            override fun onBillingServiceDisconnected() { //				if(billingClientTry<3) setupBillingClient() // Test if required to try again
+            override fun onBillingServiceDisconnected() {
+            //				if(billingClientTry<3) setupBillingClient() // Test if required to try again
             }
         })
     }
 
     private fun checkPendingPurchases() {
-        val purchases = billingClient.queryPurchases("inapp").purchasesList
-        if (purchases != null) {
+        billingClient.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(ProductType.INAPP).build()) {
+                _, purchases ->
             for (purchase in purchases) {
                 if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
                     lifecycleScope.launch { acknowledgePurchase(purchase) }
@@ -626,6 +629,7 @@ class MainHomeScreen : AppCompatActivity() {
                 }
             }
         }
+//        val purchases = billingClient.queryPurchases("inapp").purchasesList
     }
 
     private fun querySkuDetailsRequest() {
@@ -648,7 +652,7 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun acknowledgePurchase(purchase: Purchase) {
+    private suspend fun acknowledgePurchase(purchase: Purchase) {
         val params = AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build()
         billingClient.acknowledgePurchase(params) {}
         if (purchase.skus[0] == "remove_ads") {
@@ -658,16 +662,17 @@ class MainHomeScreen : AppCompatActivity() {
             refUsersData.document(uid).set(hashMapOf("pr" to 1), SetOptions.merge())
             Firebase.firestore.collection("PremiumUser").document(uid).set(hashMapOf("id" to mAuth.currentUser?.email, "d" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()))
             consumePurchase(purchase)
-            removeAds.visibility = View.GONE
-            bannerMHS.visibility = View.GONE
+            binding.removeAds.visibility = View.GONE
+            binding.bannerMHS.visibility = View.GONE
             editor.putBoolean("premium", true) // write username to preference file
             editor.apply()
         }
     }
 
-    private fun consumePurchase(purchase: Purchase) {
+    private suspend fun consumePurchase(purchase: Purchase) {
         val params = ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build()
-        billingClient.consumeAsync(params) { _: BillingResult, _: String -> }
+//        billingClient.consumeAsync(params) { _: BillingResult, _: String -> }
+        billingClient.consumePurchase(params)
     }
 
     @Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
@@ -675,12 +680,12 @@ class MainHomeScreen : AppCompatActivity() {
         AppLovinPrivacySettings.setHasUserConsent(true, this)
         MobileAds.initialize(this) {
             Log.d("Inter", "onInitializationComplete")
-            bannerMHS.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
-            bannerMHS.visibility = View.VISIBLE
+            binding.bannerMHS.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
+            binding.bannerMHS.visibility = View.VISIBLE
             loadRewardAd()
             loadInterstitialAd()
         }
-        val requestBuilder = RequestConfiguration.Builder().setTestDeviceIds(listOf("CE88E5381EAA1C30F911F4851420C18E")).build()
+        val requestBuilder = RequestConfiguration.Builder().setTestDeviceIds(listOf(getString(R.string.testDeviceID))).build()
         MobileAds.setRequestConfiguration(requestBuilder)
     }
 
@@ -741,8 +746,8 @@ class MainHomeScreen : AppCompatActivity() {
                 Log.d("Inter", "Rewarded ad loaded")
                 mRewardedAd = rewardedAd
                 loadRewardedAdTry = 1
-                watchVideo.setImageResource(R.drawable.watch_ad_1000)
-                watchVideo.visibility = View.VISIBLE
+                binding.watchVideo.setImageResource(R.drawable.watch_ad_1000)
+                binding.watchVideo.visibility = View.VISIBLE
             }
         })
     }
@@ -752,17 +757,17 @@ class MainHomeScreen : AppCompatActivity() {
             mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdShowedFullScreenContent() {                        // Called when ad is shown.
                     Log.d("Inter", "mRewardedAd Ad was shown.")
-                    if (clickedDailyReward) dailyRewardGridLayout.visibility = View.GONE
-                    watchVideo.clearAnimation()
-                    watchVideo.visibility = View.GONE
+                    if (clickedDailyReward) binding.dailyRewardGridLayout.visibility = View.GONE
+                    binding.watchVideo.clearAnimation()
+                    binding.watchVideo.visibility = View.GONE
                     if (musicStatus) soundBackground.pause()
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     // Called when ad fails to show.
                     Log.d("Inter", "mRewardedAd Ad failed to show.")
-                    watchVideo.clearAnimation()
-                    watchVideo.visibility = View.GONE
+                    binding.watchVideo.clearAnimation()
+                    binding.watchVideo.visibility = View.GONE
                     loadRewardAd()
                 }
 
@@ -785,8 +790,8 @@ class MainHomeScreen : AppCompatActivity() {
                 loadRewardAd()
             }
         } else {
-            watchVideo.clearAnimation()
-            watchVideo.visibility = View.GONE
+            binding.watchVideo.clearAnimation()
+            binding.watchVideo.visibility = View.GONE
             loadRewardAd()
         }
     }
@@ -802,21 +807,21 @@ class MainHomeScreen : AppCompatActivity() {
 
         totalCoins += rewardAmount  // reward with daily reward amount for watching video
         userBasicInfo.score = totalCoins  // reward with daily reward amount for watching video
-        watchVideoCoin.text = rewardAmount.toString()
-        watchVideoCoin.visibility = View.VISIBLE
+        binding.watchVideoCoin.text = rewardAmount.toString()
+        binding.watchVideoCoin.visibility = View.VISIBLE
         if (soundStatus) SoundManager.instance?.playCardCollectSound()
-        anim(watchVideoCoin, R.anim.slide_500_coins)
+        anim(binding.watchVideoCoin, R.anim.slide_500_coins)
         if (!clickedDailyReward) {
             refUsersData.document(uid).set(hashMapOf("sc" to totalCoins), SetOptions.merge())
         } else {
             refUsersData.document(uid).set(hashMapOf("sc" to totalCoins, "LSD" to today, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
         }
         clickedDailyReward = false
-        watchVideoCoin.visibility = View.GONE
+        binding.watchVideoCoin.visibility = View.GONE
         loadRewardAd()
         Handler(Looper.getMainLooper()).postDelayed({
             if (vibrateStatus) vibrationStart()
-            userScoreMHS.setText(String.format("%,d", totalCoins), true)
+            binding.userScoreMHS.setText(String.format("%,d", totalCoins), true)
 //            watchVideoCoin.visibility = View.GONE
 //            loadRewardAd()
         }, 1250)
@@ -841,23 +846,23 @@ class MainHomeScreen : AppCompatActivity() {
         if (soundStatus) SoundManager.instance?.playUpdateSound()
         clickedDailyReward = true
         if (premiumStatus) {
-            dailyRewardGridLayout.visibility = View.GONE
+            binding.dailyRewardGridLayout.visibility = View.GONE
             addPoints()
         } else if (mRewardedAd != null && !newUser) { // check Rewarded Ads loaded or not
             showRewardedVideoAd()
-            watchVideo.clearAnimation()
-            watchVideo.visibility = View.GONE
+            binding.watchVideo.clearAnimation()
+            binding.watchVideo.visibility = View.GONE
         } else if (mInterstitialAd != null && !newUser) { // check Interstitial Ads loaded or not
             showInterstitialAd()
-            dailyRewardGridLayout.visibility = View.GONE
-            watchVideo.clearAnimation()
-            watchVideo.visibility = View.GONE
+            binding.dailyRewardGridLayout.visibility = View.GONE
+            binding.watchVideo.clearAnimation()
+            binding.watchVideo.visibility = View.GONE
             loadRewardAd()
         } else {
-            dailyRewardGridLayout.visibility = View.GONE
+            binding.dailyRewardGridLayout.visibility = View.GONE
             addPoints()
-            watchVideo.clearAnimation()
-            watchVideo.visibility = View.GONE
+            binding.watchVideo.clearAnimation()
+            binding.watchVideo.visibility = View.GONE
             loadRewardAd()
             if (!premiumStatus) loadInterstitialAd()
         }
@@ -873,16 +878,16 @@ class MainHomeScreen : AppCompatActivity() {
             if (soundStatus) SoundManager.instance?.playUpdateSound()
             view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         }
-        if (playerStatsML.progress == 1f) {
-            playerStatsML.transitionToStart()
-        } else playerStatsML.transitionToEnd()
+        if (binding.playerStatsML.progress == 1f) {
+            binding.playerStatsML.transitionToStart()
+        } else binding.playerStatsML.transitionToEnd()
     }
 
     private fun openSettingsWindow() {
         settingsWindowStatus = true
-        settingsLayout.visibility = View.VISIBLE
+        binding.settingsLayout.visibility = View.VISIBLE
 //		Handler(Looper.getMainLooper()).postDelayed({
-        closeSettings.visibility = View.VISIBLE
+        binding.closeSettings.visibility = View.VISIBLE
 //		}, 220)
 //		anim(settingsLayoutTemp, R.anim.zoomin_center)
     }
@@ -890,9 +895,9 @@ class MainHomeScreen : AppCompatActivity() {
     fun closeSettingsWindow(view: View) {
         settingsWindowStatus = false
 //		anim(settingsLayoutTemp, R.anim.zoomout_center)
-        closeSettings.visibility = View.GONE
-        settingsLayout.visibility = View.GONE
-        closeSettings.clearAnimation()
+        binding.closeSettings.visibility = View.GONE
+        binding.settingsLayout.visibility = View.GONE
+        binding.closeSettings.clearAnimation()
     }
 
     private fun checkIfOnlineGameAllowed() {
@@ -923,49 +928,49 @@ class MainHomeScreen : AppCompatActivity() {
         nPlayers = when (view.tag.toString().toInt()) {
             0 -> 4
             4 -> 4
+            10 -> 4
             else -> 7
         }
-        createRoom()
+        if(view.tag.toString().toInt() != 10) createRoom() else createRoom(dummyReal = true)
     }
 
 
     @SuppressLint("SetTextI18n")
-    private fun createRoom() {
-        maskAllLoading.visibility = View.VISIBLE
-        loadingText.text = getString(R.string.creatingRoom)
+    private fun createRoom(dummyReal: Boolean = false) {
+        binding.maskAllLoading.visibility = View.VISIBLE
+        binding.loadingText.text = getString(R.string.creatingRoom)
         if (!offlineGameAllowed && offlineRoomCreate) {
             toastCenter(offlineGameAllowedM)
             if (soundStatus) SoundManager.instance?.playErrorSound()
             if (vibrateStatus) vibrationStart()
-            loadingText.text = offlineGameAllowedM
+            binding.loadingText.text = offlineGameAllowedM
             Handler(Looper.getMainLooper()).postDelayed({
-                maskAllLoading.visibility = View.GONE
+                binding.maskAllLoading.visibility = View.GONE
             }, 4000)
         } else if (offlineGameAllowed && offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 1200)
         else if (!onlineGameAllowed) {
             if (soundStatus) SoundManager.instance?.playErrorSound()
             if (vibrateStatus) vibrationStart()
-            loadingText.text = onlineGameAllowedM
+            binding.loadingText.text = onlineGameAllowedM
             Handler(Looper.getMainLooper()).postDelayed({
-                maskAllLoading.visibility = View.GONE
+                binding.maskAllLoading.visibility = View.GONE
             }, 3500)
         } else {
             val allowedChars = ('A'..'H') + ('J'..'N') + ('P'..'Z') + ('2'..'9')  // 1, I , O and 0 skipped as they look same
             val roomID = if (BuildConfig.DEBUG) "AABB" else (1..4).map { allowedChars.random() }.joinToString("")
             if (nPlayers == 7) {
-                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data7)
+                if (!dummyReal) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data7)
                 else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData7)
             } else if (nPlayers == 4 && !offlineRoomCreate) {
-                if (!BuildConfig.DEBUG) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data4)
-                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).data4)
-//                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData4)
+                if (!dummyReal) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data4)
+                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData4)
             }
         }
     }
 
     private fun createRoomWithID(roomID: String, roomData: Any) {
         refRoomData.document(roomID).set(roomData).addOnFailureListener {
-            maskAllLoading.visibility = View.GONE
+            binding.maskAllLoading.visibility = View.GONE
             toastCenter("Failed to create room \nPlease try again or later")
         }.addOnSuccessListener {
             startNextActivity(roomID)
@@ -996,38 +1001,38 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun createRoomWindowOpen() {
         Handler(Looper.getMainLooper()).postDelayed({
-            closeCreateRoom.visibility = View.VISIBLE
+            binding.closeCreateRoom.visibility = View.VISIBLE
         }, 270)
-        createRoomFrame.visibility = View.VISIBLE
-        anim(createRoomFrameTemp, R.anim.slide_down_player_stats) //		anim(closeCreateRoom, R.anim.zoomin_center)
+        binding.createRoomFrame.visibility = View.VISIBLE
+        anim(binding.createRoomFrameTemp, R.anim.slide_down_player_stats) //		anim(closeCreateRoom, R.anim.zoomin_center)
         createRoomWindowStatus = true
     }
 
     fun createRoomWindowExit(view: View) {
-        closeCreateRoom.clearAnimation()
-        createSingle.clearAnimation()
-        createDouble.clearAnimation()
-        closeCreateRoom.visibility = View.GONE
-        maskAllLoading.visibility = View.GONE
-        anim(createRoomFrameTemp, R.anim.slide_up_player_stats)
+        binding.closeCreateRoom.clearAnimation()
+        binding.createSingle.clearAnimation()
+        binding.createDouble.clearAnimation()
+        binding.closeCreateRoom.visibility = View.GONE
+        binding.maskAllLoading.visibility = View.GONE
+        anim(binding.createRoomFrameTemp, R.anim.slide_up_player_stats)
         createRoomWindowStatus = false
         Handler(Looper.getMainLooper()).postDelayed({
-            createRoomFrame.visibility = View.GONE
-        }, 410)
+            binding.createRoomFrame.visibility = View.GONE
+        }, 390)
     }
 
     fun joinRoomButtonClicked(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (soundStatus) SoundManager.instance?.playUpdateSound()
         if (vibrateStatus) vibrationStart()
-        val roomID = roomIDInput.text.toString() //read text field
+        val roomID = binding.roomIDInput.text.toString() //read text field
         if (roomID.isNotEmpty()) {
             if (!onlineGameAllowed && !joinRoomPending) {
                 toastCenter(onlineGameAllowedM)
             } else {
                 hideKeyboard()
-                maskAllLoading.visibility = View.VISIBLE
-                loadingText.text = getString(R.string.checkJoinRoom)
+                binding.maskAllLoading.visibility = View.VISIBLE
+                binding.loadingText.text = getString(R.string.checkJoinRoom)
                 try {
                     refRoomData.document(roomID).get().addOnSuccessListener { dataSnapshot ->
                         try {
@@ -1041,16 +1046,16 @@ class MainHomeScreen : AppCompatActivity() {
                                     SoundManager.instance?.playErrorSound()
                                     speak("Sorry. Room is full")
                                     if (vibrateStatus) vibrationStart()
-                                    maskAllLoading.visibility = View.GONE
-                                    roomIDInputLayout.helperText = null
+                                    binding.maskAllLoading.visibility = View.GONE
+                                    binding.roomIDInputLayout.helperText = null
                                     errorJoinRoomID = true
-                                    roomIDInputLayout.error = "Room is Full"
-                                    roomIDInput.text?.clear()
+                                    binding.roomIDInputLayout.error = "Room is Full"
+                                    binding.roomIDInput.text?.clear()
                                 } else {
                                     if (vibrateStatus) vibrationStart()
                                     if (soundStatus) SoundManager.instance?.playSuccessSound()
-                                    maskAllLoading.visibility = View.VISIBLE
-                                    loadingText.text = getString(R.string.joiningRoom)
+                                    binding.maskAllLoading.visibility = View.VISIBLE
+                                    binding.loadingText.text = getString(R.string.joiningRoom)
                                     logFirebaseEvent("create_join_room_screen",  "join_$nPlayers")
                                     if (queTemp == 0) refRoomData.document(roomID)  // new player joined - not previously joined
                                         .set(hashMapOf("p$que" to userName, "PJ" to que, "p${que}h" to uid), SetOptions.merge()).addOnSuccessListener {
@@ -1065,33 +1070,33 @@ class MainHomeScreen : AppCompatActivity() {
                                 SoundManager.instance?.playErrorSound()
                                 speak("Sorry,No room found. Please check room ID", speed = 1.0f)
                                 if (vibrateStatus) vibrationStart()
-                                maskAllLoading.visibility = View.GONE
-                                roomIDInputLayout.helperText = null
+                                binding.maskAllLoading.visibility = View.GONE
+                                binding.roomIDInputLayout.helperText = null
                                 errorJoinRoomID = true
-                                roomIDInputLayout.error = "No Room found"
-                                roomIDInput.text?.clear()
+                                binding.roomIDInputLayout.error = "No Room found"
+                                binding.roomIDInput.text?.clear()
                             }
                         } catch (successError: java.lang.Exception) {
                             toastCenter("Failed to join room. Try again")
                             if (vibrateStatus) vibrationStart()
-                            maskAllLoading.visibility = View.GONE
-                            roomIDInputLayout.helperText = null
+                            binding.maskAllLoading.visibility = View.GONE
+                            binding.roomIDInputLayout.helperText = null
                             errorJoinRoomID = true
-                            roomIDInputLayout.error = "Failed to join room. Try again"
-                            roomIDInput.text?.clear()
+                            binding.roomIDInputLayout.error = "Failed to join room. Try again"
+                            binding.roomIDInput.text?.clear()
                         }
                     }.addOnFailureListener {
-                        maskAllLoading.visibility = View.GONE
+                        binding.maskAllLoading.visibility = View.GONE
                         toastCenter("Failed to join room. Try again")
                     }
                 } catch (e: Exception) {
                     toastCenter("Failed to join room. Try again")
                     if (vibrateStatus) vibrationStart()
-                    maskAllLoading.visibility = View.GONE
-                    roomIDInputLayout.helperText = null
+                    binding.maskAllLoading.visibility = View.GONE
+                    binding.roomIDInputLayout.helperText = null
                     errorJoinRoomID = true
-                    roomIDInputLayout.error = "Failed to join room. Try again"
-                    roomIDInput.text?.clear()
+                    binding.roomIDInputLayout.error = "Failed to join room. Try again"
+                    binding.roomIDInput.text?.clear()
                 }
             }
         } else {
@@ -1099,8 +1104,8 @@ class MainHomeScreen : AppCompatActivity() {
             speak("Please enter room ID")
             vibrationStart()
             errorJoinRoomID = false
-            roomIDInputLayout.error = null
-            roomIDInputLayout.helperText = getString(R.string.joinHelper)
+            binding.roomIDInputLayout.error = null
+            binding.roomIDInputLayout.helperText = getString(R.string.joinHelper)
         }
     }
 
@@ -1147,22 +1152,22 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun joinRoomWindowOpen(showAds: Boolean = true) {
         Handler(Looper.getMainLooper()).postDelayed({
-            closeJoinRoom.visibility = View.VISIBLE
+            binding.closeJoinRoom.visibility = View.VISIBLE
         }, 270)
-        joinRoomFrame.visibility = View.VISIBLE
-        anim(joinRoomFrameTemp, R.anim.zoomin_center)
-        roomIDInputLayout.error = null
-        roomIDInputLayout.helperText = getString(R.string.joinHelper)
+        binding.joinRoomFrame.visibility = View.VISIBLE
+        anim(binding.joinRoomFrameTemp, R.anim.zoomin_center)
+        binding.roomIDInputLayout.error = null
+        binding.roomIDInputLayout.helperText = getString(R.string.joinHelper)
         errorJoinRoomID = false
         joinRoomWindowStatus = true
     }
 
     fun joinRoomWindowExit(view: View) {
-        closeJoinRoom.visibility = View.GONE
-        anim(joinRoomFrameTemp, R.anim.zoomout_center)
+        binding.closeJoinRoom.visibility = View.GONE
+        anim(binding.joinRoomFrameTemp, R.anim.zoomout_center)
         joinRoomWindowStatus = false
         Handler(Looper.getMainLooper()).postDelayed({
-            joinRoomFrame.visibility = View.GONE
+            binding.joinRoomFrame.visibility = View.GONE
         }, 250)
     }
 
@@ -1179,7 +1184,7 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     fun music(view: View) {
-        musicStatus = musicSwitch.isChecked
+        musicStatus = binding.musicSwitch.isChecked
         if (musicStatus) {
             soundBackground.start()
         } else {
@@ -1190,7 +1195,7 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     fun sound(view: View) {
-        soundStatus = soundSwitch.isChecked
+        soundStatus = binding.soundSwitch.isChecked
         if (soundStatus) {
             SoundManager.instance?.playUpdateSound()
         }
@@ -1200,7 +1205,7 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     fun vibrate(view: View) {
-        vibrateStatus = vibrateSwitch.isChecked
+        vibrateStatus = binding.vibrateSwitch.isChecked
         if (vibrateStatus) {
             vibrationStart(1000)
         }
@@ -1237,10 +1242,10 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     private fun enterText(view: View = View(this)) {
-        roomIDInput.setOnEditorActionListener { _, actionId, _ ->
+        binding.roomIDInput.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_SEND -> {
-                    joinRoomButtonClicked(joinRoomButton)
+                    joinRoomButtonClicked(binding.joinRoomButton)
                     false
                 }
                 else -> false
@@ -1248,8 +1253,8 @@ class MainHomeScreen : AppCompatActivity() {
         }
     }
 
-    fun toastCenter(message: String) {
-        Snackbar.make(backgroundmhs, message, Snackbar.LENGTH_LONG).setAction("Dismiss") {}.setActionTextColor(getColor(R.color.borderblue)).show()
+    fun toastCenter(message: String, length: Int= Snackbar.LENGTH_LONG) {
+        Snackbar.make(binding.backgroundmhs, message, length).setAction("Dismiss") {}.setActionTextColor(getColor(R.color.borderblue)).show()
     }
 
     fun trainingStart(view: View) {
@@ -1258,8 +1263,8 @@ class MainHomeScreen : AppCompatActivity() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://kaaliteeri.page.link/?link=http://jo.in1/AABB&apn=com.kaalikiteeggi.three_of_spades&amv=70&st=Join%20my%20room%20ID%20%3D%3E%20AABB&si=https://tinyurl.com/3ofspade")))
 
         @Suppress("KotlinConstantConditions") if (trainAccess) {
-            maskAllLoading.visibility = View.VISIBLE
-            loadingText.text = getString(R.string.startTrain)
+            binding.maskAllLoading.visibility = View.VISIBLE
+            binding.loadingText.text = getString(R.string.startTrain)
             if (soundStatus) SoundManager.instance?.playUpdateSound()
             startActivity(Intent(this, TrainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
             overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
@@ -1268,21 +1273,21 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     private fun ranking() {
-        snackbar = Snackbar.make(backgroundmhs, "Click on player to see more details", 2500).setAction("Dismiss") {}
+        snackbar = Snackbar.make(binding.backgroundmhs, "Click on player to see more details", 2500).setAction("Dismiss") {}
         snackbar.setActionTextColor(getColor(R.color.borderblue))
         snackbar.show()
         snackbar.view.setOnClickListener { snackbar.dismiss() }
-        rankStats.visibility = View.VISIBLE
-        anim(rankStats, R.anim.slide_left_activity)
+        binding.rankStats.visibility = View.VISIBLE
+        anim(binding.rankStats, R.anim.slide_left_activity)
         rankWindowStatus = true
     }
 
     @SuppressLint("SimpleDateFormat")
     private fun initTabLayoutAdapter() {
-        viewPager2.adapter = RankStateAdapter(this, tabs = 2)  // attach adapter to viewpager2 view
-        viewPager2.offscreenPageLimit = 2  // set limit of pages to keep in memory 2
-        viewPager2.isSaveFromParentEnabled = false
-        tabLayoutMediator = TabLayoutMediator(tabRank, viewPager2) { tab: TabLayout.Tab, i: Int ->
+        binding.viewPager2.adapter = RankStateAdapter(this, tabs = 2)  // attach adapter to viewpager2 view
+        binding.viewPager2.offscreenPageLimit = 2  // set limit of pages to keep in memory 2
+        binding.viewPager2.isSaveFromParentEnabled = false
+        tabLayoutMediator = TabLayoutMediator(binding.tabRank, binding.viewPager2) { tab: TabLayout.Tab, i: Int ->
             when (i) {
                 1 -> {
                     tab.text = "All Time"
@@ -1309,47 +1314,44 @@ class MainHomeScreen : AppCompatActivity() {
                     1 -> {
                         handleAllTimeView()
                     }
-                    else -> {
-                    }
                 }
             }
         }
-        viewPager2.registerOnPageChangeCallback(viewPagerCallback)
+        binding.viewPager2.registerOnPageChangeCallback(viewPagerCallback)
     }
 
     private fun handleAllTimeView() {
         if (!rankAllTimeSetupDone) {
             logFirebaseEvent("Ranking",  "Requested")
             rankAllTimeSetupDone = true
-            rankProgress.visibility = View.VISIBLE
-            loadingProgressBar.visibility = View.VISIBLE
-            recyclerView = (supportFragmentManager.findFragmentByTag("f1")?.view as View).rankGallery
+            binding.rankProgress.visibility = View.VISIBLE
+            binding.loadingProgressBar.visibility = View.VISIBLE
+            recyclerView = (supportFragmentManager.findFragmentByTag("f1")?.view as View).findViewById(R.id.rankGallery)
             layoutManager = LinearLayoutManager(this)
             recyclerView.layoutManager = layoutManager
-            adapter = ListViewAdapter(this, userArrayList)
+            adapter = UserInfoRanking(this, userArrayList)
             recyclerView.adapter = adapter
             refUsersData.whereGreaterThanOrEqualTo("sc", 5000).orderBy("sc", Query.Direction.DESCENDING).limit(limitFetchOnceAT).get().addOnSuccessListener { querySnapshot ->
                 if (querySnapshot.isEmpty) maxItemsFetchAT = -1
                 querySnapAT = querySnapshot
-                rankProgress.visibility = View.GONE
+                binding.rankProgress.visibility = View.GONE
                 val previousSize = userArrayList.size
                 val newItems = createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT, startAt = 0)
                 userArrayList.addAll(newItems)
                 adapter.notifyItemRangeInserted(previousSize, newItems.size)
-                loadingProgressBar.visibility = View.GONE
+                binding.loadingProgressBar.visibility = View.GONE
                 anim(recyclerView, R.anim.slide_down_in)
                 recyclerViewScrollListener = object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
                         if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) isScrollingAllTime = true
                     }
-
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
                         val itemCount = layoutManager.itemCount
                         if (itemCount < maxItemsFetchAT && isScrollingAllTime && layoutManager.findLastCompletelyVisibleItemPosition() == itemCount - 1) {
                             isScrollingAllTime = false
-                            loadingProgressBar.visibility = View.VISIBLE
+                            binding.loadingProgressBar.visibility = View.VISIBLE
                             refUsersData.whereGreaterThanOrEqualTo("sc", 5000).orderBy("sc", Query.Direction.DESCENDING).limit(limitFetchOnceAT).startAfter(querySnapAT.last()).get().addOnSuccessListener { querySnapshot ->
                                 if (querySnapshot.isEmpty) maxItemsFetchAT = -1
                                 else {
@@ -1358,7 +1360,7 @@ class MainHomeScreen : AppCompatActivity() {
                                     val newItems = createUserArrayFromSnapshot(querySnapAT, filterLastSeen = true, lsdLimit = lastSeenLimitAT, startAt = previousSize)
                                     userArrayList.addAll(newItems)
                                     adapter.notifyItemRangeInserted(previousSize, newItems.size)
-                                    loadingProgressBar.visibility = View.GONE
+                                    binding.loadingProgressBar.visibility = View.GONE
                                 }
                             }
                         }
@@ -1371,20 +1373,20 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun handleDailyView() {
         if (!rankDailySetupDone) {
-            loadingProgressBar.visibility = View.VISIBLE
+            binding.loadingProgressBar.visibility = View.VISIBLE
             logFirebaseEvent("Ranking",  "Requested")
             rankDailySetupDone = true
-            rankProgress.visibility = View.VISIBLE
-            recyclerView1 = (supportFragmentManager.findFragmentByTag("f0")?.view as View).rankGallery
+            binding.rankProgress.visibility = View.VISIBLE
+            recyclerView1 = (supportFragmentManager.findFragmentByTag("f0")?.view as View).findViewById(R.id.rankGallery)
             layoutManager1 = LinearLayoutManager(this)
             recyclerView1.layoutManager = layoutManager1
-            adapter1 = ListViewAdapter(this, userArrayList1, type = 0)
+            adapter1 = UserInfoRanking(this, userArrayList1, type = 0)
             recyclerView1.adapter = adapter1
 
             refUsersData.whereEqualTo("LSD", today).orderBy("scd", Query.Direction.DESCENDING).limit(limitFetchOnce).get().addOnSuccessListener { querySnapshot ->
                 if (querySnapshot.isEmpty) maxItemsFetchDaily = -1
-                loadingProgressBar.visibility = View.GONE
-                rankProgress.visibility = View.GONE
+                binding.loadingProgressBar.visibility = View.GONE
+                binding.rankProgress.visibility = View.GONE
                 querySnapDaily = querySnapshot
                 val previousSize = userArrayList1.size
                 val newItems = createUserArrayFromSnapshot(querySnapDaily, startAt = 0)
@@ -1402,7 +1404,7 @@ class MainHomeScreen : AppCompatActivity() {
                         val itemCount = layoutManager1.itemCount
                         if (itemCount < maxItemsFetchDaily && isScrollingDaily && layoutManager1.findLastCompletelyVisibleItemPosition() == itemCount - 1) {
                             isScrollingDaily = false
-                            loadingProgressBar.visibility = View.VISIBLE
+                            binding.loadingProgressBar.visibility = View.VISIBLE
                             refUsersData.whereEqualTo("LSD", today).orderBy("scd", Query.Direction.DESCENDING).limit(limitFetchOnce).startAfter(querySnapDaily.last()).get().addOnSuccessListener { querySnapshot ->
                                 if (querySnapshot.isEmpty) {
                                     maxItemsFetchDaily = -1
@@ -1412,10 +1414,10 @@ class MainHomeScreen : AppCompatActivity() {
                                     val newItems = createUserArrayFromSnapshot(querySnapDaily, startAt = previousSize)
                                     userArrayList1.addAll(newItems)
                                     adapter1.notifyItemRangeInserted(previousSize, newItems.size)
-                                    loadingProgressBar.visibility = View.GONE
+                                    binding.loadingProgressBar.visibility = View.GONE
                                 }
                             }
-                        } else loadingProgressBar.visibility = View.GONE
+                        } else binding.loadingProgressBar.visibility = View.GONE
                     }
                 }
                 recyclerView1.addOnScrollListener(recyclerView1ScrollListener)
@@ -1427,10 +1429,10 @@ class MainHomeScreen : AppCompatActivity() {
     fun closeRankWindow(view: View) {        //        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (this::snackbar.isInitialized) snackbar.dismiss()
         rankWindowStatus = false
-        anim(rankStats, R.anim.slide_right_activity)
+        anim(binding.rankStats, R.anim.slide_right_activity)
         Handler(Looper.getMainLooper()).postDelayed({
-            rankStats.clearAnimation()
-            rankStats.visibility = View.GONE
+            binding.rankStats.clearAnimation()
+            binding.rankStats.visibility = View.GONE
         }, 190)
     }
 
@@ -1478,15 +1480,15 @@ class MainHomeScreen : AppCompatActivity() {
             view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
             if (soundStatus) SoundManager.instance?.playUpdateSound()
         }
-        rateUsLayout.visibility = View.VISIBLE
-        anim(rateUsLayoutFrame, R.anim.zoomin_center)
-        anim(rateUsIcon1, R.anim.anim_scale_appeal)
+        binding.rateUsLayout.visibility = View.VISIBLE
+        anim(binding.rateUsLayoutFrame, R.anim.zoomin_center)
+        anim(binding.rateUsIcon1, R.anim.anim_scale_appeal)
         ratingWindowOpenStatus = true
     }
 
     fun closeRatingWindow(view: View) {        //        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        rateUsIcon1.clearAnimation()
-        rateUsLayout.visibility = View.GONE
+        binding.rateUsIcon1.clearAnimation()
+        binding.rateUsLayout.visibility = View.GONE
         ratingWindowOpenStatus = false
     }
 
@@ -1529,14 +1531,14 @@ class MainHomeScreen : AppCompatActivity() {
 
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
         if (soundStatus) SoundManager.instance?.playUpdateSound()
-        if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || playerStatsML.progress == 0f || createRoomWindowStatus) && ratingWindowOpenStatus && backButtonPressedStatus) {            //            moveTaskToBack(true)
+        if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || binding.playerStatsML.progress == 0f || dailyRewardWindow  || createRoomWindowStatus) && ratingWindowOpenStatus && backButtonPressedStatus) {            //            moveTaskToBack(true)
             super.onBackPressed()
             closeRatingWindow(View(this))
             backButtonPressedStatus = false
-        } else if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || playerStatsML.progress == 0f || createRoomWindowStatus || ratingWindowOpenStatus) && checkRatingRequest()) {
+        } else if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || binding.playerStatsML.progress == 0f || createRoomWindowStatus || dailyRewardWindow  || ratingWindowOpenStatus) && checkRatingRequest()) {
             backButtonPressedStatus = true
             openRatingWindow(View(this))
-        } else if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || playerStatsML.progress == 0f || createRoomWindowStatus || ratingWindowOpenStatus)) {
+        } else if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || binding.playerStatsML.progress == 0f || createRoomWindowStatus || dailyRewardWindow || ratingWindowOpenStatus)) {
             moveTaskToBack(true)            //            super.onBackPressed()
         } // none should be visible
         else if (ratingWindowOpenStatus) {
@@ -1546,7 +1548,8 @@ class MainHomeScreen : AppCompatActivity() {
         if (joinRoomWindowStatus) joinRoomWindowExit(View(this))
         if (createRoomWindowStatus) createRoomWindowExit(View(this))
         if (settingsWindowStatus) closeSettingsWindow(View(this))
-        if (playerStatsML.progress == 0f) playerStatsML.transitionToEnd() //openClosePlayerStats(View(this))
+        if (binding.playerStatsML.progress == 0f) binding.playerStatsML.transitionToEnd() //openClosePlayerStats(View(this))
+        if(dailyRewardWindow) closeDailyRewardWindowDisplay(View(this))
         //           super.onBackPressed()
     }
 
@@ -1578,12 +1581,14 @@ class MainHomeScreen : AppCompatActivity() {
 
     override fun onDestroy() {
         if (this::soundBackground.isInitialized) soundBackground.release()
-        if (this::billingClient.isInitialized) billingClient.endConnection()
-        if (this::viewPagerCallback.isInitialized) viewPager2.unregisterOnPageChangeCallback(viewPagerCallback)
+        if (this::billingClient.isInitialized) {
+            billingClient.endConnection()
+        }
+        if (this::viewPagerCallback.isInitialized) binding.viewPager2.unregisterOnPageChangeCallback(viewPagerCallback)
         if (this::recyclerViewScrollListener.isInitialized) recyclerView.removeOnScrollListener(recyclerViewScrollListener)
         if (this::recyclerView1ScrollListener.isInitialized) recyclerView1.removeOnScrollListener(recyclerView1ScrollListener)
         if (this::tabLayoutMediator.isInitialized) tabLayoutMediator.detach()
-        viewPager2.adapter = null
+        binding.viewPager2.adapter = null
         try {
             mInterstitialAd!!.fullScreenContentCallback = null
             mInterstitialAd = null
@@ -1601,7 +1606,7 @@ class MainHomeScreen : AppCompatActivity() {
             textToSpeech.shutdown()
         } catch (_: java.lang.Exception) {
         }
-        bannerMHS.destroy()
+        binding.bannerMHS.destroy()
         super.onDestroy()
 
     }

@@ -99,7 +99,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     //	private var userBasicInfoStatus = mutableListOf<Boolean>()
     private var userBasicInfoStatus = MutableLiveData<MutableList<Boolean>>()
-    private lateinit var adapter: LVAdapterJoinRoom
+    private lateinit var adapter: UserInfoRankingJoinRoom
     private lateinit var binding: ActivityCreateJoinRoomScreenBinding
 
     // endregion
@@ -132,7 +132,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             userBasicInfoStatus.value = MutableList(nPlayers) { false }
         }
         binding.playersJoin.layoutManager = LinearLayoutManager(this)
-        adapter = LVAdapterJoinRoom(this, userBasicInfoList)
+        adapter = UserInfoRankingJoinRoom(this, userBasicInfoList)
         binding.playersJoin.adapter = adapter
 
         Handler(Looper.getMainLooper()).post {

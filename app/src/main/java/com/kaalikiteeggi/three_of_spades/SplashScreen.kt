@@ -99,7 +99,7 @@ class SplashScreen : AppCompatActivity() {
                     adapterClass, status!!.description, status.latency))
             }
         }
-        val requestBuilder = RequestConfiguration.Builder().setTestDeviceIds(listOf("CE88E5381EAA1C30F911F4851420C18E")).build()
+        val requestBuilder = RequestConfiguration.Builder().setTestDeviceIds(listOf(getString(R.string.testDeviceID))).build()
         MobileAds.setRequestConfiguration(requestBuilder)
     }
 

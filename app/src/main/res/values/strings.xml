@@ -17,6 +17,7 @@
     <string name="default_notification_channel_id1">ch_kkt1</string>
     <string name="facebook_app_id">231024018145704</string>
     <string name="fb_login_protocol_scheme">fb231024018145704</string>
+    <string name="facebook_client_token">1f5ed54d79e51e35ca5ae0bdc02ee558</string>
 
     <string name="scheme">http</string>
     <string name="scheme1">https</string>
@@ -26,6 +27,7 @@
     <string name="packageName">com.kaalikiteeggi.three_of_spades</string>
     <string name="inviteLink">https://kaaliteeri.page.link/invite</string>
 
+    <string name="testDeviceID">788209F4A59FEBFD2269F384616B107B</string>
     <string name="bannerReal_MP">3c2fa482ece345faa1f68203bc9b8123</string>
     <string name="bannerTest_MP">b195f8dd8ded45fe847ad89ed1d016da</string>
 
@@ -141,5 +143,6 @@
     <string name="swipe">Swipe Up/Down to hide/reveal</string>
     <string name="join">Join</string>
     <string name="splashLoadingDone">Lets Play</string>
+    <string name="dummy_nonline">Dummy\nOnline</string>
 
 </resources>

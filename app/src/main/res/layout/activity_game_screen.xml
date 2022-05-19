@@ -1360,6 +1360,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/bidCoin"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_28sdp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="@dimen/_minus2sdp"
+        android:background="@drawable/coin_trans_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewBider" />
 
     <TextView
         android:id="@+id/textViewBider"
@@ -1376,15 +1385,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RelativeOverlap,RtlSymmetry,TextContrastCheck" />
 
-    <TextView
-        android:id="@+id/bidCoin"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_28sdp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="@dimen/_minus2sdp"
-        android:background="@drawable/coin_trans_1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewBider" />
+
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textViewBidValue"
@@ -1407,7 +1408,7 @@
         android:id="@+id/bidNowImage"
         android:layout_width="@dimen/imageWidth_4"
         android:layout_height="@dimen/imageWidth_4"
-        android:background="@drawable/purplesquarebutton"
+        android:background="@drawable/purple_square_button"
         android:gravity="center"
         android:text="@string/bidNow"
         android:textColor="@color/white"
@@ -1500,13 +1501,15 @@
         <HorizontalScrollView
             android:id="@+id/emojiGrid"
             android:layout_width="@dimen/_250sdp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_35sdp"
             android:elevation="@dimen/_10sdp"
-            android:scrollbarAlwaysDrawHorizontalTrack="false"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
             android:scrollbarStyle="insideInset"
             android:scrollbarThumbHorizontal="@drawable/scrollbar"
             android:scrollbarTrackHorizontal="@drawable/scrollbar_track"
             android:scrollbars="horizontal"
+            android:fadeScrollbars="false"
+            android:background="@drawable/shine_score_table"
             android:scrollbarSize="@dimen/_2sdp"
             android:layout_marginBottom="@dimen/_3sdp"
             app:layout_constraintBottom_toTopOf="@id/editTextChatInput1"
@@ -2128,11 +2131,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <nl.dionsegijn.konfetti.KonfettiView
-        android:id="@+id/konfettiGSA"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scoreViewLayout"
@@ -2229,6 +2228,12 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/konfettiGSA"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/startNextRoundButton"

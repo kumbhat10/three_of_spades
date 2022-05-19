@@ -12,9 +12,8 @@
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/playerStatsML"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/background_glitter"
         app:layoutDescription="@xml/player_stats_motion_scene"
         app:layout_constraintBottom_toTopOf="@+id/bannerMHS"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,6 +22,23 @@
         app:layout_constraintVertical_bias="0"
         app:motionProgress="0">
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.5"
+            app:shimmer_duration="3500"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="@color/font_yellow">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/background_glitter"
+                android:contentDescription="@string/todo" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
         <TextView
             android:id="@+id/removeAds"
             android:layout_width="@dimen/mhsIconsSize"
@@ -32,10 +48,10 @@
             android:background="@drawable/no_ads_merged"
             android:clickable="true"
             android:focusable="true"
-            android:scaleX="0.85"
-            android:scaleY="0.85"
             android:gravity="center"
             android:onClick="removeAdsOrPremium"
+            android:scaleX="0.85"
+            android:scaleY="0.85"
             android:text="@string/no_ad"
             android:textColor="@color/white"
             android:textSize="@dimen/_16ssp"
@@ -54,9 +70,9 @@
             android:contentDescription="@string/todo"
             android:focusable="true"
             android:gravity="center"
+            android:onClick="developerCredits"
             android:scaleX="0.85"
             android:scaleY="0.85"
-            android:onClick="developerCredits"
             android:src="@drawable/contact_us"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,9 +87,9 @@
             android:layout_marginEnd="@dimen/mhsIconsMargin"
             android:background="@drawable/rate_us_star"
             android:gravity="center"
+            android:onClick="openRatingWindow"
             android:scaleX="0.85"
             android:scaleY="0.85"
-            android:onClick="openRatingWindow"
             android:tag="rate"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp"
@@ -88,6 +104,7 @@
             android:layout_height="@dimen/mhsIconsSize"
             android:layout_marginTop="@dimen/mhsIconsGap"
             android:layout_marginEnd="@dimen/mhsIconsMargin"
+            android:background="@drawable/button_square"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -99,6 +116,26 @@
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rateUsIcon" />
+
+        <TextView
+            android:id="@+id/trainingButton1"
+            android:layout_width="@dimen/mhsIconsSize"
+            android:layout_height="@dimen/mhsIconsSize"
+            android:layout_marginTop="@dimen/mhsIconsGap"
+            android:layout_marginEnd="@dimen/mhsIconsMargin"
+            android:background="@drawable/button_square"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="createRoomButtonClicked"
+            android:tag="10"
+            android:text="@string/dummy_nonline"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainingButton" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mainIconGridView"
@@ -299,8 +336,8 @@
             android:id="@id/settingsLayoutTemp"
             android:layout_width="0dp"
             android:layout_height="@dimen/_230sdp"
-            android:background="@drawable/shine_player_stats"
             android:layout_margin="@dimen/_30sdp"
+            android:background="@drawable/shine_player_stats"
             android:padding="@dimen/_20sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -308,83 +345,83 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-                <TextView
-                    android:id="@+id/textMusic"
-                    android:layout_width="@dimen/settingWidth"
-                    android:layout_height="@dimen/settingHeight"
-                    android:gravity="center|start"
-                    android:text="@string/music"
-                    android:textColor="@color/font_grey_settings"
-                    android:textSize="@dimen/_15ssp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/musicSwitch"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/textSound"/>
+            <TextView
+                android:id="@+id/textMusic"
+                android:layout_width="@dimen/settingWidth"
+                android:layout_height="@dimen/settingHeight"
+                android:gravity="center|start"
+                android:text="@string/music"
+                android:textColor="@color/font_grey_settings"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintBottom_toTopOf="@id/textSound"
+                app:layout_constraintEnd_toStartOf="@id/musicSwitch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/musicSwitch"
-                        android:layout_width="@dimen/settingWidth"
-                        android:layout_height="@dimen/settingHeight"
-                        app:layout_constraintStart_toEndOf="@id/textMusic"
-                        app:layout_constraintBottom_toTopOf="@id/textSound"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:checked="true"
-                        android:onClick="music"
-                        android:thumb="@drawable/thumb_music"
-                        app:track="@drawable/track1" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/musicSwitch"
+                android:layout_width="@dimen/settingWidth"
+                android:layout_height="@dimen/settingHeight"
+                android:checked="true"
+                android:onClick="music"
+                android:thumb="@drawable/thumb_music"
+                app:layout_constraintBottom_toTopOf="@id/textSound"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textMusic"
+                app:layout_constraintTop_toTopOf="parent"
+                app:track="@drawable/track1" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textSound"
-                    android:layout_width="@dimen/settingWidth"
-                    android:layout_height="@dimen/settingHeight"
-                    android:gravity="center|start"
-                    android:text="@string/sound"
-                    android:textColor="@color/font_grey_settings"
-                    android:textSize="@dimen/_15ssp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textMusic"
-                    app:layout_constraintBottom_toTopOf="@id/textVibrate"
-                    app:layout_constraintEnd_toStartOf="@id/soundSwitch"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textSound"
+                android:layout_width="@dimen/settingWidth"
+                android:layout_height="@dimen/settingHeight"
+                android:gravity="center|start"
+                android:text="@string/sound"
+                android:textColor="@color/font_grey_settings"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintBottom_toTopOf="@id/textVibrate"
+                app:layout_constraintEnd_toStartOf="@id/soundSwitch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textMusic" />
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/soundSwitch"
-                        android:layout_width="@dimen/settingWidth"
-                        android:layout_height="@dimen/settingHeight"
-                        app:layout_constraintTop_toBottomOf="@+id/textMusic"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/textVibrate"
-                        app:layout_constraintStart_toEndOf="@id/textSound"
-                        android:checked="true"
-                        android:onClick="sound"
-                        android:thumb="@drawable/thumb_sound"
-                        app:track="@drawable/track1" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/soundSwitch"
+                android:layout_width="@dimen/settingWidth"
+                android:layout_height="@dimen/settingHeight"
+                android:checked="true"
+                android:onClick="sound"
+                android:thumb="@drawable/thumb_sound"
+                app:layout_constraintBottom_toTopOf="@id/textVibrate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textSound"
+                app:layout_constraintTop_toBottomOf="@+id/textMusic"
+                app:track="@drawable/track1" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textVibrate"
-                    android:layout_width="@dimen/settingWidth"
-                    android:layout_height="@dimen/settingHeight"
-                    android:gravity="center|start"
-                    android:text="@string/vibrate"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/vibrateSwitch"
-                    app:layout_constraintTop_toBottomOf="@id/textSound"
-                    android:textColor="@color/font_grey_settings"
-                    android:textSize="@dimen/_15ssp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textVibrate"
+                android:layout_width="@dimen/settingWidth"
+                android:layout_height="@dimen/settingHeight"
+                android:gravity="center|start"
+                android:text="@string/vibrate"
+                android:textColor="@color/font_grey_settings"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/vibrateSwitch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textSound" />
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/vibrateSwitch"
-                        android:layout_width="@dimen/settingWidth"
-                        android:layout_height="@dimen/settingHeight"
-                        android:checked="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textSound"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/textVibrate"
-                        android:onClick="vibrate"
-                        android:thumb="@drawable/thumb_vibrate"
-                        app:track="@drawable/track1" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/vibrateSwitch"
+                android:layout_width="@dimen/settingWidth"
+                android:layout_height="@dimen/settingHeight"
+                android:checked="true"
+                android:onClick="vibrate"
+                android:thumb="@drawable/thumb_vibrate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textVibrate"
+                app:layout_constraintTop_toBottomOf="@id/textSound"
+                app:track="@drawable/track1" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -398,9 +435,9 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:onClick="closeSettingsWindow"
-            app:layout_constraintTop_toBottomOf="@id/settingsLayoutTemp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/settingsLayoutTemp"
             app:srcCompat="@drawable/close"
             tools:ignore="ContentDescription" />
 
@@ -581,93 +618,122 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dailyRewardGridLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_96sdp"
-        android:background="@drawable/shine_player_stats"
+        android:background="@drawable/shine_daily_reward"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_65sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:src="@drawable/ribbon"
-            tools:ignore="ContentDescription" />
-
-        <GridView
-            android:id="@+id/dailyRewardGrid"
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/ribbon1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
-            android:columnWidth="@dimen/_65sdp"
-            android:gravity="center"
-            android:numColumns="3" />
+            android:layout_marginTop="@dimen/_8sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shimmer_auto_start="true"
+            app:shimmer_base_alpha="0.92"
+            app:shimmer_duration="1500"
+            app:shimmer_highlight_alpha="1"
+            app:shimmer_highlight_color="@color/white">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_20sdp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/claimReward"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_36sdp"
-                android:background="@drawable/greenrectanglesimple"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:gravity="center_vertical"
-                android:onClick="claimDailyReward"
-                android:paddingStart="@dimen/_14sdp"
-                android:paddingTop="@dimen/_2sdp"
-                android:paddingEnd="@dimen/_11sdp"
-                android:paddingBottom="@dimen/_4sdp"
-                android:text="@string/claim_reward"
-                android:textColor="@color/colorongreen"
-                android:textSize="@dimen/_13ssp"
-                android:tint="?attr/colorControlNormal"
-                app:drawableRightCompat="@drawable/watch_video"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/ribbon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_65sdp"
+                    android:src="@drawable/ribbon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_36sdp"
-                android:layout_marginStart="@dimen/_14sdp"
-                android:layout_toEndOf="@+id/claimReward"
-                android:background="@drawable/redrectanlgesimple"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:gravity="center_vertical"
-                android:onClick="closeDailyRewardWindowDisplay"
-                android:paddingStart="@dimen/_14sdp"
-                android:paddingTop="@dimen/_2sdp"
-                android:paddingEnd="@dimen/_9sdp"
-                android:paddingBottom="@dimen/_4sdp"
-                android:text="@string/cancel_reward"
-                android:textColor="#FDFDFD"
-                android:textSize="@dimen/_13ssp"
-                app:drawableRightCompat="@drawable/watch_video_cancel"
-                app:layout_constraintStart_toEndOf="@id/claimReward"
-                app:layout_constraintTop_toTopOf="parent" />
+                <GridView
+                    android:id="@+id/dailyRewardGrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_4sdp"
+                    android:columnWidth="@dimen/_65sdp"
+                    android:gravity="center"
+                    android:numColumns="3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ribbon" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/claimReward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_36sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:background="@drawable/greenrectanglesimple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center_vertical"
+                    android:onClick="claimDailyReward"
+                    android:paddingStart="@dimen/_14sdp"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:paddingEnd="@dimen/_11sdp"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:text="@string/claim_reward"
+                    android:textColor="@color/colorongreen"
+                    android:textSize="@dimen/_13ssp"
+                    android:tint="?attr/colorControlNormal"
+                    app:drawableRightCompat="@drawable/watch_video"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/cancelReward"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dailyRewardGrid" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/cancelReward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_36sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:layout_toEndOf="@+id/claimReward"
+                    android:background="@drawable/redrectanlgesimple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center_vertical"
+                    android:onClick="closeDailyRewardWindowDisplay"
+                    android:paddingStart="@dimen/_14sdp"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:paddingEnd="@dimen/_9sdp"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:tag="close"
+                    android:text="@string/cancel_reward"
+                    android:textColor="#FDFDFD"
+                    android:textSize="@dimen/_13ssp"
+                    app:drawableRightCompat="@drawable/watch_video_cancel"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/claimReward"
+                    app:layout_constraintTop_toBottomOf="@id/dailyRewardGrid" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/rateUsLayout"
@@ -833,13 +899,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Space
-            android:id="@+id/space4"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_5sdp"
-            app:layout_constraintBottom_toBottomOf="@+id/rankTitle"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <ImageView
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
@@ -854,6 +913,13 @@
             app:layout_constraintTop_toTopOf="@id/rankTitle"
             app:layout_constraintVertical_bias="0.3"
             app:srcCompat="@drawable/close" />
+
+        <androidx.legacy.widget.Space
+            android:id="@+id/space4"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_5sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/rankTitle"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabRank"
@@ -916,10 +982,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        ads:layout_constraintBottom_toBottomOf="parent"
-        ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintEnd_toEndOf="parent"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_admob"/>
+        ads:adUnitId="@string/banner_admob"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

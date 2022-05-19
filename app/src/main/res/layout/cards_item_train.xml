@@ -6,11 +6,11 @@
     android:fadingEdge="vertical">
 
     <TextView
-        android:id="@+id/textViewDisplayCard"
+        android:id="@+id/textViewDisplayCardTrain"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/imageViewDisplayCard"
-        android:layout_alignEnd="@+id/imageViewDisplayCard"
+        android:layout_above="@+id/imageViewDisplayCardTrain"
+        android:layout_alignEnd="@+id/imageViewDisplayCardTrain"
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/_2sdp"
         android:layout_marginEnd="@dimen/_2sdp"
@@ -24,7 +24,7 @@
         android:textStyle="bold" />
 
     <ImageView
-        android:id="@+id/imageViewDisplayCard"
+        android:id="@+id/imageViewDisplayCardTrain"
         android:layout_width="@dimen/_35sdp"
         android:layout_height="@dimen/_61sdp"
         android:layout_alignParentBottom="true"

@@ -47,6 +47,7 @@
 
     <color name = "inActiveCard">#C1323232</color>
     <color name = "highlightCard1">#9A39FF00</color>
+    <color name = "emojiBackground">#C4070E3A</color>
 
     <color name="thumbSwitchON">@color/icon_yellow</color>
     <color name="thumbSwitchOFF">#9C9C9C</color>

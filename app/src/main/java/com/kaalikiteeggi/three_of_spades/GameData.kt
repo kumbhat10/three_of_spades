@@ -2,7 +2,9 @@ package com.kaalikiteeggi.three_of_spades
 
 import kotlin.random.Random
 
-class GameData() {
+class GameData(dummy:Boolean = false, gameNumber:Int = 1, nPlayers: Int = 4) {
+	private var a = 4
+
 	var bb: Int = 0 // current bidder
 	var bs: MutableList<Int> = mutableListOf(1,1,1,1) // bid status
 	var bv: Int = 175 // current bid value
@@ -34,7 +36,7 @@ class GameData() {
 	var tr: String = ""  // Master Trump for whole game
 }
 
-fun getGameData4(dummy:Boolean = false, gameNumber:Int = 1):GameData {
+fun getGameData4(dummy:Boolean = false, gameNumber:Int = 1): GameData {
 	val gameData = GameData()
 	val randPlayer = Random.nextInt(1, 5)
 	val randPlayerNext = if(randPlayer==4) 1 else randPlayer+1

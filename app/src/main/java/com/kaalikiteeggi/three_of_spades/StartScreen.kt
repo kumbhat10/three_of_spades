@@ -7,10 +7,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.speech.tts.TextToSpeech
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -21,19 +19,15 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.kaalikiteeggi.three_of_spades.databinding.ActivityStartScreenBinding
-import kotlinx.android.synthetic.main.activity_start_screen.*
-
 
 class StartScreen : AppCompatActivity() {
 	private lateinit var callBackManager: CallbackManager
@@ -63,32 +57,31 @@ class StartScreen : AppCompatActivity() {
 		binding = ActivityStartScreenBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 
-		findViewById<ImageView>(R.id.icon_3startscreen).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_zoom))
-		vcStart.text = "Ver: " + packageManager.getPackageInfo(packageName, 0).versionName
+		binding.icon3startscreen.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_zoom))
+		binding.vcStart.text = "Ver: " + packageManager.getPackageInfo(packageName, 0).versionName
 		SoundManager.instance?.playUpdateSound() //soundUpdate.start()
 		mAuth = FirebaseAuth.getInstance() // endregion
 
 		// region Facebook Login
-		val loginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
-		loginButton.setOnClickListener {
+		binding.facebookLoginButton.setOnClickListener {
 			it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 			SoundManager.instance?.playUpdateSound() //soundUpdate.start()
-			maskButtons.visibility = View.VISIBLE
-			loadingText3.text = getString(R.string.wait)
-			loadingTextSC.visibility = View.VISIBLE
+			binding.maskButtons.visibility = View.VISIBLE
+			binding.loadingText3.text = getString(R.string.wait)
+			binding.loadingTextSC.visibility = View.VISIBLE
 		}
 		callBackManager = CallbackManager.Factory.create()
-		loginButton.setPermissions("email", "public_profile")
-		loginButton.registerCallback(callBackManager, object : FacebookCallback<LoginResult> {
+		binding.facebookLoginButton.setPermissions("email", "public_profile")
+		binding.facebookLoginButton.registerCallback(callBackManager, object : FacebookCallback<LoginResult> {
 			override fun onCancel() {
 				SoundManager.instance?.playErrorSound() //soundError.start()
 				toastCenter("Facebook login cancelled")
-				maskButtons.visibility = View.GONE
+				binding.maskButtons.visibility = View.GONE
 			}
 			override fun onError(error: FacebookException) {
 				SoundManager.instance?.playErrorSound() //soundError.start()
 				toastCenter("Facebook login Error : ${error.message}")
-				maskButtons.visibility = View.GONE
+				binding.maskButtons.visibility = View.GONE
 				}
 			override fun onSuccess(result: LoginResult) {
 				val credentialFacebook = FacebookAuthProvider.getCredential(result.accessToken.token)
@@ -103,13 +96,13 @@ class StartScreen : AppCompatActivity() {
 			.build()
 
 		mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-		findViewById<SignInButton>(R.id.googleSignInButton).setOnClickListener {
+		binding.googleSignInButton.setOnClickListener {
 			it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 			SoundManager.instance?.playUpdateSound() //soundUpdate.start()
 			startActivityForResult(mGoogleSignInClient.signInIntent, googleCode)
-			maskButtons.visibility = View.VISIBLE
-			loadingText3.text = getString(R.string.wait)
-			loadingTextSC.visibility = View.VISIBLE
+			binding.maskButtons.visibility = View.VISIBLE
+			binding.loadingText3.text = getString(R.string.wait)
+			binding.loadingTextSC.visibility = View.VISIBLE
 		} //endregion
 	}
 
@@ -117,9 +110,9 @@ class StartScreen : AppCompatActivity() {
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 		if (resultCode == Activity.RESULT_OK) {
-			maskButtons.visibility = View.VISIBLE
+			binding.maskButtons.visibility = View.VISIBLE
 		} else {
-			maskButtons.visibility = View.GONE
+			binding.maskButtons.visibility = View.GONE
 		}
 		if (requestCode == googleCode && resultCode == Activity.RESULT_OK) {
 			val account = GoogleSignIn.getSignedInAccountFromIntent(data).result
@@ -137,10 +130,10 @@ class StartScreen : AppCompatActivity() {
 				newUser = task.result?.additionalUserInfo?.isNewUser!!
 				updateUI(provider)
 			} else {
-				maskButtons.visibility = View.GONE
+				binding.maskButtons.visibility = View.GONE
 			}
 		}.addOnFailureListener(this) { exception ->
-			maskButtons.visibility = View.GONE
+			binding.maskButtons.visibility = View.GONE
 			try {
 				if ((exception as FirebaseAuthUserCollisionException).errorCode == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL") {
 					SoundManager.instance?.playErrorSound() //soundError.start()
@@ -159,13 +152,14 @@ class StartScreen : AppCompatActivity() {
 	}
 
 	private fun updateUI(provider: String) {
-		if (newUser) loadingText3.text = getString(R.string.new_player)
-		else loadingText3.text = getString(R.string.fetching_player)
+		if (newUser) binding.loadingText3.text = getString(R.string.new_player)
+		else binding.loadingText3.text = getString(R.string.fetching_player)
 
 		val user = mAuth.currentUser
 		if (user != null) {
 			val userGivenName = user.displayName!!
 			val uid = user.uid
+			val email = if(user.email != null) user.email else "na"
 			userPhotoUrl = user.photoUrl!!.toString()
 			if (newUser && provider == "facebook") {
 				userPhotoUrl = "$userPhotoUrl?width=1000&height=1000&return_ssl_resources=1"
@@ -178,48 +172,47 @@ class StartScreen : AppCompatActivity() {
 				update = true
 			}
 
-			if (update) {
-				val profileUpdates = UserProfileChangeRequest.Builder()
-					.setPhotoUri(Uri.parse(userPhotoUrl)).build()
-				user.updateProfile(profileUpdates).addOnSuccessListener {}
-			}
+//			if (update) {
+//				val profileUpdates = UserProfileChangeRequest.Builder()
+//					.setPhotoUri(Uri.parse(userPhotoUrl)).build()
+//				user.updateProfile(profileUpdates).addOnSuccessListener {}
+//			}
 			try {
 				refUsersData.document(uid).get().addOnSuccessListener { documentSnapshot ->
 					if (documentSnapshot.data != null) {
-						val setData = hashMapOf("n" to userGivenName, "ph" to userPhotoUrl)
-						//                   else hashMapOf("n" to userGivenName, "ph" to userPhotoUrl, "b_bot" to 0,"p_bot" to 0,"w_bot" to 0)
+						val setData = hashMapOf("n" to userGivenName, "ph" to userPhotoUrl, "e" to email, "uid" to uid)
 
 						refUsersData.document(uid).set(setData, SetOptions.merge())
 							.addOnSuccessListener { startNextActivity(userGivenName) }
 							.addOnFailureListener { exception ->
-								maskButtons.visibility = View.GONE
+								binding.maskButtons.visibility = View.GONE
 								toastCenter("${exception.message} \n Failed to merge with existing player data\n" + "Please try again")
 							}
 					} else {
-						refUsersData.document(uid).set(CreateUser(userGivenName, userPhotoUrl).data)
+						refUsersData.document(uid).set(CreateUser(username = userGivenName, userPhotoUrl = userPhotoUrl, email = email!!, uid = uid).data)
 							.addOnSuccessListener { startNextActivity(userGivenName) }
 							.addOnFailureListener { exception ->
-								maskButtons.visibility = View.GONE
+								binding.maskButtons.visibility = View.GONE
 								toastCenter("${exception.message} \n Failed to create new player \nPlease try again")
 							}
 					}
 				}
 			} catch (me: Exception) {
-				maskButtons.visibility = View.GONE
+				binding.maskButtons.visibility = View.GONE
 				toastCenter(me.message.toString())
 			}
 		} else {
-			maskButtons.visibility = View.GONE
+			binding.maskButtons.visibility = View.GONE
 			toastCenter("Failed to get User details \nPlease try again")
 		}
 	}
 
 	private fun startNextActivity(userGivenName: String?) {
 		SoundManager.instance?.playSuccessSound() //soundSuccess.start()
-		loadingText3.visibility = View.GONE
-		loadingTextSC.visibility = View.GONE
-		signInSuccess.visibility = View.VISIBLE
-		signInSuccess.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_activity))
+		binding.loadingText3.visibility = View.GONE
+		binding.loadingTextSC.visibility = View.GONE
+		binding.signInSuccess.visibility = View.VISIBLE
+		binding.signInSuccess.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_activity))
 		startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", newUser) }
 			.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
 		overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
@@ -227,7 +220,7 @@ class StartScreen : AppCompatActivity() {
 	}
 
 	private fun toastCenter(message: String) {
-		Snackbar.make(startRoot, message, Snackbar.LENGTH_LONG).setAction("Dismiss") {}
+		Snackbar.make(binding.startRoot, message, Snackbar.LENGTH_LONG).setAction("Dismiss") {}
 			.setActionTextColor(getColor(R.color.borderblue)).show()
 	}
 

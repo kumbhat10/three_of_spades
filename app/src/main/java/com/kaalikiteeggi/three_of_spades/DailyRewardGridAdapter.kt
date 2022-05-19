@@ -1,33 +1,31 @@
 package com.kaalikiteeggi.three_of_spades
 
-import android.content.Context
+import android.annotation.SuppressLint
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.kaalikiteeggi.three_of_spades.databinding.CoinRewardGridBinding
 
+class DailyRewardGridAdapter( var arrayList: ArrayList<GenericItemDescription>, private var highlightPosition:Int) : BaseAdapter() {
 
-class DailyRewardGridAdapter( var arrayList: ArrayList<DailyRewardItem>, private var highlightPosition:Int) : BaseAdapter() {
+    @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view:View = View.inflate(parent?.context, R.layout.coin_reward_grid, null)
-        val icons:ImageView = view.findViewById(R.id.coinRewardIcon)
-        val textDescription:TextView = view.findViewById(R.id.coinRewardText)
-        val listItem: DailyRewardItem = arrayList[position]
-        textDescription.text = listItem.textDescription
 
+        val view = CoinRewardGridBinding.inflate(LayoutInflater.from(parent?.context), parent, false)
+
+        view.coinRewardText.text = arrayList[position].textDescription
         if(position==highlightPosition-1){
-            view.background = ContextCompat.getDrawable(parent!!.context,R.drawable.shine_player_stats)
-            icons.startAnimation(AnimationUtils.loadAnimation(parent.context,R.anim.anim_scale_infinite))
-//            textDescription.background = ContextCompat.getDrawable(context,R.drawable.button_square)
-            icons.setImageResource(R.drawable.coin_trans_1)
-            textDescription.setTextColor(ContextCompat.getColor(parent.context, R.color.font_yellow))
+            view.root.background = ContextCompat.getDrawable(parent!!.context,R.drawable.shine_player_stats)
+            view.coinLottie.visibility = View.VISIBLE
+            view.coinRewardIcon.visibility = View.GONE
+//            view.coinRewardIcon.setImageResource(R.drawable.coin_trans_1)
+            view.coinRewardText.setTextColor(ContextCompat.getColor(parent.context, R.color.font_yellow))
+            view.coinRewardText.textSize = parent.context.resources.getDimension(R.dimen._13ssp)/parent.context.resources.displayMetrics.density
 //            textDescription.background = ContextCompat.getDrawable(parent.context,R.drawable.greensquarebutton1)
-
         }
-        return view
+        return view.root
     }
 
     override fun getItem(position: Int): Any {

@@ -16,16 +16,16 @@
     android:theme="@style/Theme.App"
     android:id="@+id/userRankRoot">
 
-    <View
-        android:id="@+id/lineBreak"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:background="#B5FFEB3B"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/userScore"
-        app:layout_constraintStart_toEndOf="@id/userImage"
-        app:layout_constraintTop_toBottomOf="@id/userImage" />
+<!--    <View-->
+<!--        android:id="@+id/lineBreak"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_marginTop="@dimen/_4sdp"-->
+<!--        android:background="#B5FFEB3B"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/userScore"-->
+<!--        app:layout_constraintStart_toEndOf="@id/userImage"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/userImage" />-->
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userImage"

@@ -10,9 +10,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 @SuppressLint("SimpleDateFormat")
 
-class CreateUser(username: String="", userPhotoUrl: String="") {
+class CreateUser(username: String="", userPhotoUrl: String="", email: String = "", uid:String = "") {
     val todayDate = SimpleDateFormat("yyyyMMdd").format(Date()).toInt()
    val data = hashMapOf("n" to username, //username
+       "e" to email,
+       "uid" to uid,
        "ph" to userPhotoUrl, // photo URL
        "sc" to 4500, //start coins
        "scd" to 0, //start coins

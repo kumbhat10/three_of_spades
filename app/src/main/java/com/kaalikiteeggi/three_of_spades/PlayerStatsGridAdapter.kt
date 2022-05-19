@@ -1,24 +1,27 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.player_stats_grid.view.*
+import com.kaalikiteeggi.three_of_spades.databinding.PlayerStatsGridBinding
 
 class PlayerStatsItem(var parameterIcon: Int, var parameter: String, var parameterValue: String)
 
-class PlayerStatsGridAdapter(var arrayList: ArrayList<PlayerStatsItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
+class PlayerStatsGridAdapter(var arrayList: ArrayList<PlayerStatsItem>) : RecyclerView.Adapter<PlayerStatsGridAdapter.PlayerStatsViewHolder>()  {
 
-	class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {		///to do something with views here later
+	class PlayerStatsViewHolder(private val binder: PlayerStatsGridBinding) : RecyclerView.ViewHolder(binder.root) {		///to do something with views here later
+		fun bind(playerStatsItem: PlayerStatsItem){
+			binder.parameter.text = playerStatsItem.parameter
+			binder.parameterValue.text = playerStatsItem.parameterValue
+			binder.parameterIcon.setImageResource(playerStatsItem.parameterIcon)
+		}
 	}
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-		return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.player_stats_grid, parent, false))
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerStatsViewHolder {
+		return PlayerStatsViewHolder(PlayerStatsGridBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 	}
-	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-		holder.itemView.parameter.text = arrayList[position].parameter
-		holder.itemView.parameterValue.text = arrayList[position].parameterValue
-		holder.itemView.parameterIcon.setImageResource(arrayList[position].parameterIcon)
+	override fun onBindViewHolder(holder: PlayerStatsViewHolder, position: Int) {
+
+		holder.bind(arrayList[position])
 	}
 	override fun getItemCount(): Int {
 		return arrayList.size

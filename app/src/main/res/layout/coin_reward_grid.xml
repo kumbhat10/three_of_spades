@@ -4,36 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/_1sdp"
-    android:background="@drawable/shine_score_table">
+    app:cardCornerRadius="@dimen/_1sdp">
 
     <ImageView
         android:id="@+id/coinRewardIcon"
-        android:layout_width="@dimen/_61sdp"
-        android:layout_height="@dimen/_72sdp"
+        android:layout_width="@dimen/_72sdp"
+        android:layout_height="@dimen/_85sdp"
         android:src="@drawable/coin_trans_1blurr"
         tools:ignore="ContentDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/coinRewardText" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/coinLottie"
+        android:layout_width="@dimen/_72sdp"
+        android:layout_height="@dimen/_72sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/coinRewardText"
+        app:lottie_rawRes="@raw/prize_lottie"
+        android:scaleY="1.5"
+        android:scaleX="1.5"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_repeatCount="-1"
+        app:lottie_repeatMode="restart"/>
 
     <TextView
         android:id="@+id/coinRewardText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/blacksquarebutton"
-        android:gravity="center"
+        android:fontFamily="@font/lily_script_one"
+        android:gravity="top|center"
         android:paddingStart="@dimen/_7sdp"
-        android:paddingTop="@dimen/_2sdp"
         android:paddingEnd="@dimen/_7sdp"
         android:paddingBottom="@dimen/_3sdp"
         android:text="Day 1 \n1000 coins"
         android:textColor="#ACACAC"
         android:textSize="@dimen/_9ssp"
-        tools:ignore="HardcodedText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/coinRewardIcon"/>
-
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

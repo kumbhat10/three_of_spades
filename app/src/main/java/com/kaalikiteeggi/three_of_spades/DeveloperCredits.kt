@@ -6,28 +6,21 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import com.android.billingclient.api.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import kotlinx.android.synthetic.main.activity_developer_credits.*
-import kotlinx.android.synthetic.main.activity_main_home_screen.*
-import kotlin.random.Random
+import com.kaalikiteeggi.three_of_spades.databinding.ActivityDeveloperCreditsBinding
 
 class DeveloperCredits : AppCompatActivity() {
     private lateinit var text:String
@@ -40,13 +33,15 @@ class DeveloperCredits : AppCompatActivity() {
     private val whatsapp1 = "https://wa.me/919582648284"
     private val whatsapp2 = "https://wa.me/447496393966"
     private lateinit var intentBuilder: CustomTabsIntent.Builder
+    private lateinit var binding: ActivityDeveloperCreditsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        setContentView(R.layout.activity_developer_credits)
+        binding = ActivityDeveloperCreditsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        findViewById<ImageView>(R.id.icon_3developer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
+        binding.icon3developer.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
 
         vn = packageManager.getPackageInfo(packageName,0).versionName
         vc = packageManager.getPackageInfo(packageName,0).versionCode.toString()
@@ -54,7 +49,7 @@ class DeveloperCredits : AppCompatActivity() {
         FirebaseCrashlytics.getInstance().setUserId(uid)
         soundStatus = intent.getBooleanExtra("soundStatus", true)    //Get roomID and display
         text = "VC: $vc\nVN: $vn\n W: ${resources.configuration.screenWidthDp}\nH: ${resources.configuration.screenHeightDp}\nUser ID: $uid"
-        findViewById<TextView>(R.id.sizeDC).text = text
+        binding.sizeDC.text = text
 
         Handler(Looper.getMainLooper()).post {
             createEmailIntent()
@@ -67,7 +62,7 @@ class DeveloperCredits : AppCompatActivity() {
         try{
             intentBuilder.build().launchUrl(this, Uri.parse(homePageKKT))
         }catch (me:Exception){
-            Snackbar.make(backgdDC, "No browser installed to open website", Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+            Snackbar.make(binding.backgdDC, "No browser installed to open website", Snackbar.LENGTH_SHORT).setAction("Action", null).show()
             shareLink()
         }
     }
