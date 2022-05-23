@@ -71,7 +71,7 @@ class UserInfoRanking(private val context: Context, private val userArrayList: A
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserInfoRankingViewHolder {
-        return UserInfoRanking.UserInfoRankingViewHolder(UserRankBinding.inflate(LayoutInflater.from(parent.context), parent, false), type = type)
+        return UserInfoRankingViewHolder(UserRankBinding.inflate(LayoutInflater.from(parent.context), parent, false), type = type)
     }
 
     override fun getItemCount(): Int {

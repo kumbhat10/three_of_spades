@@ -975,7 +975,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 }
             }
             if (pt == 1 && roundNumber == roundNumberLimit) {
-                findViewById<LinearLayout>(R.id.imageGallery).removeAllViews() // show no self cards after throwing last card
+                binding.imageGallery.removeAllViews() // show no self cards after throwing last card
             }
             playerTurn.value = nextTurn(pt)
             gameTurn.value = gt + 1
@@ -1074,14 +1074,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     @SuppressLint("NewApi", "CutPasteId")
     private fun displaySelfCards(view: View = View(applicationContext), animations: Boolean = false, filter: Boolean = false, bidingRequest: Boolean = false) {
-        findViewById<LinearLayout>(R.id.imageGallery).removeAllViews()
-        val gallery = findViewById<LinearLayout>(R.id.imageGallery)
-        gallery.visibility = View.VISIBLE
+        binding.imageGallery.removeAllViews()
+        binding.imageGallery.visibility = View.VISIBLE
         val inflater = LayoutInflater.from(applicationContext)
         val typedValue = TypedValue()
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true)
         for (x: Int in cardsInHand) {
-            val viewTemp = inflater.inflate(R.layout.cards_item_list, gallery, false)
+            val viewTemp = inflater.inflate(R.layout.cards_item_list, binding.imageGallery, false)
             if (x == cardsInHand[cardsInHand.size - 1]) {
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).setPaddingRelative(0, 0, 0, 0)
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
@@ -1093,7 +1092,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_active_cards))
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
             } else viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-
             viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).tag = x.toString() // tag the card number to the image
             if (cardsPoints.elementAt(x) != 0) {
                 viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).text = "${cardsPoints.elementAt(x)}"
@@ -1105,7 +1103,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 validateSelfPlayedCard(it)
                 viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
             }
-            gallery.addView(viewTemp)
+            binding.imageGallery.addView(viewTemp)
         }
         if (animations) {
             findViewById<ConstraintLayout>(R.id.playerCards).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
@@ -1121,8 +1119,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
             //            findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).clearAnimation()
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
         }
-        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
-        findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
+        binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
+        binding.imageGallery.clearAnimation()
     }
 
     private fun animateWinner() {
@@ -1323,7 +1321,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (playerTurn.value!! == fromInt && (bidder != playerTurn.value!! || !bidingStarted)) {
                 if (bidStatus[playerTurn.value!! - 1] == 1) { // show bid frame and ask to bid or pass
                     bidDone = false
-                    findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
+                    binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
                     findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.VISIBLE // this path is critical
                     findViewById<ConstraintLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
                     countDownTimer("Bidding", purpose = "start")
@@ -1453,13 +1451,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (bidStatus[i] == 0) {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
                 findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(applicationContext, R.drawable.pass)
-                if (iPlayer == fromInt) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
+                if (iPlayer == fromInt) binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
             } else {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
 
-                if (iPlayer == fromInt) findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
+                if (iPlayer == fromInt) binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
             }
-            if (iPlayer == fromInt) findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
+            if (iPlayer == fromInt) binding.imageGallery.clearAnimation()
         }
     }
 
@@ -1475,8 +1473,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
             findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
         }
-        findViewById<LinearLayout>(R.id.imageGallery).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
-        findViewById<LinearLayout>(R.id.imageGallery).clearAnimation()
+        binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
+        binding.imageGallery.clearAnimation()
         findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[bidder - 1]).visibility = View.VISIBLE
 
         //        textViewBidValue.clearAnimation()
@@ -1546,7 +1544,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             findViewById<ImageView>(R.id.imageViewWinnerCenter4).clearAnimation()
             findViewById<ImageView>(R.id.imageViewWinnerCenter4).visibility = View.GONE
             binding.relativeLayoutTableCards.visibility = View.GONE
-            findViewById<LinearLayout>(R.id.imageGallery).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_out))
+            binding.imageGallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_out))
             Handler(Looper.getMainLooper()).postDelayed({
                 shuffleOver = true
                 displaySelfCards(animations = true, bidingRequest = true)
@@ -1557,7 +1555,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun displayShufflingCards(view: View = View(applicationContext), sets: Int = 5, distribute: Boolean = true) {
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         if (distribute) shufflingDistribute()
-        val gallery = findViewById<LinearLayout>(R.id.imageGallery)
+        val gallery = binding.imageGallery
         gallery.removeAllViews()
         val inflater = LayoutInflater.from(applicationContext)
         for (xx: Int in 0 until sets) {

@@ -741,7 +741,6 @@ class MainHomeScreen : AppCompatActivity() {
                 mRewardedAd = null
                 if (loadRewardedAdTry <= 3) loadRewardAd()
             }
-
             override fun onAdLoaded(rewardedAd: RewardedAd) {
                 Log.d("Inter", "Rewarded ad loaded")
                 mRewardedAd = rewardedAd

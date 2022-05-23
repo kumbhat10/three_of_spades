@@ -1666,9 +1666,7 @@ class GameScreen : AppCompatActivity() {
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         binding.imageGallery.removeAllViews()
         binding.imageGallery.visibility = View.VISIBLE
-        val inflater = LayoutInflater.from(applicationContext)
         for (x: Int in cardsInHand) {
-
             val viewTemp = CardsItemListBinding.inflate(layoutInflater, binding.imageGallery, false) //inflater.inflate(R.layout.cards_item_list, binding.imageGallery, false)
             val imageViewDisplayCard = viewTemp.imageViewDisplayCard
             if (x == cardsInHand[cardsInHand.size - 1]) {
@@ -1841,9 +1839,9 @@ class GameScreen : AppCompatActivity() {
     private fun displayShufflingCards(view: View = View(this), sets: Int = 5, distribute: Boolean = true) {
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         if (distribute) shufflingDistribute()
-        val gallery = binding.imageGallery
-        gallery.removeAllViews()
-        val inflater = LayoutInflater.from(this)
+//        val gallery = binding.imageGallery
+        binding.imageGallery.removeAllViews()
+        LayoutInflater.from(this)
         for (xx: Int in 0 until sets) {
             for (x: Int in 0..3) {
                 val viewTemp = CardsItemListSuitsBinding.inflate(layoutInflater, binding.imageGallery, false)  //inflater.inflate(R.layout.cards_item_list_suits, gallery, false)
@@ -1854,11 +1852,11 @@ class GameScreen : AppCompatActivity() {
                 } else {
                     viewTemp.imageViewDisplayCard1.setBackgroundColor(ContextCompat.getColor(this, R.color.cardsBackgroundLight))
                 }
-                gallery.addView(viewTemp.imageViewDisplayCard1)
+                binding.imageGallery.addView(viewTemp.imageViewDisplayCard1)
             }
         }
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
-        gallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
+        binding.imageGallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
     }
 
     private fun shufflingDistribute() {

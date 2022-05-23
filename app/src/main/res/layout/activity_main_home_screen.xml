@@ -317,7 +317,7 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="callToShowRewardedVideoAd"
-        android:src="@drawable/watch_ad_500"
+        android:src="@drawable/watch_ad_1000"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
