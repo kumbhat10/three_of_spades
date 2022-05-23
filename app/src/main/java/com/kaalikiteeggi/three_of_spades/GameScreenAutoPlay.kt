@@ -40,6 +40,8 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.kaalikiteeggi.three_of_spades.databinding.ActivityGameScreenBinding
+import com.kaalikiteeggi.three_of_spades.databinding.CardsItemListBinding
+import com.kaalikiteeggi.three_of_spades.databinding.CardsItemListSuitsBinding
 import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
@@ -1076,34 +1078,33 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun displaySelfCards(view: View = View(applicationContext), animations: Boolean = false, filter: Boolean = false, bidingRequest: Boolean = false) {
         binding.imageGallery.removeAllViews()
         binding.imageGallery.visibility = View.VISIBLE
-        val inflater = LayoutInflater.from(applicationContext)
         val typedValue = TypedValue()
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true)
         for (x: Int in cardsInHand) {
-            val viewTemp = inflater.inflate(R.layout.cards_item_list, binding.imageGallery, false)
+            val viewTemp = CardsItemListBinding.inflate(layoutInflater, binding.imageGallery, false)
             if (x == cardsInHand[cardsInHand.size - 1]) {
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).setPaddingRelative(0, 0, 0, 0)
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
+                viewTemp.imageViewDisplayCard.setPaddingRelative(0, 0, 0, 0)
+                viewTemp.imageViewDisplayCard.layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
             }
-            viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).setImageResource(cardsDrawable[x])
+            viewTemp.imageViewDisplayCard.setImageResource(cardsDrawable[x])
             if (filter && gameTurn.value!! > 1 && cardsSuit[x] != trumpStart && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1) {
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
+                viewTemp.imageViewDisplayCard.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
             } else if (filter && gameTurn.value!! > 1 && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1) {
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_active_cards))
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            } else viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).tag = x.toString() // tag the card number to the image
+                viewTemp.imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_active_cards))
+                viewTemp.imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
+            } else viewTemp.imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
+            viewTemp.imageViewDisplayCard.tag = x.toString() // tag the card number to the image
             if (cardsPoints.elementAt(x) != 0) {
-                viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).text = "${cardsPoints.elementAt(x)}"
-                if (animations) viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale)) //                if (animations) viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
+                viewTemp.textViewDisplayCard.text = "${cardsPoints.elementAt(x)}"
+                if (animations) viewTemp.textViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale)) //                if (animations) viewTemp.imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
             } else {
-                viewTemp.findViewById<TextView>(R.id.textViewDisplayCard).visibility = View.GONE
-            } //            viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).setOnClickListener {
-                validateSelfPlayedCard(it)
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
+                viewTemp.textViewDisplayCard.visibility = View.GONE
             }
-            binding.imageGallery.addView(viewTemp)
+            viewTemp.imageViewDisplayCard.setOnClickListener {
+                validateSelfPlayedCard(it)
+                viewTemp.imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
+            }
+            binding.imageGallery.addView(viewTemp.root)
         }
         if (animations) {
             findViewById<ConstraintLayout>(R.id.playerCards).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
@@ -1552,29 +1553,25 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }, time)
     }
 
-    private fun displayShufflingCards(view: View = View(applicationContext), sets: Int = 5, distribute: Boolean = true) {
+    private fun displayShufflingCards(view: View = View(this), sets: Int = 5, distribute: Boolean = true) {
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         if (distribute) shufflingDistribute()
-        val gallery = binding.imageGallery
-        gallery.removeAllViews()
-        val inflater = LayoutInflater.from(applicationContext)
+        binding.imageGallery.removeAllViews()
         for (xx: Int in 0 until sets) {
             for (x: Int in 0..3) {
-                val viewTemp = inflater.inflate(R.layout.cards_item_list_suits, gallery, false)
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).setImageResource(PlayingCards().suitsDrawable[x])
-                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw))
+                val viewTemp = CardsItemListSuitsBinding.inflate(layoutInflater, binding.imageGallery, false)  //inflater.inflate(R.layout.cards_item_list_suits, gallery, false)
+                viewTemp.imageViewDisplayCard1.setImageResource(PlayingCards().suitsDrawable[x])
+                viewTemp.imageViewDisplayCard1.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw))
                 if (x % 2 != 0) {
-                    viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundDark))
+                    viewTemp.imageViewDisplayCard1.setBackgroundColor(ContextCompat.getColor(this, R.color.cardsBackgroundDark))
                 } else {
-                    viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.cardsBackgroundLight))
-                } //                viewTemp.findViewById<ImageView>(R.id.imageViewDisplayCard1).setOnClickListener {
-                //                    viewTemp.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.clockwise_ccw))
-                //                }
-                gallery.addView(viewTemp)
+                    viewTemp.imageViewDisplayCard1.setBackgroundColor(ContextCompat.getColor(this, R.color.cardsBackgroundLight))
+                }
+                binding.imageGallery.addView(viewTemp.root)
             }
         }
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
-        gallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
+        binding.imageGallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
     }
 
     private fun shufflingDistribute() {

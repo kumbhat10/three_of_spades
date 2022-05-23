@@ -1542,7 +1542,7 @@ class GameScreen : AppCompatActivity() {
         return coins
     }
 
-    fun startNextGame(view: View) { // dummy - try to parameterize and write all at once - or read from CreateGameData class
+    fun startNextGame(view: View) { // dummy - Check if debouncing required
         findViewById<AppCompatTextView>(R.id.startNextRoundButton).clearAnimation()
         findViewById<AppCompatTextView>(R.id.startNextRoundButton).visibility = View.GONE
 
@@ -1839,9 +1839,7 @@ class GameScreen : AppCompatActivity() {
     private fun displayShufflingCards(view: View = View(this), sets: Int = 5, distribute: Boolean = true) {
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         if (distribute) shufflingDistribute()
-//        val gallery = binding.imageGallery
         binding.imageGallery.removeAllViews()
-        LayoutInflater.from(this)
         for (xx: Int in 0 until sets) {
             for (x: Int in 0..3) {
                 val viewTemp = CardsItemListSuitsBinding.inflate(layoutInflater, binding.imageGallery, false)  //inflater.inflate(R.layout.cards_item_list_suits, gallery, false)
@@ -1852,7 +1850,7 @@ class GameScreen : AppCompatActivity() {
                 } else {
                     viewTemp.imageViewDisplayCard1.setBackgroundColor(ContextCompat.getColor(this, R.color.cardsBackgroundLight))
                 }
-                binding.imageGallery.addView(viewTemp.imageViewDisplayCard1)
+                binding.imageGallery.addView(viewTemp.root)
             }
         }
         findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
@@ -1869,7 +1867,6 @@ class GameScreen : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation?) {
                     binding.imageViewWinnerCenter.startAnimation(anim)
                 }
-
                 override fun onAnimationStart(animation: Animation?) {}
             })
             binding.imageViewWinnerCenter.startAnimation(anim)
@@ -1881,7 +1878,6 @@ class GameScreen : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation?) {
                     binding.imageViewWinnerCenter4.startAnimation(anim)
                 }
-
                 override fun onAnimationStart(animation: Animation?) {}
             })
             binding.imageViewWinnerCenter4.startAnimation(anim)

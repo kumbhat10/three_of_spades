@@ -2,7 +2,7 @@ package com.kaalikiteeggi.three_of_spades
 
 import kotlin.random.Random
 
-class GameData(dummy:Boolean = false, gameNumber:Int = 1, nPlayers: Int = 4) {
+class GameData(nPlayers: Int = 4) {
 	private var a = 4
 
 	var bb: Int = 0 // current bidder
