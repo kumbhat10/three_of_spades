@@ -660,7 +660,7 @@ class GameScreen : AppCompatActivity() {
 
         if (gameData.bvo < gameData.bv && bidingStarted && soundStatus) {
             speak("${playerName(gameData.bb)} bid ${gameData.bv}", speed = 1f)
-            moveView(binding.bidCoin, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewX = bidCoinX, targetViewMoveY = bidCoinY)
+            moveView(binding.bidCoin, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = bidCoinX, targetViewMoveY = bidCoinY)
         } else if (bidingStarted && soundStatus && previousPlayerTurn != gameData.pt) speak("${playerName(previousPlayerTurn)} passed", speed = 1f) //                        else if (soundStatus) SoundManager.instance?.playUpdateSound() //
         binding.frameAskBid.visibility = View.GONE //biding frame invisible
         resetBackgroundAnimationBidding() //set pass label on photo if passed
@@ -706,12 +706,14 @@ class GameScreen : AppCompatActivity() {
     private fun nextTurn(current: Int): Int {
         return if ((current == 7 && nPlayers7) || (current == 4 && nPlayers4)) 1 else current + 1
     }
-    private fun moveView(viewToMove: View, fromView: View, duration: Long = 350, targetViewX: Float = 3F, targetViewMoveY: Float = 3F  ) {
-        val xViewToMove = if (targetViewX != 3F) targetViewX else viewToMove.x
-        val yViewToMove = if (targetViewMoveY != 3F) targetViewMoveY else viewToMove.y
-        viewToMove.x = fromView.x
-        viewToMove.y = fromView.y
-        viewToMove.animate().x(xViewToMove).y(yViewToMove).duration = duration
+    private fun moveView(viewToMove: View, fromView: View, duration: Long = 350, targetViewMoveX: Float = 30F, targetViewMoveY: Float = 30F  ) {
+        if (targetViewMoveX != 30F && targetViewMoveY != 30F) {
+//            val xViewToMove = if (targetViewMoveX != 30F) targetViewMoveX else viewToMove.x
+//            val yViewToMove = if (targetViewMoveY != 30F) targetViewMoveY else viewToMove.y
+            viewToMove.x = fromView.x
+            viewToMove.y = fromView.y
+            viewToMove.animate().x(targetViewMoveX).y(targetViewMoveY).duration = duration
+        }
     }
 
     fun askToBid(view: View) {
@@ -780,7 +782,7 @@ class GameScreen : AppCompatActivity() {
         if (!gameState4) {
             gameState4 = true
             if (soundStatus) SoundManager.instance?.playSuccessSound()
-            if (gameData.bb != 0) moveView(binding.trumpImage, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewX = trumpX, targetViewMoveY = trumpY)
+            if (gameData.bb != 0) moveView(binding.trumpImage, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = trumpX, targetViewMoveY = trumpY)
             startPartnerSelection()
         }
     }
@@ -911,8 +913,8 @@ class GameScreen : AppCompatActivity() {
     }
     private fun getBuddyAndDisplay() {
         if (vibrateStatus) vibrationStart()
-        if (gameData.bb != 0) moveView(binding.buddyImage1, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewX = buddy1X, targetViewMoveY = buddy1Y)
-        if (nPlayers7 && gameData.bb != 0) moveView(binding.buddyImage2, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewX = buddy2X, targetViewMoveY = buddy2Y)
+        if (gameData.bb != 0) moveView(binding.buddyImage1, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = buddy1X, targetViewMoveY = buddy1Y)
+        if (nPlayers7 && gameData.bb != 0) moveView(binding.buddyImage2, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = buddy2X, targetViewMoveY = buddy2Y)
     }
 
     private fun startPlayingRound() {
@@ -1668,7 +1670,6 @@ class GameScreen : AppCompatActivity() {
         binding.imageGallery.visibility = View.VISIBLE
         for (x: Int in cardsInHand) {
             val viewTemp = CardsItemListBinding.inflate(layoutInflater, binding.imageGallery, false) //inflater.inflate(R.layout.cards_item_list, binding.imageGallery, false)
-            val imageViewDisplayCard = viewTemp.imageViewDisplayCard
             if (x == cardsInHand[cardsInHand.size - 1]) {
                 viewTemp.imageViewDisplayCard.setPaddingRelative(0, 0, 0, 0)
                 viewTemp.imageViewDisplayCard.layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
@@ -1890,8 +1891,7 @@ class GameScreen : AppCompatActivity() {
             snackBar.setActionTextColor(getColor(R.color.borderblue))
             snackBar.view.setOnClickListener { snackBar.dismiss() }
         } else snackBar.setText(message)
-        snackBar.show() //        toast.setText(message)
-        //        toast.show()
+        snackBar.show()
     }
 
     private fun playerName(index: Int): String {
