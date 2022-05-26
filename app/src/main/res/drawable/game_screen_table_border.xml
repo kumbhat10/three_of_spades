@@ -6,8 +6,8 @@
                 android:centerX="0.5"
                 android:centerY="0.5"
                 android:endColor="@color/white"
-                android:gradientRadius="160%"
-                android:startColor="@color/Black"
+                android:gradientRadius="100%"
+                android:startColor="#BCBCBC"
                 android:type="radial" />
             <corners
                 android:radius="@dimen/radiusInner1x"/>
@@ -22,7 +22,7 @@
         <shape android:shape="rectangle"
             android:thickness="@dimen/_36sdp">
             <solid
-                android:color="@color/Black"/>
+                android:color="#000000"/>
             <corners
                 android:radius="@dimen/radiusInner2x"/>
         </shape>

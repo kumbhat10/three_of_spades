@@ -337,12 +337,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         displaySelfCards(animations = false)
                         Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 3000)
                         if (playerTurn.value!! != fromInt) {
-                            centralText("${playerName(bidder)} will play first")
                             if (nGamesPlayed < 5) speak("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
                             else speak("${playerName(bidder)} will play first ", speed = 1f)
                         }
                         if (playerTurn.value!! == fromInt) {
-//							centralText("You will have ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card")
                             speak("You will get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1f)
                         }
                     } else {
@@ -885,7 +883,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
             } else if (gameTurn.value!! != 5 && gameTurn.value!! != 0) {
                 animatePlayer(playerTurn.value!!)
                 if (playerTurn.value!! == fromInt && !played) {
-                    centralText("Please play your next card", 0)
                     displaySelfCards(filter = true)
                     countDownTimer(task = "PlayCard") // start countdown timer and run autoPlayCard
                     if (vibrateStatus) vibrationStart()
@@ -1011,7 +1008,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({ // start after 1.5 seconds
             if (roundNumber < roundNumberLimit) {
                 startNextRound()
-                centralText("Waiting for ${playerName(roundWinner)} to play next card", 1800)
             } else if (roundNumber == roundNumberLimit) {
                 try {
                     gameTurn.removeObserver(roundListener)
@@ -1151,7 +1147,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
             }
         } else {  // to everyone else
             speak("Waiting to select partner card", speed = 1.05f)
-            centralText("Waiting for ${playerName(bidder)} \nto select partner card", 0)
             Handler(Looper.getMainLooper()).postDelayed({ autoPartnerSelect() }, timeAutoTrumpAndPartner.random()) // auto select for robot bidder
         }
     }
@@ -1241,10 +1236,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (bidder != fromInt) {     //  show to everyone except bidder
             autoTrumpSelect()
             speak("${playerName(bidder)} won bid. Waiting to choose trump", speed = 1.10f)
-            centralText("Waiting for ${playerName(bidder)} \n to choose Trump", 0)
         } else { // show to bidder only
             binding.bidNowImage.visibility = View.GONE // redundant not required really
-            centralText("Well done! ${playerName(bidder)} \n You won the bid round", 0)
             speak("You won bid. Choose your trump now", speed = 1.10f, queue = TextToSpeech.QUEUE_ADD)
             findViewById<ConstraintLayout>(R.id.frameTrumpSelection).visibility = View.VISIBLE
             findViewById<ConstraintLayout>(R.id.frameTrumpSelection).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
@@ -1297,10 +1290,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             bidValuePrev = bidValue
             if (!bidingStarted) {
                 binding.bidNowImage.visibility = View.VISIBLE
-                centralText("${playerName(playerTurn.value!!)} will start bidding", 0) //display message only first time
                 speak("You will start bidding", speed = 1f)
-            } else {
-                centralText("Waiting for ${playerName(playerTurn.value!!)} to bid", 0) //display message only first time
             }
             if (bidSpeak && bidingStarted && soundStatus) {
                 speak("${playerName(bidder)} bid $bidValue", speed = 1.3f)
@@ -1334,7 +1324,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (bidder == playerTurn.value!! && bidingStarted) { // finish bid and move to next game state  // dummy playerTurn.value!! == fromInt &&
                 playerTurn.removeObserver(bidTurnListener)
                 gameState.value = 3 //// change game state to 3 as biding is finished
-                if (bidder == fromInt) centralText("Well done! ${playerName(bidder)} \n You won the bid round", 0)
             } else if (playerTurn.value!! != 1 && (bidder != playerTurn.value!! || !bidingStarted)) {
                 autoBid()
             } //            bidingStarted = true
@@ -1538,7 +1527,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
             SoundManager.instance?.playShuffleSound() // soundShuffle.start()
         }, 400) //delayed sound play of shuffling
         displayShufflingCards() //show suits cards and animate
-        centralText(getString(R.string.shufflingcards), 5200)
         speak("Shuffling cards Please wait", speed = 1f)
         Handler(Looper.getMainLooper()).postDelayed({
             findViewById<ImageView>(R.id.imageViewWinnerCenter4).animation = null
@@ -1678,12 +1666,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(this, getString(R.string.inter_admob), adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                Log.d("Inter", "onAdFailedToLoad")
+                Log.d("InterstitialAd", "onAdFailedToLoad")
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
-
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                Log.d("Inter", "onAdLoaded")
+                Log.d("InterstitialAd", "onAdLoaded")
                 loadInterAdTry = 0
                 mInterstitialAd = interstitialAd
             }
@@ -1694,13 +1681,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (mInterstitialAd != null) {
             mInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                    Log.d("Inter", "onAdFailedToShowFullScreenContent")
+                    Log.d("InterstitialAd", "onAdFailedToShowFullScreenContent")
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
 
                 override fun onAdDismissedFullScreenContent() {
-                    Log.d("Inter", "onAdDismissedFullScreenContent")
+                    Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
                     logFirebaseEvent(key = "watched_ad")
                     if (gameState.value!! == 6) {

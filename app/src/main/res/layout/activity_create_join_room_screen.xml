@@ -14,8 +14,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:scaleType="fitXY"
-        android:foreground="@drawable/tint_backgroundgame"
-        android:src="@drawable/game_screen_table_blue"
         app:layout_constraintBottom_toTopOf="@+id/bannerCJRS"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/todo" />

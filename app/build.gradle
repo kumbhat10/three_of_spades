@@ -10,14 +10,6 @@ if (!project.hasProperty("disable-performance-plugin")) {
 }
 
 android {
-    signingConfigs {
-        kkt_release {
-            storeFile file('C:\\Users\\kumbh\\OneDrive\\Documents\\kaalikitiggi.jks')
-            storePassword 'Kanakrajj10'
-            keyAlias 'key1'
-            keyPassword 'Kanakrajj10'
-        }
-    }
     compileSdkVersion 32
     buildFeatures{
         viewBinding = true
@@ -48,7 +40,6 @@ android {
             }
             android.buildTypes.release.ndk.debugSymbolLevel = 'FULL'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.kkt_release
         }
     }
     compileOptions {

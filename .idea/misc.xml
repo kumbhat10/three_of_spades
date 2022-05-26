@@ -3,17 +3,32 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/biddericon.xml" value="0.2785" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/bug_icon.xml" value="0.2785" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/button_pressed_score_table.xml" value="0.3035" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/contact_us.xml" value="0.3075" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/game_screen_table_border.xml" value="0.2175" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/no_ads_merged.xml" value="0.3075" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/ranking.xml" value="0.3035" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/rate_us_star.xml" value="0.3075" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/star_half.xml" value="0.2785" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/status_left.xml" value="0.152" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/status_offline.xml" value="0.152" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/status_online.xml" value="0.152" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_blue.xml" value="0.2175" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_brown.xml" value="0.2175" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_green.xml" value="0.169" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_orange.xml" value="0.277" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_pink.xml" value="0.169" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_purple.xml" value="0.169" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_red.xml" value="0.3035" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_x1.xml" value="0.169" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_gs_yellow.xml" value="0.169" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/table_jr_blue.xml" value="0.1265" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/tint_background4.xml" value="0.3075" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/tint_backgroundgame.xml" value="0.3035" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/drawable/user_photo.xml" value="0.3075" />
+        <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_create_join_room_screen.xml" value="0.1" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_developer_credits.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_game_screen.xml" value="0.264" />
         <entry key="..\:/Users/dkK53733/AndroidStudioProjects/three_of_spades/app/src/main/res/layout/activity_main_home_screen.xml" value="0.2" />

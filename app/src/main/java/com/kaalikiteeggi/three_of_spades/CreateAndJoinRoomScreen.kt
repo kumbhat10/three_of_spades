@@ -41,7 +41,7 @@ import java.util.*
 @Suppress("DEPRECATION")
 class CreateAndJoinRoomScreen : AppCompatActivity() {
     // region Initialization
-    private lateinit var soundBkgd: MediaPlayer
+    private lateinit var soundBackground: MediaPlayer
 
     private lateinit var v: Vibrator
     private val myRefGameData = Firebase.database.getReference("GameData") // initialize database reference
@@ -88,16 +88,15 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private var p6 = ""
     private var p7 = ""
 
-    private lateinit var userStats: java.util.ArrayList<Int>
-    private lateinit var userStatsTotal: java.util.ArrayList<Int>
-    private lateinit var userStatsDaily: java.util.ArrayList<Int>
+    private lateinit var userStats: ArrayList<Int>
+    private lateinit var userStatsTotal: ArrayList<Int>
+    private lateinit var userStatsDaily: ArrayList<Int>
     private lateinit var mAuth: FirebaseAuth
     private var uid = ""
     private var shareLink = ""
     private var handler = Handler(Looper.getMainLooper())
     private var userBasicInfoList = mutableListOf<UserBasicInfo>()
 
-    //	private var userBasicInfoStatus = mutableListOf<Boolean>()
     private var userBasicInfoStatus = MutableLiveData<MutableList<Boolean>>()
     private lateinit var adapter: UserInfoRankingJoinRoom
     private lateinit var binding: ActivityCreateJoinRoomScreenBinding
@@ -105,7 +104,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     // endregion
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM)
             .enabled(true) //default: true
             .showErrorDetails(true) //default: true
             .showRestartButton(true) //default: true
@@ -115,7 +114,6 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             .apply()
         binding = ActivityCreateJoinRoomScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        setContentView(R.layout.activity_create_join_room_screen)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val controller = window.insetsController
             controller!!.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
@@ -127,8 +125,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         offline = intent.getBooleanExtra("offline", true)
 
         if (!offline) {
-            val emptyUser = UserBasicInfo()
-            userBasicInfoList = MutableList(nPlayers) { emptyUser }
+            userBasicInfoList = MutableList(nPlayers) { UserBasicInfo() }
             userBasicInfoStatus.value = MutableList(nPlayers) { false }
         }
         binding.playersJoin.layoutManager = LinearLayoutManager(this)
@@ -141,9 +138,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             }
             else getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-            soundBkgd = MediaPlayer.create(this, R.raw.music)
-            soundBkgd.isLooping = true
-            soundBkgd.setVolume(0.05F, 0.05F)
+            soundBackground = MediaPlayer.create(this, R.raw.music)
+            soundBackground.isLooping = true
+            soundBackground.setVolume(0.05F, 0.05F)
             getSharedPrefs()
             updateUIAndAnimateElements()
             initializeSpeechEngine()
@@ -183,7 +180,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
+        if (musicStatus && this::soundBackground.isInitialized) soundBackground.start()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -315,15 +312,14 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             registration.remove()
             playerInfo = ArrayList()
             playerInfoCoins = ArrayList()
-            if (playerJoining == 10) {
-                startNextActivity()
-            }
+            if (playerJoining == 10) startNextActivity()
         }
         if (playerJoining == 11) {
             userBasicInfoStatus.observe(this) { eachStatus ->
                 if (eachStatus.all { it }) {
                     toastCenter("Ready To start")
-                    handler.postDelayed({ startNextActivity() }, 1500L)
+//                    handler.postDelayed({ startNextActivity() }, 1500L)
+                    startNextActivity(transition = false)
                 }
             }
         }
@@ -349,7 +345,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         binding.imageViewShareButton2.visibility = View.GONE
         binding.offlineProgressbar.visibility = View.GONE
         binding.waitingToJoinText.visibility = View.GONE
-        Handler(Looper.getMainLooper()).postDelayed({ binding.startGameButton.visibility = View.VISIBLE }, 600)        //		anim(startGameButton, R.anim.anim_scale_appeal)
+        Handler(Looper.getMainLooper()).postDelayed({ binding.startGameButton.visibility = View.VISIBLE }, 600)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -407,7 +403,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
     }
 
-    private fun startNextActivity() {
+    private fun startNextActivity(transition:Boolean = true) {
+        if (!offline) registration.remove()
         if (nPlayers == 7) {
             playerInfo.addAll(listOf(p1, p2, p3, p4, p5, p6, p7, userBasicInfoList[0].photoURL, userBasicInfoList[1].photoURL, userBasicInfoList[2].photoURL, userBasicInfoList[3].photoURL, userBasicInfoList[4].photoURL, userBasicInfoList[5].photoURL, userBasicInfoList[6].photoURL))
             playerInfoCoins.addAll(listOf(userBasicInfoList[0].score, userBasicInfoList[1].score, userBasicInfoList[2].score, userBasicInfoList[3].score, userBasicInfoList[4].score, userBasicInfoList[5].score, userBasicInfoList[6].score))
@@ -423,7 +420,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreenAutoPlay::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
                 .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("roomID", roomID) }.putStringArrayListExtra("playerInfo", playerInfo).putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins).putIntegerArrayListExtra("userStats", userStats).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
-        overridePendingTransition(R.anim.slide_top_in_activity, R.anim.slide_top_in_activity) //		finishAfterTransition()
+        if(transition) overridePendingTransition(R.anim.slide_top_in_activity, R.anim.slide_top_in_activity) //		finishAfterTransition()
         finishAndRemoveTask()
     }
 
@@ -473,7 +470,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
         if (sharedPreferences.contains("musicStatus")) {
             musicStatus = sharedPreferences.getBoolean("musicStatus", true)
-            if (musicStatus) soundBkgd.start()
+            if (musicStatus) soundBackground.start()
         }
         if (sharedPreferences.contains("soundStatus")) {
             soundStatus = sharedPreferences.getBoolean("soundStatus", true)
@@ -533,28 +530,28 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (musicStatus) soundBkgd.pause()
+        if (musicStatus) soundBackground.pause()
         try {
             if (this::textToSpeech.isInitialized) textToSpeech.stop()
-        } catch (me: java.lang.Exception) {
+        } catch (_: java.lang.Exception) {
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (musicStatus && this::soundBkgd.isInitialized) soundBkgd.start()
+        if (musicStatus && this::soundBackground.isInitialized) soundBackground.start()
     }
 
     override fun onDestroy() {
         binding.bannerCJRS.destroy() // destroy MoPub banner add view
-        if (this::soundBkgd.isInitialized) soundBkgd.release() //		adapter = null
+        if (this::soundBackground.isInitialized) soundBackground.release() //		adapter = null
         binding.playersJoin.adapter = null
         try {
             if (this::textToSpeech.isInitialized) {
                 textToSpeech.stop()
                 textToSpeech.shutdown()
             }
-        } catch (me: java.lang.Exception) {
+        } catch (_: java.lang.Exception) {
         }
         try {
             if (!offline) registration.remove()

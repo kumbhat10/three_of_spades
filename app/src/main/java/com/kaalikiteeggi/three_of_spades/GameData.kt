@@ -10,6 +10,7 @@ class GameData(nPlayers: Int = 4) {
 	var bv: Int = 175 // current bid value
 	var bvo: Int = 175 // previous(old) bid value
 	var ct: MutableList<Int> = mutableListOf(53, 53, 53, 53) // list of cards on table
+	var ct1: MutableList<Int> = mutableListOf(53, 53, 53, 53) // list of cards on table
 	var ch1: MutableList<Int> = mutableListOf(99) //Cards in hand for player 1
 	var ch2: MutableList<Int> = mutableListOf(99) //Cards in hand for player 1
 	var ch3: MutableList<Int> = mutableListOf(99) //Cards in hand for player 1
@@ -63,6 +64,7 @@ fun getGameData7(dummy:Boolean = false, gameNumber:Int = 1):GameData {
 	gameData.bv = 350
 	gameData.bvo = 350
 	gameData.ct = mutableListOf(99,99,99,99,99,99,99)
+	gameData.ct1 = mutableListOf(99,99,99,99,99,99,99)
 	gameData.ch1 = cardsShuffled.slice( 0..13).sortedBy { it } as MutableList<Int>
 	gameData.ch2 = cardsShuffled.slice(14..27).sortedBy { it } as MutableList<Int>
 	gameData.ch3 = cardsShuffled.slice(28..41).sortedBy { it } as MutableList<Int>

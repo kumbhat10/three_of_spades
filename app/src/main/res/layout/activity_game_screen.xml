@@ -13,10 +13,8 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/app_name"
         android:onClick="closeChatScoreWindow"
-        android:foreground="@drawable/tint_backgroundgame"
-
         android:scaleType="fitXY"
-        android:src="@drawable/table_gs_red"
+        android:src="@drawable/table_gs_blue"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

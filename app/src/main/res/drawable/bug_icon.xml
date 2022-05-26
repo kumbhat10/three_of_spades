@@ -11,8 +11,8 @@
 
     <item android:drawable="@drawable/sorry11"
         android:gravity="center"
-        android:height="200dp"
-        android:width="280dp"/>
+        android:height="180dp"
+        android:width="255dp"/>
 
     <item
         android:drawable="@drawable/biddericon"
