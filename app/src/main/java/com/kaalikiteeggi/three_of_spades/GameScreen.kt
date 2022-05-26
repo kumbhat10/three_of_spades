@@ -18,10 +18,10 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
@@ -55,7 +55,6 @@ import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.min
 import kotlin.math.round
 import kotlin.properties.Delegates
@@ -132,7 +131,7 @@ class GameScreen : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var refRoomDatabase: DatabaseReference
     private lateinit var refGameDatabase: DatabaseReference
-    private lateinit var refRoomFirestore: CollectionReference
+    private lateinit var refRoomFireStore: CollectionReference
     private var refUsersData = Firebase.firestore.collection("Users")
     private var uid = ""
     private lateinit var chatRegistration: ListenerRegistration
@@ -269,13 +268,13 @@ class GameScreen : AppCompatActivity() {
 
         refRoomDatabase = Firebase.database.getReference("GameData/$roomID")
         refGameDatabase = Firebase.database.getReference("GameData/$roomID/G")
-        refRoomFirestore = Firebase.firestore.collection(getString(R.string.pathRoom))
+        refRoomFireStore = Firebase.firestore.collection(getString(R.string.pathRoom))
         //region Other Thread - player info update
         uid = FirebaseAuth.getInstance().uid.toString()
         FirebaseCrashlytics.getInstance().setUserId(uid)
         Handler(Looper.getMainLooper()).post {
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            refRoomFirestore.document(roomID).set(hashMapOf("PJ" to 11), SetOptions.merge()) // 11 means game started -- why everyone is writing it to be 11
+            refRoomFireStore.document(roomID).set(hashMapOf("PJ" to 11), SetOptions.merge()) // 11 means game started -- why everyone is writing it to be 11
             updatePlayerInfo()
             initializeSpeechEngine()
             getSharedPrefs()
@@ -317,7 +316,6 @@ class GameScreen : AppCompatActivity() {
                 binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
                 binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
             }
-
             override fun onFinish() {
                 if (!bidDone) {
                     bidDone = true
@@ -491,7 +489,7 @@ class GameScreen : AppCompatActivity() {
         if (fromInt != 1) checkRoomExists() // check for all except host
         else writeToRoomDatabase("OL/$from", 1) // Turn only host online
 
-        chatRegistration = refRoomFirestore.document(roomID + "_chat").addSnapshotListener(chatListener)
+        chatRegistration = refRoomFireStore.document(roomID + "_chat").addSnapshotListener(chatListener)
         if (activityExists) {
             refRoomDatabase.child("G").removeEventListener(gameDataListener)
             refRoomDatabase.child("G").addValueEventListener(gameDataListener)
@@ -924,18 +922,8 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun startPlayingRound() {
-        //region Partner Check
-        if (p1s.value != gameData.p1s) {
-            p1s.value = gameData.p1s // Live Data
-        }
-//        if (gameData.p1 != 0 && gameData.p1s == 1) partner1CardText.value = gameData.p1 //redundant as pc1s = p1s when partner confirmed
-        if (nPlayers7) {
-            if (p2s.value != gameData.p2s) {
-                p2s.value = gameData.p2s // Live Data
-            }
-//            if (gameData.p2 != 0 && gameData.p2s == 1) partner2CardText.value = gameData.p2 //redundant as pc2s = p2s when partner confirmed
-        }
-        // endregion
+         if (p1s.value != gameData.p1s) p1s.value = gameData.p1s // Live Data
+        if (nPlayers7 && p2s.value != gameData.p2s) p2s.value = gameData.p2s
         played = gameData.ct[fromInt - 1] != cardsIndexLimit
         if ((gameData.rn == 10 || BuildConfig.DEBUG) && !premiumStatus) loadInterstitialAd() // dummy - load the ad again
         updatePlayerScoreInfo()
@@ -1099,6 +1087,29 @@ class GameScreen : AppCompatActivity() {
         }, 1500)
     }
 
+    private fun animateWinner() {
+        if (soundStatus) SoundManager.instance?.playCardCollectSound()
+        if (nPlayers7) {
+            binding.imageViewWinnerCenter.visibility = View.VISIBLE
+            if (roundWinner > 0) binding.imageViewWinnerCenter.startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.imageViewWinnerCenter.visibility = View.GONE
+                textViewCenterPoint.visibility = View.GONE
+            }, 1000)
+        } else if (nPlayers4) {
+            binding.imageViewWinnerCenter4.visibility = View.VISIBLE
+            if (roundWinner > 0) binding.imageViewWinnerCenter4.startAnimation(AnimationUtils.loadAnimation(this, refIDMappedTableWinnerAnim[roundWinner - 1]))
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.imageViewWinnerCenter4.visibility = View.GONE
+                textViewCenterPoint.visibility = View.GONE
+            }, 1000)
+        }
+        findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
+        for (i in 0 until nPlayers) {
+            findViewById<ImageView>(refIDMappedTableImageView[i]).visibility = View.INVISIBLE
+        }
+    }
+
     private fun startNextRound() {
         gameData.sc[fromInt - 1] = tablePoints + gameData.sc[fromInt - 1]
         writeToGameDatabase(data = mutableMapOf("ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to fromInt, "rn" to gameData.rn + 1, "rtr" to ""))
@@ -1164,8 +1175,8 @@ class GameScreen : AppCompatActivity() {
                 if (nPlayers7) checkIfPartnerAndUpdateServer7(cardSelected, gameData.pt)
                 else checkIfPartnerAndUpdateServer4(cardSelected, gameData.pt)
             }
-
-            gameData.ct1 = gameData.ct
+            gameData.ct1.clear()
+            gameData.ct1.addAll(gameData.ct)
             gameData.ct[fromInt - 1] = cardSelected  // update cards on table list
             writeToGameDatabase(data = mutableMapOf("ch$fromInt" to cardsInHand, "p1" to gameData.p1, "p1s" to gameData.p1s, "pc1s" to gameData.pc1s, "p2" to gameData.p2, "p2s" to gameData.p2s, "pc2s" to gameData.pc2s, "ct" to gameData.ct, "ct1" to gameData.ct1, "rt" to gameData.rt + 1, "pt" to nextTurnPlayer, "rtr" to if (gameData.rt == 1) cardsSuit[cardSelected] else gameData.rtr))
 
@@ -1737,28 +1748,6 @@ class GameScreen : AppCompatActivity() {
         binding.imageGallery.clearAnimation()
     }
 
-    private fun animateWinner() {
-        if (soundStatus) SoundManager.instance?.playCardCollectSound()
-        if (nPlayers7) {
-            binding.imageViewWinnerCenter.visibility = View.VISIBLE
-            if (roundWinner > 0) binding.imageViewWinnerCenter.startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
-            handlerDeclareWinner.postDelayed({
-                binding.imageViewWinnerCenter.visibility = View.GONE
-                textViewCenterPoint.visibility = View.GONE
-            }, 1000)
-        } else if (nPlayers4) {
-            binding.imageViewWinnerCenter4.visibility = View.VISIBLE
-            if (roundWinner > 0) binding.imageViewWinnerCenter4.startAnimation(AnimationUtils.loadAnimation(this, refIDMappedTableWinnerAnim[roundWinner - 1]))
-            handlerDeclareWinner.postDelayed({
-                binding.imageViewWinnerCenter4.visibility = View.GONE
-                textViewCenterPoint.visibility = View.GONE
-            }, 1000)
-        }
-        findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
-        for (i in 0 until nPlayers) {
-            findViewById<ImageView>(refIDMappedTableImageView[i]).visibility = View.INVISIBLE
-        }
-    }
 
     private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1f, queue: Int = TextToSpeech.QUEUE_FLUSH, forceSpeak: Boolean = false) {
         if (soundStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
@@ -1984,13 +1973,13 @@ class GameScreen : AppCompatActivity() {
 
     @SuppressLint("SimpleDateFormat")
     private fun sendEmoji(view: View) {
-        refRoomFirestore.document(roomID + "_chat").set(hashMapOf("M" to Emoji().emojiChatArray[view.id], "F" to fromInt, "Fn" to selfName, "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), "dt" to SimpleDateFormat("HH:mm:ss z").format(Date())), SetOptions.merge())
+        refRoomFireStore.document(roomID + "_chat").set(hashMapOf("M" to Emoji().emojiChatArray[view.id], "F" to fromInt, "Fn" to selfName, "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), "dt" to SimpleDateFormat("HH:mm:ss z").format(Date())), SetOptions.merge())
     }
 
     @SuppressLint("SimpleDateFormat")
     fun sendChat(view: View) {
         if (binding.editTextChatInput.text.toString().isNotEmpty()) {
-            refRoomFirestore.document(roomID + "_chat").set(hashMapOf("M" to binding.editTextChatInput.text.toString(), "F" to fromInt, "Fn" to selfName, "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), "dt" to SimpleDateFormat("HH:mm:ss z").format(Date())), SetOptions.merge())
+            refRoomFireStore.document(roomID + "_chat").set(hashMapOf("M" to binding.editTextChatInput.text.toString(), "F" to fromInt, "Fn" to selfName, "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), "dt" to SimpleDateFormat("HH:mm:ss z").format(Date())), SetOptions.merge())
             binding.editTextChatInput.setText("")
         }
     }
