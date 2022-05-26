@@ -1467,8 +1467,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         binding.imageGallery.clearAnimation()
         findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[bidder - 1]).visibility = View.VISIBLE
 
-        //        textViewBidValue.clearAnimation()
-        //        findViewById<TextView>(R.id.textViewBider).clearAnimation()
         findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
         findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
     }
