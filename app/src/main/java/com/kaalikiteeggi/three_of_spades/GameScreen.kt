@@ -674,7 +674,7 @@ class GameScreen : AppCompatActivity() {
         if (gameData.bs[fromInt - 1] == 1 && gameData.pt > 0) {  // highlight current player
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[gameData.pt - 1]).visibility = View.VISIBLE
         }
-        if (gameData.pt == fromInt && (gameData.bb != gameData.pt && !bidingStarted)) {
+        if (gameData.pt == fromInt && (gameData.bb != gameData.pt)) {
             if (gameData.bs[fromInt - 1] == 1) { // show bid frame and ask to bid or pass
                 binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
                 binding.frameAskBid.visibility = View.VISIBLE // this path is critical
@@ -682,7 +682,7 @@ class GameScreen : AppCompatActivity() {
                 bidDone = false
                 countDownTimer("Bidding", purpose = "start")
                 if (vibrateStatus) vibrationStart()
-            } else if (gameData.bs[fromInt - 1] == 0) {
+            } else {
                 bidDone = true
                 writeToGameDatabase(data = mutableMapOf("pt" to nextTurnPlayer))
             }
@@ -1586,8 +1586,8 @@ class GameScreen : AppCompatActivity() {
         binding.startNextRoundButton.clearAnimation()
         binding.startNextRoundButton.visibility = View.GONE
 
-        refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1)
-        else getGameData7(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1)).addOnFailureListener {
+        refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1, s = gameData.s)
+        else getGameData7(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1, s = gameData.s)).addOnFailureListener {
             toastCenter("Failed to start new game. Please Try again")
             speak("Failed to start new game. Please try again")
             binding.startNextRoundButton.visibility = View.VISIBLE

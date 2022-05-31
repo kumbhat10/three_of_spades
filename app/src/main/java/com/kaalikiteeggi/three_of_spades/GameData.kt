@@ -32,12 +32,12 @@ class GameData(nPlayers: Int = 4) {
 	var rn: Int = 1     // Round number -> 1 to 13/14 (4 players/7 Players)
 	var rt: Int = 1     // Round turn number -> 1 to 5/8 (4 players/7 Players) with +1 for declaring round winner
 	var rtr: String = ""  // Round Trump - First card Suite
-	var sc: MutableList<Int> = mutableListOf(0,0,0,0)  // Final reward score list for that game
-	var s: MutableList<Int> = mutableListOf(0,0,0,0,0) // Individual score list for current game
+	var sc: MutableList<Int> = mutableListOf(0,0,0,0)  // local reward score list for that game
+	var s: MutableList<Int> = mutableListOf(0,0,0,0,0) // Individual final score list for current game after win/defeat
 	var tr: String = ""  // Master Trump for whole game
 }
 
-fun getGameData4(dummy:Boolean = false, gameNumber:Int = 1): GameData {
+fun getGameData4(dummy:Boolean = false, gameNumber:Int = 1, s: MutableList<Int> = mutableListOf(0,0,0,0,0)): GameData {
 	val gameData = GameData()
 	val randPlayer = Random.nextInt(1, 5)
 	val randPlayerNext = if(randPlayer==4) 1 else randPlayer+1
@@ -50,10 +50,11 @@ fun getGameData4(dummy:Boolean = false, gameNumber:Int = 1): GameData {
 	gameData.ch4 = cardsShuffled.slice(39..51).sortedBy { it } as MutableList<Int>
 	gameData.gn = gameNumber
 	gameData.pt = if(!dummy) randPlayerNext else 1
+	gameData.s = s
 	return gameData
 }
 
-fun getGameData7(dummy:Boolean = false, gameNumber:Int = 1):GameData {
+fun getGameData7(dummy:Boolean = false, gameNumber:Int = 1, s: MutableList<Int> = mutableListOf(0, 0, 0, 0, 0, 0, 0, 0)):GameData {
 	val gameData = GameData()
 	val randPlayer = Random.nextInt(1, 8)
 	val randPlayerNext = if(randPlayer==7) 1 else randPlayer+1
@@ -77,7 +78,7 @@ fun getGameData7(dummy:Boolean = false, gameNumber:Int = 1):GameData {
 	gameData.pc2 = 99
 	gameData.pt = if(!dummy) randPlayerNext else 1
 	gameData.sc = mutableListOf(0,0,0,0,0,0,0)
-	gameData.s = mutableListOf(0, 0, 0, 0, 0, 0, 0, 0)
+	gameData.s = s
 	return gameData
 }
 
