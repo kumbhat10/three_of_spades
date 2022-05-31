@@ -563,7 +563,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     private fun createDynamicLink() {
         shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=70" +
-                "&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID + "&si=https://tinyurl.com/3ofspade" //https://i.pinimg.com/564x/f9/fd/d9/f9fdd9bf6fbb9f00d945e1b22b293aea.jpg"
+                "&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID + "&si=https://tinyurl.com/3ofspade"
     }
 
     fun shareRoomInfo(view: View) {

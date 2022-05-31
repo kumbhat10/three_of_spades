@@ -148,14 +148,14 @@
             android:name=".GameScreen"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:hardwareAccelerated="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".GameScreenAutoPlay"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:hardwareAccelerated="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <!--android:resizeableActivity="true" -->

@@ -933,7 +933,6 @@ class MainHomeScreen : AppCompatActivity() {
         if(view.tag.toString().toInt() != 10) createRoom() else createRoom(dummyReal = true)
     }
 
-
     @SuppressLint("SetTextI18n")
     private fun createRoom(dummyReal: Boolean = false) {
         binding.maskAllLoading.visibility = View.VISIBLE
@@ -1588,6 +1587,7 @@ class MainHomeScreen : AppCompatActivity() {
         if (this::recyclerView1ScrollListener.isInitialized) recyclerView1.removeOnScrollListener(recyclerView1ScrollListener)
         if (this::tabLayoutMediator.isInitialized) tabLayoutMediator.detach()
         binding.viewPager2.adapter = null
+        tabLayoutMediator.detach()
         try {
             mInterstitialAd!!.fullScreenContentCallback = null
             mInterstitialAd = null
