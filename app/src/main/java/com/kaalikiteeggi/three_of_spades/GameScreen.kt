@@ -674,7 +674,7 @@ class GameScreen : AppCompatActivity() {
         if (gameData.bs[fromInt - 1] == 1 && gameData.pt > 0) {  // highlight current player
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[gameData.pt - 1]).visibility = View.VISIBLE
         }
-        if (gameData.pt == fromInt && (gameData.bb != gameData.pt || !bidingStarted)) {
+        if (gameData.pt == fromInt && (gameData.bb != gameData.pt && !bidingStarted)) {
             if (gameData.bs[fromInt - 1] == 1) { // show bid frame and ask to bid or pass
                 binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
                 binding.frameAskBid.visibility = View.VISIBLE // this path is critical
@@ -2057,7 +2057,6 @@ class GameScreen : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
-
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
