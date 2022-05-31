@@ -655,7 +655,6 @@ class GameScreen : AppCompatActivity() {
             if (gameData.pt != fromInt) speak("${playerName(gameData.pt)} will start bidding", speed = 1.1f)
             else speak("${playerName(gameData.pt)} You will start bidding", speed = 1.1f)
         }
-
         if (gameData.bvo < gameData.bv && bidingStarted && soundStatus) {
             speak("${playerName(gameData.bb)} bid ${gameData.bv}", speed = 1f)
             moveView(binding.bidCoin, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = bidCoinX, targetViewMoveY = bidCoinY)
@@ -1586,8 +1585,8 @@ class GameScreen : AppCompatActivity() {
         binding.startNextRoundButton.clearAnimation()
         binding.startNextRoundButton.visibility = View.GONE
 
-        refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1, s = gameData.s)
-        else getGameData7(dummy = BuildConfig.DEBUG, gameNumber = gameData.gn + 1, s = gameData.s)).addOnFailureListener {
+        refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)
+        else getGameData7(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)).addOnFailureListener {
             toastCenter("Failed to start new game. Please Try again")
             speak("Failed to start new game. Please try again")
             binding.startNextRoundButton.visibility = View.VISIBLE

@@ -37,13 +37,13 @@ class GameData(nPlayers: Int = 4) {
 	var tr: String = ""  // Master Trump for whole game
 }
 
-fun getGameData4(dummy:Boolean = false, gameNumber:Int = 1, s: MutableList<Int> = mutableListOf(0,0,0,0,0)): GameData {
+fun getGameData4(dummy:Boolean = false, lastGameBidder:Int = Random.nextInt(1, 5), gameNumber:Int = 1, s: MutableList<Int> = mutableListOf(0,0,0,0,0)): GameData {
 	val gameData = GameData()
-	val randPlayer = Random.nextInt(1, 5)
-	val randPlayerNext = if(randPlayer==4) 1 else randPlayer+1
+//	val randPlayer = Random.nextInt(1, 5)
+	val randPlayerNext = if(lastGameBidder==4) 1 else lastGameBidder+1
 	val cardsShuffled = (0..51).shuffled()  // create shuffled pack of 1 deck with no cards removed ( 4Player x 13 = 52 cards each player)
 
-	gameData.bb = if(!dummy) randPlayer else 4
+	gameData.bb = if(!dummy) lastGameBidder else 4
 	gameData.ch1 = cardsShuffled.slice(0..12).sortedBy { it } as MutableList<Int>
 	gameData.ch2 = cardsShuffled.slice(13..25).sortedBy { it } as MutableList<Int>
 	gameData.ch3 = cardsShuffled.slice(26..38).sortedBy { it } as MutableList<Int>
@@ -54,13 +54,12 @@ fun getGameData4(dummy:Boolean = false, gameNumber:Int = 1, s: MutableList<Int> 
 	return gameData
 }
 
-fun getGameData7(dummy:Boolean = false, gameNumber:Int = 1, s: MutableList<Int> = mutableListOf(0, 0, 0, 0, 0, 0, 0, 0)):GameData {
+fun getGameData7(dummy:Boolean = false, lastGameBidder:Int = Random.nextInt(1, 8), gameNumber:Int = 1, s: MutableList<Int> = mutableListOf(0, 0, 0, 0, 0, 0, 0, 0)):GameData {
 	val gameData = GameData()
-	val randPlayer = Random.nextInt(1, 8)
-	val randPlayerNext = if(randPlayer==7) 1 else randPlayer+1
+	val randPlayerNext = if(lastGameBidder==7) 1 else lastGameBidder+1
 	val cardsShuffled = (0..97).shuffled() // create shuffled pack of 1 deck with no cards removed ( 4Player x 13 = 52 cards each player)
 
-	gameData.bb = if(!dummy) randPlayer else 7
+	gameData.bb = if(!dummy) lastGameBidder else 7
 	gameData.bs = mutableListOf(1,1,1,1,1,1,1)
 	gameData.bv = 350
 	gameData.bvo = 350
