@@ -193,9 +193,9 @@ class GameScreen : AppCompatActivity() {
     private lateinit var onlineStatus: MutableList<Int>
     private lateinit var allCardsReset: MutableList<Int>
     private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L
-    else 3000L
+    else 500L
     private var timeCountdownBid = if (!BuildConfig.DEBUG) 15000L
-    else 3000L
+    else 500L
     private var delayGameOver = 5000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
 
@@ -216,6 +216,7 @@ class GameScreen : AppCompatActivity() {
     private var maxBidValue: Int = 350
     private var bidingStarted = false   /// biding happened before
     private var gameState1 = false   /// biding happened before
+    private var shufflingAnimationFinished = false   /// biding happened before
     private var gameState4 = false   /// biding happened before
     private var roundStarted = false
     private var gameState6 = false
@@ -296,7 +297,6 @@ class GameScreen : AppCompatActivity() {
                 binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
                 binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
             }
-
             override fun onFinish() {
                 autoPlayCard()
                 if (soundStatus) SoundManager.instance?.playTimerSound()
@@ -571,12 +571,13 @@ class GameScreen : AppCompatActivity() {
             binding.scoreViewLayout.visibility = View.GONE
             updatePlayerNames()
             shufflingWindow(gameStateChange = true)
-        } else if (activityExists) startBidding()
+        } else if (activityExists && shufflingAnimationFinished) startBidding()
     }
 
     private fun resetVariables() {
         if (gameData.gn > 1) binding.gameBkgd.setImageResource(GameScreenData().tableBackground.random()) //changeBackground()
         currentBidder.value = 0
+        shufflingAnimationFinished = false
         binding.bidNowImage.visibility = View.GONE
         for (i in 0 until nPlayers) { // first reset background and animation of all partner icon
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).clearAnimation()
@@ -1736,7 +1737,9 @@ class GameScreen : AppCompatActivity() {
             binding.playerCards.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
         }
         if (bidingRequest && activityExists) {
-            handlerDeclareWinner.postDelayed({ startBidding() }, 800)
+            handlerDeclareWinner.postDelayed({
+                startBidding()
+                shufflingAnimationFinished = true}, 800)
         }
     }
 
@@ -1885,7 +1888,6 @@ class GameScreen : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation?) {
                     binding.imageViewWinnerCenter.startAnimation(anim)
                 }
-
                 override fun onAnimationStart(animation: Animation?) {}
             })
             binding.imageViewWinnerCenter.startAnimation(anim)
@@ -1897,7 +1899,6 @@ class GameScreen : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation?) {
                     binding.imageViewWinnerCenter4.startAnimation(anim)
                 }
-
                 override fun onAnimationStart(animation: Animation?) {}
             })
             binding.imageViewWinnerCenter4.startAnimation(anim)
@@ -2037,16 +2038,15 @@ class GameScreen : AppCompatActivity() {
         InterstitialAd.load(this, getString(R.string.inter_admob), adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 Log.d("InterstitialAd", "onAdFailedToLoad")
+                mInterstitialAd = null
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
-
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("InterstitialAd", "onAdLoaded")
                 loadInterAdTry = 0
                 mInterstitialAd = interstitialAd
             }
         })
-
     }
 
     private fun showInterstitialAd() {
@@ -2072,7 +2072,7 @@ class GameScreen : AppCompatActivity() {
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
-            mInterstitialAd!!.setImmersiveMode(true)
+//            mInterstitialAd!!.setImmersiveMode(true)
             mInterstitialAd!!.show(this)
         } else {
             Log.d("InterstitialAd", "InterstitialAd is Null")

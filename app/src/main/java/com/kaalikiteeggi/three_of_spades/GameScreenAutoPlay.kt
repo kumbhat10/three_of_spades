@@ -1665,6 +1665,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         InterstitialAd.load(this, getString(R.string.inter_admob), adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 Log.d("InterstitialAd", "onAdFailedToLoad")
+                mInterstitialAd = null
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -1683,7 +1684,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
-
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
@@ -1693,11 +1693,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
                     }
                 }
-
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
-            mInterstitialAd!!.setImmersiveMode(true)
+//            mInterstitialAd!!.setImmersiveMode(true)
             mInterstitialAd!!.show(this)
         } else {
             Log.d("Inter", "InterstitialAd is Null")

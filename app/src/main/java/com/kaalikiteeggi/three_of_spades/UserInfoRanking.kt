@@ -18,6 +18,7 @@ class UserInfoRanking(private val context: Context, private val userArrayList: A
     private var mPrevExpandedPosition = -1
 
     class UserInfoRankingViewHolder(private val binder: UserRankBinding, val type: Int) : RecyclerView.ViewHolder(binder.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(userInfo: UserBasicInfo, isExpanded: Boolean, position:Int) {
             binder.userRank.text = userInfo.userRank
             if (position < 3) {

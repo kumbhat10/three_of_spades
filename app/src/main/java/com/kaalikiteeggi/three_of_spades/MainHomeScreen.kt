@@ -220,6 +220,8 @@ class MainHomeScreen : AppCompatActivity() {
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         logFirebaseEvent("MainHomeScreen",  "open")
+        if(BuildConfig.DEBUG) Picasso.get().setIndicatorsEnabled(true)
+
     }
 
     private fun mainIconGridDisplay() {
@@ -606,7 +608,7 @@ class MainHomeScreen : AppCompatActivity() {
                 toastCenter("Payment Failed. Please try again", length = Snackbar.LENGTH_INDEFINITE)
             }
         }
-        billingClient = BillingClient.newBuilder(applicationContext).enablePendingPurchases().setListener(purchaseListener).build()
+        billingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener(purchaseListener).build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 checkPendingPurchases()
@@ -680,13 +682,13 @@ class MainHomeScreen : AppCompatActivity() {
         AppLovinPrivacySettings.setHasUserConsent(true, this)
         MobileAds.initialize(this) {
             Log.d("Inter", "onInitializationComplete")
-            binding.bannerMHS.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
-            binding.bannerMHS.visibility = View.VISIBLE
-            loadRewardAd()
-            loadInterstitialAd()
         }
         val requestBuilder = RequestConfiguration.Builder().setTestDeviceIds(listOf(getString(R.string.testDeviceID))).build()
         MobileAds.setRequestConfiguration(requestBuilder)
+        binding.bannerMHS.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
+        binding.bannerMHS.visibility = View.VISIBLE
+        loadRewardAd()
+        loadInterstitialAd()
     }
 
     private fun loadInterstitialAd() {
@@ -695,9 +697,9 @@ class MainHomeScreen : AppCompatActivity() {
         InterstitialAd.load(this, getString(R.string.inter_admob), adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 Log.d("Inter", "onAdFailedToLoad")
+                mInterstitialAd = null
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
-
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("Inter", "onAdLoaded")
                 loadInterAdTry = 0
@@ -714,17 +716,15 @@ class MainHomeScreen : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
-
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("Inter", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
                     addPoints()
                 }
-
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
-            mInterstitialAd!!.setImmersiveMode(true)
+//            mInterstitialAd!!.setImmersiveMode(true)
             mInterstitialAd!!.show(this)
         } else {
             Log.d("Inter", "InterstitialAd is Null")
@@ -1589,13 +1589,13 @@ class MainHomeScreen : AppCompatActivity() {
         binding.viewPager2.adapter = null
         tabLayoutMediator.detach()
         try {
-            mInterstitialAd!!.fullScreenContentCallback = null
+//            mInterstitialAd!!.fullScreenContentCallback = null
             mInterstitialAd = null
         } catch (_: java.lang.Exception) {
         }
 
         try {
-            mRewardedAd!!.fullScreenContentCallback = null
+//            mRewardedAd!!.fullScreenContentCallback = null
             mRewardedAd = null
         } catch (_: java.lang.Exception) {
         }

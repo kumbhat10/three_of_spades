@@ -20,10 +20,8 @@ class DailyRewardGridAdapter( var arrayList: ArrayList<GenericItemDescription>, 
             view.root.background = ContextCompat.getDrawable(parent!!.context,R.drawable.shine_player_stats)
             view.coinLottie.visibility = View.VISIBLE
             view.coinRewardIcon.visibility = View.GONE
-//            view.coinRewardIcon.setImageResource(R.drawable.coin_trans_1)
             view.coinRewardText.setTextColor(ContextCompat.getColor(parent.context, R.color.font_yellow))
             view.coinRewardText.textSize = parent.context.resources.getDimension(R.dimen._13ssp)/parent.context.resources.displayMetrics.density
-//            textDescription.background = ContextCompat.getDrawable(parent.context,R.drawable.greensquarebutton1)
         }
         return view.root
     }
