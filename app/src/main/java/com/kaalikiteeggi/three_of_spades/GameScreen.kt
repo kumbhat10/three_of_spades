@@ -1261,7 +1261,8 @@ class GameScreen : AppCompatActivity() {
                 updateWholeScoreBoard()
             }
             handlerDeclareWinner.postDelayed({
-                if (!premiumStatus && mInterstitialAd != null && (gameData.gn % gameLimitNoAds == 0)) showInterstitialAd()//mInterstitialAdMP.show()
+                if (!premiumStatus && mInterstitialAd != null && (gameData.gn % gameLimitNoAds == 0)) showInterstitialAd()
+                maskWinner.value = false
                 if (fromInt == 1) { // show start next game button only to host
                     binding.startNextRoundButton.visibility = View.VISIBLE
                     binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
@@ -1313,8 +1314,8 @@ class GameScreen : AppCompatActivity() {
         }
         binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner , winner = true)
         binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser , winner = false)
-
         maskWinner.value = true
+
         scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
         scoreBoardTable(display = false, data = createScoreTableTotal(), upDateTotal = true)
         scoreBoardTable(data = scoreList)

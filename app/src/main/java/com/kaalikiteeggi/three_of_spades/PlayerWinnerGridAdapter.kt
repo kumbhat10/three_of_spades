@@ -27,7 +27,7 @@ class PlayerWinnerGridAdapter(var arrayList: ArrayList<GenericItemDescription>, 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = convertView ?: PlayerInfoWinnerBinding.inflate(LayoutInflater.from(parent?.context), parent, false).root
-        Picasso.get().load(arrayList[position].imageUrl).resize(400, 400).into(view.findViewById<ShapeableImageView>(R.id.userPhoto1))
+        Picasso.get().load(arrayList[position].imageUrl).resize(400, 400).centerCrop().into(view.findViewById<ShapeableImageView>(R.id.userPhoto1))
         view.findViewById<MaterialTextView>(R.id.userName1).text = arrayList[position].textDescription
         if(winner) view.background =  ContextCompat.getDrawable(parent!!.context, R.drawable.blacksquarebutton) //parent?.context?.getDrawable(R.drawable.blackcirclebutton)
         return view
