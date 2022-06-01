@@ -55,6 +55,7 @@ import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.min
 import kotlin.math.round
 import kotlin.properties.Delegates
@@ -153,6 +154,7 @@ class GameScreen : AppCompatActivity() {
     private var partner2CardText = MutableLiveData<Int>()
     private var p1s = MutableLiveData<Int>()
     private var p2s = MutableLiveData<Int>()
+    private var maskWinner = MutableLiveData(false)
 
     private lateinit var playerInfo: ArrayList<String>
     private lateinit var playerInfoCoins: ArrayList<Int>
@@ -195,8 +197,8 @@ class GameScreen : AppCompatActivity() {
     private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L
     else 500L
     private var timeCountdownBid = if (!BuildConfig.DEBUG) 15000L
-    else 500L
-    private var delayGameOver = 5000L
+    else 1500L
+    private var delayGameOver = 7000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
 
     private var lastChat = ""
@@ -424,7 +426,27 @@ class GameScreen : AppCompatActivity() {
                 else -> binding.buddyText1.text = if (nPlayers4) getString(R.string.partner) else getString(R.string.partner1)  //13
             }
         }
-
+        maskWinner.observe(this){
+            if(it){
+                binding.gridLoser.visibility = View.VISIBLE
+                binding.gridWinner.visibility = View.VISIBLE
+                binding.textWinner.visibility = View.VISIBLE
+                binding.textLoser.visibility = View.VISIBLE
+                binding.konfettLottie.visibility = View.VISIBLE
+                binding.winnerLottie.visibility = View.VISIBLE
+                binding.winnerLottie.playAnimation()
+                binding.konfettLottie.playAnimation()
+            }else{
+                binding.gridLoser.visibility = View.GONE
+                binding.gridWinner.visibility = View.GONE
+                binding.textWinner.visibility = View.GONE
+                binding.textLoser.visibility = View.GONE
+                binding.konfettLottie.visibility = View.GONE
+                binding.winnerLottie.visibility = View.GONE
+                binding.winnerLottie.cancelAnimation()
+                binding.konfettLottie.cancelAnimation()
+            }
+        }
         p1s.value = 0
         p1s.observe(this) {
             if (it != 0) {
@@ -1006,12 +1028,10 @@ class GameScreen : AppCompatActivity() {
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
             //("Game Over: ${playerName(gameData.bb - 1)}'s team Won")
-
             if (fromInt == gameData.bb && gameData.p1s != 1) speak("Well done!! You won")
             else if ((fromInt == gameData.bb || from == "p$gameData.p1") && gameData.p1s == 1) {
                 speak("Well done!! Your team won")
             } else speak("Sorry Your team lost")
-
             if (fromInt == gameData.bb) { // bidder will change game state to 6
                 val pointsListTemp = mutableListOf(gameData.gn, -gameData.bv, -gameData.bv, -gameData.bv, -gameData.bv)
                 if (gameData.p1s != 1) { //No partners found so far
@@ -1026,10 +1046,8 @@ class GameScreen : AppCompatActivity() {
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
             //("Game Over: ${playerName(gameData.bb - 1)}'s  team Lost")
-
             if (fromInt == gameData.bb || fromInt == gameData.p1) speak("Sorry Your team lost")
             else speak("Well done!! Your team won")
-
             if (gameData.bb == fromInt) { // bidder will change game state to 6
                 val pointsListTemp = mutableListOf(gameData.gn, gameData.bv, gameData.bv, gameData.bv, gameData.bv)
                 pointsListTemp[gameData.bb] = -1 * gameData.bv * 2
@@ -1257,7 +1275,6 @@ class GameScreen : AppCompatActivity() {
         p2Gain += scoreList[2]
         p3Gain += scoreList[3]
         p4Gain += scoreList[4]
-
         totalDailyCoins += scoreList[fromInt]
         p1Coins += scoreList[1]
         p2Coins += scoreList[2]
@@ -1268,15 +1285,10 @@ class GameScreen : AppCompatActivity() {
             p5Gain += scoreList[5]
             p6Gain += scoreList[6]
             p7Gain += scoreList[7]
-
             p5Coins += scoreList[5]
             p6Coins += scoreList[6]
             p7Coins += scoreList[7]
         }
-        scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
-        scoreBoardTable(display = false, data = createScoreTableTotal(), upDateTotal = true)
-        scoreBoardTable(data = scoreList)
-
         if (gameData.bb == fromInt) {
             nGamesBid += 1
             nGamesBidDaily += 1
@@ -1286,22 +1298,33 @@ class GameScreen : AppCompatActivity() {
                 SoundManager.instance?.playDholSound()
                 SoundManager.instance?.playWonSound()
             }
-            speak("Congratulations! Your team won", speed = 1.1f)
-            createKonfetti(applicationContext, binding.konfettiGSA, duration = coinDur, konType = KonType.Win, burst = false, speed = coinSpeed, ratePerSec = coinRate)
+            binding.winnerLottie.setAnimation(R.raw.trophy_lottie)
             nGamesWon += 1
             nGamesWonDaily += 1
         } else {
             if (soundStatus) SoundManager.instance?.playLostSound()
-            speak("Sorry! Your team lost", speed = 1.1f)
-            createKonfetti(applicationContext, binding.konfettiGSA, duration = coinDur, konType = KonType.Lost, burst = false, speed = coinSpeed, ratePerSec = coinRate)
+            binding.winnerLottie.setAnimation(R.raw.sad_lottie)
         }
+        val arrayListWinner = ArrayList<GenericItemDescription>()
+        val arrayListLoser = ArrayList<GenericItemDescription>()
+        for(i in 1..nPlayers){
+            if(scoreList[i]>0)       arrayListWinner.add(GenericItemDescription(name = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            else      arrayListLoser.add(GenericItemDescription(name = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+        }
+        binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner , winner = true)
+        binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser , winner = false)
 
+        maskWinner.value = true
+        scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
+        scoreBoardTable(display = false, data = createScoreTableTotal(), upDateTotal = true)
+        scoreBoardTable(data = scoreList)
         nGamesPlayed += 1
         nGamesPlayedDaily += 1
         refUsersData.document(uid).set(hashMapOf("sc" to playerCoins(from), "scd" to totalDailyCoins, "w" to nGamesWon, "w_daily" to nGamesWonDaily, "b" to nGamesBid, "b_daily" to nGamesBidDaily, "p" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
     }
 
     fun openCloseScoreSheet(view: View) {
+        maskWinner.value = false
         if (binding.scrollViewScore.visibility == View.VISIBLE) {
             binding.closeGameRoomIcon.visibility = View.VISIBLE
             binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
@@ -2114,10 +2137,14 @@ class GameScreen : AppCompatActivity() {
     }
 
     override fun onPause() {
-        super.onPause()
         if (activityExists) writeToRoomDatabase("OL/$from", 0)
+        super.onPause()
     }  // is offline
 
+    override fun onResume() {
+
+        super.onResume()
+    }
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
         if (!scoreOpenStatus && !chatOpenStatus) {
             this.moveTaskToBack(true)

@@ -2231,7 +2231,117 @@
         android:id="@+id/konfettiGSA"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/konfettLottie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_autoPlay="true"
+        app:lottie_repeatCount="-1"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:visibility="visible"
+        android:scaleType="centerCrop"
+        android:background="@drawable/shine_confetti_gs"
+        app:lottie_rawRes="@raw/konfetti_lottie"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideLoser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6"/>
+
+    <GridView
+        android:id="@+id/gridWinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:columnWidth="@dimen/upWidth1a"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:verticalSpacing="@dimen/_5sdp"
+        android:numColumns="2"
+        android:stretchMode="spacingWidthUniform"
+        app:layout_constraintEnd_toEndOf="@+id/guideWinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <GridView
+        android:id="@+id/gridLoser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:columnWidth="@dimen/upWidth1a"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:verticalSpacing="@dimen/_5sdp"
+        android:numColumns="2"
+        android:stretchMode="spacingWidthUniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideLoser"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/winnerLottie"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:lottie_autoPlay="true"
+        app:lottie_repeatCount="-1"
+        android:visibility="visible"
+        android:scaleX="1"
+        android:scaleY="1"
+        app:lottie_rawRes="@raw/trophy_lottie"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:fontFamily="@font/calligraffitti"
+        android:shadowColor="#000000"
+        android:shadowRadius="10"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:text="Victory"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_35ssp"
+        app:layout_constraintBottom_toTopOf="@id/gridWinner"
+        app:layout_constraintEnd_toEndOf="@id/guideWinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textLoser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guideLoser"
+        android:padding="@dimen/_10sdp"
+        android:shadowColor="#000000"
+        android:shadowRadius="10"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/gridLoser"
+        android:text="Defeat"
+        android:textSize="@dimen/_35ssp"
+        android:fontFamily="@font/calligraffitti"
+        android:textColor="@color/white"/>
 
     <TextView
         android:id="@+id/startNextRoundButton"
