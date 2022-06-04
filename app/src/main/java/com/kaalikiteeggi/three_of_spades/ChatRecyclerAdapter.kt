@@ -18,7 +18,7 @@ class ChatRecyclerAdapter(private val chatArray: ArrayList<ChatMessage>,  val us
 			}else{
 				binder.chatText.textSize = 15f
 			}
-			Picasso.get().load(photoUrl).resize(100, 100).error(R.drawable.user_photo).into(binder.userPhoto)
+			if(photoUrl.isNotEmpty()) Picasso.get().load(photoUrl).resize(100, 100).error(R.drawable.user_photo).into(binder.userPhoto)
 		}
 	}
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {

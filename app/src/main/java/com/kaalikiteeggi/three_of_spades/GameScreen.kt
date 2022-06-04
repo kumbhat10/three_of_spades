@@ -2125,11 +2125,13 @@ class GameScreen : AppCompatActivity() {
     }
 
     fun closeGameRoom(view: View) {
-        if (activityExists && (fromInt == 1 || view.tag == "clicked")) refRoomDatabase.child("OL/p1").setValue(2)
+        if (activityExists && (fromInt == 1 || view.tag == "clicked")) refRoomDatabase.child("OL/$from").setValue(2)
         activityExists = false
         countDownBidding.cancel()
         countDownPlayCard.cancel()
-        startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) }.apply { putExtra("returnFromGameScreen", true) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) }
+            .apply { putExtra("returnFromGameScreen", true) }
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         overridePendingTransition(R.anim.slide_right_activity, R.anim.slide_right_activity)
         finishAndRemoveTask()
     }
