@@ -601,6 +601,7 @@ class GameScreen : AppCompatActivity() {
     private fun resetVariables() {
         if (gameData.gn > 1) binding.gameBkgd.setImageResource(GameScreenData().tableBackground.random()) //changeBackground()
         currentBidder.value = 0
+        binding.bidCoin.visibility = View.VISIBLE
         shufflingAnimationFinished = false
         binding.bidNowImage.visibility = View.GONE
         for (i in 0 until nPlayers) { // first reset background and animation of all partner icon
@@ -814,6 +815,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun startPartnerSelection() {
+        binding.bidCoin.visibility = View.GONE
         if (gameData.bb == fromInt) {  // only to bidder
             binding.linearLayoutPartnerSelection.visibility = View.VISIBLE // make selection frame visible
             binding.linearLayoutPartnerSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
@@ -919,6 +921,7 @@ class GameScreen : AppCompatActivity() {
         gameState1 = false
         gameState4 = false
         if (!roundStarted) {
+            binding.bidCoin.visibility = View.GONE
             newGameStatus = true
             roundStarted = true
             if (soundStatus) SoundManager.instance?.playSuccessSound()
@@ -1822,6 +1825,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun finishBackgroundAnimationBidding() {  //clear Everything on finish of biding round
+        binding.bidCoin.visibility = View.GONE
         for (i in 0 until nPlayers) {
             findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE

@@ -1358,49 +1358,46 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <ImageView
         android:id="@+id/bidCoin"
-        android:layout_width="@dimen/_50sdp"
+        android:layout_width="@dimen/_28sdp"
         android:layout_height="@dimen/_28sdp"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="@dimen/_minus2sdp"
-        android:background="@drawable/coin_trans_1"
+        android:background="@drawable/coin_bid"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewBider" />
-
-    <TextView
-        android:id="@+id/textViewBider"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/_28sdp"
-        android:background="@drawable/redrectanlgesimple"
-        android:gravity="start|center"
-        android:paddingStart="@dimen/_5sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:text="@string/Bider"
-        android:textColor="@color/username"
-        android:textSize="@dimen/_13ssp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="RelativeOverlap,RtlSymmetry,TextContrastCheck" />
-
+        app:layout_constraintBottom_toBottomOf="@id/textViewBidValue" />
 
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textViewBidValue"
         android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_28sdp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="@dimen/_minus2sdp"
-        android:background="@drawable/shine_game_score"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shine_player_stats"
         android:gravity="center"
+        android:padding="@dimen/_5sdp"
         android:text="@string/bidValue2"
         android:textColor="@color/white"
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_10ssp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewBider"
         app:ticker_animationDuration="800"
         app:ticker_defaultCharacterList="number"
         app:ticker_defaultPreferredScrollingDirection="any" />
+
+    <TextView
+        android:id="@+id/textViewBider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shine_player_stats"
+        android:gravity="start|center"
+        android:padding="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:text="@string/Bider"
+        android:textColor="@color/username"
+        android:textSize="@dimen/_11ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RelativeOverlap,RtlSymmetry,TextContrastCheck" />
 
     <TextView
         android:id="@+id/bidNowImage"
@@ -2231,16 +2228,16 @@
         android:id="@+id/konfettLottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="true"
+        android:background="@drawable/shine_confetti_gs"
         android:clickable="true"
-        app:lottie_autoPlay="true"
-        app:lottie_repeatCount="-1"
+        android:focusable="true"
+        android:scaleType="centerCrop"
         android:scaleX="1"
         android:scaleY="1"
         android:visibility="visible"
-        android:scaleType="centerCrop"
-        android:background="@drawable/shine_confetti_gs"
-        app:lottie_rawRes="@raw/konfetti_lottie"/>
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/konfetti_lottie"
+        app:lottie_repeatCount="-1" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideWinner"
