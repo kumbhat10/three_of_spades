@@ -104,9 +104,6 @@ class GameScreen : AppCompatActivity() {
     private var cardsIndexLimit = 0
     private var roundNumberLimit = 0
     private var scoreLimit = 0
-    private var coinDur = 1000L
-    private var coinSpeed = 5f
-    private var coinRate = 70
 
     private var soundStatus = true
     private var vibrateStatus = true
@@ -204,7 +201,6 @@ class GameScreen : AppCompatActivity() {
     private var lastChat = ""
     private var lastChatFrom = 1
     private var lastChatTime = ""
-    private var scoreSheetNotUpdated = true
 
     private var played = false
     private var bidDone = false
@@ -506,8 +502,8 @@ class GameScreen : AppCompatActivity() {
         }  // close keyboard after sending chat
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         if (fromInt != 1) checkRoomExists() // check for all except host
         else writeToRoomDatabase("OL/$from", 1) // Turn only host online
 
@@ -520,8 +516,9 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
+        if (activityExists) writeToRoomDatabase("OL/$from", 0)
         refRoomDatabase.child("OL").removeEventListener(onlineStatusListener)
         chatRegistration.remove()
 
@@ -535,7 +532,10 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun writeToGameDatabase(data: MutableMap<String, Any>) {
-        if (activityExists) refGameDatabase.updateChildren(data)
+        if (activityExists) {
+            refGameDatabase.updateChildren(data)
+            writeToRoomDatabase("OL/$from", 1)
+        }
     }
 
     private fun createGameDataListener() {
@@ -656,6 +656,8 @@ class GameScreen : AppCompatActivity() {
                 Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().error(R.drawable.user_photo).into(findViewById<ImageView>(refIDMappedImageView[i]))
             }
         }
+        scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
+        scoreBoardTable(display = false, data = createScoreTableTotal(), upDateTotal = true)
         findViewById<ImageView>(refIDMappedImageView[fromInt - 1]).visibility = View.INVISIBLE
     }
 
@@ -982,7 +984,6 @@ class GameScreen : AppCompatActivity() {
         if (bidTeamScoreFinal >= gameData.bv) { // bidder team won case
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
-            speak("Game Over   bidder team won")
             if (fromInt == gameData.bb) { // bidder will change game state to 6
                 val pointsListTemp = mutableListOf(gameData.gn, -gameData.bv, -gameData.bv, -gameData.bv, -gameData.bv, -gameData.bv, -gameData.bv, -gameData.bv)
                 if (gameData.p1s != 1 && gameData.p2s != 1) { //Case 1 : No partners found so far
@@ -1007,7 +1008,6 @@ class GameScreen : AppCompatActivity() {
             // if opponent score has reached target value & both partners are disclosed
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
-            speak("Game Over  Defender team won")
             if (fromInt == gameData.bb) { // winner will change game state to 6
                 val pointsListTemp = mutableListOf(gameData.gn, gameData.bv, gameData.bv, gameData.bv, gameData.bv, gameData.bv, gameData.bv, gameData.bv)
                 if (gameData.p1 == gameData.p2) { // either both partners are same person
@@ -1325,8 +1325,8 @@ class GameScreen : AppCompatActivity() {
     }
 
     fun openCloseScoreSheet(view: View) {
-        maskWinner.value = false
-        if (binding.scrollViewScore.visibility == View.VISIBLE) {
+        if(maskWinner.value!!) maskWinner.value = false
+        else if (binding.scrollViewScore.visibility == View.VISIBLE) {
             binding.closeGameRoomIcon.visibility = View.VISIBLE
             binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
             Handler(Looper.getMainLooper()).postDelayed({
@@ -1336,11 +1336,6 @@ class GameScreen : AppCompatActivity() {
             scoreOpenStatus = false
         } else {
             scoreOpenStatus = true
-            if (scoreSheetNotUpdated) {
-                scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
-                scoreBoardTable(display = false, data = createScoreTableTotal(), upDateTotal = true)
-            }
-            scoreSheetNotUpdated = false
             binding.closeGameRoomIcon.visibility = View.GONE
             binding.scrollViewScore.visibility = View.VISIBLE
             binding.scoreViewLayout.visibility = View.VISIBLE
@@ -1433,7 +1428,6 @@ class GameScreen : AppCompatActivity() {
             trumpX = binding.trumpImage.x
             trumpY = binding.trumpImage.y
         }
-
         textViewCenterPoint = if (nPlayers4) binding.textViewCenterPoints4
         else binding.textViewCenterPoints
         if (nPlayers7) {
@@ -1773,7 +1767,6 @@ class GameScreen : AppCompatActivity() {
         binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
         binding.imageGallery.clearAnimation()
     }
-
 
     private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1f, queue: Int = TextToSpeech.QUEUE_FLUSH, forceSpeak: Boolean = false) {
         if (soundStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
@@ -2128,7 +2121,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     fun closeGameRoom(view: View) {
-        if (activityExists && (fromInt == 1 || view.tag == "clicked")) refRoomDatabase.child("OL/$from").setValue(2)
+        if (activityExists && (fromInt == 1 || view.tag == "clicked")) refRoomDatabase.child("OL/p1").setValue(2)
         activityExists = false
         countDownBidding.cancel()
         countDownPlayCard.cancel()
@@ -2137,15 +2130,6 @@ class GameScreen : AppCompatActivity() {
         finishAndRemoveTask()
     }
 
-    override fun onPause() {
-        if (activityExists) writeToRoomDatabase("OL/$from", 0)
-        super.onPause()
-    }  // is offline
-
-    override fun onResume() {
-
-        super.onResume()
-    }
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
         if (!scoreOpenStatus && !chatOpenStatus) {
             this.moveTaskToBack(true)

@@ -157,11 +157,12 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var ct2: MutableLiveData<Int>
     private lateinit var ct3: MutableLiveData<Int>
     private lateinit var ct4: MutableLiveData<Int>
+    private var maskWinner = MutableLiveData(false)
 
     private var gameNumber: Int = 1
     private var gameLimitNoAds: Int = 2
 
-    private var delayWaitGameMode6 = 3500L
+    private var delayWaitGameMode6 = 5500L
     private var delayDeclareWinner = 1000L
     private var timeCountdownPlayCard = 20000L
     private var timeAutoPlayCard = listOf<Long>(700, 850, 600, 700, 1000, 600, 1000)
@@ -361,7 +362,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         // region table card listener
         ct1 = MutableLiveData()
         ct1.value = cardsIndexLimit
-        ct1.observe(this, {
+        ct1.observe(this) {
             tablePointsCalculator()
             if (ct1.value!! <= (cardsIndexLimit - 2)) {
                 if (soundStatus) SoundManager.instance?.playCardPlayedSound()
@@ -372,10 +373,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedTableImageView[0]).visibility = View.INVISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[0]).clearAnimation()
             }
-        })
+        }
         ct2 = MutableLiveData()
         ct2.value = cardsIndexLimit
-        ct2.observe(this, {
+        ct2.observe(this) {
             tablePointsCalculator()
             if (ct2.value!! <= (cardsIndexLimit - 2)) {
                 if (soundStatus) SoundManager.instance?.playCardPlayedSound()
@@ -386,10 +387,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedTableImageView[1]).visibility = View.INVISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[1]).clearAnimation()
             }
-        })
+        }
         ct3 = MutableLiveData()
         ct3.value = cardsIndexLimit
-        ct3.observe(this, {
+        ct3.observe(this) {
             tablePointsCalculator()
             if (ct3.value!! <= (cardsIndexLimit - 2)) {
                 if (soundStatus) SoundManager.instance?.playCardPlayedSound()
@@ -400,10 +401,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedTableImageView[2]).visibility = View.INVISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[2]).clearAnimation()
             }
-        })
+        }
         ct4 = MutableLiveData()
         ct4.value = cardsIndexLimit
-        ct4.observe(this, {
+        ct4.observe(this) {
             tablePointsCalculator()
             if (ct4.value!! <= (cardsIndexLimit - 2)) {
                 if (soundStatus) SoundManager.instance?.playCardPlayedSound()
@@ -414,7 +415,28 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedTableImageView[3]).visibility = View.INVISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[3]).clearAnimation()
             }
-        }) // endregion
+        } // endregion
+        maskWinner.observe(this){
+            if(it){
+                binding.gridLoser.visibility = View.VISIBLE
+                binding.gridWinner.visibility = View.VISIBLE
+                binding.textWinner.visibility = View.VISIBLE
+                binding.textLoser.visibility = View.VISIBLE
+                binding.konfettLottie.visibility = View.VISIBLE
+                binding.winnerLottie.visibility = View.VISIBLE
+                binding.winnerLottie.playAnimation()
+                binding.konfettLottie.playAnimation()
+            }else{
+                binding.gridLoser.visibility = View.GONE
+                binding.gridWinner.visibility = View.GONE
+                binding.textWinner.visibility = View.GONE
+                binding.textLoser.visibility = View.GONE
+                binding.konfettLottie.visibility = View.GONE
+                binding.winnerLottie.visibility = View.GONE
+                binding.winnerLottie.cancelAnimation()
+                binding.konfettLottie.cancelAnimation()
+            }
+        }
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
         logFirebaseEvent(key = "start_offline$nPlayers")
         applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true) // for click effect on self playing cards
@@ -542,16 +564,18 @@ class GameScreenAutoPlay : AppCompatActivity() {
             } else if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0)) showInterstitialAd()
             binding.startNextRoundButton.visibility = View.VISIBLE
             binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
+            maskWinner.value = false
         }, delayWaitGameMode6)
     }
 
     private fun updateWholeScoreBoard() {
         if (scoreList[fromInt] > 0) {
-            createKonfetti(applicationContext, binding.konfettiGSA, duration = coinDur, konType = KonType.Win, speed = coinSpeed, ratePerSec = coinRate)
+            binding.winnerLottie.setAnimation(R.raw.trophy_lottie)
+//            createKonfetti(applicationContext, binding.konfettiGSA, duration = coinDur, konType = KonType.Win, speed = coinSpeed, ratePerSec = coinRate)
             nGamesWon += 1
             nGamesWonDaily += 1
         } else {
-            createKonfetti(applicationContext, binding.konfettiGSA, duration = coinDur, konType = KonType.Lost, speed = coinSpeed, ratePerSec = coinRate)
+            binding.winnerLottie.setAnimation(R.raw.sad_lottie)
         }
         p1Gain += scoreList[1]
         p2Gain += scoreList[2]
@@ -564,6 +588,16 @@ class GameScreenAutoPlay : AppCompatActivity() {
         p3Coins += scoreList[3]
         p4Coins += scoreList[4]
 
+        val arrayListWinner = ArrayList<GenericItemDescription>()
+        val arrayListLoser = ArrayList<GenericItemDescription>()
+        for(i in 1..nPlayers){
+            if(scoreList[i]>0)       arrayListWinner.add(GenericItemDescription(name = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            else      arrayListLoser.add(GenericItemDescription(name = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+        }
+        binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner , winner = true)
+        binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser , winner = false)
+        maskWinner.value = true
+
         scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
         scoreBoardTable(display = false, data = listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain), upDateTotal = true)   // createScoreTableTotal
         scoreBoardTable(data = scoreList)
@@ -572,7 +606,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
             nGamesBid += 1
             nGamesBidDaily += 1
         }
-
         nGamesPlayed += 1
         nGamesPlayedDaily += 1
         updateTimeAutoPlay()
@@ -636,6 +669,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     fun openCloseScoreSheet(view: View) {
+        maskWinner.value = false
         if (binding.scrollViewScore.visibility == View.VISIBLE) {
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
             binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))

@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
-    <runningDeviceTargetSelectedWithDropDown>
-      <Target>
-        <type value="RUNNING_DEVICE_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="SERIAL_NUMBER" />
-            <value value="R5CR201C2XM" />
-          </Key>
-        </deviceKey>
-      </Target>
-    </runningDeviceTargetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2022-06-01T12:07:19.672222800Z" />
-    <multipleDevicesSelectedInDropDown value="true" />
     <runningDeviceTargetsSelectedWithDialog>
       <Target>
         <type value="RUNNING_DEVICE_TARGET" />
@@ -30,15 +17,6 @@
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
             <value value="C:\Users\dkK53733\.android\avd\Pixel_4a_API_32.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-      <Target>
-        <type value="RUNNING_DEVICE_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="SERIAL_NUMBER" />
-            <value value="R5CR201C2XM" />
           </Key>
         </deviceKey>
       </Target>
