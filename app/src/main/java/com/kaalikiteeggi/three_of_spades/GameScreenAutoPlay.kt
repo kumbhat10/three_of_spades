@@ -571,7 +571,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun updateWholeScoreBoard() {
         if (scoreList[fromInt] > 0) {
             binding.winnerLottie.setAnimation(R.raw.trophy_lottie)
-//            createKonfetti(applicationContext, binding.konfettiGSA, duration = coinDur, konType = KonType.Win, speed = coinSpeed, ratePerSec = coinRate)
             nGamesWon += 1
             nGamesWonDaily += 1
         } else {

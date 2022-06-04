@@ -144,5 +144,9 @@
     <string name="join">Join</string>
     <string name="splashLoadingDone">Lets Play</string>
     <string name="dummy_nonline">Dummy\nOnline</string>
+    <string name="victory">Victory</string>
+    <string name="defeat">Defeat</string>
+    <string name="resultWon">You Won</string>
+    <string name="resultLost">You Lost</string>
 
 </resources>

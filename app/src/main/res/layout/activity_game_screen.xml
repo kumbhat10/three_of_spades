@@ -2227,16 +2227,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <nl.dionsegijn.konfetti.KonfettiView
-        android:id="@+id/konfettiGSA"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/konfettLottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:clickable="true"
         app:lottie_autoPlay="true"
         app:lottie_repeatCount="-1"
         android:scaleX="1"
@@ -2317,9 +2313,9 @@
         android:shadowRadius="10"
         android:shadowDx="10"
         android:shadowDy="10"
-        android:text="Victory"
+        android:text="@string/victory"
         android:textColor="@color/white"
-        android:textSize="@dimen/_35ssp"
+        android:textSize="@dimen/_28ssp"
         app:layout_constraintBottom_toTopOf="@id/gridWinner"
         app:layout_constraintEnd_toEndOf="@id/guideWinner"
         app:layout_constraintStart_toStartOf="parent"
@@ -2338,10 +2334,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/gridLoser"
-        android:text="Defeat"
-        android:textSize="@dimen/_35ssp"
+        android:text="@string/defeat"
+        android:textSize="@dimen/_28ssp"
         android:fontFamily="@font/calligraffitti"
         android:textColor="@color/white"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guideLoser"
+        android:padding="@dimen/_10sdp"
+        android:shadowColor="#000000"
+        android:shadowRadius="10"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/resultWon"
+        android:textSize="@dimen/_32ssp"
+        android:textStyle="bold"
+        android:fontFamily="@font/almendra_display"
+        android:textColor="#8DEEFF"/>
 
     <TextView
         android:id="@+id/startNextRoundButton"

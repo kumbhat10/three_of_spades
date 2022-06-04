@@ -428,6 +428,7 @@ class GameScreen : AppCompatActivity() {
                 binding.gridWinner.visibility = View.VISIBLE
                 binding.textWinner.visibility = View.VISIBLE
                 binding.textLoser.visibility = View.VISIBLE
+                binding.textResult.visibility = View.VISIBLE
                 binding.konfettLottie.visibility = View.VISIBLE
                 binding.winnerLottie.visibility = View.VISIBLE
                 binding.winnerLottie.playAnimation()
@@ -437,6 +438,7 @@ class GameScreen : AppCompatActivity() {
                 binding.gridWinner.visibility = View.GONE
                 binding.textWinner.visibility = View.GONE
                 binding.textLoser.visibility = View.GONE
+                binding.textResult.visibility = View.GONE
                 binding.konfettLottie.visibility = View.GONE
                 binding.winnerLottie.visibility = View.GONE
                 binding.winnerLottie.cancelAnimation()
@@ -1300,11 +1302,13 @@ class GameScreen : AppCompatActivity() {
                 SoundManager.instance?.playWonSound()
             }
             binding.winnerLottie.setAnimation(R.raw.trophy_lottie)
+            binding.textResult.text = getString(R.string.resultWon)
             nGamesWon += 1
             nGamesWonDaily += 1
         } else {
             if (soundStatus) SoundManager.instance?.playLostSound()
             binding.winnerLottie.setAnimation(R.raw.sad_lottie)
+            binding.textResult.text = getString(R.string.resultLost)
         }
         val arrayListWinner = ArrayList<GenericItemDescription>()
         val arrayListLoser = ArrayList<GenericItemDescription>()
