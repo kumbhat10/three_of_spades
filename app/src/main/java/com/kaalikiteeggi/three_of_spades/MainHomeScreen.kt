@@ -904,7 +904,6 @@ class MainHomeScreen : AppCompatActivity() {
             override fun onCancelled(errorDataLoad: DatabaseError) {
                 onlineGameAllowedM = errorDataLoad.message
             }
-
             override fun onDataChange(data: DataSnapshot) {
                 if (data.exists()) {
                     onlineGameAllowed = data.child("OnlineGame").value.toString().toInt() == 1
@@ -1040,7 +1039,7 @@ class MainHomeScreen : AppCompatActivity() {
                                 val queTemp = checkPlayerJoiningQue(dataSnapshot)
                                 val que = if (queTemp != 0) queTemp else playersJoined + 1
 
-                                if (que > nPlayers) {
+                                if (que > nPlayers+3) {
                                     SoundManager.instance?.playErrorSound()
                                     speak("Sorry. Room is full")
                                     if (vibrateStatus) vibrationStart()
@@ -1055,10 +1054,34 @@ class MainHomeScreen : AppCompatActivity() {
                                     binding.maskAllLoading.visibility = View.VISIBLE
                                     binding.loadingText.text = getString(R.string.joiningRoom)
                                     logFirebaseEvent("create_join_room_screen",  "join_$nPlayers")
-                                    if (queTemp == 0) refRoomData.document(roomID)  // new player joined - not previously joined
-                                        .set(hashMapOf("p$que" to userName, "PJ" to que, "p${que}h" to uid), SetOptions.merge()).addOnSuccessListener {
-                                            startCJRS(roomID = roomID, playerJoining = que, nPlayers = nPlayers)
+
+                                    if (queTemp == 0) {
+                                        val roomDocRef = refRoomData.document(roomID)
+                                       Firebase.firestore.runTransaction { transaction ->
+                                            val snapshot = transaction.get(roomDocRef)
+                                            val playerJoining = snapshot.getDouble("PJ")?.toInt()?.plus(1)!!
+                                            if(playerJoining <= nPlayers){
+                                                transaction.update(roomDocRef, "p$playerJoining", userName, "PJ", playerJoining, "p${playerJoining}h", uid)
+                                                return@runTransaction playerJoining
+                                            }else{
+                                                throw FirebaseFirestoreException("Roomful", FirebaseFirestoreException.Code.ABORTED)
+                                            }
                                         }
+                                           .addOnSuccessListener { Log.d("FB Transaction Success", it.toString())
+                                               startCJRS(roomID = roomID, playerJoining = it.toInt(), nPlayers = nPlayers)}
+                                           .addOnFailureListener {
+                                               Log.d("FB Transaction Failed", it.localizedMessage!!)
+                                               SoundManager.instance?.playErrorSound()
+                                               if (vibrateStatus) vibrationStart()
+                                               binding.maskAllLoading.visibility = View.GONE
+                                               binding.roomIDInputLayout.helperText = null
+                                               errorJoinRoomID = true
+                                               val em = if(it.localizedMessage=="Roomful") "Room is Full" else "Failed to join room. Try again"
+                                               speak(em, speed = 1.07f)
+                                               toastCenter(em)
+                                               binding.roomIDInputLayout.error = em
+                                           }
+                                    }
                                     else {
                                         speak("Room is already joined", speed = 1.07f)
                                         startCJRS(roomID = roomID, playerJoining = que, nPlayers = nPlayers)
@@ -1076,6 +1099,7 @@ class MainHomeScreen : AppCompatActivity() {
                             }
                         } catch (successError: java.lang.Exception) {
                             toastCenter("Failed to join room. Try again")
+                            Log.d("FB Transaction Second Try", "failed ${successError.localizedMessage}")
                             if (vibrateStatus) vibrationStart()
                             binding.maskAllLoading.visibility = View.GONE
                             binding.roomIDInputLayout.helperText = null
@@ -1085,10 +1109,12 @@ class MainHomeScreen : AppCompatActivity() {
                         }
                     }.addOnFailureListener {
                         binding.maskAllLoading.visibility = View.GONE
+                        Log.d("FB Transaction Document read", "failed ${it.localizedMessage}")
                         toastCenter("Failed to join room. Try again")
                     }
                 } catch (e: Exception) {
                     toastCenter("Failed to join room. Try again")
+                    Log.d("FB Transaction Main Try", "failed ${e.localizedMessage}")
                     if (vibrateStatus) vibrationStart()
                     binding.maskAllLoading.visibility = View.GONE
                     binding.roomIDInputLayout.helperText = null
@@ -1105,16 +1131,6 @@ class MainHomeScreen : AppCompatActivity() {
             binding.roomIDInputLayout.error = null
             binding.roomIDInputLayout.helperText = getString(R.string.joinHelper)
         }
-    }
-
-    private fun startCJRS(roomID: String, playerJoining: Int, nPlayers: Int) {
-        val userStatsDaily = ArrayList(listOf(nGamesPlayedDaily, nGamesWonDaily, nGamesBidDaily))
-        val userStatsTotal = ArrayList(listOf(nGamesPlayed + nGamesPlayedBot, nGamesWon + nGamesWonBot, nGamesBid + nGamesBidBot))
-
-        startActivity(Intent(this, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }.apply { putExtra("selfName", userName) }.apply { putExtra("from", "p$playerJoining") }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("photoURL", photoURL) }.apply { putExtra("totalCoins", totalCoins) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("offline", false) }.putIntegerArrayListExtra("userStats", ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))).putIntegerArrayListExtra("userStatsTotal", userStatsTotal).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
-        overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
-        finishAndRemoveTask() //		Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
-
     }
 
     private fun checkPlayerJoiningQue(dataSnapshot: DocumentSnapshot?): Int {        //        val playersJoined = dataSnapshot?.get("PJ").toString().toInt()
@@ -1137,6 +1153,17 @@ class MainHomeScreen : AppCompatActivity() {
             else -> 0
         }
     }
+
+    private fun startCJRS(roomID: String, playerJoining: Int, nPlayers: Int) {
+        val userStatsDaily = ArrayList(listOf(nGamesPlayedDaily, nGamesWonDaily, nGamesBidDaily))
+        val userStatsTotal = ArrayList(listOf(nGamesPlayed + nGamesPlayedBot, nGamesWon + nGamesWonBot, nGamesBid + nGamesBidBot))
+
+        startActivity(Intent(this, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }.apply { putExtra("selfName", userName) }.apply { putExtra("from", "p$playerJoining") }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("photoURL", photoURL) }.apply { putExtra("totalCoins", totalCoins) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("offline", false) }.putIntegerArrayListExtra("userStats", ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))).putIntegerArrayListExtra("userStatsTotal", userStatsTotal).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
+        finishAndRemoveTask() //		Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
+
+    }
+
 
     private fun hideKeyboard() {
         val view = this.currentFocus

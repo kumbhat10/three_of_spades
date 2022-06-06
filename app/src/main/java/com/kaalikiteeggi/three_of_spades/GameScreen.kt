@@ -1334,6 +1334,7 @@ class GameScreen : AppCompatActivity() {
     fun openCloseScoreSheet(view: View) {
         if(maskWinner.value!!) maskWinner.value = false
         else if (binding.scrollViewScore.visibility == View.VISIBLE) {
+            if(BuildConfig.DEBUG) maskWinner.value = true
             binding.closeGameRoomIcon.visibility = View.VISIBLE
             binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
             Handler(Looper.getMainLooper()).postDelayed({
