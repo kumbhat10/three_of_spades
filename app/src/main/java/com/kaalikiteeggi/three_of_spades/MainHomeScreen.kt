@@ -1039,7 +1039,7 @@ class MainHomeScreen : AppCompatActivity() {
                                 val queTemp = checkPlayerJoiningQue(dataSnapshot)
                                 val que = if (queTemp != 0) queTemp else playersJoined + 1
 
-                                if (que > nPlayers+3) {
+                                if (que > nPlayers) {
                                     SoundManager.instance?.playErrorSound()
                                     speak("Sorry. Room is full")
                                     if (vibrateStatus) vibrationStart()
