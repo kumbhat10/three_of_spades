@@ -551,7 +551,16 @@ class GameScreen : AppCompatActivity() {
                     gameData = data.getValue<GameData>()!!
                     tableCardsHandle()
                     bidValue.value = gameData.bv
-                    cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
+//                    cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
+                    cardsInHand = when(fromInt){
+                        1->gameData.ch1
+                        2->gameData.ch2
+                        3->gameData.ch3
+                        4->gameData.ch4
+                        5->gameData.ch5
+                        6->gameData.ch6
+                        else->gameData.ch7
+                    }
                     scoreList = gameData.s
                     if (gameData.gs in 2..5) displaySelfCards(animation = false)
                     if (currentBidder.value != gameData.bb) {
@@ -959,7 +968,7 @@ class GameScreen : AppCompatActivity() {
         if (p1s.value != gameData.p1s) p1s.value = gameData.p1s // Live Data
         if (nPlayers7 && p2s.value != gameData.p2s) p2s.value = gameData.p2s
         played = gameData.ct[fromInt - 1] != cardsIndexLimit
-        if ((gameData.rn == 10 || BuildConfig.DEBUG) && !premiumStatus) loadInterstitialAd() // dummy - load the ad again
+        if ((gameData.rn == 8 && gameData.gn % gameLimitNoAds == 0) && !premiumStatus) loadInterstitialAd() // dummy - load the ad again
         updatePlayerScoreInfo()
         play()
     }
@@ -1208,7 +1217,7 @@ class GameScreen : AppCompatActivity() {
             gameData.ct[fromInt - 1] = cardSelected  // update cards on table list
             writeToGameDatabase(data = mutableMapOf("ch$fromInt" to cardsInHand, "p1" to gameData.p1, "p1s" to gameData.p1s, "pc1s" to gameData.pc1s, "p2" to gameData.p2, "p2s" to gameData.p2s, "pc2s" to gameData.pc2s, "ct" to gameData.ct, "ct1" to gameData.ct1, "rt" to gameData.rt + 1, "pt" to nextTurnPlayer, "rtr" to if (gameData.rt == 1) cardsSuit[cardSelected] else gameData.rtr))
 
-            writeToRoomDatabase("OL/$from", 1) // dummy - Turn them online again - check if really required
+//            writeToRoomDatabase("OL/$from", 1) // dummy - Turn them online again - check if really required
         }
     }
 
