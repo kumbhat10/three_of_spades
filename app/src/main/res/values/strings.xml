@@ -149,7 +149,7 @@
     <string name="dummy_nonline">Dummy\nOnline</string>
     <string name="victory">Victory</string>
     <string name="defeat">Defeat</string>
-    <string name="resultWon">You Won</string>
-    <string name="resultLost">You Lost</string>
+    <string name="resultWon">Victory</string>
+    <string name="resultLost">Defeat</string>
 
 </resources>

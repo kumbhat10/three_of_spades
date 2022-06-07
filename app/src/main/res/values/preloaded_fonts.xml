@@ -3,13 +3,10 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/almendra</item>
         <item>@font/almendra_display</item>
-        <item>@font/amiri</item>
-        <item>@font/arizonia</item>
         <item>@font/armata</item>
-        <item>@font/codystar</item>
         <item>@font/lily_script_one</item>
-        <item>@font/nosifer</item>
-        <item>@font/vt323</item>
+        <item>@font/luckiest_guy</item>
+        <item>@font/calligraffitti</item>
 
     </array>
 </resources>
