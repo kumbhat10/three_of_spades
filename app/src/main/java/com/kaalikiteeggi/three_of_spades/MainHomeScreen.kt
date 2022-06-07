@@ -220,7 +220,7 @@ class MainHomeScreen : AppCompatActivity() {
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         logFirebaseEvent("MainHomeScreen",  "open")
-        if(BuildConfig.DEBUG) Picasso.get().setIndicatorsEnabled(true)
+//        if(BuildConfig.DEBUG) Picasso.get().setIndicatorsEnabled(true)
 
     }
 

@@ -11,9 +11,9 @@
 
 <!--    <solid-->
 <!--        android:color="#DC000000"/>-->
-    <corners android:radius="@dimen/_7sdp"/>
+    <corners android:radius="@dimen/_8sdp"/>
 
     <stroke android:width="@dimen/_1sdp"
-        android:color="#FFFFFF"/>
+        android:color="@color/white"/>
 
 </shape>

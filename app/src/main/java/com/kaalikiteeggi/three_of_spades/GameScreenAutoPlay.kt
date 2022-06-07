@@ -422,6 +422,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 binding.gridWinner.visibility = View.VISIBLE
                 binding.textWinner.visibility = View.VISIBLE
                 binding.textLoser.visibility = View.VISIBLE
+                binding.textResult.visibility = View.VISIBLE
                 binding.konfettLottie.visibility = View.VISIBLE
                 binding.winnerLottie.visibility = View.VISIBLE
                 binding.winnerLottie.playAnimation()
@@ -431,6 +432,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 binding.gridWinner.visibility = View.GONE
                 binding.textWinner.visibility = View.GONE
                 binding.textLoser.visibility = View.GONE
+                binding.textResult.visibility = View.GONE
                 binding.konfettLottie.visibility = View.GONE
                 binding.winnerLottie.visibility = View.GONE
                 binding.winnerLottie.cancelAnimation()
@@ -587,11 +589,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
         p3Coins += scoreList[3]
         p4Coins += scoreList[4]
 
-        val arrayListWinner = ArrayList<GenericItemDescription>()
-        val arrayListLoser = ArrayList<GenericItemDescription>()
+        val arrayListWinner = ArrayList<WinnerItemDescription>()
+        val arrayListLoser = ArrayList<WinnerItemDescription>()
         for(i in 1..nPlayers){
-            if(scoreList[i]>0)       arrayListWinner.add(GenericItemDescription(name = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
-            else      arrayListLoser.add(GenericItemDescription(name = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            if(scoreList[i]>0)       arrayListWinner.add(WinnerItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            else      arrayListLoser.add(WinnerItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
         }
         binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner , winner = true)
         binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser , winner = false)

@@ -233,8 +233,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
                 updateRoomInfoOnline(dataSnapshot)
             } else if (dataSnapshot != null && !dataSnapshot.exists()) {                //				soundError.start()
                 SoundManager.instance?.playErrorSound()
-                toastCenter("Sorry $selfName \n$p1 has left the room. \nYou can create your own room or join other")
-                speak("$p1 has left. You can create your own room or join another room", forceSpeak = false)
+                toastCenter("Sorry $selfName \n$p1 has left the room")
+                speak("$p1 has left", forceSpeak = false)
 
                 Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, 4000)
             } else if (error != null) {

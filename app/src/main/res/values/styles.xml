@@ -56,7 +56,14 @@
     <style name="ShapeAppearanceOverlay.App.Card.AllRounded" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/_4sdp</item>
+    </style>
 
+    <style name="ShapeAppearanceOverlay.App.Card.AllRounded1" parent="">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/_9sdp</item>
+
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeTopRight">@dimen/_9sdp</item>
     </style>
 
     <style name="TabTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">

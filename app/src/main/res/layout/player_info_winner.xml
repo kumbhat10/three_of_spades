@@ -1,49 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/red_button">
+    android:background="@drawable/red_button"
+    android:paddingBottom="@dimen/_1sdp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userPhoto1"
         android:layout_width="@dimen/upWidth1"
         android:layout_height="@dimen/upWidth1"
-        android:layout_margin="@dimen/_10sdp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:src="@drawable/user_photo"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/user_photo" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.AllRounded1" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/userName1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_2sdp"
-        app:layout_constraintTop_toBottomOf="@id/userPhoto1"
-        app:layout_constraintStart_toStartOf="@id/userPhoto1"
-        app:layout_constraintEnd_toEndOf="@id/userPhoto1"
+        android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="@dimen/_11ssp"/>
+        android:textSize="@dimen/_11ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/userPhoto1"
+        app:layout_constraintTop_toBottomOf="@id/userPhoto1" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/userScore1"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_9sdp"
         android:background="@drawable/shine_score_transparent"
         android:gravity="center"
-        android:paddingTop="@dimen/_2sdp"
-        android:paddingBottom="@dimen/_2sdp"
-        android:layout_marginBottom="@dimen/_7sdp"
-        android:layout_marginStart="@dimen/_5sdp"
-        android:layout_marginEnd="@dimen/_5sdp"
-        android:text="@string/playerView1"
+        android:padding="@dimen/_2sdp"
+        android:paddingStart="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_5sdp"
+        android:text="@string/bidScore"
         android:textColor="@color/white"
-        android:textSize="@dimen/_9ssp"
+        android:textSize="@dimen/_8ssp"
         android:visibility="visible"
-        app:layout_constraintStart_toStartOf="@id/userPhoto1"
-        app:layout_constraintEnd_toEndOf="@id/userPhoto1"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/userScore2"
         app:layout_constraintTop_toBottomOf="@+id/userName1" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/userScore2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/bidScore1"
+        android:textColor="#FFF200"
+        android:textSize="@dimen/_11sdp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/userName1"
+        app:layout_constraintStart_toEndOf="@id/userScore1"
+        app:layout_constraintBottom_toBottomOf="@id/userScore1"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

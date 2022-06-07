@@ -66,6 +66,8 @@
     <string name="playerView3">Player</string>
     <string name="playerView2">Player</string>
     <string name="playerView1">Player</string>
+    <string name="bidScore">70 / 275</string>
+    <string name="bidScore1">-420</string>
     <string name="Trump">Trump</string>
     <string name="partner">Partner</string>
     <string name="partner1">Buddy 1</string>

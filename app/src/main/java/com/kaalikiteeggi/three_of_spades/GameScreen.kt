@@ -935,9 +935,9 @@ class GameScreen : AppCompatActivity() {
                 if (gameData.rt > 1 || gameData.rn > 1) speak("Lets Start!", queue = TextToSpeech.QUEUE_ADD)
             }, 2000)
             if (gameData.pt != fromInt) {
-                if (gameData.rt == 1 || gameData.rn == 1) speak("${playerName(gameData.bb)} will play first \n You will get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
+                if (gameData.rt == 1 || gameData.rn == 1) speak("${playerName(gameData.bb)} will play first.", speed = 1f)
             } else {
-                if (gameData.rt == 1 || gameData.rn == 1) speak("You will get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
+                if (gameData.rt == 1 || gameData.rn == 1) speak("You will play first.", speed = 1.1f)
             }
         } else {
             startPlayingRound()
@@ -964,7 +964,7 @@ class GameScreen : AppCompatActivity() {
             val t1 = if (gameData.p1s != 0) gameData.sc[gameData.p1 - 1] else 0
             val t2 = if (nPlayers7 && gameData.p2s != 0 && gameData.p1 != gameData.p2) gameData.sc[gameData.p2 - 1] else 0 // if not same partners then only add other points
 
-            if (gameData.bb > 0) bidTeamScore = gameData.sc[gameData.bb - 1] + t1 + t2
+             bidTeamScore = if (gameData.bb > 0) gameData.sc[gameData.bb - 1] + t1 + t2 else t1+t2
 
             for (i in 0 until nPlayers) {
                 val j = i + 1
@@ -973,7 +973,7 @@ class GameScreen : AppCompatActivity() {
                     findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$bidTeamScore /${gameData.bv}"
                 } else {
                     findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j)
-                    findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${gameData.sc.sum() - bidTeamScore} /${scoreLimit - gameData.bv}" //                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
+                    findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${gameData.sc.sum() - bidTeamScore} /${scoreLimit - gameData.bv}"
                 }
             }
             val tt1 = if (gameData.p1s == 1) gameData.sc[gameData.p1 - 1] else 0
@@ -1313,11 +1313,13 @@ class GameScreen : AppCompatActivity() {
             binding.winnerLottie.setAnimation(R.raw.sad_lottie)
             binding.textResult.text = getString(R.string.resultLost)
         }
-        val arrayListWinner = ArrayList<GenericItemDescription>()
-        val arrayListLoser = ArrayList<GenericItemDescription>()
+        val arrayListWinner = ArrayList<WinnerItemDescription>()
+        val arrayListLoser = ArrayList<WinnerItemDescription>()
         for(i in 1..nPlayers){
-            if(scoreList[i]>0)       arrayListWinner.add(GenericItemDescription(name = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
-            else      arrayListLoser.add(GenericItemDescription(name = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            val target = if (i==gameData.bb || i==gameData.p1  || i==gameData.p2) gameData.bv else scoreLimit - gameData.bv
+
+            if(scoreList[i]>0)       arrayListWinner.add(WinnerItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i-1], points = gameData.s[i]   ))
+            else      arrayListLoser.add(WinnerItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i-1], points = gameData.s[i]   ))
         }
         binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner , winner = true)
         binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser , winner = false)
