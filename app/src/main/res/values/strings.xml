@@ -110,6 +110,7 @@
     //1F3AE - game played emoji in decimal from hexadecimal
     <string name="nill">Nill</string>
     <string name="sound">Sound</string>
+    <string name="speech">Speech</string>
     <string name="vibrate">Vibrate</string>
     <string name="start_next_game">Start next round</string>
     <string name="fetching_player">Fetching Player data....</string>

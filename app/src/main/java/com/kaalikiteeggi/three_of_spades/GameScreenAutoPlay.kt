@@ -90,6 +90,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var coinRate = 150
     private var reviewRequested = false
     private var soundStatus = true
+    private var speechStatus = true
     private var vibrateStatus = true
     private lateinit var vibrator: Vibrator
 
@@ -416,8 +417,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedTableImageView[3]).clearAnimation()
             }
         } // endregion
-        maskWinner.observe(this){
-            if(it){
+        maskWinner.observe(this) {
+            if (it) {
                 binding.gridLoser.visibility = View.VISIBLE
                 binding.gridWinner.visibility = View.VISIBLE
                 binding.textWinner.visibility = View.VISIBLE
@@ -427,7 +428,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 binding.winnerLottie.visibility = View.VISIBLE
                 binding.winnerLottie.playAnimation()
                 binding.konfettLottie.playAnimation()
-            }else{
+            } else {
                 binding.gridLoser.visibility = View.GONE
                 binding.gridWinner.visibility = View.GONE
                 binding.textWinner.visibility = View.GONE
@@ -550,8 +551,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         binding.relativeLayoutTableCards.visibility = View.GONE
         countDownTimer("PlayCard", purpose = "cancel")
         if (vibrateStatus) vibrationStart()
-        if (soundStatus) SoundManager.instance?.playShuffleSound() //soundShuffle.start()
-        displayShufflingCards(distribute = false)
+//        if (soundStatus) SoundManager.instance?.playShuffleSound() //soundShuffle.start()
+//        displayShufflingCards(distribute = false)
         scoreOpenStatus = true
         if (newGameStatus) { // dummy - newGameStatus not needed as score list has game index which is unique
             newGameStatus = false
@@ -566,7 +567,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             } else if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0)) showInterstitialAd()
             binding.startNextRoundButton.visibility = View.VISIBLE
             binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-            maskWinner.value = false
+//            maskWinner.value = false
         }, delayWaitGameMode6)
     }
 
@@ -591,17 +592,20 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
         val arrayListWinner = ArrayList<WinnerItemDescription>()
         val arrayListLoser = ArrayList<WinnerItemDescription>()
-        for(i in 1..nPlayers){
-            if(scoreList[i]>0)       arrayListWinner.add(WinnerItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
-            else      arrayListLoser.add(WinnerItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+        val scoredList = listOf(pt1, pt2, pt3, pt4)
+        for (i in 1..nPlayers) {
+            val target = if (i == bidder || i == buPlayer1) bidValue else scoreLimit - bidValue
+
+            if (scoreList[i] > 0) arrayListWinner.add(WinnerItemDescription(scored = scoredList[i-1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            else arrayListLoser.add(WinnerItemDescription(scored = scoredList[i-1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
         }
-        binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner , winner = true)
-        binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser , winner = false)
+        binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner, winner = true)
+        binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser, winner = false)
         maskWinner.value = true
 
         scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
         scoreBoardTable(display = false, data = listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain), upDateTotal = true)   // createScoreTableTotal
-        scoreBoardTable(data = scoreList)
+        scoreBoardTable(display = false, data = scoreList)
 
         if (bidder == fromInt) {
             nGamesBid += 1
@@ -758,6 +762,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     fun startNextGame(view: View) {
+        maskWinner.value = false
         binding.startNextRoundButton.clearAnimation()
         binding.startNextRoundButton.visibility = View.GONE
         binding.scrollViewScore.visibility = View.GONE
@@ -789,10 +794,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
             for (i in 0 until nPlayers) {
                 val j = i + 1
-                if (j == bidder || (j == buPlayer1 && buFound1 != 0)) { //                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  $bidTeamScore /$bidValue"
-                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) //+ ": $bidTeamScore /$bidValue"
+                if (j == bidder || (j == buPlayer1 && buFound1 != 0)) {
+                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j)
                     findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$bidTeamScore /$bidValue"
-                } else { //                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) + "\n$emojiScore  ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
+                } else {
                     findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) //+ ": ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
                     findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
                 }
@@ -1444,7 +1449,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun speak(speechText: String, speed: Float = 1f, queue: Int = TextToSpeech.QUEUE_FLUSH, forceSpeak: Boolean = false) {
-        if (soundStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
+        if (speechStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
             textToSpeech.setPitch(1f)
             textToSpeech.setSpeechRate(speed)
             textToSpeech.speak(speechText, queue, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
@@ -1651,6 +1656,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (sharedPreferences.contains("soundStatus")) {
             soundStatus = sharedPreferences.getBoolean("soundStatus", true)
         }
+        if (sharedPreferences.contains("speechStatus")) {
+            speechStatus = sharedPreferences.getBoolean("speechStatus", true)
+        }
         if (sharedPreferences.contains("vibrateStatus")) {
             vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)
         }
@@ -1703,6 +1711,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 mInterstitialAd = null
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
+
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("InterstitialAd", "onAdLoaded")
                 loadInterAdTry = 0
@@ -1719,6 +1728,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
@@ -1728,6 +1738,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
                     }
                 }
+
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }

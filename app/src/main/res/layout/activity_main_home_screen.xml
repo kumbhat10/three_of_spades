@@ -344,7 +344,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <TextView
                 android:id="@+id/textMusic"
                 android:layout_width="@dimen/settingWidth"
@@ -379,9 +378,9 @@
                 android:text="@string/sound"
                 android:textColor="@color/font_grey_settings"
                 android:textSize="@dimen/_15ssp"
-                app:layout_constraintBottom_toTopOf="@id/textVibrate"
                 app:layout_constraintEnd_toStartOf="@id/soundSwitch"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/textSpeech"
                 app:layout_constraintTop_toBottomOf="@+id/textMusic" />
 
             <androidx.appcompat.widget.SwitchCompat
@@ -391,10 +390,36 @@
                 android:checked="true"
                 android:onClick="sound"
                 android:thumb="@drawable/thumb_sound"
-                app:layout_constraintBottom_toTopOf="@id/textVibrate"
+                app:layout_constraintTop_toBottomOf="@+id/textMusic"
+                app:layout_constraintBottom_toTopOf="@id/textSpeech"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/textSound"
-                app:layout_constraintTop_toBottomOf="@+id/textMusic"
+                app:track="@drawable/track1" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textSpeech"
+                android:layout_width="@dimen/settingWidth"
+                android:layout_height="@dimen/settingHeight"
+                android:gravity="center|start"
+                android:text="@string/speech"
+                android:textColor="@color/font_grey_settings"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintBottom_toTopOf="@id/textVibrate"
+                app:layout_constraintEnd_toStartOf="@id/speechSwitch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSound" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/speechSwitch"
+                android:layout_width="@dimen/settingWidth"
+                android:layout_height="@dimen/settingHeight"
+                android:checked="true"
+                android:onClick="speech"
+                android:thumb="@drawable/thumb_speech"
+                app:layout_constraintBottom_toTopOf="@id/textVibrate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textSpeech"
+                app:layout_constraintTop_toBottomOf="@+id/textSound"
                 app:track="@drawable/track1" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -408,7 +433,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/vibrateSwitch"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textSound" />
+                app:layout_constraintTop_toBottomOf="@id/textSpeech" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/vibrateSwitch"
@@ -420,9 +445,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textVibrate"
-                app:layout_constraintTop_toBottomOf="@id/textSound"
+                app:layout_constraintTop_toBottomOf="@id/textSpeech"
                 app:track="@drawable/track1" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

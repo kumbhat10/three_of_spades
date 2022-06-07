@@ -72,6 +72,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     private var p7Status = false
     private var musicStatus = false
     private var soundStatus = true
+    private var speechStatus = true
     private var vibrateStatus = true
     private var premiumStatus = false
     private var p1 = ""
@@ -317,7 +318,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         if (playerJoining == 11) {
             userBasicInfoStatus.observe(this) { eachStatus ->
                 if (eachStatus.all { it }) {
-                    toastCenter("Ready To start")
+//                    toastCenter("Ready To start")
 //                    handler.postDelayed({ startNextActivity() }, 1500L)
                     startNextActivity(transition = false)
                 }
@@ -340,12 +341,13 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     private fun allPlayersJoined() {
         if (soundStatus) SoundManager.instance?.playSuccessSound()
-        speak("Ready to Start", speed = 1.06f, forceSpeak = false)
+        speak("All Players have joined now. Ready to Start", speed = 0.95f, forceSpeak = false)
         binding.imageViewShareButton2.clearAnimation()
         binding.imageViewShareButton2.visibility = View.GONE
         binding.offlineProgressbar.visibility = View.GONE
         binding.waitingToJoinText.visibility = View.GONE
-        Handler(Looper.getMainLooper()).postDelayed({ binding.startGameButton.visibility = View.VISIBLE }, 600)
+        val delayTime = if(offline) 600L else 2000L
+        Handler(Looper.getMainLooper()).postDelayed({ binding.startGameButton.visibility = View.VISIBLE }, delayTime)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -438,7 +440,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     private fun speak(speechText: String, pitch: Float = 1f, speed: Float = 1.05f, que: Int = TextToSpeech.QUEUE_FLUSH, forceSpeak: Boolean = false) {
-        if (soundStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
+        if (speechStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
             val params = Bundle()
@@ -474,6 +476,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
         if (sharedPreferences.contains("soundStatus")) {
             soundStatus = sharedPreferences.getBoolean("soundStatus", true)
+        }
+        if (sharedPreferences.contains("speechStatus")) {
+            speechStatus = sharedPreferences.getBoolean("speechStatus", true)
         }
         if (sharedPreferences.contains("vibrateStatus")) {
             vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)

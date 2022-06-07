@@ -140,6 +140,7 @@ class MainHomeScreen : AppCompatActivity() {
     private var userBasicInfo = UserBasicInfo()
     private var musicStatus = false
     private var soundStatus = true
+    private var speechStatus = true
     private var vibrateStatus = true
     private var premiumStatus = false
     private var newUser = true
@@ -556,6 +557,14 @@ class MainHomeScreen : AppCompatActivity() {
         if (sharedPreferences.contains("soundStatus")) {
             soundStatus = sharedPreferences.getBoolean("soundStatus", true)
             binding.soundSwitch.isChecked = soundStatus
+        }
+        if (sharedPreferences.contains("speechStatus")) {
+            speechStatus = sharedPreferences.getBoolean("speechStatus", true)
+            binding.speechSwitch.isChecked = speechStatus
+        }else{
+            speechStatus = true
+            editor.putBoolean("speechStatus", speechStatus) // write username to preference file
+            editor.apply()
         }
         if (sharedPreferences.contains("vibrateStatus")) {
             vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)
@@ -1226,7 +1235,15 @@ class MainHomeScreen : AppCompatActivity() {
         }
         editor.putBoolean("soundStatus", soundStatus) // write username to preference file
         editor.apply()
+    }
 
+    fun speech(view: View) {
+        speechStatus = binding.speechSwitch.isChecked
+        if (speechStatus) {
+            speak("Speech is enabled", speed = 0.95f)
+        }else speak("Speech is disabled", speed = 0.95f, ignoreSpeechStatus = true)
+        editor.putBoolean("speechStatus", speechStatus) // write username to preference file
+        editor.apply()
     }
 
     fun vibrate(view: View) {
@@ -1249,8 +1266,8 @@ class MainHomeScreen : AppCompatActivity() {
         }
     }
 
-    private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1.05f) {
-        if (soundStatus && this::textToSpeech.isInitialized) {
+    private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1.05f, ignoreSpeechStatus:Boolean=false) {
+        if ((speechStatus || ignoreSpeechStatus) && this::textToSpeech.isInitialized) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
             textToSpeech.speak(speechText, TextToSpeech.QUEUE_FLUSH, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)

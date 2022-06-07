@@ -106,6 +106,7 @@ class GameScreen : AppCompatActivity() {
     private var scoreLimit = 0
 
     private var soundStatus = true
+    private var speechStatus = true
     private var vibrateStatus = true
     private lateinit var vibrator: Vibrator
 
@@ -295,6 +296,7 @@ class GameScreen : AppCompatActivity() {
                 binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownPlayCard).toInt()   //10000 because max progress is 10000
                 binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
             }
+
             override fun onFinish() {
                 autoPlayCard()
                 if (soundStatus) SoundManager.instance?.playTimerSound()
@@ -314,6 +316,7 @@ class GameScreen : AppCompatActivity() {
                 binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
                 binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
             }
+
             override fun onFinish() {
                 if (!bidDone) {
                     bidDone = true
@@ -422,8 +425,8 @@ class GameScreen : AppCompatActivity() {
                 else -> binding.buddyText1.text = if (nPlayers4) getString(R.string.partner) else getString(R.string.partner1)  //13
             }
         }
-        maskWinner.observe(this){
-            if(it){
+        maskWinner.observe(this) {
+            if (it) {
                 binding.gridLoser.visibility = View.VISIBLE
                 binding.gridWinner.visibility = View.VISIBLE
                 binding.textWinner.visibility = View.VISIBLE
@@ -433,7 +436,7 @@ class GameScreen : AppCompatActivity() {
                 binding.winnerLottie.visibility = View.VISIBLE
                 binding.winnerLottie.playAnimation()
                 binding.konfettLottie.playAnimation()
-            }else{
+            } else {
                 binding.gridLoser.visibility = View.GONE
                 binding.gridWinner.visibility = View.GONE
                 binding.textWinner.visibility = View.GONE
@@ -587,6 +590,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun gameState1() {
+        maskWinner.value = false
         binding.horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         if (!gameState1) {
             gameState1 = true
@@ -599,6 +603,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun resetVariables() {
+        maskWinner.value = false
         if (gameData.gn > 1) binding.gameBkgd.setImageResource(GameScreenData().tableBackground.random()) //changeBackground()
         currentBidder.value = 0
         binding.bidCoin.visibility = View.VISIBLE
@@ -951,7 +956,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun startPlayingRound() {
-         if (p1s.value != gameData.p1s) p1s.value = gameData.p1s // Live Data
+        if (p1s.value != gameData.p1s) p1s.value = gameData.p1s // Live Data
         if (nPlayers7 && p2s.value != gameData.p2s) p2s.value = gameData.p2s
         played = gameData.ct[fromInt - 1] != cardsIndexLimit
         if ((gameData.rn == 10 || BuildConfig.DEBUG) && !premiumStatus) loadInterstitialAd() // dummy - load the ad again
@@ -964,7 +969,7 @@ class GameScreen : AppCompatActivity() {
             val t1 = if (gameData.p1s != 0) gameData.sc[gameData.p1 - 1] else 0
             val t2 = if (nPlayers7 && gameData.p2s != 0 && gameData.p1 != gameData.p2) gameData.sc[gameData.p2 - 1] else 0 // if not same partners then only add other points
 
-             bidTeamScore = if (gameData.bb > 0) gameData.sc[gameData.bb - 1] + t1 + t2 else t1+t2
+            bidTeamScore = if (gameData.bb > 0) gameData.sc[gameData.bb - 1] + t1 + t2 else t1 + t2
 
             for (i in 0 until nPlayers) {
                 val j = i + 1
@@ -1257,8 +1262,8 @@ class GameScreen : AppCompatActivity() {
             binding.relativeLayoutTableCards.visibility = View.GONE
             countDownTimer("PlayCard", purpose = "cancel")
             if (vibrateStatus) vibrationStart()
-            if (soundStatus) SoundManager.instance?.playShuffleSound() //
-            displayShufflingCards(distribute = false)
+//            if (soundStatus) SoundManager.instance?.playShuffleSound() //
+//            displayShufflingCards(distribute = false)
             scoreOpenStatus = true
             if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
             if (newGameStatus) {
@@ -1267,7 +1272,7 @@ class GameScreen : AppCompatActivity() {
             }
             handlerDeclareWinner.postDelayed({
                 if (!premiumStatus && mInterstitialAd != null && (gameData.gn % gameLimitNoAds == 0)) showInterstitialAd()
-                maskWinner.value = false
+//                maskWinner.value = false
                 if (fromInt == 1) { // show start next game button only to host
                     binding.startNextRoundButton.visibility = View.VISIBLE
                     binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
@@ -1315,28 +1320,28 @@ class GameScreen : AppCompatActivity() {
         }
         val arrayListWinner = ArrayList<WinnerItemDescription>()
         val arrayListLoser = ArrayList<WinnerItemDescription>()
-        for(i in 1..nPlayers){
-            val target = if (i==gameData.bb || i==gameData.p1  || i==gameData.p2) gameData.bv else scoreLimit - gameData.bv
+        for (i in 1..nPlayers) {
+            val target = if (i == gameData.bb || i == gameData.p1 || i == gameData.p2) gameData.bv else scoreLimit - gameData.bv
 
-            if(scoreList[i]>0)       arrayListWinner.add(WinnerItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i-1], points = gameData.s[i]   ))
-            else      arrayListLoser.add(WinnerItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i-1], points = gameData.s[i]   ))
+            if (scoreList[i] > 0) arrayListWinner.add(WinnerItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i - 1], points = gameData.s[i]))
+            else arrayListLoser.add(WinnerItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i - 1], points = gameData.s[i]))
         }
-        binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner , winner = true)
-        binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser , winner = false)
+        binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner, winner = true)
+        binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser, winner = false)
         maskWinner.value = true
 
         scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
         scoreBoardTable(display = false, data = createScoreTableTotal(), upDateTotal = true)
-        scoreBoardTable(data = scoreList)
+        scoreBoardTable(display = false, data = scoreList)
         nGamesPlayed += 1
         nGamesPlayedDaily += 1
         refUsersData.document(uid).set(hashMapOf("sc" to playerCoins(from), "scd" to totalDailyCoins, "w" to nGamesWon, "w_daily" to nGamesWonDaily, "b" to nGamesBid, "b_daily" to nGamesBidDaily, "p" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
     }
 
     fun openCloseScoreSheet(view: View) {
-        if(maskWinner.value!!) maskWinner.value = false
+        if (maskWinner.value!!) maskWinner.value = false
         else if (binding.scrollViewScore.visibility == View.VISIBLE) {
-            if(BuildConfig.DEBUG) maskWinner.value = true
+            if (BuildConfig.DEBUG) maskWinner.value = true
             binding.closeGameRoomIcon.visibility = View.VISIBLE
             binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
             Handler(Looper.getMainLooper()).postDelayed({
@@ -1766,7 +1771,8 @@ class GameScreen : AppCompatActivity() {
         if (bidingRequest && activityExists) {
             handlerDeclareWinner.postDelayed({
                 startBidding()
-                shufflingAnimationFinished = true}, 800)
+                shufflingAnimationFinished = true
+            }, 800)
         }
     }
 
@@ -1779,7 +1785,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1f, queue: Int = TextToSpeech.QUEUE_FLUSH, forceSpeak: Boolean = false) {
-        if (soundStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
+        if (speechStatus && this::textToSpeech.isInitialized && (forceSpeak || !closeRoom)) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
             textToSpeech.speak(speechText, queue, bundleOf(Pair(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.15f)), null)
@@ -1915,6 +1921,7 @@ class GameScreen : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation?) {
                     binding.imageViewWinnerCenter.startAnimation(anim)
                 }
+
                 override fun onAnimationStart(animation: Animation?) {}
             })
             binding.imageViewWinnerCenter.startAnimation(anim)
@@ -1926,6 +1933,7 @@ class GameScreen : AppCompatActivity() {
                 override fun onAnimationEnd(animation: Animation?) {
                     binding.imageViewWinnerCenter4.startAnimation(anim)
                 }
+
                 override fun onAnimationStart(animation: Animation?) {}
             })
             binding.imageViewWinnerCenter4.startAnimation(anim)
@@ -2023,6 +2031,9 @@ class GameScreen : AppCompatActivity() {
         if (sharedPreferences.contains("soundStatus")) {
             soundStatus = sharedPreferences.getBoolean("soundStatus", true)
         }
+        if (sharedPreferences.contains("speechStatus")) {
+            speechStatus = sharedPreferences.getBoolean("speechStatus", true)
+        }
         if (sharedPreferences.contains("vibrateStatus")) {
             vibrateStatus = sharedPreferences.getBoolean("vibrateStatus", true)
         }
@@ -2068,6 +2079,7 @@ class GameScreen : AppCompatActivity() {
                 mInterstitialAd = null
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
+
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("InterstitialAd", "onAdLoaded")
                 loadInterAdTry = 0
@@ -2084,6 +2096,7 @@ class GameScreen : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
@@ -2136,9 +2149,7 @@ class GameScreen : AppCompatActivity() {
         activityExists = false
         countDownBidding.cancel()
         countDownPlayCard.cancel()
-        startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) }
-            .apply { putExtra("returnFromGameScreen", true) }
-            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) }.apply { putExtra("returnFromGameScreen", true) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         overridePendingTransition(R.anim.slide_right_activity, R.anim.slide_right_activity)
         finishAndRemoveTask()
     }
