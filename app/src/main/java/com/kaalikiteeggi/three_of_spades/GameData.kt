@@ -2,8 +2,7 @@ package com.kaalikiteeggi.three_of_spades
 
 import kotlin.random.Random
 
-class GameData(nPlayers: Int = 4) {
-	private var a = 4
+class GameData {
 
 	var bb: Int = 0 // current bidder
 	var bs: MutableList<Int> = mutableListOf(1,1,1,1) // bid status

@@ -16,12 +16,11 @@
 # debugging stack traces.
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
-
+-keepclassmembers class com.kaalikiteeggi.three_of_spades.** { *; }
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
 
--keep class com.inmobi.* {*;}
 -keep public class com.google.android.gms.*
 -dontwarn com.google.android.gms.**
 -dontwarn com.squareup.picasso.**
@@ -40,6 +39,7 @@
 # skip IAB classes
 -keep class com.iab.* {*;}
 -dontwarn com.iab.**
+-dontwarn com.google.firebase.messaging.TopicOperation$TopicOperations
 # For communication with AdColony's WebView
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;

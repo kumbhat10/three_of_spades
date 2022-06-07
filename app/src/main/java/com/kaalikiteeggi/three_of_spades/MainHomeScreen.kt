@@ -119,7 +119,7 @@ class MainHomeScreen : AppCompatActivity() {
     private var userArrayList1 = ArrayList<UserBasicInfo>()
 
     private var settingsWindowStatus = false
-    private var trainAccess = true
+    private var trainAccess = false
     private var onlineGameAllowed = false
     private var onlineGameAllowedM = "Cannot reach server\nCheck your network"
     private var offlineGameAllowed = true
@@ -240,6 +240,10 @@ class MainHomeScreen : AppCompatActivity() {
             } else if (errorJoinRoomID) {
                 errorJoinRoomID = false
             }
+        }
+        if(BuildConfig.DEBUG) {
+            binding.trainingButton.visibility = View.VISIBLE
+            binding.trainingButton1.visibility = View.VISIBLE
         }
     }
 
@@ -1172,7 +1176,6 @@ class MainHomeScreen : AppCompatActivity() {
         finishAndRemoveTask() //		Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
 
     }
-
 
     private fun hideKeyboard() {
         val view = this.currentFocus
