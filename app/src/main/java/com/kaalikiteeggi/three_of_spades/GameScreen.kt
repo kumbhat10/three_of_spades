@@ -809,7 +809,7 @@ class GameScreen : AppCompatActivity() {
         if (!gameState4) {
             gameState4 = true
             if (soundStatus) SoundManager.instance?.playSuccessSound()
-            if (gameData.bb != 0) moveView(binding.trumpImage, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = trumpX, targetViewMoveY = trumpY)
+//            if (gameData.bb != 0) moveView(binding.trumpImage, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = trumpX, targetViewMoveY = trumpY)
             startPartnerSelection()
         }
     }
@@ -946,8 +946,8 @@ class GameScreen : AppCompatActivity() {
 
     private fun getBuddyAndDisplay() {
         if (vibrateStatus) vibrationStart()
-        if (gameData.bb != 0) moveView(binding.buddyImage1, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = buddy1X, targetViewMoveY = buddy1Y)
-        if (nPlayers7 && gameData.bb != 0) moveView(binding.buddyImage2, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = buddy2X, targetViewMoveY = buddy2Y)
+//        if (gameData.bb != 0) moveView(binding.buddyImage1, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = buddy1X, targetViewMoveY = buddy1Y)
+//        if (nPlayers7 && gameData.bb != 0) moveView(binding.buddyImage2, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = buddy2X, targetViewMoveY = buddy2Y)
     }
 
     private fun startPlayingRound() {
@@ -2132,7 +2132,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     fun closeGameRoom(view: View) {
-        if (activityExists && (fromInt == 1 || view.tag == "clicked")) refRoomDatabase.child("OL/$from").setValue(2)
+        if (activityExists) refRoomDatabase.child("OL/$from").setValue(2)
         activityExists = false
         countDownBidding.cancel()
         countDownPlayCard.cancel()
