@@ -1546,7 +1546,7 @@ class GameScreen : AppCompatActivity() {
             }
             if (onlineStatus[index] == 1 && fromInt != index + 1) {
                 if(oldValue==2) speak("${playerName(index + 1)} has joined again !", speed = 1f)
-                findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.status_online)
+                findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.greencirclebutton)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
             }
             if (onlineStatus[index] == 2 && fromInt != index + 1) {

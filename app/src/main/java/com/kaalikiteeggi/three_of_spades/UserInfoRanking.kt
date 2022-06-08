@@ -87,8 +87,7 @@ class UserInfoRanking(private val context: Context, private val userArrayList: A
         if (isExpanded) mPrevExpandedPosition = position
 
         holder.bind(userInfo = userArrayList[position], isExpanded = isExpanded, position = position)
-        holder.itemView.setOnClickListener { view ->
-//            view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.click_press))
+        holder.itemView.setOnClickListener {
             mExpandedPosition = if (isExpanded) -1 else position  //by pass minimize function
             if (position != mPrevExpandedPosition) notifyItemChanged(mPrevExpandedPosition)
             notifyItemChanged(position)
