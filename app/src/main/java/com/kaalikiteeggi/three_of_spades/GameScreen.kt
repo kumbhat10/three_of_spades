@@ -603,6 +603,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun resetVariables() {
+        centralText(cancel = true)
         maskWinner.value = false
         if (gameData.gn > 1) binding.gameBkgd.setImageResource(GameScreenData().tableBackground.random()) //changeBackground()
         currentBidder.value = 0
@@ -1276,6 +1277,8 @@ class GameScreen : AppCompatActivity() {
                 if (fromInt == 1) { // show start next game button only to host
                     binding.startNextRoundButton.visibility = View.VISIBLE
                     binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
+                }else{
+                    if(gameData.gs==6) centralText("Waiting for host to start next game", displayTime = 0)
                 }
             }, delayGameOver)
         }
@@ -1535,12 +1538,14 @@ class GameScreen : AppCompatActivity() {
 
     private fun updateOnlineStatus(index: Int, newValue: Int) {
         if (onlineStatus[index] != newValue) {
+            val oldValue = onlineStatus[index]
             onlineStatus[index] = newValue
             if (onlineStatus[index] == 0 && fromInt != index + 1) {
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.status_offline)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
             }
             if (onlineStatus[index] == 1 && fromInt != index + 1) {
+                if(oldValue==2) speak("${playerName(index + 1)} has joined again !", speed = 1f)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.status_online)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
             }
