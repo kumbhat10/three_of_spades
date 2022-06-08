@@ -577,10 +577,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun updateWholeScoreBoard() {
         if (scoreList[fromInt] > 0) {
             binding.winnerLottie.setAnimation(R.raw.trophy_lottie)
+            binding.textResult.text = getString(R.string.resultWon)
             nGamesWon += 1
             nGamesWonDaily += 1
         } else {
             binding.winnerLottie.setAnimation(R.raw.sad_lottie)
+            binding.textResult.text = getString(R.string.resultLost)
+
         }
         p1Gain += scoreList[1]
         p2Gain += scoreList[2]
@@ -598,7 +601,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         val scoredList = listOf(pt1, pt2, pt3, pt4)
         for (i in 1..nPlayers) {
             val target = if (i == bidder || i == buPlayer1) bidValue else scoreLimit - bidValue
-
             if (scoreList[i] > 0) arrayListWinner.add(WinnerItemDescription(scored = scoredList[i-1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
             else arrayListLoser.add(WinnerItemDescription(scored = scoredList[i-1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
         }
