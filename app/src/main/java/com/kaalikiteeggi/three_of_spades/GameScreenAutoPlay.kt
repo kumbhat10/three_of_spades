@@ -552,7 +552,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         countDownTimer("PlayCard", purpose = "cancel")
         if (vibrateStatus) vibrationStart()
 //        if (soundStatus) SoundManager.instance?.playShuffleSound() //soundShuffle.start()
-//        displayShufflingCards(distribute = false)
+        displayShufflingCards(distribute = false)
         scoreOpenStatus = true
         if (newGameStatus) { // dummy - newGameStatus not needed as score list has game index which is unique
             newGameStatus = false

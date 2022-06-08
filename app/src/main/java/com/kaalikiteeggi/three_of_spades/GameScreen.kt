@@ -551,16 +551,7 @@ class GameScreen : AppCompatActivity() {
                     gameData = data.getValue<GameData>()!!
                     tableCardsHandle()
                     bidValue.value = gameData.bv
-//                    cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
-                    cardsInHand = when(fromInt){
-                        1->gameData.ch1
-                        2->gameData.ch2
-                        3->gameData.ch3
-                        4->gameData.ch4
-                        5->gameData.ch5
-                        6->gameData.ch6
-                        else->gameData.ch7
-                    }
+                    cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
                     scoreList = gameData.s
                     if (gameData.gs in 2..5) displaySelfCards(animation = false)
                     if (currentBidder.value != gameData.bb) {
@@ -1272,7 +1263,7 @@ class GameScreen : AppCompatActivity() {
             countDownTimer("PlayCard", purpose = "cancel")
             if (vibrateStatus) vibrationStart()
 //            if (soundStatus) SoundManager.instance?.playShuffleSound() //
-//            displayShufflingCards(distribute = false)
+            displayShufflingCards(distribute = false)
             scoreOpenStatus = true
             if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
             if (newGameStatus) {
