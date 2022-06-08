@@ -18,6 +18,7 @@
     <string name="facebook_app_id">231024018145704</string>
     <string name="fb_login_protocol_scheme">fb231024018145704</string>
     <string name="facebook_client_token">1f5ed54d79e51e35ca5ae0bdc02ee558</string>
+    <string name="sdkkey">LE8KyK_mZGxs6ontpvzp9iODIcaFQ4q31dCapUTpZMen7GxTkDDv0B8Ney94C86K8A5NfnEHHCTEMxsOgZbhcL</string>
 
     <string name="scheme">http</string>
     <string name="scheme1">https</string>

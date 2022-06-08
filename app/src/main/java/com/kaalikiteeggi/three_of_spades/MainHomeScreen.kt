@@ -34,6 +34,7 @@ import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.ProductType
 import com.applovin.sdk.AppLovinPrivacySettings
+import com.applovin.sdk.AppLovinSdk
 import com.facebook.login.LoginManager
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -692,6 +693,7 @@ class MainHomeScreen : AppCompatActivity() {
     @Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
     private fun initializeAds() {
         AppLovinPrivacySettings.setHasUserConsent(true, this)
+        AppLovinSdk.initializeSdk(applicationContext)
         MobileAds.initialize(this) {
             Log.d("Inter", "onInitializationComplete")
         }

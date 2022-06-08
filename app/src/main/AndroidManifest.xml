@@ -74,6 +74,9 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <meta-data android:name="applovin.sdk.key"
+            android:value="LE8KyK_mZGxs6ontpvzp9iODIcaFQ4q31dCapUTpZMen7GxTkDDv0B8Ney94C86K8A5NfnEHHCTEMxsOgZbhcL"/>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-2714670043901113~8731907775" />
