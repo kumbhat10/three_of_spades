@@ -217,7 +217,6 @@ class MainHomeScreen : AppCompatActivity() {
             enterText() // press enter to join room
             buildCustomTabIntent()
 //			setupBillingClient() // memory leak issue so don't initialize everytime except when requested
-            if (BuildConfig.DEBUG) binding.trainingButton.visibility = View.VISIBLE
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         logFirebaseEvent("MainHomeScreen",  "open")
@@ -942,7 +941,7 @@ class MainHomeScreen : AppCompatActivity() {
             10 -> 4
             else -> 7
         }
-        if(view.tag.toString().toInt() != 10) createRoom() else createRoom(dummyReal = true)
+        if(view.tag.toString().toInt() != 10) createRoom() else if(BuildConfig.DEBUG) createRoom(dummyReal = true)
     }
 
     @SuppressLint("SetTextI18n")
@@ -1305,7 +1304,7 @@ class MainHomeScreen : AppCompatActivity() {
     fun trainingStart(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         trainAccess = false
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://kaaliteeri.page.link/?link=http://jo.in1/AABB&apn=com.kaalikiteeggi.three_of_spades&amv=70&st=Join%20my%20room%20ID%20%3D%3E%20AABB&si=https://tinyurl.com/3ofspade")))
+        if(BuildConfig.DEBUG) startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://kaaliteeri.page.link/?link=http://jo.in1/AABB&apn=com.kaalikiteeggi.three_of_spades&amv=70&st=Join%20my%20room%20ID%20%3D%3E%20AABB&si=https://tinyurl.com/3ofspade")))
 
         @Suppress("KotlinConstantConditions") if (trainAccess) {
             binding.maskAllLoading.visibility = View.VISIBLE

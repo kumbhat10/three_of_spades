@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -419,6 +420,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         } // endregion
         maskWinner.observe(this) {
             if (it) {
+                binding.startNextRoundButton.updateLayoutParams<ConstraintLayout.LayoutParams> { verticalBias = 0.95F }
                 binding.gridLoser.visibility = View.VISIBLE
                 binding.gridWinner.visibility = View.VISIBLE
                 binding.textWinner.visibility = View.VISIBLE
@@ -429,6 +431,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 binding.winnerLottie.playAnimation()
                 binding.konfettLottie.playAnimation()
             } else {
+                binding.startNextRoundButton.updateLayoutParams<ConstraintLayout.LayoutParams> { verticalBias = 0.5F }
                 binding.gridLoser.visibility = View.GONE
                 binding.gridWinner.visibility = View.GONE
                 binding.textWinner.visibility = View.GONE
