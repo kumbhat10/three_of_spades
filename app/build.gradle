@@ -21,7 +21,7 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 32
         versionCode 75
-        versionName "75A"
+        versionName "75B"
         signingConfig signingConfigs.debug
     }
     buildTypes {

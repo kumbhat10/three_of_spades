@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/dialogueTitle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/luckiest_guy"
+    android:textSize="@dimen/_22ssp"
+    android:textColor="@color/font_yellow"
+    android:gravity="center"
+    android:padding="@dimen/_10sdp">
+
+</TextView>

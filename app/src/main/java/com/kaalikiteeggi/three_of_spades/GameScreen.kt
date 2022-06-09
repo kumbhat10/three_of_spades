@@ -50,9 +50,7 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.kaalikiteeggi.three_of_spades.databinding.ActivityGameScreenBinding
-import com.kaalikiteeggi.three_of_spades.databinding.CardsItemListBinding
-import com.kaalikiteeggi.three_of_spades.databinding.CardsItemListSuitsBinding
+import com.kaalikiteeggi.three_of_spades.databinding.*
 import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
@@ -1280,7 +1278,7 @@ class GameScreen : AppCompatActivity() {
 //                maskWinner.value = false
                 if (fromInt == 1) { // show start next game button only to host
                     binding.startNextRoundButton.visibility = View.VISIBLE
-                    binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
+//                    binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
                 }else{
                     if(gameData.gs==6) centralText("Waiting for host to start next game", displayTime = 0)
                 }
@@ -2112,7 +2110,7 @@ class GameScreen : AppCompatActivity() {
                     logFirebaseEvent(key = "watched_ad")
                     if (fromInt == 1 && gameData.gs == 6) {
                         binding.startNextRoundButton.visibility = View.VISIBLE
-                        binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
+//                        binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
                     }
                     if (fromInt == 1) writeToRoomDatabase("OL/$from", 1) // for others except host, onStart will take care to update activity
                 }
@@ -2134,8 +2132,15 @@ class GameScreen : AppCompatActivity() {
         speak("Are you sure want to leave the game", speed = 0.95f, forceSpeak = true)
         if (!this::alertDialog.isInitialized) {
             val builder = AlertDialog.Builder(this)
-            builder.setTitle("Exit Game")
-            builder.setMessage("Are you sure want to leave the game ?")
+
+            val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
+            titleTextView.dialogueTitle.text = "Exit Game"
+            builder.setCustomTitle(titleTextView.root)
+
+            val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
+            bodyTextView.dialogueBody.text = getString(R.string.leave_room_confirm)
+            builder.setView(bodyTextView.root)
+
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                 toastCenter("Leaving game now")
                 speak("Leaving game ", forceSpeak = true)
@@ -2148,7 +2153,7 @@ class GameScreen : AppCompatActivity() {
                 closeRoom = false
             }
             alertDialog = builder.create()
-            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_player_stats))
+            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_dialogue_background))
         }
         alertDialog.show()
     }

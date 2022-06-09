@@ -41,9 +41,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.kaalikiteeggi.three_of_spades.databinding.ActivityGameScreenBinding
-import com.kaalikiteeggi.three_of_spades.databinding.CardsItemListBinding
-import com.kaalikiteeggi.three_of_spades.databinding.CardsItemListSuitsBinding
+import com.kaalikiteeggi.three_of_spades.databinding.*
 import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
@@ -570,7 +568,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 reviewRequested = true
             } else if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0)) showInterstitialAd()
             binding.startNextRoundButton.visibility = View.VISIBLE
-            binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
+//            binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
 //            maskWinner.value = false
         }, delayWaitGameMode6)
     }
@@ -1732,17 +1730,14 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
-
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
                     logFirebaseEvent(key = "watched_ad")
                     if (gameState.value!! == 6) {
                         binding.startNextRoundButton.visibility = View.VISIBLE
-                        binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
                     }
                 }
-
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
@@ -1760,8 +1755,15 @@ class GameScreenAutoPlay : AppCompatActivity() {
         speak("Are you sure want to leave the game", speed = 0.95f, forceSpeak = true)
         if (!this::alertDialog.isInitialized) {
             val builder = AlertDialog.Builder(this)
-            builder.setTitle("Exit Game")
-            builder.setMessage("Are you sure want to leave the game ?")
+
+            val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
+            titleTextView.dialogueTitle.text = "Exit Game"
+            builder.setCustomTitle(titleTextView.root)
+
+            val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
+            bodyTextView.dialogueBody.text = getString(R.string.leave_room_confirm)
+            builder.setView(bodyTextView.root)
+
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                 toastCenter("Leaving game now")
                 speak("Leaving game", forceSpeak = true)
@@ -1774,7 +1776,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 closeRoom = false
             }
             alertDialog = builder.create()
-            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_player_stats))
+            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_dialogue_background))
         }
         alertDialog.show()
     }

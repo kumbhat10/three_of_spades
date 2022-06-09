@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <gradient
+                android:angle="90"
+                android:centerX="0.5"
+                android:centerY="0.5"
+                android:endColor="@color/score1"
+                android:gradientRadius="100%"
+                android:startColor="#ED031919"
+                android:type="radial" />
+                <corners
+                    android:radius="@dimen/_10sdp"/>
+                <stroke android:width="2dp"
+                    android:color="@color/font_yellow"/>
+        </shape>
+    </item>
+
+<!--    <item android:drawable="@drawable/tint_background_game"/>-->
+
+</layer-list>

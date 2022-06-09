@@ -14,6 +14,7 @@ import android.os.*
 import android.speech.tts.TextToSpeech
 import android.text.Html
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -58,6 +59,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kaalikiteeggi.three_of_spades.databinding.ActivityMainHomeScreenBinding
+import com.kaalikiteeggi.three_of_spades.databinding.DialogueBodyBinding
+import com.kaalikiteeggi.three_of_spades.databinding.DialogueTitleBinding
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -127,6 +130,9 @@ class MainHomeScreen : AppCompatActivity() {
     private var offlineGameAllowedM = ""
 
     private var refUsersData = Firebase.firestore.collection("Users")
+    private val roomExistCheckLimit = 3
+    private var roomExistCheckCount = 0
+    private val allowedChars = ('A'..'H') + ('J'..'N') + ('P'..'Z') + ('2'..'9')  // 1, I , O and 0 skipped as they look same
     private lateinit var refRoomData: CollectionReference
     private lateinit var fireStoreRef: DocumentReference
 
@@ -220,7 +226,7 @@ class MainHomeScreen : AppCompatActivity() {
 //			setupBillingClient() // memory leak issue so don't initialize everytime except when requested
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        logFirebaseEvent("MainHomeScreen",  "open")
+        logFirebaseEvent("MainHomeScreen", "open")
 //        if(BuildConfig.DEBUG) Picasso.get().setIndicatorsEnabled(true)
 
     }
@@ -241,7 +247,7 @@ class MainHomeScreen : AppCompatActivity() {
                 errorJoinRoomID = false
             }
         }
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             binding.trainingButton.visibility = View.VISIBLE
             binding.trainingButton1.visibility = View.VISIBLE
         }
@@ -344,7 +350,7 @@ class MainHomeScreen : AppCompatActivity() {
     private fun playerStatsGridDisplay(transition: Boolean = true) {
         binding.playerStatsGrid.layoutManager = GridLayoutManager(this, 3)
         binding.playerStatsGrid.adapter = PlayerStatsGridAdapter(setDataListPS())
-        if(transition) Handler(Looper.getMainLooper()).postDelayed({binding.playerStatsML.transitionToEnd()},1500L)
+        if (transition) Handler(Looper.getMainLooper()).postDelayed({ binding.playerStatsML.transitionToEnd() }, 1500L)
 
     }
 
@@ -565,7 +571,7 @@ class MainHomeScreen : AppCompatActivity() {
         if (sharedPreferences.contains("speechStatus")) {
             speechStatus = sharedPreferences.getBoolean("speechStatus", true)
             binding.speechSwitch.isChecked = speechStatus
-        }else{
+        } else {
             speechStatus = true
             editor.putBoolean("speechStatus", speechStatus) // write username to preference file
             editor.apply()
@@ -627,15 +633,15 @@ class MainHomeScreen : AppCompatActivity() {
                 checkPendingPurchases()
                 querySkuDetailsRequest()
             }
+
             override fun onBillingServiceDisconnected() {
-            //				if(billingClientTry<3) setupBillingClient() // Test if required to try again
+                //				if(billingClientTry<3) setupBillingClient() // Test if required to try again
             }
         })
     }
 
     private fun checkPendingPurchases() {
-        billingClient.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(ProductType.INAPP).build()) {
-                _, purchases ->
+        billingClient.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(ProductType.INAPP).build()) { _, purchases ->
             for (purchase in purchases) {
                 if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
                     lifecycleScope.launch { acknowledgePurchase(purchase) }
@@ -714,6 +720,7 @@ class MainHomeScreen : AppCompatActivity() {
                 mInterstitialAd = null
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
+
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("Inter", "onAdLoaded")
                 loadInterAdTry = 0
@@ -730,11 +737,13 @@ class MainHomeScreen : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("Inter", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
                     addPoints()
                 }
+
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
@@ -755,6 +764,7 @@ class MainHomeScreen : AppCompatActivity() {
                 mRewardedAd = null
                 if (loadRewardedAdTry <= 3) loadRewardAd()
             }
+
             override fun onAdLoaded(rewardedAd: RewardedAd) {
                 Log.d("Inter", "Rewarded ad loaded")
                 mRewardedAd = rewardedAd
@@ -816,7 +826,7 @@ class MainHomeScreen : AppCompatActivity() {
         else 1000
         showDialogue(rewardAmount.toString())
         if (clickedDailyReward) logFirebaseEvent("daily_rewards", "coins$rewardAmount")
-        else logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY,  "coins$rewardAmount")
+        else logFirebaseEvent(FirebaseAnalytics.Event.EARN_VIRTUAL_CURRENCY, "coins$rewardAmount")
 
         totalCoins += rewardAmount  // reward with daily reward amount for watching video
         userBasicInfo.score = totalCoins  // reward with daily reward amount for watching video
@@ -840,15 +850,23 @@ class MainHomeScreen : AppCompatActivity() {
         }, 1250)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showDialogue(coins: String) {
         if (!this::alertDialog.isInitialized) {
             val builder = AlertDialog.Builder(this)
-            builder.setTitle("Congratulations !!! ${Emoji().celebrate}${Emoji().celebrate}${Emoji().celebrate}")
-            builder.setMessage("\nYou received $coins coins\n")
+
+            val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
+            titleTextView.dialogueTitle.text = "${Emoji().celebrate}  Congratulations  ${Emoji().celebrate}"
+            builder.setCustomTitle(titleTextView.root)
+
+            val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
+            bodyTextView.dialogueBody.text = "\nYou collected $coins coins\n"
+            builder.setView(bodyTextView.root)
+
             builder.setPositiveButton("Ok") { _: DialogInterface, _: Int ->
             }
             alertDialog = builder.create()
-            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_player_stats))
+            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_dialogue_background))
         }
         alertDialog.show()
     }
@@ -918,6 +936,7 @@ class MainHomeScreen : AppCompatActivity() {
             override fun onCancelled(errorDataLoad: DatabaseError) {
                 onlineGameAllowedM = errorDataLoad.message
             }
+
             override fun onDataChange(data: DataSnapshot) {
                 if (data.exists()) {
                     onlineGameAllowed = data.child("OnlineGame").value.toString().toInt() == 1
@@ -933,7 +952,11 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     fun createRoomButtonClicked(view: View) {
+        roomExistCheckCount = 0
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        binding.lightMHS.text = getString(R.string.loading)
+        binding.maskAllLoading.visibility = View.VISIBLE
+        binding.loadingText.text = getString(R.string.creatingRoom)
         if (soundStatus) SoundManager.instance?.playUpdateSound()
         offlineRoomCreate = view.tag.toString().toInt() == 0
 
@@ -943,12 +966,13 @@ class MainHomeScreen : AppCompatActivity() {
             10 -> 4
             else -> 7
         }
-        if(view.tag.toString().toInt() != 10) createRoom() else if(BuildConfig.DEBUG) createRoom(dummyReal = true)
+        if (view.tag.toString().toInt() != 10) createRoom() else if (BuildConfig.DEBUG) createRoom(testPlayersJoinRoom = true)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun createRoom(dummyReal: Boolean = false) {
+    private fun createRoom(testPlayersJoinRoom: Boolean = false) {
         binding.maskAllLoading.visibility = View.VISIBLE
+        binding.lightMHS.text = getString(R.string.loading)
         binding.loadingText.text = getString(R.string.creatingRoom)
         if (!offlineGameAllowed && offlineRoomCreate) {
             toastCenter(offlineGameAllowedM)
@@ -967,15 +991,48 @@ class MainHomeScreen : AppCompatActivity() {
                 binding.maskAllLoading.visibility = View.GONE
             }, 3500)
         } else {
-            val allowedChars = ('A'..'H') + ('J'..'N') + ('P'..'Z') + ('2'..'9')  // 1, I , O and 0 skipped as they look same
-            val roomID = if (BuildConfig.DEBUG) "AABB" else (1..4).map { allowedChars.random() }.joinToString("")
-            if (nPlayers == 7) {
-                if (!dummyReal) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data7)
-                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData7)
-            } else if (nPlayers == 4 && !offlineRoomCreate) {
-                if (!dummyReal) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data4)
-                else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData4)
+            getRoomIDAndCreateRoom(testPlayersJoinRoom)
+
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun getRoomIDAndCreateRoom(testPlayersJoinRoom: Boolean) {
+        if (roomExistCheckCount < roomExistCheckLimit) {
+            roomExistCheckCount += 1
+            Log.d("CreateRoom", "Try $roomExistCheckCount")
+            val roomID = if (BuildConfig.DEBUG && roomExistCheckCount == 1) "AABB" else (1..4).map { allowedChars.random() }.joinToString("")
+            refRoomData.document(roomID).get().addOnSuccessListener { dataSnapshot ->
+                if (dataSnapshot.data == null) {
+                    Log.d("CreateRoom", "Try $roomExistCheckCount : Room $roomID  doesn't exist. So creating room here")
+                    if (nPlayers == 7) {
+                        if (!testPlayersJoinRoom) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data7)
+                        else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData7)
+                    } else if (nPlayers == 4 && !offlineRoomCreate) {
+                        if (!testPlayersJoinRoom) createRoomWithID(roomID, CreateRoomData(userBasicInfo).data4)
+                        else createRoomWithID(roomID, CreateRoomData(userBasicInfo).dummyData4)
+                    }
+                    roomExistCheckCount = 0
+                } else {
+                    Log.d("CreateRoom", "Try $roomExistCheckCount : Room $roomID exist. Retrying again")
+                    getRoomIDAndCreateRoom(testPlayersJoinRoom)
+                }
+            }.addOnFailureListener {
+                binding.lightMHS.text = getString(R.string.room_error)
+                binding.loadingText.text = "Failed to create room.\nPlease try again"
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.maskAllLoading.visibility = View.GONE
+                }, 3000)
+                toastCenter("Failed to create room.\nPlease try again")
+                Log.d("CreateRoom", "Try $roomExistCheckCount : Failed")
             }
+        } else {
+            binding.lightMHS.text = getString(R.string.room_error)
+            binding.loadingText.text = "Failed to create room.\nPlease try again"
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.maskAllLoading.visibility = View.GONE
+            }, 3000)
+            toastCenter("Failed to create room.\nPlease try again")
         }
     }
 
@@ -985,6 +1042,8 @@ class MainHomeScreen : AppCompatActivity() {
             toastCenter("Failed to create room \nPlease try again or later")
         }.addOnSuccessListener {
             startNextActivity(roomID)
+        }.addOnFailureListener {
+            toastCenter("Failed to create room.\nPlease try again")
         }
     }
 
@@ -993,9 +1052,9 @@ class MainHomeScreen : AppCompatActivity() {
         if (!offlineRoomCreate) {
             editor.putString("Room", roomID) // write room ID in storage - to delete later
             editor.apply()
-            logFirebaseEvent("create_join_room_screen",  "create_$nPlayers")
+            logFirebaseEvent("create_join_room_screen", "create_$nPlayers")
         } else {
-            logFirebaseEvent("create_join_room_screen",  "create_offline_$nPlayers")
+            logFirebaseEvent("create_join_room_screen", "create_offline_$nPlayers")
         }
         val userStatsDaily = ArrayList(listOf(nGamesPlayedDaily, nGamesWonDaily, nGamesBidDaily))
         val userStatsTotal = ArrayList(listOf(nGamesPlayed + nGamesPlayedBot, nGamesWon + nGamesWonBot, nGamesBid + nGamesBidBot))
@@ -1004,10 +1063,7 @@ class MainHomeScreen : AppCompatActivity() {
 
         startActivity(Intent(this, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }.apply { putExtra("selfName", userName) }.apply { putExtra("photoURL", photoURL) }.apply { putExtra("totalCoins", totalCoins) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("from", "p1") }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("offline", offlineRoomCreate) }.putIntegerArrayListExtra("userStats", userStats).putIntegerArrayListExtra("userStatsTotal", userStatsTotal).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
-        finishAndRemoveTask() //		finish()
-        //		Handler(Looper.getMainLooper()).postDelayed({
-        //			finish()
-        //		}, 500)
+        finishAndRemoveTask()
     }
 
     private fun createRoomWindowOpen() {
@@ -1067,36 +1123,35 @@ class MainHomeScreen : AppCompatActivity() {
                                     if (soundStatus) SoundManager.instance?.playSuccessSound()
                                     binding.maskAllLoading.visibility = View.VISIBLE
                                     binding.loadingText.text = getString(R.string.joiningRoom)
-                                    logFirebaseEvent("create_join_room_screen",  "join_$nPlayers")
+                                    logFirebaseEvent("create_join_room_screen", "join_$nPlayers")
 
                                     if (queTemp == 0) {
                                         val roomDocRef = refRoomData.document(roomID)
-                                       Firebase.firestore.runTransaction { transaction ->
+                                        Firebase.firestore.runTransaction { transaction ->
                                             val snapshot = transaction.get(roomDocRef)
                                             val playerJoining = snapshot.getDouble("PJ")?.toInt()?.plus(1)!!
-                                            if(playerJoining <= nPlayers){
+                                            if (playerJoining <= nPlayers) {
                                                 transaction.update(roomDocRef, "p$playerJoining", userName, "PJ", playerJoining, "p${playerJoining}h", uid)
                                                 return@runTransaction playerJoining
-                                            }else{
+                                            } else {
                                                 throw FirebaseFirestoreException("Roomful", FirebaseFirestoreException.Code.ABORTED)
                                             }
+                                        }.addOnSuccessListener {
+                                            Log.d("FB Transaction Success", it.toString())
+                                            startCJRS(roomID = roomID, playerJoining = it.toInt(), nPlayers = nPlayers)
+                                        }.addOnFailureListener {
+                                            Log.d("FB Transaction Failed", it.localizedMessage!!)
+                                            SoundManager.instance?.playErrorSound()
+                                            if (vibrateStatus) vibrationStart()
+                                            binding.maskAllLoading.visibility = View.GONE
+                                            binding.roomIDInputLayout.helperText = null
+                                            errorJoinRoomID = true
+                                            val em = if (it.localizedMessage == "Roomful") "Room is Full" else "Failed to join room. Try again"
+                                            speak(em, speed = 1.07f)
+                                            toastCenter(em)
+                                            binding.roomIDInputLayout.error = em
                                         }
-                                           .addOnSuccessListener { Log.d("FB Transaction Success", it.toString())
-                                               startCJRS(roomID = roomID, playerJoining = it.toInt(), nPlayers = nPlayers)}
-                                           .addOnFailureListener {
-                                               Log.d("FB Transaction Failed", it.localizedMessage!!)
-                                               SoundManager.instance?.playErrorSound()
-                                               if (vibrateStatus) vibrationStart()
-                                               binding.maskAllLoading.visibility = View.GONE
-                                               binding.roomIDInputLayout.helperText = null
-                                               errorJoinRoomID = true
-                                               val em = if(it.localizedMessage=="Roomful") "Room is Full" else "Failed to join room. Try again"
-                                               speak(em, speed = 1.07f)
-                                               toastCenter(em)
-                                               binding.roomIDInputLayout.error = em
-                                           }
-                                    }
-                                    else {
+                                    } else {
                                         speak("Room is already joined", speed = 1.07f)
                                         startCJRS(roomID = roomID, playerJoining = que, nPlayers = nPlayers)
                                     }
@@ -1245,7 +1300,7 @@ class MainHomeScreen : AppCompatActivity() {
         speechStatus = binding.speechSwitch.isChecked
         if (speechStatus) {
             speak("Speech is enabled", speed = 0.95f)
-        }else speak("Speech is disabled", speed = 0.95f, ignoreSpeechStatus = true)
+        } else speak("Speech is disabled", speed = 0.95f, ignoreSpeechStatus = true)
         editor.putBoolean("speechStatus", speechStatus) // write username to preference file
         editor.apply()
     }
@@ -1270,7 +1325,7 @@ class MainHomeScreen : AppCompatActivity() {
         }
     }
 
-    private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1.05f, ignoreSpeechStatus:Boolean=false) {
+    private fun speak(speechText: String, pitch: Float = 0.95f, speed: Float = 1.05f, ignoreSpeechStatus: Boolean = false) {
         if ((speechStatus || ignoreSpeechStatus) && this::textToSpeech.isInitialized) {
             textToSpeech.setPitch(pitch)
             textToSpeech.setSpeechRate(speed)
@@ -1299,14 +1354,14 @@ class MainHomeScreen : AppCompatActivity() {
         }
     }
 
-    fun toastCenter(message: String, length: Int= Snackbar.LENGTH_LONG) {
+    fun toastCenter(message: String, length: Int = Snackbar.LENGTH_LONG) {
         Snackbar.make(binding.backgroundmhs, message, length).setAction("Dismiss") {}.setActionTextColor(getColor(R.color.borderblue)).show()
     }
 
     fun trainingStart(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         trainAccess = false
-        if(BuildConfig.DEBUG) startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://kaaliteeri.page.link/?link=http://jo.in1/AABB&apn=com.kaalikiteeggi.three_of_spades&amv=70&st=Join%20my%20room%20ID%20%3D%3E%20AABB&si=https://tinyurl.com/3ofspade")))
+        if (BuildConfig.DEBUG) startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://kaaliteeri.page.link/?link=http://jo.in1/AABB&apn=com.kaalikiteeggi.three_of_spades&amv=70&st=Join%20my%20room%20ID%20%3D%3E%20AABB&si=https://tinyurl.com/3ofspade")))
 
         @Suppress("KotlinConstantConditions") if (trainAccess) {
             binding.maskAllLoading.visibility = View.VISIBLE
@@ -1368,7 +1423,7 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun handleAllTimeView() {
         if (!rankAllTimeSetupDone) {
-            logFirebaseEvent("Ranking",  "Requested")
+            logFirebaseEvent("Ranking", "Requested")
             rankAllTimeSetupDone = true
             binding.rankProgress.visibility = View.VISIBLE
             binding.loadingProgressBar.visibility = View.VISIBLE
@@ -1392,6 +1447,7 @@ class MainHomeScreen : AppCompatActivity() {
                         super.onScrollStateChanged(recyclerView, newState)
                         if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) isScrollingAllTime = true
                     }
+
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
                         val itemCount = layoutManager.itemCount
@@ -1420,7 +1476,7 @@ class MainHomeScreen : AppCompatActivity() {
     private fun handleDailyView() {
         if (!rankDailySetupDone) {
             binding.loadingProgressBar.visibility = View.VISIBLE
-            logFirebaseEvent("Ranking",  "Requested")
+            logFirebaseEvent("Ranking", "Requested")
             rankDailySetupDone = true
             binding.rankProgress.visibility = View.VISIBLE
             recyclerView1 = (supportFragmentManager.findFragmentByTag("f0")?.view as View).findViewById(R.id.rankGallery)
@@ -1493,7 +1549,7 @@ class MainHomeScreen : AppCompatActivity() {
             intentInvite.putExtra(Intent.EXTRA_TITLE, "Invite friends")
             intentInvite.putExtra(Intent.EXTRA_TEXT, message)
             startActivity(Intent.createChooser(intentInvite, "Invite friends via "))
-            logFirebaseEvent(FirebaseAnalytics.Event.SHARE,  "invite")
+            logFirebaseEvent(FirebaseAnalytics.Event.SHARE, "invite")
         } catch (_: Exception) {
         }
     }
@@ -1541,7 +1597,7 @@ class MainHomeScreen : AppCompatActivity() {
     fun askLaterRating(view: View) { // request for rating after x days from today if choose ask later
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (soundStatus) SoundManager.instance?.playUpdateSound()
-        logFirebaseEvent("rate_us_vector.xml",  "rate_later")
+        logFirebaseEvent("rate_us_vector.xml", "rate_later")
         closeRatingWindow(View(this))
         ratingRequestDate = getChangedDate(SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt(), requestRatingAfterDays)
         editor.putInt("ratingRequestDate", ratingRequestDate)
@@ -1556,8 +1612,8 @@ class MainHomeScreen : AppCompatActivity() {
         closeRatingWindow(View(this))
         if (!rated) inAppReview()  //openPlayStore() //- disable in app review for a while
         else openPlayStore()
-        if (view.tag == "good") logFirebaseEvent("rate_us_vector.xml",  "rate_good")
-        else if (view.tag == "bad") logFirebaseEvent("rate_us_vector.xml",  "rate_bad")
+        if (view.tag == "good") logFirebaseEvent("rate_us_vector.xml", "rate_good")
+        else if (view.tag == "bad") logFirebaseEvent("rate_us_vector.xml", "rate_bad")
     }
 
     private fun openPlayStore() {
@@ -1577,11 +1633,11 @@ class MainHomeScreen : AppCompatActivity() {
 
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
         if (soundStatus) SoundManager.instance?.playUpdateSound()
-        if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || binding.playerStatsML.progress == 0f || dailyRewardWindow  || createRoomWindowStatus) && ratingWindowOpenStatus && backButtonPressedStatus) {            //            moveTaskToBack(true)
+        if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || binding.playerStatsML.progress == 0f || dailyRewardWindow || createRoomWindowStatus) && ratingWindowOpenStatus && backButtonPressedStatus) {            //            moveTaskToBack(true)
             super.onBackPressed()
             closeRatingWindow(View(this))
             backButtonPressedStatus = false
-        } else if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || binding.playerStatsML.progress == 0f || createRoomWindowStatus || dailyRewardWindow  || ratingWindowOpenStatus) && checkRatingRequest()) {
+        } else if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || binding.playerStatsML.progress == 0f || createRoomWindowStatus || dailyRewardWindow || ratingWindowOpenStatus) && checkRatingRequest()) {
             backButtonPressedStatus = true
             openRatingWindow(View(this))
         } else if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || binding.playerStatsML.progress == 0f || createRoomWindowStatus || dailyRewardWindow || ratingWindowOpenStatus)) {
@@ -1595,7 +1651,7 @@ class MainHomeScreen : AppCompatActivity() {
         if (createRoomWindowStatus) createRoomWindowExit(View(this))
         if (settingsWindowStatus) closeSettingsWindow(View(this))
         if (binding.playerStatsML.progress == 0f) binding.playerStatsML.transitionToEnd() //openClosePlayerStats(View(this))
-        if(dailyRewardWindow) closeDailyRewardWindowDisplay(View(this))
+        if (dailyRewardWindow) closeDailyRewardWindowDisplay(View(this))
         //           super.onBackPressed()
     }
 
@@ -1670,14 +1726,14 @@ class MainHomeScreen : AppCompatActivity() {
                         rated = true
                         editor.putBoolean("rated", true)
                         editor.apply()
-                        logFirebaseEvent("rate_us",  "rated")
+                        logFirebaseEvent("rate_us", "rated")
                         refUsersData.document(uid).set(hashMapOf("rated" to 1, "ratedD" to today), SetOptions.merge())
                     } else {
                         openPlayStore()
                     }
                 }
             } else {
-                logFirebaseEvent("rate_us_vector.xml",  "ratedFailure")
+                logFirebaseEvent("rate_us_vector.xml", "ratedFailure")
                 openPlayStore()
             }
         }

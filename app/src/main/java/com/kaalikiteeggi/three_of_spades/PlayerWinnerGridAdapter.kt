@@ -33,7 +33,7 @@ class PlayerWinnerGridAdapter(var arrayList: ArrayList<WinnerItemDescription>, v
         if(arrayList[position].imageUrl.isNotEmpty()) Picasso.get().load(arrayList[position].imageUrl).resize(400, 400).centerCrop().into(view.findViewById<ShapeableImageView>(R.id.userPhoto1))
         view.findViewById<MaterialTextView>(R.id.userName1).text = arrayList[position].playerName
         view.findViewById<MaterialTextView>(R.id.userScore2).text = if(arrayList[position].points > 0) "+${arrayList[position].points}" else arrayList[position].points.toString()
-        view.findViewById<MaterialTextView>(R.id.userScore1).text = arrayList[position].scored.toString() + " / " + arrayList[position].target.toString()
+        view.findViewById<MaterialTextView>(R.id.userScore1).text = arrayList[position].scored.toString() + " /" + arrayList[position].target.toString()
         if(winner) {
             view.background =  ContextCompat.getDrawable(parent!!.context, R.drawable.black_button)
         }

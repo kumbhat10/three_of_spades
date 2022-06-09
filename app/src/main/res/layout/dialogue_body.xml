@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogueBody"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/almendra"
+    android:gravity="left"
+    android:paddingStart="@dimen/_12sdp"
+    android:paddingEnd="0dp"
+    android:text="@string/leave_room_confirm"
+    android:textColor="@color/font_yellow"
+    android:textSize="@dimen/_15ssp"
+    tools:ignore="RtlHardcoded">
+
+</TextView>

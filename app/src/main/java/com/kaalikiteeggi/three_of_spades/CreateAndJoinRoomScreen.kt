@@ -11,10 +11,8 @@ import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.*
 import android.speech.tts.TextToSpeech
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowInsetsController
-import android.view.WindowManager
+import android.util.TypedValue
+import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -25,6 +23,7 @@ import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.ktx.database
@@ -35,6 +34,8 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.kaalikiteeggi.three_of_spades.databinding.ActivityCreateJoinRoomScreenBinding
+import com.kaalikiteeggi.three_of_spades.databinding.DialogueBodyBinding
+import com.kaalikiteeggi.three_of_spades.databinding.DialogueTitleBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -509,22 +510,27 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         speak("Are you sure want to leave the room", speed = 1f, forceSpeak = true)
         if (!this::alertDialog.isInitialized) {
             val builder = AlertDialog.Builder(this)
-            builder.setTitle("Leave Room")
-            builder.setMessage("Are you sure want to leave the room ?")
+
+            val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
+            titleTextView.dialogueTitle.text = getString(R.string.leave_room)
+            builder.setCustomTitle(titleTextView.root)
+
+            val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
+            bodyTextView.dialogueBody.text = getString(R.string.leave_room_confirm)
+            builder.setView(bodyTextView.root)
+
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                toastCenter("Leaving room.....")
                 speak("Leaving room ", forceSpeak = true)
                 Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, 700)
             }
             builder.setNegativeButton("No") { _: DialogInterface, _: Int ->
                 closeRoom = false
-                speak("Glad to hear that", forceSpeak = true)
             }
             builder.setOnDismissListener {
                 closeRoom = false
             }
             alertDialog = builder.create()
-            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_player_stats))
+            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_dialogue_background))
         }
         alertDialog.show()
     }

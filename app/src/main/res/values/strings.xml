@@ -152,5 +152,8 @@
     <string name="resultWon">Victory</string>
     <string name="resultLost">Defeat</string>
     <string name="startcjrs">Start</string>
+    <string name="leave_room">Leave Room</string>
+    <string name="leave_room_confirm">Are you sure want to leave?</string>
+    <string name="room_error">Room Error</string>
 
 </resources>

@@ -1379,7 +1379,6 @@
         app:layout_constraintBottom_toBottomOf="@id/textViewBidValue"
         app:layout_constraintTop_toTopOf="parent"/>
 
-
     <com.robinhood.ticker.TickerView
         android:id="@+id/textViewBidValue"
         android:layout_width="@dimen/_50sdp"
@@ -1389,7 +1388,8 @@
         android:padding="@dimen/_5sdp"
         android:text="@string/bidValue2"
         android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_10ssp"
+        android:textStyle="bold"
+        android:textSize="@dimen/_11ssp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewBider"
         app:ticker_animationDuration="800"
@@ -1407,7 +1407,7 @@
         android:paddingEnd="@dimen/_10sdp"
         android:text="@string/Bider"
         android:textColor="@color/username"
-        android:textSize="@dimen/_11ssp"
+        android:textSize="@dimen/_12ssp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RelativeOverlap,RtlSymmetry,TextContrastCheck" />
@@ -2392,10 +2392,13 @@
         android:id="@+id/startNextRoundButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shine_bid_value"
         android:clickable="true"
         android:contentDescription="@string/todo"
         android:focusable="true"
+        android:shadowColor="@color/Black"
+        android:shadowRadius="10"
+        android:shadowDy="10"
+        android:shadowDx="10"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
         android:onClick="startNextGame"
@@ -2406,7 +2409,7 @@
         android:text="@string/start_next_game"
         android:textColor="@color/white"
         android:fontFamily="@font/luckiest_guy"
-        android:textSize="@dimen/_17ssp"
+        android:textSize="@dimen/_27ssp"
         android:visibility="gone"
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintBottom_toBottomOf="parent"

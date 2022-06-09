@@ -899,7 +899,7 @@
             android:gravity="center"
             android:text="@string/fetching_player"
             android:textColor="@color/font_grey_settings"
-            android:textSize="@dimen/_17ssp"
+            android:textSize="@dimen/_14ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lightMHS" />
