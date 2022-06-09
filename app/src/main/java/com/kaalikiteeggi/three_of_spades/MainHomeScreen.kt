@@ -228,13 +228,21 @@ class MainHomeScreen : AppCompatActivity() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         logFirebaseEvent("MainHomeScreen", "open")
 //        if(BuildConfig.DEBUG) Picasso.get().setIndicatorsEnabled(true)
-
     }
 
     private fun mainIconGridDisplay() {
         binding.mainIconGridView.layoutManager = GridLayoutManager(this, 2)
         binding.mainIconGridView.adapter = MHSIconAdapter(this, setDataListMHS()) { output ->
             actionGridItemClick(position = output) // receive position output here
+        }
+
+        val arrayListCreateRoom = ArrayList<CreateRoomItemDescription>()
+        arrayListCreateRoom.add(CreateRoomItemDescription(gameInfo = getString(R.string.play_offline), gameInfo1 = getString(R.string._1_deck), gameInfo2 = getString(R.string._4_players)))
+        arrayListCreateRoom.add(CreateRoomItemDescription(gameInfo = getString(R.string.play_online), gameInfo1 = getString(R.string._1_deck), gameInfo2 = getString(R.string._4_players)))
+        arrayListCreateRoom.add(CreateRoomItemDescription(gameInfo = getString(R.string.play_online), gameInfo1 = getString(R.string._2_deck), gameInfo2 = getString(R.string._7_players)))
+        binding.gridCreateRoom.adapter = CreateRoomGridAdapter(context = this, arrayList = arrayListCreateRoom) { position ->
+            Log.d("Create Room", position.toString())
+            createRoomButtonClicked(position = position)
         }
 
         //		mainIconGridView.visibility = View.VISIBLE
@@ -769,8 +777,9 @@ class MainHomeScreen : AppCompatActivity() {
                 Log.d("Inter", "Rewarded ad loaded")
                 mRewardedAd = rewardedAd
                 loadRewardedAdTry = 1
-                binding.watchVideo.setImageResource(R.drawable.watch_ad_1000)
                 binding.watchVideo.visibility = View.VISIBLE
+                binding.watchVideo.resumeAnimation()
+                binding.watchVideoPromo.visibility = View.VISIBLE
             }
         })
     }
@@ -781,16 +790,18 @@ class MainHomeScreen : AppCompatActivity() {
                 override fun onAdShowedFullScreenContent() {                        // Called when ad is shown.
                     Log.d("Inter", "mRewardedAd Ad was shown.")
                     if (clickedDailyReward) binding.dailyRewardGridLayout.visibility = View.GONE
-                    binding.watchVideo.clearAnimation()
+                    binding.watchVideo.cancelAnimation()
                     binding.watchVideo.visibility = View.GONE
+                    binding.watchVideoPromo.visibility = View.GONE
                     if (musicStatus) soundBackground.pause()
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     // Called when ad fails to show.
                     Log.d("Inter", "mRewardedAd Ad failed to show.")
-                    binding.watchVideo.clearAnimation()
+                    binding.watchVideo.cancelAnimation()
                     binding.watchVideo.visibility = View.GONE
+                    binding.watchVideoPromo.visibility = View.GONE
                     loadRewardAd()
                 }
 
@@ -813,8 +824,9 @@ class MainHomeScreen : AppCompatActivity() {
                 loadRewardAd()
             }
         } else {
-            binding.watchVideo.clearAnimation()
+            binding.watchVideo.cancelAnimation()
             binding.watchVideo.visibility = View.GONE
+            binding.watchVideoPromo.visibility = View.GONE
             loadRewardAd()
         }
     }
@@ -881,19 +893,22 @@ class MainHomeScreen : AppCompatActivity() {
             addPoints()
         } else if (mRewardedAd != null && !newUser) { // check Rewarded Ads loaded or not
             showRewardedVideoAd()
-            binding.watchVideo.clearAnimation()
+            binding.watchVideo.cancelAnimation()
             binding.watchVideo.visibility = View.GONE
+            binding.watchVideoPromo.visibility = View.GONE
         } else if (mInterstitialAd != null && !newUser) { // check Interstitial Ads loaded or not
             showInterstitialAd()
             binding.dailyRewardGridLayout.visibility = View.GONE
-            binding.watchVideo.clearAnimation()
+            binding.watchVideo.cancelAnimation()
             binding.watchVideo.visibility = View.GONE
+            binding.watchVideoPromo.visibility = View.GONE
             loadRewardAd()
         } else {
             binding.dailyRewardGridLayout.visibility = View.GONE
             addPoints()
-            binding.watchVideo.clearAnimation()
+            binding.watchVideo.cancelAnimation()
             binding.watchVideo.visibility = View.GONE
+            binding.watchVideoPromo.visibility = View.GONE
             loadRewardAd()
             if (!premiumStatus) loadInterstitialAd()
         }
@@ -951,22 +966,25 @@ class MainHomeScreen : AppCompatActivity() {
         })
     }
 
-    fun createRoomButtonClicked(view: View) {
+    fun createRoomButton(view: View) {
+        createRoomButtonClicked(position = 10)
+    }
+
+    private fun createRoomButtonClicked(position: Int) {
         roomExistCheckCount = 0
-        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         binding.lightMHS.text = getString(R.string.loading)
         binding.maskAllLoading.visibility = View.VISIBLE
         binding.loadingText.text = getString(R.string.creatingRoom)
         if (soundStatus) SoundManager.instance?.playUpdateSound()
-        offlineRoomCreate = view.tag.toString().toInt() == 0
+        offlineRoomCreate = position == 0
 
-        nPlayers = when (view.tag.toString().toInt()) {
+        nPlayers = when (position) {
             0 -> 4
-            4 -> 4
-            10 -> 4
-            else -> 7
+            1 -> 4
+            2 -> 7
+            else -> 4
         }
-        if (view.tag.toString().toInt() != 10) createRoom() else if (BuildConfig.DEBUG) createRoom(testPlayersJoinRoom = true)
+        if (position != 10) createRoom() else if (BuildConfig.DEBUG) createRoom(testPlayersJoinRoom = true)
     }
 
     @SuppressLint("SetTextI18n")
@@ -1067,21 +1085,14 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     private fun createRoomWindowOpen() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            binding.closeCreateRoom.visibility = View.VISIBLE
-        }, 270)
         binding.createRoomFrame.visibility = View.VISIBLE
-        anim(binding.createRoomFrameTemp, R.anim.slide_down_player_stats) //		anim(closeCreateRoom, R.anim.zoomin_center)
+        anim(binding.gridCreateRoom, R.anim.slide_down_player_stats)
         createRoomWindowStatus = true
     }
 
     fun createRoomWindowExit(view: View) {
-        binding.closeCreateRoom.clearAnimation()
-        binding.createSingle.clearAnimation()
-        binding.createDouble.clearAnimation()
-        binding.closeCreateRoom.visibility = View.GONE
         binding.maskAllLoading.visibility = View.GONE
-        anim(binding.createRoomFrameTemp, R.anim.slide_up_player_stats)
+        anim(binding.gridCreateRoom, R.anim.slide_up_player_stats)
         createRoomWindowStatus = false
         Handler(Looper.getMainLooper()).postDelayed({
             binding.createRoomFrame.visibility = View.GONE

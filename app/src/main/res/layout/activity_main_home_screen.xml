@@ -128,7 +128,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
-            android:onClick="createRoomButtonClicked"
+            android:onClick="createRoomButton"
             android:tag="10"
             android:text="@string/dummy_nonline"
             android:textColor="@color/white"
@@ -171,6 +171,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card.ProfileCard"
             tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/watchVideoPromo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/get_1000_coins"
+            android:textSize="@dimen/_9ssp"
+            android:fontFamily="@font/luckiest_guy"
+            android:textColor="@color/Black"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/profileCard"
+            app:layout_constraintEnd_toEndOf="@id/profileCard"/>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profilePic"
@@ -310,20 +325,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/watchVideo"
-        android:layout_width="@dimen/_70sdp"
-        android:layout_height="@dimen/mhsWatchVideoIconsSize"
-        android:layout_marginTop="@dimen/_24sdp"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_55sdp"
+        android:layout_marginTop="@dimen/_14sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:focusable="true"
+        android:clickable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="callToShowRewardedVideoAd"
         android:src="@drawable/watch_ad_1000"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="false"
+        app:lottie_rawRes="@raw/watch_video_lottie"
+        app:lottie_repeatCount="-1"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settingsLayout"
@@ -579,78 +598,50 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/createRoomFrame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:background="@color/layoutBackgroundLittle"
         android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@id/bannerMHS"
+        app:layout_constraintTop_toTopOf="parent"
         android:focusable="true"
         android:onClick="createRoomWindowExit"
         android:visibility="gone">
+
+        <GridView
+            android:id="@+id/gridCreateRoom"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_350sdp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:layout_constraintVertical_bias="1"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:verticalSpacing="@dimen/_5sdp"
+            android:numColumns="1"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/closeCreateRoom"/>
 
         <ImageView
             android:id="@+id/closeCreateRoom"
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_36sdp"
-            android:layout_below="@+id/createRoomFrameTemp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_minus20sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="@dimen/_4sdp"
             android:clickable="true"
             android:focusable="true"
             android:onClick="createRoomWindowExit"
             app:srcCompat="@drawable/close"
             tools:ignore="ContentDescription" />
 
-        <LinearLayout
-            android:id="@+id/createRoomFrameTemp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/redcartoonbanner"
-            android:orientation="vertical"
-            android:padding="@dimen/_30sdp">
-
-            <pl.droidsonroids.gif.GifImageButton
-                android:layout_width="@dimen/deckWidth"
-                android:layout_height="@dimen/deckHeight"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_35sdp"
-                android:layout_marginBottom="@dimen/_6sdp"
-                android:background="@drawable/offline_single_deck"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:onClick="createRoomButtonClicked"
-                android:tag="0" />
-
-            <pl.droidsonroids.gif.GifImageButton
-                android:id="@+id/createSingle"
-                android:layout_width="@dimen/deckWidth"
-                android:layout_height="@dimen/deckHeight"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_6sdp"
-                android:background="@drawable/single_deck"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:onClick="createRoomButtonClicked"
-                android:tag="4" />
-
-            <pl.droidsonroids.gif.GifImageButton
-                android:id="@+id/createDouble"
-                android:layout_width="@dimen/deckWidth"
-                android:layout_height="@dimen/deckHeight"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_15sdp"
-                android:background="@drawable/double_deck"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:onClick="createRoomButtonClicked"
-                android:tag="7" />
-        </LinearLayout>
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dailyRewardGridLayout"

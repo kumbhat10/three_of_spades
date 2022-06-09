@@ -38,6 +38,15 @@
                 app:customColorValue="#000000" />
         </Constraint>
 
+        <Constraint android:id="@id/watchVideoPromo">
+            <CustomAttribute
+                app:attributeName="TextColor"
+                app:customColorValue="#000000" />
+            <PropertySet
+                android:visibility="gone"
+                app:visibilityMode="ignore"/>
+        </Constraint>
+
         <Constraint android:id="@+id/userScoreMHS">
             <CustomAttribute
                 app:attributeName="TextColor"
@@ -174,6 +183,15 @@
                 app:customColorValue="@color/font_grey_settings" />
         </Constraint>
 
+        <Constraint android:id="@id/watchVideoPromo">
+            <CustomAttribute
+                app:attributeName="TextColor"
+                app:customColorValue="@color/white" />
+            <PropertySet
+                android:visibility="gone"
+                app:visibilityMode="ignore"/>
+        </Constraint>
+
         <Constraint android:id="@+id/userScoreMHS">
             <CustomAttribute
                 app:attributeName="TextColor"
@@ -288,6 +306,21 @@
                 <CustomAttribute
                     app:attributeName="TextColor"
                     app:customColorValue="@color/font_grey_settings" />
+            </KeyAttribute>
+
+            <KeyAttribute
+                app:framePosition="40"
+                app:motionTarget="@+id/watchVideoPromo">
+                <CustomAttribute
+                    app:attributeName="TextColor"
+                    app:customColorValue="#000000" />
+            </KeyAttribute>
+            <KeyAttribute
+                app:framePosition="60"
+                app:motionTarget="@+id/watchVideoPromo">
+                <CustomAttribute
+                    app:attributeName="TextColor"
+                    app:customColorValue="@color/white" />
             </KeyAttribute>
 
             <KeyAttribute

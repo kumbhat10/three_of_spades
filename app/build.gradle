@@ -65,7 +65,7 @@ dependencies {
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
     implementation 'cat.ereza:customactivityoncrash:2.4.0'
     implementation 'ch.halcyon:squareprogressbar:1.6.4'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.24'
+//    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.24'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'  // keep same size across different screen resolutions
     implementation 'com.intuit.ssp:ssp-android:1.0.6' // keep same text size across different screen resolutions
     implementation 'com.robinhood.ticker:ticker:2.0.4' // Numbers increment animation - like counter

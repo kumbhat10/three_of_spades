@@ -471,7 +471,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         cardsIndexLimit = 53
         roundNumberLimit = 13
         scoreLimit = 355
-        scoreList = listOf(pt1, pt2, pt3, pt4) //        findViewById<GifImageView>(R.id.imageViewChat).visibility = View.GONE
+        scoreList = listOf(pt1, pt2, pt3, pt4)
+
         binding.textView14.visibility = View.VISIBLE
         binding.textView14a.visibility = View.VISIBLE
         findViewById<ImageView>(R.id.onlinep1_4).visibility = View.VISIBLE

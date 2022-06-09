@@ -1,6 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="testGameData">n</string>
-    <string name="useTestDevice">y</string>
     <string name="pathRoom">NewRoom</string>
 
     <string name="customactivityoncrash_error_activity_error_occurred_explanation">"It's not you, It's us &#128522; \n\nServer is high on spirit &#129396; \n\n(Sending error report to developer)"</string>
@@ -18,7 +16,6 @@
     <string name="facebook_app_id">231024018145704</string>
     <string name="fb_login_protocol_scheme">fb231024018145704</string>
     <string name="facebook_client_token">1f5ed54d79e51e35ca5ae0bdc02ee558</string>
-    <string name="sdkkey">LE8KyK_mZGxs6ontpvzp9iODIcaFQ4q31dCapUTpZMen7GxTkDDv0B8Ney94C86K8A5NfnEHHCTEMxsOgZbhcL</string>
 
     <string name="scheme">http</string>
     <string name="scheme1">https</string>
@@ -29,14 +26,6 @@
     <string name="inviteLink">https://kaaliteeri.page.link/invite</string>
 
     <string name="testDeviceID">788209F4A59FEBFD2269F384616B107B</string>
-    <string name="bannerReal_MP">3c2fa482ece345faa1f68203bc9b8123</string>
-    <string name="bannerTest_MP">b195f8dd8ded45fe847ad89ed1d016da</string>
-
-    <string name="interstitialTest_mp">24534e1901884e398f1253216226017e</string>
-    <string name="interstitialReal_mp">f9356ee2eeb346949d95926fc2fcb60f</string>
-
-    <string name="rewardedReal_mp">380ef1aa57bb4c409eb2c71cc1f938af</string>
-    <string name="rewardedTest_mp">920b6145fb1546cf8b5cf2ac34638bb7</string>
 
     <string name="banner_admob">ca-app-pub-2714670043901113/2653923895</string>
     <string name="inter_admob">ca-app-pub-2714670043901113/6210025529</string>
@@ -60,7 +49,6 @@
 
     <string name="hinRoomID">Room ID</string>
     <string name="waitingToJoin">Invite\nPlayers</string>
-    <string name="shuffling_cards">Shuffling Cards</string>
     <string name="playerView6">Player</string>
     <string name="playerView5">Player</string>
     <string name="playerView4">Player</string>
@@ -94,7 +82,6 @@
     <string name="partnerSelection1">Choose your 1st partner card</string>
     <string name="partnerSelection1_4">Choose your partner card</string>
     <string name="partnerSelection2">Choose your 2nd partner card</string>
-    <string name="shufflingcards">Shuffling Cards</string>
     <string name="bothPartner">Both</string>
     <string name="onlyPartner">Only</string>
     <string name="anyPartner">Any</string>
@@ -105,7 +92,6 @@
     <string name="playerRank">1st</string>
     <string name="newplayer">New\nPlayer</string>
     <string name="room_id">Offline Room</string>
-    <string name="welcomeBack">Hello</string>
 
     <string name="todo">TODO</string>
     <string name="nill">Nill</string>
@@ -141,7 +127,6 @@
     <string name="train">Train</string>
     <string name="privacy_policy"><u>Privacy Policy</u></string>
     <string name="register">Please Sign in</string>
-    <string name="rate_us">Rate\nus</string>
     <string name="no_ad">Ads</string>
     <string name="swipe">Swipe Up/Down to hide/reveal</string>
     <string name="join">Join</string>
@@ -155,5 +140,12 @@
     <string name="leave_room">Leave Room</string>
     <string name="leave_room_confirm">Are you sure want to leave?</string>
     <string name="room_error">Room Error</string>
+    <string name="_4_players">4 Players</string>
+    <string name="_7_players">7 Players</string>
+    <string name="_1_deck">  1 Deck</string>
+    <string name="_2_deck">  2 Decks</string>
+    <string name="play_offline">Play Offline</string>
+    <string name="play_online">Play Online</string>
+    <string name="get_1000_coins">Get 1000\ncoins</string>
 
 </resources>
