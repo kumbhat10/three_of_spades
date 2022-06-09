@@ -90,8 +90,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.1.2'
     implementation 'com.google.firebase:firebase-perf-ktx:20.1.0'
 
-    implementation 'com.applovin:applovin-sdk:11.4.2'
-    implementation  'com.google.ads.mediation:applovin:11.4.0.0'
+    implementation 'com.applovin:applovin-sdk:11.4.3'
+    implementation  'com.google.ads.mediation:applovin:11.4.2.0'
 
     implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
     implementation 'com.google.android.material:material:1.6.1'

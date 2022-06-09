@@ -9,6 +9,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -41,6 +43,7 @@ class StartScreen : AppCompatActivity() {
 	private lateinit var intentBuilder: CustomTabsIntent.Builder
 	private val privacyPolicyUrl = "https://sites.google.com/view/kaali-ki-teeggi/privacy-policy"
 
+	private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 	private lateinit var binding: ActivityStartScreenBinding
 	@SuppressLint("ShowToast", "SetTextI18n")
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +91,7 @@ class StartScreen : AppCompatActivity() {
 				signInWithCredential(credentialFacebook, "facebook")
 			}
 		}) // endregion
+
 		// region Google Sign In
 
 		val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -95,33 +99,31 @@ class StartScreen : AppCompatActivity() {
 			.requestEmail()
 			.build()
 
+		resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+
+			if (result.resultCode == Activity.RESULT_OK) {
+				binding.maskButtons.visibility = View.VISIBLE
+			} else {
+				binding.maskButtons.visibility = View.GONE
+			}
+			if (result.resultCode == Activity.RESULT_OK) {
+				val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
+				if (account != null) {
+					val credentialGoogle = GoogleAuthProvider.getCredential(account.idToken, null)
+					signInWithCredential(credentialGoogle, "google")
+				}
+			}
+		}
+
 		mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 		binding.googleSignInButton.setOnClickListener {
 			it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-			SoundManager.instance?.playUpdateSound() //soundUpdate.start()
-			startActivityForResult(mGoogleSignInClient.signInIntent, googleCode)
+			SoundManager.instance?.playUpdateSound()
+			resultLauncher.launch(mGoogleSignInClient.signInIntent)
 			binding.maskButtons.visibility = View.VISIBLE
 			binding.loadingText3.text = getString(R.string.wait)
 			binding.loadingTextSC.visibility = View.VISIBLE
 		} //endregion
-	}
-
-	@Deprecated("Deprecated in Java")
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		super.onActivityResult(requestCode, resultCode, data)
-		if (resultCode == Activity.RESULT_OK) {
-			binding.maskButtons.visibility = View.VISIBLE
-		} else {
-			binding.maskButtons.visibility = View.GONE
-		}
-		if (requestCode == googleCode && resultCode == Activity.RESULT_OK) {
-			val account = GoogleSignIn.getSignedInAccountFromIntent(data).result
-			if (account != null) {
-				val credentialGoogle = GoogleAuthProvider.getCredential(account.idToken, null)
-				signInWithCredential(credentialGoogle, "google")
-			}
-		}
-		callBackManager.onActivityResult(requestCode, resultCode, data)
 	}
 
 	private fun signInWithCredential(credential: AuthCredential, provider: String) {
