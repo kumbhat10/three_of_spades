@@ -90,7 +90,7 @@
     <dimen name="crjsgap">@dimen/_70sdp</dimen>
     <dimen name="bidcoingap">@dimen/_11sdp</dimen>
     <dimen name="bidcoinsize">@dimen/_55sdp</dimen>
-    <dimen name="bidcointextsize">@dimen/_16ssp</dimen>
+    <dimen name="bidcointextsize">@dimen/_14ssp</dimen>
     <dimen name="settingWidth">@dimen/_80sdp</dimen>
     <dimen name="settingHeight">@dimen/_40sdp</dimen>
 

@@ -33,6 +33,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textview.MaterialTextView
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
@@ -601,8 +602,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         val scoredList = listOf(pt1, pt2, pt3, pt4)
         for (i in 1..nPlayers) {
             val target = if (i == bidder || i == buPlayer1) bidValue else scoreLimit - bidValue
-            if (scoreList[i] > 0) arrayListWinner.add(WinnerItemDescription(scored = scoredList[i-1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
-            else arrayListLoser.add(WinnerItemDescription(scored = scoredList[i-1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            if (scoreList[i] > 0) arrayListWinner.add(WinnerItemDescription(scored = scoredList[i - 1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            else arrayListLoser.add(WinnerItemDescription(scored = scoredList[i - 1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
         }
         binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner, winner = true)
         binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser, winner = false)
@@ -643,11 +644,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
         for (i in 0..nPlayers) {
             viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).text = data[i].toString()
             if (!upDateHeader) viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._12ssp))
-            // else viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._13ssp))
             if (i > 0 && !upDateHeader && data[i].toString().toInt() < 0) {
-                // viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
                 viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.Red))
-            } else if (i > 0 && !upDateHeader) { //                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTypeface(Typeface.DEFAULT_BOLD,Typeface.BOLD)
+            } else if (i > 0 && !upDateHeader) {
                 viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.borderblueDark1g))
             }
         }
@@ -800,10 +799,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
             for (i in 0 until nPlayers) {
                 val j = i + 1
                 if (j == bidder || (j == buPlayer1 && buFound1 != 0)) {
-                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j)
+//                    findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(j)
                     findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$bidTeamScore /$bidValue"
                 } else {
-                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) //+ ": ${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
+//                    findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(j)
                     findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
                 }
             }
@@ -1444,9 +1443,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (playerTurn.value!! == fromInt) {
                 findViewById<ConstraintLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
                 Handler(Looper.getMainLooper()).postDelayed({
-                    findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE
                     findViewById<ConstraintLayout>(R.id.frameAskBid).clearAnimation()
-                }, 180)
+                    findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE
+                }, 200)
             }
             bidingStarted = true
             playerTurn.value = nextBidderTurn(playerTurn.value!!)
@@ -1558,8 +1557,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun updatePlayerNames() {
         val totalCoins = listOf(p1Coins, p2Coins, p3Coins, p4Coins)
-        for (i in 0 until nPlayers) { //            findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(i + 1) + "\n${Emoji().money}${String.format("%,d", totalCoins[i])}"
-            findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(i + 1) // + " $${String.format("%,d", totalCoins[i])}"
+        for (i in 0 until nPlayers) {
+            findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(i + 1)
             findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$${String.format("%,d", totalCoins[i])}"
         }
     }

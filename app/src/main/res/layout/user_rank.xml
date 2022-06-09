@@ -60,7 +60,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/_14sdp"
         android:background="@drawable/redcartoonbanner"
-        android:fontFamily="@font/lily_script_one"
+        android:fontFamily="@font/luckiest_guy"
         android:gravity="center"
         android:paddingStart="@dimen/_12sdp"
         android:paddingEnd="@dimen/_14sdp"

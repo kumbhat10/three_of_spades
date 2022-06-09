@@ -80,7 +80,7 @@
     <string name="bid20button">20</string>
     <string name="bid50button">50</string>
     <string name="bid75button">75</string>
-    <string name="raise_bid_or_pass">Raise Bid or Pass</string>
+    <string name="raise_bid_or_pass">Raise or Pass</string>
     <string name="chooseTrump">Select Trump suit</string>
 
     <string name="passText">Next</string>
@@ -88,8 +88,8 @@
     <string name="sendChatButton">Send</string>
     <string name="chatInputHint">Type here…</string>
     <string name="noOfChat">0</string>
-    <string name="Bider">"Bid : "</string>
-    <string name="bidNow">Bidder</string>
+    <string name="Bider">" &#127919; :  "</string>
+    <string name="bidNow">Player\nTurn</string>
     <string name="timerStart">10s</string>
     <string name="partnerSelection1">Choose your 1st partner card</string>
     <string name="partnerSelection1_4">Choose your partner card</string>
@@ -113,7 +113,7 @@
     <string name="speech">Speech</string>
     <string name="vibrate">Vibrate</string>
     <string name="start_next_game">Start next round</string>
-    <string name="fetching_player">Fetching Player data....</string>
+    <string name="fetching_player">Downloading user data....</string>
     <string name="new_player">Creating Profile</string>
 
     <string name="creatingRoom">Creating Room…</string>
@@ -151,5 +151,6 @@
     <string name="defeat">Defeat</string>
     <string name="resultWon">Victory</string>
     <string name="resultLost">Defeat</string>
+    <string name="startcjrs">Start</string>
 
 </resources>

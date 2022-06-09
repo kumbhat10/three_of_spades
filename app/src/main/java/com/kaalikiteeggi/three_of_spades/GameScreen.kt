@@ -679,7 +679,7 @@ class GameScreen : AppCompatActivity() {
         val totalCoins = if (nPlayers7) listOf(p1Coins, p2Coins, p3Coins, p4Coins, p5Coins, p6Coins, p7Coins)
         else listOf(p1Coins, p2Coins, p3Coins, p4Coins)
         for (i in 0 until nPlayers) {
-            findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(i + 1) // + " $${String.format("%,d", totalCoins[i])}"
+            findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(i + 1) // + " $${String.format("%,d", totalCoins[i])}"
             findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$${String.format("%,d", totalCoins[i])}"
         }
     }
@@ -979,10 +979,10 @@ class GameScreen : AppCompatActivity() {
             for (i in 0 until nPlayers) {
                 val j = i + 1
                 if (j == gameData.bb || (j == gameData.p1 && gameData.p1s != 0) || (j == gameData.p2 && gameData.p2s != 0)) {
-                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j) // + " $bidTeamScore /$bidValue"
+//                    findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(j)
                     findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$bidTeamScore /${gameData.bv}"
                 } else {
-                    findViewById<TickerView>(refIDMappedTextView[i]).text = playerName(j)
+//                    findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(j)
                     findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${gameData.sc.sum() - bidTeamScore} /${scoreLimit - gameData.bv}"
                 }
             }
