@@ -1627,7 +1627,7 @@ class GameScreen : AppCompatActivity() {
         binding.startNextRoundButton.clearAnimation()
         binding.startNextRoundButton.visibility = View.GONE
 
-        refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)
+        if(gameData.gs == 6) refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)
         else getGameData7(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)).addOnFailureListener {
             toastCenter("Failed to start new game. Please Try again")
             speak("Failed to start new game. Please try again")
