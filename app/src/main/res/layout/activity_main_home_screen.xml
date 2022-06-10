@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="activity1"
+            type="com.kaalikiteeggi.three_of_spades.MainHomeScreen" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/backgroundmhs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,10 +42,11 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/todo"
                 android:scaleType="fitXY"
-                android:src="@drawable/background_glitter"
-                android:contentDescription="@string/todo" />
+                android:src="@drawable/background_glitter" />
         </com.facebook.shimmer.ShimmerFrameLayout>
+
         <TextView
             android:id="@+id/removeAds"
             android:layout_width="@dimen/mhsIconsSize"
@@ -176,16 +184,16 @@
             android:id="@+id/watchVideoPromo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/get_1000_coins"
-            android:textSize="@dimen/_9ssp"
-            android:fontFamily="@font/luckiest_guy"
-            android:textColor="@color/Black"
-            android:gravity="center"
-            android:visibility="gone"
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_4sdp"
+            android:fontFamily="@font/luckiest_guy"
+            android:gravity="center"
+            android:text="@string/get_1000_coins"
+            android:textColor="@color/Black"
+            android:textSize="@dimen/_9ssp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/profileCard"
-            app:layout_constraintEnd_toEndOf="@id/profileCard"/>
+            app:layout_constraintEnd_toEndOf="@id/profileCard" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profilePic"
@@ -204,13 +212,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_5sdp"
+            android:fontFamily="@font/luckiest_guy"
             android:gravity="start|center"
             android:onClick="openClosePlayerStats"
             android:text="@string/playeName"
             android:textColor="@color/font_grey_settings"
             android:textSize="@dimen/_20ssp"
             android:visibility="visible"
-            android:fontFamily="@font/luckiest_guy"
 
             app:layout_constraintBottom_toBottomOf="@id/profilePic"
             app:layout_constraintStart_toEndOf="@id/profilePic"
@@ -279,12 +287,12 @@
                 android:background="@drawable/shine_player_stats"
                 android:clickable="true"
                 android:focusable="true"
+                android:fontFamily="@font/luckiest_guy"
                 android:gravity="center"
                 android:onClick="signOut"
                 android:padding="@dimen/_10sdp"
                 android:paddingStart="@dimen/_15sdp"
                 android:paddingEnd="@dimen/_15sdp"
-                android:fontFamily="@font/luckiest_guy"
                 android:text="@string/signout"
                 android:textColor="@color/font_grey_settings"
                 android:textSize="@dimen/_14ssp"
@@ -332,8 +340,8 @@
         android:layout_marginTop="@dimen/_14sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_5sdp"
-        android:focusable="true"
         android:clickable="true"
+        android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:onClick="callToShowRewardedVideoAd"
         android:src="@drawable/watch_ad_1000"
@@ -342,7 +350,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="false"
         app:lottie_rawRes="@raw/watch_video_lottie"
-        app:lottie_repeatCount="-1"/>
+        app:lottie_repeatCount="-1" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settingsLayout"
@@ -352,59 +360,72 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="closeSettingsWindow"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@id/settingsLayoutTemp"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_230sdp"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/_30sdp"
             android:background="@drawable/shine_player_stats"
-            android:padding="@dimen/_20sdp"
+            android:padding="@dimen/_15sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/settingsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/luckiest_guy"
+                android:gravity="center"
+                android:text="@string/settings"
+                android:textColor="@color/font_yellow"
+                android:textSize="@dimen/_20ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/textMusic"
                 android:layout_width="@dimen/settingWidth"
                 android:layout_height="@dimen/settingHeight"
-                android:gravity="center|start"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/luckiest_guy"
+                android:gravity="center|start"
                 android:text="@string/music"
                 android:textColor="@color/font_grey_settings"
                 android:textSize="@dimen/_15ssp"
-                app:layout_constraintBottom_toTopOf="@id/textSound"
                 app:layout_constraintEnd_toStartOf="@id/musicSwitch"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/settingsTitle" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/musicSwitch"
                 android:layout_width="@dimen/settingWidth"
-                android:layout_height="@dimen/settingHeight"
+                android:layout_height="@dimen/settingHeight1"
+                android:onCheckedChanged="@{()->activity1.music()}"
                 android:checked="true"
-                android:onClick="music"
                 android:thumb="@drawable/thumb_music"
-                app:layout_constraintBottom_toTopOf="@id/textSound"
+                app:layout_constraintBottom_toBottomOf="@id/textMusic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/textMusic"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textMusic"
                 app:track="@drawable/track1" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textSound"
                 android:layout_width="@dimen/settingWidth"
                 android:layout_height="@dimen/settingHeight"
-                android:gravity="center|start"
+                android:layout_marginTop="@dimen/settingTopMargin"
                 android:fontFamily="@font/luckiest_guy"
+                android:gravity="center|start"
                 android:text="@string/sound"
                 android:textColor="@color/font_grey_settings"
                 android:textSize="@dimen/_15ssp"
                 app:layout_constraintEnd_toStartOf="@id/soundSwitch"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/textSpeech"
                 app:layout_constraintTop_toBottomOf="@+id/textMusic" />
 
             <androidx.appcompat.widget.SwitchCompat
@@ -412,24 +433,24 @@
                 android:layout_width="@dimen/settingWidth"
                 android:layout_height="@dimen/settingHeight"
                 android:checked="true"
-                android:onClick="sound"
+                android:onCheckedChanged="@{()->activity1.sound()}"
                 android:thumb="@drawable/thumb_sound"
-                app:layout_constraintTop_toBottomOf="@+id/textMusic"
-                app:layout_constraintBottom_toTopOf="@id/textSpeech"
+                app:layout_constraintBottom_toBottomOf="@id/textSound"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/textSound"
+                app:layout_constraintTop_toTopOf="@id/textSound"
                 app:track="@drawable/track1" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textSpeech"
                 android:layout_width="@dimen/settingWidth"
                 android:layout_height="@dimen/settingHeight"
-                android:gravity="center|start"
+                android:layout_marginTop="@dimen/settingTopMargin"
                 android:fontFamily="@font/luckiest_guy"
+                android:gravity="center|start"
                 android:text="@string/speech"
                 android:textColor="@color/font_grey_settings"
                 android:textSize="@dimen/_15ssp"
-                app:layout_constraintBottom_toTopOf="@id/textVibrate"
                 app:layout_constraintEnd_toStartOf="@id/speechSwitch"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textSound" />
@@ -439,24 +460,24 @@
                 android:layout_width="@dimen/settingWidth"
                 android:layout_height="@dimen/settingHeight"
                 android:checked="true"
-                android:onClick="speech"
+                android:onCheckedChanged="@{()->activity1.speech()}"
                 android:thumb="@drawable/thumb_speech"
-                app:layout_constraintBottom_toTopOf="@id/textVibrate"
+                app:layout_constraintBottom_toBottomOf="@id/textSpeech"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/textSpeech"
-                app:layout_constraintTop_toBottomOf="@+id/textSound"
+                app:layout_constraintTop_toTopOf="@id/textSpeech"
                 app:track="@drawable/track1" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textVibrate"
                 android:layout_width="@dimen/settingWidth"
                 android:layout_height="@dimen/settingHeight"
+                android:layout_marginTop="@dimen/settingTopMargin"
                 android:fontFamily="@font/luckiest_guy"
                 android:gravity="center|start"
                 android:text="@string/vibrate"
                 android:textColor="@color/font_grey_settings"
                 android:textSize="@dimen/_15ssp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/vibrateSwitch"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textSpeech" />
@@ -466,12 +487,12 @@
                 android:layout_width="@dimen/settingWidth"
                 android:layout_height="@dimen/settingHeight"
                 android:checked="true"
-                android:onClick="vibrate"
+                android:onCheckedChanged="@{()->activity1.vibrate()}"
                 android:thumb="@drawable/thumb_vibrate"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/textVibrate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textVibrate"
-                app:layout_constraintTop_toBottomOf="@id/textSpeech"
+                app:layout_constraintTop_toTopOf="@id/textVibrate"
                 app:track="@drawable/track1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -525,11 +546,11 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:cursorVisible="true"
+                android:fontFamily="@font/luckiest_guy"
                 android:hint="@string/hinRoomID"
                 android:imeOptions="actionSend"
                 android:inputType="textCapCharacters"
                 android:textAlignment="center"
-                android:fontFamily="@font/luckiest_guy"
                 app:boxBackgroundColor="#1E1E1E"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusBottomEnd="@dimen/_20sdp"
@@ -569,8 +590,8 @@
                 android:layout_marginTop="@dimen/_15sdp"
                 android:background="@drawable/orangesquarebutton"
                 android:clickable="true"
-                android:fontFamily="@font/luckiest_guy"
                 android:focusable="true"
+                android:fontFamily="@font/luckiest_guy"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:gravity="center"
                 android:onClick="joinRoomButtonClicked"
@@ -604,40 +625,40 @@
         android:layout_height="0dp"
         android:background="@color/layoutBackgroundLittle"
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@id/bannerMHS"
-        app:layout_constraintTop_toTopOf="parent"
         android:focusable="true"
         android:onClick="createRoomWindowExit"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bannerMHS"
+        app:layout_constraintTop_toTopOf="parent">
 
         <GridView
             android:id="@+id/gridCreateRoom"
             android:layout_width="0dp"
             android:layout_height="@dimen/_350sdp"
             android:layout_gravity="center"
-            android:gravity="center"
-            app:layout_constraintVertical_bias="1"
-            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginStart="@dimen/_10sdp"
-            android:verticalSpacing="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:gravity="center"
             android:numColumns="1"
+            android:verticalSpacing="@dimen/_10sdp"
             android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/closeCreateRoom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/closeCreateRoom"/>
+            app:layout_constraintVertical_bias="1" />
 
         <ImageView
             android:id="@+id/closeCreateRoom"
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_36sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="@dimen/_4sdp"
             android:clickable="true"
             android:focusable="true"
             android:onClick="createRoomWindowExit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/close"
             tools:ignore="ContentDescription" />
 
@@ -862,7 +883,7 @@
         android:background="@color/BlackTrans"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -873,9 +894,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:fontFamily="@font/luckiest_guy"
             android:text="@string/loading"
             android:textColor="@color/font_yellow"
-            android:fontFamily="@font/luckiest_guy"
             android:textSize="@dimen/_32ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -1002,8 +1023,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/bannerMHS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -1015,3 +1035,4 @@
         ads:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

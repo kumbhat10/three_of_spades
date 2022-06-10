@@ -200,6 +200,7 @@ class MainHomeScreen : AppCompatActivity() {
 //        }
         binding = ActivityMainHomeScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.activity1 = this
 //        setContentView(R.layout.activity_main_home_screen)
         background = Random.nextInt(0, 6)
         checkJoinRoom(intent)
@@ -1287,7 +1288,7 @@ class MainHomeScreen : AppCompatActivity() {
         view.startAnimation(AnimationUtils.loadAnimation(this, anim))
     }
 
-    fun music(view: View) {
+    fun music() {
         musicStatus = binding.musicSwitch.isChecked
         if (musicStatus) {
             soundBackground.start()
@@ -1298,7 +1299,7 @@ class MainHomeScreen : AppCompatActivity() {
         editor.apply()
     }
 
-    fun sound(view: View) {
+    fun sound() {
         soundStatus = binding.soundSwitch.isChecked
         if (soundStatus) {
             SoundManager.instance?.playUpdateSound()
@@ -1307,7 +1308,7 @@ class MainHomeScreen : AppCompatActivity() {
         editor.apply()
     }
 
-    fun speech(view: View) {
+    fun speech() {
         speechStatus = binding.speechSwitch.isChecked
         if (speechStatus) {
             speak("Speech is enabled", speed = 0.95f)
@@ -1316,7 +1317,7 @@ class MainHomeScreen : AppCompatActivity() {
         editor.apply()
     }
 
-    fun vibrate(view: View) {
+    fun vibrate() {
         vibrateStatus = binding.vibrateSwitch.isChecked
         if (vibrateStatus) {
             vibrationStart(1000)

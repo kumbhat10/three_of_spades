@@ -8,7 +8,7 @@ plugins {
 if (!project.hasProperty("disable-performance-plugin")) {
     apply plugin: 'com.google.firebase.firebase-perf'
 }
-
+apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 32
     buildFeatures{
@@ -48,6 +48,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    buildFeatures {
+        dataBinding true
+        viewBinding true
     }
     sourceSets {
         debug {
