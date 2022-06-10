@@ -738,8 +738,9 @@
                     android:paddingEnd="@dimen/_11sdp"
                     android:paddingBottom="@dimen/_4sdp"
                     android:text="@string/claim_reward"
-                    android:textColor="@color/colorongreen"
-                    android:textSize="@dimen/_13ssp"
+                    android:fontFamily="@font/luckiest_guy"
+                    android:textColor="#1E3515"
+                    android:textSize="@dimen/_14ssp"
                     android:tint="?attr/colorControlNormal"
                     app:drawableRightCompat="@drawable/watch_video"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -767,6 +768,7 @@
                     android:paddingEnd="@dimen/_9sdp"
                     android:paddingBottom="@dimen/_4sdp"
                     android:tag="close"
+                    android:fontFamily="@font/luckiest_guy"
                     android:text="@string/cancel_reward"
                     android:textColor="#FDFDFD"
                     android:textSize="@dimen/_13ssp"
@@ -781,7 +783,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rateUsLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -791,11 +793,14 @@
         android:onClick="closeRatingWindow"
         android:visibility="gone">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rateUsLayoutFrame"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="@dimen/_18sdp"
             android:layout_marginEnd="@dimen/_18sdp"
             android:background="@drawable/yellowshield"
@@ -808,6 +813,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_65sdp"
                 android:layout_marginTop="@dimen/_15sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:src="@drawable/rate_us"
                 tools:ignore="ContentDescription" />
 
@@ -815,8 +823,11 @@
                 android:id="@+id/rateUsText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_15sdp"
-                android:fontFamily="@font/lily_script_one"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rateUsImage"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/luckiest_guy"
                 android:gravity="top|center_horizontal"
                 android:text="@string/rateMessage"
                 android:textColor="@color/Black"
@@ -828,27 +839,36 @@
                 android:layout_width="@dimen/rateUsWidth"
                 android:layout_height="@dimen/rateUsHeight"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_6sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rateUsText"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:background="@drawable/greenrectanglesimple"
                 android:clickable="true"
+                android:fontFamily="@font/luckiest_guy"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:gravity="center"
                 android:onClick="rateUs"
                 android:tag="good"
                 android:text="@string/yes_love_it"
-                android:textColor="@color/Black"
-                android:textSize="@dimen/_22ssp"
+                android:textColor="#09200B"
+                android:textSize="@dimen/_24ssp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/rateUsIcon2"
                 android:layout_width="@dimen/rateUsWidth"
                 android:layout_height="@dimen/rateUsHeight"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rateUsIcon1"
                 android:background="@drawable/redrectanlgesimple"
                 android:clickable="true"
                 android:focusable="true"
+                android:fontFamily="@font/luckiest_guy"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:gravity="center"
                 android:onClick="rateUs"
@@ -864,7 +884,12 @@
                 android:layout_marginBottom="@dimen/_50sdp"
                 android:clickable="true"
                 android:drawableEnd="@drawable/later"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rateUsIcon2"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:focusable="true"
+                android:fontFamily="@font/luckiest_guy"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:gravity="center"
                 android:onClick="askLaterRating"
@@ -873,8 +898,8 @@
                 android:textColor="@color/Black"
                 android:textSize="@dimen/_13ssp" />
 
-        </LinearLayout>
-    </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/maskAllLoading"
@@ -909,8 +934,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_2sdp"
             android:gravity="center"
+            android:fontFamily="@font/luckiest_guy"
             android:text="@string/fetching_player"
-            android:textColor="@color/font_grey_settings"
+            android:textColor="#FF5722"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -936,19 +962,23 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_43sdp"
             android:background="@color/font_yellow"
-            android:fontFamily="@font/lily_script_one"
+            android:fontFamily="@font/luckiest_guy"
             android:gravity="center"
             android:text="@string/top_players"
             android:textColor="@color/Black"
-            android:textSize="@dimen/_24ssp"
+            android:textSize="@dimen/_26ssp"
             android:textStyle="normal"
+            android:shadowColor="#6C6C6C"
+            android:shadowDy="3"
+            android:shadowDx="3"
+            android:shadowRadius="3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:layout_width="@dimen/_32sdp"
-            android:layout_height="@dimen/_32sdp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:clickable="true"
             android:contentDescription="@string/todo"
@@ -972,7 +1002,7 @@
             android:id="@+id/tabRank"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/shine_player_stats"
+            android:background="@drawable/shine_user_rank_bkgd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/space4"
@@ -980,16 +1010,16 @@
             app:tabIndicatorHeight="@dimen/_5sdp"
             app:tabPaddingBottom="@dimen/_2sdp"
             app:tabPaddingTop="@dimen/_2sdp"
-            app:tabSelectedTextColor="@color/icon_yellow"
+            app:tabSelectedTextColor="#FFD500"
             app:tabTextAppearance="@style/TabTextAppearance"
-            app:tabTextColor="@color/BlackTransUserStats3"
+            app:tabTextColor="@color/white"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="@dimen/_1sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

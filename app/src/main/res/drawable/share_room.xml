@@ -3,13 +3,13 @@
 
     <item
         android:drawable="@drawable/blackcirclebutton"
-        android:width="@dimen/_80sdp"
-        android:height="@dimen/_80sdp"
+        android:width="@dimen/_70sdp"
+        android:height="@dimen/_70sdp"
         android:gravity="center"/>
     <item
         android:drawable="@drawable/add"
-        android:width="@dimen/_60sdp"
-        android:height="@dimen/_60sdp"
+        android:width="@dimen/_50sdp"
+        android:height="@dimen/_50sdp"
         android:gravity="center"/>
 
 </layer-list>

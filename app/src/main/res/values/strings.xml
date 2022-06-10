@@ -118,8 +118,8 @@
     <string name="claim_reward">Claim Reward  </string>
     <string name="cancel_reward">Cancel </string>
     <string name="joinHelper">Enter 4 digit Room ID</string>
-    <string name="yes_love_it">Love it</string>
-    <string name="could_be_better">Could be better</string>
+    <string name="yes_love_it">&#128147; Love it </string> //1f493
+    <string name="could_be_better">Not sure</string>
     <string name="total_all_time">(All time score)</string>
     <string name="versionInfo">"ver: "</string>
     <string name="top_players">Top Players</string>

@@ -16,17 +16,6 @@
     android:theme="@style/Theme.App"
     android:id="@+id/userRankRoot">
 
-<!--    <View-->
-<!--        android:id="@+id/lineBreak"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="1dp"-->
-<!--        android:layout_marginTop="@dimen/_4sdp"-->
-<!--        android:background="#B5FFEB3B"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/userScore"-->
-<!--        app:layout_constraintStart_toEndOf="@id/userImage"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/userImage" />-->
-
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userImage"
         android:layout_width="@dimen/rankImage"
@@ -45,10 +34,11 @@
         android:layout_marginEnd="@dimen/_1sdp"
         android:background="@drawable/yellowbutton"
         android:gravity="end|center"
+        android:fontFamily="@font/luckiest_guy"
         android:paddingStart="@dimen/_8sdp"
         android:paddingEnd="@dimen/_8sdp"
         android:text="@string/nill"
-        android:textColor="#1E1E1E"
+        android:textColor="#352C0C"
         android:textSize="@dimen/_12ssp"
         app:layout_constraintBottom_toBottomOf="@id/userImage"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,8 +78,9 @@
         android:gravity="center"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_13sdp"
+        android:fontFamily="@font/luckiest_guy"
         android:text="@string/newplayer"
-        android:textColor="#FFFFFF"
+        android:textColor="#113C07"
         android:textSize="@dimen/_10ssp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/space7"
@@ -105,7 +96,7 @@
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
         android:text="@string/playeName"
-        android:textColor="#CDCFDA"
+        android:textColor="#EDEDED"
         android:textSize="@dimen/_13ssp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/userNewText"
@@ -191,7 +182,8 @@
         android:paddingStart="@dimen/_8sdp"
         android:paddingEnd="@dimen/_8sdp"
         android:text="@string/nill"
-        android:textColor="#1E1E1E"
+        android:fontFamily="@font/luckiest_guy"
+        android:textColor="#352C0C"
         android:textSize="@dimen/_12ssp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

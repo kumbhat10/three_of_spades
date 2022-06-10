@@ -167,7 +167,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         if (!offline) {
             binding.imageViewShareButton2.visibility = View.VISIBLE
             binding.waitingToJoinText.visibility = View.VISIBLE
-            binding.imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_scale_infinite))
+//            binding.imageViewShareButton2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_scale_infinite))
             binding.roomIDTitle.text = "Room ID: $roomID"   // display the room ID
         } else {
             binding.offlineProgressbar.visibility = View.VISIBLE
@@ -223,7 +223,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             speak("$p4 joined", speed = 1.1f, forceSpeak = false)
             userBasicInfoList.add(3, data[3])
             adapter.notifyItemInserted(3)
-            Handler(Looper.getMainLooper()).postDelayed({ allPlayersJoined() }, 800)
+            Handler(Looper.getMainLooper()).postDelayed({
+                userBasicInfoStatus.value = mutableListOf(true,true,true,true)
+                allPlayersJoined() }, 800)
         }, 2900)
     }
 
@@ -334,7 +336,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         if (soundStatus) SoundManager.instance?.playSuccessSound()
         if (!offline) speak("All Players have joined now. Ready to Start", speed = 1f, forceSpeak = false)
         else speak("All Players have joined", speed = 1f, forceSpeak = false)
-        binding.imageViewShareButton2.clearAnimation()
+//        binding.imageViewShareButton2.clearAnimation()
         binding.imageViewShareButton2.visibility = View.GONE
         binding.offlineProgressbar.visibility = View.GONE
         binding.waitingToJoinText.visibility = View.GONE
