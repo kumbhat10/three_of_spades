@@ -106,8 +106,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     // endregion
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM)
-            .enabled(true) //default: true
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM).enabled(true) //default: true
             .showErrorDetails(true) //default: true
             .showRestartButton(true) //default: true
             .logErrorOnRestart(false) //default: true
@@ -135,10 +134,9 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         binding.playersJoin.adapter = adapter
 
         Handler(Looper.getMainLooper()).post {
-            v = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            v = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 (this.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-            }
-            else getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            } else getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
             soundBackground = MediaPlayer.create(this, R.raw.music)
             soundBackground.isLooping = true
@@ -315,15 +313,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             playerInfo = ArrayList()
             playerInfoCoins = ArrayList()
             if (playerJoining == 10) startNextActivity()
-        }
-        if (playerJoining == 11) {
-            userBasicInfoStatus.observe(this) { eachStatus ->
-                if (eachStatus.all { it }) {
-//                    toastCenter("Ready To start")
-//                    handler.postDelayed({ startNextActivity() }, 1500L)
-                    startNextActivity(transition = false)
-                }
-            }
+            if (playerJoining == 11) startNextActivity(transition = false)
         }
     }
 
@@ -342,12 +332,13 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
     private fun allPlayersJoined() {
         if (soundStatus) SoundManager.instance?.playSuccessSound()
-        speak("All Players have joined now. Ready to Start", speed = 0.95f, forceSpeak = false)
+        if (!offline) speak("All Players have joined now. Ready to Start", speed = 1f, forceSpeak = false)
+        else speak("All Players have joined", speed = 1f, forceSpeak = false)
         binding.imageViewShareButton2.clearAnimation()
         binding.imageViewShareButton2.visibility = View.GONE
         binding.offlineProgressbar.visibility = View.GONE
         binding.waitingToJoinText.visibility = View.GONE
-        val delayTime = if(offline) 600L else 2000L
+        val delayTime = if (offline || BuildConfig.DEBUG) 600L else 2000L
         Handler(Looper.getMainLooper()).postDelayed({ binding.startGameButton.visibility = View.VISIBLE }, delayTime)
     }
 
@@ -406,25 +397,29 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
     }
 
-    private fun startNextActivity(transition:Boolean = true) {
-        if (!offline) registration.remove()
-        if (nPlayers == 7) {
-            playerInfo.addAll(listOf(p1, p2, p3, p4, p5, p6, p7, userBasicInfoList[0].photoURL, userBasicInfoList[1].photoURL, userBasicInfoList[2].photoURL, userBasicInfoList[3].photoURL, userBasicInfoList[4].photoURL, userBasicInfoList[5].photoURL, userBasicInfoList[6].photoURL))
-            playerInfoCoins.addAll(listOf(userBasicInfoList[0].score, userBasicInfoList[1].score, userBasicInfoList[2].score, userBasicInfoList[3].score, userBasicInfoList[4].score, userBasicInfoList[5].score, userBasicInfoList[6].score))
-        } else if (nPlayers == 4) {
-            playerInfo.addAll(listOf(p1, p2, p3, p4, userBasicInfoList[0].photoURL, userBasicInfoList[1].photoURL, userBasicInfoList[2].photoURL, userBasicInfoList[3].photoURL))
-            playerInfoCoins.addAll(listOf(userBasicInfoList[0].score, userBasicInfoList[1].score, userBasicInfoList[2].score, userBasicInfoList[3].score))
+    private fun startNextActivity(transition: Boolean = true) {
+        userBasicInfoStatus.observe(this) { eachStatus ->
+            if (eachStatus.all { it }) {
+                if (!offline) registration.remove()
+                if (nPlayers == 7) {
+                    playerInfo.addAll(listOf(p1, p2, p3, p4, p5, p6, p7, userBasicInfoList[0].photoURL, userBasicInfoList[1].photoURL, userBasicInfoList[2].photoURL, userBasicInfoList[3].photoURL, userBasicInfoList[4].photoURL, userBasicInfoList[5].photoURL, userBasicInfoList[6].photoURL))
+                    playerInfoCoins.addAll(listOf(userBasicInfoList[0].score, userBasicInfoList[1].score, userBasicInfoList[2].score, userBasicInfoList[3].score, userBasicInfoList[4].score, userBasicInfoList[5].score, userBasicInfoList[6].score))
+                } else if (nPlayers == 4) {
+                    playerInfo.addAll(listOf(p1, p2, p3, p4, userBasicInfoList[0].photoURL, userBasicInfoList[1].photoURL, userBasicInfoList[2].photoURL, userBasicInfoList[3].photoURL))
+                    playerInfoCoins.addAll(listOf(userBasicInfoList[0].score, userBasicInfoList[1].score, userBasicInfoList[2].score, userBasicInfoList[3].score))
+                }
+                if (!offline) {
+                    if (soundStatus) SoundManager.instance?.playUpdateSound()
+                    startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreen::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
+                        .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("roomID", roomID) }.putStringArrayListExtra("playerInfo", playerInfo).putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins).putIntegerArrayListExtra("userStats", userStats).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                } else {
+                    startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreenAutoPlay::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
+                        .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("roomID", roomID) }.putStringArrayListExtra("playerInfo", playerInfo).putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins).putIntegerArrayListExtra("userStats", userStats).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                }
+                if (transition) overridePendingTransition(R.anim.slide_top_in_activity, R.anim.slide_top_in_activity) //		finishAfterTransition()
+                finishAndRemoveTask()
+            }
         }
-        if (!offline) {
-            if (soundStatus) SoundManager.instance?.playUpdateSound()
-            startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreen::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
-                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("roomID", roomID) }.putStringArrayListExtra("playerInfo", playerInfo).putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins).putIntegerArrayListExtra("userStats", userStats).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
-        } else {
-            startActivity(Intent(this@CreateAndJoinRoomScreen, GameScreenAutoPlay::class.java).apply { putExtra("selfName", selfName) }  // AutoPlay
-                .apply { putExtra("from", from) }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("roomID", roomID) }.putStringArrayListExtra("playerInfo", playerInfo).putIntegerArrayListExtra("playerInfoCoins", playerInfoCoins).putIntegerArrayListExtra("userStats", userStats).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
-        }
-        if(transition) overridePendingTransition(R.anim.slide_top_in_activity, R.anim.slide_top_in_activity) //		finishAfterTransition()
-        finishAndRemoveTask()
     }
 
     private fun initializeSpeechEngine() {
@@ -573,8 +568,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
     }
 
     private fun createDynamicLink() {
-        shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=70" +
-                "&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID + "&si=https://tinyurl.com/3ofspade"
+        shareLink = "https://kaaliteeri.page.link/?link=${getString(R.string.scheme)}://${getString(R.string.hostJoinRoom)}/$roomID" + "&apn=${getString(R.string.packageName)}" + "&amv=70" + "&st=Join%20my%20room%20ID%20%3D%3E%20" + roomID + "&si=https://tinyurl.com/3ofspade"
     }
 
     fun shareRoomInfo(view: View) {

@@ -932,19 +932,19 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun openSettingsWindow() {
         settingsWindowStatus = true
-        binding.settingsLayout.visibility = View.VISIBLE
-//		Handler(Looper.getMainLooper()).postDelayed({
         binding.closeSettings.visibility = View.VISIBLE
-//		}, 220)
-//		anim(settingsLayoutTemp, R.anim.zoomin_center)
+        binding.settingsLayout.visibility = View.VISIBLE
+        binding.closeSettings.visibility = View.VISIBLE
+		anim(binding.settingsLayoutTemp, R.anim.zoomin_center)
     }
 
     fun closeSettingsWindow(view: View) {
         settingsWindowStatus = false
-//		anim(settingsLayoutTemp, R.anim.zoomout_center)
+		anim(binding.settingsLayoutTemp, R.anim.zoomout_center)
         binding.closeSettings.visibility = View.GONE
-        binding.settingsLayout.visibility = View.GONE
-        binding.closeSettings.clearAnimation()
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.settingsLayout.visibility = View.GONE
+        }, 250)
     }
 
     private fun checkIfOnlineGameAllowed() {
