@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_4sdp"
         android:fontFamily="@font/almendra"
-        android:textColor="@color/white"
+        android:textColor="@color/font_grey_settings"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userPhoto"

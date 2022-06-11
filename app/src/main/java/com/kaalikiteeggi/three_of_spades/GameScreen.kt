@@ -614,9 +614,12 @@ class GameScreen : AppCompatActivity() {
         gameState1 = false
         gameState4 = false
         gameState6 = false
+        binding.frameAskBid.visibility = View.GONE
+        binding.frameTrumpSelection.visibility = View.GONE
+        maskWinner.value = false
         if(fromInt==1){
             centralText("Restarting Game", displayTime = 0)
-            Handler(Looper.getMainLooper()).postDelayed({startNextGame(View(this))},4000L)
+            Handler(Looper.getMainLooper()).postDelayed({startNextGame(View(this))},1500L)
         }
         else {
             centralText("Host has restarted Game", displayTime = 0)
@@ -1590,7 +1593,7 @@ class GameScreen : AppCompatActivity() {
             if (onlineStatus[index] == 1 && fromInt != index + 1) {
                 if (oldValue == 2) {
                     speak("${playerName(index + 1)} has joined again !", speed = 1f)
-                    insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has joined!", player = index+1, isEmojiOnly = false) )
+                    insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has joined!", player = index+1, isEmojiOnly = false, isNotification = true) )
                 }
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.greencirclebutton)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
@@ -1599,7 +1602,7 @@ class GameScreen : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.status_left)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
                 speak("${playerName(index + 1)} has left !", speed = 1.1f)
-                insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has left", player = index+1, isEmojiOnly = false) )
+                insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has left", player = index+1, isEmojiOnly = false, isNotification = true) )
                 toastCenter("${playerName(index + 1)} has left the game !")
                 if (index == 0) { //if only host leaves the room
                     activityExists = false
@@ -2177,15 +2180,12 @@ class GameScreen : AppCompatActivity() {
         speak("Are you sure want to leave the game", speed = 0.95f, forceSpeak = true)
         if (!this::alertDialog.isInitialized) {
             val builder = AlertDialog.Builder(this)
-
             val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
             titleTextView.dialogueTitle.text = "Exit Game"
             builder.setCustomTitle(titleTextView.root)
-
             val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
             bodyTextView.dialogueBody.text = getString(R.string.leave_room_confirm)
             builder.setView(bodyTextView.root)
-
             builder.setPositiveButton("Leave Room") { _: DialogInterface, _: Int ->
                 toastCenter("Leaving game now")
                 speak("Leaving game ", forceSpeak = true)
@@ -2211,18 +2211,14 @@ class GameScreen : AppCompatActivity() {
         speak("We need to restart this round", speed = 0.95f, forceSpeak = true)
         if (!this::alertDialogReset.isInitialized) {
             val builder = AlertDialog.Builder(this)
-
             val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
             titleTextView.dialogueTitle.text = "Server Error"
             titleTextView.dialogueTitle.apply { setTextColor(resources.getColor(R.color.red1))}
             builder.setCustomTitle(titleTextView.root)
-
             val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
             bodyTextView.dialogueBody.text = getString(R.string.game_error)
             builder.setView(bodyTextView.root)
-
             builder.setPositiveButton("OK") { _: DialogInterface, _: Int ->
-//                toastCenter("Leaving game now")
                 speak("Restarting game", forceSpeak = true)
                 writeToGameDatabase(data = mutableMapOf("gs" to 7))
             }
@@ -2235,7 +2231,6 @@ class GameScreen : AppCompatActivity() {
     fun closeGameRoom(view: View) {
         if (activityExists) {
             refRoomDatabase.child("OL/$from").setValue(2)
-            refRoomFireStore.document(roomID + "_chat").set(hashMapOf("M" to "I've left the room", "F" to fromInt, "Fn" to selfName, "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), "dt" to SimpleDateFormat("HH:mm:ss z").format(Date())), SetOptions.merge())
         }
         activityExists = false
         countDownBidding.cancel()
