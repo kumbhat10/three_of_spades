@@ -85,9 +85,9 @@
     <string name="bothPartner">Both</string>
     <string name="onlyPartner">Only</string>
     <string name="anyPartner">Any</string>
-    <string name="_10_pts">10 pts</string>
-    <string name="_400">400</string>
-    <string name="_700">700</string>
+    <string name="_10_pts">10</string>
+    <string name="_400">40</string>
+    <string name="_700">120</string>
     <string name="playeName">Player Name?</string>
     <string name="playerRank">1st</string>
     <string name="newplayer">New\nPlayer</string>
@@ -138,8 +138,9 @@
     <string name="resultLost">Defeat</string>
     <string name="startcjrs">Start</string>
     <string name="leave_room">Leave Room</string>
-    <string name="leave_room_confirm">Are you sure want to leave?</string>
+    <string name="leave_room_confirm">Are you sure want to Leave or Restart this round?</string>
     <string name="room_error">Room Error</string>
+    <string name="game_error">We need to restart this round due to some server error</string>
     <string name="_4_players">4 Players</string>
     <string name="_7_players">7 Players</string>
     <string name="_1_deck">  1 Deck</string>

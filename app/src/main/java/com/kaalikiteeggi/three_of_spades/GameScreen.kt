@@ -73,6 +73,7 @@ class GameScreen : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
     private lateinit var alertDialog: AlertDialog
+    private lateinit var alertDialogReset: AlertDialog
     private lateinit var snackBar: Snackbar
 
     private lateinit var refIDMappedTextView: List<Int>
@@ -244,6 +245,7 @@ class GameScreen : AppCompatActivity() {
         } else window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         roomID = intent.getStringExtra("roomID")!!.toString()
+        FirebaseCrashlytics.getInstance().setCustomKey("RoomID", roomID)
         from = intent.getStringExtra("from")!!.toString()
         fromInt = from.split("")[2].toInt()
         selfName = intent.getStringExtra("selfName")!!.toString()
@@ -550,40 +552,60 @@ class GameScreen : AppCompatActivity() {
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(data: DataSnapshot) {
                 if (data.value != null && activityExists) {
-                    gameData = data.getValue<GameData>()!!
-                    tableCardsHandle()
-                    bidValue.value = gameData.bv
-                    cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
-                    scoreList = gameData.s
-                    if (gameData.gs in 2..5) displaySelfCards(animation = false)
-                    if (currentBidder.value != gameData.bb) {
-                        currentBidder.value = gameData.bb //LiveData
-                    }
-                    if (partner1Card.value != gameData.pc1) {
-                        partner1Card.value = gameData.pc1  //LiveData
-                    }
-                    if (partner1CardText.value != gameData.pc1s) {
-                        partner1CardText.value = gameData.pc1s //LiveData
-                    }
-                    if (trump.value != gameData.tr) {
-                        trump.value = gameData.tr    //LiveData
-                    }
-                    if (nPlayers7) {
-                        partner2CardText.value = gameData.pc2s
-                        partner2Card.value = gameData.pc2
-                    }
-                    when (gameData.gs) {
-                        1 -> gameState1()
-                        3 -> gameState3()
-                        4 -> gameState4()
-                        5 -> gameState5()
-                        6 -> gameState6()
+                    try {
+                        cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
+                        gameData = data.getValue<GameData>()!!
+                        if (gameData.gs in 2..5) displaySelfCards(animation = false)
+                        tableCardsHandle()
+                        bidValue.value = gameData.bv
+                        scoreList = gameData.s
+                        if (currentBidder.value != gameData.bb) {
+                            currentBidder.value = gameData.bb //LiveData
+                        }
+                        if (partner1Card.value != gameData.pc1) {
+                            partner1Card.value = gameData.pc1  //LiveData
+                        }
+                        if (partner1CardText.value != gameData.pc1s) {
+                            partner1CardText.value = gameData.pc1s //LiveData
+                        }
+                        if (trump.value != gameData.tr) {
+                            trump.value = gameData.tr    //LiveData
+                        }
+                        if (nPlayers7) {
+                            if (partner2CardText.value != gameData.pc2s) {
+                                partner2CardText.value = gameData.pc2s //LiveData
+                            }
+                            if (partner2Card.value != gameData.pc2) {
+                                partner2Card.value = gameData.pc2  //LiveData
+                            }
+                        }
+                        when (gameData.gs) {
+                            1 -> gameState1()
+                            3 -> gameState3()
+                            4 -> gameState4()
+                            5 -> gameState5()
+                            6 -> gameState6()
+                            7 -> gameState7()
+                        }
+                    } catch (e: Exception) {
+                        if(fromInt == 1) showDialogueResetGame()
+                        centralText("Server Error")
+                        FirebaseCrashlytics.getInstance().recordException(e)
                     }
                 }
             }
         }
     }
 
+    private fun gameState7(){
+        if(fromInt==1){
+            centralText("Restarting Game")
+            Handler(Looper.getMainLooper()).postDelayed({startNextGame(View(this))},2000L)
+                        }
+            else {
+                centralText("Host has restarted Game")
+        }
+    }
     private fun tableCardsHandle() { //Table Cards & Table Points - Independent of everything else
         if (gameData.gs == 5) {
             showTableCard()
@@ -1279,8 +1301,8 @@ class GameScreen : AppCompatActivity() {
                 if (fromInt == 1) { // show start next game button only to host
                     binding.startNextRoundButton.visibility = View.VISIBLE
 //                    binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-                }else{
-                    if(gameData.gs==6) centralText("Waiting for host to start next game", displayTime = 0)
+                } else {
+                    if (gameData.gs == 6) centralText("Waiting for host to start next game", displayTime = 0)
                 }
             }, delayGameOver)
         }
@@ -1547,7 +1569,7 @@ class GameScreen : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
             }
             if (onlineStatus[index] == 1 && fromInt != index + 1) {
-                if(oldValue==2) speak("${playerName(index + 1)} has joined again !", speed = 1f)
+                if (oldValue == 2) speak("${playerName(index + 1)} has joined again !", speed = 1f)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.greencirclebutton)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
             }
@@ -1625,7 +1647,7 @@ class GameScreen : AppCompatActivity() {
         binding.startNextRoundButton.clearAnimation()
         binding.startNextRoundButton.visibility = View.GONE
 
-        if(gameData.gs == 6) refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)
+        if (fromInt == 1) refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)
         else getGameData7(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)).addOnFailureListener {
             toastCenter("Failed to start new game. Please Try again")
             speak("Failed to start new game. Please try again")
@@ -2141,13 +2163,17 @@ class GameScreen : AppCompatActivity() {
             bodyTextView.dialogueBody.text = getString(R.string.leave_room_confirm)
             builder.setView(bodyTextView.root)
 
-            builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+            builder.setPositiveButton("Leave Room") { _: DialogInterface, _: Int ->
                 toastCenter("Leaving game now")
                 speak("Leaving game ", forceSpeak = true)
                 Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(View(this)) }, 300)
             }
-            builder.setNegativeButton("No") { _: DialogInterface, _: Int ->
+            builder.setNegativeButton("Cancel") { _: DialogInterface, _: Int ->
                 closeRoom = false
+            }
+            if(fromInt==1) builder.setNeutralButton("Restart round"){_: DialogInterface, _: Int ->
+                speak("Restarting game", forceSpeak = true)
+                writeToGameDatabase(data = mutableMapOf("gs" to 7))
             }
             builder.setOnDismissListener {
                 closeRoom = false
@@ -2156,6 +2182,30 @@ class GameScreen : AppCompatActivity() {
             alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_dialogue_background))
         }
         alertDialog.show()
+    }
+
+    fun showDialogueResetGame() {
+        speak("We need to restart this round", speed = 0.95f, forceSpeak = true)
+        if (!this::alertDialogReset.isInitialized) {
+            val builder = AlertDialog.Builder(this)
+
+            val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
+            titleTextView.dialogueTitle.text = "Server Error"
+            builder.setCustomTitle(titleTextView.root)
+
+            val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
+            bodyTextView.dialogueBody.text = getString(R.string.game_error)
+            builder.setView(bodyTextView.root)
+
+            builder.setPositiveButton("Restart Round") { _: DialogInterface, _: Int ->
+//                toastCenter("Leaving game now")
+                speak("Restarting game", forceSpeak = true)
+                writeToGameDatabase(data = mutableMapOf("gs" to 7))
+            }
+            alertDialogReset = builder.create()
+            alertDialogReset.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_dialogue_background))
+        }
+        alertDialogReset.show()
     }
 
     fun closeGameRoom(view: View) {

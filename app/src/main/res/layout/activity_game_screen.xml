@@ -1240,7 +1240,7 @@
         android:layout_marginStart="@dimen/imageGapBetweenCards"
         android:gravity="center"
         android:text="@string/partner2"
-        android:textColor="@color/font_grey_settings"
+        android:textColor="#FFFFFF"
         android:textSize="@dimen/userScoreTextSize"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/buddyText1"
@@ -1273,7 +1273,7 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
         android:text="@string/partner1"
-        android:textColor="@color/font_grey_settings"
+        android:textColor="#FFFFFF"
         android:textSize="@dimen/userScoreTextSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -1310,7 +1310,7 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
         android:text="@string/Trump"
-        android:textColor="@color/font_grey_settings"
+        android:textColor="#FFFFFF"
         android:textSize="@dimen/userScoreTextSize"
         app:layout_constraintEnd_toStartOf="@+id/buddyText1"
         app:layout_constraintTop_toTopOf="@+id/buddyText1"
@@ -1763,7 +1763,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_30sdp"
-        android:background="@drawable/shine_score_table"
+        android:background="@drawable/shine_bid_value"
         android:paddingBottom="@dimen/_10sdp"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
@@ -1781,7 +1781,7 @@
             android:padding="@dimen/_20sdp"
             android:fontFamily="@font/luckiest_guy"
             android:text="@string/chooseTrump"
-            android:textColor="@color/font_yellow"
+            android:textColor="@color/font_grey_settings"
             android:textSize="@dimen/_18ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -1917,13 +1917,15 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
-            android:shadowColor="#3E3E3E"
-            android:shadowDx="3"
-            android:shadowDy="3"
-            android:shadowRadius="3"
+            android:fontFamily="@font/luckiest_guy"
+            android:shadowRadius="4"
+            android:shadowDx="4"
+            android:shadowDy="4"
+            android:shadowColor="@color/Black"
+            android:padding="@dimen/_5sdp"
             android:text="@string/_700"
             android:textColor="#FFFFFF"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_16ssp"
             android:textStyle="normal"
             android:visibility="gone"/>
 
@@ -1934,14 +1936,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/imageViewSelf_4"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewTable2_4"
             android:layout_marginBottom="@dimen/_4sdp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
+            android:fontFamily="@font/luckiest_guy"
             android:text="@string/_400"
+            android:shadowRadius="4"
+            android:shadowDx="4"
+            android:shadowDy="4"
+            android:shadowColor="@color/Black"
+            android:padding="@dimen/_5sdp"
             android:textColor="#FFFFFF"
-            android:textSize="@dimen/_15ssp"
+            android:textSize="@dimen/_17ssp"
             android:textStyle="normal"
             android:visibility="gone"/>
 
@@ -2086,7 +2095,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="90"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:srcCompat="@drawable/c10" />
 
         <ImageView
@@ -2101,7 +2110,7 @@
             android:contentDescription="@string/app_name"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:srcCompat="@drawable/c10" />
 
         <ImageView
@@ -2117,7 +2126,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="-90"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:srcCompat="@drawable/c10" />
 
         <ImageView
@@ -2151,8 +2160,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scoreViewLayout"
         android:layout_width="0dp"
@@ -2162,7 +2169,7 @@
         android:layout_marginStart="@dimen/_40sdp"
         android:layout_marginEnd="@dimen/_40sdp"
         android:animateLayoutChanges="true"
-        android:background="@drawable/shine_score_table"
+        android:background="@drawable/shine_confetti_gs"
         android:clickable="true"
         android:focusable="true"
         android:onClick="openCloseScoreSheet"
