@@ -216,6 +216,7 @@ class GameScreen : AppCompatActivity() {
     private var maxBidValue: Int = 350
     private var bidingStarted = false   /// biding happened before
     private var gameState1 = false   /// biding happened before
+    private var gameState7 = false   /// reset happened before
     private var shufflingAnimationFinished = false   /// biding happened before
     private var gameState4 = false   /// biding happened before
     private var roundStarted = false
@@ -359,19 +360,10 @@ class GameScreen : AppCompatActivity() {
                 val data = (dataSnapshot.data as Map<String, Any>)
                 if (data["M"].toString().isNotEmpty() && (lastChatTime != data["dt"].toString() || lastChat != data["M"].toString() || lastChatFrom != data["F"].toString().toInt())) { // if chat is not empty
                     if (soundStatus) SoundManager.instance?.playChatSound()
-                    chatArray.add(ChatMessage(message = data["M"].toString(), player = data["F"].toString().toInt(), isEmojiOnly = data["M"].toString() > String(Character.toChars(0x1F000))))
-                    chatAdapter.notifyItemInserted(chatArray.size - 1)
-                    binding.chatRecyclerView.scrollToPosition(chatArray.size - 1)
                     lastChat = data["M"].toString()
                     lastChatFrom = data["F"].toString().toInt()
                     lastChatTime = data["dt"].toString()
-                    if (binding.chatLinearLayout.visibility != View.VISIBLE) {
-                        binding.imageViewChat.repeatCount = LottieDrawable.INFINITE
-                        binding.imageViewChat.resumeAnimation()
-                        counterChat += 1 // increase counter by 1 is chat display is off
-                        binding.textViewChatNo.visibility = View.VISIBLE
-                        binding.textViewChatNo.text = "$counterChat New ${Emoji().message}"
-                    }
+                    insertNewMessageChat(chatMessage = ChatMessage(message = data["M"].toString(), player = data["F"].toString().toInt(), isEmojiOnly = data["M"].toString() > String(Character.toChars(0x1F000))))
                 }
             }
         }
@@ -511,6 +503,19 @@ class GameScreen : AppCompatActivity() {
         }  // close keyboard after sending chat
     }
 
+    private fun insertNewMessageChat(chatMessage: ChatMessage){
+        chatArray.add(chatMessage)
+        chatAdapter.notifyItemInserted(chatArray.size - 1)
+        binding.chatRecyclerView.scrollToPosition(chatArray.size - 1)
+
+        if (binding.chatLinearLayout.visibility != View.VISIBLE) {
+            binding.imageViewChat.repeatCount = LottieDrawable.INFINITE
+            binding.imageViewChat.resumeAnimation()
+            counterChat += 1 // increase counter by 1 is chat display is off
+            binding.textViewChatNo.visibility = View.VISIBLE
+            binding.textViewChatNo.text = "$counterChat New ${Emoji().message}"
+        }
+    }
     override fun onResume() {
         super.onResume()
         if (fromInt != 1) checkRoomExists() // check for all except host
@@ -553,30 +558,32 @@ class GameScreen : AppCompatActivity() {
             override fun onDataChange(data: DataSnapshot) {
                 if (data.value != null && activityExists) {
                     try {
-                        cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
                         gameData = data.getValue<GameData>()!!
-                        if (gameData.gs in 2..5) displaySelfCards(animation = false)
-                        tableCardsHandle()
-                        bidValue.value = gameData.bv
-                        scoreList = gameData.s
-                        if (currentBidder.value != gameData.bb) {
-                            currentBidder.value = gameData.bb //LiveData
-                        }
-                        if (partner1Card.value != gameData.pc1) {
-                            partner1Card.value = gameData.pc1  //LiveData
-                        }
-                        if (partner1CardText.value != gameData.pc1s) {
-                            partner1CardText.value = gameData.pc1s //LiveData
-                        }
-                        if (trump.value != gameData.tr) {
-                            trump.value = gameData.tr    //LiveData
-                        }
-                        if (nPlayers7) {
-                            if (partner2CardText.value != gameData.pc2s) {
-                                partner2CardText.value = gameData.pc2s //LiveData
+                        if(gameData.gs!=7) {
+                            cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
+                            if (gameData.gs in 2..5) displaySelfCards(animation = false)
+                            tableCardsHandle()
+                            bidValue.value = gameData.bv
+                            scoreList = gameData.s
+                            if (currentBidder.value != gameData.bb) {
+                                currentBidder.value = gameData.bb //LiveData
                             }
-                            if (partner2Card.value != gameData.pc2) {
-                                partner2Card.value = gameData.pc2  //LiveData
+                            if (partner1Card.value != gameData.pc1) {
+                                partner1Card.value = gameData.pc1  //LiveData
+                            }
+                            if (partner1CardText.value != gameData.pc1s) {
+                                partner1CardText.value = gameData.pc1s //LiveData
+                            }
+                            if (trump.value != gameData.tr) {
+                                trump.value = gameData.tr    //LiveData
+                            }
+                            if (nPlayers7) {
+                                if (partner2CardText.value != gameData.pc2s) {
+                                    partner2CardText.value = gameData.pc2s //LiveData
+                                }
+                                if (partner2Card.value != gameData.pc2) {
+                                    partner2Card.value = gameData.pc2  //LiveData
+                                }
                             }
                         }
                         when (gameData.gs) {
@@ -585,12 +592,17 @@ class GameScreen : AppCompatActivity() {
                             4 -> gameState4()
                             5 -> gameState5()
                             6 -> gameState6()
-                            7 -> gameState7()
+                            7 -> if(!gameState7) gameState7()
                         }
                     } catch (e: Exception) {
-                        if(fromInt == 1) showDialogueResetGame()
-                        centralText("Server Error")
-                        FirebaseCrashlytics.getInstance().recordException(e)
+                        if(fromInt == 1 && gameData.gs!=7 ) {
+                            showDialogueResetGame()
+                        }
+                        if(gameData.gs!=7) {
+                            centralText(message = "Server Error", displayTime = 0)
+                            speak("There was some server error")
+                            FirebaseCrashlytics.getInstance().recordException(e)
+                        }
                     }
                 }
             }
@@ -598,12 +610,17 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun gameState7(){
+        gameState7 = true
+        gameState1 = false
+        gameState4 = false
+        gameState6 = false
         if(fromInt==1){
-            centralText("Restarting Game")
-            Handler(Looper.getMainLooper()).postDelayed({startNextGame(View(this))},2000L)
-                        }
-            else {
-                centralText("Host has restarted Game")
+            centralText("Restarting Game", displayTime = 0)
+            Handler(Looper.getMainLooper()).postDelayed({startNextGame(View(this))},4000L)
+        }
+        else {
+            centralText("Host has restarted Game", displayTime = 0)
+            speak("Host has restarted Game")
         }
     }
     private fun tableCardsHandle() { //Table Cards & Table Points - Independent of everything else
@@ -627,6 +644,9 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun resetVariables() {
+        gameState7 = false
+        gameState6 = false
+        gameState4 = false
         centralText(cancel = true)
         maskWinner.value = false
         if (gameData.gn > 1) binding.gameBkgd.setImageResource(GameScreenData().tableBackground.random()) //changeBackground()
@@ -650,7 +670,6 @@ class GameScreen : AppCompatActivity() {
         counterPartnerSelection = 0
         played = false
         roundStarted = false
-        gameState6 = false
         roundWinner = 0
         tablePoints = 0
         if (nPlayers4) {
@@ -1569,7 +1588,10 @@ class GameScreen : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
             }
             if (onlineStatus[index] == 1 && fromInt != index + 1) {
-                if (oldValue == 2) speak("${playerName(index + 1)} has joined again !", speed = 1f)
+                if (oldValue == 2) {
+                    speak("${playerName(index + 1)} has joined again !", speed = 1f)
+                    insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has joined!", player = index+1, isEmojiOnly = false) )
+                }
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.greencirclebutton)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
             }
@@ -1577,7 +1599,8 @@ class GameScreen : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.status_left)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
                 speak("${playerName(index + 1)} has left !", speed = 1.1f)
-                toastCenter("${playerName(index + 1)} has left the room !")
+                insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has left", player = index+1, isEmojiOnly = false) )
+                toastCenter("${playerName(index + 1)} has left the game !")
                 if (index == 0) { //if only host leaves the room
                     activityExists = false
                     countDownBidding.cancel()
@@ -2191,13 +2214,14 @@ class GameScreen : AppCompatActivity() {
 
             val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
             titleTextView.dialogueTitle.text = "Server Error"
+            titleTextView.dialogueTitle.apply { setTextColor(resources.getColor(R.color.red1))}
             builder.setCustomTitle(titleTextView.root)
 
             val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
             bodyTextView.dialogueBody.text = getString(R.string.game_error)
             builder.setView(bodyTextView.root)
 
-            builder.setPositiveButton("Restart Round") { _: DialogInterface, _: Int ->
+            builder.setPositiveButton("OK") { _: DialogInterface, _: Int ->
 //                toastCenter("Leaving game now")
                 speak("Restarting game", forceSpeak = true)
                 writeToGameDatabase(data = mutableMapOf("gs" to 7))
@@ -2209,7 +2233,10 @@ class GameScreen : AppCompatActivity() {
     }
 
     fun closeGameRoom(view: View) {
-        if (activityExists) refRoomDatabase.child("OL/$from").setValue(2)
+        if (activityExists) {
+            refRoomDatabase.child("OL/$from").setValue(2)
+            refRoomFireStore.document(roomID + "_chat").set(hashMapOf("M" to "I've left the room", "F" to fromInt, "Fn" to selfName, "d" to SimpleDateFormat("yyyyMMdd").format(Date()).toInt(), "dt" to SimpleDateFormat("HH:mm:ss z").format(Date())), SetOptions.merge())
+        }
         activityExists = false
         countDownBidding.cancel()
         countDownPlayCard.cancel()
