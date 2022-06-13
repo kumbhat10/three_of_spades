@@ -159,7 +159,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var ct3: MutableLiveData<Int>
     private lateinit var ct4: MutableLiveData<Int>
     private var maskWinner = MutableLiveData(false)
-
     private var gameNumber: Int = 1
     private var gameLimitNoAds: Int = 2
 
