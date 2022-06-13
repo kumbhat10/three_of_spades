@@ -228,6 +228,9 @@ class MainHomeScreen : AppCompatActivity() {
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         logFirebaseEvent("MainHomeScreen", "open")
+        FirebaseCrashlytics.getInstance().setUserId(uid)
+        FirebaseCrashlytics.getInstance().setCustomKey("UID", "https://console.firebase.google.com/u/0/project/kaali-ki-teegi/firestore/data/~2FUsers~2F$uid?consoleUI=FIREBASE")
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
 //        if(BuildConfig.DEBUG) Picasso.get().setIndicatorsEnabled(true)
     }
 

@@ -104,7 +104,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var selfName: String
     private lateinit var from: String
     private var fromInt = 0
-    private var nPlayers = 0
+    private var nPlayers = 4
     private var totalDailyCoins = 0
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -164,7 +164,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var gameLimitNoAds: Int = 2
 
     private var delayWaitGameMode6 = 5500L
-    private var delayDeclareWinner = 1000L
+    private var delayDeclareWinner = 1500L
     private var timeCountdownPlayCard = 20000L
     private var timeAutoPlayCard = listOf<Long>(700, 850, 600, 700, 1000, 600, 1000)
     private var timeCountdownBid = 20000L
@@ -285,21 +285,24 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 }
 
                 override fun onFinish() {
-                    if (vibrateStatus) vibrationStart()
-                    if (soundStatus) SoundManager.instance?.playTimerSound()
-                    bidStatus[playerTurn.value!! - 1] = 0
-                    bidingStarted = true
-                    playerTurn.value = nextBidderTurn(fromInt)
-                    findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
-                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
-                    findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
-                    findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
-                    findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
-                    findViewById<TextView>(R.id.textViewTimer).clearAnimation()
-                    findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE
-                    findViewById<ConstraintLayout>(R.id.frameAskBid).clearAnimation()
-                    centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
-                    speak("Time's Up ${playerName(fromInt)}. You can't bid now", speed = 1.05f)
+                    if (!bidDone) {
+                        bidDone = true
+                        if (vibrateStatus) vibrationStart()
+                        if (soundStatus) SoundManager.instance?.playTimerSound()
+                        bidStatus[playerTurn.value!! - 1] = 0
+                        bidingStarted = true
+                        playerTurn.value = nextBidderTurn(fromInt)
+                        findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
+                        findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
+                        findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
+                        findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
+                        findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
+                        findViewById<TextView>(R.id.textViewTimer).clearAnimation()
+                        findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE
+                        findViewById<ConstraintLayout>(R.id.frameAskBid).clearAnimation()
+                        centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
+                        speak("Time's Up ${playerName(fromInt)}. You can't bid now", speed = 1.05f)
+                    }
                 }
             } //        endregion
             // region Game State Listener
@@ -358,6 +361,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
             gameState.observe(this, gameStateListener) // endregion
             uid = FirebaseAuth.getInstance().uid.toString()
             FirebaseCrashlytics.getInstance().setUserId(uid)
+            FirebaseCrashlytics.getInstance().setCustomKey("UID", "https://console.firebase.google.com/u/0/project/kaali-ki-teegi/firestore/data/~2FUsers~2F$uid?consoleUI=FIREBASE")
+
             refUsersData.document(uid).set(hashMapOf("LPD_bot" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()), SetOptions.merge())
         } // endregion
         // region table card listener
@@ -619,7 +624,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         nGamesPlayed += 1
         nGamesPlayedDaily += 1
         updateTimeAutoPlay()
-        refUsersData.document(uid).set(hashMapOf("sc" to playerCoins(from), "scd" to totalDailyCoins, "w_bot" to nGamesWon, "w_daily" to nGamesWonDaily, "b_bot" to nGamesBid, "b_daily" to nGamesBidDaily, "p_bot" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
+        refUsersData.document(uid).set(hashMapOf("LPD_bot" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt(), "sc" to playerCoins(from), "scd" to totalDailyCoins, "w_bot" to nGamesWon, "w_daily" to nGamesWonDaily, "b_bot" to nGamesBid, "b_daily" to nGamesBidDaily, "p_bot" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
+
     }
 
     private fun createScoreTableHeader(): List<String> {
@@ -797,21 +803,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
             for (i in 0 until nPlayers) {
                 val j = i + 1
-                if (j == bidder || (j == buPlayer1 && buFound1 != 0)) {
-//                    findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(j)
-                    findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$bidTeamScore /$bidValue"
-                } else {
-//                    findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(j)
-                    findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
-                }
+                if (j == bidder || (j == buPlayer1 && buFound1 != 0)) findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$bidTeamScore /$bidValue"
+                else findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${pointsList.sum() - bidTeamScore} /${scoreLimit - bidValue}"
             }
             var tt1 = 0
             if (buFound1 == 1) tt1 = pointsList[buPlayer1 - 1]
             val bidTeamScoreFinal = pointsList[bidder - 1] + tt1 // total score of bid team
-            if (roundNumber != roundNumberLimit) Handler(Looper.getMainLooper()).postDelayed({
-                decideGameWinnerTeam4(bidTeamScoreFinal, totalGamePoints = pointsList.sum())
-            }, delayDeclareWinner)
-            else decideGameWinnerTeam4(bidTeamScoreFinal, totalGamePoints = pointsList.sum())
+            decideGameWinnerTeam4(bidTeamScoreFinal, totalGamePoints = pointsList.sum())
         }
     }
 
@@ -820,7 +818,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             gameTurn.removeObserver(roundListener)
 
             clearAllAnimation()
-            if (vibrateStatus) vibrationStart() //            toastCenter("Game Over: Bidder team Won \n         Defender team Lost")
+            if (vibrateStatus) vibrationStart()
             centralText("Game Over: Bidder team Won \n         Defender team Lost")
 
             if (fromInt == bidder && buFound1 != 1) {
@@ -848,11 +846,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 pointsListTemp[buPlayer1] = bidValue
             }
             scoreList = pointsListTemp
-            gameState.value = 6
+            Handler(Looper.getMainLooper()).postDelayed({ gameState.value = 6 }, delayDeclareWinner)
         } else if (buFound1 == 1 && (totalGamePoints - bidTeamScore) >= (scoreLimit - bidValue)) { // if opponent score has reached target value & both partners are disclosed
             gameTurn.removeObserver(roundListener)
             clearAllAnimation()
-            if (vibrateStatus) vibrationStart() //            toastCenter("Game Over: Defender team Won \n         Bidder team Lost")
+            if (vibrateStatus) vibrationStart()
             centralText("Game Over: Defender team Won \n         Bidder team Lost")
 
             if (fromInt == bidder || fromInt == buPlayer1) {
@@ -865,12 +863,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 }
                 speak("Well done! Your team won")
             }
-
             val pointsListTemp = mutableListOf(gameNumber, bidValue, bidValue, bidValue, bidValue)
             pointsListTemp[bidder] = -1 * bidValue * 2
             pointsListTemp[buPlayer1] = -bidValue
             scoreList = pointsListTemp
-            gameState.value = 6
+            Handler(Looper.getMainLooper()).postDelayed({ gameState.value = 6 }, delayDeclareWinner)
         }
     }
 
@@ -1050,6 +1047,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({ animateWinner() }, 550)
         Handler(Looper.getMainLooper()).postDelayed({ // start after 1.5 seconds
             if (roundNumber < roundNumberLimit) {
+                endGameRound()
                 startNextRound()
             } else if (roundNumber == roundNumberLimit) {
                 try {
@@ -1076,18 +1074,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         ct4.value = cardsIndexLimit
     }
 
-    private fun startNextRound() { //        if(roundNumber==12) toastCenter("Round number $roundNumber")
-        when (roundWinner) {
-            1 -> pt1 += tablePoints
-            2 -> pt2 += tablePoints
-            3 -> pt3 += tablePoints
-            4 -> pt4 += tablePoints
-        }
-        updatePlayerScoreInfo(listOf(pt1, pt2, pt3, pt4))
-        ct1.value = cardsIndexLimit
-        ct2.value = cardsIndexLimit
-        ct3.value = cardsIndexLimit
-        ct4.value = cardsIndexLimit
+    private fun startNextRound() {
         playerTurn.value = roundWinner
         trumpStart = ""
         roundNumber += 1
@@ -1274,11 +1261,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
         moveView(binding.trumpImage, findViewById(refIDMappedImageView[bidder - 1]))
     } // just displaying trump card
 
-    private fun startTrumpSelection() { //        textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.progressBarPlayer4)
-        //        findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer44))
+    private fun startTrumpSelection() {
         if (bidder != fromInt) {     //  show to everyone except bidder
             autoTrumpSelect()
             speak("${playerName(bidder)} won bid. Waiting to choose trump", speed = 1.10f)
+            centralText(cancel = true)
         } else { // show to bidder only
             binding.bidNowImage.visibility = View.GONE // redundant not required really
             speak("You won bid. Choose your trump now", speed = 1.10f, queue = TextToSpeech.QUEUE_ADD)
@@ -1338,38 +1325,37 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (bidSpeak && bidingStarted && soundStatus) {
                 speak("${playerName(bidder)} bid $bidValue", speed = 1.3f)
                 GameScreenAutoPlay().moveView(binding.bidCoin, findViewById(refIDMappedImageView[bidder - 1]))
-            } //            else if (soundStatus) SoundManager.instance?.playUpdateSound()//soundUpdate.start()
-            binding.textViewBidValue.text = "$bidValue" //.toString() //show current bid value $emojiScore
-            findViewById<TextView>(R.id.textViewBider).text = getString(R.string.Bider) + playerName(bidder) //            textViewBidValue.textColor = ContextCompat.getColor(applicationContext, R.color.font_yellow)
-            //            findViewById<TextView>(R.id.textViewBider).setTextColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
+            }
+            binding.textViewBidValue.text = "$bidValue"  //show current bid value
+            findViewById<TextView>(R.id.textViewBider).text = getString(R.string.Bider) + playerName(bidder)
             findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE //biding frame invisible
             resetBackgroundAnimationBidding() //set all background to black or red depending on status
             findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
             findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).setImageResource(R.drawable.biddericon)
-            animatePlayer(playerTurn.value!!)  // animate current player
-            val tView: ImageView = findViewById(refIDMappedImageView[playerTurn.value!! - 1])
+            animatePlayer(it)  // animate current player
+            val tView: ImageView = findViewById(refIDMappedImageView[it - 1])
             binding.bidNowImage.animate().x(tView.x).y(tView.y).duration = 450
-            if (bidStatus[playerTurn.value!! - 1] == 1) {  // highlight current player
-                findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[playerTurn.value!! - 1]).visibility = View.VISIBLE
+            if (bidStatus[it - 1] == 1) {  // highlight current player
+                findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[it - 1]).visibility = View.VISIBLE
             }
-            if (playerTurn.value!! == fromInt && (bidder != playerTurn.value!! || !bidingStarted)) {
-                if (bidStatus[playerTurn.value!! - 1] == 1) { // show bid frame and ask to bid or pass
+            if (it == fromInt && (bidder != it || !bidingStarted)) {
+                if (bidStatus[it - 1] == 1) { // show bid frame and ask to bid or pass
                     bidDone = false
                     binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
                     findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.VISIBLE // this path is critical
                     findViewById<ConstraintLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
                     countDownTimer("Bidding", purpose = "start")
                     if (vibrateStatus) vibrationStart()
-                } else if (bidStatus[playerTurn.value!! - 1] == 0) {
-                    playerTurn.value = nextBidderTurn(playerTurn.value!!)
+                } else if (bidStatus[it - 1] == 0) {
+                    playerTurn.value = nextBidderTurn(it)
                 }
             }
-            if (bidder == playerTurn.value!! && bidingStarted) { // finish bid and move to next game state  // dummy playerTurn.value!! == fromInt &&
+            if (bidder == it && bidingStarted) { // finish bid and move to next game state  // dummy playerTurn.value!! == fromInt &&
                 playerTurn.removeObserver(bidTurnListener)
                 gameState.value = 3 //// change game state to 3 as biding is finished
-            } else if (playerTurn.value!! != 1 && (bidder != playerTurn.value!! || !bidingStarted)) {
+            } else if (it != 1) {
                 autoBid()
-            } //            bidingStarted = true
+            }
         }
         playerTurn.observe(this, bidTurnListener)
     }
@@ -1384,23 +1370,27 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     fun nextBidderTurn(currentTurn: Int): Int {
         var nBT = currentTurn
-        while (true) {
+        var found = false
+        for(i in 1 until nPlayers){
             nBT = nextTurn(nBT)
-            if (bidStatus[nBT - 1] == 1) break
+            if(bidStatus [nBT-1] ==1){
+                found = true
+                break
+            }
         }
-        return nBT
+        return if (found) nBT else bidder
     }
 
     private fun autoBid() {
         val tempView = View(applicationContext)
         if (bidStatus[playerTurn.value!! - 1] == 1) {
-            if (maxAutoBidLimit.random() > bidValue) tempView.tag = listOf("5", "10", "20", "pass").random() //check if bid value has not reached maximum allowed bid value
+            if (maxAutoBidLimit.random() > bidValue) tempView.tag = listOf("5", "10", "20", "10", "pass").random() //check if bid value has not reached maximum allowed bid value
             else tempView.tag = "pass"
             countDownBidding.cancel() // dummy
             Handler(Looper.getMainLooper()).postDelayed({
                 bidDone = false
                 askToBid(tempView)
-            }, timeAutoBid.random()) // timeDelayAutoPlay.random())
+            }, timeAutoBid.random())
         } else {
             playerTurn.value = nextBidderTurn(playerTurn.value!!)
         }
@@ -1408,6 +1398,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     fun askToBid(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+        if(this::countDownBidding.isInitialized) countDownBidding.cancel()
         countDownTimer("Bidding", purpose = "cancel")
         if (!bidDone) {
             bidDone = true
@@ -1416,34 +1407,39 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 "pass" -> {
                     bidStatus[playerTurn.value!! - 1] = 0
                     speak("${playerName(playerTurn.value!!)} passed", speed = 1.15f)
-                    if (playerTurn.value!! == fromInt) centralText("    Time's Up !!  \n You cannot bid anymore", 2500)
+                    if (playerTurn.value!! == fromInt) centralText("You passed \nYou cannot bid anymore", 2500)
                 }
                 "5" -> {
                     bidValue = min(bidValue + 5, maxBidValue)
+                    bidStatus[playerTurn.value!! - 1] = 1
                     bidder = playerTurn.value!!
                 }
                 "10" -> {
                     bidValue = min(bidValue + 10, maxBidValue)
+                    bidStatus[playerTurn.value!! - 1] = 1
                     bidder = playerTurn.value!!
                 }
                 "20" -> {
                     bidValue = min(bidValue + 20, maxBidValue)
+                    bidStatus[playerTurn.value!! - 1] = 1
                     bidder = playerTurn.value!!
                 }
                 "50" -> {
                     bidValue = min(bidValue + 50, maxBidValue)
+                    bidStatus[playerTurn.value!! - 1] = 1
                     bidder = playerTurn.value!!
                 }
                 "75" -> {
                     bidValue = min(bidValue + 75, maxBidValue)
+                    bidStatus[playerTurn.value!! - 1] = 1
                     bidder = playerTurn.value!!
                 }
             }
             if (playerTurn.value!! == fromInt) {
                 findViewById<ConstraintLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
                 Handler(Looper.getMainLooper()).postDelayed({
-                    findViewById<ConstraintLayout>(R.id.frameAskBid).clearAnimation()
                     findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.GONE
+                    findViewById<ConstraintLayout>(R.id.frameAskBid).clearAnimation()
                 }, 200)
             }
             bidingStarted = true
@@ -1641,11 +1637,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun nextTurn(current: Int): Int {
-        var next = 0
-        if (current != 4) {
-            next = current + 1
-        } else if (current == 4) next = 1
-        return next
+        return if (current < 4) current + 1 else 1
     }
 
     private fun getSharedPrefs() {
@@ -1762,7 +1754,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             builder.setCustomTitle(titleTextView.root)
 
             val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
-            bodyTextView.dialogueBody.text = getString(R.string.leave_room_confirm)
+            bodyTextView.dialogueBody.text = getString(R.string.leave_room_confirm1)
             builder.setView(bodyTextView.root)
 
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
@@ -1786,6 +1778,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         activityExists = false
         countDownBidding.cancel()
         countDownPlayCard.cancel()
+        refUsersData.document(uid).set(hashMapOf("LPD_bot" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()), SetOptions.merge())
         startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) }.apply { putExtra("returnFromGameScreen", true) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         overridePendingTransition(R.anim.slide_right_activity, R.anim.slide_right_activity)
         finishAndRemoveTask()

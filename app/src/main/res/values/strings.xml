@@ -138,7 +138,8 @@
     <string name="resultLost">Defeat</string>
     <string name="startcjrs">Start</string>
     <string name="leave_room">Leave Room</string>
-    <string name="leave_room_confirm">Are you sure want to Leave or Restart this round?</string>
+    <string name="leave_room_confirm">Are you sure want to Leave or Restart this round ?</string>
+    <string name="leave_room_confirm1">Are you sure want to Leave ?</string>
     <string name="room_error">Room Error</string>
     <string name="game_error">We need to restart this round due to some server error</string>
     <string name="_4_players">4 Players</string>

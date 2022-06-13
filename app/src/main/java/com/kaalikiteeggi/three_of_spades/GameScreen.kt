@@ -601,7 +601,11 @@ class GameScreen : AppCompatActivity() {
                         if(gameData.gs!=7) {
                             centralText(message = "Server Error", displayTime = 0)
                             speak("There was some server error")
+                            FirebaseCrashlytics.getInstance().setCustomKey("RoomID", roomID)
+                            FirebaseCrashlytics.getInstance().setCustomKey("UID", "https://console.firebase.google.com/u/0/project/kaali-ki-teegi/firestore/data/~2FUsers~2F$uid?consoleUI=FIREBASE")
+                            FirebaseCrashlytics.getInstance().log(data.value.toString())
                             FirebaseCrashlytics.getInstance().recordException(e)
+                            FirebaseCrashlytics.getInstance().sendUnsentReports()
                         }
                     }
                 }
@@ -614,9 +618,18 @@ class GameScreen : AppCompatActivity() {
         gameState1 = false
         gameState4 = false
         gameState6 = false
+        handlerDeclareWinner.removeCallbacksAndMessages(null)
         binding.frameAskBid.visibility = View.GONE
         binding.frameTrumpSelection.visibility = View.GONE
+        finishBackgroundAnimationBidding()
         maskWinner.value = false
+        showTableCard(resetCards = true)
+        binding.relativeLayoutTableCards.visibility = View.GONE
+        countDownTimer("PlayCard", purpose = "cancel")
+        countDownTimer("Bidding", purpose = "cancel")
+
+        displayShufflingCards(distribute = false)
+
         if(fromInt==1){
             centralText("Restarting Game", displayTime = 0)
             Handler(Looper.getMainLooper()).postDelayed({startNextGame(View(this))},1500L)
@@ -650,6 +663,7 @@ class GameScreen : AppCompatActivity() {
         gameState7 = false
         gameState6 = false
         gameState4 = false
+        newGameStatus = true
         centralText(cancel = true)
         maskWinner.value = false
         if (gameData.gn > 1) binding.gameBkgd.setImageResource(GameScreenData().tableBackground.random()) //changeBackground()
@@ -773,11 +787,15 @@ class GameScreen : AppCompatActivity() {
 
     private fun nextBidderTurn(currentTurn: Int, bidStatus: MutableList<Int>): Int {
         var nBT = currentTurn
-        while (true) {  ///dummy dangerous - If stuck in infinite loop
+        var found = false
+        for(i in 1 until nPlayers){
             nBT = nextTurn(nBT)
-            if (bidStatus[nBT - 1] == 1) break
+            if(bidStatus [nBT-1] ==1){
+                found = true
+                break
+            }
         }
-        return nBT
+        return if (found) nBT else gameData.bb
     }
 
     private fun nextTurn(current: Int): Int {
@@ -805,11 +823,11 @@ class GameScreen : AppCompatActivity() {
                     gameData.bs[fromInt - 1] = 0
                     writeToGameDatabase(data = mutableMapOf("bs" to gameData.bs, "bvo" to gameData.bv, "pt" to nextValidBidder))
                 }
-                "5" -> writeToGameDatabase(data = mutableMapOf("bv" to min(gameData.bv + 5, maxBidValue), "bvo" to gameData.bv, "bb" to fromInt, "pt" to if (min(gameData.bv + 5, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
-                "10" -> writeToGameDatabase(data = mutableMapOf("bv" to min(gameData.bv + 10, maxBidValue), "bvo" to gameData.bv, "bb" to fromInt, "pt" to if (min(gameData.bv + 10, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
-                "20" -> writeToGameDatabase(data = mutableMapOf("bv" to min(gameData.bv + 20, maxBidValue), "bvo" to gameData.bv, "bb" to fromInt, "pt" to if (min(gameData.bv + 20, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
-                "50" -> writeToGameDatabase(data = mutableMapOf("bv" to min(gameData.bv + 50, maxBidValue), "bvo" to gameData.bv, "bb" to fromInt, "pt" to if (min(gameData.bv + 50, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
-                "75" -> writeToGameDatabase(data = mutableMapOf("bv" to min(gameData.bv + 75, maxBidValue), "bvo" to gameData.bv, "bb" to fromInt, "pt" to if (min(gameData.bv + 75, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
+                "5" -> raiseBid(5)// writeToGameDatabase(data = mutableMapOf("bv" to min(gameData.bv + 5, maxBidValue), "bvo" to gameData.bv, "bb" to fromInt, "pt" to if (min(gameData.bv + 5, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
+                "10" -> raiseBid(10)
+                "20" -> raiseBid(20)
+                "50" -> raiseBid(50)
+                "75" -> raiseBid(75)
             }
             binding.frameAskBid.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
             Handler(Looper.getMainLooper()).postDelayed({
@@ -817,6 +835,10 @@ class GameScreen : AppCompatActivity() {
                 binding.frameAskBid.clearAnimation()
             }, 180)
         }
+    }
+
+    private fun raiseBid(bidValue: Int){
+        writeToGameDatabase(data = mutableMapOf("bv" to min(gameData.bv + bidValue, maxBidValue), "bvo" to gameData.bv, "bb" to fromInt, "pt" to if (min(gameData.bv + bidValue, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
     }
 
     private fun gameState3() {
@@ -948,8 +970,8 @@ class GameScreen : AppCompatActivity() {
                     counterPartnerSelection = 0
                     binding.linearLayoutPartnerSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
                     Handler(Looper.getMainLooper()).postDelayed({
-                        binding.linearLayoutPartnerSelection.clearAnimation()
                         binding.linearLayoutPartnerSelection.visibility = View.GONE
+                        binding.linearLayoutPartnerSelection.clearAnimation()
                     }, 180)
                 } else {
                     if (soundStatus) SoundManager.instance?.playErrorSound()
@@ -962,8 +984,8 @@ class GameScreen : AppCompatActivity() {
                 counterPartnerSelection = 0
                 binding.linearLayoutPartnerSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_center))
                 Handler(Looper.getMainLooper()).postDelayed({
-                    binding.linearLayoutPartnerSelection.clearAnimation()
                     binding.linearLayoutPartnerSelection.visibility = View.GONE
+                    binding.linearLayoutPartnerSelection.clearAnimation()
                 }, 180)
             }
         }
@@ -977,7 +999,6 @@ class GameScreen : AppCompatActivity() {
             newGameStatus = true
             roundStarted = true
             if (soundStatus) SoundManager.instance?.playSuccessSound()
-            getBuddyAndDisplay()
             finishPassOverlay()
             if (gameData.bb > 0) updatePlayerScoreInfo()
 //            displaySelfCards(animation = false)
@@ -994,12 +1015,6 @@ class GameScreen : AppCompatActivity() {
         } else {
             startPlayingRound()
         }
-    }
-
-    private fun getBuddyAndDisplay() {
-        if (vibrateStatus) vibrationStart()
-//        if (gameData.bb != 0) moveView(binding.buddyImage1, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = buddy1X, targetViewMoveY = buddy1Y)
-//        if (nPlayers7 && gameData.bb != 0) moveView(binding.buddyImage2, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = buddy2X, targetViewMoveY = buddy2Y)
     }
 
     private fun startPlayingRound() {
@@ -1304,12 +1319,11 @@ class GameScreen : AppCompatActivity() {
     private fun gameState6() {
         if (!gameState6) {
             gameState6 = true
-            showTableCard(resetCards = true)
             if (fromInt == 1) logFirebaseEvent(key = "played$nPlayers")
+            showTableCard(resetCards = true)
             binding.relativeLayoutTableCards.visibility = View.GONE
             countDownTimer("PlayCard", purpose = "cancel")
             if (vibrateStatus) vibrationStart()
-//            if (soundStatus) SoundManager.instance?.playShuffleSound() //
             displayShufflingCards(distribute = false)
             scoreOpenStatus = true
             if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
@@ -1322,7 +1336,6 @@ class GameScreen : AppCompatActivity() {
 //                maskWinner.value = false
                 if (fromInt == 1) { // show start next game button only to host
                     binding.startNextRoundButton.visibility = View.VISIBLE
-//                    binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
                 } else {
                     if (gameData.gs == 6) centralText("Waiting for host to start next game", displayTime = 0)
                 }
@@ -1384,7 +1397,7 @@ class GameScreen : AppCompatActivity() {
         scoreBoardTable(display = false, data = scoreList)
         nGamesPlayed += 1
         nGamesPlayedDaily += 1
-        refUsersData.document(uid).set(hashMapOf("sc" to playerCoins(from), "scd" to totalDailyCoins, "w" to nGamesWon, "w_daily" to nGamesWonDaily, "b" to nGamesBid, "b_daily" to nGamesBidDaily, "p" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
+        refUsersData.document(uid).set(hashMapOf("LPD" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt(), "sc" to playerCoins(from), "scd" to totalDailyCoins, "w" to nGamesWon, "w_daily" to nGamesWonDaily, "b" to nGamesBid, "b_daily" to nGamesBidDaily, "p" to nGamesPlayed, "p_daily" to nGamesPlayedDaily), SetOptions.merge())
     }
 
     fun openCloseScoreSheet(view: View) {
@@ -1670,8 +1683,8 @@ class GameScreen : AppCompatActivity() {
     }
 
     fun startNextGame(view: View) { // dummy - Check if debouncing required
-        binding.startNextRoundButton.clearAnimation()
         binding.startNextRoundButton.visibility = View.GONE
+        binding.startNextRoundButton.clearAnimation()
 
         if (fromInt == 1) refRoomDatabase.child("G").setValue(if (nPlayers4) getGameData4(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)
         else getGameData7(dummy = BuildConfig.DEBUG, lastGameBidder = gameData.bb, gameNumber = gameData.gn + 1, s = gameData.s)).addOnFailureListener {
@@ -1740,13 +1753,14 @@ class GameScreen : AppCompatActivity() {
                 countDownPlayCard.start()
             }
         } else if (purpose == "cancel") {
+            if (task == "Bidding") countDownBidding.cancel()
+            if (task == "PlayCard") countDownPlayCard.cancel()
             binding.closeGameRoomIcon.visibility = View.VISIBLE
             binding.progressbarTimer.visibility = View.GONE
             binding.textViewTimer.visibility = View.GONE
             binding.progressbarTimer.clearAnimation()
             binding.textViewTimer.clearAnimation()
-            if (task == "Bidding") countDownBidding.cancel()
-            if (task == "PlayCard") countDownPlayCard.cancel()
+
         }
     }
 
@@ -1929,12 +1943,12 @@ class GameScreen : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (nPlayers4) {
                 binding.imageViewWinnerCenter4.animation = null
-                binding.imageViewWinnerCenter4.clearAnimation()
                 binding.imageViewWinnerCenter4.visibility = View.GONE
+                binding.imageViewWinnerCenter4.clearAnimation()
             } else if (nPlayers7) {
                 binding.imageViewWinnerCenter.animation = null
-                binding.imageViewWinnerCenter.clearAnimation()
                 binding.imageViewWinnerCenter.visibility = View.GONE
+                binding.imageViewWinnerCenter.clearAnimation()
             }
             binding.relativeLayoutTableCards.visibility = View.GONE
             binding.imageGallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_out))
@@ -2233,6 +2247,7 @@ class GameScreen : AppCompatActivity() {
             refRoomDatabase.child("OL/$from").setValue(2)
         }
         activityExists = false
+        refUsersData.document(uid).set(hashMapOf("LPD" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()), SetOptions.merge())
         countDownBidding.cancel()
         countDownPlayCard.cancel()
         startActivity(Intent(this, MainHomeScreen::class.java).apply { putExtra("newUser", false) }.apply { putExtra("returnFromGameScreen", true) }.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))

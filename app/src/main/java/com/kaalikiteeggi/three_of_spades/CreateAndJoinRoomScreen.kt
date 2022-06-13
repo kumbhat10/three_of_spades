@@ -150,6 +150,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         uid = mAuth.uid.toString()
         FirebaseCrashlytics.getInstance().setUserId(uid)
+        FirebaseCrashlytics.getInstance().setCustomKey("UID", "https://console.firebase.google.com/u/0/project/kaali-ki-teegi/firestore/data/~2FUsers~2F$uid?consoleUI=FIREBASE")
     }
 
     @SuppressLint("SetTextI18n")
@@ -305,6 +306,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
         if (playerJoining == nPlayers) allPlayersJoined()
         if (playerJoining >= 10) {
+            FirebaseCrashlytics.getInstance().setCustomKey("RoomID", roomID)
+            FirebaseCrashlytics.getInstance().log(dataSnapshot.toString())
             if (fromInt != 1 || playerJoining == 11) {
                 binding.maskAllLoading1.visibility = View.VISIBLE
                 binding.progressBarLoading4.visibility = View.VISIBLE

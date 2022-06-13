@@ -34,6 +34,9 @@ class GameData {
 	var sc: MutableList<Int> = mutableListOf(0,0,0,0)  // local reward score list for that game
 	var s: MutableList<Int> = mutableListOf(0,0,0,0,0) // Individual final score list for current game after win/defeat
 	var tr: String = ""  // Master Trump for whole game
+	override fun toString(): String {
+		return "bb-> $bb  bs-> $bs  bv-> $bv  bvo-> $bvo  ct-> $ct  ct1-> $ct1  ch1-> $ch1  ch2-> $ch2  "//ch3-> $ch3  ch4-> $ch4  ch5-> $ch5  ch6-> $ch6  ch7-> $ch7  gs-> $gs  gn-> $gn  p1-> $p1  p1s-> $p1s  p2-> $p2  p2s-> $p2s  pc1-> $pc1  pc1s-> $pc1s  pc2-> $pc2  pc2s-> $pc2s  pt-> $pt  rn-> $rn  rt-> $rt  rtr-> $rtr  sc-> $sc  s-> $s  tr-> $tr"
+	}
 }
 
 fun getGameData4(dummy:Boolean = false, lastGameBidder:Int = Random.nextInt(1, 5), gameNumber:Int = 1, s: MutableList<Int> = mutableListOf(0,0,0,0,0)): GameData {
