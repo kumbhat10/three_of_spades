@@ -961,17 +961,19 @@
             android:id="@+id/rankTitle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_43sdp"
-            android:background="@color/font_yellow"
+            android:background="@drawable/shine_player_stats"
             android:fontFamily="@font/luckiest_guy"
             android:gravity="center"
             android:text="@string/top_players"
-            android:textColor="@color/Black"
+            android:textColor="@color/white"
             android:textSize="@dimen/_26ssp"
             android:textStyle="normal"
-            android:shadowColor="#6C6C6C"
-            android:shadowDy="3"
-            android:shadowDx="3"
-            android:shadowRadius="3"
+            android:paddingEnd="@dimen/_6sdp"
+            android:paddingStart="@dimen/_6sdp"
+            android:shadowColor="@color/Black"
+            android:shadowDy="4"
+            android:shadowDx="4"
+            android:shadowRadius="4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -991,13 +993,6 @@
             app:layout_constraintVertical_bias="0.3"
             app:srcCompat="@drawable/close" />
 
-        <androidx.legacy.widget.Space
-            android:id="@+id/space4"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_5sdp"
-            app:layout_constraintBottom_toBottomOf="@+id/rankTitle"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabRank"
             android:layout_width="match_parent"
@@ -1005,7 +1000,8 @@
             android:background="@drawable/shine_user_rank_bkgd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/space4"
+            android:layout_marginTop="@dimen/_1sdp"
+            app:layout_constraintTop_toBottomOf="@+id/rankTitle"
             app:tabGravity="fill"
             app:tabIndicatorHeight="@dimen/_3sdp"
             app:tabPaddingBottom="@dimen/_2sdp"

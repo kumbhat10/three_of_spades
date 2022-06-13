@@ -75,7 +75,8 @@
     <dimen name="padding_userScore">@dimen/_3sdp</dimen>
     <dimen name="usernameTextSize">@dimen/_11ssp</dimen>
     <dimen name="userScoreTextSize">@dimen/_10ssp</dimen>
-    <dimen name="userScoreGap">@dimen/_minus2sdp</dimen>
+<!--    <dimen name="userScoreGap"></dimen>-->
+    <dimen name="userScoreGap">@dimen/_minus1sdp</dimen>
     <dimen name="scoreTableTextSize">@dimen/_9ssp</dimen>
 
     <dimen name="mhsIconsSize">@dimen/_50sdp</dimen>

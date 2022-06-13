@@ -25,7 +25,7 @@
       android:pathData="M64.73,2L539.28,2C574.03,2 602.01,29.98 602.01,64.73L602.01,169.28C602.01,204.03 574.03,232 539.28,232L64.73,232C29.98,231.99 2,204.02 2,169.26L2,64.71C2,29.96 29.98,1.99 64.73,1.99L64.73,2Z"
       android:fillType="evenOdd">
     <aapt:attr name="android:fillColor">
-      <gradient 
+      <gradient
           android:gradientRadius="279.996"
           android:centerX="131.998"
           android:centerY="11.998"
@@ -57,5 +57,5 @@
       android:strokeAlpha="0.498"
       android:fillColor="#ffffff"
       android:fillType="evenOdd"
-      android:fillAlpha="0.498"/>
+      android:fillAlpha="0.35"/>
 </vector>

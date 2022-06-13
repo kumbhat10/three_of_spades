@@ -171,7 +171,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var timeAutoBid = listOf<Long>(1650, 1400, 1500, 1800)
     private var speedAutoBid = 1.1f
     private var timeAutoTrumpAndPartner = listOf<Long>(1700, 2000, 1700)
-    private var maxAutoBidLimit = listOf(220, 230, 235)
+    private var maxAutoBidLimit = listOf(220, 230, 235, 245, 250)
 
     private var scoreSheetNotUpdated = true
     private var played = false
