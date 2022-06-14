@@ -10,6 +10,7 @@ if (!project.hasProperty("disable-performance-plugin")) {
 }
 apply plugin: 'kotlin-kapt'
 android {
+    namespace 'com.kaalikiteeggi.three_of_spades'
     compileSdkVersion 32
     buildFeatures{
         viewBinding = true
@@ -20,8 +21,8 @@ android {
         minSdkVersion 24
         //noinspection OldTargetApi
         targetSdkVersion 32
-        versionCode 76
-        versionName "76B"
+        versionCode 77
+        versionName "77B"
         signingConfig signingConfigs.debug
     }
     buildTypes {
