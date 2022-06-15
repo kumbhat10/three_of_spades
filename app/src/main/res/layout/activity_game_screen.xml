@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/gameBkgd"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/_480sdp"
         android:layout_height="match_parent"
         android:contentDescription="@string/app_name"
         android:onClick="closeChatScoreWindow"
@@ -2184,7 +2184,7 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="openCloseScoreSheet"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -2197,6 +2197,7 @@
             android:background="@drawable/shine_player_stats"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="gone"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:orientation="vertical"
             android:paddingBottom="@dimen/_2sdp"
@@ -2205,10 +2206,37 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpeakableTextPresentCheck" />
 
+        <GridView
+            android:id="@+id/gridScoreHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnWidth="@dimen/scoreTablePhotoTotal"
+            android:gravity="center"
+            android:visibility="visible"
+            android:stretchMode="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <GridView
+            android:id="@+id/gridScoreBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:columnWidth="@dimen/scoreTablePhotoTotal"
+            android:gravity="center"
+            android:visibility="visible"
+            android:stretchMode="columnWidth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gridScoreHeader"
+            app:layout_constraintBottom_toTopOf="@id/addViewGameScreenBanner"/>
+
         <LinearLayout
             android:id="@+id/imageGalleryScoreTotal"
             android:layout_width="0dp"
             android:layout_height="@dimen/_23sdp"
+            android:visibility="gone"
             android:layout_marginTop="0dp"
             android:background="@drawable/shine_game_score"
             android:clickable="true"
@@ -2236,7 +2264,7 @@
             android:scrollbarTrackVertical="@drawable/scrollbar_track"
             android:scrollbars="vertical"
             android:verticalScrollbarPosition="right"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/addViewGameScreenBanner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

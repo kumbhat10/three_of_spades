@@ -1380,13 +1380,13 @@ class GameScreen : AppCompatActivity() {
             binding.winnerLottie.setAnimation(R.raw.sad_lottie)
             binding.textResult.text = getString(R.string.resultLost)
         }
-        val arrayListWinner = ArrayList<WinnerItemDescription>()
-        val arrayListLoser = ArrayList<WinnerItemDescription>()
+        val arrayListWinner = ArrayList<PlayerScoreItemDescription>()
+        val arrayListLoser = ArrayList<PlayerScoreItemDescription>()
         for (i in 1..nPlayers) {
             val target = if (i == gameData.bb || i == gameData.p1 || i == gameData.p2) gameData.bv else scoreLimit - gameData.bv
 
-            if (scoreList[i] > 0) arrayListWinner.add(WinnerItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i - 1], points = gameData.s[i]))
-            else arrayListLoser.add(WinnerItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i - 1], points = gameData.s[i]))
+            if (scoreList[i] > 0) arrayListWinner.add(PlayerScoreItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i - 1], points = gameData.s[i]))
+            else arrayListLoser.add(PlayerScoreItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i - 1], points = gameData.s[i]))
         }
         binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner, winner = true)
         binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser, winner = false)

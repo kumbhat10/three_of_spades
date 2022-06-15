@@ -36,7 +36,7 @@
         android:shadowDy="1"
         android:textSize="@dimen/_11ssp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/userPhoto1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userPhoto1" />
 
     <com.google.android.material.textview.MaterialTextView

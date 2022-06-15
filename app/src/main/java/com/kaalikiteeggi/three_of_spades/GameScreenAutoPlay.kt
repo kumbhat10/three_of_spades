@@ -183,6 +183,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var ptAll: List<Int>
     private var bidTeamScore = 0
     private lateinit var scoreList: List<Int>
+    private var scoreBodyRecyclerList = arrayListOf<Int>()
     private var tablePoints = 0
 
     private var bidder: Int = 0
@@ -475,8 +476,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
         cardsIndexLimit = 53
         roundNumberLimit = 13
         scoreLimit = 355
-        scoreList = listOf(pt1, pt2, pt3, pt4)
-
+        scoreList = listOf(1, pt1, pt2, pt3, pt4)
+        scoreBodyRecyclerList.addAll(scoreList)
+        binding.gridScoreHeader.numColumns = nPlayers+1
+        binding.gridScoreBody.numColumns = nPlayers+1
         binding.textView14.visibility = View.VISIBLE
         binding.textView14a.visibility = View.VISIBLE
         findViewById<ImageView>(R.id.onlinep1_4).visibility = View.VISIBLE
@@ -587,7 +590,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         } else {
             binding.winnerLottie.setAnimation(R.raw.sad_lottie)
             binding.textResult.text = getString(R.string.resultLost)
-
         }
         p1Gain += scoreList[1]
         p2Gain += scoreList[2]
@@ -600,21 +602,25 @@ class GameScreenAutoPlay : AppCompatActivity() {
         p3Coins += scoreList[3]
         p4Coins += scoreList[4]
 
-        val arrayListWinner = ArrayList<WinnerItemDescription>()
-        val arrayListLoser = ArrayList<WinnerItemDescription>()
+        val arrayListWinner = ArrayList<PlayerScoreItemDescription>()
+        val arrayListLoser = ArrayList<PlayerScoreItemDescription>()
         val scoredList = listOf(pt1, pt2, pt3, pt4)
         for (i in 1..nPlayers) {
             val target = if (i == bidder || i == buPlayer1) bidValue else scoreLimit - bidValue
-            if (scoreList[i] > 0) arrayListWinner.add(WinnerItemDescription(scored = scoredList[i - 1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
-            else arrayListLoser.add(WinnerItemDescription(scored = scoredList[i - 1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            if (scoreList[i] > 0) arrayListWinner.add(PlayerScoreItemDescription(scored = scoredList[i - 1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
+            else arrayListLoser.add(PlayerScoreItemDescription(scored = scoredList[i - 1], target = target, points = scoreList[i], playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1]))
         }
         binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner, winner = true)
         binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser, winner = false)
         maskWinner.value = true
 
-        scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
-        scoreBoardTable(display = false, data = listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain), upDateTotal = true)   // createScoreTableTotal
-        scoreBoardTable(display = false, data = scoreList)
+        scoreBodyRecyclerList.addAll(scoreList)
+        binding.gridScoreHeader.adapter = ScoreHeaderAdapter(arrayList = createScoreTableHeader())
+        binding.gridScoreBody.adapter = ScoreBodyAdapter(arrayList = scoreBodyRecyclerList, nPlayers = nPlayers)
+
+//        scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
+//        scoreBoardTable(display = false, data = listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain), upDateTotal = true)   // createScoreTableTotal
+//        scoreBoardTable(display = false, data = scoreList)
 
         if (bidder == fromInt) {
             nGamesBid += 1
@@ -627,8 +633,14 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     }
 
-    private fun createScoreTableHeader(): List<String> {
-        return listOf("Player\n${Emoji().money}", p1 + "\n${Emoji().money}${String.format("%,d", p1Coins)}", p2 + "\n${Emoji().money}${String.format("%,d", p2Coins)}", p3 + "\n${Emoji().money}${String.format("%,d", p3Coins)}", p4 + "\n${Emoji().money}${String.format("%,d", p4Coins)}")
+    private fun createScoreTableHeader(): ArrayList<PlayerScoreItemDescription> {
+        val arrayListScoreHeader = ArrayList<PlayerScoreItemDescription>()
+        arrayListScoreHeader.add(PlayerScoreItemDescription(playerName = "Player"))
+        val totalList = listOf(p1Gain, p2Gain, p3Gain, p4Gain)
+        for (i in 1..nPlayers) {
+            arrayListScoreHeader.add(PlayerScoreItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], points = totalList[i-1]))
+        }
+        return arrayListScoreHeader //listOf("Player\n${Emoji().money}", p1 + "\n${Emoji().money}${String.format("%,d", p1Coins)}", p2 + "\n${Emoji().money}${String.format("%,d", p2Coins)}", p3 + "\n${Emoji().money}${String.format("%,d", p3Coins)}", p4 + "\n${Emoji().money}${String.format("%,d", p4Coins)}")
     }
 
     private fun scoreBoardTable(data: List<Any>, display: Boolean = true, upDateHeader: Boolean = false, upDateTotal: Boolean = false) {
@@ -694,8 +706,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
         } else {
             scoreOpenStatus = true
             if (scoreSheetNotUpdated) {
-                scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
-                scoreBoardTable(display = false, data = listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain), upDateTotal = true)
+                binding.gridScoreHeader.adapter = ScoreHeaderAdapter(arrayList = createScoreTableHeader())
+                binding.gridScoreBody.adapter = ScoreBodyAdapter(arrayList = scoreBodyRecyclerList, nPlayers = nPlayers)
+//                scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
+//                scoreBoardTable(display = false, data = listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain), upDateTotal = true)
             }
             scoreSheetNotUpdated = false
             findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
@@ -755,7 +769,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         pt2 = 0
         pt3 = 0
         pt4 = 0
-        scoreList = listOf(pt1, pt2, pt3, pt4)
+        scoreList = listOf(gameNumber, pt1, pt2, pt3, pt4)
         ptAll = listOf(pt1, pt2, pt3, pt4)
         partnerCardSelected = false
         roundStarted = false

@@ -40,4 +40,8 @@ class ChatRecyclerAdapter(private val chatArray: ArrayList<ChatMessage>,  val us
 		return chatArray.size
 	}
 
+	override fun getItemViewType(position: Int): Int {
+		return  super.getItemViewType(position)
+	}
+
 }

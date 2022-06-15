@@ -4,6 +4,9 @@
 
     <dimen name="upWidth">@dimen/_75sdp</dimen>
     <dimen name="upWidth1">@dimen/_70sdp</dimen>
+    <dimen name="scoreTablePhoto">@dimen/_56sdp</dimen>
+    <dimen name="scoreTablePhotoMargin">@dimen/_2sdp</dimen>
+    <dimen name="scoreTablePhotoTotal">@dimen/_60sdp</dimen>
     <dimen name="upWidth1a">@dimen/_90sdp</dimen>
     <dimen name="upTop">@dimen/_10sdp</dimen>
     <dimen name="upStart">@dimen/_10sdp</dimen>
