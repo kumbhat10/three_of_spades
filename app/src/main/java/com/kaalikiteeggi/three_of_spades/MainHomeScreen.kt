@@ -249,7 +249,6 @@ class MainHomeScreen : AppCompatActivity() {
             createRoomButtonClicked(position = position)
         }
 
-        //		mainIconGridView.visibility = View.VISIBLE
         // Attach Text watcher to room ID input - For resetting error hint on re-entering roomID
         binding.roomIDInput.doOnTextChanged { _, _, _, _ ->
             if (binding.roomIDInputLayout.error != null && !errorJoinRoomID) {
@@ -397,6 +396,7 @@ class MainHomeScreen : AppCompatActivity() {
         editor = sharedPreferences.edit()
         if (user != null) {
             FirebaseCrashlytics.getInstance().setUserId(uid)
+            FirebaseCrashlytics.getInstance().setCustomKey("User", user.displayName!!)
             userName = user.displayName!!.split(" ")[0]
             binding.usernameCardMHS.text = userName
             if (intent.getBooleanExtra("newUser", false)) { //check if user has joined room or created one and display Toast
@@ -481,10 +481,15 @@ class MainHomeScreen : AppCompatActivity() {
                         totalDailyCoins = 0
                         fireStoreRef.set(hashMapOf("LSD" to today, "scd" to 0, "p_daily" to 0, "w_daily" to 0, "b_daily" to 0, "nDRC" to consecutiveDay, "claim" to 0, "phone" to "${Build.MANUFACTURER} ${Build.MODEL}", "phAPI" to Build.VERSION.SDK_INT, "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
                     }
+                    if(BuildConfig.DEBUG && !claimedToday && resources.getBoolean(R.bool.disable_daily_reward)) {
+                        claimedToday = true
+                        totalCoins += dailyRewardAmount  // reward with daily reward amount for watching video
+                        userBasicInfo.score = totalCoins  // reward with daily reward amount for watching video
+                        refUsersData.document(uid).set(hashMapOf("sc" to totalCoins, "LSD" to today, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
+                    }
                     userBasicInfo = extractUserData(dataSnapshot)
                     userDataFetched = true
                     if (joinRoomPending) autoJoinRoom()
-//                    Handler(Looper.getMainLooper()).postDelayed({playerStatsGridDisplay()},700L)
                     playerStatsGridDisplay()
                     if (!claimedToday && !joinRoomPending) { //if not claimed today
                         Handler(Looper.getMainLooper()).postDelayed({
@@ -851,7 +856,7 @@ class MainHomeScreen : AppCompatActivity() {
         if (soundStatus) SoundManager.instance?.playCardCollectSound()
         anim(binding.watchVideoCoin, R.anim.slide_500_coins)
         if (!clickedDailyReward) {
-            refUsersData.document(uid).set(hashMapOf("sc" to totalCoins), SetOptions.merge())
+            refUsersData.document(uid).set(hashMapOf("sc" to totalCoins, "LSD" to today, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date())), SetOptions.merge())
         } else {
             refUsersData.document(uid).set(hashMapOf("sc" to totalCoins, "LSD" to today, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
         }
