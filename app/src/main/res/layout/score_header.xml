@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/scoreTablePhotoTotal"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shine_user_rank"
-    android:paddingBottom="@dimen/_1sdp">
+    android:background="@drawable/black_button">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userPhoto1"
@@ -13,7 +12,6 @@
         android:layout_marginStart="@dimen/scoreTablePhotoMargin"
         android:layout_marginEnd="@dimen/scoreTablePhotoMargin"
         android:layout_marginTop="@dimen/scoreTablePhotoMargin"
-        android:src="@drawable/user_photo"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,32 +28,58 @@
         android:shadowColor="@color/Black"
         android:shadowRadius="3"
         android:shadowDx="3"
-        android:text="@string/playerView1"
         android:shadowDy="3"
-        android:textSize="@dimen/_10ssp"
+        android:text="@string/playerView1"
+        android:textSize="@dimen/_11ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userPhoto1" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/userScore2"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/total"
+        android:fontFamily="@font/luckiest_guy"
         android:shadowColor="@color/Black"
         android:shadowRadius="3"
-        android:fontFamily="@font/luckiest_guy"
+        app:layout_constraintHorizontal_bias="0.42"
         android:shadowDx="3"
+        android:background="@drawable/redrectanlgesimple"
         android:shadowDy="3"
-        android:textColor="#FFF314"
-        android:textSize="@dimen/_12ssp"
+        android:paddingStart="@dimen/_3sdp"
+        android:paddingEnd="@dimen/_3sdp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14ssp"
         android:visibility="visible"
-        android:layout_marginTop="@dimen/_minus1sdp"
-        android:layout_marginBottom="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         app:layout_constraintTop_toBottomOf="@id/userName1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf= "parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/userRank1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/playerRank"
+        android:fontFamily="@font/luckiest_guy"
+        android:shadowColor="@color/Black"
+        android:shadowRadius="3"
+        android:shadowDx="3"
+        android:layout_marginEnd="@dimen/_3sdp"
+        android:shadowDy="3"
+        android:paddingStart="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_2sdp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14ssp"
+        android:visibility="invisible"
+        android:layout_marginTop="@dimen/_minus1sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -306,7 +306,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         }
         if (playerJoining == nPlayers) allPlayersJoined()
         if (playerJoining >= 10) {
-            FirebaseCrashlytics.getInstance().setCustomKey("RoomID", roomID)
+            FirebaseCrashlytics.getInstance().setCustomKey("RoomID ${kotlin.random.Random.nextInt(1,1000)}", roomID)
             FirebaseCrashlytics.getInstance().log(dataSnapshot.toString())
             if (fromInt != 1 || playerJoining == 11) {
                 binding.maskAllLoading1.visibility = View.VISIBLE

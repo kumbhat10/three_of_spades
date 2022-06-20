@@ -7,8 +7,8 @@
     <path
         android:pathData="M92.97,37.28L607.99,37.28A64.55,64.55 0,0 1,672.54 101.82L672.54,580.46A64.55,64.55 0,0 1,607.99 645.01L92.97,645.01A64.55,64.55 0,0 1,28.42 580.46L28.42,101.82A64.55,64.55 0,0 1,92.97 37.28z"
         android:strokeWidth="4.85"
-        android:fillColor="#1097F1"
-        android:strokeColor="#0D6DB6"/>
+        android:fillColor="#FFAA00"
+        android:strokeColor="#BD980E"/>
     <path
         android:pathData="M96.69,37.28L611.71,37.28A64.55,64.55 0,0 1,676.26 101.82L676.26,580.46A64.55,64.55 0,0 1,611.71 645.01L96.69,645.01A64.55,64.55 0,0 1,32.14 580.46L32.14,101.82A64.55,64.55 0,0 1,96.69 37.28z">
         <aapt:attr name="android:fillColor">
@@ -48,7 +48,7 @@
                 android:endX="344.98"
                 android:endY="702.23"
                 android:type="linear">
-                <item android:offset="0" android:color="#C8FFFFFF"/>
+                <item android:offset="0" android:color="#FFFFFFFF"/>
                 <item android:offset="1" android:color="#00FFFFFF"/>
             </gradient>
         </aapt:attr>

@@ -18,7 +18,7 @@ class UserBasicInfo(val empty: Boolean = true, val index: Int = 0, val uid: Stri
 	val photoURL: String = "", val played: Int = 0, val playedDaily: Int = 0, val lastSeen: Int = SimpleDateFormat("yyyyMMdd").format(Date())
 	.toInt(), val won: Int = 0, val bid: Int = 0, private val wonDaily: Int = 0, private val bidDaily: Int = 0, joinDate: Int=0, val appVersion:String = "--") {
 
-	val userRank: Spanned? = Html.fromHtml("${index + 1}<sup>${rankExtFromInt(index + 1)}</sup>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+	val userRank: Spanned = rankStringFromInt(index+1)//Html.fromHtml("${index + 1}<sup>${rankExtFromInt(index + 1)}</sup>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 	val userScore: String = String.format("%,d", played) + " " + Emoji().gamePlayed + "\n" + String.format("%,d", won) + " " + Emoji().trophy + "\n" + String.format("%,d", bid) + " " + Emoji().score
 	val userScoreDaily: String = String.format("%,d", playedDaily) + " " + Emoji().gamePlayed + "\n" + String.format("%,d", wonDaily) + " " + Emoji().trophy + "\n" + String.format("%,d", bidDaily) + " " + Emoji().score
 	val userScoreFill: String = "Play " + Emoji().gamePlayed + "\n" + "Win " + Emoji().trophy + "\n" + "Bid " + Emoji().score
@@ -75,7 +75,7 @@ fun createUserArrayFromSnapshot(querySnapshot: QuerySnapshot, filterLastSeen:Boo
 				tempArray.add(extractUserData(document, index = index-1))
 				index += 1
 			}
-		}catch (me:Exception) {		}
+		}catch (_:Exception) {		}
 	}
 	return tempArray
 }
@@ -86,6 +86,9 @@ fun rankExtFromInt(i: Int): String {
 		11, 12, 13 -> "th"
 		else -> suffixes[i % 10]
 	}
+}
+fun rankStringFromInt(i:Int): Spanned{
+	return Html.fromHtml("$i<sup>${rankExtFromInt(i)}</sup>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
 }
 

@@ -13,6 +13,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.applovin.sdk.AppLovinAd
 import com.applovin.sdk.AppLovinPrivacySettings
 import com.applovin.sdk.AppLovinSdk
 import com.google.android.gms.ads.MobileAds
@@ -90,8 +91,10 @@ class SplashScreen : AppCompatActivity() {
     }
 
     private fun mobileAds() {
-        AppLovinPrivacySettings.setHasUserConsent(true, this)
-        AppLovinSdk.initializeSdk(applicationContext)
+        AppLovinPrivacySettings.setHasUserConsent(true, applicationContext)
+        AppLovinPrivacySettings.setIsAgeRestrictedUser(false, applicationContext)
+        AppLovinPrivacySettings.setDoNotSell( false, applicationContext )
+        AppLovinSdk.getInstance(applicationContext).initializeSdk()
 
         MobileAds.initialize(applicationContext){initializationStatus->
             val statusMap = initializationStatus.adapterStatusMap

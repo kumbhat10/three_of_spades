@@ -52,6 +52,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.*
@@ -715,8 +716,10 @@ class MainHomeScreen : AppCompatActivity() {
 
     @Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
     private fun initializeAds() {
-        AppLovinPrivacySettings.setHasUserConsent(true, this)
-        AppLovinSdk.initializeSdk(applicationContext)
+        AppLovinPrivacySettings.setHasUserConsent(true, applicationContext)
+        AppLovinPrivacySettings.setIsAgeRestrictedUser(false, applicationContext)
+        AppLovinPrivacySettings.setDoNotSell( false, applicationContext )
+        AppLovinSdk.getInstance(applicationContext).initializeSdk()
         MobileAds.initialize(this) {
             Log.d("Inter", "onInitializationComplete")
         }

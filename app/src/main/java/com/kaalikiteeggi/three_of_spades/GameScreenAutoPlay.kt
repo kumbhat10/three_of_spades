@@ -25,6 +25,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cat.ereza.customactivityoncrash.config.CaocConfig
@@ -170,7 +171,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var timeAutoBid = listOf<Long>(1650, 1400, 1500, 1800)
     private var speedAutoBid = 1.1f
     private var timeAutoTrumpAndPartner = listOf<Long>(1700, 2000, 1700)
-    private var maxAutoBidLimit = listOf(220, 230, 235, 245, 250)
+    private var maxAutoBidLimit = listOf(225, 230, 235, 245)
 
     private var scoreSheetNotUpdated = true
     private var played = false
@@ -183,7 +184,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var ptAll: List<Int>
     private var bidTeamScore = 0
     private lateinit var scoreList: List<Int>
-    private var scoreBodyRecyclerList = arrayListOf<Int>()
+    private var scoreBodyArrayList = arrayListOf<Int>()
+    private var scoreHeaderArrayList = arrayListOf<PlayerScoreItemDescription>()
+    private lateinit var adapterScoreHeader: ScoreHeaderAdapter
+    private lateinit var adapterScoreBody: ScoreBodyAdapter
+
     private var tablePoints = 0
 
     private var bidder: Int = 0
@@ -269,7 +274,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     if (soundStatus) SoundManager.instance?.playTimerSound()
                     if (vibrateStatus) vibrationStart()
                     findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
-                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
+                    binding.closeGameRoomIcon.visibility = View.VISIBLE
                     findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
                     findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
                     findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
@@ -279,7 +284,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             // region       Countdown Biding
             countDownBidding = object : CountDownTimer(timeCountdownBid, 20) {
                 @SuppressLint("SetTextI18n")
-                override fun onTick(millisUntilFinished: Long) { //                    findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
+                override fun onTick(millisUntilFinished: Long) { //                    binding.closeGameRoomIcon.visibility = View.GONE
                     binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
                     binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString() + "s"
                 }
@@ -293,7 +298,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         bidingStarted = true
                         playerTurn.value = nextBidderTurn(fromInt)
                         findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
-                        findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
+                        binding.closeGameRoomIcon.visibility = View.VISIBLE
                         findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
                         findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
                         findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
@@ -311,7 +316,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     binding.horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
                     if (!roundStarted) {
                         resetVariables()
-                        binding.scrollViewScore.visibility = View.GONE
                         binding.scoreViewLayout.visibility = View.GONE
                         if (this::p1.isInitialized) updatePlayerNames()
                         roundStarted = true
@@ -340,13 +344,15 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         if (soundStatus) SoundManager.instance?.playSuccessSound()
                         updatePlayerScoreInfo(listOf(pt1, pt2, pt3, pt4))
                         displaySelfCards(animations = false)
-                        Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 3000)
+                        if (nGamesPlayed < 10) Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 2000)
+                        else Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 1000)
+
                         if (playerTurn.value!! != fromInt) {
-                            if (nGamesPlayed < 5) speak("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
+                            if (nGamesPlayed < 10) speak("${playerName(bidder)} will play first \n You get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1.1f)
                             else speak("${playerName(bidder)} will play first ", speed = 1f)
                         }
                         if (playerTurn.value!! == fromInt) {
-                            speak("You will get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1f)
+                            if (nGamesPlayed < 10) speak("You will get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1f)
                         }
                     } else {
                         displaySelfCards(animations = false)
@@ -477,9 +483,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
         roundNumberLimit = 13
         scoreLimit = 355
         scoreList = listOf(1, pt1, pt2, pt3, pt4)
-        scoreBodyRecyclerList.addAll(scoreList)
-        binding.gridScoreHeader.numColumns = nPlayers+1
-        binding.gridScoreBody.numColumns = nPlayers+1
+
+        binding.gridScoreHeader.layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.HORIZONTAL }
+        binding.gridScoreBody.layoutManager = GridLayoutManager(this, nPlayers + 1, LinearLayoutManager.VERTICAL, false)
+
         binding.textView14.visibility = View.VISIBLE
         binding.textView14a.visibility = View.VISIBLE
         findViewById<ImageView>(R.id.onlinep1_4).visibility = View.VISIBLE
@@ -576,8 +583,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 reviewRequested = true
             } else if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0)) showInterstitialAd()
             binding.startNextRoundButton.visibility = View.VISIBLE
-//            binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
-//            maskWinner.value = false
+
         }, delayWaitGameMode6)
     }
 
@@ -614,13 +620,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser, winner = false)
         maskWinner.value = true
 
-        scoreBodyRecyclerList.addAll(scoreList)
-        binding.gridScoreHeader.adapter = ScoreHeaderAdapter(arrayList = createScoreTableHeader())
-        binding.gridScoreBody.adapter = ScoreBodyAdapter(arrayList = scoreBodyRecyclerList, nPlayers = nPlayers)
-
-//        scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
-//        scoreBoardTable(display = false, data = listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain), upDateTotal = true)   // createScoreTableTotal
-//        scoreBoardTable(display = false, data = scoreList)
+        updateScoreTableHeader()
+        updateScoreTableBody()
 
         if (bidder == fromInt) {
             nGamesBid += 1
@@ -633,92 +634,51 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     }
 
-    private fun createScoreTableHeader(): ArrayList<PlayerScoreItemDescription> {
-        val arrayListScoreHeader = ArrayList<PlayerScoreItemDescription>()
-        arrayListScoreHeader.add(PlayerScoreItemDescription(playerName = "Player"))
-        val totalList = listOf(p1Gain, p2Gain, p3Gain, p4Gain)
-        for (i in 1..nPlayers) {
-            arrayListScoreHeader.add(PlayerScoreItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], points = totalList[i-1]))
+    private fun updateScoreTableBody() {
+        val prevSize = scoreBodyArrayList.size
+        scoreBodyArrayList.addAll(scoreList)
+        if (!this::adapterScoreBody.isInitialized) {
+            adapterScoreBody = ScoreBodyAdapter((scoreBodyArrayList), nColumns = nPlayers+1)
+            binding.gridScoreBody.adapter = adapterScoreBody
         }
-        return arrayListScoreHeader //listOf("Player\n${Emoji().money}", p1 + "\n${Emoji().money}${String.format("%,d", p1Coins)}", p2 + "\n${Emoji().money}${String.format("%,d", p2Coins)}", p3 + "\n${Emoji().money}${String.format("%,d", p3Coins)}", p4 + "\n${Emoji().money}${String.format("%,d", p4Coins)}")
+        adapterScoreBody.notifyItemRangeInserted(prevSize, scoreList.size)
     }
 
-    private fun scoreBoardTable(data: List<Any>, display: Boolean = true, upDateHeader: Boolean = false, upDateTotal: Boolean = false) {
-        if (display) {
-            scoreOpenStatus = true
-            findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-            binding.scrollViewScore.visibility = View.VISIBLE
-            binding.scoreViewLayout.visibility = View.VISIBLE
-            binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_scoretable_open))
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateScoreTableHeader(showRank:Boolean = true) {
+        scoreHeaderArrayList = ArrayList<PlayerScoreItemDescription>()
+        scoreHeaderArrayList.add(PlayerScoreItemDescription(playerName = "Player"))
+        val totalList = listOf(p1Gain, p2Gain, p3Gain, p4Gain)
+        val sortedArray = totalList.distinct().sortedDescending()
+        for (i in 1..nPlayers) {
+            scoreHeaderArrayList.add(PlayerScoreItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], points = totalList[i - 1], rank = rankStringFromInt(1+sortedArray.indexOf(totalList[i-1])), showRank = showRank ))
         }
-        val inflater = LayoutInflater.from(applicationContext)
-        val viewTemp = when {
-            upDateHeader -> inflater.inflate(PlayersReference().refIDScoreLayout(nPlayers), findViewById<LinearLayout>(R.id.imageGalleryScoreName), false)
-            upDateTotal -> inflater.inflate(PlayersReference().refIDScoreLayout(nPlayers), findViewById<LinearLayout>(R.id.imageGalleryScoreTotal), false)
-            else -> inflater.inflate(PlayersReference().refIDScoreLayout(nPlayers), findViewById<LinearLayout>(R.id.imageGalleryScore), false)
-        }
-        for (i in 0..nPlayers) {
-            viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).text = data[i].toString()
-            if (!upDateHeader) viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen._12ssp))
-            if (i > 0 && !upDateHeader && data[i].toString().toInt() < 0) {
-                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.Red))
-            } else if (i > 0 && !upDateHeader) {
-                viewTemp.findViewById<TextView>(refIDValesTextViewScore[i]).setTextColor(ContextCompat.getColor(applicationContext, R.color.borderblueDark1g))
-            }
-        }
-        when {
-            upDateHeader -> {
-                findViewById<LinearLayout>(R.id.imageGalleryScoreName).removeAllViews()
-                findViewById<LinearLayout>(R.id.imageGalleryScoreName).addView(viewTemp)
-            }
-            upDateTotal -> {
-                findViewById<LinearLayout>(R.id.imageGalleryScoreTotal).removeAllViews()
-                findViewById<LinearLayout>(R.id.imageGalleryScoreTotal).addView(viewTemp)
-            }
-            else -> {
-                viewTemp.layoutParams.height = resources.getDimensionPixelSize(R.dimen._22sdp)
-//				viewTemp.background = ContextCompat.getDrawable(this, R.drawable.blackrectangle)
-                findViewById<LinearLayout>(R.id.imageGalleryScore).addView(viewTemp)
-            }
-        }
-        if (display) binding.scrollViewScore.post {
-            binding.scrollViewScore.fullScroll(View.FOCUS_DOWN)
-        }
+//        for (i in 1..3) { //dummy for 7 players testing
+//            scoreHeaderArrayList.add(PlayerScoreItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], points = totalList[i-1]))
+//        }
+            adapterScoreHeader = ScoreHeaderAdapter(scoreHeaderArrayList)
+            binding.gridScoreHeader.adapter = adapterScoreHeader
     }
 
     fun closeChatScoreWindow(view: View) {
-        //        findViewById<RelativeLayout>(R.id.chatLinearLayout).visibility = View.GONE
-        binding.scrollViewScore.visibility = View.GONE
         binding.scoreViewLayout.visibility = View.GONE
-        findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
+        binding.closeGameRoomIcon.visibility = View.VISIBLE
     }
 
     fun openCloseScoreSheet(view: View) {
         maskWinner.value = false
-        if (binding.scrollViewScore.visibility == View.VISIBLE) {
-            findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
+        if (binding.scoreViewLayout.visibility == View.VISIBLE) {
+            scoreOpenStatus = false
+            binding.closeGameRoomIcon.visibility = View.VISIBLE
             binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
             Handler(Looper.getMainLooper()).postDelayed({
-                binding.scrollViewScore.visibility = View.GONE
                 binding.scoreViewLayout.visibility = View.GONE
             }, 140)
-            scoreOpenStatus = false
         } else {
             scoreOpenStatus = true
-            if (scoreSheetNotUpdated) {
-                binding.gridScoreHeader.adapter = ScoreHeaderAdapter(arrayList = createScoreTableHeader())
-                binding.gridScoreBody.adapter = ScoreBodyAdapter(arrayList = scoreBodyRecyclerList, nPlayers = nPlayers)
-//                scoreBoardTable(display = false, data = createScoreTableHeader(), upDateHeader = true)
-//                scoreBoardTable(display = false, data = listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain), upDateTotal = true)
-            }
-            scoreSheetNotUpdated = false
-            findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
-            binding.scrollViewScore.visibility = View.VISIBLE
+            binding.closeGameRoomIcon.visibility = View.GONE
             binding.scoreViewLayout.visibility = View.VISIBLE
             binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_scoretable_open))
-            binding.scrollViewScore.post {
-                binding.scrollViewScore.fullScroll(View.FOCUS_DOWN)
-            }
         }
     }
 
@@ -736,11 +696,12 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun resetVariables() {
         if (gameNumber > 1) binding.gameBkgd.setImageResource(GameScreenData().tableBackground.random())// change background only from 2nd game
         binding.buddyImage1.setImageResource(R.drawable.ic_back_side_blue)
-        findViewById<ImageView>(R.id.trumpImage).setImageResource(R.drawable.trump)
+        binding.trumpImage.setImageResource(R.drawable.trump)
+        binding.trumpImage.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
         binding.textViewBidValue.text = getString(R.string.bidValue2)  //$emojiScore
         binding.bidNowImage.visibility = View.GONE // redundant not required really
-        findViewById<TextView>(R.id.textViewBider).text = getString(R.string.Bider)
-        findViewById<TickerView>(R.id.trumpText).text = getString(R.string.Trump)
+        binding.textViewBider.text = getString(R.string.Bider)
+        binding.trumpText.text = getString(R.string.Trump)
         for (i in 0 until nPlayers) { // first reset background and animation of all partner icon
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).clearAnimation()
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
@@ -787,7 +748,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         maskWinner.value = false
         binding.startNextRoundButton.clearAnimation()
         binding.startNextRoundButton.visibility = View.GONE
-        binding.scrollViewScore.visibility = View.GONE
         binding.scoreViewLayout.visibility = View.GONE
 
         val cardsShuffled = (0..51).shuffled()
@@ -832,7 +792,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
-            centralText("Game Over: Bidder team Won \n         Defender team Lost")
+            centralText("Game Over")
 
             if (fromInt == bidder && buFound1 != 1) {
                 if (soundStatus) {
@@ -864,7 +824,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             gameTurn.removeObserver(roundListener)
             clearAllAnimation()
             if (vibrateStatus) vibrationStart()
-            centralText("Game Over: Defender team Won \n         Bidder team Lost")
+            centralText("Game Over")
 
             if (fromInt == bidder || fromInt == buPlayer1) {
                 if (soundStatus) SoundManager.instance?.playLostSound()
@@ -896,9 +856,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private fun countDownTimer(task: String, purpose: String = "start") {
         if (purpose == "start") {
-            findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
+            binding.closeGameRoomIcon.visibility = View.GONE
             findViewById<ProgressBar>(R.id.progressbarTimer).progress = 100
-            findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.GONE
+            binding.closeGameRoomIcon.visibility = View.GONE
             findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.VISIBLE
             findViewById<TextView>(R.id.textViewTimer).visibility = View.VISIBLE
             findViewById<TextView>(R.id.textViewTimer).text = "10s" //            findViewById<ProgressBar>(R.id.progressbarTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
@@ -906,7 +866,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (task == "Bidding" && this::countDownBidding.isInitialized) countDownBidding.start()
             if (task == "PlayCard" && this::countDownPlayCard.isInitialized) countDownPlayCard.start()
         } else if (purpose == "cancel") {
-            findViewById<ImageView>(R.id.closeGameRoomIcon).visibility = View.VISIBLE
+            binding.closeGameRoomIcon.visibility = View.VISIBLE
             findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.GONE
             findViewById<TextView>(R.id.textViewTimer).visibility = View.GONE
             findViewById<ProgressBar>(R.id.progressbarTimer).clearAnimation()
@@ -1249,28 +1209,29 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun displayTrumpCard() {
+        binding.trumpImage.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
         when (trump) {
             "H" -> {
-                findViewById<ImageView>(R.id.trumpImage).setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_hearts))
+                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_hearts))
                 findViewById<TickerView>(R.id.trumpText).text = "Heart"
             }
             "S" -> {
-                findViewById<ImageView>(R.id.trumpImage).setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_spades))
+                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_spades))
                 findViewById<TickerView>(R.id.trumpText).text = "Spade"
 
             }
             "D" -> {
-                findViewById<ImageView>(R.id.trumpImage).setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_diamonds))
+                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_diamonds))
                 findViewById<TickerView>(R.id.trumpText).text = "Diamond"
 
             }
             "C" -> {
-                findViewById<ImageView>(R.id.trumpImage).setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_clubs))
+                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_clubs))
                 findViewById<TickerView>(R.id.trumpText).text = "Club"
 
             }
         }
-        findViewById<ImageView>(R.id.trumpImage).clearAnimation() // main trump showing view
+        binding.trumpImage.clearAnimation() // main trump showing view
         moveView(binding.trumpImage, findViewById(refIDMappedImageView[bidder - 1]))
     } // just displaying trump card
 
@@ -1384,9 +1345,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
     fun nextBidderTurn(currentTurn: Int): Int {
         var nBT = currentTurn
         var found = false
-        for(i in 1 until nPlayers){
+        for (i in 1 until nPlayers) {
             nBT = nextTurn(nBT)
-            if(bidStatus [nBT-1] ==1){
+            if (bidStatus[nBT - 1] == 1) {
                 found = true
                 break
             }
@@ -1411,7 +1372,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     fun askToBid(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        if(this::countDownBidding.isInitialized) countDownBidding.cancel()
+        if (this::countDownBidding.isInitialized) countDownBidding.cancel()
         countDownTimer("Bidding", purpose = "cancel")
         if (!bidDone) {
             bidDone = true
@@ -1539,7 +1500,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun updatePlayerInfo() {
         playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
         val playerInfoCoins = intent.getStringArrayListExtra("playerInfoCoins") as ArrayList<Int>
@@ -1554,6 +1515,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         p4Coins = playerInfoCoins[3]
 
         updatePlayerNames()
+        updateScoreTableHeader(showRank = false)
         for (i in 0 until nPlayers) {
             val j = i + nPlayers
             if (playerInfo[j].isNotEmpty()) {
@@ -1736,6 +1698,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
@@ -1744,6 +1707,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         binding.startNextRoundButton.visibility = View.VISIBLE
                     }
                 }
+
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
@@ -1814,13 +1778,12 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
-        if (!scoreOpenStatus) { //            if(vibrateStatus) vibrationStart()
-            toastCenter("App is minimized")
+        if (!scoreOpenStatus) {
             this.moveTaskToBack(true)
         } else {
             openCloseScoreSheet(View(applicationContext))
         }
-    } // is offline
+    }
 
     override fun onDestroy() {
         try {

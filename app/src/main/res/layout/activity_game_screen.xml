@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/gameBkgd"
-        android:layout_width="@dimen/_480sdp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/app_name"
         android:onClick="closeChatScoreWindow"
@@ -1253,7 +1253,7 @@
         app:layout_constraintStart_toEndOf="@+id/buddyText1"
         app:layout_constraintTop_toBottomOf="@+id/buddyImage2"
         app:layout_constraintWidth_min="@dimen/_36sdp"
-        app:ticker_animationDuration="900"
+        app:ticker_animationDuration="500"
         app:ticker_defaultCharacterList="alphabet"
         tools:ignore="SmallSp" />
 
@@ -1286,7 +1286,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buddyImage1"
         app:layout_constraintWidth_min="@dimen/_36sdp"
-        app:ticker_animationDuration="900"
+        app:ticker_animationDuration="500"
         app:ticker_defaultCharacterList="alphabet"
         tools:ignore="SmallSp" />
 
@@ -1295,7 +1295,6 @@
         android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_marginTop="@dimen/imageGapEnd"
-        android:background="#FFFFFF"
         android:clickable="true"
         android:contentDescription="@string/todo"
         android:focusable="true"
@@ -1322,7 +1321,7 @@
         app:layout_constraintEnd_toStartOf="@+id/buddyText1"
         app:layout_constraintTop_toTopOf="@+id/buddyText1"
         app:layout_constraintWidth_min="@dimen/_36sdp"
-        app:ticker_animationDuration="900"
+        app:ticker_animationDuration="500"
         app:ticker_defaultCharacterList="alphabet"
         tools:ignore="SmallSp,TooManyViews,TouchTargetSizeCheck" />
 
@@ -2173,14 +2172,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scoreViewLayout"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/_2sdp"
         android:layout_marginBottom="@dimen/_2sdp"
-        android:layout_marginStart="@dimen/_40sdp"
-        android:layout_marginEnd="@dimen/_40sdp"
         android:animateLayoutChanges="true"
-        android:background="@drawable/shine_bid_value"
+        android:background="@drawable/shine_user_rank"
         android:clickable="true"
         android:focusable="true"
         android:onClick="openCloseScoreSheet"
@@ -2190,96 +2187,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/imageGalleryScoreName"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
-            android:background="@drawable/shine_player_stats"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/_2sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <GridView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gridScoreHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:columnWidth="@dimen/scoreTablePhotoTotal"
-            android:gravity="center"
             android:visibility="visible"
-            android:stretchMode="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <GridView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gridScoreBody"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:columnWidth="@dimen/scoreTablePhotoTotal"
-            android:gravity="center"
+            android:layout_height="0dp"
             android:visibility="visible"
-            android:stretchMode="columnWidth"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/gridScoreHeader"
             app:layout_constraintBottom_toTopOf="@id/addViewGameScreenBanner"/>
-
-        <LinearLayout
-            android:id="@+id/imageGalleryScoreTotal"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_23sdp"
-            android:visibility="gone"
-            android:layout_marginTop="0dp"
-            android:background="@drawable/shine_game_score"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/_2sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageGalleryScoreName" />
-
-        <ScrollView
-            android:id="@+id/scrollViewScore"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/_2sdp"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="openCloseScoreSheet"
-            android:fadeScrollbars="false"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarSize="@dimen/_6sdp"
-            android:scrollbarStyle="insideOverlay"
-            android:scrollbarThumbVertical="@drawable/scrollbar"
-            android:scrollbarTrackVertical="@drawable/scrollbar_track"
-            android:scrollbars="vertical"
-            android:verticalScrollbarPosition="right"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/addViewGameScreenBanner"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageGalleryScoreTotal">
-
-            <LinearLayout
-                android:id="@+id/imageGalleryScore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="openCloseScoreSheet"/>
-        </ScrollView>
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/addViewGameScreenBanner"
@@ -2299,7 +2224,7 @@
         android:id="@+id/konfettLottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/shine_confetti_gs"
+        android:background="@drawable/shine_user_rank"
         android:clickable="true"
         android:focusable="true"
         android:scaleType="centerCrop"
@@ -2439,6 +2364,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:background="@drawable/yellowrectanglesimple"
         android:contentDescription="@string/todo"
         android:focusable="true"
         android:shadowColor="@color/Black"
@@ -2455,7 +2381,7 @@
         android:text="@string/start_next_game"
         android:textColor="@color/white"
         android:fontFamily="@font/luckiest_guy"
-        android:textSize="@dimen/_27ssp"
+        android:textSize="@dimen/_20ssp"
         android:visibility="gone"
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintBottom_toBottomOf="parent"
