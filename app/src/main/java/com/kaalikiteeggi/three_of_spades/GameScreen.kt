@@ -192,9 +192,9 @@ class GameScreen : AppCompatActivity() {
     private var counterChat = 0
     private lateinit var onlineStatus: MutableList<Int>
     private lateinit var allCardsReset: MutableList<Int>
-    private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L  else 500L
+    private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L  else 300L
     private var timeCountdownBid = if (!BuildConfig.DEBUG) 15000L else 1500L
-    private var delayGameOver = if(BuildConfig.DEBUG) 4000L else 7000L
+    private var delayGameOver = if(BuildConfig.DEBUG) 3000L else 7000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
 
     private var lastChat = ""
@@ -1248,9 +1248,9 @@ class GameScreen : AppCompatActivity() {
 
     private fun endGameRound() { // function called by only round winner - so all table points get added to round winner
         gameData.sc[fromInt - 1] += tablePoints //+ gameData.sc[fromInt - 1]
-        refRoomDatabase.child("G").setValue(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to "")).addOnSuccessListener { }.addOnFailureListener {
+        refRoomDatabase.child("G").updateChildren(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to "")).addOnSuccessListener { }.addOnFailureListener {
             logFirebaseEvent(key = "Failed-Next-Turn")
-            refRoomDatabase.child("G").setValue(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to ""))
+            refRoomDatabase.child("G").updateChildren(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to ""))
         }
     }
 
