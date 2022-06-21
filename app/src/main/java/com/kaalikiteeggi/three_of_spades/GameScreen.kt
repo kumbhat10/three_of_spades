@@ -54,7 +54,6 @@ import com.google.firebase.ktx.Firebase
 import com.kaalikiteeggi.three_of_spades.databinding.*
 import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
-import java.lang.Math.random
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -193,11 +192,9 @@ class GameScreen : AppCompatActivity() {
     private var counterChat = 0
     private lateinit var onlineStatus: MutableList<Int>
     private lateinit var allCardsReset: MutableList<Int>
-    private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L
-    else 500L
-    private var timeCountdownBid = if (!BuildConfig.DEBUG) 15000L
-    else 1500L
-    private var delayGameOver = 7000L
+    private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L  else 500L
+    private var timeCountdownBid = if (!BuildConfig.DEBUG) 15000L else 1500L
+    private var delayGameOver = if(BuildConfig.DEBUG) 4000L else 7000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
 
     private var lastChat = ""
@@ -207,7 +204,6 @@ class GameScreen : AppCompatActivity() {
     private var played = false
     private var bidDone = false
     private var bidTeamScore = 0
-    private lateinit var scoreList: List<Int>
     private var scoreBodyArrayList = arrayListOf<Int>()
     private var scoreHeaderArrayList = arrayListOf<PlayerScoreItemDescription>()
     private lateinit var adapterScoreHeader: ScoreHeaderAdapter
@@ -556,6 +552,7 @@ class GameScreen : AppCompatActivity() {
     private fun writeToGameDatabase(data: MutableMap<String, Any>) {
         if (activityExists) {
             refGameDatabase.updateChildren(data)
+            Log.d("GameDatabase Write", data.toString())
             writeToRoomDatabase("OL/$from", 1)
         }
     }
@@ -565,6 +562,7 @@ class GameScreen : AppCompatActivity() {
             override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(data: DataSnapshot) {
                 if (data.value != null && activityExists) {
+                    Log.d("GameDatabase Read", data.value.toString())
                     try {
                         gameData = data.getValue<GameData>()!!
                         if(gameData.gs!=7) {
@@ -572,7 +570,6 @@ class GameScreen : AppCompatActivity() {
                             if (gameData.gs in 2..5) displaySelfCards(animation = false)
                             tableCardsHandle()
                             bidValue.value = gameData.bv
-                            scoreList = gameData.s
                             if (currentBidder.value != gameData.bb) {
                                 currentBidder.value = gameData.bb //LiveData
                             }
@@ -863,7 +860,7 @@ class GameScreen : AppCompatActivity() {
         } else { // show to gameData.bb only
             binding.bidNowImage.visibility = View.GONE // redundant not required really
             speak("Well done!! Choose your trump now", speed = 1f, queue = TextToSpeech.QUEUE_ADD)
-            if (!(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_full_auto_mode_game_screen))) {
+            if (!(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen))) {
                 binding.frameTrumpSelection.visibility = View.VISIBLE
                 binding.frameTrumpSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
             }else{
@@ -914,7 +911,7 @@ class GameScreen : AppCompatActivity() {
                 speak("Choose your partner card", speed = 1.1f)
             } //choose 1st buddy text
             if (nPlayers4) {
-                if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_full_auto_mode_game_screen)){
+                if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen)){
                     Handler(Looper.getMainLooper()).postDelayed({
                         autoPartnerSelect()
                     }, 1000)
@@ -1245,12 +1242,12 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun startNextRound() {
-        gameData.sc[fromInt - 1] = tablePoints + gameData.sc[fromInt - 1]
+        gameData.sc[fromInt - 1] += tablePoints //+ gameData.sc[fromInt - 1]
         writeToGameDatabase(data = mutableMapOf("ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to fromInt, "rn" to gameData.rn + 1, "rtr" to ""))
     }
 
     private fun endGameRound() { // function called by only round winner - so all table points get added to round winner
-        gameData.sc[fromInt - 1] = tablePoints + gameData.sc[fromInt - 1]
+        gameData.sc[fromInt - 1] += tablePoints //+ gameData.sc[fromInt - 1]
         refRoomDatabase.child("G").setValue(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to "")).addOnSuccessListener { }.addOnFailureListener {
             logFirebaseEvent(key = "Failed-Next-Turn")
             refRoomDatabase.child("G").setValue(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to ""))
@@ -1377,7 +1374,7 @@ class GameScreen : AppCompatActivity() {
             }
             handlerDeclareWinner.postDelayed({
                 if (!premiumStatus && mInterstitialAd != null && (gameData.gn % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen))) showInterstitialAd()
-                else if(fromInt==1 && BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_full_auto_mode_game_screen)){
+                else if(fromInt==1 && BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen)){
                     startNextGame(View(this))
                 }
                 if (fromInt == 1) { // show start next game button only to host
@@ -1390,29 +1387,29 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun updateWholeScoreBoard() {
-        p1Gain += scoreList[1]
-        p2Gain += scoreList[2]
-        p3Gain += scoreList[3]
-        p4Gain += scoreList[4]
-        totalDailyCoins += scoreList[fromInt]
-        p1Coins += scoreList[1]
-        p2Coins += scoreList[2]
-        p3Coins += scoreList[3]
-        p4Coins += scoreList[4]
+        p1Gain += gameData.s[1]
+        p2Gain += gameData.s[2]
+        p3Gain += gameData.s[3]
+        p4Gain += gameData.s[4]
+        totalDailyCoins += gameData.s[fromInt]
+        p1Coins += gameData.s[1]
+        p2Coins += gameData.s[2]
+        p3Coins += gameData.s[3]
+        p4Coins += gameData.s[4]
 
         if (nPlayers7) {
-            p5Gain += scoreList[5]
-            p6Gain += scoreList[6]
-            p7Gain += scoreList[7]
-            p5Coins += scoreList[5]
-            p6Coins += scoreList[6]
-            p7Coins += scoreList[7]
+            p5Gain += gameData.s[5]
+            p6Gain += gameData.s[6]
+            p7Gain += gameData.s[7]
+            p5Coins += gameData.s[5]
+            p6Coins += gameData.s[6]
+            p7Coins += gameData.s[7]
         }
         if (gameData.bb == fromInt) {
             nGamesBid += 1
             nGamesBidDaily += 1
         }
-        if (scoreList[fromInt] > 0) {
+        if (gameData.s[fromInt] > 0) {
             if (soundStatus) {
                 SoundManager.instance?.playDholSound()
                 SoundManager.instance?.playWonSound()
@@ -1430,7 +1427,7 @@ class GameScreen : AppCompatActivity() {
         val arrayListLoser = ArrayList<PlayerScoreItemDescription>()
         for (i in 1..nPlayers) {
             val target = if (i == gameData.bb || i == gameData.p1 || i == gameData.p2) gameData.bv else scoreLimit - gameData.bv
-            if (scoreList[i] > 0) arrayListWinner.add(PlayerScoreItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i - 1], points = gameData.s[i]))
+            if (gameData.s[i] > 0) arrayListWinner.add(PlayerScoreItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i - 1], points = gameData.s[i]))
             else arrayListLoser.add(PlayerScoreItemDescription(target = target, playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], scored = gameData.sc[i - 1], points = gameData.s[i]))
         }
         binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner, winner = true)
@@ -1446,12 +1443,12 @@ class GameScreen : AppCompatActivity() {
 
     private fun updateScoreTableBody() {
         val prevSize = scoreBodyArrayList.size
-        scoreBodyArrayList.addAll(scoreList)
+        scoreBodyArrayList.addAll(gameData.s)
         if (!this::adapterScoreBody.isInitialized) {
             adapterScoreBody = ScoreBodyAdapter((scoreBodyArrayList), nColumns = nPlayers+1)
             binding.gridScoreBody.adapter = adapterScoreBody
         }
-        adapterScoreBody.notifyItemRangeInserted(prevSize, scoreList.size)
+        adapterScoreBody.notifyItemRangeInserted(prevSize, gameData.s.size)
     }
 
     @SuppressLint("NotifyDataSetChanged")

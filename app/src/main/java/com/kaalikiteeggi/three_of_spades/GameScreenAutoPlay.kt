@@ -578,11 +578,15 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
         if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
         Handler(Looper.getMainLooper()).postDelayed({
+            binding.startNextRoundButton.visibility = View.VISIBLE
             if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 3)) {  // Ask only once per game
                 inAppReview()
                 reviewRequested = true
             } else if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen_offline))) showInterstitialAd()
-            binding.startNextRoundButton.visibility = View.VISIBLE
+            else if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) {
+                startNextGame(View(this))
+                binding.startNextRoundButton.visibility = View.GONE
+            }
 
         }, delayWaitGameMode6)
     }

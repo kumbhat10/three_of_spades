@@ -4,11 +4,11 @@
     <gradient
         android:centerX="0.5"
         android:centerY="0.5"
-        android:startColor="#E4CF0E"
-        android:endColor="#FF7700"
+        android:endColor="#F703D0F4"
+        android:startColor="#F8E91E63"
         android:gradientRadius="100%p"
         android:type="linear"
-        android:angle="-90"/>
+        android:angle="180"/>
 
 <!--    <solid android:color="#0385A6"/>-->
 <!--    <corners-->
