@@ -14,8 +14,10 @@ class PartnerCardListAdapter(private val nPlayers: Int, private val output: (Int
     else PlayingCards().cardsIndexSortedPartner7
 
     class PartnerCardListViewHolder(private val binder: CardsItemListPartnerBinding, val nPlayers: Int) : RecyclerView.ViewHolder(binder.root) {
+
         private val cardsDrawablePartner = if (nPlayers == 4) PlayingCards().cardsDrawable4
         else PlayingCards().cardsDrawablePartner7
+
         private val cardsPointsPartner = if (nPlayers == 4) PlayingCards().cardsPoints4
         else PlayingCards().cardsPointsPartner7
 

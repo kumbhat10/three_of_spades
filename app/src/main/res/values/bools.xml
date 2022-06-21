@@ -2,4 +2,7 @@
 <resources>
     <bool name="portrait_only">true</bool>
     <bool name="disable_daily_reward">true</bool>
+    <bool name="disable_ads_game_screen">true</bool>
+    <bool name="disable_ads_game_screen_offline">true</bool>
+    <bool name="enable_full_auto_mode_game_screen">true</bool>
 </resources>

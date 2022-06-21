@@ -581,7 +581,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 3)) {  // Ask only once per game
                 inAppReview()
                 reviewRequested = true
-            } else if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0)) showInterstitialAd()
+            } else if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen_offline))) showInterstitialAd()
             binding.startNextRoundButton.visibility = View.VISIBLE
 
         }, delayWaitGameMode6)

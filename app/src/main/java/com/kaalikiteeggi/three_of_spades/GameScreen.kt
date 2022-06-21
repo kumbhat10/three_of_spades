@@ -54,6 +54,7 @@ import com.google.firebase.ktx.Firebase
 import com.kaalikiteeggi.three_of_spades.databinding.*
 import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
+import java.lang.Math.random
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -101,8 +102,6 @@ class GameScreen : AppCompatActivity() {
     private lateinit var cardsPoints: List<Int>
     private lateinit var cardsSuit: List<String>
     private lateinit var cardsDrawablePartner: List<Int>
-    private lateinit var cardsIndexSortedPartner: List<Int>
-    private lateinit var cardsPointsPartner: List<Int>
     private var cardsIndexLimit = 0
     private var roundNumberLimit = 0
     private var scoreLimit = 0
@@ -864,8 +863,16 @@ class GameScreen : AppCompatActivity() {
         } else { // show to gameData.bb only
             binding.bidNowImage.visibility = View.GONE // redundant not required really
             speak("Well done!! Choose your trump now", speed = 1f, queue = TextToSpeech.QUEUE_ADD)
-            binding.frameTrumpSelection.visibility = View.VISIBLE
-            binding.frameTrumpSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
+            if (!(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_full_auto_mode_game_screen))) {
+                binding.frameTrumpSelection.visibility = View.VISIBLE
+                binding.frameTrumpSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
+            }else{
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val view = View(this)
+                    view.tag = listOf("h","s","d","c").random()
+                    onTrumpSelectionClick(view)
+                }, 1000)
+            }
             if (vibrateStatus) vibrationStart()
         }
     }
@@ -901,13 +908,24 @@ class GameScreen : AppCompatActivity() {
             binding.linearLayoutPartnerSelection.visibility = View.VISIBLE // make selection frame visible
             binding.linearLayoutPartnerSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
             if (nPlayers7) {
+                binding.linearLayoutPartnerSelection.visibility = View.VISIBLE // make selection frame visible
+                binding.linearLayoutPartnerSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
                 if (counterPartnerSelection == 0) binding.textViewPartnerSelect.text = getString(R.string.partnerSelection1)
                 speak("Choose your partner card", speed = 1.1f)
             } //choose 1st buddy text
             if (nPlayers4) {
-                binding.textViewPartnerSelect.text = getString(R.string.partnerSelection1_4)
-                speak("Choose your partner card", speed = 1.1f)
-            }
+                if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_full_auto_mode_game_screen)){
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        autoPartnerSelect()
+                    }, 1000)
+                }
+                }else{
+                    binding.linearLayoutPartnerSelection.visibility = View.VISIBLE // make selection frame visible
+                    binding.linearLayoutPartnerSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
+                    binding.textViewPartnerSelect.text = getString(R.string.partnerSelection1_4)
+                    speak("Choose your partner card", speed = 1.1f)
+                }
+
             binding.partnerSelectRV.layoutManager = LinearLayoutManager(this@GameScreen, RecyclerView.HORIZONTAL, false)
             binding.partnerSelectRV.adapter = PartnerCardListAdapter(nPlayers = nPlayers) { output ->
                 if (nPlayers7) partnerSelectClick7(cardSelected = output)
@@ -921,6 +939,27 @@ class GameScreen : AppCompatActivity() {
                 if (gameData.bb != 0) centralText("Waiting for ${playerName(gameData.bb)} \nto choose partner card", 0)
             }
         }
+    }
+
+    private fun autoPartnerSelect() {
+        val cardsInHandTemp = when (gameData.bb) {
+            1 -> gameData.ch1
+            2 -> gameData.ch2
+            3 -> gameData.ch3
+            4 -> gameData.ch4
+            5 -> gameData.ch5
+            6 -> gameData.ch6
+            else -> gameData.ch7
+        }
+
+        var partnerCardSelected = 1
+        for(i in PlayingCards().cardsIndexSortedPartner4.slice(1..51)){
+            if(!cardsInHandTemp.contains(i)) {
+                partnerCardSelected = i
+                break
+            }
+        }
+        partnerSelectClick4(partnerCardSelected)
     }
 
     private fun partnerSelectClick4(cardSelected: Int) { // assumption is cardsInHand already updated
@@ -1337,8 +1376,10 @@ class GameScreen : AppCompatActivity() {
                 updateWholeScoreBoard()
             }
             handlerDeclareWinner.postDelayed({
-                if (!premiumStatus && mInterstitialAd != null && (gameData.gn % gameLimitNoAds == 0)) showInterstitialAd()
-//                maskWinner.value = false
+                if (!premiumStatus && mInterstitialAd != null && (gameData.gn % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen))) showInterstitialAd()
+                else if(fromInt==1 && BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_full_auto_mode_game_screen)){
+                    startNextGame(View(this))
+                }
                 if (fromInt == 1) { // show start next game button only to host
                     binding.startNextRoundButton.visibility = View.VISIBLE
                 } else {
@@ -1448,17 +1489,6 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    private fun createScoreTableHeader(): List<String> {
-        return if (nPlayers == 7) listOf("Player\n${Emoji().money}", p1 + "\n${Emoji().money}${String.format("%,d", p1Coins)}", p2 + "\n${Emoji().money}${String.format("%,d", p2Coins)}", p3 + "\n${Emoji().money}${String.format("%,d", p3Coins)}", p4 + "\n${Emoji().money}${String.format("%,d", p4Coins)}", p5 + "\n${Emoji().money}${String.format("%,d", p5Coins)}", p6 + "\n${Emoji().money}${String.format("%,d", p6Coins)}", p7 + "\n${Emoji().money}${String.format("%,d", p7Coins)}")
-        else listOf("Player\n${Emoji().money}", p1 + "\n${Emoji().money}${String.format("%,d", p1Coins)}", p2 + "\n${Emoji().money}${String.format("%,d", p2Coins)}", p3 + "\n${Emoji().money}${String.format("%,d", p3Coins)}", p4 + "\n${Emoji().money}${String.format("%,d", p4Coins)}")
-    }
-
-    private fun createScoreTableTotal(): List<Any> {
-        return if (nPlayers == 7) listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain, p5Gain, p6Gain, p7Gain)
-        else listOf("Total", p1Gain, p2Gain, p3Gain, p4Gain)
-    }
-
-
     private fun logFirebaseEvent(event: String = "game_screen", int: Int = 1, key: String) {
         val params = Bundle()
         params.putInt(key, int)
@@ -1544,9 +1574,7 @@ class GameScreen : AppCompatActivity() {
             cardsDrawable = PlayingCards().cardsDrawable7()
             cardsPoints = PlayingCards().cardsPoints7()
             cardsSuit = PlayingCards().cardsSuit7()
-            cardsIndexSortedPartner = PlayingCards().cardsIndexSortedPartner7
             cardsDrawablePartner = PlayingCards().cardsDrawablePartner7
-            cardsPointsPartner = PlayingCards().cardsPointsPartner7
             cardsIndexLimit = 99
             roundNumberLimit = 14
             scoreLimit = maxBidValue + 5
@@ -1560,9 +1588,7 @@ class GameScreen : AppCompatActivity() {
             cardsDrawable = PlayingCards().cardsDrawable4
             cardsPoints = PlayingCards().cardsPoints4
             cardsSuit = PlayingCards().cardSuit4
-            cardsIndexSortedPartner = PlayingCards().cardsIndexSortedPartner4
             cardsDrawablePartner = PlayingCards().cardsDrawable4
-            cardsPointsPartner = PlayingCards().cardsPoints4
             cardsIndexLimit = 53
             roundNumberLimit = 13
             scoreLimit = maxBidValue + 5
