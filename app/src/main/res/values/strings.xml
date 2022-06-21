@@ -30,6 +30,8 @@
     <string name="banner_admob">ca-app-pub-2714670043901113/2653923895</string>
     <string name="inter_admob">ca-app-pub-2714670043901113/6210025529</string>
     <string name="reward_admob">ca-app-pub-2714670043901113/5307668082</string>
+    <string name="reward_inter_admob">ca-app-pub-2714670043901113/1377187277</string>
+<!--    <string name="reward_inter_admob_test">ca-app-pub-3940256099942544/5354046379</string>-->
 
     <string name="app_name">3 of Spades</string>
     <string name="developer">Dushyant Kumbhat</string>

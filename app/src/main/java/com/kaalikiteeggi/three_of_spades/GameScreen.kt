@@ -36,6 +36,8 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -115,8 +117,9 @@ class GameScreen : AppCompatActivity() {
     private var chatOpenStatus = false
     private var activityExists = true
     private var mInterstitialAd: InterstitialAd? = null
+    private var rewardedInterstitialAd: RewardedInterstitialAd? = null
     private var loadInterAdTry = 0
-
+    private var loadRewardedInterAdTry = 0
     private lateinit var roomID: String
     private lateinit var selfName: String
     private lateinit var from: String
@@ -194,7 +197,7 @@ class GameScreen : AppCompatActivity() {
     private lateinit var allCardsReset: MutableList<Int>
     private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L  else 300L
     private var timeCountdownBid = if (!BuildConfig.DEBUG) 15000L else 1500L
-    private var delayGameOver = if(BuildConfig.DEBUG) 3000L else 7000L
+    private var delayGameOver = if(BuildConfig.DEBUG) 3000L else 5000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
 
     private var lastChat = ""
@@ -1064,7 +1067,10 @@ class GameScreen : AppCompatActivity() {
         if (p1s.value != gameData.p1s) p1s.value = gameData.p1s // Live Data
         if (nPlayers7 && p2s.value != gameData.p2s) p2s.value = gameData.p2s
         played = gameData.ct[fromInt - 1] != cardsIndexLimit
-        if ((gameData.rn == 8 && gameData.gn % gameLimitNoAds == 0) && !premiumStatus) loadInterstitialAd() // dummy - load the ad again
+        if ((gameData.rn == 8 && gameData.gn % gameLimitNoAds == 0) && !premiumStatus) {
+            if(rewardedInterstitialAd == null) loadRewardedInterstitialAd()
+            if(mInterstitialAd == null) loadInterstitialAd()
+        } // dummy - load the ad again
         updatePlayerScoreInfo()
         play()
     }
@@ -1361,14 +1367,23 @@ class GameScreen : AppCompatActivity() {
             countDownTimer("PlayCard", purpose = "cancel")
             if (vibrateStatus) vibrationStart()
             displayShufflingCards(distribute = false)
-            scoreOpenStatus = true
+            if (rewardedInterstitialAd == null && !premiumStatus) loadRewardedInterstitialAd()
             if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
             if (newGameStatus) {
                 newGameStatus = false
                 updateWholeScoreBoard()
             }
             handlerDeclareWinner.postDelayed({
-                if (!premiumStatus && mInterstitialAd != null && (gameData.gn % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen))) showInterstitialAd()
+                scoreOpenStatus = true
+                binding.closeGameRoomIcon.visibility = View.GONE
+                binding.scoreViewLayout.visibility = View.VISIBLE
+                maskWinner.value = false
+                if (!premiumStatus && (gameData.gn % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen))){
+                    if(rewardedInterstitialAd != null) showRewardedInterstitialAd()
+                    else if(mInterstitialAd != null) {
+                        showInterstitialAd()
+                    }
+                }
                 else if(fromInt==1 && BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen)){
                     startNextGame(View(this))
                 }
@@ -1444,6 +1459,7 @@ class GameScreen : AppCompatActivity() {
             binding.gridScoreBody.adapter = adapterScoreBody
         }
         adapterScoreBody.notifyItemRangeInserted(prevSize, gameData.s.size)
+        binding.gridScoreBody.scrollToPosition(scoreBodyArrayList.size-1)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -2135,11 +2151,54 @@ class GameScreen : AppCompatActivity() {
                 binding.addViewGameScreenBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
                 binding.addViewChatGameScreenBanner.visibility = View.VISIBLE
                 binding.addViewGameScreenBanner.visibility = View.VISIBLE
+                loadRewardedInterstitialAd()
                 loadInterstitialAd()
             }
         } else {
             binding.addViewGameScreenBanner.visibility = View.GONE
             binding.addViewChatGameScreenBanner.visibility = View.GONE
+        }
+    }
+    private fun loadRewardedInterstitialAd(){
+        loadRewardedInterAdTry += 1 // try 5 times
+        RewardedInterstitialAd.load(this, getString(R.string.reward_inter_admob), AdRequest.Builder().build(), object: RewardedInterstitialAdLoadCallback(){
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                Log.d("RewardedInterstitialAd", "onAdFailedToLoad ${loadAdError.message}")
+                rewardedInterstitialAd = null
+                if (loadRewardedInterAdTry <= 2) loadRewardedInterstitialAd()
+            }
+            override fun onAdLoaded(rewardedInterstitialAd1: RewardedInterstitialAd) {
+                Log.d("RewardedInterstitialAd", "onAdLoaded")
+                loadRewardedInterAdTry = 0
+                rewardedInterstitialAd = rewardedInterstitialAd1
+            }
+        })
+
+    }
+    private fun showRewardedInterstitialAd() {
+        if (rewardedInterstitialAd != null) {
+            rewardedInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                    Log.d("RewardedInterstitialAd", "onAdFailedToShowFullScreenContent")
+                    rewardedInterstitialAd = null
+                    loadRewardedInterstitialAd()
+                }
+                override fun onAdDismissedFullScreenContent() {
+                    Log.d("RewardedInterstitialAd", "onAdDismissedFullScreenContent")
+                    rewardedInterstitialAd = null
+                    logFirebaseEvent(key = "watched_ad")
+                    if (fromInt == 1 && gameData.gs == 6) {
+                        binding.startNextRoundButton.visibility = View.VISIBLE
+                    }
+                    if (fromInt == 1) writeToRoomDatabase("OL/$from", 1) // for others except host, onStart will take care to update activity
+                }
+                override fun onAdShowedFullScreenContent() {}
+                override fun onAdImpression() {}
+            }
+            rewardedInterstitialAd!!.show(this) { rewardItem -> Log.d("RewardedInterstitialAd", "Reward received ${rewardItem.amount}") }
+        } else {
+            Log.d("RewardedInterstitialAd", "RewardedInterstitialAd is Null")
+            loadRewardedInterstitialAd()
         }
     }
 
@@ -2151,7 +2210,6 @@ class GameScreen : AppCompatActivity() {
                 mInterstitialAd = null
                 if (loadInterAdTry <= 2) loadInterstitialAd()
             }
-
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("InterstitialAd", "onAdLoaded")
                 loadInterAdTry = 0
@@ -2168,22 +2226,18 @@ class GameScreen : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
-
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
                     logFirebaseEvent(key = "watched_ad")
                     if (fromInt == 1 && gameData.gs == 6) {
                         binding.startNextRoundButton.visibility = View.VISIBLE
-//                        binding.startNextRoundButton.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_appeal))
                     }
                     if (fromInt == 1) writeToRoomDatabase("OL/$from", 1) // for others except host, onStart will take care to update activity
                 }
-
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
-//            mInterstitialAd!!.setImmersiveMode(true)
             mInterstitialAd!!.show(this)
         } else {
             Log.d("InterstitialAd", "InterstitialAd is Null")

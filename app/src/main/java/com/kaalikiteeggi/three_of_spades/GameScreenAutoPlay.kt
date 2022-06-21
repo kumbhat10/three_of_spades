@@ -33,6 +33,9 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.play.core.review.ReviewManagerFactory
@@ -86,9 +89,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var cardsIndexLimit = 0
     private var roundNumberLimit = 0
     private var scoreLimit = 0
-    private var coinDur = 1000L
-    private var coinSpeed = 5f
-    private var coinRate = 150
     private var reviewRequested = false
     private var soundStatus = true
     private var speechStatus = true
@@ -99,7 +99,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var scoreOpenStatus = false
     private var activityExists = true
     private var mInterstitialAd: InterstitialAd? = null
+    private var rewardedInterstitialAd: RewardedInterstitialAd? = null
     private var loadInterAdTry = 0
+    private var loadRewardedInterAdTry = 0
 
     private lateinit var roomID: String
     private lateinit var selfName: String
@@ -163,17 +165,16 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var gameNumber: Int = 1
     private var gameLimitNoAds: Int = 2
 
-    private var delayWaitGameMode6 = 5500L
+    private var delayWaitGameMode6 = 4500L
     private var delayDeclareWinner = 1500L
-    private var timeCountdownPlayCard = 20000L
-    private var timeAutoPlayCard = listOf<Long>(700, 850, 600, 700, 1000, 600, 1000)
-    private var timeCountdownBid = 20000L
-    private var timeAutoBid = listOf<Long>(1650, 1400, 1500, 1800)
+    private var timeCountdownPlayCard = if(BuildConfig.DEBUG) 1000L else 20000L
+    private var timeAutoPlayCard = if(BuildConfig.DEBUG) listOf<Long>(600) else listOf<Long>(500, 700, 850, 600, 700, 600, 1000)
+    private var timeCountdownBid = if(BuildConfig.DEBUG) 1000L else 20000L
+    private var timeAutoBid = if(BuildConfig.DEBUG) listOf<Long>(600) else listOf<Long>(1650, 1400, 1500, 1800)
     private var speedAutoBid = 1.1f
-    private var timeAutoTrumpAndPartner = listOf<Long>(1700, 2000, 1700)
+    private var timeAutoTrumpAndPartner = if(BuildConfig.DEBUG) listOf<Long>(600) else listOf<Long>(1700, 2000, 1700)
     private var maxAutoBidLimit = listOf(225, 230, 235, 245)
 
-    private var scoreSheetNotUpdated = true
     private var played = false
 
     private var pt1 = 0
@@ -503,6 +504,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private fun updateTimeAutoPlay() {
         timeAutoPlayCard = when {
+            BuildConfig.DEBUG -> listOf(300)
             nGamesPlayed < 5 -> listOf(1000, 900, 1100, 1200, 800)
             nGamesPlayed < 10 -> listOf(600, 900, 650, 800, 700, 900)
             nGamesPlayed < 15 -> listOf(500, 550, 600, 700, 800)
@@ -510,6 +512,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             else -> listOf(350, 250, 300, 300, 200)
         }
         timeAutoBid = when {
+            BuildConfig.DEBUG -> listOf(600)
             nGamesPlayed < 10 -> listOf(1600, 1700, 1800)
             nGamesPlayed < 20 -> listOf(1600, 1400, 1500)
             else -> listOf(1400)
@@ -570,24 +573,32 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (vibrateStatus) vibrationStart()
 //        if (soundStatus) SoundManager.instance?.playShuffleSound() //soundShuffle.start()
         displayShufflingCards(distribute = false)
-        scoreOpenStatus = true
         if (newGameStatus) { // dummy - newGameStatus not needed as score list has game index which is unique
             newGameStatus = false
             updateWholeScoreBoard()
             gameNumber += 1
         }
+        if (rewardedInterstitialAd == null && !premiumStatus) loadRewardedInterstitialAd()
         if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
         Handler(Looper.getMainLooper()).postDelayed({
+            scoreOpenStatus = true
+            binding.closeGameRoomIcon.visibility = View.GONE
+            binding.scoreViewLayout.visibility = View.VISIBLE
             binding.startNextRoundButton.visibility = View.VISIBLE
+            maskWinner.value = false
             if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 3)) {  // Ask only once per game
                 inAppReview()
                 reviewRequested = true
-            } else if (!premiumStatus && mInterstitialAd != null && ((gameNumber - 1) % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen_offline))) showInterstitialAd()
+            } else if (!premiumStatus && ((gameNumber - 1) % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen_offline))) {
+                if(rewardedInterstitialAd != null) showRewardedInterstitialAd()
+                else if(mInterstitialAd!=null) {
+                    showInterstitialAd()
+                }
+            }
             else if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) {
                 startNextGame(View(this))
                 binding.startNextRoundButton.visibility = View.GONE
             }
-
         }, delayWaitGameMode6)
     }
 
@@ -646,6 +657,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             binding.gridScoreBody.adapter = adapterScoreBody
         }
         adapterScoreBody.notifyItemRangeInserted(prevSize, scoreList.size)
+        binding.gridScoreBody.scrollToPosition(scoreBodyArrayList.size-1)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -1668,6 +1680,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 binding.addViewGameScreenBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
                 binding.addViewChatGameScreenBanner.visibility = View.VISIBLE
                 binding.addViewGameScreenBanner.visibility = View.VISIBLE
+                loadRewardedInterstitialAd()
                 loadInterstitialAd()
             }
         } else {
@@ -1676,10 +1689,52 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
-    private fun loadInterstitialAd(showAd: Boolean = false) {
+    private fun loadRewardedInterstitialAd(){
+        loadRewardedInterAdTry += 1 // try 5 times
+        RewardedInterstitialAd.load(this, getString(R.string.reward_inter_admob), AdRequest.Builder().build(), object: RewardedInterstitialAdLoadCallback(){
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                Log.d("RewardedInterstitialAd", "onAdFailedToLoad ${loadAdError.message}")
+                rewardedInterstitialAd = null
+                if (loadRewardedInterAdTry <= 2) loadRewardedInterstitialAd()
+            }
+            override fun onAdLoaded(rewardedInterstitialAd1: RewardedInterstitialAd) {
+                Log.d("RewardedInterstitialAd", "onAdLoaded")
+                loadRewardedInterAdTry = 0
+                rewardedInterstitialAd = rewardedInterstitialAd1
+            }
+        })
+
+    }
+    private fun showRewardedInterstitialAd() {
+        if (rewardedInterstitialAd != null) {
+            rewardedInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                    Log.d("RewardedInterstitialAd", "onAdFailedToShowFullScreenContent")
+                    rewardedInterstitialAd = null
+                    loadRewardedInterstitialAd()
+                }
+                override fun onAdDismissedFullScreenContent() {
+                    Log.d("RewardedInterstitialAd", "onAdDismissedFullScreenContent")
+                    rewardedInterstitialAd = null
+                    loadRewardedInterstitialAd()
+                    logFirebaseEvent(key = "watched_ad")
+                    if (gameState.value!! == 6) {
+                        binding.startNextRoundButton.visibility = View.VISIBLE
+                    }
+                }
+                override fun onAdShowedFullScreenContent() {}
+                override fun onAdImpression() {}
+            }
+            rewardedInterstitialAd!!.show(this) { rewardItem -> Log.d("RewardedInterstitialAd", "Reward received ${rewardItem.amount}") }
+        } else {
+            Log.d("RewardedInterstitialAd", "RewardedInterstitialAd is Null")
+            loadRewardedInterstitialAd()
+        }
+    }
+
+    private fun loadInterstitialAd() {
         loadInterAdTry += 1 // try 5 times
-        val adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(this, getString(R.string.inter_admob), adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(this, getString(R.string.inter_admob), AdRequest.Builder().build(), object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 Log.d("InterstitialAd", "onAdFailedToLoad")
                 mInterstitialAd = null
@@ -1693,7 +1748,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
             }
         })
     }
-
     private fun showInterstitialAd() {
         if (mInterstitialAd != null) {
             mInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
@@ -1702,7 +1756,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
-
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
@@ -1711,7 +1764,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         binding.startNextRoundButton.visibility = View.VISIBLE
                     }
                 }
-
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
