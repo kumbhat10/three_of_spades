@@ -22,7 +22,7 @@ class ScoreBodyAdapter(var arrayList: ArrayList<Int>, private val nColumns: Int)
                 }
             } else {
                 binder.scoreBodyText.text = playerScore.toString()
-//                binder.scoreBodyText.setTextColor(ContextCompat.getColor(binder.root.context, R.color.yellow))
+                binder.root.setBackgroundResource(R.color.transparent)
             }
         }
     }
