@@ -3,7 +3,7 @@
     <bool name="portrait_only">true</bool>
     <bool name="disable_daily_reward">true</bool>
     <bool name="delete_last_room">false</bool>
-    <bool name="disable_ads_game_screen">true</bool>
+    <bool name="disable_ads_game_screen">false</bool>
     <bool name="disable_ads_game_screen_offline">false</bool>
     <bool name="enable_auto_mode_game_screen">true</bool>
     <bool name="enable_auto_mode_game_screen_offline">true</bool>
