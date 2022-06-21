@@ -1079,10 +1079,8 @@ class GameScreen : AppCompatActivity() {
             for (i in 0 until nPlayers) {
                 val j = i + 1
                 if (j == gameData.bb || (j == gameData.p1 && gameData.p1s != 0) || (j == gameData.p2 && gameData.p2s != 0)) {
-//                    findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(j)
                     findViewById<TickerView>(refIDMappedTextViewA[i]).text = "$bidTeamScore /${gameData.bv}"
                 } else {
-//                    findViewById<MaterialTextView>(refIDMappedTextView[i]).text = playerName(j)
                     findViewById<TickerView>(refIDMappedTextViewA[i]).text = "${gameData.sc.sum() - bidTeamScore} /${scoreLimit - gameData.bv}"
                 }
             }
@@ -1242,16 +1240,13 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun startNextRound() {
-        gameData.sc[fromInt - 1] += tablePoints //+ gameData.sc[fromInt - 1]
+        gameData.sc[fromInt - 1] += tablePoints
         writeToGameDatabase(data = mutableMapOf("ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to fromInt, "rn" to gameData.rn + 1, "rtr" to ""))
     }
 
     private fun endGameRound() { // function called by only round winner - so all table points get added to round winner
-        gameData.sc[fromInt - 1] += tablePoints //+ gameData.sc[fromInt - 1]
-        refRoomDatabase.child("G").updateChildren(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to "")).addOnSuccessListener { }.addOnFailureListener {
-            logFirebaseEvent(key = "Failed-Next-Turn")
-            refRoomDatabase.child("G").updateChildren(mutableMapOf("p1" to 8, "p1s" to 0, "p2" to 8, "p2s" to 0, "ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 1, "pt" to 0, "rn" to 1, "tr" to "", "rtr" to ""))
-        }
+        gameData.sc[fromInt - 1] += tablePoints
+        writeToGameDatabase(data = mutableMapOf("ct" to allCardsReset, "ct1" to allCardsReset, "sc" to gameData.sc, "rt" to 0, "pt" to fromInt))
     }
 
     private fun autoPlayCard() {
