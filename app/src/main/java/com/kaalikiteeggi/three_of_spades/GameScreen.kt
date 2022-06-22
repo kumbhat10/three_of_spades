@@ -1829,7 +1829,7 @@ class GameScreen : AppCompatActivity() {
         for (x: Int in cardsInHand) {
             val viewTemp = CardsItemListBinding.inflate(layoutInflater, binding.imageGallery, false) //inflater.inflate(R.layout.cards_item_list, binding.imageGallery, false)
             if (x == cardsInHand[cardsInHand.size - 1]) {
-                viewTemp.imageViewDisplayCard.setPaddingRelative(0, 0, 0, 0)
+                viewTemp.imageViewDisplayCard.setPaddingRelative(resources.getDimensionPixelSize(R.dimen.paddingStartDisplayCardLast), 0, 0, 0)
                 viewTemp.imageViewDisplayCard.layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
             }
             if (x != cardsIndexLimit) viewTemp.imageViewDisplayCard.setImageResource(cardsDrawable[x])

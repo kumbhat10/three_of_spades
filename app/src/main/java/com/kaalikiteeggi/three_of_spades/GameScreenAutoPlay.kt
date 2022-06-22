@@ -1098,7 +1098,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         for (x: Int in cardsInHand) {
             val viewTemp = CardsItemListBinding.inflate(layoutInflater, binding.imageGallery, false)
             if (x == cardsInHand[cardsInHand.size - 1]) {
-                viewTemp.imageViewDisplayCard.setPaddingRelative(0, 0, 0, 0)
+                viewTemp.imageViewDisplayCard.setPaddingRelative(resources.getDimensionPixelSize(R.dimen.paddingStartDisplayCardLast), 0, 0, 0)
                 viewTemp.imageViewDisplayCard.layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
             }
             viewTemp.imageViewDisplayCard.setImageResource(cardsDrawable[x])
@@ -1535,7 +1535,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         for (i in 0 until nPlayers) {
             val j = i + nPlayers
             if (playerInfo[j].isNotEmpty()) {
-                Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().error(R.drawable.s3).into(findViewById<ImageView>(refIDMappedImageView[i]))
+                Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().error(R.drawable.user_photo).into(findViewById<ImageView>(refIDMappedImageView[i]))
             }
         }
     }

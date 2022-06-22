@@ -24,8 +24,8 @@
 
     <ImageView
         android:id="@+id/imageViewPartner"
-        android:layout_width="@dimen/_39sdp"
-        android:layout_height="@dimen/_54sdp"
+        android:layout_width="@dimen/_42sdp"
+        android:layout_height="@dimen/_57sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="0dp"

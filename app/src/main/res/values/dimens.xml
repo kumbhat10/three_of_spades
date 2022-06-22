@@ -70,7 +70,8 @@
 
     <dimen name="scoreTableWidth">@dimen/_64sdp</dimen>
     <dimen name="scoreTableWidthLarge">@dimen/_70sdp</dimen>
-    <dimen name="widthDisplayCardLast">@dimen/_39sdp</dimen>
+    <dimen name="widthDisplayCardLast">@dimen/_43sdp</dimen>
+    <dimen name="paddingStartDisplayCardLast">@dimen/_minus2sdp</dimen>
     <dimen name="widthDisplayCardLastTrain">@dimen/_42sdp</dimen>
     <dimen name="status_online">@dimen/_12sdp</dimen>
 

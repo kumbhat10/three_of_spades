@@ -1437,7 +1437,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/playerCards"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_64sdp"
+        android:layout_height="@dimen/_68sdp"
         android:layout_marginStart="@dimen/_50sdp"
         android:layout_marginEnd="@dimen/_55sdp"
         android:layout_marginBottom="0dp"
@@ -1978,7 +1978,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="55"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/ns14" />
 
         <ImageView
             android:id="@+id/imageViewTable2"
@@ -1994,7 +1994,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="-80"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/ns14" />
 
         <ImageView
             android:id="@+id/imageViewTable3"
@@ -2010,7 +2010,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="-20"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10"
+            app:srcCompat="@drawable/ns14"
             tools:ignore="TooManyViews" />
 
         <ImageView
@@ -2027,7 +2027,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="20"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/ns14" />
 
         <ImageView
             android:id="@+id/imageViewTable5"
@@ -2043,7 +2043,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="80"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/ns14" />
 
         <ImageView
             android:id="@+id/imageViewTable6"
@@ -2059,7 +2059,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="-55"
             android:visibility="gone"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/ns14" />
 
         <ImageView
             android:id="@+id/imageViewSelf"
@@ -2075,7 +2075,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:visibility="invisible"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/ns14" />
 
         <ImageView
             android:id="@+id/imageViewSelf_4"
@@ -2089,7 +2089,7 @@
             android:contentDescription="@string/app_name"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/c10"
+            android:src="@drawable/ns14"
             android:visibility="invisible" />
 
         <ImageView
@@ -2106,7 +2106,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="90"
             android:visibility="invisible"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/ns14" />
 
         <ImageView
             android:id="@+id/imageViewTable2_4"
@@ -2121,7 +2121,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:visibility="invisible"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/ns14" />
 
         <ImageView
             android:id="@+id/imageViewTable1_4"
@@ -2137,7 +2137,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="-90"
             android:visibility="invisible"
-            app:srcCompat="@drawable/c10" />
+            app:srcCompat="@drawable/ns14" />
 
         <ImageView
             android:id="@+id/imageViewWinnerCenter"

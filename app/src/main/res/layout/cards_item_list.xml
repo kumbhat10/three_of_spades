@@ -25,7 +25,7 @@
     <ImageView
         android:id="@+id/imageViewDisplayCard"
         android:layout_width="@dimen/_31sdp"
-        android:layout_height="@dimen/_54sdp"
+        android:layout_height="@dimen/_57sdp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
@@ -35,8 +35,8 @@
         android:cropToPadding="true"
         android:elevation="0dp"
         android:fadingEdge="horizontal"
-        android:paddingStart="0dp"
-        android:paddingEnd="@dimen/_minus7sdp"
+        android:paddingStart="@dimen/_minus2sdp"
+        android:paddingEnd="@dimen/_minus10sdp"
         app:srcCompat="@drawable/ic_back_side_blue" />
 
 </RelativeLayout>
