@@ -713,7 +713,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (gameNumber > 1) binding.gameBkgd.setImageResource(GameScreenData().tableBackground.random())// change background only from 2nd game
         binding.buddyImage1.setImageResource(R.drawable.ic_back_side_blue)
         binding.trumpImage.setImageResource(R.drawable.trump)
-        binding.trumpImage.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
         binding.textViewBidValue.text = getString(R.string.bidValue2)  //$emojiScore
         binding.bidNowImage.visibility = View.GONE // redundant not required really
         binding.textViewBider.text = getString(R.string.Bider)
@@ -1113,7 +1112,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 viewTemp.textViewDisplayCard.text = "${cardsPoints.elementAt(x)}"
                 if (animations) viewTemp.textViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale)) //                if (animations) viewTemp.imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
             } else {
-                viewTemp.textViewDisplayCard.visibility = View.GONE
+                viewTemp.textViewDisplayCard.visibility = View.INVISIBLE
             }
             viewTemp.imageViewDisplayCard.setOnClickListener {
                 validateSelfPlayedCard(it)
@@ -1225,24 +1224,23 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun displayTrumpCard() {
-        binding.trumpImage.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
         when (trump) {
             "H" -> {
-                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_hearts))
+                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.nh0))
                 findViewById<TickerView>(R.id.trumpText).text = "Heart"
             }
             "S" -> {
-                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_spades))
+                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ns0))
                 findViewById<TickerView>(R.id.trumpText).text = "Spade"
 
             }
             "D" -> {
-                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_diamonds))
+                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.nd0))
                 findViewById<TickerView>(R.id.trumpText).text = "Diamond"
 
             }
             "C" -> {
-                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.ic_clubs))
+                binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.nc0))
                 findViewById<TickerView>(R.id.trumpText).text = "Club"
 
             }

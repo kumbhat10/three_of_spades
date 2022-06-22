@@ -373,27 +373,25 @@ class GameScreen : AppCompatActivity() {
         }
         //endregion
         trump.observe(this) {
-            binding.trumpImage.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
             when (it) {
                 "H" -> {
-                    binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_hearts))
+                    binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.nh0))
                     binding.trumpText.text = "Heart"
                 }
                 "S" -> {
-                    binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_spades))
+                    binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ns0))
                     binding.trumpText.text = "Spade"
                 }
                 "D" -> {
-                    binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_diamonds))
+                    binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.nd0))
                     binding.trumpText.text = "Diamond"
                 }
                 "C" -> {
-                    binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_clubs))
+                    binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.nc0))
                     binding.trumpText.text = "Club"
                 }
                 else -> {
                     binding.trumpImage.setImageResource(R.drawable.trump)
-                    binding.trumpImage.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
                     binding.trumpText.text = getString(R.string.Trump)
                 }
             }
@@ -1846,7 +1844,7 @@ class GameScreen : AppCompatActivity() {
                     viewTemp.textViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
                 }
             } else {
-                viewTemp.textViewDisplayCard.visibility = View.GONE
+                viewTemp.textViewDisplayCard.visibility = View.INVISIBLE
             }
             viewTemp.imageViewDisplayCard.setOnClickListener {
                 validateSelfPlayedCard(it)

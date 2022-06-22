@@ -6,7 +6,8 @@ package com.kaalikiteeggi.three_of_spades
 class PlayingCards {
 
 	//    region Suits Drawable
-	val suitsDrawable = listOf(R.drawable.ic_spades, R.drawable.ic_hearts, R.drawable.ic_clubs, R.drawable.ic_diamonds)
+//	val suitsDrawable = listOf(R.drawable.ic_spades, R.drawable.ic_hearts, R.drawable.ic_clubs, R.drawable.ic_diamonds) // old suits
+	val suitsDrawable = listOf(R.drawable.ns0, R.drawable.nh0, R.drawable.nc0, R.drawable.nd0)
 
 	//    endregion
 	//     region Cards Drawable

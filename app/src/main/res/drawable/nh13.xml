@@ -5,15 +5,15 @@
     android:viewportWidth="140"
     android:viewportHeight="190">
   <path
-      android:fillColor="#FF000000"
+      android:fillColor="#303030"
       android:pathData="m21,5h103c8.86,0 16,7.14 16,16v153c0,8.86 -7.14,16 -16,16h-103c-8.86,0 -16,-7.14 -16,-16v-153c0,-8.86 7.14,-16 16,-16z"
       android:fillAlpha="0.49804"/>
   <path
       android:pathData="m17,1h103c8.86,0 16,7.14 16,16v153c0,8.86 -7.14,16 -16,16h-103c-8.86,0 -16,-7.14 -16,-16v-153c0,-8.86 7.14,-16 16,-16z"
-      android:fillColor="#fff"/>
+      android:fillColor="#000000"/>
   <path
       android:pathData="m19,3h103c8.86,0 16,7.14 16,16v153c0,8.86 -7.14,16 -16,16h-103c-8.86,0 -16,-7.14 -16,-16v-153c0,-8.86 7.14,-16 16,-16z"
-      android:fillColor="#c7891f"/>
+      android:fillColor="#000000"/>
   <path
       android:pathData="m18,2h103c8.86,0 16,7.14 16,16v153c0,8.86 -7.14,16 -16,16h-103c-8.86,0 -16,-7.14 -16,-16v-153c0,-8.86 7.14,-16 16,-16z">
     <aapt:attr name="android:fillColor">

@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:fadingEdge="vertical">
 
     <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/imageViewDisplayCard1"
         android:layout_width="@dimen/_47sdp"
         android:layout_height="@dimen/_68sdp"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:scaleType="fitXY"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
         android:contentDescription="@string/app_name"
         android:contextClickable="true"
-        android:elevation="@dimen/_36sdp"
-        android:fadingEdge="horizontal"
-        app:srcCompat="@drawable/ic_hearts" />
+        app:srcCompat="@drawable/ns0" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
