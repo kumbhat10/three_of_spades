@@ -36,6 +36,8 @@ class ScoreHeaderAdapter (var arrayList: ArrayList<PlayerScoreItemDescription>) 
 //                    binder.root.background =  ContextCompat.getDrawable(binder.root.context, R.drawable.red_button)
                     binder.userScore2.background =  ContextCompat.getDrawable(binder.root.context, R.drawable.redrectanlgesimple)
                 }
+            }else{
+                binder.root.setBackgroundColor(ContextCompat.getColor(binder.root.context, R.color.transparent))
             }
         }
     }

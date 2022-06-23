@@ -33,7 +33,6 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
@@ -166,13 +165,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var gameLimitNoAds: Int = 2
 
     private var delayWaitGameMode6 = 4500L
-    private var delayDeclareWinner = 1500L
-    private var timeCountdownPlayCard = if(BuildConfig.DEBUG) 1000L else 20000L
-    private var timeAutoPlayCard = if(BuildConfig.DEBUG) listOf<Long>(600) else listOf<Long>(500, 700, 850, 600, 700, 600, 1000)
-    private var timeCountdownBid = if(BuildConfig.DEBUG) 1000L else 20000L
-    private var timeAutoBid = if(BuildConfig.DEBUG) listOf<Long>(600) else listOf<Long>(1650, 1400, 1500, 1800)
+    private var delayDeclareWinner = 2500L
+    private var timeCountdownPlayCard = if (BuildConfig.DEBUG) 6000L else 20000L
+    private var timeAutoPlayCard = if (BuildConfig.DEBUG) listOf<Long>(200) else listOf<Long>(500, 700, 850, 600, 700, 600, 1000)
+    private var timeCountdownBid = if (BuildConfig.DEBUG) 1000L else 20000L
+    private var timeAutoBid = if (BuildConfig.DEBUG) listOf<Long>(600) else listOf<Long>(1650, 1400, 1500, 1800)
     private var speedAutoBid = 1.1f
-    private var timeAutoTrumpAndPartner = if(BuildConfig.DEBUG) listOf<Long>(600) else listOf<Long>(1700, 2000, 1700)
+    private var timeAutoTrumpAndPartner = if (BuildConfig.DEBUG) listOf<Long>(600) else listOf<Long>(1700, 2000, 1700)
     private var maxAutoBidLimit = listOf(225, 230, 235, 245)
 
     private var played = false
@@ -189,6 +188,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var scoreHeaderArrayList = arrayListOf<PlayerScoreItemDescription>()
     private lateinit var adapterScoreHeader: ScoreHeaderAdapter
     private lateinit var adapterScoreBody: ScoreBodyAdapter
+    private var selfCardsArrayList = arrayListOf<PlayingCardDescription>()
+    private lateinit var adapterSelfCards: SelfCardListAdapter
+    private val adapterShuffleCards = ShuffleCardsAdapter()
 
     private var tablePoints = 0
 
@@ -262,7 +264,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             updatePlayerInfo()
             initializeSpeechEngine()
-            getSharedPrefs() // region       Countdown PlayCard
+            getSharedPrefs()
+            // region       Countdown PlayCard
             countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 20) {
                 @SuppressLint("SetTextI18n")
                 override fun onTick(millisUntilFinished: Long) {
@@ -320,7 +323,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         binding.scoreViewLayout.visibility = View.GONE
                         if (this::p1.isInitialized) updatePlayerNames()
                         roundStarted = true
-                        if (BuildConfig.DEBUG) shufflingWindow(time = 2000L, gameStateChange = true) // gameStateChange = change game state to 2 after shuffling
+                        if (BuildConfig.DEBUG) shufflingWindow(time = 2900L, gameStateChange = true) // gameStateChange = change game state to 2 after shuffling
                         else shufflingWindow(gameStateChange = true) // gameStateChange = change game state to 2 after shuffling
                     } else {
                         startBidding()
@@ -344,7 +347,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         finishPassOverlay()
                         if (soundStatus) SoundManager.instance?.playSuccessSound()
                         updatePlayerScoreInfo(listOf(pt1, pt2, pt3, pt4))
-                        displaySelfCards(animations = false)
                         if (nGamesPlayed < 10) Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 2000)
                         else Handler(Looper.getMainLooper()).postDelayed({ startPlayingRound() }, 1000)
 
@@ -356,7 +358,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                             if (nGamesPlayed < 10) speak("You will get ${(timeCountdownPlayCard / 1000).toInt()} seconds to play card", speed = 1f)
                         }
                     } else {
-                        displaySelfCards(animations = false)
                         startPlayingRound()
                     }
                 }
@@ -485,9 +486,12 @@ class GameScreenAutoPlay : AppCompatActivity() {
         scoreLimit = 355
         scoreList = listOf(1, pt1, pt2, pt3, pt4)
 
+        binding.selfCards.layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.HORIZONTAL }
         binding.gridScoreHeader.layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.HORIZONTAL }
         binding.gridScoreBody.layoutManager = GridLayoutManager(this, nPlayers + 1, LinearLayoutManager.VERTICAL, false)
-
+        adapterSelfCards = SelfCardListAdapter(cardsArray = selfCardsArrayList) { card ->
+            validateSelfPlayedCard(card)
+        }
         binding.textView14.visibility = View.VISIBLE
         binding.textView14a.visibility = View.VISIBLE
         findViewById<ImageView>(R.id.onlinep1_4).visibility = View.VISIBLE
@@ -504,7 +508,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private fun updateTimeAutoPlay() {
         timeAutoPlayCard = when {
-            BuildConfig.DEBUG -> listOf(300)
+            BuildConfig.DEBUG -> timeAutoPlayCard
             nGamesPlayed < 5 -> listOf(1000, 900, 1100, 1200, 800)
             nGamesPlayed < 10 -> listOf(600, 900, 650, 800, 700, 900)
             nGamesPlayed < 15 -> listOf(500, 550, 600, 700, 800)
@@ -575,7 +579,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         displayShufflingCards(distribute = false)
         if (newGameStatus) { // dummy - newGameStatus not needed as score list has game index which is unique
             newGameStatus = false
-            updateWholeScoreBoard()
+//            updateWholeScoreBoard()
+            maskWinner.value = true
             gameNumber += 1
         }
         if (rewardedInterstitialAd == null && !premiumStatus) loadRewardedInterstitialAd()
@@ -590,12 +595,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 inAppReview()
                 reviewRequested = true
             } else if (!premiumStatus && ((gameNumber - 1) % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen_offline))) {
-                if(rewardedInterstitialAd != null) showRewardedInterstitialAd()
-                else if(mInterstitialAd!=null) {
+                if (rewardedInterstitialAd != null) showRewardedInterstitialAd()
+                else if (mInterstitialAd != null) {
                     showInterstitialAd()
                 }
-            }
-            else if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) {
+            } else if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) {
                 startNextGame(View(this))
                 binding.startNextRoundButton.visibility = View.GONE
             }
@@ -612,6 +616,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
             binding.winnerLottie.setAnimation(R.raw.sad_lottie)
             binding.textResult.text = getString(R.string.resultLost)
         }
+        binding.textResult.visibility = View.VISIBLE
+        binding.winnerLottie.visibility = View.VISIBLE
+        binding.winnerLottie.playAnimation()
+
         p1Gain += scoreList[1]
         p2Gain += scoreList[2]
         p3Gain += scoreList[3]
@@ -633,7 +641,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
         binding.gridWinner.adapter = PlayerWinnerGridAdapter(arrayList = arrayListWinner, winner = true)
         binding.gridLoser.adapter = PlayerWinnerGridAdapter(arrayList = arrayListLoser, winner = false)
-        maskWinner.value = true
+//        maskWinner.value = true
 
         updateScoreTableHeader()
         updateScoreTableBody()
@@ -653,27 +661,28 @@ class GameScreenAutoPlay : AppCompatActivity() {
         val prevSize = scoreBodyArrayList.size
         scoreBodyArrayList.addAll(scoreList)
         if (!this::adapterScoreBody.isInitialized) {
-            adapterScoreBody = ScoreBodyAdapter((scoreBodyArrayList), nColumns = nPlayers+1)
+            adapterScoreBody = ScoreBodyAdapter((scoreBodyArrayList), nColumns = nPlayers + 1)
             binding.gridScoreBody.adapter = adapterScoreBody
         }
         adapterScoreBody.notifyItemRangeInserted(prevSize, scoreList.size)
-        binding.gridScoreBody.scrollToPosition(scoreBodyArrayList.size-1)
+        binding.gridScoreBody.scrollToPosition(scoreBodyArrayList.size - 1)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun updateScoreTableHeader(showRank:Boolean = true) {
-        scoreHeaderArrayList = ArrayList<PlayerScoreItemDescription>()
+    private fun updateScoreTableHeader(showRank: Boolean = true) {
+        scoreHeaderArrayList.clear() // = ArrayList<PlayerScoreItemDescription>()
         scoreHeaderArrayList.add(PlayerScoreItemDescription(playerName = "Player"))
         val totalList = listOf(p1Gain, p2Gain, p3Gain, p4Gain)
         val sortedArray = totalList.distinct().sortedDescending()
         for (i in 1..nPlayers) {
-            scoreHeaderArrayList.add(PlayerScoreItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], points = totalList[i - 1], rank = rankStringFromInt(1+sortedArray.indexOf(totalList[i-1])), showRank = showRank ))
+            scoreHeaderArrayList.add(PlayerScoreItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], points = totalList[i - 1], rank = rankStringFromInt(1 + sortedArray.indexOf(totalList[i - 1])), showRank = showRank))
         }
+        adapterScoreHeader.notifyDataSetChanged()
 //        for (i in 1..3) { //dummy for 7 players testing
 //            scoreHeaderArrayList.add(PlayerScoreItemDescription(playerName = playerName(i), imageUrl = playerInfo[nPlayers + i - 1], points = totalList[i-1]))
 //        }
-            adapterScoreHeader = ScoreHeaderAdapter(scoreHeaderArrayList)
-            binding.gridScoreHeader.adapter = adapterScoreHeader
+//            adapterScoreHeader = ScoreHeaderAdapter(scoreHeaderArrayList)
+//            binding.gridScoreHeader.adapter = adapterScoreHeader
     }
 
     fun closeChatScoreWindow(view: View) {
@@ -767,6 +776,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
         val cardsShuffled = (0..51).shuffled()
         cardsInHand = (cardsShuffled.slice(0..12).sortedBy { it }).toMutableList()  //  (mutableListOf<Int>(1,11,12,24,25,37,38,50,51, 49,23,36,5).sortedBy { it }).toMutableList()   // //
+        createCardsArray()
         cardsInHand2 = (cardsShuffled.slice(13..25).sortedBy { it }).toMutableList()
         cardsInHand3 = (cardsShuffled.slice(26..38).sortedBy { it }).toMutableList()
         cardsInHand4 = (cardsShuffled.slice(39..51).sortedBy { it }).toMutableList()
@@ -834,6 +844,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 pointsListTemp[buPlayer1] = bidValue
             }
             scoreList = pointsListTemp
+            updateWholeScoreBoard()
             Handler(Looper.getMainLooper()).postDelayed({ gameState.value = 6 }, delayDeclareWinner)
         } else if (buFound1 == 1 && (totalGamePoints - bidTeamScore) >= (scoreLimit - bidValue)) { // if opponent score has reached target value & both partners are disclosed
             gameTurn.removeObserver(roundListener)
@@ -855,6 +866,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             pointsListTemp[bidder] = -1 * bidValue * 2
             pointsListTemp[buPlayer1] = -bidValue
             scoreList = pointsListTemp
+            updateWholeScoreBoard()
             Handler(Looper.getMainLooper()).postDelayed({ gameState.value = 6 }, delayDeclareWinner)
         }
     }
@@ -911,7 +923,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             } else if (gameTurn.value!! != 5 && gameTurn.value!! != 0) {
                 animatePlayer(playerTurn.value!!)
                 if (playerTurn.value!! == fromInt && !played) {
-                    displaySelfCards(filter = true)
+                    displaySelfCards()
                     countDownTimer(task = "PlayCard") // start countdown timer and run autoPlayCard
                     if (vibrateStatus) vibrationStart()
                 } else if (playerTurn.value!! != fromInt) {
@@ -955,9 +967,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
-    private fun validateSelfPlayedCard(view: View) {
+    private fun validateSelfPlayedCard(cardSelected: Int) {
         if (gameState.value!! == 5 && playerTurn.value!! == fromInt && gameTurn.value!! != 8 && gameTurn.value!! != 0) {
-            val cardSelected = view.tag.toString().toInt()
+//            val cardSelected = view.tag.toString().toInt()
             if (gameTurn.value!! == 1 || cardsSuit[cardSelected] == trumpStart || cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) == -1) {
                 countDownTimer("PlayCard", purpose = "cancel")
                 startNextTurn(cardSelected, forcePlay = false) // allow throw if first chance, or same suit as first turn or doesn't have same suit card
@@ -970,6 +982,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun startNextTurn(cardSelected: Int, forcePlay: Boolean) {
         if (!played || forcePlay) {
             if (!forcePlay) played = true // make it true only if human played not bot
@@ -984,8 +997,15 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 when (pt) {
                     1 -> {
                         ct1.value = cardSelected.toString().toInt()
+                        selfCardsArrayList.removeAt(cardsInHand.indexOf(cardSelected))
+                        adapterSelfCards.notifyItemRemoved(cardsInHand.indexOf(cardSelected))
+                        selfCardsArrayList.forEachIndexed { index, card ->
+                            val notify = card.filter || card.lastCard
+                            card.filter = false
+                            card.lastCard = false
+                            if(notify) adapterSelfCards.notifyItemChanged(index)
+                        }
                         cardsInHand.remove(cardSelected)
-                        displaySelfCards(animations = false) // refresh cards in hand only after first player turn not always
                     }
                     2 -> {
                         ct2.value = cardSelected.toString().toInt()
@@ -1000,9 +1020,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         cardsInHand4.remove(cardSelected)
                     }
                 }
-            }
-            if (pt == 1 && roundNumber == roundNumberLimit) {
-                binding.imageGallery.removeAllViews() // show no self cards after throwing last card
             }
             playerTurn.value = nextTurn(pt)
             gameTurn.value = gt + 1
@@ -1088,43 +1105,22 @@ class GameScreenAutoPlay : AppCompatActivity() {
         return suit
     }
 
-    @SuppressLint("NewApi", "CutPasteId")
-    private fun displaySelfCards(view: View = View(applicationContext), animations: Boolean = false, filter: Boolean = false, bidingRequest: Boolean = false) {
-        binding.imageGallery.removeAllViews()
-        binding.imageGallery.visibility = View.VISIBLE
-        val typedValue = TypedValue()
-        applicationContext.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, typedValue, true)
+    private fun createCardsArray() {
+        selfCardsArrayList.clear()
         for (x: Int in cardsInHand) {
-            val viewTemp = CardsItemListBinding.inflate(layoutInflater, binding.imageGallery, false)
-            if (x == cardsInHand[cardsInHand.size - 1]) {
-                viewTemp.imageViewDisplayCard.setPaddingRelative(resources.getDimensionPixelSize(R.dimen.paddingStartDisplayCardLast), 0, 0, 0)
-                viewTemp.imageViewDisplayCard.layoutParams.width = resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
-            }
-            viewTemp.imageViewDisplayCard.setImageResource(cardsDrawable[x])
-            if (filter && gameTurn.value!! > 1 && cardsSuit[x] != trumpStart && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1) {
-                viewTemp.imageViewDisplayCard.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.inActiveCard))
-            } else if (filter && gameTurn.value!! > 1 && cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1) {
-                viewTemp.imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_infinite_active_cards))
-                viewTemp.imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            } else viewTemp.imageViewDisplayCard.foreground = ContextCompat.getDrawable(applicationContext, typedValue.resourceId)
-            viewTemp.imageViewDisplayCard.tag = x.toString() // tag the card number to the image
-            if (cardsPoints.elementAt(x) != 0) {
-                viewTemp.textViewDisplayCard.text = "${cardsPoints.elementAt(x)}"
-                if (animations) viewTemp.textViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale)) //                if (animations) viewTemp.imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw_self_cards))
-            } else {
-                viewTemp.textViewDisplayCard.visibility = View.INVISIBLE
-            }
-            viewTemp.imageViewDisplayCard.setOnClickListener {
-                validateSelfPlayedCard(it)
-                viewTemp.imageViewDisplayCard.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.scale_highlight))
-            }
-            binding.imageGallery.addView(viewTemp.root)
+            val card = PlayingCardDescription(cardInt = x, cardDrawable = cardsDrawable[x], points = cardsPoints.elementAt(x))
+            selfCardsArrayList.add(card)
         }
-        if (animations) {
-            findViewById<ConstraintLayout>(R.id.playerCards).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
-        }
-        if (bidingRequest && activityExists) {
-            startBidding()
+    }
+
+    private fun displaySelfCards() {
+        val cardsPresentCheck = cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1
+        for (i in selfCardsArrayList.size-1 downTo  0) {
+            selfCardsArrayList[i].filter = gameTurn.value!! > 1 && cardsSuit[selfCardsArrayList[i].cardInt] != trumpStart && cardsPresentCheck
+            if(i<selfCardsArrayList.size-1){
+                selfCardsArrayList[i].lastCard = (!selfCardsArrayList[i].filter && selfCardsArrayList[i+1].filter) || ( !selfCardsArrayList[i].filter)
+            }
+            if(selfCardsArrayList[i].filter || selfCardsArrayList[i].lastCard) adapterSelfCards.notifyItemChanged(i)
         }
     }
 
@@ -1134,8 +1130,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
             //            findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).clearAnimation()
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
         }
-        binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
-        binding.imageGallery.clearAnimation()
+        binding.selfCards.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
+        binding.selfCards.clearAnimation()
     }
 
     private fun animateWinner() {
@@ -1329,7 +1325,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (it == fromInt && (bidder != it || !bidingStarted)) {
                 if (bidStatus[it - 1] == 1) { // show bid frame and ask to bid or pass
                     bidDone = false
-                    binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
+                    binding.selfCards.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
                     findViewById<ConstraintLayout>(R.id.frameAskBid).visibility = View.VISIBLE // this path is critical
                     findViewById<ConstraintLayout>(R.id.frameAskBid).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
                     countDownTimer("Bidding", purpose = "start")
@@ -1468,13 +1464,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
             if (bidStatus[i] == 0) {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
                 findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(applicationContext, R.drawable.pass)
-                if (iPlayer == fromInt) binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
+                if (iPlayer == fromInt) binding.selfCards.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
             } else {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
 
-                if (iPlayer == fromInt) binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
+                if (iPlayer == fromInt) binding.selfCards.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
             }
-            if (iPlayer == fromInt) binding.imageGallery.clearAnimation()
+            if (iPlayer == fromInt) binding.selfCards.clearAnimation()
         }
     }
 
@@ -1490,8 +1486,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
             findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
         }
-        binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
-        binding.imageGallery.clearAnimation()
+        binding.selfCards.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
+        binding.selfCards.clearAnimation()
         findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[bidder - 1]).visibility = View.VISIBLE
 
         findViewById<ImageView>(refIDMappedPartnerIconImageView[bidder - 1]).visibility = View.VISIBLE
@@ -1529,6 +1525,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         p4Coins = playerInfoCoins[3]
 
         updatePlayerNames()
+        adapterScoreHeader = ScoreHeaderAdapter(scoreHeaderArrayList)
+        binding.gridScoreHeader.adapter = adapterScoreHeader
         updateScoreTableHeader(showRank = false)
         for (i in 0 until nPlayers) {
             val j = i + nPlayers
@@ -1547,10 +1545,10 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
-    private fun shufflingWindow(time: Long = 4900, fadeOffTime: Long = 700, gameStateChange: Boolean = false) {
+    private fun shufflingWindow(time: Long = 4900, fadeOffTime: Long = 600, gameStateChange: Boolean = false) {
         shuffleOver = false
         if (soundStatus) Handler(Looper.getMainLooper()).postDelayed({
-            SoundManager.instance?.playShuffleSound() // soundShuffle.start()
+            SoundManager.instance?.playShuffleSound()
         }, 400) //delayed sound play of shuffling
         displayShufflingCards() //show suits cards and animate
         speak("Shuffling cards Please wait", speed = 1f)
@@ -1559,33 +1557,20 @@ class GameScreenAutoPlay : AppCompatActivity() {
             findViewById<ImageView>(R.id.imageViewWinnerCenter4).clearAnimation()
             findViewById<ImageView>(R.id.imageViewWinnerCenter4).visibility = View.GONE
             binding.relativeLayoutTableCards.visibility = View.GONE
-            binding.imageGallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_out))
+            binding.selfCards.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_out))
             Handler(Looper.getMainLooper()).postDelayed({
                 shuffleOver = true
-                displaySelfCards(animations = true, bidingRequest = true)
+                binding.selfCards.adapter = adapterSelfCards
+                binding.selfCards.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_in))
+                Handler(Looper.getMainLooper()).postDelayed({ if (activityExists) startBidding() }, 1500L)
             }, fadeOffTime)
         }, time)
     }
 
     private fun displayShufflingCards(view: View = View(this), sets: Int = 5, distribute: Boolean = true) {
-        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
         if (distribute) shufflingDistribute()
-        binding.imageGallery.removeAllViews()
-        for (xx: Int in 0 until sets) {
-            for (x: Int in 0..3) {
-                val viewTemp = CardsItemListSuitsBinding.inflate(layoutInflater, binding.imageGallery, false)  //inflater.inflate(R.layout.cards_item_list_suits, gallery, false)
-                viewTemp.imageViewDisplayCard1.setImageResource(PlayingCards().suitsDrawable[x])
-                viewTemp.imageViewDisplayCard1.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.clockwise_ccw))
-                if (x % 2 != 0) {
-                    viewTemp.imageViewDisplayCard1.setBackgroundColor(ContextCompat.getColor(this, R.color.cardsBackgroundDark))
-                } else {
-                    viewTemp.imageViewDisplayCard1.setBackgroundColor(ContextCompat.getColor(this, R.color.cardsBackgroundLight))
-                }
-                binding.imageGallery.addView(viewTemp.root)
-            }
-        }
-        findViewById<HorizontalScrollView>(R.id.horizontalScrollView1).foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
-        binding.imageGallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
+        binding.selfCards.adapter = adapterShuffleCards
+        binding.selfCards.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_left_right))
     }
 
     private fun shufflingDistribute() {
@@ -1687,14 +1672,15 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
     }
 
-    private fun loadRewardedInterstitialAd(){
+    private fun loadRewardedInterstitialAd() {
         loadRewardedInterAdTry += 1 // try 5 times
-        RewardedInterstitialAd.load(this, getString(R.string.reward_inter_admob), AdRequest.Builder().build(), object: RewardedInterstitialAdLoadCallback(){
+        RewardedInterstitialAd.load(this, getString(R.string.reward_inter_admob), AdRequest.Builder().build(), object : RewardedInterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 Log.d("RewardedInterstitialAd", "onAdFailedToLoad ${loadAdError.message}")
                 rewardedInterstitialAd = null
                 if (loadRewardedInterAdTry <= 2) loadRewardedInterstitialAd()
             }
+
             override fun onAdLoaded(rewardedInterstitialAd1: RewardedInterstitialAd) {
                 Log.d("RewardedInterstitialAd", "onAdLoaded")
                 loadRewardedInterAdTry = 0
@@ -1703,6 +1689,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         })
 
     }
+
     private fun showRewardedInterstitialAd() {
         if (rewardedInterstitialAd != null) {
             rewardedInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
@@ -1711,6 +1698,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     rewardedInterstitialAd = null
                     loadRewardedInterstitialAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("RewardedInterstitialAd", "onAdDismissedFullScreenContent")
                     rewardedInterstitialAd = null
@@ -1720,6 +1708,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         binding.startNextRoundButton.visibility = View.VISIBLE
                     }
                 }
+
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
@@ -1746,6 +1735,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             }
         })
     }
+
     private fun showInterstitialAd() {
         if (mInterstitialAd != null) {
             mInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
@@ -1754,6 +1744,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
+
                 override fun onAdDismissedFullScreenContent() {
                     Log.d("InterstitialAd", "onAdDismissedFullScreenContent")
                     mInterstitialAd = null
@@ -1762,6 +1753,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         binding.startNextRoundButton.visibility = View.VISIBLE
                     }
                 }
+
                 override fun onAdShowedFullScreenContent() {}
                 override fun onAdImpression() {}
             }
@@ -1852,7 +1844,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 textToSpeech.stop()
                 textToSpeech.shutdown()
             }
-        } catch (me: java.lang.Exception) {
+        } catch (_: java.lang.Exception) {
         }
         super.onDestroy()
 

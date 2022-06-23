@@ -13,23 +13,23 @@
         android:startOffset="600"
         android:toYDelta="10%p"/>
 
-    <translate
-        android:fromXDelta="0%p"
-        android:toXDelta="-20%p"
-        android:duration="700"
-        android:startOffset="850"
-        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
-    <translate
-        android:fromXDelta="-20%p"
-        android:toXDelta="20%p"
-        android:duration="700"
-        android:startOffset="1500"
-        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
-    <translate
-        android:fromXDelta="20%p"
-        android:toXDelta="0%p"
-        android:duration="900"
-        android:startOffset="2200"
-        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+<!--    <translate-->
+<!--        android:fromXDelta="0%p"-->
+<!--        android:toXDelta="-20%p"-->
+<!--        android:duration="700"-->
+<!--        android:startOffset="850"-->
+<!--        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>-->
+<!--    <translate-->
+<!--        android:fromXDelta="-20%p"-->
+<!--        android:toXDelta="20%p"-->
+<!--        android:duration="700"-->
+<!--        android:startOffset="1500"-->
+<!--        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>-->
+<!--    <translate-->
+<!--        android:fromXDelta="20%p"-->
+<!--        android:toXDelta="0%p"-->
+<!--        android:duration="900"-->
+<!--        android:startOffset="2200"-->
+<!--        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>-->
 
 </set>

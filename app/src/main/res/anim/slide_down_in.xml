@@ -6,12 +6,12 @@
         android:fromYDelta="100%p"
         android:toYDelta="-4%p"
         android:duration="400"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
 
     <translate android:fromYDelta="-4%p"
         android:toYDelta="4%p"
         android:duration="200"
-        android:interpolator="@android:anim/bounce_interpolator"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
         android:startOffset="400"/>
 
 </set>
