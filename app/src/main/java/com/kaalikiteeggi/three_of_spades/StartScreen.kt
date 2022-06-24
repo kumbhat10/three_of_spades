@@ -182,9 +182,7 @@ class StartScreen : AppCompatActivity() {
 			try {
 				refUsersData.document(uid).get().addOnSuccessListener { documentSnapshot ->
 					if (documentSnapshot.data != null) {
-						val setData = hashMapOf("n" to userGivenName, "ph" to userPhotoUrl, "e" to email, "uid" to uid)
-
-						refUsersData.document(uid).set(setData, SetOptions.merge())
+						refUsersData.document(uid).set(hashMapOf("n" to userGivenName, "ph" to userPhotoUrl, "e" to email, "uid" to uid), SetOptions.merge())
 							.addOnSuccessListener { startNextActivity(userGivenName) }
 							.addOnFailureListener { exception ->
 								binding.maskButtons.visibility = View.GONE

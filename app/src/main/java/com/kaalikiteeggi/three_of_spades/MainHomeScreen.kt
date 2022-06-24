@@ -412,7 +412,7 @@ class MainHomeScreen : AppCompatActivity() {
             startActivity(Intent(this, StartScreen::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
             finishAndRemoveTask()
         }
-        refUsersData.document(uid).get().addOnSuccessListener { dataSnapshot ->
+        fireStoreRef.get().addOnSuccessListener { dataSnapshot ->
             if (dataSnapshot.data != null) {
                 try {
                     premiumStatus = dataSnapshot.get("pr").toString().toInt() == 1
@@ -471,7 +471,7 @@ class MainHomeScreen : AppCompatActivity() {
                         nGamesPlayedDaily = 0
                         nGamesWonDaily = 0
                         totalDailyCoins = 0
-                        fireStoreRef.set(hashMapOf("LSD" to today, "scd" to 0, "p_daily" to 0, "w_daily" to 0, "b_daily" to 0, "nDRC" to consecutiveDay, "claim" to 0, "phone" to "${Build.MANUFACTURER} ${Build.MODEL}", "phAPI" to Build.VERSION.SDK_INT, "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
+                        fireStoreRef.set(hashMapOf("uid" to uid, "LSD" to today, "scd" to 0, "p_daily" to 0, "w_daily" to 0, "b_daily" to 0, "nDRC" to consecutiveDay, "claim" to 0, "phone" to "${Build.MANUFACTURER} ${Build.MODEL}", "phAPI" to Build.VERSION.SDK_INT, "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
                     } else if (today > getChangedDate(lastSeenDate, 1)) { // if more than 1 day gap , reset counter
                         consecutiveDay = 1
                         claimedToday = false
@@ -480,13 +480,13 @@ class MainHomeScreen : AppCompatActivity() {
                         nGamesPlayedDaily = 0
                         nGamesWonDaily = 0
                         totalDailyCoins = 0
-                        fireStoreRef.set(hashMapOf("LSD" to today, "scd" to 0, "p_daily" to 0, "w_daily" to 0, "b_daily" to 0, "nDRC" to consecutiveDay, "claim" to 0, "phone" to "${Build.MANUFACTURER} ${Build.MODEL}", "phAPI" to Build.VERSION.SDK_INT, "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
+                        fireStoreRef.set(hashMapOf("uid" to uid, "LSD" to today, "scd" to 0, "p_daily" to 0, "w_daily" to 0, "b_daily" to 0, "nDRC" to consecutiveDay, "claim" to 0, "phone" to "${Build.MANUFACTURER} ${Build.MODEL}", "phAPI" to Build.VERSION.SDK_INT, "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())
                     }
                     if(BuildConfig.DEBUG && !claimedToday && resources.getBoolean(R.bool.disable_daily_reward)) {
                         claimedToday = true
                         totalCoins += dailyRewardAmount  // reward with daily reward amount for watching video
                         userBasicInfo.score = totalCoins  // reward with daily reward amount for watching video
-                        refUsersData.document(uid).set(hashMapOf("sc" to totalCoins, "LSD" to today, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
+                        fireStoreRef.set(hashMapOf("uid" to uid, "sc" to totalCoins, "LSD" to today, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "nDRC" to consecutiveDay, "claim" to 1), SetOptions.merge())
                     }
                     userBasicInfo = extractUserData(dataSnapshot)
                     userDataFetched = true
@@ -507,7 +507,7 @@ class MainHomeScreen : AppCompatActivity() {
                     editor.apply()
                     editor.putBoolean("premium", premiumStatus) // write username to preference file
                     editor.apply()
-                    fireStoreRef.set(hashMapOf("LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "lang" to applicationContext.resources.configuration.locale.displayLanguage, "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())                    //					checkAccessToTrain()
+                    fireStoreRef.set(hashMapOf("uid" to uid, "LSDT" to SimpleDateFormat("HH:mm:ss z").format(Date()), "lang" to applicationContext.resources.configuration.locale.displayLanguage, "VC" to packageManager.getPackageInfo(packageName, 0).versionName.toString()), SetOptions.merge())                    //					checkAccessToTrain()
                 } catch (exception: java.lang.Exception) {
                     mAuth.signOut()
                     startActivity(Intent(this, StartScreen::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
@@ -963,16 +963,19 @@ class MainHomeScreen : AppCompatActivity() {
             override fun onCancelled(errorDataLoad: DatabaseError) {
                 onlineGameAllowedM = errorDataLoad.message
             }
-
             override fun onDataChange(data: DataSnapshot) {
                 if (data.exists()) {
-                    onlineGameAllowed = data.child("OnlineGame").value.toString().toInt() == 1
+                    val onlineGameAllowedVC = data.child("minVer").value.toString().toInt() <= packageManager.getPackageInfo(packageName,0).versionCode
+                    onlineGameAllowed = data.child("OnlineGame").value.toString().toInt() == 1 && onlineGameAllowedVC
                     onlineGameAllowedM = data.child("OnlineGameM").value.toString()
                     offlineGameAllowed = data.child("OfflineGame").value.toString().toInt() == 1
                     offlineGameAllowedM = data.child("OfflineGameM").value.toString()
-                    if (!onlineGameAllowed or !offlineGameAllowed) {
+                    if (!onlineGameAllowed or !offlineGameAllowed or !onlineGameAllowedVC) {
+                        SoundManager.instance!!.playErrorSound()
+                        speak("Please Update your app", ignoreSpeechStatus = true)
                         toastCenter(onlineGameAllowedM + "\n" + offlineGameAllowedM)
                     }
+                    if(!onlineGameAllowedVC) Handler(Looper.getMainLooper()).postDelayed({openPlayStore()},2300L)
                 }
             }
         })

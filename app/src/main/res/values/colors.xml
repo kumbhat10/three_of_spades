@@ -10,6 +10,7 @@
     <color name="colorOnSecondary">#000000</color>
     
     <color name="Black">#000000</color>
+    <color name="greyBlack">#C5C5C5</color>
     <color name="shimmerImageBackground">#FFFFFF</color>
     <color name="shimmerBackground">@color/Black</color>
     <color name="BlackTrans">#E4000000</color>

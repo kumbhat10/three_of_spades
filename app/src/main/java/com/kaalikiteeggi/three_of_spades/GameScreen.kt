@@ -195,7 +195,7 @@ class GameScreen : AppCompatActivity() {
     private var counterChat = 0
     private lateinit var onlineStatus: MutableList<Int>
     private lateinit var allCardsReset: MutableList<Int>
-    private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L else 300L
+    private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L else 9000L
     private var timeCountdownBid = if (!BuildConfig.DEBUG) 15000L else 1500L
     private var delayGameOver = if (BuildConfig.DEBUG) 3000L else 5000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
@@ -780,7 +780,7 @@ class GameScreen : AppCompatActivity() {
         }
         if (gameData.pt == fromInt && (gameData.bb != gameData.pt)) {
             if (gameData.bs[fromInt - 1] == 1) { // show bid frame and ask to bid or pass
-                binding.imageGallery.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
+                binding.selfCards.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.font_yellow))
                 binding.frameAskBid.visibility = View.VISIBLE // this path is critical
                 binding.frameAskBid.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
                 bidDone = false
@@ -1305,12 +1305,19 @@ class GameScreen : AppCompatActivity() {
     private fun startNextTurn(cardSelected: Int) {  // always called whenever played any card
         if (!played) {
             played = true
+            selfCardsArrayList.removeAt((cardsInHand as ArrayList<Long>).indexOf(cardSelected.toLong()))
+            adapterSelfCards.notifyItemRemoved((cardsInHand as ArrayList<Long>).indexOf(cardSelected.toLong()))
+            selfCardsArrayList.forEachIndexed { index, card ->
+                val notify = card.filter || card.lastCard
+                card.filter = false
+                card.lastCard = false
+                if(notify) adapterSelfCards.notifyItemChanged(index)
+            }
             (cardsInHand as ArrayList<Long>).remove(cardSelected.toLong())
             if (gameData.rn < roundNumberLimit) {
                 displaySelfCards()
             } else {
                 cardsInHand = mutableListOf(cardsIndexLimit)
-                binding.imageGallery.removeAllViews() // show no self cards after throwing last card
             }
             if (gameData.pt != gameData.bb) {  //if current player turn is not bidder then check if its partner or not and update together
                 if (nPlayers7) checkIfPartnerAndUpdateServer7(cardSelected, gameData.pt)
@@ -1418,6 +1425,9 @@ class GameScreen : AppCompatActivity() {
             binding.winnerLottie.setAnimation(R.raw.sad_lottie)
             binding.textResult.text = getString(R.string.resultLost)
         }
+        binding.textResult.visibility = View.VISIBLE
+        binding.winnerLottie.visibility = View.VISIBLE
+        binding.winnerLottie.playAnimation()
         p1Gain += gameData.s[1]
         p2Gain += gameData.s[2]
         p3Gain += gameData.s[3]
@@ -1872,12 +1882,12 @@ class GameScreen : AppCompatActivity() {
             if (gameData.bs[i] == 0) {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.progressBarPlayer2))
                 findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(this, R.drawable.pass)
-                if ("p$iPlayer" == from) binding.imageGallery.setBackgroundColor(ContextCompat.getColor(this, R.color.progressBarPlayer2))
+                if ("p$iPlayer" == from) binding.selfCards.setBackgroundColor(ContextCompat.getColor(this, R.color.progressBarPlayer2))
             } else {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
-                if ("p$iPlayer" == from) binding.imageGallery.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
+                if ("p$iPlayer" == from) binding.selfCards.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
             }
-            if ("p$iPlayer" == from) binding.imageGallery.clearAnimation()
+            if ("p$iPlayer" == from) binding.selfCards.clearAnimation()
         }
     }
 
@@ -1894,8 +1904,8 @@ class GameScreen : AppCompatActivity() {
             findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
         }
-        binding.imageGallery.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
-        binding.imageGallery.clearAnimation()
+        binding.selfCards.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
+        binding.selfCards.clearAnimation()
         if (gameData.bb > 0) findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[gameData.bb - 1]).visibility = View.VISIBLE
         if (gameData.bb > 0) {
             findViewById<ImageView>(refIDMappedPartnerIconImageView[gameData.bb - 1]).visibility = View.VISIBLE
@@ -1932,9 +1942,10 @@ class GameScreen : AppCompatActivity() {
         val cardsPresentCheck = cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1
         for (i in selfCardsArrayList.size - 1 downTo 0) {
             selfCardsArrayList[i].filter = gameData.rt > 1 && cardsSuit[selfCardsArrayList[i].cardInt] != gameData.rtr && cardsPresentCheck
-            if (i < selfCardsArrayList.size - 1) {
-                selfCardsArrayList[i].lastCard = (!selfCardsArrayList[i].filter && selfCardsArrayList[i + 1].filter) || (!selfCardsArrayList[i].filter)
-            }
+            selfCardsArrayList[i].lastCard = !selfCardsArrayList[i].filter
+//            if (i < selfCardsArrayList.size - 1) {
+//                selfCardsArrayList[i].lastCard = (!selfCardsArrayList[i].filter && selfCardsArrayList[i + 1].filter) || (!selfCardsArrayList[i].filter)
+//            }
             if (selfCardsArrayList[i].filter || selfCardsArrayList[i].lastCard) adapterSelfCards.notifyItemChanged(i)
         }
     }
@@ -1957,7 +1968,7 @@ class GameScreen : AppCompatActivity() {
                 binding.imageViewWinnerCenter.clearAnimation()
             }
             binding.relativeLayoutTableCards.visibility = View.GONE
-            binding.imageGallery.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_out))
+            binding.selfCards.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down_out))
             Handler(Looper.getMainLooper()).postDelayed({
                 shuffleOver = true
                 binding.selfCards.adapter = adapterSelfCards
