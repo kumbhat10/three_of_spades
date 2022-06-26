@@ -1436,7 +1436,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/selfCards"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_default="wrap"
         android:layout_height="@dimen/_71sdp"
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_5sdp"

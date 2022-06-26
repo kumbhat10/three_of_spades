@@ -187,7 +187,7 @@ class GameScreen : AppCompatActivity() {
     private var p5Gain = 0
     private var p6Gain = 0
     private var p7Gain = 0
-    private lateinit var cardsInHand: MutableList<Int>
+    private var cardsInHand =  mutableListOf<Int>()
 
     private lateinit var gameData: GameData
     private var gameLimitNoAds: Int = 2
@@ -570,12 +570,12 @@ class GameScreen : AppCompatActivity() {
                     try {
                         gameData = data.getValue<GameData>()!!
                         if (gameData.gs != 7) {
-                            cardsInHand = data.child("ch$fromInt").value as MutableList<Int>
-                            if(cardsInHand.size != selfCardsArrayList.size) {
-                                createCardsArray()
+                            cardsInHand.clear()
+                            (data.child("ch$fromInt").value as MutableList<Int>).forEach{card ->  cardsInHand.add(card)}
+                            if(cardsInHand.size != selfCardsArrayList.size || (!gameState1 && gameData.gs == 1)) {
+                                createCardsArray() //dummy - check every edge case whats best for all game state
                                 if(gameData.gs!=1) binding.selfCards.adapter = adapterSelfCards
                             }
-//                            if (gameData.gs in 2..5) displaySelfCards() //dummy check if required here anymore
                             tableCardsHandle()
                             bidValue.value = gameData.bv
                             if (currentBidder.value != gameData.bb) {
@@ -608,6 +608,7 @@ class GameScreen : AppCompatActivity() {
                             7 -> if (!gameState7) gameState7()
                         }
                     } catch (e: Exception) {
+                        Log.d("Error", e.message!!)
                         if (fromInt == 1 && gameData.gs != 7) {
                             showDialogueResetGame()
                         }
@@ -1305,19 +1306,20 @@ class GameScreen : AppCompatActivity() {
     private fun startNextTurn(cardSelected: Int) {  // always called whenever played any card
         if (!played) {
             played = true
-            selfCardsArrayList.removeAt((cardsInHand as ArrayList<Long>).indexOf(cardSelected.toLong()))
-            adapterSelfCards.notifyItemRemoved((cardsInHand as ArrayList<Long>).indexOf(cardSelected.toLong()))
+            selfCardsArrayList.removeAt(cardsInHand.indexOf(cardSelected))
+            cardsInHand.remove(cardSelected)
+            adapterSelfCards.notifyItemRemoved(cardsInHand.indexOf(cardSelected))
             selfCardsArrayList.forEachIndexed { index, card ->
                 val notify = card.filter || card.lastCard
                 card.filter = false
                 card.lastCard = false
                 if(notify) adapterSelfCards.notifyItemChanged(index)
             }
-            (cardsInHand as ArrayList<Long>).remove(cardSelected.toLong())
             if (gameData.rn < roundNumberLimit) {
-                displaySelfCards()
+//                displaySeelfCards()
             } else {
                 cardsInHand = mutableListOf(cardsIndexLimit)
+                binding.selfCards.adapter = adapterShuffleCards
             }
             if (gameData.pt != gameData.bb) {  //if current player turn is not bidder then check if its partner or not and update together
                 if (nPlayers7) checkIfPartnerAndUpdateServer7(cardSelected, gameData.pt)
