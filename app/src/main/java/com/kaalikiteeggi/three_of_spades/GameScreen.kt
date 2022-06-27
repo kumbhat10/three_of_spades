@@ -1303,11 +1303,11 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun startNextTurn(cardSelected: Int) {  // always called whenever played any card
         if (!played) {
             played = true
             selfCardsArrayList.removeAt(cardsInHand.indexOf(cardSelected))
-            cardsInHand.remove(cardSelected)
             adapterSelfCards.notifyItemRemoved(cardsInHand.indexOf(cardSelected))
             selfCardsArrayList.forEachIndexed { index, card ->
                 val notify = card.filter || card.lastCard
@@ -1315,6 +1315,7 @@ class GameScreen : AppCompatActivity() {
                 card.lastCard = false
                 if(notify) adapterSelfCards.notifyItemChanged(index)
             }
+            cardsInHand.remove(cardSelected)
             if (gameData.rn < roundNumberLimit) {
 //                displaySeelfCards()
             } else {
