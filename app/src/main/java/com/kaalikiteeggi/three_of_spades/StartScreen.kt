@@ -35,7 +35,6 @@ class StartScreen : AppCompatActivity() {
 	private lateinit var callBackManager: CallbackManager
 	private lateinit var mAuth: FirebaseAuth
 	private lateinit var mGoogleSignInClient: GoogleSignInClient
-	private var googleCode = 882
 	private var refUsersData = Firebase.firestore.collection("Users")
 	private var newUser: Boolean = false
 	private lateinit var userPhotoUrl: String

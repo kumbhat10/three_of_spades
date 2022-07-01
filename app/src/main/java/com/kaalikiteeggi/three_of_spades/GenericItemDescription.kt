@@ -10,7 +10,7 @@ class GenericItemDescription(icons: Int=0, name: String, val imageUrl: String ="
 class PlayerScoreItemDescription(val playerName: String, val imageUrl: String ="", val scored:Int=0, val target:Int=175, val points:Int=0, val rank:Spanned=rankStringFromInt(0), val showRank:Boolean = false) {
 
 }
-class PlayingCardDescription(val cardInt: Int=0, val cardDrawable: Int=0, val points: Int =0 , var filter:Boolean = false, var lastCard:Boolean = false, var animate:Boolean = false) {
+class PlayingCardDescription(val cardInt: Int=0, val cardDrawable: Int=0, val points: Int =0 , var filter:Boolean = false, var expandCard:Boolean = false, var animate:Boolean = false) {
 
 }
 class CreateRoomItemDescription(val gameInfo: String, val gameInfo1: String="  1 Deck", val gameInfo2: String="4 Players"){

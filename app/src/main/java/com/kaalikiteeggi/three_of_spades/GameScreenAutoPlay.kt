@@ -999,10 +999,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         ct1.value = cardSelected.toString().toInt()
                         selfCardsArrayList.removeAt(cardsInHand.indexOf(cardSelected))
                         adapterSelfCards.notifyItemRemoved(cardsInHand.indexOf(cardSelected))
+
                         selfCardsArrayList.forEachIndexed { index, card ->
-                            val notify = card.filter || card.lastCard
+                            val notify = if(index == selfCardsArrayList.size-1 ) card.filter || !card.expandCard else card.filter || card.expandCard
                             card.filter = false
-                            card.lastCard = false
+                            card.expandCard = index == selfCardsArrayList.size-1
                             if(notify) adapterSelfCards.notifyItemChanged(index)
                         }
                         cardsInHand.remove(cardSelected)
@@ -1115,12 +1116,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private fun displaySelfCards() {
         val cardsPresentCheck = cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(trumpStart) != -1
-        for (i in selfCardsArrayList.size-1 downTo  0) {
+        for (i in 0 until selfCardsArrayList.size) {
             selfCardsArrayList[i].filter = gameTurn.value!! > 1 && cardsSuit[selfCardsArrayList[i].cardInt] != trumpStart && cardsPresentCheck
-            if(i<selfCardsArrayList.size-1){
-                selfCardsArrayList[i].lastCard = (!selfCardsArrayList[i].filter && selfCardsArrayList[i+1].filter) || ( !selfCardsArrayList[i].filter)
-            }
-            if(selfCardsArrayList[i].filter || selfCardsArrayList[i].lastCard) adapterSelfCards.notifyItemChanged(i)
+            selfCardsArrayList[i].expandCard = if(i == selfCardsArrayList.size-1) true else !selfCardsArrayList[i].filter && cardsPresentCheck
+            val notify = if(i == selfCardsArrayList.size-1 ) selfCardsArrayList[i].filter else selfCardsArrayList[i].filter || selfCardsArrayList[i].expandCard
+            if(notify) adapterSelfCards.notifyItemChanged(i)
         }
     }
 

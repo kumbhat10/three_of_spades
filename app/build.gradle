@@ -11,7 +11,7 @@ if (!project.hasProperty("disable-performance-plugin")) {
 apply plugin: 'kotlin-kapt'
 android {
     namespace 'com.kaalikiteeggi.three_of_spades'
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildFeatures{
         viewBinding = true
     }
@@ -20,7 +20,7 @@ android {
         applicationId "com.kaalikiteeggi.three_of_spades"
         minSdkVersion 24
         //noinspection OldTargetApi
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 80
         versionName "80A"
         signingConfig signingConfigs.debug
@@ -87,6 +87,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.0.1'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.0.0'
+    implementation 'com.google.firebase:firebase-config-ktx:21.1.0'
     implementation 'com.google.firebase:firebase-messaging:23.0.6'
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.1.2'
     implementation 'com.google.firebase:firebase-perf-ktx:20.1.0'

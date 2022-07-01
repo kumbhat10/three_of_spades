@@ -187,7 +187,7 @@ class GameScreen : AppCompatActivity() {
     private var p5Gain = 0
     private var p6Gain = 0
     private var p7Gain = 0
-    private var cardsInHand =  mutableListOf<Int>()
+    private var cardsInHand = mutableListOf<Int>()
 
     private lateinit var gameData: GameData
     private var gameLimitNoAds: Int = 2
@@ -195,9 +195,9 @@ class GameScreen : AppCompatActivity() {
     private var counterChat = 0
     private lateinit var onlineStatus: MutableList<Int>
     private lateinit var allCardsReset: MutableList<Int>
-    private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L else 9000L
+    private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L else 1500L
     private var timeCountdownBid = if (!BuildConfig.DEBUG) 15000L else 1500L
-    private var delayGameOver = if (BuildConfig.DEBUG) 3000L else 5000L
+    private var delayGameOver = if (BuildConfig.DEBUG) 2000L else 5000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
 
     private var lastChat = ""
@@ -571,10 +571,10 @@ class GameScreen : AppCompatActivity() {
                         gameData = data.getValue<GameData>()!!
                         if (gameData.gs != 7) {
                             cardsInHand.clear()
-                            (data.child("ch$fromInt").value as MutableList<Int>).forEach{card ->  cardsInHand.add(card)}
-                            if(cardsInHand.size != selfCardsArrayList.size || (!gameState1 && gameData.gs == 1)) {
+                            (data.child("ch$fromInt").value as MutableList<Int>).forEach { card -> cardsInHand.add(card) }
+                            if ((cardsInHand.size != selfCardsArrayList.size && !cardsInHand.contains(cardsIndexLimit)) || (!gameState1 && gameData.gs == 1)) {
                                 createCardsArray() //dummy - check every edge case whats best for all game state
-                                if(gameData.gs!=1) binding.selfCards.adapter = adapterSelfCards
+                                if (gameData.gs != 1) binding.selfCards.adapter = adapterSelfCards
                             }
                             tableCardsHandle()
                             bidValue.value = gameData.bv
@@ -1309,15 +1309,16 @@ class GameScreen : AppCompatActivity() {
             played = true
             selfCardsArrayList.removeAt(cardsInHand.indexOf(cardSelected))
             adapterSelfCards.notifyItemRemoved(cardsInHand.indexOf(cardSelected))
+
             selfCardsArrayList.forEachIndexed { index, card ->
-                val notify = card.filter || card.lastCard
+                val notify = if(index == selfCardsArrayList.size-1 ) card.filter || !card.expandCard else card.filter || card.expandCard
                 card.filter = false
-                card.lastCard = false
+                card.expandCard = index == selfCardsArrayList.size-1
                 if(notify) adapterSelfCards.notifyItemChanged(index)
             }
             cardsInHand.remove(cardSelected)
             if (gameData.rn < roundNumberLimit) {
-//                displaySeelfCards()
+//                displaySelfCards()
             } else {
                 cardsInHand = mutableListOf(cardsIndexLimit)
                 binding.selfCards.adapter = adapterShuffleCards
@@ -1943,13 +1944,11 @@ class GameScreen : AppCompatActivity() {
     @SuppressLint("CutPasteId")
     private fun displaySelfCards() {
         val cardsPresentCheck = cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1
-        for (i in selfCardsArrayList.size - 1 downTo 0) {
+        for (i in 0 until selfCardsArrayList.size) {
             selfCardsArrayList[i].filter = gameData.rt > 1 && cardsSuit[selfCardsArrayList[i].cardInt] != gameData.rtr && cardsPresentCheck
-            selfCardsArrayList[i].lastCard = !selfCardsArrayList[i].filter
-//            if (i < selfCardsArrayList.size - 1) {
-//                selfCardsArrayList[i].lastCard = (!selfCardsArrayList[i].filter && selfCardsArrayList[i + 1].filter) || (!selfCardsArrayList[i].filter)
-//            }
-            if (selfCardsArrayList[i].filter || selfCardsArrayList[i].lastCard) adapterSelfCards.notifyItemChanged(i)
+            selfCardsArrayList[i].expandCard = if (i == selfCardsArrayList.size - 1) true else !selfCardsArrayList[i].filter && cardsPresentCheck
+            val notify = if (i == selfCardsArrayList.size - 1) selfCardsArrayList[i].filter else selfCardsArrayList[i].filter || selfCardsArrayList[i].expandCard
+            if (notify) adapterSelfCards.notifyItemChanged(i)
         }
     }
 

@@ -100,7 +100,7 @@ class MainHomeScreen : AppCompatActivity() {
 
     private var rankAllTimeSetupDone = false
     private var rankDailySetupDone = false
-    private val limitFetchOnceAT = 15L
+    private val limitFetchOnceAT = 20L
     private val limitFetchOnce = 10L
     private var lastSeenLimitAT = getChangedDate(today, -7)
     private var maxItemsFetchAT = 50
@@ -1473,7 +1473,6 @@ class MainHomeScreen : AppCompatActivity() {
                         super.onScrollStateChanged(recyclerView, newState)
                         if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) isScrollingAllTime = true
                     }
-
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
                         val itemCount = layoutManager.itemCount

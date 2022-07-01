@@ -1,7 +1,6 @@
 package com.kaalikiteeggi.three_of_spades
 
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +12,12 @@ import com.kaalikiteeggi.three_of_spades.databinding.CardsItemListBinding
 class SelfCardListAdapter(private val cardsArray: ArrayList<PlayingCardDescription>, private val output: (Int) -> Unit) : RecyclerView.Adapter<SelfCardListAdapter.SelfCardListViewHolder>() {
 
     class SelfCardListViewHolder(private val binder: CardsItemListBinding) : RecyclerView.ViewHolder(binder.root) {
-        fun bind(card: PlayingCardDescription, lastCard:Boolean = false) {
+        fun bind(card: PlayingCardDescription, lastCard: Boolean = false) {
             binder.imageViewDisplayCard.setImageResource(card.cardDrawable)
             if (lastCard) {
                 binder.imageViewDisplayCard.setPaddingRelative(0, 0, 0, 0)
                 binder.imageViewDisplayCard.layoutParams.width = binder.root.resources.getDimensionPixelSize(R.dimen.widthDisplayCardLast)
-            }else{
+            } else {
                 binder.imageViewDisplayCard.setPaddingRelative(0, 0, binder.root.resources.getDimensionPixelSize(R.dimen.paddingOtherDisplayCard), 0)
                 binder.imageViewDisplayCard.layoutParams.width = binder.root.resources.getDimensionPixelSize(R.dimen.widthDisplayCardOthers)
             }
@@ -43,16 +42,16 @@ class SelfCardListAdapter(private val cardsArray: ArrayList<PlayingCardDescripti
     override fun onBindViewHolder(holder: SelfCardListViewHolder, position: Int) {
         val card = cardsArray[position]
 
-        holder.bind(card, lastCard = card.lastCard ||(position == cardsArray.size - 1))
+        holder.bind(card, lastCard = card.expandCard || (position == cardsArray.size - 1))
 
-        if (card.animate) holder.itemView.setOnClickListener { view ->
-            view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.zoomout_center))
+        holder.itemView.setOnClickListener { view ->
             output(card.cardInt)
-        } else holder.itemView.setOnClickListener { view ->
-            view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.scale_highlight))
-            output(card.cardInt)
+            if (card.filter) view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.scale_highlight))
+            else view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.zoomout_center))
         }
+
     }
+
     override fun getItemCount(): Int {
         return cardsArray.size
     }
