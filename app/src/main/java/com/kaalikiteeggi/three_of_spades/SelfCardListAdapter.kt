@@ -46,10 +46,9 @@ class SelfCardListAdapter(private val cardsArray: ArrayList<PlayingCardDescripti
 
         holder.itemView.setOnClickListener { view ->
             output(card.cardInt)
-            if (card.filter) view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.scale_highlight))
-            else view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.zoomout_center))
+            if (!card.filter && card.expandCard && position != cardsArray.size - 1) view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.slide_up_out))
+            else view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.scale_highlight))
         }
-
     }
 
     override fun getItemCount(): Int {
