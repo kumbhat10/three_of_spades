@@ -261,7 +261,7 @@ class GameScreen : AppCompatActivity() {
         playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
         val userStats = intent.getIntegerArrayListExtra("userStats")!!
         val userStatsDaily = intent.getIntegerArrayListExtra("userStatsDaily")!!
-        playerInfoCoins = intent.getStringArrayListExtra("playerInfoCoins") as ArrayList<Int>
+        playerInfoCoins = intent.getIntegerArrayListExtra("playerInfoCoins") as ArrayList<Int>
         nPlayers = intent.getIntExtra("nPlayers", 0)
 
         nGamesPlayed = userStats[0]
@@ -572,7 +572,7 @@ class GameScreen : AppCompatActivity() {
                         if (gameData.gs != 7) {
                             cardsInHand.clear()
                             (data.child("ch$fromInt").value as MutableList<Int>).forEach { card -> cardsInHand.add(card) }
-                            if ((cardsInHand.size != selfCardsArrayList.size && !cardsInHand.contains(cardsIndexLimit)) || (!gameState1 && gameData.gs == 1)) {
+                            if ((cardsInHand.size != selfCardsArrayList.size  || !gameState1 && gameData.gs == 1) && !cardsInHand.contains(cardsIndexLimit)) {
                                 createCardsArray() //dummy - check every edge case whats best for all game state
                                 if (gameData.gs != 1) binding.selfCards.adapter = adapterSelfCards
                             }
@@ -1321,7 +1321,7 @@ class GameScreen : AppCompatActivity() {
 //                displaySelfCards()
             } else {
                 cardsInHand = mutableListOf(cardsIndexLimit)
-                binding.selfCards.adapter = adapterShuffleCards
+//                binding.selfCards.adapter = adapterShuffleCards
             }
             if (gameData.pt != gameData.bb) {  //if current player turn is not bidder then check if its partner or not and update together
                 if (nPlayers7) checkIfPartnerAndUpdateServer7(cardSelected, gameData.pt)
