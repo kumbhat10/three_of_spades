@@ -41,14 +41,6 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         tools:ignore="DataExtractionRules,UnusedAttribute">
 
-
-        <!--        <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled"-->
-        <!--            android:value="false"/>-->
-        <!--        <meta-data android:name="com.facebook.sdk.AutoInitEnabled"-->
-        <!--            android:value="false"/>-->
-        <!--        <meta-data android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"-->
-        <!--            android:value="true"/>-->
-
         <meta-data
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />

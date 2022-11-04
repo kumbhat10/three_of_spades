@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER", "UNCHECKED_CAST", "PLUGIN_WARNING", "ImplicitThis", "DEPRECATION")
+@file:Suppress("UNUSED_PARAMETER", "ImplicitThis", "DEPRECATION")
 
 package com.kaalikiteeggi.three_of_spades
 
@@ -438,10 +438,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 binding.textWinner.visibility = View.VISIBLE
                 binding.textLoser.visibility = View.VISIBLE
                 binding.textResult.visibility = View.VISIBLE
-                binding.konfettLottie.visibility = View.VISIBLE
+                binding.konfettiLottie.visibility = View.VISIBLE
                 binding.winnerLottie.visibility = View.VISIBLE
+                binding.winnerLottie.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
                 binding.winnerLottie.playAnimation()
-                binding.konfettLottie.playAnimation()
+                binding.konfettiLottie.playAnimation()
             } else {
                 binding.startNextRoundButton.updateLayoutParams<ConstraintLayout.LayoutParams> { verticalBias = 0.5F }
                 binding.gridLoser.visibility = View.GONE
@@ -449,10 +450,11 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 binding.textWinner.visibility = View.GONE
                 binding.textLoser.visibility = View.GONE
                 binding.textResult.visibility = View.GONE
-                binding.konfettLottie.visibility = View.GONE
+                binding.konfettiLottie.visibility = View.GONE
                 binding.winnerLottie.visibility = View.GONE
+                binding.winnerLottie.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
                 binding.winnerLottie.cancelAnimation()
-                binding.konfettLottie.cancelAnimation()
+                binding.konfettiLottie.cancelAnimation()
             }
         }
         firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
@@ -618,6 +620,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         }
         binding.textResult.visibility = View.VISIBLE
         binding.winnerLottie.visibility = View.VISIBLE
+        binding.winnerLottie.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.tint_background_lottie))
         binding.winnerLottie.playAnimation()
 
         p1Gain += scoreList[1]
@@ -1513,7 +1516,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun updatePlayerInfo() {
         playerInfo = intent.getStringArrayListExtra("playerInfo") as ArrayList<String>
-        val playerInfoCoins = intent.getStringArrayListExtra("playerInfoCoins") as ArrayList<Int>
+        val playerInfoCoins = intent.getIntegerArrayListExtra("playerInfoCoins") as ArrayList<Int>
 
         p1 = playerInfo[0]
         p2 = playerInfo[1]
@@ -1531,7 +1534,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         for (i in 0 until nPlayers) {
             val j = i + nPlayers
             if (playerInfo[j].isNotEmpty()) {
-                Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().error(R.drawable.user_photo).into(findViewById<ImageView>(refIDMappedImageView[i]))
+                Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().transform(CircleTransform()).error(R.drawable.user_photo).into(findViewById<ImageView>(refIDMappedImageView[i]))
             }
         }
     }

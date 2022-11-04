@@ -434,10 +434,11 @@ class GameScreen : AppCompatActivity() {
                 binding.textWinner.visibility = View.VISIBLE
                 binding.textLoser.visibility = View.VISIBLE
                 binding.textResult.visibility = View.VISIBLE
-                binding.konfettLottie.visibility = View.VISIBLE
+                binding.konfettiLottie.visibility = View.VISIBLE
                 binding.winnerLottie.visibility = View.VISIBLE
+                binding.winnerLottie.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
                 binding.winnerLottie.playAnimation()
-                binding.konfettLottie.playAnimation()
+                binding.konfettiLottie.playAnimation()
             } else {
                 binding.startNextRoundButton.updateLayoutParams<ConstraintLayout.LayoutParams> { verticalBias = 0.5F }
                 binding.gridLoser.visibility = View.GONE
@@ -445,10 +446,11 @@ class GameScreen : AppCompatActivity() {
                 binding.textWinner.visibility = View.GONE
                 binding.textLoser.visibility = View.GONE
                 binding.textResult.visibility = View.GONE
-                binding.konfettLottie.visibility = View.GONE
+                binding.konfettiLottie.visibility = View.GONE
                 binding.winnerLottie.visibility = View.GONE
+                binding.winnerLottie.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
                 binding.winnerLottie.cancelAnimation()
-                binding.konfettLottie.cancelAnimation()
+                binding.konfettiLottie.cancelAnimation()
             }
         }
         p1s.value = 0
@@ -737,7 +739,7 @@ class GameScreen : AppCompatActivity() {
         for (i in 0 until nPlayers) {
             val j = i + nPlayers // playerInfo has first nPlayers elements as name and later nPlayers elements as profile pic URL so offsetting with nPlayers
             if (playerInfo[j].isNotEmpty() && i != fromInt - 1) {
-                Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().error(R.drawable.user_photo).into(findViewById<ImageView>(refIDMappedImageView[i]))
+                Picasso.get().load(playerInfo[j]).resize(300, 300).centerCrop().transform(CircleTransform()).error(R.drawable.user_photo).into(findViewById<ImageView>(refIDMappedImageView[i]))
             }
         }
         findViewById<ImageView>(refIDMappedImageView[fromInt - 1]).visibility = View.INVISIBLE
@@ -1172,8 +1174,8 @@ class GameScreen : AppCompatActivity() {
             if (fromInt == gameData.bb || fromInt == gameData.p1) {
                 speak("Sorry Your team lost")
             } else {
-                binding.winnerLottie.visibility = View.VISIBLE
-                binding.winnerLottie.playAnimation()
+//                binding.winnerLottie.visibility = View.VISIBLE
+//                binding.winnerLottie.playAnimation()
                 speak("Well done!! Your team won")
             }
             if (gameData.bb == fromInt) { // bidder will change game state to 6
@@ -1430,6 +1432,7 @@ class GameScreen : AppCompatActivity() {
             binding.textResult.text = getString(R.string.resultLost)
         }
         binding.textResult.visibility = View.VISIBLE
+        binding.winnerLottie.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.tint_background_lottie))
         binding.winnerLottie.visibility = View.VISIBLE
         binding.winnerLottie.playAnimation()
         p1Gain += gameData.s[1]

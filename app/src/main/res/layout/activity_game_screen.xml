@@ -2234,7 +2234,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/konfettLottie"
+        android:id="@+id/konfettiLottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/shine_confetti_gs"
@@ -2272,7 +2272,7 @@
         android:gravity="center"
         android:verticalSpacing="@dimen/_5sdp"
         android:numColumns="2"
-        android:visibility="visible"
+        android:visibility="gone"
         android:stretchMode="spacingWidthUniform"
         app:layout_constraintEnd_toEndOf="@+id/guideWinner"
         app:layout_constraintStart_toStartOf="parent"
@@ -2296,6 +2296,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/winnerLottie"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:background="@drawable/tint_background_lottie"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/trophy_lottie"
+        app:lottie_repeatCount="-1" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textResult"
         android:layout_width="wrap_content"
@@ -2316,21 +2332,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/winnerLottie"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:scaleX="1"
-        android:scaleY="1"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/trophy_lottie"
-        app:lottie_repeatCount="-1" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textWinner"

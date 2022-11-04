@@ -14,11 +14,11 @@
         app:layout_constraintWidth_max="@dimen/_30sdp"
         android:layout_height="@dimen/_14sdp"
         android:layout_marginBottom="@dimen/_minus1sdp"
-        android:background="@drawable/greenrectanglesimple"
+        android:background="@drawable/bluerectanglesimple"
         android:gravity="center"
         android:visibility="visible"
         android:text="@string/_10_pts"
-        android:textColor="@color/Black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="@dimen/_9ssp" />
 
