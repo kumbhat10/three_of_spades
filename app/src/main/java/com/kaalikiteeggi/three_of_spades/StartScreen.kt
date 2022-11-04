@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.activity.result.ActivityResultLauncher
@@ -117,6 +118,7 @@ class StartScreen : AppCompatActivity() {
 		mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 		binding.googleSignInButton.setOnClickListener {
 			it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
+			Log.d("Login","Login button clicked")
 			SoundManager.instance?.playUpdateSound()
 			resultLauncher.launch(mGoogleSignInClient.signInIntent)
 			binding.maskButtons.visibility = View.VISIBLE
@@ -143,10 +145,12 @@ class StartScreen : AppCompatActivity() {
 				} else {
 					SoundManager.instance?.playErrorSound() //soundError.start()
 					toastCenter("${exception.message} \n PLease try again or use other method")
+					Log.d("Login error", exception.message.toString())
 				}
 			} catch (error: Exception) {
 				SoundManager.instance?.playErrorSound() //soundError.start()
 				toastCenter("${exception.message} \n PLease try again or use other method")
+				Log.d("Login error", exception.message.toString())
 			}
 
 		}

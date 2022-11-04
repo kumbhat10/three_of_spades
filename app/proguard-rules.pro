@@ -14,7 +14,7 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
--keepattributes SourceFile,LineNumberTable
+-keepattributes Signature, SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
 -keepclassmembers class com.kaalikiteeggi.three_of_spades.** { *; }
 # If you keep the line number information, uncomment this to
@@ -40,6 +40,7 @@
 -keep class com.iab.* {*;}
 -dontwarn com.iab.**
 -dontwarn com.google.firebase.messaging.TopicOperation$TopicOperations
+-dontwarn com.google.protobuf.java_com_google_android_gmscore_sdk_target_granule__proguard_group_gtm_N1281923064GeneratedExtensionRegistryLite$Loader
 # For communication with AdColony's WebView
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
@@ -49,8 +50,10 @@
 }
 
 -keep class org.webrtc.* { *; }
--keep class com.google.android.gms.*
-{ *; }
+-keep class com.google.android.gms.* { *; }
+-keep public class com.google.firebase.** {*;}
+-keep class com.google.android.gms.internal.** {*;}
+-keepclasseswithmembers class com.google.firebase.FirebaseException
 
 -dontwarn com.google.android.gms.**
 -dontwarn android.media.**
