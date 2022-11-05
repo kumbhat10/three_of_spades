@@ -1,6 +1,5 @@
 package com.kaalikiteeggi.three_of_spades
 
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -25,7 +24,7 @@ class ChatRecyclerAdapter(private val chatArray: ArrayList<ChatMessage>,  val us
 			}else{
 				binder.chatText.setTextColor(ContextCompat.getColor(binder.root.context, R.color.font_grey_settings))
 			}
-			if(photoUrl.isNotEmpty()) Picasso.get().load(photoUrl).resize(100, 100).error(R.drawable.user_photo).into(binder.userPhoto)
+			if(photoUrl.isNotEmpty()) Picasso.get().load(photoUrl).resize(100, 100).transform(CircleTransform()).error(R.drawable.user_photo).into(binder.userPhoto)
 		}
 	}
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
