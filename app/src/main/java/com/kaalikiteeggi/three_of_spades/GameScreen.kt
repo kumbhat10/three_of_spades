@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER", "UNCHECKED_CAST", "PLUGIN_WARNING", "ImplicitThis", "DEPRECATION")
+@file:Suppress("UNUSED_PARAMETER", "UNCHECKED_CAST", "ImplicitThis", "DEPRECATION")
 
 package com.kaalikiteeggi.three_of_spades
 
@@ -14,6 +14,7 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -199,6 +200,7 @@ class GameScreen : AppCompatActivity() {
     private var timeCountdownBid = if (BuildConfig.DEBUG) 1500L else 20000L
     private var delayGameOver = if (BuildConfig.DEBUG) 1000L else 5000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
+    private var moveViewDuration = 350L
 
     private var lastChat = ""
     private var lastChatFrom = 1
@@ -309,7 +311,7 @@ class GameScreen : AppCompatActivity() {
 
             override fun onFinish() {
                 autoPlayCard()
-                if (soundStatus && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)  )) SoundManager.instance?.playTimerSound()
+                if (soundStatus && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)  )) SoundManager.instance?.playTimerSound()
                 if (vibrateStatus) vibrationStart()
                 binding.progressbarTimer.progress = 0
                 binding.closeGameRoomIcon.visibility = View.VISIBLE
@@ -344,7 +346,7 @@ class GameScreen : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).postDelayed({
                         binding.frameAskBid.visibility = View.GONE
                         binding.frameAskBid.clearAnimation()
-                    }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 100L else 180L)
+                    }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 180L)
                     speak("Time's Up ${playerName(fromInt)}. You can't bid now", speed = 1.05f)
                 }
             }
@@ -653,7 +655,7 @@ class GameScreen : AppCompatActivity() {
 
         if (fromInt == 1) {
             centralText("Restarting Game", displayTime = 0)
-            Handler(Looper.getMainLooper()).postDelayed({ startNextGame(View(this)) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 500L else 1500L)
+            Handler(Looper.getMainLooper()).postDelayed({ startNextGame(View(this)) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1500L)
         } else {
             centralText("Host has restarted Game", displayTime = 0)
             speak("Host has restarted Game")
@@ -770,7 +772,7 @@ class GameScreen : AppCompatActivity() {
         }
         if (gameData.bvo < gameData.bv && bidingStarted && soundStatus) {
             speak("${playerName(gameData.bb)} bid ${gameData.bv}", speed = 1f)
-            moveView(binding.bidCoin, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = bidCoinX, targetViewMoveY = bidCoinY)
+            moveView2(binding.bidCoin, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = bidCoinX, targetViewMoveY = bidCoinY)
         } else if (bidingStarted && soundStatus && previousPlayerTurn != gameData.pt) speak("${playerName(previousPlayerTurn)} passed", speed = 1f) //                        else if (soundStatus) SoundManager.instance?.playUpdateSound() //
         binding.frameAskBid.visibility = View.GONE //biding frame invisible
         resetBackgroundAnimationBidding() //set pass label on photo if passed
@@ -822,16 +824,28 @@ class GameScreen : AppCompatActivity() {
         return if ((current == 7 && nPlayers7) || (current == 4 && nPlayers4)) 1 else current + 1
     }
 
-    private fun moveView(viewToMove: View, fromView: View, duration: Long = 350, targetViewMoveX: Float = 30F, targetViewMoveY: Float = 30F) {
+    private fun moveView2(viewToMove: View, fromView: View, duration: Long = 350, targetViewMoveX: Float = 30F, targetViewMoveY: Float = 30F) {
         if (targetViewMoveX != 30F && targetViewMoveY != 30F) {
 //            val xViewToMove = if (targetViewMoveX != 30F) targetViewMoveX else viewToMove.x
 //            val yViewToMove = if (targetViewMoveY != 30F) targetViewMoveY else viewToMove.y
             viewToMove.x = fromView.x
             viewToMove.y = fromView.y
-            viewToMove.animate().x(targetViewMoveX).y(targetViewMoveY).duration = duration
+            viewToMove.animate().x(targetViewMoveX).y(targetViewMoveY).setDuration(duration).interpolator = AccelerateDecelerateInterpolator()
         }
     }
+    private fun moveView(viewToMove: View, fromView: View? = null, fromX: Float = 0F, fromY: Float = 0F, duration: Long = moveViewDuration) {
+        val xViewToMove = viewToMove.x
+        val yViewToMove = viewToMove.y
+        if (fromView != null) {
+            viewToMove.x = fromView.x
+            viewToMove.y = fromView.y
+        } else {
+            viewToMove.x = fromX
+            viewToMove.y = fromY
+        }
+        viewToMove.animate().x(xViewToMove).y(yViewToMove).setDuration(duration).interpolator = AccelerateDecelerateInterpolator()
 
+    }
     fun askToBid(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (!bidDone) {
@@ -854,7 +868,7 @@ class GameScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.frameAskBid.visibility = View.GONE
                 binding.frameAskBid.clearAnimation()
-            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 100L else 180)
+            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 180)
         }
     }
 
@@ -874,11 +888,10 @@ class GameScreen : AppCompatActivity() {
         if (gameData.bb != fromInt && gameData.bb != 0) {     //  show to everyone except bidder
             binding.frameTrumpSelection.visibility = View.GONE
             speak("${playerName(gameData.bb)} won bid. Waiting to choose trump")
-            centralText("Waiting for ${playerName(gameData.bb)} \n to choose Trump", 0)
         } else { // show to gameData.bb only
             binding.bidNowImage.visibility = View.GONE // redundant not required really
             speak("Well done!! Choose your trump now", speed = 1f, queue = TextToSpeech.QUEUE_ADD)
-            if (!(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen))) {
+            if (!(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online))) {
                 binding.frameTrumpSelection.visibility = View.VISIBLE
                 binding.frameTrumpSelection.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_center))
             } else {
@@ -929,7 +942,7 @@ class GameScreen : AppCompatActivity() {
                 speak("Choose your partner card", speed = 1.1f)
             } //choose 1st buddy text
             if (nPlayers4) {
-                if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) {
+                if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) {
                     Handler(Looper.getMainLooper()).postDelayed({
                         autoPartnerSelect()
                     }, timeAutoPlayMode)
@@ -957,16 +970,8 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun autoPartnerSelect() {
-        val cardsInHandTemp = when (gameData.bb) {
-            1 -> gameData.ch1
-            2 -> gameData.ch2
-            3 -> gameData.ch3
-            4 -> gameData.ch4
-            5 -> gameData.ch5
-            6 -> gameData.ch6
-            else -> gameData.ch7
-        }
 
+        val cardsInHandTemp = listOf(gameData.ch1, gameData.ch2, gameData.ch3, gameData.ch4, gameData.ch5, gameData.ch6, gameData.ch7)[gameData.bb - 1]
         var partnerCardSelected = 1
         for (i in PlayingCards().cardsIndexSortedPartner4.slice(1..51)) {
             if (!cardsInHandTemp.contains(i)) {
@@ -978,10 +983,9 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun partnerSelectClick4(cardSelected: Int) { // assumption is cardsInHand already updated
-        if ((cardsInHand as ArrayList<Long>).contains(cardSelected.toLong())) {
+        if (cardsInHand.contains(cardSelected)) {
             if (soundStatus) SoundManager.instance?.playErrorSound() //
             if (vibrateStatus) vibrationStart()
-            toastCenter("$selfName, You have this card")
             speak("You have this card. Choose any other card", speed = 1.1f)
         } else {
             writeToGameDatabase(data = mutableMapOf("pc1" to cardSelected, "pc1s" to 11, "gs" to 5))
@@ -996,14 +1000,13 @@ class GameScreen : AppCompatActivity() {
     private fun partnerSelectClick7(cardSelected: Int) { // assumption is cardsInHand is already updated & latest
         if (counterPartnerSelection == 0) {
             when {
-                (cardsInHand as List<Long>).contains((cardSelected * 2).toLong()) and (cardsInHand as List<Long>).contains((cardSelected * 2 + 1).toLong()) -> {
+                cardsInHand.contains(cardSelected * 2) and cardsInHand.contains(cardSelected * 2 + 1) -> {
                     if (soundStatus) SoundManager.instance?.playErrorSound()
                     if (vibrateStatus) vibrationStart()
-                    toastCenter("$selfName, You already have both of selected card")
                     speak("You already have both card")
                 }
 
-                (cardsInHand as List<Long>).contains((cardSelected * 2).toLong()) or (cardsInHand as List<Long>).contains((cardSelected * 2 + 1).toLong()) -> {
+                cardsInHand.contains(cardSelected * 2) or cardsInHand.contains(cardSelected * 2 + 1) -> {
                     if (soundStatus) SoundManager.instance?.playUpdateSound()
                     writeToGameDatabase(data = mutableMapOf("pc1" to cardSelected, "pc1s" to 11)) // Only card
                     binding.buddyImage1.setImageResource(cardsDrawablePartner[cardSelected])
@@ -1022,12 +1025,11 @@ class GameScreen : AppCompatActivity() {
                 }
             }
         } else if (counterPartnerSelection == 1) {
-            if ((cardsInHand as List<Long>).contains((cardSelected * 2).toLong()) and (cardsInHand as List<Long>).contains((cardSelected * 2 + 1).toLong())) {
+            if (cardsInHand.contains(cardSelected * 2) and cardsInHand.contains(cardSelected * 2 + 1)) {
                 if (soundStatus) SoundManager.instance?.playErrorSound() //
                 if (vibrateStatus) vibrationStart()
-                toastCenter("$selfName, You already have both of same cards")
                 speak("You have both. Choose any other card")
-            } else if ((cardsInHand as List<Long>).contains((cardSelected * 2).toLong()) or (cardsInHand as List<Long>).contains((cardSelected * 2 + 1).toLong())) {
+            } else if (cardsInHand.contains(cardSelected * 2) or cardsInHand.contains(cardSelected * 2 + 1)) {
                 if (gameData.pc1 != cardSelected) {
                     writeToGameDatabase(data = mutableMapOf("pc2" to cardSelected, "pc2s" to 11, "gs" to 5))  // bidder has one of card in his hand
                     counterPartnerSelection = 0
@@ -1197,7 +1199,7 @@ class GameScreen : AppCompatActivity() {
         // if the game turn changes then only proceed
         clearAllAnimation()
         if (gameData.rt == nPlayers + 1) { // Round finished - Declare round winner
-            handlerDeclareWinner.postDelayed({ declareRoundWinner() }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else 700)
+            handlerDeclareWinner.postDelayed({ declareRoundWinner() }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else 700)
         } else {
             handlerDeclareWinner.removeCallbacksAndMessages(null)
             if (gameData.rt != 8 && gameData.rt != 0) {
@@ -1226,7 +1228,7 @@ class GameScreen : AppCompatActivity() {
         roundWinner = roundCards.toIntArray().indexOf(winnerCard) + 1
         animatePlayer(roundWinner)
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_big_fast))
-        handlerDeclareWinner.postDelayed({ animateWinner() }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 0L else 600L)
+        handlerDeclareWinner.postDelayed({ animateWinner() }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 0L else 600L)
         handlerDeclareWinner.postDelayed({ // start after 1.5 seconds
             if (gameData.rn < roundNumberLimit) {
                 if (roundWinner == fromInt) { // only winner can start next round
@@ -1238,7 +1240,7 @@ class GameScreen : AppCompatActivity() {
                     endGameRound() // update points of last round to server by winner
                 }
             }
-        }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else 1500)
+        }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else 1500)
     }
 
     private fun animateWinner() {
@@ -1249,14 +1251,14 @@ class GameScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.imageViewWinnerCenter.visibility = View.GONE
                 textViewCenterPoint.visibility = View.GONE
-            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 500L else 1000)
+            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000)
         } else if (nPlayers4) {
             binding.imageViewWinnerCenter4.visibility = View.VISIBLE
             if (roundWinner > 0) binding.imageViewWinnerCenter4.startAnimation(AnimationUtils.loadAnimation(this, refIDMappedTableWinnerAnim[roundWinner - 1]))
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.imageViewWinnerCenter4.visibility = View.GONE
                 textViewCenterPoint.visibility = View.GONE
-            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 500L else 1000)
+            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000)
         }
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
         for (i in 0 until nPlayers) {
@@ -1319,6 +1321,17 @@ class GameScreen : AppCompatActivity() {
         if (!played) {
             played = true
             val position = cardsInHand.indexOf(cardSelected)
+
+            if (soundStatus) SoundManager.instance?.playCardPlayedSound()
+            val view = findViewById<ImageView>(refIDMappedTableImageView[fromInt-1])
+            view.visibility = View.VISIBLE
+            view.setImageResource(cardsDrawable[cardSelected])
+
+            val cardViewHolder = binding.selfCards.layoutManager?.findViewByPosition(position)
+            if (cardViewHolder != null) {
+                moveView(view, fromX = binding.selfCards.x + cardViewHolder.x, fromY = binding.selfCards.y - cardViewHolder.height)
+            }
+
             selfCardsArrayList.removeAt(position)
             adapterSelfCards.notifyItemRemoved(position)
             cardsInHand.remove(cardSelected)
@@ -1418,13 +1431,11 @@ class GameScreen : AppCompatActivity() {
                     else if (mInterstitialAd != null) {
                         showInterstitialAd()
                     }
-                } else if (fromInt == 1 && BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) {
+                } else if (fromInt == 1 && BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) {
                     startNextGame(binding.startNextRoundButton)
                 }
                 if (fromInt == 1) { // show start next game button only to host
                     binding.startNextRoundButton.visibility = View.VISIBLE
-                } else {
-                    if (gameData.gs == 6) centralText("Waiting for host to start next game", displayTime = 0)
                 }
             }, delayGameOver)
         }
@@ -1470,7 +1481,7 @@ class GameScreen : AppCompatActivity() {
             nGamesBid += 1
             nGamesBidDaily += 1
         }
-        Handler(Looper.getMainLooper()).postDelayed({ maskWinner.value = true }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 500L else 1000L)
+        Handler(Looper.getMainLooper()).postDelayed({ maskWinner.value = true }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000L)
 
         val arrayListWinner = ArrayList<PlayerScoreItemDescription>()
         val arrayListLoser = ArrayList<PlayerScoreItemDescription>()
@@ -1542,10 +1553,11 @@ class GameScreen : AppCompatActivity() {
 
     private fun setupGame4or7() {
 
-        timeCountdownPlayCard = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else if (BuildConfig.DEBUG) 1500L else 20000L
-        timeCountdownBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else if (BuildConfig.DEBUG) 1500L else 20000L
-        delayGameOver = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else if (BuildConfig.DEBUG) 2000L else 5000L
-        timeAutoPlayMode =  if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 400L else 1000L
+        timeCountdownPlayCard = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 0L else if (BuildConfig.DEBUG) 6000L else 20000L
+        timeCountdownBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else if (BuildConfig.DEBUG) 1500L else 20000L
+        delayGameOver = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else if (BuildConfig.DEBUG) 2000L else 5000L
+        timeAutoPlayMode =  if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 1000L
+        moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 500L
 
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
         refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
@@ -1692,7 +1704,7 @@ class GameScreen : AppCompatActivity() {
                     countDownPlayCard.cancel()
                     val view = View(applicationContext)
                     view.tag = "notClicked"
-                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 1000L else 2500)
+                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000L else 2500)
                 }
             }
         }
@@ -1712,7 +1724,7 @@ class GameScreen : AppCompatActivity() {
                     findViewById<ImageView>(refIDMappedOnlineIconImageView[0]).setImageResource(R.drawable.status_offline)
                     val view = View(applicationContext)
                     view.tag = "notClicked"
-                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 1000L else 2500)
+                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000L else 2500)
                 }
             }
         })
@@ -1836,10 +1848,10 @@ class GameScreen : AppCompatActivity() {
         for (index in 0 until nPlayers) {
             val newCard = gameData.ct[index] != gameData.ct1[index]
             if (gameData.ct[index] <= (cardsIndexLimit - 2) && !resetCards) {
-                if (soundStatus && newCard) SoundManager.instance?.playCardPlayedSound()
+                if (soundStatus && newCard && index != fromInt-1) SoundManager.instance?.playCardPlayedSound()
                 findViewById<ImageView>(refIDMappedTableImageView[index]).visibility = View.VISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[index]).setImageResource(cardsDrawable[gameData.ct[index]])
-                if (newCard) findViewById<ImageView>(refIDMappedTableImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[index]))
+                if (newCard && index != fromInt-1) findViewById<ImageView>(refIDMappedTableImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[index]))
             } else {
                 findViewById<ImageView>(refIDMappedTableImageView[index]).visibility = View.INVISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[index]).clearAnimation()
@@ -1940,7 +1952,7 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    private fun centralText(message: String = "", displayTime: Int = if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 1000 else 3000, cancel: Boolean = false) {
+    private fun centralText(message: String = "", displayTime: Int = if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000 else 3000, cancel: Boolean = false) {
         if (cancel) {
             binding.textViewShuffling.clearAnimation()
             binding.textViewShuffling.text = ""
@@ -2004,10 +2016,10 @@ class GameScreen : AppCompatActivity() {
                     handlerDeclareWinner.postDelayed({
                         startBidding()
                         shufflingAnimationFinished = true
-                    }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 100L else 800L)
+                    }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 800L)
                 }
             }, fadeOffTime)
-        }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 1000L else time)
+        }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000L else time)
     }
 
     private fun displayShufflingCards(view: View = View(this), sets: Int = 5, distribute: Boolean = true) {

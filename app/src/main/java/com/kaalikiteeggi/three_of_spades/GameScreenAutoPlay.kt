@@ -15,8 +15,10 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.animation.BounceInterpolator
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -257,7 +259,8 @@ class GameScreenAutoPlay : AppCompatActivity() {
         refIDMappedHighlightView = PlayersReference().refIDMappedHighlightView(from, nPlayers)
         refIDMappedPartnerIconImageView = PlayersReference().refIDMappedPartnerIconImageView(from, nPlayers)
         refIDMappedTableAnim = PlayersReference().refIDMappedTableAnim(from, nPlayers)
-        refIDMappedTableWinnerAnim = PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
+        refIDMappedTableWinnerAnim = if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline) && resources.getBoolean(R.bool.enable_super_fast_test_offline)) listOf(R.anim.anim_table_card_winner_1_sf, R.anim.anim_table_card_winner_2_4_sf, R.anim.anim_table_card_winner_6_sf, R.anim.anim_table_card_winner_self_sf)
+        else PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
         refIDMappedTableImageView = PlayersReference().refIDMappedTableImageView(from, nPlayers)
         refSelfCardTable = findViewById(refIDMappedTableImageView[0])
         //region Other Thread tasks
@@ -383,10 +386,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 if (soundStatus) SoundManager.instance?.playCardPlayedSound()
                 findViewById<ImageView>(refIDMappedTableImageView[0]).visibility = View.VISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[0]).setImageResource(cardsDrawable[cardSelected])
-                //                findViewById<ImageView>(refIDMappedTableImageView[0]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[0]))
                 val cardViewHolder = binding.selfCards.layoutManager?.findViewByPosition(cardsInHand.indexOf(cardSelected))
                 if (cardViewHolder != null) {
-                    moveView(refSelfCardTable, fromX = binding.selfCards.x + cardViewHolder.x, fromY = binding.selfCards.y - cardViewHolder.height, duration = 500)
+                    moveView(refSelfCardTable, fromX = binding.selfCards.x + cardViewHolder.x, fromY = binding.selfCards.y - cardViewHolder.height)
                 }
             } else {
                 findViewById<ImageView>(refIDMappedTableImageView[0]).visibility = View.INVISIBLE
@@ -481,12 +483,12 @@ class GameScreenAutoPlay : AppCompatActivity() {
     }
 
     private fun setupGame() {
-        delayWaitGameMode6 = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 1000L else 4500L
-        delayDeclareWinner = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 500L else 2500L
-        moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 150L else 350L
+        delayWaitGameMode6 = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 500L else 4500L
+        delayDeclareWinner = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 300L else 2500L
+        moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 100L else 350L
         timeCountdownBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 200L else if (BuildConfig.DEBUG) 2000L else 20000L
         timeCountdownPlayCard = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 200L else if (BuildConfig.DEBUG) 5000L else 20000L
-        timeAutoBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) listOf(200L) else if (BuildConfig.DEBUG) listOf<Long>(800, 1200, 900) else listOf<Long>(1650, 1400, 1500, 1800)
+        timeAutoBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) listOf(300L) else if (BuildConfig.DEBUG) listOf<Long>(800, 1200, 900) else listOf<Long>(1650, 1400, 1500, 1800)
         timeAutoTrumpAndPartner = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) listOf(200L) else if (BuildConfig.DEBUG) listOf<Long>(300) else listOf<Long>(1700, 2000, 1700)
 
         refIDValesTextViewScore = PlayersReference().refIDTextViewScoreSheet4
@@ -936,7 +938,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 trumpStart = ""
             } // reset for new round
             if (gameTurn.value!! == 5) {
-                Handler(Looper.getMainLooper()).postDelayed({ declareRoundWinner() }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 200L else 700L)
+                Handler(Looper.getMainLooper()).postDelayed({ declareRoundWinner() }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 0L else 700L)
             } else if (gameTurn.value!! != 5 && gameTurn.value!! != 0) {
                 animatePlayer(playerTurn.value!!)
                 if (playerTurn.value!! == fromInt && !played) {
@@ -1169,7 +1171,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         findViewById<ImageView>(R.id.imageViewWinnerCenter4).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableWinnerAnim[roundWinner - 1]))
         Handler(Looper.getMainLooper()).postDelayed({
             findViewById<ImageView>(R.id.imageViewWinnerCenter4).visibility = View.GONE
-        }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 0L else 1000L)
+        }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 50L else 1000L)
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
         for (i in 0 until nPlayers) { // don't GONE self card is it is primary reference view
             findViewById<ImageView>(refIDMappedTableImageView[i]).visibility = View.INVISIBLE
@@ -1388,7 +1390,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             viewToMove.x = fromX
             viewToMove.y = fromY
         }
-        viewToMove.animate().x(xViewToMove).y(yViewToMove).duration = duration
+        viewToMove.animate().x(xViewToMove).y(yViewToMove).setDuration(duration).interpolator = AccelerateDecelerateInterpolator()
     }
 
     fun nextBidderTurn(currentTurn: Int): Int {
