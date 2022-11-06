@@ -4,7 +4,6 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kaalikiteeggi.three_of_spades.databinding.CardsItemListBinding
@@ -39,15 +38,14 @@ class SelfCardListAdapter(private val cardsArray: ArrayList<PlayingCardDescripti
         return SelfCardListViewHolder(CardsItemListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: SelfCardListViewHolder, position: Int) {
+    @Suppress("UnnecessaryVariable")
+    override fun onBindViewHolder(holder: SelfCardListViewHolder, position1: Int) {
+        val position = position1
         val card = cardsArray[position]
 
         holder.bind(card, lastCard = card.expandCard || (position == cardsArray.size - 1))
-
-        holder.itemView.setOnClickListener { view ->
+        holder.itemView.setOnClickListener {
             output(card.cardInt)
-            if (!card.filter && card.expandCard && position != cardsArray.size - 1) view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.slide_up_out))
-            else view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.scale_highlight))
         }
     }
 

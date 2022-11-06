@@ -21,8 +21,8 @@ android {
         minSdkVersion 24
         //noinspection OldTargetApi
         targetSdkVersion 33
-        versionCode 80
-        versionName "80B"
+        versionCode 81
+        versionName "81A"
         signingConfig signingConfigs.debug
     }
     buildTypes {

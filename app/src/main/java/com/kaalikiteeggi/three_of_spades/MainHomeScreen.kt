@@ -52,7 +52,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.*
@@ -362,7 +361,7 @@ class MainHomeScreen : AppCompatActivity() {
     private fun playerStatsGridDisplay(transition: Boolean = true) {
         binding.playerStatsGrid.layoutManager = GridLayoutManager(this, 3)
         binding.playerStatsGrid.adapter = PlayerStatsGridAdapter(setDataListPS())
-        if (transition) Handler(Looper.getMainLooper()).postDelayed({ binding.playerStatsML.transitionToEnd() }, 1500L)
+        if (transition) Handler(Looper.getMainLooper()).postDelayed({ binding.playerStatsML.transitionToEnd() }, if(BuildConfig.DEBUG) 0L else 1500L)
 
     }
 
@@ -869,8 +868,6 @@ class MainHomeScreen : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (vibrateStatus) vibrationStart()
             binding.userScoreMHS.setText(String.format("%,d", totalCoins), true)
-//            watchVideoCoin.visibility = View.GONE
-//            loadRewardAd()
         }, 1250)
     }
 
@@ -1015,7 +1012,7 @@ class MainHomeScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.maskAllLoading.visibility = View.GONE
             }, 4000)
-        } else if (offlineGameAllowed && offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, 1200)
+        } else if (offlineGameAllowed && offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, if(BuildConfig.DEBUG) 0L else 1200)
         else if (!onlineGameAllowed) {
             if (soundStatus) SoundManager.instance?.playErrorSound()
             if (vibrateStatus) vibrationStart()
@@ -1255,7 +1252,7 @@ class MainHomeScreen : AppCompatActivity() {
 
         startActivity(Intent(this, CreateAndJoinRoomScreen::class.java).apply { putExtra("roomID", roomID) }.apply { putExtra("selfName", userName) }.apply { putExtra("from", "p$playerJoining") }.apply { putExtra("nPlayers", nPlayers) }.apply { putExtra("photoURL", photoURL) }.apply { putExtra("totalCoins", totalCoins) }.apply { putExtra("totalDailyCoins", totalDailyCoins) }.apply { putExtra("offline", false) }.putIntegerArrayListExtra("userStats", ArrayList(listOf(nGamesPlayed, nGamesWon, nGamesBid))).putIntegerArrayListExtra("userStatsTotal", userStatsTotal).putIntegerArrayListExtra("userStatsDaily", userStatsDaily).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
         overridePendingTransition(R.anim.slide_left_activity, R.anim.slide_left_activity)
-        finishAndRemoveTask() //		Handler(Looper.getMainLooper()).postDelayed({ finish() }, 500)
+        finishAndRemoveTask()
 
     }
 

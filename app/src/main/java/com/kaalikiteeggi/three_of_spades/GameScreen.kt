@@ -58,7 +58,6 @@ import com.robinhood.ticker.TickerView
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.min
 import kotlin.math.round
 import kotlin.properties.Delegates
@@ -1174,8 +1173,6 @@ class GameScreen : AppCompatActivity() {
             if (fromInt == gameData.bb || fromInt == gameData.p1) {
                 speak("Sorry Your team lost")
             } else {
-//                binding.winnerLottie.visibility = View.VISIBLE
-//                binding.winnerLottie.playAnimation()
                 speak("Well done!! Your team won")
             }
             if (gameData.bb == fromInt) { // bidder will change game state to 6
@@ -1405,7 +1402,7 @@ class GameScreen : AppCompatActivity() {
                         showInterstitialAd()
                     }
                 } else if (fromInt == 1 && BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) {
-                    startNextGame(View(this))
+                    startNextGame(binding.startNextRoundButton)
                 }
                 if (fromInt == 1) { // show start next game button only to host
                     binding.startNextRoundButton.visibility = View.VISIBLE
@@ -1555,8 +1552,8 @@ class GameScreen : AppCompatActivity() {
         binding.gridScoreHeader.layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.HORIZONTAL }
         binding.gridScoreBody.layoutManager = GridLayoutManager(this, nPlayers + 1, LinearLayoutManager.VERTICAL, false)
 
-        adapterSelfCards = SelfCardListAdapter(cardsArray = selfCardsArrayList) { card ->
-            validateSelfPlayedCard(card)
+        adapterSelfCards = SelfCardListAdapter(cardsArray = selfCardsArrayList) { cardSelected ->
+            validateSelfPlayedCard(cardSelected)
         }
         textViewCenterPoint = if (nPlayers4) binding.textViewCenterPoints4
         else binding.textViewCenterPoints

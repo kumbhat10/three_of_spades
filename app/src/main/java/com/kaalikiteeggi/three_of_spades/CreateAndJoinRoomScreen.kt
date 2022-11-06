@@ -11,7 +11,6 @@ import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.*
 import android.speech.tts.TextToSpeech
-import android.util.TypedValue
 import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +22,6 @@ import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.ktx.database
@@ -212,13 +210,13 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             speak("$p2 joined", speed = 1f, forceSpeak = false)
             userBasicInfoList.add(1, data[1])
             adapter.notifyItemInserted(1)
-        }, 800)
+        }, if(BuildConfig.DEBUG) 100L else 800)
         handler.postDelayed({
             if (soundStatus) SoundManager.instance?.playUpdateSound()
             speak("$p3 joined", speed = 1.1f, forceSpeak = false)
             userBasicInfoList.add(2, data[2])
             adapter.notifyItemInserted(2)
-        }, 1900)
+        }, if(BuildConfig.DEBUG) 300L else 1900)
         handler.postDelayed({
             if (soundStatus) SoundManager.instance?.playUpdateSound()
             speak("$p4 joined", speed = 1.1f, forceSpeak = false)
@@ -227,7 +225,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 userBasicInfoStatus.value = mutableListOf(true,true,true,true)
                 allPlayersJoined() }, 800)
-        }, 2900)
+        }, if(BuildConfig.DEBUG) 500L else 2900)
     }
 
     private fun getRoomLiveUpdates() {
@@ -343,8 +341,8 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         binding.imageViewShareButton2.visibility = View.GONE
         binding.offlineProgressbar.visibility = View.GONE
         binding.waitingToJoinText.visibility = View.GONE
-        val delayTime = if (offline || BuildConfig.DEBUG) 600L else 2000L
-        Handler(Looper.getMainLooper()).postDelayed({ binding.startGameButton.visibility = View.VISIBLE }, delayTime)
+        val delayTime = if (offline) 600L else 2000L
+        Handler(Looper.getMainLooper()).postDelayed({ binding.startGameButton.visibility = View.VISIBLE }, if(BuildConfig.DEBUG) 0L else delayTime)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -521,7 +519,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
 
             builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                 speak("Leaving room ", forceSpeak = true)
-                Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, 700)
+                Handler(Looper.getMainLooper()).postDelayed({ closeJoiningRoom() }, if(BuildConfig.DEBUG) 0L else 700)
             }
             builder.setNegativeButton("No") { _: DialogInterface, _: Int ->
                 closeRoom = false
