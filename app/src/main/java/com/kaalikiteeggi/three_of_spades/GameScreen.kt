@@ -309,7 +309,7 @@ class GameScreen : AppCompatActivity() {
 
             override fun onFinish() {
                 autoPlayCard()
-                if (soundStatus) SoundManager.instance?.playTimerSound()
+                if (soundStatus && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)  )) SoundManager.instance?.playTimerSound()
                 if (vibrateStatus) vibrationStart()
                 binding.progressbarTimer.progress = 0
                 binding.closeGameRoomIcon.visibility = View.VISIBLE
