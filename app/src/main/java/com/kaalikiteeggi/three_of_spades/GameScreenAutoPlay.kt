@@ -166,7 +166,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private var delayWaitGameMode6 = 4500L
     private var delayDeclareWinner = 2500L
-    private var moveViewDuration = 300L
+    private var moveViewDuration = 350L
     private var timeCountdownPlayCard = if (BuildConfig.DEBUG) 6000L else 20000L
     private var timeAutoPlayCard = if (BuildConfig.DEBUG) listOf<Long>(100, 150, 200, 175, 125, 225) else listOf<Long>(500, 700, 850, 600, 700, 600, 1000)
     private var timeCountdownBid = if (BuildConfig.DEBUG) 2000L else 20000L
@@ -276,7 +276,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
                 override fun onFinish() {
                     autoPlayCard(cardsInHand, forcePlay = false)
-                    if (soundStatus) SoundManager.instance?.playTimerSound()
+                    if (soundStatus && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline))) SoundManager.instance?.playTimerSound()
                     if (vibrateStatus) vibrationStart()
                     findViewById<ProgressBar>(R.id.progressbarTimer).progress = 0
                     binding.closeGameRoomIcon.visibility = View.VISIBLE
@@ -1020,9 +1020,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                         val position = cardsInHand.indexOf(cardSelected)
                         selfCardsArrayList.removeAt(position)
                         adapterSelfCards.notifyItemRemoved(position)
-                        Log.d("SelfCard", "2 selfCardsArrayList->${selfCardsArrayList.size}  cardsInHand->${cardsInHand.size}")
                         cardsInHand.remove(cardSelected)
-                        Log.d("SelfCard", "3 selfCardsArrayList->${selfCardsArrayList.size}  cardsInHand->${cardsInHand.size}")
                         val rangeList = mutableListOf<Int>()
                         selfCardsArrayList.forEachIndexed { index, card ->
                             val notify = card.filter || if (index == selfCardsArrayList.size - 1) !card.expandCard else card.expandCard

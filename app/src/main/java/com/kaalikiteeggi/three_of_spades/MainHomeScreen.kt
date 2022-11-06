@@ -599,7 +599,7 @@ class MainHomeScreen : AppCompatActivity() {
         }
         if (sharedPreferences.contains("Room") && !joinRoomPending) {
             val roomID = sharedPreferences.getString("Room", "").toString()
-            if (roomID.isNotEmpty()) {
+            if (roomID.isNotEmpty() && !(BuildConfig.DEBUG && !resources.getBoolean(R.bool.delete_last_room))) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     deleteAllRoomData(roomID)
                 }, 0)

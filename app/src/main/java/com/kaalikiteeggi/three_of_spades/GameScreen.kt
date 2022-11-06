@@ -194,8 +194,9 @@ class GameScreen : AppCompatActivity() {
     private var counterChat = 0
     private lateinit var onlineStatus: MutableList<Int>
     private lateinit var allCardsReset: MutableList<Int>
-    private var timeCountdownPlayCard = if (!BuildConfig.DEBUG) 15000L else 1500L
-    private var timeCountdownBid = if (!BuildConfig.DEBUG) 15000L else 1500L
+    private var timeAutoPlayMode = 1000L
+    private var timeCountdownPlayCard = if (BuildConfig.DEBUG) 1500L else 20000L
+    private var timeCountdownBid = if (BuildConfig.DEBUG) 1500L else 20000L
     private var delayGameOver = if (BuildConfig.DEBUG) 2000L else 5000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
 
@@ -380,18 +381,22 @@ class GameScreen : AppCompatActivity() {
                     binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.nh0))
                     binding.trumpText.text = "Heart"
                 }
+
                 "S" -> {
                     binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ns0))
                     binding.trumpText.text = "Spade"
                 }
+
                 "D" -> {
                     binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.nd0))
                     binding.trumpText.text = "Diamond"
                 }
+
                 "C" -> {
                     binding.trumpImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.nc0))
                     binding.trumpText.text = "Club"
                 }
+
                 else -> {
                     binding.trumpImage.setImageResource(R.drawable.trump)
                     binding.trumpText.text = getString(R.string.Trump)
@@ -506,6 +511,7 @@ class GameScreen : AppCompatActivity() {
                     hideKeyboard()
                     false
                 }
+
                 else -> false
             }
         }  // close keyboard after sending chat
@@ -573,7 +579,7 @@ class GameScreen : AppCompatActivity() {
                         if (gameData.gs != 7) {
                             cardsInHand.clear()
                             (data.child("ch$fromInt").value as MutableList<Int>).forEach { card -> cardsInHand.add(card) }
-                            if ((cardsInHand.size != selfCardsArrayList.size  || !gameState1 && gameData.gs == 1) && !cardsInHand.contains(cardsIndexLimit)) {
+                            if ((cardsInHand.size != selfCardsArrayList.size || (!gameState1 && gameData.gs == 1)) && !cardsInHand.contains(cardsIndexLimit)) {
                                 createCardsArray() //dummy - check every edge case whats best for all game state
                                 if (gameData.gs != 1) binding.selfCards.adapter = adapterSelfCards
                             }
@@ -837,6 +843,7 @@ class GameScreen : AppCompatActivity() {
                     gameData.bs[fromInt - 1] = 0
                     writeToGameDatabase(data = mutableMapOf("bs" to gameData.bs, "bvo" to gameData.bv, "pt" to nextValidBidder))
                 }
+
                 "5" -> raiseBid(5)// writeToGameDatabase(data = mutableMapOf("bv" to min(gameData.bv + 5, maxBidValue), "bvo" to gameData.bv, "bb" to fromInt, "pt" to if (min(gameData.bv + 5, maxBidValue) < maxBidValue) nextValidBidder else fromInt))
                 "10" -> raiseBid(10)
                 "20" -> raiseBid(20)
@@ -879,7 +886,7 @@ class GameScreen : AppCompatActivity() {
                     val view = View(this)
                     view.tag = listOf("h", "s", "d", "c").random()
                     onTrumpSelectionClick(view)
-                }, 1000)
+                }, timeAutoPlayMode)
             }
             if (vibrateStatus) vibrationStart()
         }
@@ -925,7 +932,7 @@ class GameScreen : AppCompatActivity() {
                 if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) {
                     Handler(Looper.getMainLooper()).postDelayed({
                         autoPartnerSelect()
-                    }, 1000)
+                    }, timeAutoPlayMode)
                 }
             } else {
                 binding.linearLayoutPartnerSelection.visibility = View.VISIBLE // make selection frame visible
@@ -995,6 +1002,7 @@ class GameScreen : AppCompatActivity() {
                     toastCenter("$selfName, You already have both of selected card")
                     speak("You already have both card")
                 }
+
                 (cardsInHand as List<Long>).contains((cardSelected * 2).toLong()) or (cardsInHand as List<Long>).contains((cardSelected * 2 + 1).toLong()) -> {
                     if (soundStatus) SoundManager.instance?.playUpdateSound()
                     writeToGameDatabase(data = mutableMapOf("pc1" to cardSelected, "pc1s" to 11)) // Only card
@@ -1003,6 +1011,7 @@ class GameScreen : AppCompatActivity() {
                     speak("Choose second partner card")
                     counterPartnerSelection = 1
                 }
+
                 else -> {
                     if (soundStatus) SoundManager.instance?.playUpdateSound()
                     writeToGameDatabase(data = mutableMapOf("pc1" to cardSelected, "pc1s" to 10)) // Any card
@@ -1295,10 +1304,13 @@ class GameScreen : AppCompatActivity() {
                 countDownTimer("PlayCard", purpose = "cancel")
                 startNextTurn(cardSelected) // allow throw if first chance, or same suit as first turn or doesn't have same suit card
             } else {
+                binding.selfCards.layoutManager?.findViewByPosition(cardsInHand.indexOf(cardSelected))?.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_highlight))
                 if (soundStatus) SoundManager.instance?.playErrorSound()
                 if (vibrateStatus) vibrationStart()
                 speak("Play ${getSuitName(gameData.rtr)} card")
             }
+        }else{
+            binding.selfCards.layoutManager?.findViewByPosition(cardsInHand.indexOf(cardSelected))?.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_highlight))
         }
     }
 
@@ -1306,16 +1318,21 @@ class GameScreen : AppCompatActivity() {
     private fun startNextTurn(cardSelected: Int) {  // always called whenever played any card
         if (!played) {
             played = true
-            selfCardsArrayList.removeAt(cardsInHand.indexOf(cardSelected))
-            adapterSelfCards.notifyItemRemoved(cardsInHand.indexOf(cardSelected))
-
-            selfCardsArrayList.forEachIndexed { index, card ->
-                val notify = if(index == selfCardsArrayList.size-1 ) card.filter || !card.expandCard else card.filter || card.expandCard
-                card.filter = false
-                card.expandCard = index == selfCardsArrayList.size-1
-                if(notify) adapterSelfCards.notifyItemChanged(index)
-            }
+            val position = cardsInHand.indexOf(cardSelected)
+            selfCardsArrayList.removeAt(position)
+            adapterSelfCards.notifyItemRemoved(position)
             cardsInHand.remove(cardSelected)
+            val rangeList = mutableListOf<Int>()
+            selfCardsArrayList.forEachIndexed { index, card ->
+                val notify = card.filter || if (index == selfCardsArrayList.size - 1) !card.expandCard else card.expandCard
+                if (notify) rangeList.add(index)
+                card.filter = false
+                card.expandCard = index == selfCardsArrayList.size - 1
+            }
+            if (rangeList.isNotEmpty()) {
+                adapterSelfCards.notifyItemRangeChanged(rangeList[0], rangeList.size)
+            }
+
             if (gameData.rn < roundNumberLimit) {
 //                displaySelfCards()
             } else {
@@ -1524,6 +1541,12 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun setupGame4or7() {
+
+        timeCountdownPlayCard = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else if (BuildConfig.DEBUG) 1500L else 20000L
+        timeCountdownBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else if (BuildConfig.DEBUG) 1500L else 20000L
+        delayGameOver = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else if (BuildConfig.DEBUG) 2000L else 5000L
+        timeAutoPlayMode =  if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 400L else 1000L
+
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
         refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
         refIDMappedImageView = PlayersReference().refIDMappedImageView(from, nPlayers)
@@ -1944,11 +1967,13 @@ class GameScreen : AppCompatActivity() {
     @SuppressLint("CutPasteId")
     private fun displaySelfCards() {
         val cardsPresentCheck = cardsSuit.slice(cardsInHand as Iterable<Int>).indexOf(gameData.rtr) != -1
-        for (i in 0 until selfCardsArrayList.size) {
-            selfCardsArrayList[i].filter = gameData.rt > 1 && cardsSuit[selfCardsArrayList[i].cardInt] != gameData.rtr && cardsPresentCheck
-            selfCardsArrayList[i].expandCard = if (i == selfCardsArrayList.size - 1) true else !selfCardsArrayList[i].filter && cardsPresentCheck
-            val notify = if (i == selfCardsArrayList.size - 1) selfCardsArrayList[i].filter else selfCardsArrayList[i].filter || selfCardsArrayList[i].expandCard
-            if (notify) adapterSelfCards.notifyItemChanged(i)
+        if (cardsPresentCheck) {
+            for (i in 0 until selfCardsArrayList.size) {
+                selfCardsArrayList[i].filter = gameData.rt > 1 && cardsSuit[selfCardsArrayList[i].cardInt] != gameData.rtr
+                selfCardsArrayList[i].expandCard = if (i == selfCardsArrayList.size - 1) true else !selfCardsArrayList[i].filter
+                val notify = if (i == selfCardsArrayList.size - 1) selfCardsArrayList[i].filter else selfCardsArrayList[i].filter || selfCardsArrayList[i].expandCard
+                if (notify) adapterSelfCards.notifyItemChanged(i)
+            }
         }
     }
 
