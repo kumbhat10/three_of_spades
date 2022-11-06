@@ -197,7 +197,7 @@ class GameScreen : AppCompatActivity() {
     private var timeAutoPlayMode = 1000L
     private var timeCountdownPlayCard = if (BuildConfig.DEBUG) 1500L else 20000L
     private var timeCountdownBid = if (BuildConfig.DEBUG) 1500L else 20000L
-    private var delayGameOver = if (BuildConfig.DEBUG) 2000L else 5000L
+    private var delayGameOver = if (BuildConfig.DEBUG) 1000L else 5000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
 
     private var lastChat = ""
@@ -344,7 +344,7 @@ class GameScreen : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).postDelayed({
                         binding.frameAskBid.visibility = View.GONE
                         binding.frameAskBid.clearAnimation()
-                    }, 180)
+                    }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 100L else 180L)
                     speak("Time's Up ${playerName(fromInt)}. You can't bid now", speed = 1.05f)
                 }
             }
@@ -653,7 +653,7 @@ class GameScreen : AppCompatActivity() {
 
         if (fromInt == 1) {
             centralText("Restarting Game", displayTime = 0)
-            Handler(Looper.getMainLooper()).postDelayed({ startNextGame(View(this)) }, 1500L)
+            Handler(Looper.getMainLooper()).postDelayed({ startNextGame(View(this)) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 500L else 1500L)
         } else {
             centralText("Host has restarted Game", displayTime = 0)
             speak("Host has restarted Game")
@@ -854,7 +854,7 @@ class GameScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.frameAskBid.visibility = View.GONE
                 binding.frameAskBid.clearAnimation()
-            }, 180)
+            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 100L else 180)
         }
     }
 
@@ -1197,7 +1197,7 @@ class GameScreen : AppCompatActivity() {
         // if the game turn changes then only proceed
         clearAllAnimation()
         if (gameData.rt == nPlayers + 1) { // Round finished - Declare round winner
-            handlerDeclareWinner.postDelayed({ declareRoundWinner() }, 700)
+            handlerDeclareWinner.postDelayed({ declareRoundWinner() }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else 700)
         } else {
             handlerDeclareWinner.removeCallbacksAndMessages(null)
             if (gameData.rt != 8 && gameData.rt != 0) {
@@ -1226,7 +1226,7 @@ class GameScreen : AppCompatActivity() {
         roundWinner = roundCards.toIntArray().indexOf(winnerCard) + 1
         animatePlayer(roundWinner)
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_big_fast))
-        handlerDeclareWinner.postDelayed({ animateWinner() }, 600)
+        handlerDeclareWinner.postDelayed({ animateWinner() }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 0L else 600L)
         handlerDeclareWinner.postDelayed({ // start after 1.5 seconds
             if (gameData.rn < roundNumberLimit) {
                 if (roundWinner == fromInt) { // only winner can start next round
@@ -1238,7 +1238,7 @@ class GameScreen : AppCompatActivity() {
                     endGameRound() // update points of last round to server by winner
                 }
             }
-        }, 1500)
+        }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 200L else 1500)
     }
 
     private fun animateWinner() {
@@ -1249,14 +1249,14 @@ class GameScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.imageViewWinnerCenter.visibility = View.GONE
                 textViewCenterPoint.visibility = View.GONE
-            }, 1000)
+            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 500L else 1000)
         } else if (nPlayers4) {
             binding.imageViewWinnerCenter4.visibility = View.VISIBLE
             if (roundWinner > 0) binding.imageViewWinnerCenter4.startAnimation(AnimationUtils.loadAnimation(this, refIDMappedTableWinnerAnim[roundWinner - 1]))
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.imageViewWinnerCenter4.visibility = View.GONE
                 textViewCenterPoint.visibility = View.GONE
-            }, 1000)
+            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 500L else 1000)
         }
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
         for (i in 0 until nPlayers) {
@@ -1470,7 +1470,7 @@ class GameScreen : AppCompatActivity() {
             nGamesBid += 1
             nGamesBidDaily += 1
         }
-        Handler(Looper.getMainLooper()).postDelayed({ maskWinner.value = true }, 1000L)
+        Handler(Looper.getMainLooper()).postDelayed({ maskWinner.value = true }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 500L else 1000L)
 
         val arrayListWinner = ArrayList<PlayerScoreItemDescription>()
         val arrayListLoser = ArrayList<PlayerScoreItemDescription>()
@@ -1692,7 +1692,7 @@ class GameScreen : AppCompatActivity() {
                     countDownPlayCard.cancel()
                     val view = View(applicationContext)
                     view.tag = "notClicked"
-                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, 2500)
+                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 1000L else 2500)
                 }
             }
         }
@@ -1712,7 +1712,7 @@ class GameScreen : AppCompatActivity() {
                     findViewById<ImageView>(refIDMappedOnlineIconImageView[0]).setImageResource(R.drawable.status_offline)
                     val view = View(applicationContext)
                     view.tag = "notClicked"
-                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, 2500)
+                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 1000L else 2500)
                 }
             }
         })
@@ -1940,7 +1940,7 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    private fun centralText(message: String = "", displayTime: Int = 3000, cancel: Boolean = false) {
+    private fun centralText(message: String = "", displayTime: Int = if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 1000 else 3000, cancel: Boolean = false) {
         if (cancel) {
             binding.textViewShuffling.clearAnimation()
             binding.textViewShuffling.text = ""
@@ -2004,10 +2004,10 @@ class GameScreen : AppCompatActivity() {
                     handlerDeclareWinner.postDelayed({
                         startBidding()
                         shufflingAnimationFinished = true
-                    }, 800)
+                    }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 100L else 800L)
                 }
             }, fadeOffTime)
-        }, time)
+        }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen)) 1000L else time)
     }
 
     private fun displayShufflingCards(view: View = View(this), sets: Int = 5, distribute: Boolean = true) {

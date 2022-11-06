@@ -991,10 +991,9 @@ class MainHomeScreen : AppCompatActivity() {
         offlineRoomCreate = position == 0
 
         nPlayers = when (position) {
-            0 -> 4
             1 -> 4
             2 -> 7
-            else -> 4
+            else -> 4  //for Position = 0 and 10
         }
         if (position != 10) createRoom() else if (BuildConfig.DEBUG) createRoom(testPlayersJoinRoom = true)
     }
@@ -1386,7 +1385,7 @@ class MainHomeScreen : AppCompatActivity() {
         trainAccess = false
         if (BuildConfig.DEBUG) startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://kaaliteeri.page.link/?link=http://jo.in1/AABB&apn=com.kaalikiteeggi.three_of_spades&amv=70&st=Join%20my%20room%20ID%20%3D%3E%20AABB&si=https://tinyurl.com/3ofspade")))
 
-        @Suppress("KotlinConstantConditions") if (trainAccess) {
+        if (BuildConfig.DEBUG && trainAccess) {
             binding.maskAllLoading.visibility = View.VISIBLE
             binding.loadingText.text = getString(R.string.startTrain)
             if (soundStatus) SoundManager.instance?.playUpdateSound()
@@ -1711,9 +1710,10 @@ class MainHomeScreen : AppCompatActivity() {
         if (this::viewPagerCallback.isInitialized) binding.viewPager2.unregisterOnPageChangeCallback(viewPagerCallback)
         if (this::recyclerViewScrollListener.isInitialized) recyclerView.removeOnScrollListener(recyclerViewScrollListener)
         if (this::recyclerView1ScrollListener.isInitialized) recyclerView1.removeOnScrollListener(recyclerView1ScrollListener)
-        if (this::tabLayoutMediator.isInitialized) tabLayoutMediator.detach()
+        if (this::tabLayoutMediator.isInitialized) {
+            tabLayoutMediator.detach()
+        }
         binding.viewPager2.adapter = null
-        tabLayoutMediator.detach()
         try {
 //            mInterstitialAd!!.fullScreenContentCallback = null
             mInterstitialAd = null
