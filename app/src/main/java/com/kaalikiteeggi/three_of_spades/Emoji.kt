@@ -32,7 +32,10 @@ class Emoji {
 	val shit = String(Character.toChars(0x1F613))
 	val poo = String(Character.toChars(0x1F4A9))
 	val salute = String(Character.toChars(0x1F64F))
+	val punch = String(Character.toChars(0x1F44A))
+	val raiseBothHands = String(Character.toChars(0x1F64C))
+	val handShake = String(Character.toChars(0x1F91D))
 
-	val emojiChatArray = listOf(smileHard, abuse, cry, happyHeart, heroGlass, smileTongue, rofl, shit, surprised, angry, devil, salute,  thumbsUp, thumbsDown, nice, heart, poo  )
+	val emojiChatArray = listOf(smileHard, abuse, cry, happyHeart, punch, heroGlass, smileTongue, rofl, shit, handShake, raiseBothHands, surprised, angry, devil, salute,  thumbsUp, thumbsDown, nice, heart, poo  )
 
 }
