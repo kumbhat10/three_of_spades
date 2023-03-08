@@ -1705,14 +1705,14 @@ class GameScreenAutoPlay : AppCompatActivity() {
             MobileAds.initialize(this) {
                 Log.d("Inter", "onInitializationComplete")
                 binding.addViewChatGameScreenBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
-                binding.addViewGameScreenBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
+                binding.addViewScoreBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
                 binding.addViewChatGameScreenBanner.visibility = View.VISIBLE
-                binding.addViewGameScreenBanner.visibility = View.VISIBLE
+                binding.addViewScoreBanner.visibility = View.VISIBLE
                 loadRewardedInterstitialAd()
                 loadInterstitialAd()
             }
         } else {
-            binding.addViewGameScreenBanner.visibility = View.GONE
+            binding.addViewScoreBanner.visibility = View.GONE
             binding.addViewChatGameScreenBanner.visibility = View.GONE
         }
     }
@@ -1871,7 +1871,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             mInterstitialAd = null
         } catch (_: java.lang.Exception) {
         }
-        binding.addViewGameScreenBanner.destroy()
+        binding.addViewScoreBanner.destroy()
         binding.addViewChatGameScreenBanner.destroy()
         try {
             if (this::textToSpeech.isInitialized) {
