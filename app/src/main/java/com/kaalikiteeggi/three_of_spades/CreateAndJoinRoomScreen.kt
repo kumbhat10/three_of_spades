@@ -533,6 +533,7 @@ class CreateAndJoinRoomScreen : AppCompatActivity() {
         alertDialog.show()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
         moveTaskToBack(true)
     }

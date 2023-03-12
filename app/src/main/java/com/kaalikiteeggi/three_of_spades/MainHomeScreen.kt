@@ -1652,6 +1652,7 @@ class MainHomeScreen : AppCompatActivity() {
         return !rated && ((nGamesPlayed + nGamesPlayedBot) > minGames || SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt() >= ratingRequestDate)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
         if (soundStatus) SoundManager.instance?.playUpdateSound()
         if (!(rankWindowStatus || joinRoomWindowStatus || settingsWindowStatus || binding.playerStatsML.progress == 0f || dailyRewardWindow || createRoomWindowStatus) && ratingWindowOpenStatus && backButtonPressedStatus) {            //            moveTaskToBack(true)

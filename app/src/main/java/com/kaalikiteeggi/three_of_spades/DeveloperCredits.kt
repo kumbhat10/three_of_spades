@@ -151,6 +151,7 @@ class DeveloperCredits : AppCompatActivity() {
     fun closeDC(view: View){
         onBackPressed()
     }
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
 //        super.onBackPressed()
         if (soundStatus) SoundManager.instance?.playUpdateSound()
