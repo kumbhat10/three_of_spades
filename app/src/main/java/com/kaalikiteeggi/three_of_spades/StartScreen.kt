@@ -31,6 +31,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.kaalikiteeggi.three_of_spades.databinding.ActivityStartScreenBinding
+import java.util.Arrays
 
 class StartScreen : AppCompatActivity() {
 	private lateinit var callBackManager: CallbackManager
@@ -42,7 +43,7 @@ class StartScreen : AppCompatActivity() {
 	private var update = false
 	private lateinit var intentBuilder: CustomTabsIntent.Builder
 	private val privacyPolicyUrl = "https://sites.google.com/view/kaali-ki-teeggi/privacy-policy"
-
+	private val facebookStringSuffix = "?width=1000&height=1000&return_ssl_resources=1"
 	private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 	private lateinit var binding: ActivityStartScreenBinding
 	@SuppressLint("ShowToast", "SetTextI18n")
@@ -66,31 +67,37 @@ class StartScreen : AppCompatActivity() {
 		mAuth = FirebaseAuth.getInstance() // endregion
 
 		// region Facebook Login
+		callBackManager = CallbackManager.Factory.create()
+//		binding.facebookLoginButton.setPermissions("email", "public_profile")
+		LoginManager.getInstance().registerCallback(callBackManager, object : FacebookCallback<LoginResult> {
+			override fun onCancel() {
+				SoundManager.instance?.playErrorSound() //soundError.start()
+				toastCenter("Facebook login cancelled")
+				Log.d("Login Cancel", " none ")
+				binding.maskButtons.visibility = View.GONE
+			}
+			override fun onError(error: FacebookException) {
+				SoundManager.instance?.playErrorSound() //soundError.start()
+				toastCenter("Facebook login Error : ${error.message}")
+				Log.d("Login Error", " ${error.message} ")
+				binding.maskButtons.visibility = View.GONE
+
+				}
+			override fun onSuccess(result: LoginResult) {
+				Log.d("Login Success", "  ")
+				val credentialFacebook = FacebookAuthProvider.getCredential(result.accessToken.token)
+				signInWithCredential(credentialFacebook, "facebook")
+			}
+		})
 		binding.facebookLoginButton.setOnClickListener {
 			it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
 			SoundManager.instance?.playUpdateSound() //soundUpdate.start()
 			binding.maskButtons.visibility = View.VISIBLE
 			binding.loadingText3.text = getString(R.string.wait)
 			binding.loadingTextSC.visibility = View.VISIBLE
+			LoginManager.getInstance().logInWithReadPermissions(this, callBackManager, Arrays.asList("email", "public_profile"))
 		}
-		callBackManager = CallbackManager.Factory.create()
-		binding.facebookLoginButton.setPermissions("email", "public_profile")
-		binding.facebookLoginButton.registerCallback(callBackManager, object : FacebookCallback<LoginResult> {
-			override fun onCancel() {
-				SoundManager.instance?.playErrorSound() //soundError.start()
-				toastCenter("Facebook login cancelled")
-				binding.maskButtons.visibility = View.GONE
-			}
-			override fun onError(error: FacebookException) {
-				SoundManager.instance?.playErrorSound() //soundError.start()
-				toastCenter("Facebook login Error : ${error.message}")
-				binding.maskButtons.visibility = View.GONE
-				}
-			override fun onSuccess(result: LoginResult) {
-				val credentialFacebook = FacebookAuthProvider.getCredential(result.accessToken.token)
-				signInWithCredential(credentialFacebook, "facebook")
-			}
-		}) // endregion
+		// endregion
 
 		// region Google Sign In
 
@@ -126,7 +133,6 @@ class StartScreen : AppCompatActivity() {
 			binding.loadingTextSC.visibility = View.VISIBLE
 		} //endregion
 	}
-
 	private fun signInWithCredential(credential: AuthCredential, provider: String) {
 		mAuth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
 			if (task.isSuccessful) {
@@ -166,8 +172,8 @@ class StartScreen : AppCompatActivity() {
 			val uid = user.uid
 			val email = if(user.email != null) user.email else "na"
 			userPhotoUrl = user.photoUrl!!.toString()
-			if (newUser && provider == "facebook") {
-				userPhotoUrl = "$userPhotoUrl?width=1000&height=1000&return_ssl_resources=1"
+			if ((newUser || !userPhotoUrl.contains(facebookStringSuffix)) && provider == "facebook") {
+				userPhotoUrl += facebookStringSuffix
 				update = true
 			} else if (newUser && provider == "twitter") {
 				userPhotoUrl = userPhotoUrl.split("_")[0] + "_" + userPhotoUrl.split("_")[1] + ".jpeg"

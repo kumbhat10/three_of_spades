@@ -92,6 +92,7 @@ class MainHomeScreen : AppCompatActivity() {
     private var dailyRewardWindow = false
     private var ratingWindowOpenStatus = false
     private var createRoomWindowStatus = false
+    private val facebookStringSuffix = "?width=1000&height=1000&return_ssl_resources=1"
 
     private lateinit var tabLayoutMediator: TabLayoutMediator
     private lateinit var viewPagerCallback: ViewPager2.OnPageChangeCallback
@@ -423,6 +424,11 @@ class MainHomeScreen : AppCompatActivity() {
                     if (soundStatus) SoundManager.instance?.playSuccessSound()
                     binding.maskAllLoading.visibility = View.GONE
                     photoURL = dataSnapshot.get("ph").toString()
+                    if(photoURL.contains("facebook") && !photoURL.contains(facebookStringSuffix)){
+                        Log.d("Facebook issue","Not full address")
+                        photoURL += facebookStringSuffix
+                        fireStoreRef.set(hashMapOf("ph" to photoURL), SetOptions.merge())
+                    }
                     Picasso.get().load(photoURL).resize(400, 400).into(binding.profilePic)                    //                    callConfetti() // don't call confetti here - call only when coins are earned
                     totalCoins = dataSnapshot.get("sc").toString().toInt()
                     if (dataSnapshot.contains("scd") && dataSnapshot.contains("p_daily")) {

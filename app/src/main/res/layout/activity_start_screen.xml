@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/facebookLoginButton"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_13sdp"
         android:text="@string/register"
         android:fontFamily="@font/luckiest_guy"
         android:textColor="@color/font_yellow"
@@ -53,46 +53,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.facebook.login.widget.LoginButton
-        xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/facebookLoginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        app:layout_constraintBottom_toTopOf="@+id/orOption"
-        android:layout_marginBottom="@dimen/_2sdp"
-        android:paddingTop="@dimen/_8sdp"
-        android:paddingBottom="@dimen/_7sdp"
-        android:textSize="@dimen/_12ssp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/orOption"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/googleSignInButton"
-        android:layout_marginBottom="@dimen/_2sdp"
-        android:gravity="center"
-        android:fontFamily="@font/luckiest_guy"
-        android:text="or"
-        android:textColor="@color/font_yellow"
-        android:textSize="@dimen/_11ssp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="HardcodedText" />
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleSignInButton"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/loginHeightGoogle"
         android:layout_height="@dimen/loginHeightGoogle"
-        app:layout_constraintBottom_toTopOf="@id/privacyPolicy"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:insetBottom="0dp"
-        android:paddingTop="0dp"
-        android:paddingBottom="0dp"
+        android:layout_marginBottom="@dimen/_15sdp"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/privacyPolicy"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/googleSignInButton"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_speed="1.5"
+        app:lottie_repeatCount="0"
+        app:lottie_rawRes="@raw/facebook" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/googleSignInButton"
+        android:layout_width="@dimen/loginHeightGoogle"
+        android:layout_height="@dimen/loginHeightGoogle"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:visibility="visible"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/privacyPolicy"
+        app:layout_constraintEnd_toStartOf="@id/facebookLoginButton"
+        app:layout_constraintStart_toStartOf="parent"
+        android:scaleX="2.6"
+        android:scaleY="2.6"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_speed="1"
+        app:lottie_repeatCount="0"
+        app:lottie_rawRes="@raw/google" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/privacyPolicy"

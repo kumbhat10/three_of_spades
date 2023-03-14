@@ -19,7 +19,7 @@
     <dimen name="iconHeight">@dimen/_70sdp</dimen>
 
     <dimen name="loginWidth">@dimen/_140sdp</dimen>
-    <dimen name="loginHeightGoogle">@dimen/_35sdp</dimen>
+    <dimen name="loginHeightGoogle">@dimen/_45sdp</dimen>
     <dimen name="loginWidthGoogle">@dimen/_146sdp</dimen>
 
     <dimen name="tableInner1">@dimen/_6sdp</dimen>
