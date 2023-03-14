@@ -25,9 +25,10 @@
     <string name="packageName">com.kaalikiteeggi.three_of_spades</string>
     <string name="inviteLink">https://kaaliteeri.page.link/invite</string>
 
-    <string name="testDeviceID">788209F4A59FEBFD2269F384616B107B</string>
+    <string name="testDeviceID">E9A2658AE32084DDF7E980300565AD78</string>
 
     <string name="banner_admob">ca-app-pub-2714670043901113/2653923895</string>
+    <string name="banner_admob_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="inter_admob">ca-app-pub-2714670043901113/6210025529</string>
     <string name="reward_admob">ca-app-pub-2714670043901113/5307668082</string>
     <string name="reward_inter_admob">ca-app-pub-2714670043901113/1377187277</string>
@@ -127,14 +128,15 @@
     <string name="versionInfo">"ver: "</string>
     <string name="top_players">Top Players</string>
     <string name="userscore">$ 000,000</string>
-    <string name="train">Train</string>
+    <string name="dummy_join">Join\nAABB</string>
     <string name="privacy_policy"><u>Privacy Policy</u></string>
     <string name="register">Please Sign in</string>
     <string name="no_ad">Ads</string>
     <string name="swipe">Swipe Up/Down to hide/reveal</string>
     <string name="join">Join</string>
     <string name="splashLoadingDone">Lets Play</string>
-    <string name="dummy_nonline">Dummy\nOnline</string>
+    <string name="dummy_online_4">Online\n4</string>
+    <string name="dummy_online_7">Online\n7</string>
     <string name="victory">Victory</string>
     <string name="defeat">Defeat</string>
     <string name="resultWon">Victory</string>

@@ -6,6 +6,10 @@
     android:clipChildren="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     tools:context=".GameScreen">
 
     <ImageView
@@ -13,10 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/app_name"
-        android:onClick="closeChatScoreWindow"
+        android:onClick="closeChatAndScoreWindow"
         android:scaleType="fitXY"
         android:src="@drawable/table_gs_blue"
         android:visibility="visible"
+        android:layout_marginBottom="@dimen/_minus20sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -1384,7 +1389,8 @@
         android:background="@drawable/coin_bid"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/textViewBidValue"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/todo" />
 
     <com.robinhood.ticker.TickerView
         android:id="@+id/textViewBidValue"
@@ -1494,26 +1500,16 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chatLinearLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/_1sdp"
-        android:background="@color/Black"
+        android:background="@color/userRank1"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
-            ads:adUnitId="@string/banner_admob"
-            ads:adSize= "BANNER"
-            android:id="@+id/addViewChatGameScreenBanner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guidelineHorizontalCenter">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatRecyclerView"
@@ -1530,11 +1526,11 @@
             app:layout_constraintBottom_toTopOf="@id/emojiGrid"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addViewChatGameScreenBanner" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <HorizontalScrollView
             android:id="@+id/emojiGrid"
-            android:layout_width="@dimen/_250sdp"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_35sdp"
             android:elevation="@dimen/_10sdp"
             android:scrollbarAlwaysDrawHorizontalTrack="true"
@@ -1545,13 +1541,13 @@
             android:fadeScrollbars="false"
             android:background="@drawable/shine_score_table"
             android:scrollbarSize="@dimen/_2sdp"
-            android:layout_marginBottom="@dimen/_3sdp"
+            android:layout_marginBottom="@dimen/_1sdp"
             app:layout_constraintBottom_toTopOf="@id/editTextChatInput1"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
                 android:id="@+id/emojiGrid1"
-                android:elevation="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
@@ -1561,15 +1557,16 @@
             android:id="@+id/editTextChatInput1"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_35sdp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_40sdp"
             android:layout_marginBottom="3dp"
             android:hint="@string/chatInputHint"
             android:imeOptions="actionSend"
             android:inputType="textPersonName"
             android:textColor="@color/white"
-            android:textSize="@dimen/_10ssp"
+            android:textSize="@dimen/_8ssp"
             app:hintAnimationEnabled="true"
+            android:layout_marginEnd="@dimen/_7sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/sendChat"
             app:layout_constraintStart_toStartOf="parent">
@@ -1585,7 +1582,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sendChat"
             android:layout_width="@dimen/_55sdp"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@drawable/yellowrectanglesimple"
@@ -1617,6 +1614,7 @@
         android:scaleY="1.9"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/_10sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
@@ -1628,13 +1626,14 @@
         android:id="@+id/textViewChatNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_2sdp"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:text="@string/noOfChat"
         android:gravity="bottom|start"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/_12ssp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/imageViewChat"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/imageViewChat" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -2188,10 +2187,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scoreViewLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_marginBottom="@dimen/_2sdp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:animateLayoutChanges="true"
         android:background="@drawable/shine_score_sheet_bkgd"
         android:clickable="true"
@@ -2199,7 +2200,7 @@
         android:onClick="openCloseScoreSheet"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/scoreSheetButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -2220,16 +2221,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/gridScoreHeader"
-            app:layout_constraintBottom_toTopOf="@id/addViewGameScreenBanner"/>
+            app:layout_constraintBottom_toTopOf="@id/addViewScoreBanner"/>
 
         <com.google.android.gms.ads.AdView
-            android:id="@+id/addViewGameScreenBanner"
+            android:id="@+id/addViewScoreBanner"
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             ads:adSize="SMART_BANNER"
             ads:adUnitId="@string/banner_admob"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -2263,7 +2264,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6"/>
+        app:layout_constraintGuide_begin="439dp" />
 
     <GridView
         android:id="@+id/gridWinner"
@@ -2409,10 +2410,10 @@
 
     <ImageView
         android:id="@+id/scoreSheetButton"
-        android:layout_width="@dimen/_45sdp"
-        android:layout_height="@dimen/_45sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:background="@drawable/blacksquarebutton"
         android:clickable="true"
         android:focusable="true"
@@ -2422,5 +2423,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontalCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.45" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,8 +35,6 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.play.core.review.ReviewManagerFactory
@@ -97,12 +95,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private lateinit var vibrator: Vibrator
 
     private var premiumStatus = false
-    private var scoreOpenStatus = false
     private var activityExists = true
     private var mInterstitialAd: InterstitialAd? = null
-    private var rewardedInterstitialAd: RewardedInterstitialAd? = null
     private var loadInterAdTry = 0
-    private var loadRewardedInterAdTry = 0
 
     private lateinit var roomID: String
     private lateinit var selfName: String
@@ -150,6 +145,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private var p3Gain = 0
     private var p4Gain = 0
 
+    private var scoreWindowOpen = MutableLiveData(false)
     private lateinit var cardsInHand: MutableList<Int>
     private lateinit var cardsInHand2: MutableList<Int>
     private lateinit var cardsInHand3: MutableList<Int>
@@ -259,7 +255,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         refIDMappedHighlightView = PlayersReference().refIDMappedHighlightView(from, nPlayers)
         refIDMappedPartnerIconImageView = PlayersReference().refIDMappedPartnerIconImageView(from, nPlayers)
         refIDMappedTableAnim = PlayersReference().refIDMappedTableAnim(from, nPlayers)
-        refIDMappedTableWinnerAnim = if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline) && resources.getBoolean(R.bool.enable_super_fast_test_offline)) listOf(R.anim.anim_table_card_winner_1_sf, R.anim.anim_table_card_winner_2_4_sf, R.anim.anim_table_card_winner_6_sf, R.anim.anim_table_card_winner_self_sf)
+        refIDMappedTableWinnerAnim = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline) && resources.getBoolean(R.bool.enable_super_fast_test_offline)) listOf(R.anim.anim_table_card_winner_1_sf, R.anim.anim_table_card_winner_2_4_sf, R.anim.anim_table_card_winner_6_sf, R.anim.anim_table_card_winner_self_sf)
         else PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
         refIDMappedTableImageView = PlayersReference().refIDMappedTableImageView(from, nPlayers)
         refSelfCardTable = findViewById(refIDMappedTableImageView[0])
@@ -269,6 +265,19 @@ class GameScreenAutoPlay : AppCompatActivity() {
             updatePlayerInfo()
             initializeSpeechEngine()
             getSharedPrefs()
+            scoreWindowOpen.observe(this) {
+                if (it) {
+                    binding.closeGameRoomIcon.visibility = View.GONE
+                    binding.scoreViewLayout.visibility = View.VISIBLE
+                    binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_scoretable_open))
+                } else {
+                    binding.closeGameRoomIcon.visibility = View.VISIBLE
+                    binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        binding.scoreViewLayout.visibility = View.GONE
+                    }, 180)
+                }
+            }
             // region       Countdown PlayCard
             countDownPlayCard = object : CountDownTimer(timeCountdownPlayCard, 20) {
                 @SuppressLint("SetTextI18n")
@@ -292,7 +301,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             // region       Countdown Biding
             countDownBidding = object : CountDownTimer(timeCountdownBid, 20) {
                 @SuppressLint("SetTextI18n")
-                override fun onTick(millisUntilFinished: Long) { //                    binding.closeGameRoomIcon.visibility = View.GONE
+                override fun onTick(millisUntilFinished: Long) {
                     binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
                     binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString() + "s"
                 }
@@ -324,7 +333,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                     binding.horizontalScrollView1.foreground = ColorDrawable(ContextCompat.getColor(applicationContext, R.color.transparent))
                     if (!roundStarted) {
                         resetVariables()
-                        binding.scoreViewLayout.visibility = View.GONE
+                        if (scoreWindowOpen.value!!) scoreWindowOpen.value = false
                         if (this::p1.isInitialized) updatePlayerNames()
                         roundStarted = true
                         if (BuildConfig.DEBUG) shufflingWindow(time = 500L, gameStateChange = true) // gameStateChange = change game state to 2 after shuffling
@@ -593,7 +602,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         binding.relativeLayoutTableCards.visibility = View.GONE
         countDownTimer("PlayCard", purpose = "cancel")
         if (vibrateStatus) vibrationStart()
-//        if (soundStatus) SoundManager.instance?.playShuffleSound() //soundShuffle.start()
         displayShufflingCards(distribute = false)
         if (newGameStatus) { // dummy - newGameStatus not needed as score list has game index which is unique
             newGameStatus = false
@@ -601,20 +609,16 @@ class GameScreenAutoPlay : AppCompatActivity() {
             maskWinner.value = true
             gameNumber += 1
         }
-        if (rewardedInterstitialAd == null && !premiumStatus) loadRewardedInterstitialAd()
         if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
         Handler(Looper.getMainLooper()).postDelayed({
-            scoreOpenStatus = true
-            binding.closeGameRoomIcon.visibility = View.GONE
-            binding.scoreViewLayout.visibility = View.VISIBLE
+            if (!scoreWindowOpen.value!!) scoreWindowOpen.value = true
             binding.startNextRoundButton.visibility = View.VISIBLE
             maskWinner.value = false
             if (!rated && !reviewRequested && (nGamesPlayed > 10 || gameNumber > 3)) {  // Ask only once per game
                 inAppReview()
                 reviewRequested = true
             } else if (!premiumStatus && ((gameNumber - 1) % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen_offline))) {
-                if (rewardedInterstitialAd != null) showRewardedInterstitialAd()
-                else if (mInterstitialAd != null) {
+                if (mInterstitialAd != null) {
                     showInterstitialAd()
                 }
             } else if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) {
@@ -704,26 +708,13 @@ class GameScreenAutoPlay : AppCompatActivity() {
 //            binding.gridScoreHeader.adapter = adapterScoreHeader
     }
 
-    fun closeChatScoreWindow(view: View) {
-        binding.scoreViewLayout.visibility = View.GONE
-        binding.closeGameRoomIcon.visibility = View.VISIBLE
+    fun closeChatAndScoreWindow(view: View) {
+        if (scoreWindowOpen.value!!) scoreWindowOpen.value = false
     }
 
     fun openCloseScoreSheet(view: View) {
         maskWinner.value = false
-        if (binding.scoreViewLayout.visibility == View.VISIBLE) {
-            scoreOpenStatus = false
-            binding.closeGameRoomIcon.visibility = View.VISIBLE
-            binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.scoreViewLayout.visibility = View.GONE
-            }, 140)
-        } else {
-            scoreOpenStatus = true
-            binding.closeGameRoomIcon.visibility = View.GONE
-            binding.scoreViewLayout.visibility = View.VISIBLE
-            binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_scoretable_open))
-        }
+        scoreWindowOpen.value = !scoreWindowOpen.value!!
     }
 
     private fun playerCoins(p: String): Int {
@@ -791,8 +782,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         maskWinner.value = false
         binding.startNextRoundButton.clearAnimation()
         binding.startNextRoundButton.visibility = View.GONE
-        binding.scoreViewLayout.visibility = View.GONE
-
+        if (scoreWindowOpen.value!!) scoreWindowOpen.value = false
         val cardsShuffled = (0..51).shuffled()
         cardsInHand = (cardsShuffled.slice(0..12).sortedBy { it }).toMutableList()  //  (mutableListOf<Int>(1,11,12,24,25,37,38,50,51, 49,23,36,5).sortedBy { it }).toMutableList()   // //
         createCardsArray()
@@ -904,7 +894,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (purpose == "start") {
             binding.closeGameRoomIcon.visibility = View.GONE
             findViewById<ProgressBar>(R.id.progressbarTimer).progress = 100
-            binding.closeGameRoomIcon.visibility = View.GONE
             findViewById<ProgressBar>(R.id.progressbarTimer).visibility = View.VISIBLE
             findViewById<TextView>(R.id.textViewTimer).visibility = View.VISIBLE
             findViewById<TextView>(R.id.textViewTimer).text = "10s" //            findViewById<ProgressBar>(R.id.progressbarTimer).startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite))
@@ -999,7 +988,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
                 if (vibrateStatus) vibrationStart()
                 speak("Play ${getSuitName(trumpStart)} card", speed = 1.1f)
             }
-        }else{
+        } else {
             binding.selfCards.layoutManager?.findViewByPosition(cardsInHand.indexOf(cardSelected))?.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_highlight))
         }
     }
@@ -1138,7 +1127,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun createCardsArray() {
         selfCardsArrayList.clear()
         for (x: Int in cardsInHand) {
-            val card = PlayingCardDescription(cardInt = x, cardDrawable = cardsDrawable[x], points = cardsPoints.elementAt(x), expandCard = x==cardsInHand.last())
+            val card = PlayingCardDescription(cardInt = x, cardDrawable = cardsDrawable[x], points = cardsPoints.elementAt(x), expandCard = x == cardsInHand.last())
             selfCardsArrayList.add(card)
         }
     }
@@ -1703,64 +1692,15 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun initializeAds() {
         if (!premiumStatus) {
             MobileAds.initialize(this) {
-                Log.d("Inter", "onInitializationComplete")
-                binding.addViewChatGameScreenBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
-                binding.addViewScoreBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
-                binding.addViewChatGameScreenBanner.visibility = View.VISIBLE
+                Log.d("Inter", "onInitializationComplete ${it.toString()}")
+//                binding.addViewScoreBanner.adUnitId = if (BuildConfig.DEBUG) getString(R.string.banner_admob_test)
+//                else getString(R.string.banner_admob)
                 binding.addViewScoreBanner.visibility = View.VISIBLE
-                loadRewardedInterstitialAd()
+                binding.addViewScoreBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
                 loadInterstitialAd()
             }
         } else {
             binding.addViewScoreBanner.visibility = View.GONE
-            binding.addViewChatGameScreenBanner.visibility = View.GONE
-        }
-    }
-
-    private fun loadRewardedInterstitialAd() {
-        loadRewardedInterAdTry += 1 // try 5 times
-        RewardedInterstitialAd.load(this, getString(R.string.reward_inter_admob), AdRequest.Builder().build(), object : RewardedInterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                Log.d("RewardedInterstitialAd", "onAdFailedToLoad ${loadAdError.message}")
-                rewardedInterstitialAd = null
-                if (loadRewardedInterAdTry <= 2) loadRewardedInterstitialAd()
-            }
-
-            override fun onAdLoaded(rewardedInterstitialAd1: RewardedInterstitialAd) {
-                Log.d("RewardedInterstitialAd", "onAdLoaded")
-                loadRewardedInterAdTry = 0
-                rewardedInterstitialAd = rewardedInterstitialAd1
-            }
-        })
-
-    }
-
-    private fun showRewardedInterstitialAd() {
-        if (rewardedInterstitialAd != null) {
-            rewardedInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                    Log.d("RewardedInterstitialAd", "onAdFailedToShowFullScreenContent")
-                    rewardedInterstitialAd = null
-                    loadRewardedInterstitialAd()
-                }
-
-                override fun onAdDismissedFullScreenContent() {
-                    Log.d("RewardedInterstitialAd", "onAdDismissedFullScreenContent")
-                    rewardedInterstitialAd = null
-                    loadRewardedInterstitialAd()
-                    logFirebaseEvent(key = "watched_ad")
-                    if (gameState.value!! == 6) {
-                        binding.startNextRoundButton.visibility = View.VISIBLE
-                    }
-                }
-
-                override fun onAdShowedFullScreenContent() {}
-                override fun onAdImpression() {}
-            }
-            rewardedInterstitialAd!!.show(this) { rewardItem -> Log.d("RewardedInterstitialAd", "Reward received ${rewardItem.amount}") }
-        } else {
-            Log.d("RewardedInterstitialAd", "RewardedInterstitialAd is Null")
-            loadRewardedInterstitialAd()
         }
     }
 
@@ -1785,7 +1725,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
         if (mInterstitialAd != null) {
             mInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                    Log.d("InterstitialAd", "onAdFailedToShowFullScreenContent")
+                    Log.d("InterstitialAd", "onAdFailedToShowFullScreenContent - ${p0.message}")
                     mInterstitialAd = null
                     loadInterstitialAd()
                 }
@@ -1857,12 +1797,21 @@ class GameScreenAutoPlay : AppCompatActivity() {
         countDownTimer("Bidding", purpose = "cancel")
     }
 
+    override fun onPause() {
+        super.onPause()
+        binding.addViewScoreBanner.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.addViewScoreBanner.resume()
+    }
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
-        if (!scoreOpenStatus) {
+        if (!scoreWindowOpen.value!!) {
             this.moveTaskToBack(true)
         } else {
-            openCloseScoreSheet(View(applicationContext))
+            scoreWindowOpen.value = false
         }
     }
 
@@ -1873,7 +1822,6 @@ class GameScreenAutoPlay : AppCompatActivity() {
         } catch (_: java.lang.Exception) {
         }
         binding.addViewScoreBanner.destroy()
-        binding.addViewChatGameScreenBanner.destroy()
         try {
             if (this::textToSpeech.isInitialized) {
                 textToSpeech.stop()
@@ -1881,6 +1829,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
             }
         } catch (_: java.lang.Exception) {
         }
+        binding.addViewScoreBanner.destroy()
         super.onDestroy()
 
     }

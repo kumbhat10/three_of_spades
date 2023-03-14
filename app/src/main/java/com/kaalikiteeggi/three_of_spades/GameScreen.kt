@@ -37,8 +37,6 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -113,13 +111,9 @@ class GameScreen : AppCompatActivity() {
     private lateinit var vibrator: Vibrator
 
     private var premiumStatus = false
-    private var scoreOpenStatus = false
-    private var chatOpenStatus = false
     private var activityExists = true
     private var mInterstitialAd: InterstitialAd? = null
-    private var rewardedInterstitialAd: RewardedInterstitialAd? = null
     private var loadInterAdTry = 0
-    private var loadRewardedInterAdTry = 0
     private lateinit var roomID: String
     private lateinit var selfName: String
     private lateinit var from: String
@@ -156,6 +150,8 @@ class GameScreen : AppCompatActivity() {
     private var p1s = MutableLiveData<Int>()
     private var p2s = MutableLiveData<Int>()
     private var maskWinner = MutableLiveData(false)
+    private var chatWindowOpen = MutableLiveData(false)
+    private var scoreWindowOpen = MutableLiveData(false)
 
     private lateinit var playerInfo: ArrayList<String>
     private lateinit var playerInfoCoins: ArrayList<Int>
@@ -311,7 +307,7 @@ class GameScreen : AppCompatActivity() {
 
             override fun onFinish() {
                 autoPlayCard()
-                if (soundStatus && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)  )) SoundManager.instance?.playTimerSound()
+                if (soundStatus && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online))) SoundManager.instance?.playTimerSound()
                 if (vibrateStatus) vibrationStart()
                 binding.progressbarTimer.progress = 0
                 binding.closeGameRoomIcon.visibility = View.VISIBLE
@@ -324,7 +320,7 @@ class GameScreen : AppCompatActivity() {
         // region Countdown Biding
         countDownBidding = object : CountDownTimer(timeCountdownBid, 50) {
             @SuppressLint("SetTextI18n")
-            override fun onTick(millisUntilFinished: Long) { //                     binding.closeGameRoomIcon.visibility = View.GONE
+            override fun onTick(millisUntilFinished: Long) {
                 binding.progressbarTimer.progress = (millisUntilFinished * 10000 / timeCountdownBid).toInt()
                 binding.textViewTimer.text = round((millisUntilFinished / 1000).toDouble() + 1).toInt().toString()
             }
@@ -346,7 +342,7 @@ class GameScreen : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).postDelayed({
                         binding.frameAskBid.visibility = View.GONE
                         binding.frameAskBid.clearAnimation()
-                    }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 180L)
+                    }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 180L)
                     speak("Time's Up ${playerName(fromInt)}. You can't bid now", speed = 1.05f)
                 }
             }
@@ -430,6 +426,35 @@ class GameScreen : AppCompatActivity() {
                 10 -> binding.buddyText1.text = getString(R.string.anyPartner)
                 in 1..nPlayers -> binding.buddyText1.text = playerName(it)
                 else -> binding.buddyText1.text = if (nPlayers4) getString(R.string.partner) else getString(R.string.partner1)  //13
+            }
+        }
+        chatWindowOpen.observe(this) {
+            if (it) {
+                counterChat = 0 // reset chat counter to 0
+                binding.textViewChatNo.visibility = View.GONE // make counter invisible
+                binding.chatLinearLayout.visibility = View.VISIBLE
+                binding.chatLinearLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_chat_open))
+                binding.imageViewChat.repeatCount = 1
+            } else {
+                hideKeyboard()
+                binding.chatLinearLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_chat_close))
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.chatLinearLayout.visibility = View.GONE
+                }, 280) //
+            }
+        }
+        scoreWindowOpen.observe(this) {
+            if (it) {
+                binding.closeGameRoomIcon.visibility = View.GONE
+                binding.scoreViewLayout.visibility = View.VISIBLE
+                binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_scoretable_open))
+            } else {
+//                if (BuildConfig.DEBUG) maskWinner.value = true
+                binding.closeGameRoomIcon.visibility = View.VISIBLE
+                binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.scoreViewLayout.visibility = View.GONE
+                }, 180)
             }
         }
         maskWinner.observe(this) {
@@ -524,17 +549,18 @@ class GameScreen : AppCompatActivity() {
         chatAdapter.notifyItemInserted(chatArray.size - 1)
         binding.chatRecyclerView.scrollToPosition(chatArray.size - 1)
 
-        if (binding.chatLinearLayout.visibility != View.VISIBLE) {
+        if (!chatWindowOpen.value!!) {
             binding.imageViewChat.repeatCount = LottieDrawable.INFINITE
             binding.imageViewChat.resumeAnimation()
             counterChat += 1 // increase counter by 1 is chat display is off
             binding.textViewChatNo.visibility = View.VISIBLE
-            binding.textViewChatNo.text = "$counterChat New ${Emoji().message}"
+            binding.textViewChatNo.text = Emoji().message + counterChat.toString()
         }
     }
 
     override fun onResume() {
         super.onResume()
+        binding.addViewScoreBanner.resume()
         if (fromInt != 1) checkRoomExists() // check for all except host
         else writeToRoomDatabase("OL/$from", 1) // Turn only host online
 
@@ -549,6 +575,7 @@ class GameScreen : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        binding.addViewScoreBanner.pause()
         if (activityExists) writeToRoomDatabase("OL/$from", 0)
         refRoomDatabase.child("OL").removeEventListener(onlineStatusListener)
         chatRegistration.remove()
@@ -655,7 +682,7 @@ class GameScreen : AppCompatActivity() {
 
         if (fromInt == 1) {
             centralText("Restarting Game", displayTime = 0)
-            Handler(Looper.getMainLooper()).postDelayed({ startNextGame(View(this)) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1500L)
+            Handler(Looper.getMainLooper()).postDelayed({ startNextGame(View(this)) }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1500L)
         } else {
             centralText("Host has restarted Game", displayTime = 0)
             speak("Host has restarted Game")
@@ -674,7 +701,7 @@ class GameScreen : AppCompatActivity() {
         if (!gameState1) {
             gameState1 = true
             resetVariables()
-            binding.scoreViewLayout.visibility = View.GONE
+            if (scoreWindowOpen.value!!) scoreWindowOpen.value = false
             updatePlayerNames()
             shufflingWindow(gameStateChange = true)
         } else if (activityExists && shufflingAnimationFinished) startBidding()
@@ -833,6 +860,7 @@ class GameScreen : AppCompatActivity() {
             viewToMove.animate().x(targetViewMoveX).y(targetViewMoveY).setDuration(duration).interpolator = AccelerateDecelerateInterpolator()
         }
     }
+
     private fun moveView(viewToMove: View, fromView: View? = null, fromX: Float = 0F, fromY: Float = 0F, duration: Long = moveViewDuration) {
         val xViewToMove = viewToMove.x
         val yViewToMove = viewToMove.y
@@ -846,6 +874,7 @@ class GameScreen : AppCompatActivity() {
         viewToMove.animate().x(xViewToMove).y(yViewToMove).setDuration(duration).interpolator = AccelerateDecelerateInterpolator()
 
     }
+
     fun askToBid(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
         if (!bidDone) {
@@ -868,7 +897,7 @@ class GameScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.frameAskBid.visibility = View.GONE
                 binding.frameAskBid.clearAnimation()
-            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 180)
+            }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 180)
         }
     }
 
@@ -1086,7 +1115,6 @@ class GameScreen : AppCompatActivity() {
         if (nPlayers7 && p2s.value != gameData.p2s) p2s.value = gameData.p2s
         played = gameData.ct[fromInt - 1] != cardsIndexLimit
         if ((gameData.rn == 8 && gameData.gn % gameLimitNoAds == 0) && !premiumStatus) {
-            if (rewardedInterstitialAd == null) loadRewardedInterstitialAd()
             if (mInterstitialAd == null) loadInterstitialAd()
         } // dummy - load the ad again
         updatePlayerScoreInfo()
@@ -1199,7 +1227,7 @@ class GameScreen : AppCompatActivity() {
         // if the game turn changes then only proceed
         clearAllAnimation()
         if (gameData.rt == nPlayers + 1) { // Round finished - Declare round winner
-            handlerDeclareWinner.postDelayed({ declareRoundWinner() }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else 700)
+            handlerDeclareWinner.postDelayed({ declareRoundWinner() }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else 700)
         } else {
             handlerDeclareWinner.removeCallbacksAndMessages(null)
             if (gameData.rt != 8 && gameData.rt != 0) {
@@ -1228,7 +1256,7 @@ class GameScreen : AppCompatActivity() {
         roundWinner = roundCards.toIntArray().indexOf(winnerCard) + 1
         animatePlayer(roundWinner)
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.anim_scale_big_fast))
-        handlerDeclareWinner.postDelayed({ animateWinner() }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 0L else 600L)
+        handlerDeclareWinner.postDelayed({ animateWinner() }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 0L else 600L)
         handlerDeclareWinner.postDelayed({ // start after 1.5 seconds
             if (gameData.rn < roundNumberLimit) {
                 if (roundWinner == fromInt) { // only winner can start next round
@@ -1240,7 +1268,7 @@ class GameScreen : AppCompatActivity() {
                     endGameRound() // update points of last round to server by winner
                 }
             }
-        }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else 1500)
+        }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else 1500)
     }
 
     private fun animateWinner() {
@@ -1251,14 +1279,14 @@ class GameScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.imageViewWinnerCenter.visibility = View.GONE
                 textViewCenterPoint.visibility = View.GONE
-            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000)
+            }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000)
         } else if (nPlayers4) {
             binding.imageViewWinnerCenter4.visibility = View.VISIBLE
             if (roundWinner > 0) binding.imageViewWinnerCenter4.startAnimation(AnimationUtils.loadAnimation(this, refIDMappedTableWinnerAnim[roundWinner - 1]))
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.imageViewWinnerCenter4.visibility = View.GONE
                 textViewCenterPoint.visibility = View.GONE
-            }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000)
+            }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000)
         }
         findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
         for (i in 0 until nPlayers) {
@@ -1311,7 +1339,7 @@ class GameScreen : AppCompatActivity() {
                 if (vibrateStatus) vibrationStart()
                 speak("Play ${getSuitName(gameData.rtr)} card")
             }
-        }else{
+        } else {
             binding.selfCards.layoutManager?.findViewByPosition(cardsInHand.indexOf(cardSelected))?.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_highlight))
         }
     }
@@ -1323,7 +1351,7 @@ class GameScreen : AppCompatActivity() {
             val position = cardsInHand.indexOf(cardSelected)
 
             if (soundStatus) SoundManager.instance?.playCardPlayedSound()
-            val view = findViewById<ImageView>(refIDMappedTableImageView[fromInt-1])
+            val view = findViewById<ImageView>(refIDMappedTableImageView[fromInt - 1])
             view.visibility = View.VISIBLE
             view.setImageResource(cardsDrawable[cardSelected])
 
@@ -1411,26 +1439,20 @@ class GameScreen : AppCompatActivity() {
             if (fromInt == 1) logFirebaseEvent(key = "played$nPlayers")
             if (newGameStatus) {
                 newGameStatus = false
-                updateWholeScoreBoard()
+                updateWholeScoreBoard() // Also shows Win-Loose summary window
             }
             showTableCard(resetCards = true)
             binding.relativeLayoutTableCards.visibility = View.GONE
             countDownTimer("PlayCard", purpose = "cancel")
             if (vibrateStatus) vibrationStart()
             displayShufflingCards(distribute = false)
-            if (rewardedInterstitialAd == null && !premiumStatus) loadRewardedInterstitialAd()
             if (mInterstitialAd == null && !premiumStatus) loadInterstitialAd()
 
             handlerDeclareWinner.postDelayed({
-                scoreOpenStatus = true
-                binding.closeGameRoomIcon.visibility = View.GONE
-                binding.scoreViewLayout.visibility = View.VISIBLE
+                scoreWindowOpen.value = true
                 maskWinner.value = false
-                if (!premiumStatus && (gameData.gn % gameLimitNoAds == 0) && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen))) {
-                    if (rewardedInterstitialAd != null) showRewardedInterstitialAd()
-                    else if (mInterstitialAd != null) {
-                        showInterstitialAd()
-                    }
+                if (!premiumStatus && (gameData.gn % gameLimitNoAds == 0) && mInterstitialAd != null && !(BuildConfig.DEBUG && resources.getBoolean(R.bool.disable_ads_game_screen))) {
+                    showInterstitialAd()
                 } else if (fromInt == 1 && BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) {
                     startNextGame(binding.startNextRoundButton)
                 }
@@ -1481,7 +1503,7 @@ class GameScreen : AppCompatActivity() {
             nGamesBid += 1
             nGamesBidDaily += 1
         }
-        Handler(Looper.getMainLooper()).postDelayed({ maskWinner.value = true }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000L)
+        Handler(Looper.getMainLooper()).postDelayed({ maskWinner.value = true }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000L)
 
         val arrayListWinner = ArrayList<PlayerScoreItemDescription>()
         val arrayListLoser = ArrayList<PlayerScoreItemDescription>()
@@ -1528,20 +1550,8 @@ class GameScreen : AppCompatActivity() {
 
     fun openCloseScoreSheet(view: View) {
         if (maskWinner.value!!) maskWinner.value = false
-        else if (binding.scoreViewLayout.visibility == View.VISIBLE) {
-            scoreOpenStatus = false
-            if (BuildConfig.DEBUG) maskWinner.value = true
-            binding.closeGameRoomIcon.visibility = View.VISIBLE
-            binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_scoretable_close))
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.scoreViewLayout.visibility = View.GONE
-            }, 140)
-        } else {
-            scoreOpenStatus = true
-            binding.closeGameRoomIcon.visibility = View.GONE
-            binding.scoreViewLayout.visibility = View.VISIBLE
-            binding.scoreViewLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_scoretable_open))
-
+        else {
+            scoreWindowOpen.value = !scoreWindowOpen.value!!
         }
     }
 
@@ -1556,7 +1566,7 @@ class GameScreen : AppCompatActivity() {
         timeCountdownPlayCard = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 0L else if (BuildConfig.DEBUG) 6000L else 20000L
         timeCountdownBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else if (BuildConfig.DEBUG) 1500L else 20000L
         delayGameOver = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else if (BuildConfig.DEBUG) 2000L else 5000L
-        timeAutoPlayMode =  if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 1000L
+        timeAutoPlayMode = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 1000L
         moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 500L
 
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
@@ -1704,7 +1714,7 @@ class GameScreen : AppCompatActivity() {
                     countDownPlayCard.cancel()
                     val view = View(applicationContext)
                     view.tag = "notClicked"
-                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000L else 2500)
+                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000L else 2500)
                 }
             }
         }
@@ -1724,7 +1734,7 @@ class GameScreen : AppCompatActivity() {
                     findViewById<ImageView>(refIDMappedOnlineIconImageView[0]).setImageResource(R.drawable.status_offline)
                     val view = View(applicationContext)
                     view.tag = "notClicked"
-                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000L else 2500)
+                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(view) }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000L else 2500)
                 }
             }
         })
@@ -1740,12 +1750,9 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    fun closeChatScoreWindow(view: View) {
-        binding.chatLinearLayout.visibility = View.GONE
-        chatOpenStatus = false
-        scoreOpenStatus = false
-        binding.scoreViewLayout.visibility = View.GONE
-        binding.closeGameRoomIcon.visibility = View.VISIBLE
+    fun closeChatAndScoreWindow(view: View) {
+        if (chatWindowOpen.value!!) chatWindowOpen.value = false
+        if (scoreWindowOpen.value!!) scoreWindowOpen.value = false
     }
 
     private fun playerCoins(p: String): Int {
@@ -1820,7 +1827,6 @@ class GameScreen : AppCompatActivity() {
         if (purpose == "start") {
             binding.closeGameRoomIcon.visibility = View.GONE
             binding.progressbarTimer.progress = 100
-            binding.closeGameRoomIcon.visibility = View.GONE
             binding.progressbarTimer.visibility = View.VISIBLE
             binding.textViewTimer.visibility = View.VISIBLE
             binding.textViewTimer.text = "10"
@@ -1848,10 +1854,10 @@ class GameScreen : AppCompatActivity() {
         for (index in 0 until nPlayers) {
             val newCard = gameData.ct[index] != gameData.ct1[index]
             if (gameData.ct[index] <= (cardsIndexLimit - 2) && !resetCards) {
-                if (soundStatus && newCard && index != fromInt-1) SoundManager.instance?.playCardPlayedSound()
+                if (soundStatus && newCard && index != fromInt - 1) SoundManager.instance?.playCardPlayedSound()
                 findViewById<ImageView>(refIDMappedTableImageView[index]).visibility = View.VISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[index]).setImageResource(cardsDrawable[gameData.ct[index]])
-                if (newCard && index != fromInt-1) findViewById<ImageView>(refIDMappedTableImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[index]))
+                if (newCard && index != fromInt - 1) findViewById<ImageView>(refIDMappedTableImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, refIDMappedTableAnim[index]))
             } else {
                 findViewById<ImageView>(refIDMappedTableImageView[index]).visibility = View.INVISIBLE
                 findViewById<ImageView>(refIDMappedTableImageView[index]).clearAnimation()
@@ -1952,7 +1958,7 @@ class GameScreen : AppCompatActivity() {
         }
     }
 
-    private fun centralText(message: String = "", displayTime: Int = if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000 else 3000, cancel: Boolean = false) {
+    private fun centralText(message: String = "", displayTime: Int = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000 else 3000, cancel: Boolean = false) {
         if (cancel) {
             binding.textViewShuffling.clearAnimation()
             binding.textViewShuffling.text = ""
@@ -2016,10 +2022,10 @@ class GameScreen : AppCompatActivity() {
                     handlerDeclareWinner.postDelayed({
                         startBidding()
                         shufflingAnimationFinished = true
-                    }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 800L)
+                    }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 800L)
                 }
             }, fadeOffTime)
-        }, if(BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000L else time)
+        }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 1000L else time)
     }
 
     private fun displayShufflingCards(view: View = View(this), sets: Int = 5, distribute: Boolean = true) {
@@ -2083,23 +2089,7 @@ class GameScreen : AppCompatActivity() {
 
     fun openCloseChatWindow(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        if (binding.chatLinearLayout.visibility == View.VISIBLE) { //close chat display
-            hideKeyboard()
-            binding.chatLinearLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomout_chat_close))
-            Handler(Looper.getMainLooper()).postDelayed({
-                chatOpenStatus = false
-                binding.chatLinearLayout.visibility = View.GONE
-            }, 140) //
-
-        } else { //open chat display
-            counterChat = 0 // reset chat counter to 0
-            chatOpenStatus = true
-            binding.textViewChatNo.visibility = View.GONE // make counter invisible
-            binding.textViewChatNo.clearAnimation() // clear counter animation
-            binding.chatLinearLayout.visibility = View.VISIBLE
-            binding.chatLinearLayout.startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.zoomin_chat_open))
-            binding.imageViewChat.repeatCount = 1
-        }
+        chatWindowOpen.value = !chatWindowOpen.value!!
     }
 
     private fun inflateEmoji() {
@@ -2176,65 +2166,17 @@ class GameScreen : AppCompatActivity() {
         if (!premiumStatus) {
             MobileAds.initialize(this) {
                 Log.d("Inter", "onInitializationComplete")
-                binding.addViewChatGameScreenBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
-                binding.addViewGameScreenBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
-                binding.addViewChatGameScreenBanner.visibility = View.VISIBLE
-                binding.addViewGameScreenBanner.visibility = View.VISIBLE
-                loadRewardedInterstitialAd()
+//                binding.addViewScoreBanner.adUnitId = if (BuildConfig.DEBUG) getString(R.string.banner_admob_test)
+//                else getString(R.string.banner_admob)
+                binding.addViewScoreBanner.loadAd(AdRequest.Builder().build())  //load ad to banner view Admob
+                binding.addViewScoreBanner.visibility = View.VISIBLE
                 loadInterstitialAd()
             }
         } else {
-            binding.addViewGameScreenBanner.visibility = View.GONE
-            binding.addViewChatGameScreenBanner.visibility = View.GONE
+            binding.addViewScoreBanner.visibility = View.GONE
         }
     }
 
-    private fun loadRewardedInterstitialAd() {
-        loadRewardedInterAdTry += 1 // try 5 times
-        RewardedInterstitialAd.load(this, getString(R.string.reward_inter_admob), AdRequest.Builder().build(), object : RewardedInterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                Log.d("RewardedInterstitialAd", "onAdFailedToLoad ${loadAdError.message}")
-                rewardedInterstitialAd = null
-                if (loadRewardedInterAdTry <= 2) loadRewardedInterstitialAd()
-            }
-
-            override fun onAdLoaded(rewardedInterstitialAd1: RewardedInterstitialAd) {
-                Log.d("RewardedInterstitialAd", "onAdLoaded")
-                loadRewardedInterAdTry = 0
-                rewardedInterstitialAd = rewardedInterstitialAd1
-            }
-        })
-
-    }
-
-    private fun showRewardedInterstitialAd() {
-        if (rewardedInterstitialAd != null) {
-            rewardedInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                    Log.d("RewardedInterstitialAd", "onAdFailedToShowFullScreenContent")
-                    rewardedInterstitialAd = null
-                    loadRewardedInterstitialAd()
-                }
-
-                override fun onAdDismissedFullScreenContent() {
-                    Log.d("RewardedInterstitialAd", "onAdDismissedFullScreenContent")
-                    rewardedInterstitialAd = null
-                    logFirebaseEvent(key = "watched_ad")
-                    if (fromInt == 1 && gameData.gs == 6) {
-                        binding.startNextRoundButton.visibility = View.VISIBLE
-                    }
-                    if (fromInt == 1) writeToRoomDatabase("OL/$from", 1) // for others except host, onStart will take care to update activity
-                }
-
-                override fun onAdShowedFullScreenContent() {}
-                override fun onAdImpression() {}
-            }
-            rewardedInterstitialAd!!.show(this) { rewardItem -> Log.d("RewardedInterstitialAd", "Reward received ${rewardItem.amount}") }
-        } else {
-            Log.d("RewardedInterstitialAd", "RewardedInterstitialAd is Null")
-            loadRewardedInterstitialAd()
-        }
-    }
 
     private fun loadInterstitialAd(showAd: Boolean = false) {
         loadInterAdTry += 1 // try 5 times
@@ -2284,35 +2226,41 @@ class GameScreen : AppCompatActivity() {
 
     fun showDialogue(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        closeRoom = true
-        speak("Are you sure want to leave the game", speed = 0.95f, forceSpeak = true)
-        if (!this::alertDialog.isInitialized) {
-            val builder = AlertDialog.Builder(this)
-            val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
-            titleTextView.dialogueTitle.text = "Exit Game"
-            builder.setCustomTitle(titleTextView.root)
-            val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
-            bodyTextView.dialogueBody.text = getString(R.string.leave_room_confirm)
-            builder.setView(bodyTextView.root)
-            builder.setPositiveButton("Leave Room") { _: DialogInterface, _: Int ->
-                toastCenter("Leaving game now")
-                speak("Leaving game ", forceSpeak = true)
-                Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(View(this)) }, 300)
+        if(!chatWindowOpen.value!! && !scoreWindowOpen.value!!) {
+            closeRoom = true
+            speak("Are you sure want to leave the game", speed = 0.95f, forceSpeak = true)
+            if (!this::alertDialog.isInitialized) {
+                val builder = AlertDialog.Builder(this)
+                val titleTextView = DialogueTitleBinding.inflate(LayoutInflater.from(this))
+                titleTextView.dialogueTitle.text = "Exit Game"
+                builder.setCustomTitle(titleTextView.root)
+                val bodyTextView = DialogueBodyBinding.inflate(LayoutInflater.from(this))
+                bodyTextView.dialogueBody.text = getString(R.string.leave_room_confirm)
+                builder.setView(bodyTextView.root)
+                builder.setPositiveButton("Leave Room") { _: DialogInterface, _: Int ->
+                    toastCenter("Leaving game now")
+                    speak("Leaving game ", forceSpeak = true)
+                    Handler(Looper.getMainLooper()).postDelayed({ closeGameRoom(View(this)) }, 300)
+                }
+                builder.setNegativeButton("Cancel") { _: DialogInterface, _: Int ->
+                    closeRoom = false
+                }
+                if (fromInt == 1) builder.setNeutralButton("Restart round") { _: DialogInterface, _: Int ->
+                    speak("Restarting game", forceSpeak = true)
+                    writeToGameDatabase(data = mutableMapOf("gs" to 7))
+                }
+                builder.setOnDismissListener {
+                    closeRoom = false
+                }
+                alertDialog = builder.create()
+                alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_dialogue_background))
             }
-            builder.setNegativeButton("Cancel") { _: DialogInterface, _: Int ->
-                closeRoom = false
-            }
-            if (fromInt == 1) builder.setNeutralButton("Restart round") { _: DialogInterface, _: Int ->
-                speak("Restarting game", forceSpeak = true)
-                writeToGameDatabase(data = mutableMapOf("gs" to 7))
-            }
-            builder.setOnDismissListener {
-                closeRoom = false
-            }
-            alertDialog = builder.create()
-            alertDialog.window?.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.shine_dialogue_background))
+            alertDialog.show()
         }
-        alertDialog.show()
+        else{
+            if(scoreWindowOpen.value!!) scoreWindowOpen.value = false
+            if(chatWindowOpen.value!!) chatWindowOpen.value = false
+        }
     }
 
     fun showDialogueResetGame() {
@@ -2349,13 +2297,14 @@ class GameScreen : AppCompatActivity() {
         finishAndRemoveTask()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() { //minimize the app and avoid destroying the activity
-        if (!scoreOpenStatus && !chatOpenStatus) {
+        if (!scoreWindowOpen.value!! && !chatWindowOpen.value!!) {
             this.moveTaskToBack(true)
+        } else {
+            if (scoreWindowOpen.value!!) scoreWindowOpen.value = false
+            if (chatWindowOpen.value!!) chatWindowOpen.value = false
         }
-        if (scoreOpenStatus) openCloseScoreSheet(View(this))
-        if (chatOpenStatus) openCloseChatWindow(View(this))
-
     } // is offline
 
     override fun onDestroy() {
@@ -2364,8 +2313,7 @@ class GameScreen : AppCompatActivity() {
             mInterstitialAd = null
         } catch (_: java.lang.Exception) {
         }
-        binding.addViewGameScreenBanner.destroy()
-        binding.addViewChatGameScreenBanner.destroy()
+        binding.addViewScoreBanner.destroy()
         try {
             if (this::textToSpeech.isInitialized) {
                 textToSpeech.stop()
@@ -2375,6 +2323,7 @@ class GameScreen : AppCompatActivity() {
         }
         binding.chatRecyclerView.adapter = null
         super.onDestroy()
+        binding.addViewScoreBanner.destroy()
 
     }
 }
