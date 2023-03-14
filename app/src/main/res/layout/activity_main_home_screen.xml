@@ -118,7 +118,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:onClick="trainingStart"
-            android:text="@string/train"
+            android:text="@string/dummy_join"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp"
             android:visibility="gone"
@@ -137,13 +137,33 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:onClick="createRoomButton"
-            android:tag="10"
-            android:text="@string/dummy_nonline"
+            android:tag="4"
+            android:text="@string/dummy_online_4"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/trainingButton" />
+
+        <TextView
+            android:id="@+id/trainingButton2"
+            android:layout_width="@dimen/mhsIconsSize"
+            android:layout_height="@dimen/mhsIconsSize"
+            android:layout_marginTop="@dimen/mhsIconsGap"
+            android:layout_marginEnd="@dimen/mhsIconsMargin"
+            android:background="@drawable/button_square"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:onClick="createRoomButton"
+            android:tag="7"
+            android:text="@string/dummy_online_7"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainingButton1" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mainIconGridView"
@@ -640,11 +660,12 @@
             android:numColumns="1"
             android:verticalSpacing="@dimen/_10sdp"
             android:visibility="visible"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toTopOf="@id/closeCreateRoom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1" />
+            app:layout_constraintVertical_bias="0.5" />
 
         <ImageView
             android:id="@+id/closeCreateRoom"
@@ -654,9 +675,11 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="createRoomWindowExit"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gridCreateRoom"
             app:srcCompat="@drawable/close"
             tools:ignore="ContentDescription" />
 
@@ -1050,7 +1073,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/bannerMHS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

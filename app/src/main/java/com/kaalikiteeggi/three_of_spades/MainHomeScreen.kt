@@ -261,6 +261,7 @@ class MainHomeScreen : AppCompatActivity() {
         if (BuildConfig.DEBUG) {
             binding.trainingButton.visibility = View.VISIBLE
             binding.trainingButton1.visibility = View.VISIBLE
+            binding.trainingButton2.visibility = View.VISIBLE
         }
     }
 
@@ -779,7 +780,7 @@ class MainHomeScreen : AppCompatActivity() {
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(this, getString(R.string.reward_admob), adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(p0: LoadAdError) {
-                Log.d("Inter", "Rewarded failed to load")
+                Log.d("Inter", "Rewarded failed to load ${p0.message}")
                 mRewardedAd = null
                 if (loadRewardedAdTry <= 3) loadRewardAd()
             }
@@ -979,7 +980,7 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     fun createRoomButton(view: View) {
-        createRoomButtonClicked(position = 10)
+        createRoomButtonClicked(position = view.tag.toString().toInt())
     }
 
     private fun createRoomButtonClicked(position: Int) {
@@ -991,11 +992,14 @@ class MainHomeScreen : AppCompatActivity() {
         offlineRoomCreate = position == 0
 
         nPlayers = when (position) {
-            1 -> 4
-            2 -> 7
-            else -> 4  //for Position = 0 and 10
+            0 -> 4 //Offline 4 player - Single Deck
+            1 -> 4 //Online  4 player - Single Deck
+            2 -> 7 //Online  7 player - Double Deck
+            4 -> 4 //Online  4 player - Single Deck - pre-added players
+            7 -> 7 //Online  7 player - Double Deck - pre-added players
+            else -> 4  //for Position = 0(offline - 4player) and 10(training button)
         }
-        if (position != 10) createRoom() else if (BuildConfig.DEBUG) createRoom(testPlayersJoinRoom = true)
+        if (position != 4 && position != 7) createRoom() else if (BuildConfig.DEBUG) createRoom(testPlayersJoinRoom = true)
     }
 
     @SuppressLint("SetTextI18n")
@@ -1011,7 +1015,10 @@ class MainHomeScreen : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.maskAllLoading.visibility = View.GONE
             }, 4000)
-        } else if (offlineGameAllowed && offlineRoomCreate) Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, if(BuildConfig.DEBUG) 0L else 1200)
+        }
+        else if (offlineGameAllowed && offlineRoomCreate) {
+            Handler(Looper.getMainLooper()).postDelayed({ startNextActivity() }, if(BuildConfig.DEBUG) 0L else 1200)
+        }
         else if (!onlineGameAllowed) {
             if (soundStatus) SoundManager.instance?.playErrorSound()
             if (vibrateStatus) vibrationStart()
@@ -1097,17 +1104,17 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun createRoomWindowOpen() {
         binding.createRoomFrame.visibility = View.VISIBLE
-        anim(binding.gridCreateRoom, R.anim.slide_down_player_stats)
+        anim(binding.gridCreateRoom, R.anim.zoomin_center)
         createRoomWindowStatus = true
     }
 
     fun createRoomWindowExit(view: View) {
         binding.maskAllLoading.visibility = View.GONE
-        anim(binding.gridCreateRoom, R.anim.slide_up_player_stats)
         createRoomWindowStatus = false
+        anim(binding.gridCreateRoom, R.anim.zoomout_center)
         Handler(Looper.getMainLooper()).postDelayed({
             binding.createRoomFrame.visibility = View.GONE
-        }, 390)
+        }, 240)
     }
 
     fun joinRoomButtonClicked(view: View) {
