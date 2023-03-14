@@ -1409,10 +1409,12 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     private fun ranking() {
-        snackbar = Snackbar.make(binding.backgroundmhs, "Click on player to see more details", 2500).setAction("Dismiss") {}
-        snackbar.setActionTextColor(getColor(R.color.borderblue))
-        snackbar.show()
-        snackbar.view.setOnClickListener { snackbar.dismiss() }
+        if(nGamesPlayed<50) {
+            snackbar = Snackbar.make(binding.backgroundmhs, "Click on player to see more details", 2500).setAction("Dismiss") {}
+            snackbar.setActionTextColor(getColor(R.color.borderblue))
+            snackbar.show()
+            snackbar.view.setOnClickListener { snackbar.dismiss() }
+        }
         binding.rankStats.visibility = View.VISIBLE
         anim(binding.rankStats, R.anim.slide_left_activity)
         rankWindowStatus = true

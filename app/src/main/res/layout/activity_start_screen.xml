@@ -54,26 +54,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/facebookLoginButton"
-        android:layout_width="@dimen/loginHeightGoogle"
-        android:layout_height="@dimen/loginHeightGoogle"
-        android:layout_marginBottom="@dimen/_15sdp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/privacyPolicy"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/googleSignInButton"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="false"
-        app:lottie_speed="1.5"
-        app:lottie_repeatCount="0"
-        app:lottie_rawRes="@raw/facebook" />
-
-    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/googleSignInButton"
         android:layout_width="@dimen/loginHeightGoogle"
         android:layout_height="@dimen/loginHeightGoogle"
-        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_40sdp"
         android:layout_marginBottom="@dimen/_15sdp"
         android:visibility="visible"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -88,16 +72,32 @@
         app:lottie_repeatCount="0"
         app:lottie_rawRes="@raw/google" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/facebookLoginButton"
+        android:layout_width="@dimen/loginHeightGoogle"
+        android:layout_height="@dimen/loginHeightGoogle"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/privacyPolicy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/googleSignInButton"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_speed="2"
+        app:lottie_repeatCount="0"
+        app:lottie_rawRes="@raw/facebook" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/privacyPolicy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_9sdp"
+        android:fontFamily="sans-serif-medium"
         android:onClick="openPrivacyPolicy"
         android:text="@string/privacy_policy"
-        android:fontFamily="@font/luckiest_guy"
-        android:textColor="#2C89FB"
-        android:textSize="@dimen/_10ssp"
+        android:textColor="#4D9DFD"
+        android:textSize="@dimen/_11ssp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
