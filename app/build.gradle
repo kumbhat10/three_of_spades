@@ -82,7 +82,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.airbnb.android:lottie:6.0.0'
 
-    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
+    implementation 'com.facebook.android:facebook-android-sdk:16.0.0'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Import the BoM for the Firebase platform
@@ -100,7 +100,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx'
     implementation 'com.google.firebase:firebase-perf-ktx'
 
-    implementation 'com.applovin:applovin-sdk:11.8.1'
+    implementation 'com.applovin:applovin-sdk:11.8.2'
     implementation  'com.google.ads.mediation:applovin:11.7.1.0'
 
     implementation 'androidx.core:core-splashscreen:1.0.0'
