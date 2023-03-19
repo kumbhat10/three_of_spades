@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnLayout
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -88,15 +89,6 @@ class GameScreen : AppCompatActivity() {
     private lateinit var refIDMappedPartnerIconImageView: List<Int>
     private lateinit var refIDMappedOnlineIconImageView: List<Int>
 
-    private var bidCoinX: Float = 0F
-    private var bidCoinY: Float = 0F
-    private var buddy1X: Float = 0F
-    private var buddy2X: Float = 0F
-    private var buddy1Y: Float = 0F
-    private var buddy2Y: Float = 0F
-    private var trumpX: Float = 0F
-    private var trumpY: Float = 0F
-
     private lateinit var cardsDrawable: List<Int>
     private lateinit var cardsPoints: List<Int>
     private lateinit var cardsSuit: List<String>
@@ -139,6 +131,7 @@ class GameScreen : AppCompatActivity() {
     private lateinit var onlineStatusListener: ValueEventListener
     private lateinit var gameDataListener: ValueEventListener
     private lateinit var chatListener: EventListener<DocumentSnapshot>
+    private var interpolator = AccelerateDecelerateInterpolator()
 
     private var trump = MutableLiveData<String>()
     private var currentBidder = MutableLiveData<Int>()
@@ -196,6 +189,8 @@ class GameScreen : AppCompatActivity() {
     private var timeCountdownBid = if (BuildConfig.DEBUG) 1500L else 20000L
     private var delayGameOver = if (BuildConfig.DEBUG) 1000L else 5000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
+    private var delayDeclareWinner = 1000L
+
     private var moveViewDuration = 350L
 
     private var lastChat = ""
@@ -228,7 +223,17 @@ class GameScreen : AppCompatActivity() {
     private var counterPartnerSelection = 0
     private var roundWinner = 0
     private var newGameStatus = true
+    private var errorReported = false
     private lateinit var binding: ActivityGameScreenBinding
+    private var buddyImage1X = 0F
+    private var buddyImage1Y = 0F
+    private var buddyImage2X = 0F
+    private var buddyImage2Y = 0F
+    private var trumpImageX = 0F
+    private var trumpImageY = 0F
+    private var bidCoinX = 0F
+    private var bidCoinY = 0F
+    private lateinit var refSelfCardTable: ImageView
 
     // endregion
     @SuppressLint("ShowToast", "MissingPermission")
@@ -649,13 +654,17 @@ class GameScreen : AppCompatActivity() {
                             showDialogueResetGame()
                         }
                         if (gameData.gs != 7) {
-                            centralText(message = "Server Error", displayTime = 0)
-                            speak("There was some server error")
-                            FirebaseCrashlytics.getInstance().setCustomKey("RoomID ${kotlin.random.Random.nextInt(1, 1000)}", roomID)
-                            FirebaseCrashlytics.getInstance().setCustomKey("UID", "https://console.firebase.google.com/u/0/project/kaali-ki-teegi/firestore/data/~2FUsers~2F$uid?consoleUI=FIREBASE")
-                            FirebaseCrashlytics.getInstance().log(data.value.toString())
-                            FirebaseCrashlytics.getInstance().recordException(e)
-                            FirebaseCrashlytics.getInstance().sendUnsentReports()
+                            if(fromInt==1) centralText(message = "Server Error. Please restart", displayTime = 0)
+                            else centralText(message = "Server Error. Please ask host to restart", displayTime = 0)
+                            speak("There was a server error")
+                            if(!errorReported) {
+                                errorReported = true
+                                FirebaseCrashlytics.getInstance().setCustomKey("RoomID ${kotlin.random.Random.nextInt(1, 1000)}", roomID)
+                                FirebaseCrashlytics.getInstance().setCustomKey("UID", "https://console.firebase.google.com/u/0/project/kaali-ki-teegi/firestore/data/~2FUsers~2F$uid?consoleUI=FIREBASE")
+                                FirebaseCrashlytics.getInstance().log(data.value.toString())
+                                FirebaseCrashlytics.getInstance().recordException(e)
+                                FirebaseCrashlytics.getInstance().sendUnsentReports()
+                            }
                         }
                     }
                 }
@@ -664,6 +673,7 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun gameState7() {
+        errorReported = false
         gameState7 = true
         gameState1 = false
         gameState4 = false
@@ -682,7 +692,7 @@ class GameScreen : AppCompatActivity() {
 
         if (fromInt == 1) {
             centralText("Restarting Game", displayTime = 0)
-            Handler(Looper.getMainLooper()).postDelayed({ startNextGame(View(this)) }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1500L)
+            Handler(Looper.getMainLooper()).postDelayed({ startNextGame(View(this)) }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 2000L)
         } else {
             centralText("Host has restarted Game", displayTime = 0)
             speak("Host has restarted Game")
@@ -698,16 +708,17 @@ class GameScreen : AppCompatActivity() {
 
     private fun gameState1() {
         maskWinner.value = false
+        if (scoreWindowOpen.value!!) scoreWindowOpen.value = false
         if (!gameState1) {
             gameState1 = true
             resetVariables()
-            if (scoreWindowOpen.value!!) scoreWindowOpen.value = false
             updatePlayerNames()
             shufflingWindow(gameStateChange = true)
         } else if (activityExists && shufflingAnimationFinished) startBidding()
     }
 
     private fun resetVariables() {
+        errorReported = false
         gameState7 = false
         gameState6 = false
         gameState4 = false
@@ -799,7 +810,8 @@ class GameScreen : AppCompatActivity() {
         }
         if (gameData.bvo < gameData.bv && bidingStarted && soundStatus) {
             speak("${playerName(gameData.bb)} bid ${gameData.bv}", speed = 1f)
-            moveView2(binding.bidCoin, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = bidCoinX, targetViewMoveY = bidCoinY)
+            moveView(viewToMove = binding.bidCoin, toX = bidCoinX, toY = bidCoinY , fromView = findViewById(refIDMappedImageView[gameData.bb - 1]))
+
         } else if (bidingStarted && soundStatus && previousPlayerTurn != gameData.pt) speak("${playerName(previousPlayerTurn)} passed", speed = 1f) //                        else if (soundStatus) SoundManager.instance?.playUpdateSound() //
         binding.frameAskBid.visibility = View.GONE //biding frame invisible
         resetBackgroundAnimationBidding() //set pass label on photo if passed
@@ -851,19 +863,7 @@ class GameScreen : AppCompatActivity() {
         return if ((current == 7 && nPlayers7) || (current == 4 && nPlayers4)) 1 else current + 1
     }
 
-    private fun moveView2(viewToMove: View, fromView: View, duration: Long = 350, targetViewMoveX: Float = 30F, targetViewMoveY: Float = 30F) {
-        if (targetViewMoveX != 30F && targetViewMoveY != 30F) {
-//            val xViewToMove = if (targetViewMoveX != 30F) targetViewMoveX else viewToMove.x
-//            val yViewToMove = if (targetViewMoveY != 30F) targetViewMoveY else viewToMove.y
-            viewToMove.x = fromView.x
-            viewToMove.y = fromView.y
-            viewToMove.animate().x(targetViewMoveX).y(targetViewMoveY).setDuration(duration).interpolator = AccelerateDecelerateInterpolator()
-        }
-    }
-
-    private fun moveView(viewToMove: View, fromView: View? = null, fromX: Float = 0F, fromY: Float = 0F, duration: Long = moveViewDuration) {
-        val xViewToMove = viewToMove.x
-        val yViewToMove = viewToMove.y
+    private fun moveView(viewToMove: View, fromView: View? = null, toX: Float = 0F, toY: Float = 0F, fromX: Float = 0F, fromY: Float = 0F, duration: Long = moveViewDuration) {
         if (fromView != null) {
             viewToMove.x = fromView.x
             viewToMove.y = fromView.y
@@ -871,8 +871,7 @@ class GameScreen : AppCompatActivity() {
             viewToMove.x = fromX
             viewToMove.y = fromY
         }
-        viewToMove.animate().x(xViewToMove).y(yViewToMove).setDuration(duration).interpolator = AccelerateDecelerateInterpolator()
-
+        viewToMove.animate().x(toX).y(toY).setDuration(duration).interpolator = interpolator
     }
 
     fun askToBid(view: View) {
@@ -954,7 +953,9 @@ class GameScreen : AppCompatActivity() {
         if (!gameState4) {
             gameState4 = true
             if (soundStatus) SoundManager.instance?.playSuccessSound()
-//            if (gameData.bb != 0) moveView(binding.trumpImage, findViewById(refIDMappedImageView[gameData.bb - 1]), targetViewMoveX = trumpX, targetViewMoveY = trumpY)
+            if (gameData.bb != 0) {
+                moveView(viewToMove = binding.trumpImage, toX = trumpImageX, toY = trumpImageY , fromView =  findViewById(refIDMappedImageView[gameData.bb - 1]))
+            }
             startPartnerSelection()
         }
     }
@@ -1227,7 +1228,7 @@ class GameScreen : AppCompatActivity() {
         // if the game turn changes then only proceed
         clearAllAnimation()
         if (gameData.rt == nPlayers + 1) { // Round finished - Declare round winner
-            handlerDeclareWinner.postDelayed({ declareRoundWinner() }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else 700)
+            handlerDeclareWinner.postDelayed({ declareRoundWinner() }, delayDeclareWinner)
         } else {
             handlerDeclareWinner.removeCallbacksAndMessages(null)
             if (gameData.rt != 8 && gameData.rt != 0) {
@@ -1357,7 +1358,7 @@ class GameScreen : AppCompatActivity() {
 
             val cardViewHolder = binding.selfCards.layoutManager?.findViewByPosition(position)
             if (cardViewHolder != null) {
-                moveView(view, fromX = binding.selfCards.x + cardViewHolder.x, fromY = binding.selfCards.y - cardViewHolder.height)
+                moveView(refSelfCardTable, toX= refSelfCardTable.x, toY = refSelfCardTable.y, fromX = binding.selfCards.x + cardViewHolder.x, fromY = binding.selfCards.y - cardViewHolder.height)
             }
 
             selfCardsArrayList.removeAt(position)
@@ -1562,12 +1563,27 @@ class GameScreen : AppCompatActivity() {
     }
 
     private fun setupGame4or7() {
+        binding.buddyImage1.doOnLayout {
+            buddyImage1X = binding.buddyImage1.x
+            buddyImage1Y = binding.buddyImage1.y  }
+        binding.trumpImage.doOnLayout {
+            trumpImageX = binding.trumpImage.x
+            trumpImageY = binding.trumpImage.y  }
+        binding.bidCoin.doOnLayout {
+            bidCoinX = binding.bidCoin.x
+            bidCoinY = binding.bidCoin.y  }
 
+        if(nPlayers7){
+            binding.buddyImage2.doOnLayout {
+                buddyImage2X = binding.buddyImage2.x
+                buddyImage2Y = binding.buddyImage2.y  }
+        }
         timeCountdownPlayCard = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 0L else if (BuildConfig.DEBUG) 6000L else 20000L
-        timeCountdownBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else if (BuildConfig.DEBUG) 1500L else 20000L
-        delayGameOver = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 200L else if (BuildConfig.DEBUG) 2000L else 5000L
-        timeAutoPlayMode = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 1000L
-        moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else 500L
+        timeCountdownBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else if (BuildConfig.DEBUG) 1500L else 20000L
+        delayGameOver = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else if (BuildConfig.DEBUG) 2000L else 5000L
+        timeAutoPlayMode = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 80L else 1000L
+        moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 80L else 500L
+        delayDeclareWinner = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else if(nPlayers4) 700L else 1200L
 
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
         refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
@@ -1578,20 +1594,9 @@ class GameScreen : AppCompatActivity() {
         refIDMappedTableAnim = PlayersReference().refIDMappedTableAnim(from, nPlayers)
         refIDMappedTableWinnerAnim = PlayersReference().refIDMappedTableWinnerAnim(from, nPlayers)
         refIDMappedTableImageView = PlayersReference().refIDMappedTableImageView(from, nPlayers)
+        refSelfCardTable = findViewById(refIDMappedTableImageView[fromInt - 1])
+
         binding.imageViewChat.visibility = View.VISIBLE
-        //To get any view size post it as a task on the view which is executed once the view is laid out so size wont return 0
-        binding.bidCoin.post {
-            bidCoinX = binding.bidCoin.x
-            bidCoinY = binding.bidCoin.y
-        }
-        binding.buddyImage1.post {
-            buddy1X = binding.buddyImage1.x
-            buddy1Y = binding.buddyImage1.y
-        }
-        binding.trumpImage.post {
-            trumpX = binding.trumpImage.x
-            trumpY = binding.trumpImage.y
-        }
 
         binding.selfCards.layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.HORIZONTAL }
         binding.gridScoreHeader.layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.HORIZONTAL }
@@ -1605,10 +1610,6 @@ class GameScreen : AppCompatActivity() {
         if (nPlayers7) {
             maxBidValue = 700
 
-            binding.buddyImage2.post {
-                buddy2X = binding.buddyImage2.x
-                buddy2Y = binding.buddyImage2.y
-            }
             binding.textView1.visibility = View.VISIBLE
             binding.textView1a.visibility = View.VISIBLE
             binding.onlinep1.visibility = View.VISIBLE

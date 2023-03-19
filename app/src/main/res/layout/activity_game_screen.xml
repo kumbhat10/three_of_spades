@@ -1502,7 +1502,7 @@
         android:id="@+id/chatLinearLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/userRank1"
+        android:background="@drawable/shine_score_table"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
@@ -1515,8 +1515,8 @@
             android:id="@+id/chatRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:orientation="vertical"
             android:onClick="openCloseChatWindow"
+            android:orientation="vertical"
             android:scrollbarSize="@dimen/_5sdp"
             android:scrollbarStyle="insideInset"
             android:scrollbarThumbVertical="@drawable/scrollbar"
@@ -1525,8 +1525,10 @@
             android:verticalScrollbarPosition="left"
             app:layout_constraintBottom_toTopOf="@id/emojiGrid"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <HorizontalScrollView
             android:id="@+id/emojiGrid"
@@ -2218,6 +2220,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:visibility="visible"
+            android:nestedScrollingEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/gridScoreHeader"
