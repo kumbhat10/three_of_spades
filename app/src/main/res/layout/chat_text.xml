@@ -2,7 +2,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -19,13 +19,27 @@
 
     <TextView
         android:id="@+id/chatText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
         android:fontFamily="@font/almendra"
-        android:textColor="@color/font_grey_settings"
+        android:textColor="@color/font_grey_chat"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userPhoto"
+        app:layout_constraintEnd_toStartOf="@id/chatTime"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/chatTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#717171"
+        android:textSize="@dimen/_8ssp"
+        android:layout_marginEnd="@dimen/_3sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

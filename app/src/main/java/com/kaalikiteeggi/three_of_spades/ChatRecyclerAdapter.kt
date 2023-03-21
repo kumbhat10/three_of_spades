@@ -7,13 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kaalikiteeggi.three_of_spades.databinding.ChatTextBinding
 import com.squareup.picasso.Picasso
 
-data class ChatMessage(val message:String, val player:Int, val isEmojiOnly: Boolean = false, val isNotification:Boolean = false)
+data class ChatMessage(val message:String, val messageTime:String, val player:Int, val isEmojiOnly: Boolean = false, val isNotification:Boolean = false)
 
 class ChatRecyclerAdapter(private val chatArray: ArrayList<ChatMessage>,  val userPhotoInfo: List<String>) : RecyclerView.Adapter<ChatRecyclerAdapter.ChatViewHolder>() {
 
 	class ChatViewHolder(private val binder: ChatTextBinding) : RecyclerView.ViewHolder(binder.root) {
 		fun bind(chatMessage: ChatMessage, photoUrl: String){
 			binder.chatText.text = chatMessage.message
+			binder.chatTime.text = chatMessage.messageTime
 			if(chatMessage.isEmojiOnly){
 				binder.chatText.textSize = 28f
 			}else{

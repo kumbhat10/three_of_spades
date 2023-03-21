@@ -37,6 +37,7 @@
     <color name="yellow">#FFF314</color>
     <color name="yellow1">#DC8505</color>
     <color name="font_grey_settings">#E4E4E4</color>
+    <color name="font_grey_chat">#C1C1C1</color>
     <color name="tickerCoin">#FFC800</color>
     <color name="light_grey_settings">#BABABA</color>
 

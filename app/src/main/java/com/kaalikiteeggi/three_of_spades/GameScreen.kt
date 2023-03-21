@@ -373,7 +373,7 @@ class GameScreen : AppCompatActivity() {
                     lastChat = data["M"].toString()
                     lastChatFrom = data["F"].toString().toInt()
                     lastChatTime = data["dt"].toString()
-                    insertNewMessageChat(chatMessage = ChatMessage(message = data["M"].toString(), player = data["F"].toString().toInt(), isEmojiOnly = data["M"].toString() > String(Character.toChars(0x1F000))))
+                    insertNewMessageChat(chatMessage = ChatMessage(message = data["M"].toString(), messageTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date()), player = data["F"].toString().toInt(), isEmojiOnly = data["M"].toString() > String(Character.toChars(0x1F000))))
                 }
             }
         }
@@ -1289,7 +1289,7 @@ class GameScreen : AppCompatActivity() {
                 textViewCenterPoint.visibility = View.GONE
             }, if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 500L else 1000)
         }
-        findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
+        if (roundWinner > 0) findViewById<ImageView>(refIDMappedTableImageView[roundWinner - 1]).clearAnimation()
         for (i in 0 until nPlayers) {
             findViewById<ImageView>(refIDMappedTableImageView[i]).visibility = View.INVISIBLE
         }
@@ -1583,7 +1583,7 @@ class GameScreen : AppCompatActivity() {
         delayGameOver = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else if (BuildConfig.DEBUG) 2000L else 5000L
         timeAutoPlayMode = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 80L else 1000L
         moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 80L else 500L
-        delayDeclareWinner = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else if(nPlayers4) 700L else 1200L
+        delayDeclareWinner = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 40L else if(nPlayers4) 700L else 1200L
 
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
         refIDMappedTextViewA = PlayersReference().refIDMappedTextViewA(from, nPlayers)
@@ -1698,7 +1698,7 @@ class GameScreen : AppCompatActivity() {
             if (onlineStatus[index] == 1 && fromInt != index + 1) {
                 if (oldValue == 2) {
                     speak("${playerName(index + 1)} has joined again !", speed = 1f)
-                    insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has joined!", player = index + 1, isEmojiOnly = false, isNotification = true))
+                    insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has joined!",  messageTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date()), player = index + 1, isEmojiOnly = false, isNotification = true))
                 }
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.greencirclebutton)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
@@ -1707,7 +1707,7 @@ class GameScreen : AppCompatActivity() {
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).setImageResource(R.drawable.status_left)
                 findViewById<ImageView>(refIDMappedOnlineIconImageView[index]).startAnimation(AnimationUtils.loadAnimation(applicationContext, R.anim.blink_and_scale))
                 speak("${playerName(index + 1)} has left !", speed = 1.1f)
-                insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has left", player = index + 1, isEmojiOnly = false, isNotification = true))
+                insertNewMessageChat(chatMessage = ChatMessage(message = "${playerName(index + 1)} has left", messageTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date()), player = index + 1, isEmojiOnly = false, isNotification = true))
                 toastCenter("${playerName(index + 1)} has left the game !")
                 if (index == 0) { //if only host leaves the room
                     activityExists = false
