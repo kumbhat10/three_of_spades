@@ -62,3 +62,4 @@
 -dontwarn sun.misc.SignalHandler
 -dontwarn java.lang.instrument.Instrumentation
 -dontwarn sun.misc.Signal
+-printconfiguration proguard-merged-config.txt
