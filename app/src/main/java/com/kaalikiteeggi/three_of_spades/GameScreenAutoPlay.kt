@@ -165,7 +165,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
 
     private var delayWaitGameMode6 = 4500L
     private var delayDeclareWinner = 2500L
-    private var moveViewDuration = 350L
+    private var moveViewDuration = 260L
     private var timeCountdownPlayCard = if (BuildConfig.DEBUG) 6000L else 20000L
     private var timeAutoPlayCard = if (BuildConfig.DEBUG) listOf<Long>(100, 150, 200, 175, 125, 225) else listOf<Long>(500, 700, 850, 600, 700, 600, 1000)
     private var timeCountdownBid = if (BuildConfig.DEBUG) 2000L else 20000L
@@ -512,7 +512,7 @@ class GameScreenAutoPlay : AppCompatActivity() {
     private fun setupGame() {
         delayWaitGameMode6 = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 500L else 4500L
         delayDeclareWinner = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 300L else 2500L
-        moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 30L else 350L
+        moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 30L else moveViewDuration
         timeCountdownBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 80L else if (BuildConfig.DEBUG) 2000L else 20000L
         timeCountdownPlayCard = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) 80L else if (BuildConfig.DEBUG) 5000L else 20000L
         timeAutoPlayCard = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_offline) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_offline)) listOf(120L) else timeAutoPlayCard
@@ -1510,9 +1510,9 @@ class GameScreenAutoPlay : AppCompatActivity() {
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
             if (bidStatus[i] == 0) {
-                findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
+                findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.bid_passed))
                 findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(applicationContext, R.drawable.pass)
-                if (iPlayer == fromInt) binding.selfCards.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.progressBarPlayer2))
+                if (iPlayer == fromInt) binding.selfCards.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.bid_passed))
             } else {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
 

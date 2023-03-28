@@ -184,14 +184,14 @@ class GameScreen : AppCompatActivity() {
     private var counterChat = 0
     private lateinit var onlineStatus: MutableList<Int>
     private lateinit var allCardsReset: MutableList<Int>
-    private var timeAutoPlayMode = 1000L
+    private var timeAutoPlayMode = 1000L //only used in debugging mode
     private var timeCountdownPlayCard = if (BuildConfig.DEBUG) 1500L else 20000L
     private var timeCountdownBid = if (BuildConfig.DEBUG) 1500L else 20000L
     private var delayGameOver = if (BuildConfig.DEBUG) 1000L else 5000L
     private var handlerDeclareWinner = Handler(Looper.getMainLooper())
     private var delayDeclareWinner = 1000L
 
-    private var moveViewDuration = 350L
+    private var moveViewDuration = 280L
 
     private var lastChat = ""
     private var lastChatFrom = 1
@@ -1582,7 +1582,7 @@ class GameScreen : AppCompatActivity() {
         timeCountdownBid = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else if (BuildConfig.DEBUG) 1500L else 20000L
         delayGameOver = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 100L else if (BuildConfig.DEBUG) 2000L else 5000L
         timeAutoPlayMode = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 80L else 1000L
-        moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 80L else 500L
+        moveViewDuration = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 80L else moveViewDuration
         delayDeclareWinner = if (BuildConfig.DEBUG && resources.getBoolean(R.bool.enable_super_fast_test_online) && resources.getBoolean(R.bool.enable_auto_mode_game_screen_online)) 40L else if(nPlayers4) 700L else 1200L
 
         refIDMappedTextView = PlayersReference().refIDMappedTextView(from, nPlayers)
@@ -1926,14 +1926,14 @@ class GameScreen : AppCompatActivity() {
             findViewById<ImageView>(refIDMappedPartnerIconImageView[i]).visibility = View.GONE
             findViewById<ShimmerFrameLayout>(refIDMappedHighlightView[i]).visibility = View.GONE
             if (gameData.bs[i] == 0) {
-                findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.progressBarPlayer2))
+                findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.bid_passed))
                 findViewById<ImageView>(refIDMappedImageView[i]).foreground = ContextCompat.getDrawable(this, R.drawable.pass)
-                if ("p$iPlayer" == from) binding.selfCards.setBackgroundColor(ContextCompat.getColor(this, R.color.progressBarPlayer2))
+                if (iPlayer == fromInt) binding.selfCards.setBackgroundColor(ContextCompat.getColor(this, R.color.bid_passed))
             } else {
                 findViewById<ImageView>(refIDMappedImageView[i]).setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
-                if ("p$iPlayer" == from) binding.selfCards.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
+                if (iPlayer == fromInt) binding.selfCards.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent))
             }
-            if ("p$iPlayer" == from) binding.selfCards.clearAnimation()
+            if (iPlayer == fromInt) binding.selfCards.clearAnimation()
         }
     }
 
@@ -2104,7 +2104,8 @@ class GameScreen : AppCompatActivity() {
             textView.isFocusable = true
             textView.isClickable = true
             textView.id = i
-            val params = LinearLayout.LayoutParams(100, LinearLayout.LayoutParams.MATCH_PARENT)
+            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT)
+//            val params = LinearLayout.LayoutParams(100, LinearLayout.LayoutParams.MATCH_PARENT)
             params.marginEnd = 5
             textView.layoutParams = params
             textView.foreground = ContextCompat.getDrawable(this, typedValue.resourceId)

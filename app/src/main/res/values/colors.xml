@@ -41,14 +41,14 @@
     <color name="tickerCoin">#FFC800</color>
     <color name="light_grey_settings">#BABABA</color>
 
-    <color name="progressBarPlayer2">#CA0000</color>
+    <color name="bid_passed">#BEFF0000</color>
 
     <color name = "cardsBackgroundDark">#E9040E17</color>
     <color name = "cardsBackgroundLight">#F2FFFFFF</color>
     <color name = "transparent">#00000000</color>
     <color name = "layoutBackgroundLittle">#D501030B</color>
 
-    <color name = "inActiveCard">#C1323232</color>
+    <color name = "inActiveCard">#CE2E2E2E</color>
     <color name = "highlightCard1">#9A39FF00</color>
     <color name = "emojiBackground">#C4070E3A</color>
 
