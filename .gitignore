@@ -12,6 +12,7 @@
 .idea/navEditor.xml
 .idea/assetWizardSettings.xml
 app/google-services.json
+app/proguard-merged-config.txt
 .DS_Store
 /build
 /captures
