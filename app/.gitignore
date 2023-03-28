@@ -3,3 +3,4 @@ google-services*
 /release
 /google-services.json*
 google-services.json
+Proguard-merged-config.txt
