@@ -79,7 +79,7 @@ class MainHomeScreen : AppCompatActivity() {
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var intentBuilder: CustomTabsIntent.Builder
-    private lateinit var snackbar: Snackbar
+    private lateinit var snackBar: Snackbar
     private val howtoPlayUrl = "http://sites.google.com/view/kaali-ki-teeggi/how-to-play"
     private var rewardStatus = false
     private var rewardAmount = 0
@@ -188,7 +188,7 @@ class MainHomeScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_App)
         super.onCreate(savedInstanceState)
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM)
             .enabled(true) //default: true
             .showErrorDetails(true) //default: true
             .showRestartButton(true) //default: true
@@ -597,7 +597,7 @@ class MainHomeScreen : AppCompatActivity() {
             binding.speechSwitch.isChecked = speechStatus
         } else {
             speechStatus = true
-            editor.putBoolean("speechStatus", speechStatus) // write username to preference file
+            editor.putBoolean("speechStatus", true) // write username to preference file
             editor.apply()
         }
         if (sharedPreferences.contains("vibrateStatus")) {
@@ -674,7 +674,6 @@ class MainHomeScreen : AppCompatActivity() {
                 }
             }
         }
-//        val purchases = billingClient.queryPurchases("inapp").purchasesList
     }
 
     private fun querySkuDetailsRequest() {
@@ -1410,10 +1409,10 @@ class MainHomeScreen : AppCompatActivity() {
 
     private fun ranking() {
         if(nGamesPlayed<50) {
-            snackbar = Snackbar.make(binding.backgroundmhs, "Click on player to see more details", 2500).setAction("Dismiss") {}
-            snackbar.setActionTextColor(getColor(R.color.borderblue))
-            snackbar.show()
-            snackbar.view.setOnClickListener { snackbar.dismiss() }
+            snackBar = Snackbar.make(binding.backgroundmhs, "Click on player to see more details", 2500).setAction("Dismiss") {}
+            snackBar.setActionTextColor(getColor(R.color.borderblue))
+            snackBar.show()
+            snackBar.view.setOnClickListener { snackBar.dismiss() }
         }
         binding.rankStats.visibility = View.VISIBLE
         anim(binding.rankStats, R.anim.slide_left_activity)
@@ -1565,7 +1564,7 @@ class MainHomeScreen : AppCompatActivity() {
     }
 
     fun closeRankWindow(view: View) {        //        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_press))
-        if (this::snackbar.isInitialized) snackbar.dismiss()
+        if (this::snackBar.isInitialized) snackBar.dismiss()
         rankWindowStatus = false
         anim(binding.rankStats, R.anim.slide_right_activity)
         Handler(Looper.getMainLooper()).postDelayed({
