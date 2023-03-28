@@ -178,7 +178,7 @@ class GameScreen : AppCompatActivity() {
     private var p7Gain = 0
     private var cardsInHand = mutableListOf<Int>()
 
-    private lateinit var gameData: GameData
+    private var gameData = GameData()
     private var gameLimitNoAds: Int = 2
 
     private var counterChat = 0
