@@ -704,7 +704,7 @@ class MainHomeScreen : AppCompatActivity() {
             if (soundStatus) SoundManager.instance?.playSuccessSound()
             toastCenter("Congratulations!! Your Payment is approved \n You won't see Ads now")
             refUsersData.document(uid).set(hashMapOf("pr" to 1), SetOptions.merge())
-            Firebase.firestore.collection("PremiumUser").document(uid).set(hashMapOf("id" to mAuth.currentUser?.email, "d" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()))
+            Firebase.firestore.collection("PremiumUser").document(uid).set(hashMapOf("id" to mAuth.currentUser?.email, "d" to SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt(), "t" to SimpleDateFormat("HH:mm:ss z").format(Date())))
             consumePurchase(purchase)
             binding.removeAds.visibility = View.GONE
             binding.bannerMHS.visibility = View.GONE
