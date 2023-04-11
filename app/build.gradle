@@ -25,6 +25,20 @@ android {
         versionName "83A"
         signingConfig signingConfigs.debug
     }
+    signingConfigs{
+        release{
+            def tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
+            def allFilesFromDir = new File(tmpFilePath).listFiles()
+            if (allFilesFromDir != null) {
+                def keystoreFile = allFilesFromDir.first()
+                keystoreFile.renameTo("keystore/kaalikitiggi.jks")
+            }
+            storeFile = file("keystore/kaalikitiggi.jks")
+            storePassword System.getenv("SIGNING_STORE_PASSWORD")
+            keyAlias System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword System.getenv("SIGNING_KEY_PASSWORD")
+        }
+    }
     buildTypes {
         debug{
             FirebasePerformance{
@@ -90,7 +104,7 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:31.2.3')
+    implementation platform('com.google.firebase:firebase-bom:31.4.0')
 
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
@@ -104,7 +118,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx'
     implementation 'com.google.firebase:firebase-perf-ktx'
 
-    implementation 'com.applovin:applovin-sdk:11.8.2'
+    implementation 'com.applovin:applovin-sdk:11.9.0'
     implementation  'com.google.ads.mediation:applovin:11.8.2.0'
 
     implementation 'androidx.core:core-splashscreen:1.0.0'
@@ -112,8 +126,8 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-jre' // don't user 29.0-jre as it clashes with firebase SDK and not supported for android 6
     implementation 'com.google.android.play:core:1.10.3'
     implementation 'com.google.android.play:core-ktx:1.8.1'
-    implementation 'com.google.android.gms:play-services-auth:20.4.1'
-    implementation 'com.google.android.gms:play-services-ads:21.5.0'
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+    implementation 'com.google.android.gms:play-services-ads:22.0.0'
     implementation 'com.google.android.gms:play-services-base:18.2.0'
     implementation 'com.google.android.gms:play-services-games:23.1.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
@@ -124,7 +138,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.3.0'
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
