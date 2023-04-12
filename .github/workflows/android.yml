@@ -15,12 +15,8 @@ jobs:
           echo $RUNNER_TEMP
           echo | ls
           echo | pwd
-          search_dir=/home/runner/work/three_of_spades/three_of_spades
-          for entry in "$search_dir"/*
-          do
-            echo "$entry"
-          done
-
+          echo | ls /home/runner/work/three_of_spades/three_of_spades
+          
 
 - name: Decode Keystore
         id: decode_keystore
