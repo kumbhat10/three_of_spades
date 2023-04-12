@@ -15,7 +15,7 @@ jobs:
           echo $RUNNER_TEMP
           echo | ls
           echo | pwd
-          echo | ls /home/runner/work/three_of_spades/three_of_spades
+          echo | ls '/home/runner/work/three_of_spades/three_of_spades'
           
 
 - name: Decode Keystore
