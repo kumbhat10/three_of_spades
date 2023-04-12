@@ -16,9 +16,8 @@ jobs:
           echo | ls
           echo | pwd
           echo | ls '/home/runner/work/three_of_spades/three_of_spades'
-          
 
-- name: Decode Keystore
+      - name: Decode Keystore
         id: decode_keystore
         uses: timheuer/base64-to-file@v1
         with:
