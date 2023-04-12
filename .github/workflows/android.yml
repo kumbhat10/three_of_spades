@@ -26,7 +26,7 @@ jobs:
         id: decode_google_services_json
         uses: timheuer/base64-to-file@v1
         with:
-          fileName: 'app/google-services.json'
+          fileName: "${HOME}"/work/three_of_spades/three_of_spades/app/google-services.json
           encodedString: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
       - uses: actions/checkout@v2
