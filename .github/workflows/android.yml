@@ -11,6 +11,8 @@ jobs:
         run: |
           echo $HOME
           echo ${RUNNER_TEMP}
+          echo | pwd
+          echo | ls
 
       - name: Decode Keystore
         id: decode_keystore
