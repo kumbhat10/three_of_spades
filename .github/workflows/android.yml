@@ -9,6 +9,9 @@ jobs:
     steps:
       - name: Decode Keystore
         id: decode_keystore
+        run: |
+          echo $HOME
+          echo ${RUNNER_TEMP}
         uses: timheuer/base64-to-file@v1
         with:
           fileName: 'keystore/kaalikitiggi.jks'
