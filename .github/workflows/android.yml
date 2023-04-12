@@ -10,23 +10,24 @@ jobs:
       - name: Print Environment variable
         run: |
           echo $HOME
-          echo ${RUNNER_TEMP}
+          echo $RUNNER_TEMP
           echo | pwd
           echo | ls
 
       - name: Decode Keystore
         id: decode_keystore
-
         uses: timheuer/base64-to-file@v1
         with:
-          fileName: 'keystore/kaalikitiggi.jks'
+          fileName: 'kaalikitiggi.jks'
+          fileDir: 'keystore/'
           encodedString: ${{ secrets.KEYSTORE }}
 
       - name: Decode google-services.json
         id: decode_google_services_json
         uses: timheuer/base64-to-file@v1
         with:
-          fileName: "${HOME}/work/three_of_spades/three_of_spades/app/google-services.json"
+          fileName: 'google-services.json'
+          fileDir: '${HOME}/work/three_of_spades/three_of_spades/app/'
           encodedString: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
       - uses: actions/checkout@v2
