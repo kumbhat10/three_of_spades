@@ -7,11 +7,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Decode Keystore
-        id: decode_keystore
+      - name: Print Environment variable
         run: |
           echo $HOME
           echo ${RUNNER_TEMP}
+
+      - name: Decode Keystore
+        id: decode_keystore
+
         uses: timheuer/base64-to-file@v1
         with:
           fileName: 'keystore/kaalikitiggi.jks'
