@@ -29,7 +29,7 @@ jobs:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
           fileName: 'google-services.json'
           fileDir: '${HOME}/work/three_of_spades/three_of_spades/app/'
-        run: echo $GOOGLE_SERVICES_JSON | base64 -di $fileDir/$fileName"
+        run: echo $GOOGLE_SERVICES_JSON | base64 -di $fileDir/$fileName
 
       - name: set up JDK 11
         uses: actions/setup-java@v1
