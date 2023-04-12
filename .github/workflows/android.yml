@@ -13,20 +13,31 @@ jobs:
         with:
           fileName: 'keystore/kaalikitiggi.jks'
           encodedString: ${{ secrets.KEYSTORE }}
+
+      - name: Decode google-services.json
+          id: decode_google_services_json
+          uses: timheuer/base64-to-file@v1
+          with:
+            fileName: 'app/google-services.json'
+            encodedString: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
       - uses: actions/checkout@v2
       - name: set up JDK 11
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: build prod
+
+      - name: Gradle build .aab release bundle
         run: ./gradlew app:bundleRelease
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-      - name: Upload
+
+      - name: Upload aab bundle output
         uses: actions/upload-artifact@v2
         with:
           name: Build Artifacts
