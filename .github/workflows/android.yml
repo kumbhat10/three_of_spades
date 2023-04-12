@@ -15,11 +15,11 @@ jobs:
           encodedString: ${{ secrets.KEYSTORE }}
 
       - name: Decode google-services.json
-          id: decode_google_services_json
-          uses: timheuer/base64-to-file@v1
-          with:
-            fileName: 'app/google-services.json'
-            encodedString: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        id: decode_google_services_json
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: 'app/google-services.json'
+          encodedString: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
       - uses: actions/checkout@v2
       - name: set up JDK 11
