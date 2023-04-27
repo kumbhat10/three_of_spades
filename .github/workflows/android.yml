@@ -27,8 +27,8 @@ jobs:
       - name: Decode Keystore
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
-          fileName: 'keystore/kaalikitiggi.jks'
-        run: echo $KEYSTORE | base64 -di > $RUNNER_TEMP/$fileName
+          fileName: './keystore/kaalikitiggi.jks'
+        run: echo $KEYSTORE | base64 -di > $fileName
 
       - name: Decode JSON & Create google-services.json
         env:
