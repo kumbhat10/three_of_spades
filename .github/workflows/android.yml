@@ -29,9 +29,8 @@ jobs:
           KEYSTORE: ${{ secrets.KEYSTORE }}
           fileName: './keystore/kaalikitiggi.jks'
         run: |
-        echo "Creating keystore directory"
-        mkdir keystore
-        echo $KEYSTORE | base64 -di > $fileName
+          mkdir keystore
+          echo $KEYSTORE | base64 -di > $fileName
 
       - name: Decode JSON & Create google-services.json
         env:
