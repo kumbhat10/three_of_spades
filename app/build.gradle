@@ -11,7 +11,7 @@ if (!project.hasProperty("disable-performance-plugin")) {
 apply plugin: 'kotlin-kapt'
 android {
     namespace 'com.kaalikiteeggi.three_of_spades'
-    compileSdk 33
+    compileSdk 34
     buildFeatures{
         viewBinding = true
     }
@@ -20,7 +20,7 @@ android {
         applicationId "com.kaalikiteeggi.three_of_spades"
         minSdkVersion 24
         //noinspection OldTargetApi
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 83
         versionName "83A"
         signingConfig signingConfigs.debug
@@ -59,15 +59,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     kotlin {
         jvmToolchain {
-            JavaVersion.VERSION_11 //languageVersion.set(JavaLanguageVersion.of(1.8))
+            JavaVersion.VERSION_17 //languageVersion.set(JavaLanguageVersion.of(1.8))
         }
     }
     kotlin {
@@ -118,30 +118,30 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx'
     implementation 'com.google.firebase:firebase-perf-ktx'
 
-    implementation 'com.applovin:applovin-sdk:11.9.0'
-    implementation  'com.google.ads.mediation:applovin:11.9.0.0'
+    implementation 'com.applovin:applovin-sdk:11.11.3'
+    implementation  'com.google.ads.mediation:applovin:11.11.3.0'
 
     implementation 'androidx.core:core-splashscreen:1.0.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.google.guava:guava:31.1-jre' // don't user 29.0-jre as it clashes with firebase SDK and not supported for android 6
     implementation 'com.google.android.play:core:1.10.3'
     implementation 'com.google.android.play:core-ktx:1.8.1'
-    implementation 'com.google.android.gms:play-services-auth:20.5.0'
-    implementation 'com.google.android.gms:play-services-ads:22.0.0'
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+    implementation 'com.google.android.gms:play-services-ads:22.4.0'
     implementation 'com.google.android.gms:play-services-base:18.2.0'
     implementation 'com.google.android.gms:play-services-games:23.1.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
-    implementation 'com.google.android.gms:play-services-tagmanager:18.0.2'
+    implementation 'com.google.android.gms:play-services-tagmanager:18.0.3'
 
-    implementation 'androidx.browser:browser:1.5.0'
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+    implementation 'androidx.browser:browser:1.6.0'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.3.0'
-    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.android.billingclient:billing:5.2.0'
-    implementation 'com.android.billingclient:billing-ktx:5.1.0'
+    implementation 'com.android.billingclient:billing:6.0.1'
+    implementation 'com.android.billingclient:billing-ktx:6.0.1'
 }

@@ -3,17 +3,17 @@ buildscript {
     ext {
         firebase_perf_disable = true
     }
-    ext.kotlin_version = '1.8.10'
+    ext.kotlin_version = '1.9.0'
     repositories {
         google()
         mavenCentral()
 //        maven { url = uri("https://artifacts.applovin.com/android") }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.3.15'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.5'
+        classpath 'com.google.gms:google-services:4.4.0'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
         if (!project.hasProperty("disable-performance-plugin")) {
             classpath('com.google.firebase:perf-plugin:1.4.1')
         }

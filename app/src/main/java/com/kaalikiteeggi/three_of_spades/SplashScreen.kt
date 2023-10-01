@@ -124,7 +124,6 @@ class SplashScreen : AppCompatActivity() {
         }
     }
 
-    @Suppress("ReplaceJavaStaticMethodWithKotlinAnalog")
     private fun checkAppUpdate() {
         appUpdateManager = AppUpdateManagerFactory.create(baseContext)
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
