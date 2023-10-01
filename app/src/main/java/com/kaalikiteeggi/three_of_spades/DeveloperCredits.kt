@@ -140,7 +140,7 @@ class DeveloperCredits : AppCompatActivity() {
                 "\nHeight:   ${resources.configuration.screenHeightDp} " +
                 "\nDevice:   ${Build.MANUFACTURER} ${Build.MODEL}" +
                 "\n\nHi Dushyant, I need support...."
-        val whatsapp =   "$whatsapp2?text=$content"
+        val whatsapp =   "$whatsapp1?text=$content"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(whatsapp))
         try{
             startActivity(intent)

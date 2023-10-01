@@ -136,7 +136,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:gravity="start"
         android:onClick="copyToClipBoard"
-        android:textColor="#FFFFFF"
+        android:textColor="#1F6AFF"
         android:textSize="@dimen/_8ssp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
