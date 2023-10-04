@@ -3,14 +3,14 @@ buildscript {
     ext {
         firebase_perf_disable = true
     }
-    ext.kotlin_version = '1.9.0'
+    ext.kotlin_version = '1.8.10'
     repositories {
         google()
         mavenCentral()
 //        maven { url = uri("https://artifacts.applovin.com/android") }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'com.android.tools.build:gradle:7.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.4.0'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'

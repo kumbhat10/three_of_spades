@@ -17,6 +17,9 @@
 -keepattributes Signature, SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
 -keepclassmembers class com.kaalikiteeggi.three_of_spades.** { *; }
+-keep public class com.kaalikiteeggi.three_of_spades.GameData
+-keep public class com.kaalikiteeggi.three_of_spades.GameDataKt
+
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
