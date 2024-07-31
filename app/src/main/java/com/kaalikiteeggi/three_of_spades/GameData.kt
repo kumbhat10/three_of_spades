@@ -1,7 +1,9 @@
 package com.kaalikiteeggi.three_of_spades
 
+import androidx.annotation.Keep
 import kotlin.random.Random
 
+@Keep
 class GameData {
 
 	var bb: Int = 0 // current bidder

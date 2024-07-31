@@ -1,8 +1,11 @@
 package com.kaalikiteeggi.three_of_spades
 
+import androidx.annotation.Keep
+
 // Two's from diamond, heart and club is not included in the data class
 // R.drawable.c2 ,R.drawable.h2,R.drawable.d2
 // order - spades, hearts, clubs, diamonds
+@Keep
 class PlayingCards {
 
 	//    region Suits Drawable

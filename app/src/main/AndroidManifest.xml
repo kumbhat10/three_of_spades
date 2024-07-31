@@ -4,7 +4,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.android.vending.BILLING" />
@@ -40,6 +42,11 @@
         tools:replace="android:allowBackup"
         android:dataExtractionRules="@xml/data_extraction_rules"
         tools:ignore="DataExtractionRules,UnusedAttribute">
+
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
 
         <meta-data
             android:name="firebase_performance_logcat_enabled"
@@ -114,7 +121,7 @@
             android:theme="@style/Theme.App"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity">
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -124,34 +131,34 @@
         <activity
             android:name=".DeveloperCredits"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".CreateAndJoinRoomScreen"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".TrainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".GameScreen"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="DiscouragedApi,LockedOrientationActivity"/>
         <activity
             android:name=".GameScreenAutoPlay"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <!--android:resizeableActivity="true" -->
         <activity
             android:name=".MainHomeScreen"
@@ -161,14 +168,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing"
-            tools:ignore="LockedOrientationActivity">
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter android:autoVerify="true">
-                <data
-                    android:host="@string/hostFirebaseDL"
-                    android:scheme="@string/scheme1" />
-                <data
-                    android:host="@string/hostFirebaseDL"
-                    android:scheme="@string/scheme" />
+                <data android:scheme="@string/scheme1"/>
+                <data android:host="@string/hostFirebaseDL"/>
+                <data android:scheme="@string/scheme"/>
+                <data android:host="@string/hostFirebaseDL"/>
 
                 <action android:name="android.intent.action.VIEW" />
 
@@ -177,12 +182,10 @@
             </intent-filter>
 
             <intent-filter>
-                <data
-                    android:host="@string/hostJoinRoom"
-                    android:scheme="@string/scheme" />
-                <data
-                    android:host="@string/hostJoinRoom"
-                    android:scheme="@string/scheme1" />
+                <data android:scheme="@string/scheme"/>
+                <data android:host="@string/hostJoinRoom"/>
+                <data android:scheme="@string/scheme1"/>
+                <data android:host="@string/hostJoinRoom"/>
 
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -195,7 +198,7 @@
             android:launchMode="singleTop"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

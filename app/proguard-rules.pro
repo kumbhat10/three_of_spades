@@ -18,7 +18,6 @@
 -keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
 -keepclassmembers class com.kaalikiteeggi.three_of_spades.** { *; }
 -keep public class com.kaalikiteeggi.three_of_spades.GameData
--keep public class com.kaalikiteeggi.three_of_spades.GameDataKt
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
@@ -44,6 +43,8 @@
 -dontwarn com.iab.**
 -dontwarn com.google.firebase.messaging.TopicOperation$TopicOperations
 -dontwarn com.google.protobuf.java_com_google_android_gmscore_sdk_target_granule__proguard_group_gtm_N1281923064GeneratedExtensionRegistryLite$Loader
+
+-dontwarn com.google.protobuf.GeneratedExtensionRegistryLoader
 # For communication with AdColony's WebView
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
@@ -57,7 +58,11 @@
 -keep public class com.google.firebase.** {*;}
 -keep class com.google.android.gms.internal.** {*;}
 -keepclasseswithmembers class com.google.firebase.FirebaseException
--keepclassmembers class com.google.firebase.database.GenericTypeIndicator { *; }
+
+-keepclassmembers class com.google.firebase.database.GenericTypeIndicator{*;}
+-keep class * extends com.google.firebase.database.GenericTypeIndicator{*;}
+-keep class com.google.firebase.database.GenericTypeIndicator{*;}
+-keep class com.kaalikiteeggi.three_of_spades.GameData
 
 -dontwarn com.google.android.gms.**
 -dontwarn android.media.**

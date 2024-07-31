@@ -43,7 +43,7 @@ class DeveloperCredits : AppCompatActivity() {
 
         binding.icon3developer.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.anim_scale_infinite_zoom))
 
-        vn = packageManager.getPackageInfo(packageName,0).versionName
+        vn = packageManager.getPackageInfo(packageName,0).versionName.toString()
         vc = packageManager.getPackageInfo(packageName,0).versionCode.toString()
         uid = intent.getStringExtra("uid")!!.toString()    //Get roomID and display
         FirebaseCrashlytics.getInstance().setUserId(uid)
@@ -73,7 +73,7 @@ class DeveloperCredits : AppCompatActivity() {
                 data = Uri.parse(homePageKKT)
             }
             startActivity(intent)
-        } catch (me: Exception) {
+        } catch (_: Exception) {
         }
     }
 
@@ -127,7 +127,7 @@ class DeveloperCredits : AppCompatActivity() {
         else createEmailIntent()
     }
     fun sendWhatsapp(view: View){
-        if (soundStatus) SoundManager.instance?.playUpdateSound()
+        /*if (soundStatus) SoundManager.instance?.playUpdateSound()
         val content =   "(Auto generated info for debugging purpose) " +
                 "\n\nUserName: ${FirebaseAuth.getInstance().currentUser?.displayName}" +
                 "\nEmail: ${FirebaseAuth.getInstance().currentUser?.email}" +
@@ -147,12 +147,15 @@ class DeveloperCredits : AppCompatActivity() {
         }catch (me:Exception){
             Toast.makeText(this, "No app can support this action", Toast.LENGTH_SHORT).show()
         }
+        */
+
     }
     fun closeDC(view: View){
         onBackPressed()
     }
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        super.onBackPressed()
 //        super.onBackPressed()
         if (soundStatus) SoundManager.instance?.playUpdateSound()
         overridePendingTransition(R.anim.slide_right_activity,R.anim.slide_right_activity)

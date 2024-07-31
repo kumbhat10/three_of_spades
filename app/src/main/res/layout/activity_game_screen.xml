@@ -2106,7 +2106,7 @@
             android:contentDescription="@string/app_name"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ns14"
+            android:src="@drawable/nh14"
             android:visibility="invisible" />
 
         <ImageView
@@ -2123,7 +2123,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:rotation="90"
             android:visibility="invisible"
-            app:srcCompat="@drawable/ns14" />
+            app:srcCompat="@drawable/nc14" />
 
         <ImageView
             android:id="@+id/imageViewTable2_4"
@@ -2138,7 +2138,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:visibility="invisible"
-            app:srcCompat="@drawable/ns14" />
+            app:srcCompat="@drawable/nd14" />
 
         <ImageView
             android:id="@+id/imageViewTable1_4"
